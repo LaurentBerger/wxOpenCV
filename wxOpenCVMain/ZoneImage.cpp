@@ -1,0 +1,616 @@
+#include "FenetrePrincipale.h"
+#include "FenetreInfo.h"
+#include "wxOsgApp.h"
+#include "imagestat.h"
+#include "ControleCamera.h"
+
+ZoneImage::ZoneImage(wxWindow *parent,wxSize w)
+    : wxScrolled<wxWindow>(parent, wxID_ANY)   {
+    SetScrollRate( 1, 1 );
+    SetVirtualSize( w.x, w.y );
+    SetBackgroundColour( *wxRED );
+
+modeRect=false;
+modeCoupe=false;
+facteurZoom=-1;
+osgApp=NULL;
+bitmapAffiche=NULL;
+//SetBackgroundStyle(wxBG_STYLE_PAINT);
+for (int i=0;i<10;i++)
+	{
+	rectSelect[i].SetSize(wxSize(0,0));
+	rectCoupe[i].SetSize(wxSize(0,0));
+	}
+indRect=0;
+indCoupe=0;
+modeComplexe=0;
+Bind(wxEVT_MOTION, &ZoneImage::OnMouseMove,this);
+Bind(wxEVT_PAINT,&ZoneImage::OnPaint,this);
+Bind(wxEVT_ACTIVATE, &ZoneImage::OnActivate,this);
+Bind(wxEVT_LEFT_UP, &ZoneImage::OnLeftButtonUp,this);
+Bind(wxEVT_LEFT_DOWN, &ZoneImage::OnLeftButtonDown,this);
+Bind(wxEVT_CONTEXT_MENU, &ZoneImage::OnMenuContext,this);
+Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SelectPalette,this,NOIRETBLANC_,NOIRETBLANC_+9);
+Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::ModeComplexe,this,M_MODULE_,PHASE_RD);
+Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR2,ZOOM8SUR1);
+/*Connect(ZOOM1SUR2,ZOOM8SUR1  ,wxCommandEventHandler(ZoneImage::MAJZoom));
+Connect(ZOOM1SUR1,wxEVT_MENU,  wxCommandEventHandler(ZoneImage::MAJZoom));
+Connect(ZOOM2SUR1,wxEVT_MENU,  wxCommandEventHandler(ZoneImage::MAJZoom));
+Connect(ZOOM4SUR1,wxEVT_MENU,  wxCommandEventHandler(ZoneImage::MAJZoom));
+Connect(ZOOM8SUR1,wxEVT_MENU,  wxCommandEventHandler(ZoneImage::MAJZoom));*/
+}
+
+
+
+void ZoneImage::OnSize( wxSizeEvent &w)
+{
+
+wxClientDC dc(this);
+//f->DrawWindow(dc);
+
+}
+
+
+void ZoneImage::OnPaint(wxPaintEvent &evt)
+{
+    wxPaintDC dc(this);
+
+    // this call is vital: it adjusts the dc to account for the current
+    // scroll offset
+    PrepareDC(dc);
+
+	f->DrawWindow (dc);
+/*        dc.SetPen( *wxRED_PEN );
+    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+    dc.DrawRectangle( 0, 0, 200, 200 );*/
+}
+
+
+void ZoneImage::OnActivate(wxActivateEvent &w)
+{
+if (osgApp)
+	{
+	osgApp->IdFenetreActive(f->IdFenetre());
+	if (f->Cam() && f->Cam()->IsRunning())
+		{
+		wxString s= "Control :" +f->GetTitle();
+		osgApp->CtrlCamera()->SetTitle(s);
+		osgApp->CtrlCamera()->DefCamera(f->Cam());
+		}
+	}
+}
+
+
+void ZoneImage::OnMouseMove(wxMouseEvent &event)
+{
+
+if (!osgApp)
+	return;
+osgApp->DefUtilisateurAbsent(0);
+ImageInfoCV *imAcq=f->ImAcq();
+wxPoint point = event.GetPosition();
+wxRect	r(GetClientRect());
+if (!r.Contains(point) ||  this->f!=osgApp->Graphique())
+	return;
+point=RepereEcranImage(point);
+wxClientDC dc(this);
+//f->TracerDIB(f->ImageAffichee(), dc,&point);
+
+
+if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq->cols && point.y>=0 && point.y<imAcq->rows)
+	{
+	BarreInfo *barreEtat=f->BarreEtat();
+	cv::Vec3b x;
+	cv::Vec3f xx;
+	cv::Vec6f xxx;
+	std::complex<float> zz[3];
+	int val;
+	double dVal;
+	switch(imAcq->type()){
+	case CV_32FC1:
+		dVal = imAcq->at<float>(point.y,point.x);
+		barreEtat->UpdateCurseur(point.x,point.y,dVal);
+		break;
+	case CV_64FC1:
+		dVal = imAcq->at<double>(point.y,point.x);
+		barreEtat->UpdateCurseur(point.x,point.y,dVal);
+		break;
+	case CV_32FC3 :
+		xx=imAcq->at<cv::Vec3f>(point.y,point.x);;
+		barreEtat->UpdateCurseur(point.x,point.y,xx[2],xx[1],xx[0]);
+		break;
+	case CV_32FC(6) :
+		xxx=imAcq->at<cv::Vec6f>(point.y,point.x);
+		zz[0]=std::complex<float>(xxx[0],xxx[1]);
+		zz[1]=std::complex<float>(xxx[2],xxx[3]);
+		zz[2]=std::complex<float>(xxx[4],xxx[5]);
+		barreEtat->UpdateCurseur(point.x,point.y,zz[2],zz[1],zz[0]);
+		break;
+	case CV_64FC3 :
+		xx=imAcq->at<cv::Vec3d>(point.y,point.x);;
+		barreEtat->UpdateCurseur(point.x,point.y,xx[2],xx[1],xx[0]);
+		break;
+	case CV_8UC1:
+		val = imAcq->at<unsigned char>(point.y,point.x);
+		barreEtat->UpdateCurseur(point.x,point.y,val);
+		break;
+	case CV_8UC3 :
+		x=imAcq->at<cv::Vec3b>(point.y,point.x);;
+		barreEtat->UpdateCurseur(point.x,point.y,x[2],x[1],x[0]);
+		break;
+	case CV_16UC1 :
+		val = imAcq->at<unsigned short>(point.y,point.x);
+		barreEtat->UpdateCurseur(point.x,point.y,val);
+		break;
+	case CV_16SC1 :
+		val = imAcq->at< short>(point.y,point.x);
+		barreEtat->UpdateCurseur(point.x,point.y,val);
+		break;
+	case CV_16SC3 :
+		xx=imAcq->at<cv::Vec3s>(point.y,point.x);;
+		barreEtat->UpdateCurseur(point.x,point.y,xx[2],xx[1],xx[0]);
+		break;
+	case CV_16UC(48):
+		{
+		barreEtat->UpdateCurseur(point.x,point.y,0/*imRegionBrute->LitPixelEntier(point.y,point.x)*/);
+		if (event.m_shiftDown)
+			{
+			//osgApp->Outils()->RegionPrincipaleSelect(numRegion);
+/*				
+			if (imCtr)
+				{
+				int i1=NULL;//imRegionBrute->LitPixelEntier(point.y,point.x);
+				Contour	*tabCtr=NULL;//imCtr->tabCtr;
+				wxClientDC dc(this);
+				for (int i=1;i<tabCtr[i1].nbPixels;i++)
+					{
+					wxPoint p1(tabCtr[i1].tabPixels[i-1].col,tabCtr[i1].tabPixels[i-1].lig);
+					wxPoint p2(tabCtr[i1].tabPixels[i].col,tabCtr[i1].tabPixels[i].lig);
+					p1=RepereImageEcran(p1);
+					p2=RepereImageEcran(p2);
+					dc.DrawLine(p1,p2);
+					}
+				}
+*/
+			}
+//		if (event.m_controlDown)
+			//osgApp->Outils()->RegionSecondaireSelect(0/*imRegionBrute->LitPixelEntier(point.y,point.x)*/);
+		}
+		break;
+		}
+	 }
+if (event.ShiftDown())
+	{
+	ImageInfoCV *t=NULL;
+	switch(f->ModeImage()){
+	case 0:
+	case 1:
+	case 2:
+	case 3:
+	case 4:
+		t = imAcq;
+		break;
+		}	
+	if (t)
+		{
+		osgApp->ImgStat()->AfficheValCurseur(t,point.y,point.x);
+		}
+	}
+		
+if (!f->ModeRectangle() && !f->ModeCoupe())
+	return;
+if (f->ModeRectangle())
+	{
+	if ( event.LeftIsDown()  ) // detect if the mouse is down and dragging a lasso
+		{
+		wxRect	rTmp=rectSelect[indRect];
+		rectSelect[indRect].SetRight(point.x);
+		rectSelect[indRect].SetBottom(point.y);
+		    dc.SetBrush( *wxTRANSPARENT_BRUSH );
+
+		// invalidate the lasso rect so that it's drawn while dragging the mouse.
+			RefreshRect(RepereImageEcran(rectSelect[indRect]),false);
+		Update();
+			RefreshRect(RepereImageEcran(rTmp),false);
+		// you may or may not need to do an update to draw now.
+		Update();
+		// TODO2: draw the lasso rect in your OnPaint code.  i.e. draw it if (!rectSelect[indRect].IsEmpty())
+		TracerRectangle(indRect,1);
+/*		wxClientDC dc(this);
+		wxPoint p1(RepereImageEcran(rectSelect[indRect].GetTopLeft()));
+		//ClientToScreen(&p1.x,&p1.y);
+		wxBrush	tr=*wxTRANSPARENT_BRUSH;
+		dc.SetBrush(tr);
+		int		fZoomNume,fZoomDeno;
+
+		CalculZoom(fZoomNume,fZoomDeno);
+		wxRect rTrace(p1.x,p1.y,rectSelect[indRect].width*fZoomNume/fZoomDeno,rectSelect[indRect].height*fZoomNume/fZoomDeno);
+		dc.DrawRectangle(p1.x,p1.y,rectSelect[indRect].width*fZoomNume/fZoomDeno,rectSelect[indRect].height*fZoomNume/fZoomDeno);
+		dc.DrawLine(rTrace.GetBottomLeft(),rTrace.GetTopRight());
+		dc.DrawLine(rTrace.GetTopLeft(),rTrace.GetBottomRight());
+		DrawRectangles(dc);*/
+		}
+	}
+if (modeCoupe)
+	{
+	if ( event.LeftIsDown()  ) // detect if the mouse is down and dragging a lasso
+		{
+		wxRect	rTmp=rectCoupe[indCoupe],rTmp2=RepereImageEcran(rTmp);
+		f->RedresseRectangle(rTmp2);
+	//	rTmp.Inflate(2,2);
+		RefreshRect(rTmp2,false);
+		rectCoupe[indCoupe].SetRight(point.x);
+		rectCoupe[indCoupe].SetBottom(point.y);
+		
+		rTmp=rectCoupe[indCoupe];
+		rTmp2=RepereImageEcran(rTmp);
+		f->RedresseRectangle(rTmp2);
+		//rTmp.Inflate(2,2);
+		
+		rTmp2=RepereImageEcran(rTmp);
+		RefreshRect(rTmp2,false);
+		// you may or may not need to do an update to draw now.
+		Update();
+		// TODO2: draw the lasso rect in your OnPaint code.  i.e. draw it if (!rectSelect[indRect].IsEmpty())
+		wxClientDC dc(this);
+		//ClientToScreen(&p1.x,&p1.y);
+		wxBrush	tr=*wxTRANSPARENT_BRUSH;
+		dc.SetBrush(tr);
+		wxPoint pTmp1= rectCoupe[indCoupe].GetTopLeft();
+		wxPoint pTmp2=rectCoupe[indCoupe].GetBottomRight();
+		dc.DrawLine(RepereImageEcran(pTmp1),RepereImageEcran(pTmp2));
+		TracerLesCoupes(dc);
+		}
+	}
+	
+}
+
+void ZoneImage::OnLeftButtonUp(wxMouseEvent &event)
+{
+f->GestionCurseurSouris(event);
+if (!modeRect && !modeCoupe)
+	return;
+if (modeRect)
+	{
+	if ( abs(rectSelect[indRect].GetWidth()*rectSelect[indRect].GetWidth()))
+		{
+		float	stat[10];
+	 /*
+					// TODO: commit the lasso selected image to something.
+					wxMemoryDC dcMem;
+					wxBitmap bitmap(rectSelect[indRect].GetWidth(), rectSelect[indRect].GetHeight());
+					dcMem.SelectObject(bitmap);
+
+					wxMemoryDC dcYourLoadedImage;
+
+					dcMem.Blit(0, 0, rectSelect[indRect].GetWidth(), rectSelect[indRect].GetHeight(), &dcYourLoadedImage, rectSelect[indRect].GetLeft(), rectSelect[indRect].GetTop());
+	*/
+/*		imAcq->StatZone(rectSelect[indRect].GetTop(),rectSelect[indRect].GetBottom(),
+			rectSelect[indRect].GetLeft(),rectSelect[indRect].GetRight(),stat);*/
+		osgApp->ImgStat()->MAJMinMaxHisto();
+		if (indRect>=0)
+			{
+			int ind=indRect;
+			osgApp->ImgStat()->Plot(true);
+			}
+		}
+	}
+if (modeCoupe)
+	if ( rectCoupe[indCoupe].width )
+		osgApp->ImgStat()->MAJCoupe(rectCoupe[indCoupe]);	
+}
+
+void ZoneImage::OnLeftButtonDown(wxMouseEvent &event)
+{
+if (event.ShiftDown())
+	{
+	ShapedFrame *shapedFrame = new ShapedFrame(f,"ligne 1","ligne 2");
+	shapedFrame->Show(true);
+	}
+
+if (osgApp->ModeSouris()==SELECTION_EN_COURS)
+	{
+	GestionCurseurSouris(event);
+	return;
+	}
+if (!ModeRectangle() && !ModeCoupe())
+	return;
+wxPoint point = event.GetPosition(); // this is in screen coords.  Use ScreenToClient if you need this in coords for your window
+wxPoint point2 = ScreenToClient(event.GetPosition()); // this is in screen coords.  Use ScreenToClient if you need this in coords for your window
+point=RepereEcranImage(point);
+if (ModeRectangle())
+	{
+	wxRect r(*RectangleSelec());
+	r.Inflate(2,2);
+	RefreshRect(RepereImageEcran(r),false);
+	RectangleSelec()->SetLeft(point.x);
+	RectangleSelec()->SetTop(point.y);
+	}
+if (ModeCoupe())
+	{
+	f->RedresseRectangle(*CoupeSelec());
+	RefreshRect(RepereImageEcran(*CoupeSelec()),false);
+	CoupeSelec()->SetLeft(point.x);
+	CoupeSelec()->SetTop(point.y);
+	}
+// if you need the base class handler to get called, then call event.Skip();
+}
+
+void ZoneImage::GestionCurseurSouris(wxMouseEvent &event)
+{
+osgApp->DefOperande1(f->ImAcq(),f->IdFenetre());
+}
+
+
+void ZoneImage::TracerRectangle(int ind,bool croix)
+{
+wxClientDC dc(this);
+wxPoint pTmp=rectSelect[indRect].GetTopLeft();
+wxPoint p1(RepereImageEcran(pTmp));
+//ClientToScreen(&p1.x,&p1.y);
+wxBrush	tr=*wxTRANSPARENT_BRUSH;
+dc.SetBrush(tr);
+int		fZoomNume,fZoomDeno;
+
+f->CalculZoom(fZoomNume,fZoomDeno);
+wxRect rTrace(p1.x,p1.y,rectSelect[indRect].width*fZoomNume/fZoomDeno,rectSelect[indRect].height*fZoomNume/fZoomDeno);
+rTrace=RepereImageEcran(rectSelect[indRect]);
+//dc.DrawRectangle(p1.x,p1.y,rectSelect[indRect].width*fZoomNume/fZoomDeno,rectSelect[indRect].height*fZoomNume/fZoomDeno);
+dc.DrawRectangle(rTrace);
+if (croix)
+	{
+	dc.DrawLine(rTrace.GetBottomLeft(),rTrace.GetTopRight());
+	dc.DrawLine(rTrace.GetTopLeft(),rTrace.GetBottomRight());
+	}
+TracerLesRectangles(dc);
+
+}
+
+void ZoneImage::TracerLesRectangles (wxDC &hdc)
+{
+wxBrush wt=*wxTRANSPARENT_BRUSH;
+hdc.SetBrush(wt);
+for (int i=0;i<10;i++)
+	if (Rectangle(i)->GetWidth()!=0 || Rectangle(i)->GetHeight()!=0)
+		{
+		hdc.DrawRectangle(RepereImageEcran(*Rectangle(i)));
+		if (i==IndiceRectangleSelec())
+			{
+			int		fZoomNume,fZoomDeno;
+
+			f->CalculZoom(fZoomNume,fZoomDeno);
+			wxPoint pTmp(Rectangle(i)->GetTopLeft());
+			wxPoint p1(RepereImageEcran(pTmp));
+			wxRect rTrace(RepereImageEcran(*Rectangle(i)));
+			hdc.DrawLine(rTrace.GetBottomLeft(),rTrace.GetTopRight());
+			hdc.DrawLine(rTrace.GetTopLeft(),rTrace.GetBottomRight());
+			}
+		}
+}
+
+void ZoneImage::TracerLesCoupes (wxDC &hdc)
+{
+wxBrush wt=*wxTRANSPARENT_BRUSH;
+hdc.SetBrush(wt);
+for (int i=0;i<10;i++)
+	if (Coupe(i)->GetWidth()!=0 || Coupe(i)->GetHeight()!=0)
+		{
+		wxPoint pTmp1(Coupe(i)->GetTopLeft());
+		wxPoint pTmp2(Coupe(i)->GetBottomRight());
+		hdc.DrawLine(RepereImageEcran(pTmp1),RepereImageEcran(pTmp2));
+		}
+}
+
+wxPoint ZoneImage::RepereEcranImage(wxPoint &p)
+{
+wxRect	recSrc(0,0,f->ImAcq()->cols,f->ImAcq()->rows);
+wxPoint pt(0,0);
+long	mini=0,maxi;
+int		x=GetScrollPos(wxHORIZONTAL);
+int		y=GetScrollPos(wxVERTICAL);
+int		fZoomNume,fZoomDeno;
+
+f->CalculZoom(fZoomNume,fZoomDeno);
+
+maxi=GetScrollRange(wxVERTICAL);
+pt.x = (long)((p.x+x)*fZoomDeno/fZoomNume+recSrc.GetLeft());
+pt.y = (long)((p.y+y)*fZoomDeno/fZoomNume+recSrc.GetTop());
+
+return pt;
+}
+
+wxPoint ZoneImage::RepereImageEcran(wxPoint &p)
+{
+wxRect	recSrc(0,0,f->ImAcq()->cols,f->ImAcq()->rows);
+wxPoint pt(0,0);
+long	maxi;
+int		x=GetScrollPos(wxHORIZONTAL);
+int		y=GetScrollPos(wxVERTICAL);
+int		fZoomNume,fZoomDeno;
+
+f->CalculZoom(fZoomNume,fZoomDeno);
+
+maxi=GetScrollRange(wxVERTICAL);
+	pt.x = (long)((p.x-recSrc.GetLeft())*fZoomNume/fZoomDeno-x);
+	pt.y = (long)((p.y-recSrc.GetTop())*fZoomNume/fZoomDeno-y);
+wxPoint pt2=RepereEcranImage(pt);
+return pt;
+}
+
+wxRect ZoneImage::RepereImageEcran(wxRect &r)
+{
+wxPoint	p1Img(r.GetLeftTop()),p2Img(r.GetBottomRight());
+wxPoint	p1=RepereImageEcran(p1Img);
+wxPoint	p2=RepereImageEcran(p2Img);
+return wxRect(p1,p2);
+}
+wxRect ZoneImage::RepereEcranImage(wxRect &r)
+{
+wxPoint	p1(r.GetLeftTop()),p2(r.GetBottomRight());
+wxPoint	p1Img=RepereEcranImage(p1);
+wxPoint	p2Img=RepereEcranImage(p2);
+return wxRect(p1Img,p2Img);
+}
+
+
+
+wxMenu *ZoneImage::CreateMenuPalette(wxString *title)
+{
+    wxMenu *menu = new wxMenu;
+    menu->Append(NOIRETBLANC_, _("&Linear\tCtrl-F1"));
+    menu->Append(NOIRETBLANC_+1, _("&rainbow 12bits\tCtrl-F2"));
+    menu->Append(NOIRETBLANC_+2, _("&Rainbow 8bits\t"));
+    menu->Append(NOIRETBLANC_+3, _("&Gray 8 bits\tCtrl-F2"));
+    menu->Append(NOIRETBLANC_+4, _("&Rainbow loop 8 bits\t"));
+    menu->Append(NOIRETBLANC_+5, _("&Gray loop 8 bis\t"));
+    menu->Append(NOIRETBLANC_+6, _("&Jet\t"));
+    menu->Append(NOIRETBLANC_+7, _("&Rainbow\t"));
+    menu->Append(NOIRETBLANC_+8, _("&Owner\t"));
+    menu->Append(NOIRETBLANC_+9, _("&Reverse Owner\t"));
+
+    return menu;
+}
+
+wxMenu *ZoneImage::CreateMenuComplex(wxString *title)
+{
+    wxMenu *menu = new wxMenu;
+    menu->Append(M_MODULE_, _("modulus"));
+    menu->Append(PARTIE_REELLE, _("real part"));
+    menu->Append(PARTIE_IMAGINAIRE, _("imaginary part"));
+    menu->Append(LOG_DB, _("10Log z"));
+    menu->Append(PHASE_RD, _("phase (rd)"));
+
+    return menu;
+}
+
+wxMenu *ZoneImage::CreateMenuZoom(wxString *title)
+{
+    wxMenu *menu = new wxMenu;
+    menu->Append(ZOOM1SUR2, _T("&Zoom 1/2\tCtrl-F1"));
+    menu->Append(ZOOM1SUR1, _T("&Zoom x1\tCtrl-F2"));
+    menu->Append(ZOOM2SUR1, _T("&Zoom x2\tCtrl-F2"));
+    menu->Append(ZOOM4SUR1, _T("&Zoom x4\tCtrl-F2"));
+    menu->Append(ZOOM8SUR1, _T("&Zoom x8\tCtrl-F2"));
+
+    return menu;
+}
+
+void ZoneImage::OnMenuContext(wxContextMenuEvent& event)
+{
+    wxPoint point = event.GetPosition();
+    // If from keyboard
+    if (point.x == -1 && point.y == -1) {
+        wxSize size = GetSize();
+        point.x = size.x / 2;
+        point.y = size.y / 2;
+    } else {
+        point = ScreenToClient(point);
+    }
+    ShowContextMenu(point);
+}
+
+void ZoneImage::ShowContextMenu(const wxPoint& pos)
+{
+wxMenu menu;
+
+if (osgApp->ModeSouris()==SOURIS_STD)
+	{
+	ImageInfoCV *imAcq=f->ImAcq();
+
+	menu.Append(Menu_Help_About, _T("&About"));
+	menu.Append(Menu_Popup_Palette, _T("&Palette"), CreateMenuPalette(NULL));
+	menu.Append(Menu_Popup_Zoom, _T("&Zoom"), CreateMenuZoom(NULL));
+	menu.AppendCheckItem(Menu_Rectangle, _T("Stat Rectangle"));
+	menu.AppendCheckItem(Menu_Coupe, _T("Section"));
+	menu.AppendCheckItem(Menu_FilMax, _T("Filtrage Max"));
+	if (osgApp->Fenetre(f->IdFenetreOp1pre()))
+		menu.AppendCheckItem(Menu_ParAlg, _T("Parametrage Algo."));
+	if(imAcq->depth()==CV_32F && imAcq->channels()%2==0)
+		{
+		menu.AppendSeparator();
+		menu.Append(Menu_Popup_Palette, _T("&Palette"), CreateMenuComplex(NULL));
+		}
+	menu.AppendSeparator();
+	menu.Append(ENREGISTRER_FICHIER, _T("Save"));
+	menu.Append(ENREGISTRERSOUS_FICHIER, _T("Save As"));
+	menu.Append(CREER_RAPPORT, _T("Create a report"));
+	menu.Append(QUITTER_, _T("Close"));
+	if (ModeRectangle())
+		menu.Check(Menu_Rectangle, true);
+	if (ModeCoupe())
+		menu.Check(Menu_Coupe, true);
+/*	if (f->mmodeFiltre)
+		menu.Check(Menu_FilMax, true);*/
+	}
+else
+	{
+	if (osgApp->OpBinaire())
+		{
+		menu.AppendCheckItem(MENU_OP1, "Image as A");
+		menu.AppendCheckItem(MENU_OP2, "Image as B");
+		}
+	else if (osgApp->OpUnaire())
+		{
+		menu.AppendCheckItem(MENU_OP1, "Image as A");
+		}
+	menu.AppendSeparator();
+	menu.AppendCheckItem(MENU_EXEC_OP, "Execute "+*osgApp->NomOperation());
+	menu.Append(RESET_OP,  "Operation canceled");
+	if (osgApp->Op1()==f->ImAcq())
+		menu.Check(MENU_OP1, true);
+	if (osgApp->Op2()==f->ImAcq())
+		menu.Check(MENU_OP2, true);
+
+	}
+
+
+PopupMenu(&menu, pos.x, pos.y);
+
+    // test for destroying items in popup menus
+#if 0 // doesn't work in wxGTK!
+    menu.Destroy(Menu_Popup_Submenu);
+
+    PopupMenu( &menu, event.GetX(), event.GetY() );
+#endif // 0
+}
+
+void ZoneImage::ModeComplexe(wxCommandEvent& event)
+{
+modeComplexe=event.GetId()-M_MODULE_;
+
+f->MAJNouvelleImage();
+delete bitmapAffiche;
+bitmapAffiche =  NULL;
+wxRect r=GetClientRect();
+RefreshRect (r, false);
+Update();
+return;
+}
+
+
+
+void ZoneImage::SelectPalette(wxCommandEvent& event)
+{
+f->SelectPalette(event);
+
+f->MAJNouvelleImage();
+delete bitmapAffiche;
+bitmapAffiche =  NULL;
+wxRect r=GetClientRect();
+RefreshRect (r, false);
+Update();
+osgApp->ImgStat()->DrawPaletteActuelle();
+osgApp->ImgStat()->DrawPalette();
+return;
+}
+
+void ZoneImage::MAJZoom(wxCommandEvent& event)
+{
+f->MAJZoom(event);
+delete bitmapAffiche;
+bitmapAffiche =  NULL;
+wxRect r=GetClientRect();
+RefreshRect (r, false);
+Update();
+}
+

@@ -1,0 +1,404 @@
+/*#ifdef _DEBUG   
+#ifndef DBG_NEW      
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )      
+#define new DBG_NEW   
+#endif
+#endif  // _DEBUG
+#define _CRTDBG_MAP_ALLOC
+#define _CRTDBG_MAP_ALLOC_NEW
+#include <stdlib.h>
+#include <crtdbg.h>*/
+#ifndef __IMAGEINFO__
+#define __IMAGEINFO__
+
+#include <ctime>
+#include <map>
+#include <string>
+
+#include "opencv2/opencv.hpp" 
+#include "ImageConstante.h"
+typedef short CodeErreur;
+#define ERREUR OuiERREUR
+
+#define NB_OP_MORPHOLOGIE 10
+#define NB_OP_CONVOLUTION 40
+
+/*! \class DomaineParametre
+   * \brief la classe¨DomaineParametre définit la valeur, le domaine de définition, le pas de la valeur
+   * utilisé pour un paramètre de fonctions. Le pas est utilisé pour modifier l'opération dans une fenêtre de dialogue.
+   */
+
+template <class TypeValeur>
+class DomaineParametre {
+public :
+TypeValeur valeur;		/*< Valeur actuelle du paramètre*/
+TypeValeur mini,maxi;	/*< Valeur extremum du paramètre */
+TypeValeur pas;		/*< Pas entre deux valeurs */
+DomaineParametre(TypeValeur a,TypeValeur b,TypeValeur c,TypeValeur d):valeur(a),mini(b),maxi(c),pas(d){};
+DomaineParametre(TypeValeur a):valeur(a),mini(a),maxi(a),pas(a){};
+DomaineParametre():valeur(TypeValeur()),mini(TypeValeur()),maxi(TypeValeur()),pas(TypeValeur()){};
+//DomaineParametre():valeur(cv:Point(0,0)),mini(cv:Point(0,0)),maxi(cv:Point(0,0)),pas(cv:Point(0,0)){};
+};
+
+/*! \class Parametre
+   * \brief la classe¨Parametre définit les noms et domaine des paramètres nécessaires pour effectuer une opération.
+   * les paramètres peuvent être du type int, double size ou point (type OpenCV). Un lien sur la doc de la fonction 
+   * est associé aux paramètres
+   * nbImageRes désigne le nombre d'image résultat.  
+   */
+
+class Parametre {
+public :
+std::string	nomOperation;
+std::map<std::string,DomaineParametre<double> > doubleParam;
+std::map<std::string,DomaineParametre<int> > intParam;
+std::map<std::string,DomaineParametre<cv::Size> > sizeParam;
+std::map<std::string,DomaineParametre<cv::Point> > pointParam;
+std::string lienHtml;
+std::string refPDF;
+int nbImageRes;		
+};
+
+
+
+
+class ImageInfoCV : public cv::Mat {
+// Type pour les images openCV en binaire type()
+// xxxyyy 3 bits de poids faibles pour taille et signe :
+// yyy
+// 000 non signé 8 bits, 011 8 bits signé, 010 non signé 16 bits, 011 16 bits signé
+// 101 32 bits , 110 64 bits
+// xxx bit de poids fort pour le nombre de canaux
+// 000 1 canal, 001 2 canaux, 010 3 canaux 
+public :
+static ImageInfoCV **op33;
+static ImageInfoCV **op55;
+static ImageInfoCV **op77;
+static ImageInfoCV **opnn;
+static ImageInfoCV **opMorph;
+
+protected :
+// 
+
+static char *tpFct[9];
+
+
+
+void	*eSauver;
+private	:
+#ifdef __INDOTEXTE__
+char	*nomImage;			//< Nom de l'image sur le disque
+char	*natureImage;		// Méthode de saisie de l'image
+char	dateCreation[30];
+char	*createur;			// utilisateur
+double	resolX;				// Pixel par cm
+double	resolY;				// Pixel par cm 
+double	resolZ;
+char	*uniteZ;
+char	*typeMateriel;		// Nom de la chaine d'acquisition
+char	*marqueMateriel;	// marque de la chaine d'acquisition
+char	*copyright;
+char	*nomProjet;			// Nom du projet associée à l'image
+char	*nomPgm;			// Nom et version du pgm 
+char	*ordinateur;
+char	*description;
+char	*champUtil[20];
+							//membres utilisés en fonction du contexte 
+long	nbChampCopolymere;
+char	**copolymere;
+
+long	nbChampGonfle;
+char	**gonfle;
+
+long	nbChampComposite;
+char	**composite;
+
+long	nbChampMicroscope;
+char	**microscope;
+
+long	nbChampCamera;
+char	**camera;
+
+long	nbChampScanner;
+char	**scanner;
+
+long	nbChampSimulation;
+char	**simulation;
+#endif
+
+char converCplxEnt;
+static int fctImage;
+static int typeSeuillage;
+static int tailleOperateur;
+static int centrageResultat;
+static int typeOndelette;
+static int tailleOndelette;
+static int nbIterOperateur;
+static int indOpConvolution; /*< Indice de l'opérateur de convolution sélectionné */
+static int indOpMorphologie; /*< Indice de l'opérateur de morphologie sélectionné */
+static int typeResultat;	 /*< Type du résultat -1, ou constante OpenCV  p256 reference manual */
+double *minIm;			/*< Minimimum pour chaque plan de l'image */
+double *maxIm;			/*< Maximimum pour chaque plan de l'image */
+cv::Point	*locMin;	/*< Position du miminmu pour chaque plan */
+cv::Point	*locMax;	/*< Position du miminmu pour chaque plan */
+
+public : 
+//	********* Constructeurs et destructeur
+ImageInfoCV(long nbL,long nbC,int type);
+ImageInfoCV(void);
+ImageInfoCV(void *);
+ImageInfoCV(char *);
+~ImageInfoCV(void);
+void DoEnregistrer(char **nomFic,long =0,void * = NULL);
+void SauverProprieteProjet(char *);
+void DefProprieteImage(char *);
+// Lecture des images JPEG
+#ifdef WIN32
+void LectureImageJpeg(char *nomDuFichier,long &nbL,long &nbC,long &nbP);
+#else
+void LectureImageJpeg(char *nomDuFichier,long &nbL,long &nbC,long &nbP){};
+#endif
+
+
+private :
+void InitImageInfo(void *eTiff=NULL);
+void InitOp();
+char **DefChampMultiple(char *,long &);
+void DefChampMultiple(long ,char *c,char ***,long &);
+char *ConversionChampUtilChampTiff(char **,long,long &);
+
+//	********* Définition des membres privés
+public :
+void EffaceOp();
+void	DefFctImage(int i){fctImage=i;};
+void	DefFctImage(char *);
+void	DefTypeSeuillage(char*);
+void	DefTypeResultat(int i){typeResultat=i;};
+void	DefTailleOperateur(char*);
+void	DefCentrageResultat(char*);
+void	DefTypeOndelette(char *);
+void	DefTailleOndelette(long);
+void	DefNbIterOperateur(long);
+void	DefConverCplxEnt(char c);
+int		IndOpConvolution(int i=-1);  /*< Indice de l'opérateur de convolution sélectionné */
+int		IndOpMorphologie(int i=-1); /*< Indice de l'opérateur de morphologie sélectionné */
+int		FctImage(){return fctImage;};
+int		TypeResultat(){return typeResultat;};
+
+
+void 	DefNomImage(char *);
+void 	DefNatureImage(char *);
+void 	DefDateCreation(char *);
+void 	DefCreateur(char *);
+void	DefResolX(double);
+void	DefResolY(double);
+void	DefResolZ(double z);
+void	DefUniteZ(char *);
+void	DefChampUtil(char *,long i,long nbOctets=-1);
+void	DefChampCopolymere(char *);
+void	DefChampCopolymere(long ,char *);
+void	DefChampGonfle(char *);
+void	DefChampGonfle(long ,char *);
+void	DefChampComposite(char *);
+void	DefChampComposite(long ,char *);
+void	DefChampMicroscope(char *);
+void	DefChampMicroscope(long ,char *);
+void	DefChampScanner(char *);
+void	DefChampScanner(long ,char *);
+void	DefChampCamera(char *);
+void	DefChampCamera(long ,char *);
+void	DefChampSimulation(char *);
+void	DefChampSimulation(long ,char *);
+void	DefDescription(char *);
+void	DefMarqueMateriel(char *);
+void	DefTypeMateriel(char *);
+void	DefCopyright(char *);
+void	DefOrdinateur(char *);
+void 	DefNomPgm(char *);
+void 	DefNomProjet(char *);
+
+int	LitNbLigne(){return rows;};
+int	LitNbColonne(){return cols;};
+int	LitNbPlan(){return channels();};
+//	********* Lecture des membres privés
+char    *LitFctImage(void);
+char    *LitTypeSeuillage(void);
+char    *LitTailleOperateur(void);
+char    *LitCentrageResultat(void);
+char	LitValCentrageResultat(void);
+char    *LitTypeOndelette(void);
+long	LitTailleOndelette(void);
+long  	LitNbIterOperateur(void);
+char  	LitConverCplxEnt(void);
+
+char* 	LitNomImage(void);
+char* 	LitNatureImage(void);
+char*  	LitDateCreation(void);
+char* 	LitCreateur(void);
+double	LitResolX(void);
+double	LitResolY(void);
+double	LitResolZ(void);
+char*	LitUniteZ(void);
+char*	LitChampUtil(long);
+#ifdef __INFOTEXTE__
+long	LitNbChampCopolymere(void){return nbChampCopolymere;};
+long	LitNbChampComposite(void){return nbChampComposite;};
+long	LitNbChampGonfle(void){return nbChampGonfle;};
+long	LitNbChampMicroscope(void){return nbChampMicroscope;};
+long	LitNbChampScanner(void){return nbChampScanner;};
+long	LitNbChampCamera(void){return nbChampCamera;};
+long	LitNbChampSimulation(void){return nbChampSimulation;};
+#endif
+char*	LitChampCopolymere(long );
+char*	LitChampComposite(long );
+char*	LitChampGonfle(long );
+char*	LitChampMicroscope(long );
+char*	LitChampScanner(long );
+char*	LitChampCamera(long );
+char*	LitChampSimulation(long );
+char*	LitDescription(void);
+char*	LitMarqueMateriel(void);
+char*	LitTypeMateriel(void);
+char*	LitCopyright(void);
+char*	LitOrdinateur(void);
+char*	LitNomPgm(void);
+char*	LitNomProjet(void);
+char*	InfoImage(void);
+
+//Utilitaire pour info sur l'image
+char *InfoPixel(long x,long y,long =-1,long =-1); 
+
+// Surcharge des opérateurs
+ImageInfoCV 	*operator* (ImageInfoCV	&z);		// Convolution		
+ImageInfoCV 	*operator& (ImageInfoCV	&z);		// Erosion
+ImageInfoCV 	*operator| (ImageInfoCV	&z);		// Dilatation
+ImageInfoCV 	*operator+ (ImageInfoCV	&z);		// Addition
+ImageInfoCV 	*operator+ (double	z);		
+ImageInfoCV 	*operator- (ImageInfoCV	&z);		 // Soustraction
+ImageInfoCV 	*operator- (double	z);		
+ImageInfoCV 	*operator^ (ImageInfoCV	&z);		 // Produit
+ImageInfoCV 	*operator^ (double	z);		
+ImageInfoCV 	*operator/ (ImageInfoCV	&z);		 // Division
+ImageInfoCV 	*operator/ (double	z);		
+ImageInfoCV 	&operator= (ImageInfoCV	&z);
+ImageInfoCV	*Variance (long);
+
+// Fonctions membres equivalentes aux opérateurs utilisant OPENCV
+ImageInfoCV 	*Add(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
+ImageInfoCV 	*Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
+ImageInfoCV 	*Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
+ImageInfoCV 	*Div(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
+ImageInfoCV 	*Erosion(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
+ImageInfoCV 	*Dilatation(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
+ImageInfoCV 	*Ouverture(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
+ImageInfoCV 	*Fermeture(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
+ImageInfoCV 	*ChapeauHaut(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
+ImageInfoCV 	*ChapeauBas(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
+ImageInfoCV 	*GradMorph(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
+ImageInfoCV 	*Convolution(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
+ImageInfoCV 	*Laplacien(ImageInfoCV	*,Parametre &pOCV);
+ImageInfoCV 	*Scharr(ImageInfoCV	*im1,Parametre &pOCV);
+ImageInfoCV 	*Canny(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV 	*Contour(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV 	*Seuillage(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV 	*SeuillageAdaptatif(ImageInfoCV	*imSrc,Parametre &pOCV);
+ImageInfoCV 	*LissageMedian(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV 	*LissageMoyenne(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV 	*LissageGaussien(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV 	*LissageBilateral(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV 	*FFT(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV 	*IFFT(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV		**SeparationPlan(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV		*FusionPlan(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV		*ComposanteConnexe (ImageInfoCV *result,Parametre &paramOCV);
+
+void ExtremumLoc(ImageInfoCV *mask=NULL );
+
+// Transformée de fourier
+ImageInfoCV	*Fft (char dimension=0 );
+ImageInfoCV   *IFft (char dimension=0);
+
+// Corrélation et intercorrélation
+ImageInfoCV 	*Correlation (ImageInfoCV	&z);
+
+// Deconvolution itérative et de wiener
+ImageInfoCV 	*Deconvolution (ImageInfoCV	&z);
+ImageInfoCV 	*Wiener(ImageInfoCV	&z,double	varianceBruit=0,long larBruit=-1,double seuilFiltre=5);
+
+// Densité spectrale de puissance
+ImageInfoCV 	*DensiteSpectralePuissance (void);
+ImageInfoCV 	*DensiteSpectralePuissanceAR (void);
+
+// Transformée en ondelette
+ImageInfoCV 	*DOndelette(void);
+ImageInfoCV 	*IOndelette(void);
+
+// Opérateurs unaires
+ImageInfoCV	*Sqr (void);
+ImageInfoCV	*Abs (void);
+
+// Seuilage et composantes connexes 
+long  SeuilImage(float *seuil,int ligDeb=0, int colDeb=0, int hauteur=-1, int largeur=-1);
+void  SelectionMaxLocaux(ImageInfoCV &);
+ImageInfoCV *Binarisation(float *seuilBin,ImageInfoCV* =NULL);
+ImageInfoCV *NonMaximumSuppression(ImageInfoCV* ,ImageInfoCV*,float);
+ImageInfoCV *SeuilHysteresis(float seuil1,float seuil2,ImageInfoCV* =NULL);
+
+
+// Opérateurs Voronoi
+ImageInfoCV 	*Voronoi (ImageInfoCV	&z);
+
+// Squelette
+ImageInfoCV	*DistObjetFond();
+ImageInfoCV	*LigneMediane();
+
+// Reconstruction d'image
+ImageInfoCV *Recons2d(long nbPts,long tailleOperateur=0);
+ImageInfoCV *ZoomImage(long =64,long =64);
+
+// Histogramme
+ImageInfoCV *EgalisationHistogramme (void);
+
+// Ajout de bruit à une image
+ImageInfoCV *BruitImpulsionnel(double proba=0.25,long iMin=0,long iMax=255);
+ImageInfoCV *BruitGaussienMultiplicatif(double variance=3.0);
+ImageInfoCV *BruitLaplacien(double v=3.0);
+
+// Opération gèométrique
+ImageInfoCV *TransformationGeometrique(double **t, char =0);
+
+// Travaux spécifiques à la couleur
+void DefDataRGBVersPlan(unsigned char *d);	//Conversion de plan RGB vers Plan R plan G plan B
+
+// Filtrage de deriche et shen
+ImageInfoCV *GradientDericheX(double alphaDerive=0.75,double alphaMoyenne=0.25);
+ImageInfoCV *GradientDericheY(double alphaDerive=0.75,double alphaMoyenne=0.25);
+// Filtrage image bruitée Paillou
+ImageInfoCV *PaillouX(double w=50,double a=51);
+ImageInfoCV *PaillouY(double w=50,double a=51);
+ImageInfoCV *ModuleGradientPaillou(double w=50,double a=51,ImageInfoCV * = NULL);
+
+// Module du gradient
+ImageInfoCV *ModuleGradient(ImageInfoCV &,ImageInfoCV &);
+ImageInfoCV *ModuleGradientDeriche(double alphaDerive=0.75,double alphaMoyenne=0.25,ImageInfoCV * = NULL,char quadrant=0);
+
+// Statistique nanoraptor
+ImageInfoCV* ConversionCouleurEnEntier(float );
+
+// Contour
+ImageInfoCV *SuiviLigneGradient(ImageInfoCV &,ImageInfoCV &,ImageInfoCV * = NULL);
+
+
+// Spécifique MPI
+virtual void DiffusionMPI(void);
+
+// Accès aux membres privés
+double *MinIm(){if (!minIm) ExtremumLoc(); return minIm;};		/*< Minimum de l'image pour chaque canal */
+double *MaxIm(){if (!maxIm) ExtremumLoc();return maxIm;};		/*< Maximum de l'image pour chaque canal */
+
+// MODIFICATION d'une fonction OPENCV
+void Threshold( cv::InputArray _src, cv::OutputArray _dst, double thresh, double maxval, int type ); 
+
+};
+
+#endif //__IMAGEINFO__

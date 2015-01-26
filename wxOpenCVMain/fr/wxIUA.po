@@ -1,0 +1,540 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wxOpenCV\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-09 18:41+0100\n"
+"PO-Revision-Date: 2014-11-09 18:49+0100\n"
+"Last-Translator: Laurent Berger <laurent.berger@univ-lemans.fr>\n"
+"Language-Team: LANGUAGE <laurent.berger@univ-lemans.fr>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+
+msgid "&File"
+msgstr "&Fichier"
+
+msgid "&parameters"
+msgstr "&paramètres"
+
+msgid "16 bits signé"
+msgstr ""
+
+msgid "2"
+msgstr ""
+
+msgid "5"
+msgstr ""
+
+msgid "About wxAUI Demo"
+msgstr "A propos de wxOpenCV"
+
+msgid "Add"
+msgstr "Addition"
+
+msgid "Add 2 images"
+msgstr ""
+
+msgid "Another choice"
+msgstr ""
+
+msgid "Are you sure you want to close/hide this notebook page?"
+msgstr ""
+
+msgid "Are you sure you want to close/hide this pane?"
+msgstr ""
+
+msgid "Arithmetic operation"
+msgstr ""
+
+msgid "Big Toolbar"
+msgstr ""
+
+msgid "Blur (gaussian)"
+msgstr "Flou (gaussien)"
+
+msgid "Blur (mean)"
+msgstr "Flou (moyenne)"
+
+msgid "Blur (median filter)"
+msgstr "Flou (filtre médian)"
+
+msgid "Blur (median)"
+msgstr "Flou (médian)"
+
+msgid "Border type"
+msgstr ""
+
+msgid "Canny"
+msgstr ""
+
+msgid "Check 1"
+msgstr ""
+
+msgid "Check 2"
+msgstr ""
+
+msgid "Check 3"
+msgstr ""
+
+msgid "Check 4"
+msgstr ""
+
+msgid "Client Size Reporter"
+msgstr ""
+
+msgid "Constant"
+msgstr ""
+
+msgid "Constante"
+msgstr ""
+
+msgid "Contour"
+msgstr ""
+
+msgid "Convolution"
+msgstr ""
+
+msgid "Convolution parameters"
+msgstr ""
+
+msgid "Cross"
+msgstr ""
+
+msgid "Customize Toolbar clicked"
+msgstr ""
+
+msgid "Customize..."
+msgstr ""
+
+msgid "Depth of destination"
+msgstr ""
+
+msgid "Difffenrence between 2 images"
+msgstr ""
+
+msgid "Différence x"
+msgstr ""
+
+msgid "Différence y"
+msgstr ""
+
+msgid "Dilatation"
+msgstr ""
+
+msgid "Dilation"
+msgstr ""
+
+msgid "Disabled"
+msgstr ""
+
+msgid "Drop Down Item 1"
+msgstr ""
+
+msgid "Drop Down Item 2"
+msgstr ""
+
+msgid "Drop Down Item 3"
+msgstr ""
+
+msgid "Drop Down Item 4"
+msgstr ""
+
+msgid "Ellipse"
+msgstr ""
+
+msgid "Enter a name for the new perspective:"
+msgstr ""
+
+msgid "Erosion"
+msgstr ""
+
+msgid "Error"
+msgstr ""
+
+msgid "FFT"
+msgstr ""
+
+msgid "Filter name"
+msgstr ""
+
+msgid "Frei Chen x"
+msgstr ""
+
+msgid "Frei Chen y"
+msgstr ""
+
+msgid "Gradient"
+msgstr ""
+
+msgid "Histogram"
+msgstr ""
+
+msgid "IFFT"
+msgstr ""
+
+msgid "Image parameters"
+msgstr ""
+
+#, c-format
+msgid "Invalid selection %d, only %d pages left"
+msgstr ""
+
+msgid "Inverse FFT"
+msgstr ""
+
+msgid "Item 1"
+msgstr ""
+
+msgid "Item 2"
+msgstr ""
+
+msgid "Item 3"
+msgstr ""
+
+msgid "Item 4"
+msgstr ""
+
+msgid "Item 5"
+msgstr ""
+
+msgid "Item 6"
+msgstr ""
+
+msgid "Item 7"
+msgstr ""
+
+msgid "Item 8"
+msgstr ""
+
+msgid "Laplacien 4 connexe"
+msgstr ""
+
+msgid "Laplacien 8 connexe"
+msgstr ""
+
+msgid "LissageGaussien"
+msgstr ""
+
+msgid "LissageMedian"
+msgstr ""
+
+msgid "LissageMoyenneur"
+msgstr ""
+
+msgid "Log window "
+msgstr ""
+
+msgid "Morphology parameters"
+msgstr ""
+
+msgid "Moyenne"
+msgstr ""
+
+msgid "Moyenne 5x5"
+msgstr ""
+
+msgid "Moyenne 7x7"
+msgstr ""
+
+msgid "Moyenne Pondérée"
+msgstr ""
+
+msgid "Moyenne Pondérée 5x5"
+msgstr ""
+
+msgid "Moyenne Pondérée 7x7"
+msgstr ""
+
+msgid "Notebook"
+msgstr ""
+
+msgid "One choice"
+msgstr ""
+
+msgid "Open"
+msgstr "Ouvrir"
+
+msgid "Operator 1"
+msgstr ""
+
+msgid "Operator 10"
+msgstr ""
+
+msgid "Operator 2"
+msgstr ""
+
+msgid "Operator 3"
+msgstr ""
+
+msgid "Operator 4"
+msgstr ""
+
+msgid "Operator 5"
+msgstr ""
+
+msgid "Operator 6"
+msgstr ""
+
+msgid "Operator 7"
+msgstr ""
+
+msgid "Operator 8"
+msgstr ""
+
+msgid "Operator 9"
+msgstr ""
+
+msgid "Operator size"
+msgstr ""
+
+msgid "Pattern morphology"
+msgstr ""
+
+msgid "Periodic boundary"
+msgstr ""
+
+#, c-format
+msgid "Perspective %u"
+msgstr ""
+
+msgid "Prewitt x"
+msgstr ""
+
+msgid "Prewitt y"
+msgstr ""
+
+msgid "Radio 1"
+msgstr ""
+
+msgid "Radio 1 (Group 2)"
+msgstr ""
+
+msgid "Radio 2"
+msgstr ""
+
+msgid "Radio 2 (Group 2)"
+msgstr ""
+
+msgid "Radio 3"
+msgstr ""
+
+msgid "Radio 3 (Group 2)"
+msgstr ""
+
+msgid "Ready"
+msgstr ""
+
+msgid "Rectangle"
+msgstr ""
+
+msgid "Roberts x"
+msgstr ""
+
+msgid "Roberts y"
+msgstr ""
+
+msgid "Sample Bookmark Toolbar"
+msgstr ""
+
+msgid "Save"
+msgstr ""
+
+msgid "Seuillage"
+msgstr ""
+
+msgid "Sobel x"
+msgstr ""
+
+msgid "Sobel y"
+msgstr ""
+
+msgid "Sub"
+msgstr ""
+
+msgid "Subitem 1"
+msgstr ""
+
+msgid "Subitem 2"
+msgstr ""
+
+msgid "Subitem 3"
+msgstr ""
+
+msgid "Subitem 4"
+msgstr ""
+
+msgid "Subitem 5"
+msgstr ""
+
+msgid "Symetric/last pixel"
+msgstr ""
+
+msgid "Symetric/limit"
+msgstr ""
+
+msgid "Test"
+msgstr ""
+
+msgid "Text Control"
+msgstr ""
+
+msgid "Thereshold"
+msgstr ""
+
+#, c-format
+msgid "This is text box %d"
+msgstr ""
+
+msgid "This option is presently only available on wxGTK, wxMSW and wxMac"
+msgstr ""
+
+msgid "This pane will prompt the user before hiding."
+msgstr ""
+
+msgid "Toolbar 2 (Horizontal)"
+msgstr ""
+
+msgid "Toolbar 3"
+msgstr ""
+
+msgid "Tree Control"
+msgstr ""
+
+msgid "Utilisateur"
+msgstr ""
+
+msgid "Utilisateur 1"
+msgstr ""
+
+msgid "Utilisateur 1 5x5"
+msgstr ""
+
+msgid "Utilisateur 1 7x7"
+msgstr ""
+
+msgid "Utilisateur 2"
+msgstr ""
+
+msgid "Utilisateur 2 5x5"
+msgstr ""
+
+msgid "Utilisateur 2 7x7"
+msgstr ""
+
+msgid "Utilisateur 4"
+msgstr ""
+
+msgid "Utilisateur 4 7x7"
+msgstr ""
+
+msgid "Utilisateur 45x5 "
+msgstr ""
+
+msgid "Utilisateur 5"
+msgstr ""
+
+msgid "Utilsateur 3"
+msgstr ""
+
+msgid "Utilsateur 3 5x5"
+msgstr ""
+
+msgid "Utilsateur 3 7x7"
+msgstr ""
+
+msgid "Video Toolbar"
+msgstr ""
+
+msgid "Welcome to wxAUI (this is a page tooltip)"
+msgstr ""
+
+msgid "You must defined morphological operator first!"
+msgstr ""
+
+msgid "double"
+msgstr ""
+
+msgid "equal last pixel"
+msgstr ""
+
+msgid "float"
+msgstr ""
+
+msgid "grid_content"
+msgstr ""
+
+msgid "html_content"
+msgstr ""
+
+msgid "inverse FFT"
+msgstr ""
+
+msgid "notebook_content"
+msgstr ""
+
+msgid "same"
+msgstr ""
+
+msgid "settings"
+msgstr ""
+
+msgid "sizereport_content"
+msgstr ""
+
+msgid "tb1"
+msgstr ""
+
+msgid "tb2"
+msgstr ""
+
+msgid "tb3"
+msgstr ""
+
+msgid "tb4"
+msgstr ""
+
+msgid "tb5"
+msgstr ""
+
+msgid "tbVideo"
+msgstr ""
+
+msgid "test10"
+msgstr ""
+
+msgid "text_content"
+msgstr ""
+
+msgid "tree_content"
+msgstr ""
+
+msgid "wxAUI"
+msgstr ""
+
+msgid ""
+"wxAUI Demo\n"
+"An advanced window management library for wxWidgets\n"
+"(c) Copyright 2005-2006, Kirix Corporation"
+msgstr ""
+
+msgid "wxAUI Project"
+msgstr ""
+
+msgid "wxAUI Test"
+msgstr ""
+
+msgid "wxSpinCtrl:"
+msgstr ""
+
+msgid "wxTextCtrl 7: and the tooltip message can be even longer!"
+msgstr ""
+
+msgid "wxTextCtrl:"
+msgstr ""

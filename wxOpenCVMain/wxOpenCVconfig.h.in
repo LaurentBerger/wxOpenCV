@@ -1,0 +1,9 @@
+// the configured options and settings for Tutorial
+#define VERSION_MAJOR @wxOpenCV_VERSION_MAJOR@
+#define VERSION_MINOR @wxOpenCV_VERSION_MINOR@
+#define CHEMIN_PLPLOT_DRV "@PLplot_DRIVER_DIR@"
+#define CHEMIN_LOSDK "@wxWidgets_LIB_DIR@"
+#define CHEMIN_WXWIDGETS_DLL "@wxWidgets_LIB_DIR@"
+#define CHEMIN_OPENCV "@OpenCV_CONFIG_PATH@"
+#define CHEMIN_PLPLOT_WX "@PLplot_DYNLIB@"
+#define CHEMIN_PLPLOT_CXX "@PLplot_DYNLIB@"

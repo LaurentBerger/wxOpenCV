@@ -1,0 +1,632 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wxOpenCV\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-09 17:39+0100\n"
+"PO-Revision-Date: 2014-11-09 18:30+0100\n"
+"Last-Translator: Laurent Berger <laurent.berger@univ-lemans.fr>\n"
+"Language-Team: LANGUAGE <laurent.berger@univ-lemans.fr>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: Poedit 1.6.10\n"
+"X-Poedit-SourceCharset: windows-1252\n"
+
+msgid "\t"
+msgstr ""
+
+msgid "\n"
+msgstr ""
+
+msgid " "
+msgstr ""
+
+#, c-format
+msgid "%d : %s(%d) of %d "
+msgstr ""
+
+msgid "&About"
+msgstr ""
+
+msgid "&Arcenciel\tCtrl-F2"
+msgstr ""
+
+msgid "&Arcenciel 8bits\t"
+msgstr ""
+
+msgid "&Arcenciel circulaire 8 bits\t"
+msgstr ""
+
+msgid "&Gris\tCtrl-F1"
+msgstr ""
+
+msgid "&Gris 8 bits\tCtrl-F2"
+msgstr ""
+
+msgid "&Jet\t"
+msgstr ""
+
+msgid "&Owner\t"
+msgstr ""
+
+msgid "&Palette"
+msgstr ""
+
+msgid "&Rainbow\t"
+msgstr ""
+
+msgid "&Reverse Owner\t"
+msgstr ""
+
+msgid "&Zoom"
+msgstr ""
+
+msgid "&Zoom 1/2\tCtrl-F1"
+msgstr ""
+
+msgid "&Zoom x1\tCtrl-F2"
+msgstr ""
+
+msgid "&Zoom x2\tCtrl-F2"
+msgstr ""
+
+msgid "&Zoom x4\tCtrl-F2"
+msgstr ""
+
+msgid "&Zoom x8\tCtrl-F2"
+msgstr ""
+
+msgid "&gris circulaire 8 bis\t"
+msgstr ""
+
+msgid "*.csv"
+msgstr ""
+
+msgid "*.tif"
+msgstr ""
+
+msgid "*.tif;*.jpg;*.bmp"
+msgstr ""
+
+msgid "."
+msgstr ""
+
+msgid ". Do you want to save it in another folder?"
+msgstr "Voulez vous l'enregistrer dans un autre dossier?"
+
+msgid ".tif"
+msgstr ""
+
+msgid "0\t-1\t-1\t"
+msgstr ""
+
+msgid "0\tNULL"
+msgstr ""
+
+msgid "0\tNULL\t"
+msgstr ""
+
+msgid "1\t"
+msgstr ""
+
+msgid "4242"
+msgstr ""
+
+msgid ":"
+msgstr ""
+
+msgid "An error occured in unary operator :"
+msgstr ""
+
+msgid "Arabic"
+msgstr ""
+
+msgid "Arabic (Egypt)"
+msgstr ""
+
+msgid "Atmcd32d.dll"
+msgstr ""
+
+msgid "Background Info"
+msgstr ""
+
+msgid "Background image saved in "
+msgstr ""
+
+msgid "Biais"
+msgstr ""
+
+#, c-format
+msgid "Bias Image %s"
+msgstr ""
+
+msgid "Bias Info"
+msgstr ""
+
+msgid "Bias image saved in "
+msgstr ""
+
+msgid "BiasBackground"
+msgstr ""
+
+msgid "Brut"
+msgstr ""
+
+msgid "Bulgarian"
+msgstr ""
+
+msgid "C"
+msgstr ""
+
+msgid "C:/Program Files (x86)/plplot/lib/plplot5.10.0/driversd/svg"
+msgstr ""
+
+msgid "C:/Program Files (x86)/plplot/lib/plplot5.10.0/driversd/wxwidgets"
+msgstr ""
+
+msgid "Camera Control"
+msgstr "Contrôle caméra"
+
+msgid "Cancel"
+msgstr ""
+
+msgid "Canny"
+msgstr ""
+
+msgid "Close"
+msgstr ""
+
+msgid "Close window"
+msgstr ""
+
+msgid "Contour"
+msgstr ""
+
+msgid "Control :"
+msgstr ""
+
+msgid "Convolution"
+msgstr ""
+
+msgid "Corrigee"
+msgstr ""
+
+#, c-format
+msgid "Couldn't find/load the 'internat' catalog for locale '%s'."
+msgstr ""
+
+msgid "Create a report"
+msgstr "Créer un rapport"
+
+msgid "Czech"
+msgstr ""
+
+msgid "Dilatation"
+msgstr ""
+
+msgid "Do you want to cancel operation?"
+msgstr "Voulez vous annuler l'opération ?"
+
+msgid "Document is empty"
+msgstr "Document vide"
+
+msgid "End"
+msgstr ""
+
+msgid "English"
+msgstr ""
+
+msgid "English (U.S.)"
+msgstr ""
+
+msgid "Erosion"
+msgstr ""
+
+msgid "Error Saving File"
+msgstr "Erreur d'enregistrement"
+
+msgid "Execute "
+msgstr "Executer"
+
+msgid "FFT"
+msgstr ""
+
+#, c-format
+msgid "File %s already exist. This timestamp file seems already used."
+msgstr ""
+
+msgid "File Format Error "
+msgstr ""
+
+msgid "File already exist"
+msgstr "Fichier existe déjà"
+
+msgid "File already exist. Overwrite it?"
+msgstr ""
+
+msgid "Filtrage Max"
+msgstr ""
+
+msgid "Filtre"
+msgstr ""
+
+msgid "French"
+msgstr ""
+
+msgid "Georgian"
+msgstr ""
+
+msgid "German"
+msgstr ""
+
+msgid "Grabbing images stopped!"
+msgstr ""
+
+msgid "IFFT"
+msgstr ""
+
+msgid "Image "
+msgstr ""
+
+#, c-format
+msgid "Image %s loaded"
+msgstr ""
+
+msgid "Image Statistic"
+msgstr ""
+
+msgid "Image as Op1"
+msgstr ""
+
+msgid "Image as Op2"
+msgstr ""
+
+#, c-format
+msgid "Image saved %s "
+msgstr ""
+
+#, c-format
+msgid "Inconsistancy at line :%d"
+msgstr ""
+
+msgid "IndOpConvolution"
+msgstr ""
+
+msgid "IndOpDilatation"
+msgstr ""
+
+msgid "IndOpErosion"
+msgstr ""
+
+msgid "Italian"
+msgstr ""
+
+msgid "Japanese"
+msgstr ""
+
+msgid "Language"
+msgstr ""
+
+msgid "LissageGaussien"
+msgstr ""
+
+msgid "LissageMedian"
+msgstr ""
+
+msgid "LissageMoyenneur"
+msgstr ""
+
+#, c-format
+msgid "Mean mode %d b0=%f b1=%f"
+msgstr ""
+
+msgid "Message"
+msgstr ""
+
+msgid "NULL\t"
+msgstr ""
+
+msgid "No Bias Image "
+msgstr ""
+
+msgid "No background Image"
+msgstr "Pas d'image de fond"
+
+msgid "Open Sequence"
+msgstr "Ouvrir séquence"
+
+#, c-format
+msgid "OpenCV compatible camera detected (%dX%d : %d)"
+msgstr "Caméra compatible OpenCV détectée (%dX%d : %d)"
+
+msgid "OpenCV compatible camera not detected"
+msgstr "pas de caméra OpenCv compatible détectée"
+
+msgid "Operation canceled"
+msgstr "opération annulée"
+
+msgid "Ouvrir "
+msgstr ""
+
+msgid ""
+"PNG files (*.png)|*.png|JPG files (*.jpg)|*.jpg|TIFF files (*.tif)|*.tif"
+msgstr ""
+
+msgid "Parametrage Algo."
+msgstr ""
+
+msgid "Please choose language:"
+msgstr ""
+
+msgid "Polish"
+msgstr ""
+
+msgid "Quit"
+msgstr "Quitter"
+
+msgid "Quit Application"
+msgstr "Quitter l'application"
+
+msgid "RefTache"
+msgstr ""
+
+msgid "Resultat de l'opération vide"
+msgstr ""
+
+msgid "Russian"
+msgstr ""
+
+msgid "Save"
+msgstr "Enregistrer"
+
+msgid "Save As"
+msgstr "Enregistrer sous"
+
+msgid "Section"
+msgstr ""
+
+msgid "Seq"
+msgstr ""
+
+#, c-format
+msgid "Server %s failed to start"
+msgstr ""
+
+#, c-format
+msgid "Server %s started"
+msgstr ""
+
+msgid "Server uses DDE"
+msgstr ""
+
+msgid "Server uses TCP"
+msgstr ""
+
+msgid "Seuillage"
+msgstr ""
+
+msgid "Stat : "
+msgstr ""
+
+msgid "Stat Rectangle"
+msgstr ""
+
+msgid "Swedish"
+msgstr ""
+
+msgid "System default"
+msgstr ""
+
+msgid "Tache"
+msgstr ""
+
+msgid "The OpenCV Reference Manual, Release 2.4.9.0 p325"
+msgstr ""
+
+msgid "This language is not supported by the system."
+msgstr ""
+
+msgid "Timestamp ended!"
+msgstr ""
+
+msgid "Undefined"
+msgstr "indéfini"
+
+msgid "Video"
+msgstr "Vidéo"
+
+#, c-format
+msgid "Video %d"
+msgstr "Vidéo %d"
+
+msgid "Video opened"
+msgstr "Vidéo ouverte"
+
+msgid "Warning"
+msgstr "Attention"
+
+msgid "Warning "
+msgstr "Attention"
+
+msgid "You must stop grabbing image before!"
+msgstr "Vous devez arrêter l'acquisition avant!"
+
+msgid "You must stop grabbing sequence before!"
+msgstr "Vous devez arrêter l'acquisition de la séquence avant!"
+
+msgid "You've probably entered an invalid number."
+msgstr ""
+
+msgid "\\"
+msgstr ""
+
+msgid "\\DernierConfig.txt"
+msgstr ""
+
+msgid "\\Images"
+msgstr ""
+
+msgid "\\Images\\BiasBackground"
+msgstr ""
+
+msgid "\\Images\\BiasBackground\\"
+msgstr ""
+
+msgid "\\TraiMisc"
+msgstr ""
+
+msgid "_"
+msgstr ""
+
+msgid "anchor"
+msgstr ""
+
+msgid "aperture_size"
+msgstr ""
+
+#, c-format
+msgid "background Image %s"
+msgstr ""
+
+msgid "borderType"
+msgstr ""
+
+msgid "cor."
+msgstr ""
+
+msgid "corFilmax."
+msgstr ""
+
+msgid "e:\\test.yml.gz"
+msgstr ""
+
+#, c-format
+msgid "exposure Time %6.3f Mode Gain %d EMCCDGain %6.3f "
+msgstr ""
+
+msgid "fileutils"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny"
+msgstr ""
+
+msgid ""
+"http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=blur#blur"
+msgstr ""
+
+msgid ""
+"http://docs.opencv.org/modules/imgproc/doc/filtering.html?"
+"highlight=gaussianblur#gaussianblur"
+msgstr ""
+
+msgid ""
+"http://docs.opencv.org/modules/imgproc/doc/filtering.html?"
+"highlight=medianblur#medianblur"
+msgstr ""
+
+msgid ""
+"http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations."
+"html?highlight=threshold#threshold"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=263&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=298&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=325&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=331&zoom=70,250,100"
+msgstr ""
+
+msgid "internat"
+msgstr ""
+
+msgid "jpg"
+msgstr ""
+
+msgid "kernel_size"
+msgstr ""
+
+msgid "ksize"
+msgstr ""
+
+msgid "lang"
+msgstr ""
+
+#, c-format
+msgid "last config %s %s"
+msgstr ""
+
+msgid "maxval"
+msgstr ""
+
+msgid "plplotwxwidgetsd"
+msgstr ""
+
+msgid "png"
+msgstr ""
+
+msgid "seec64.bmp"
+msgstr ""
+
+#, c-format
+msgid "shape0%d.png"
+msgstr ""
+
+msgid "sigmaX"
+msgstr ""
+
+msgid "sigmaY"
+msgstr ""
+
+msgid "thresh"
+msgstr ""
+
+msgid "threshold1"
+msgstr ""
+
+msgid "threshold2"
+msgstr ""
+
+msgid "threshold_type"
+msgstr ""
+
+msgid "unable to load plplot"
+msgstr "échec chargement plplot"
+
+msgid "unable to load svg"
+msgstr "echec chargement driver svg"
+
+msgid "unable to load wxwidgets"
+msgstr "echec chargement driver wxwidgets"
+
+msgid "unknown"
+msgstr ""
+
+msgid "untitle"
+msgstr ""
+
+msgid "wxOpenCV"
+msgstr ""
+
+msgid "wxstd"
+msgstr ""
+
+msgid "|XML files (*.yaml)|*yaml"
+msgstr ""
