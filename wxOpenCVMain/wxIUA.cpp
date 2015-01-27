@@ -33,7 +33,7 @@ enum
 {
     // menu items
     ID_ADDITION =1,
-    ID_SOUSTRACTION, 
+    ID_SOUSTRACTION,
     ID_DIVISION,
     ID_MULTIPLICATION,
     ID_EROSION,
@@ -144,7 +144,7 @@ END_EVENT_TABLE()
     #include "bitmaps/LisGau.xpm"
 // Barre outils binarization
     #include "bitmaps/seuillage.xpm"
-    #include "bitmaps/seuillageAda.xpm"
+    #include "bitmaps/seuillageada.xpm"
     #include "bitmaps/canny.xpm"
     #include "bitmaps/contour.xpm"
    #include "bitmaps/statconnexe.xpm"
@@ -1257,7 +1257,7 @@ case ID_ADDITION:
 	break;
 case ID_SOUSTRACTION:
 	s="Soustraction";
-	break; 
+	break;
 case ID_DIVISION:
 	s="Division";
 	break;

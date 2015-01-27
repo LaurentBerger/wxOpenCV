@@ -1,8 +1,8 @@
 cmake_minimum_required(VERSION 2.8)
 
 
-PROJECT (wxOpenCV)
-set(CMAKE_MODULE_PATH "${wxOpenCV_SOURCE_DIR}/Cmake")
+PROJECT (wxopencv)
+set(CMAKE_MODULE_PATH "${wxopencv_SOURCE_DIR}/CMake")
 set(plplot $ENV{PLPLOT_HOME})
 set(LOSDK $ENV{LibreOfficeSDK})
 

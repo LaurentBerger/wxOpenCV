@@ -1,0 +1,42 @@
+file(REMOVE_RECURSE
+  "CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/ZoneImage.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetreInfo.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/Tableur.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetreCoupe.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/CameraAndor.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/ImInCV.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/ImInCVOperation.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/ControleCamera.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/ImageStat.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/HorodatageSequence.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/GestioncurseurSourisGlisser.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetrePalette.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/IMulti.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/GestionZone.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/wxIUA.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/RapportAOO_LO.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/AffichageNouvelleImage.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/main.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetreRegion.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetreHistogramme.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetreZoom.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetreDistribradiale.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/ServeurScilab.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetreAlgo.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/ThreadEventCamera.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/GraphiqueImage.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/ImInCVInitOp.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetrePrincipaleClavier.cpp.o"
+  "wxOpenCVMain.pdb"
+  "wxOpenCVMain"
+)
+
+# Per-language clean rules from dependency scanning.
+foreach(lang CXX)
+  include(CMakeFiles/wxOpenCVMain.dir/cmake_clean_${lang}.cmake OPTIONAL)
+endforeach()
