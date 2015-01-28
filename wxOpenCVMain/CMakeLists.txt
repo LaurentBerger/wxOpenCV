@@ -13,7 +13,7 @@ ADD_EXECUTABLE (wxOpenCVMain ${wxOpenCVMain_SRCS})
 
 configure_file (
 	"${PROJECT_SOURCE_DIR}/wxOpenCVConfig.h.in"
-	"${PROJECT_BINARY_DIR}/wxOpenCVConfig.h"
+	"${PROJECT_SOURCE_DIR}/wxOpenCVConfig.h"
 	)
 
 if (wxWidgets_FOUND)
@@ -39,9 +39,9 @@ IF(WIN32) # Check if we are on Windows
 		set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "")
   
 		if  (CMAKE_CL_64)
-			set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "__WXMSW__;WXUSINGDLL;_CRT_SECURE_NO_WARNINGS")
+			set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "__WXMSW__;_CRT_SECURE_NO_WARNINGS")
 		else()
-			set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "__WXMSW__;WXUSINGDLL;_CRT_SECURE_NO_WARNINGS")
+			set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "__WXMSW__;_CRT_SECURE_NO_WARNINGS")
 		endif()
 		set_target_properties(wxOpenCVMain PROPERTIES  LINK_FLAGS_DEBUG "/SUBSYSTEM:WINDOWS")
 		set_target_properties(wxOpenCVMain PROPERTIES LINK_FLAGS_RELEASE  "/SUBSYSTEM:WINDOWS")		

@@ -1,0 +1,36 @@
+Compilation de wxOpenCV
+Installer cmake 
+Installer le sdk de libreoffice
+Définir les variables systèmes :
+
+LibreOfficeSDK=F:\Lib\LibreOfficeSdk
+OPENCV=F:\Lib\opencv
+PLPLOT_DRV_DIR=C:\Program Files\plplot\lib\plplot5.10.0\driversd
+PLPLOT_HOME=C:\Program Files\plplot
+PLPLOT_INCLUDE=C:\Program Files\plplot\include
+PLPLOT_LIB=C:\Program Files\plplot\lib
+PLPLOT_SRC=F:\Lib\plplot-5.9.10
+wxDir=F:\Lib\wxWidgets-3.0.2
+wxWin=F:\Lib\wxWidgets-3.0.2
+
+la variable système plplot_home doit pointer sur c:\program files \plplot
+la variable système libreofficesdk  doit pointer sur D:/lib/LibreOffice_4.3_SDK/sdk/include
+
+construire le projet de opencv avec cmake( cmake flag -D WITH_IPP=OFF http://answers.opencv.org/question/40425/opencv-build-fails-because-i-cannot-download-icv-on-our-build-farm/)
+construire le projet de plplot avec cmake
+
+1 compiler OpenCV 
+2 compiler PLPLOT
+3 compiler wxOpenCV
+Attention le dossier lib de wxWidgets doit être identique à celui de PLPLOT pour windows (vc_dll ou vc_lib). Si cela n'et pas le cas erreur du type "failed to register window class"
+Les DLL debug et release de plplot ne sont pas compatibles. cela peut aussi provoquer l'erreur "failed to register window class"
+
+git clone ssh://git@renater.fr:2222/wxopencv.git
+
+Commande cmake linux
+cmake -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+cmake -G "Codeblocks Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+commande git
+git commit -F commit.txt
+git clone ssh://git@git.renater.fr:2222/wxopencv.git
+
