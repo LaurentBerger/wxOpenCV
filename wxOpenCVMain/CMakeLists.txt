@@ -37,11 +37,16 @@ IF(WIN32) # Check if we are on Windows
 	message( STATUS         "WINDOWS")
 	if(MSVC) # Check if we are using the Visual Studio compiler
 		set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "")
-  
+	message( STATUS         "${WX_LIB_DIR}")
+        IF(WX_LIB_DIR MATCHES ".*[dD][lL][lL].*")
+			SET(wxWidgets_DEFINITIONS WXUSINGDLL)
+			DBG_MSG_V("detected SHARED/DLL tree WX_LIB_DIR=${WX_LIB_DIR}")
+		ENDIF(WX_LIB_DIR MATCHES ".*[dD][lL][lL].*")
+
 		if  (CMAKE_CL_64)
-			set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "__WXMSW__;_CRT_SECURE_NO_WARNINGS")
+			set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "${wxWidgets_DEFINITIONS};__WXMSW__;_CRT_SECURE_NO_WARNINGS")
 		else()
-			set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "__WXMSW__;_CRT_SECURE_NO_WARNINGS")
+			set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "${wxWidgets_DEFINITIONS};__WXMSW__;_CRT_SECURE_NO_WARNINGS")
 		endif()
 		set_target_properties(wxOpenCVMain PROPERTIES  LINK_FLAGS_DEBUG "/SUBSYSTEM:WINDOWS")
 		set_target_properties(wxOpenCVMain PROPERTIES LINK_FLAGS_RELEASE  "/SUBSYSTEM:WINDOWS")		
