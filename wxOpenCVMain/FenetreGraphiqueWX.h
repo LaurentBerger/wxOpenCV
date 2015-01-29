@@ -30,6 +30,8 @@ wxSound			m_fire;
 NanoSurface		*surface;
 PlanReference	*surfaceReference;
 void			*osgApp;
+void			*fenParent;
+
 wxGLContext		*glContexte;
 
 wxTimer				*horlogeSeq;

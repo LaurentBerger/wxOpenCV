@@ -1,4 +1,5 @@
 #include "FenetreGraphiqueWX.h"
+#include "Fenetre3D.h"
 #include "wxOSGApp.h"
 #include "wx/wxprec.h"
 
@@ -15,6 +16,7 @@ FenetreGraphiqueWX::FenetreGraphiqueWX(wxWindow *parent, wxWindowID id,
 	basculeCopyAvance=0;
 	horlogeSeq=NULL;
 	horlogeCopy=NULL;
+	fenParent=parent;
 
 
 }
@@ -126,7 +128,7 @@ void FenetreGraphiqueWX::OnKeyDown(wxKeyEvent &event)
 int d=0;
 if (key>='1' && key<='4')
 	{
-	((wxOsgApp*)osgApp)->Graphique()->MAJNoeud(key);
+	((Fenetre3D*)fenParent)->MAJNoeud(key);
 	}
 
 
@@ -148,11 +150,11 @@ if (key=='V'&& event.ShiftDown() )
 		}
 	horlogeSeq->Start(3000,false);
 	horlogeCopy->Start(300,false);
-	((wxOsgApp*)osgApp)->AutoriseVideo();
+//	((wxOsgApp*)osgApp)->AutoriseVideo();
 	}
 if (key=='V'&& !event.ShiftDown() )
 	{
-	((wxOsgApp*)osgApp)->InterditVideo();
+//	((wxOsgApp*)osgApp)->InterditVideo();
 	if (horlogeSeq && horlogeSeq->IsRunning())
 		{
 		horlogeSeq->Stop();
@@ -185,61 +187,55 @@ if (key=='X' && event.ShiftDown())
 	surfaceReference->Monter(100);
 	surfaceReference->Maj();
 	} // if (key=='X' && event.ShiftDown())
-if (key=='C'&& event.ShiftDown())
-	((wxOsgApp*)osgApp)->AutoriseCapture();
-if (key=='C'&& !event.ShiftDown())
-	((wxOsgApp*)osgApp)->InterditCapture();
 if (key==WXK_F1)
-	((wxOsgApp*)osgApp)->ActiveGeode(0);
+	((Fenetre3D*)fenParent)->ActiveGeode(0);
 if (key==WXK_F2)
-	((wxOsgApp*)osgApp)->ActiveGeode(1);
+	((Fenetre3D*)fenParent)->ActiveGeode(1);
 if (key==WXK_F3)
-	((wxOsgApp*)osgApp)->ActiveGeode(2);
+	((Fenetre3D*)fenParent)->ActiveGeode(2);
 if (key==WXK_F4)
-	((wxOsgApp*)osgApp)->ActiveGeode(3);
+	((Fenetre3D*)fenParent)->ActiveGeode(3);
 if (key==WXK_F5)
-	((wxOsgApp*)osgApp)->ActiveGeode(4);
+	((Fenetre3D*)fenParent)->ActiveGeode(4);
 if (key==WXK_F6)
-	((wxOsgApp*)osgApp)->ActiveGeode(5);
+	((Fenetre3D*)fenParent)->ActiveGeode(5);
 if (key==WXK_F7)
-	((wxOsgApp*)osgApp)->ActiveGeode(6);
+	((Fenetre3D*)fenParent)->ActiveGeode(6);
 if (key==WXK_F8)
-	((wxOsgApp*)osgApp)->ActiveGeode(7);
+	((Fenetre3D*)fenParent)->ActiveGeode(7);
 if (key==WXK_F9)
-	((wxOsgApp*)osgApp)->ActiveGeode(8);
+	((Fenetre3D*)fenParent)->ActiveGeode(8);
 if (key==WXK_F10)
-	((wxOsgApp*)osgApp)->ActiveGeode(9);
+	((Fenetre3D*)fenParent)->ActiveGeode(9);
 if (key==WXK_F11)
-	((wxOsgApp*)osgApp)->ActiveGeode(10);
+	((Fenetre3D*)fenParent)->ActiveGeode(10);
 if (key==WXK_F12)
-	((wxOsgApp*)osgApp)->ActiveGeode(11);
+	((Fenetre3D*)fenParent)->ActiveGeode(11);
 if (key==WXK_LEFT)
-	((wxOsgApp*)osgApp)->DeplaceCurseur(-1,0);
+	((Fenetre3D*)fenParent)->DeplaceCurseur(-1,0);
 if (key==WXK_RIGHT)
-	((wxOsgApp*)osgApp)->DeplaceCurseur(1,0);
+	((Fenetre3D*)fenParent)->DeplaceCurseur(1,0);
 if (key==WXK_UP)
-	((wxOsgApp*)osgApp)->DeplaceCurseur(0,1);
+	((Fenetre3D*)fenParent)->DeplaceCurseur(0,1);
 if (key==WXK_DOWN)
-	((wxOsgApp*)osgApp)->DeplaceCurseur(0,-1);
+	((Fenetre3D*)fenParent)->DeplaceCurseur(0,-1);
+/*
 if (key=='R')
 	{
-	((wxOsgApp*)osgApp)->Composante('R');
+	((Fenetre3D*)fenParent)->Composante('R');
 	}
 if (key=='G')
 	{
-	((wxOsgApp*)osgApp)->Composante('G');
+	((Fenetre3D*)fenParent)->Composante('G');
 	}
 if (key=='B')
 	{
-	((wxOsgApp*)osgApp)->Composante('B');
+	((Fenetre3D*)fenParent)->Composante('B');
 	}
-
+*/
 if (d!=0)
 	{
 	MAJ(d);
-	((wxOsgApp*)osgApp)->MAJFichier();
-	((wxOsgApp*)osgApp)->MAJEchelle();
-	((wxOsgApp*)osgApp)->MAJCurseur();
 	}
     if (_graphics_window.valid())
     {
