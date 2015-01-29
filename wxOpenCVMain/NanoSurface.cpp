@@ -1,5 +1,9 @@
+//#include <osgDB/ReadFile> 
+// 2>osgDB.lib(osg100-osgDB.dll) : error LNK2005: "public: __cdecl std::basic_ifstream<char,struct std::char_traits<char> >::basic_ifstream<char,struct std::char_traits<char> >(char const *,int,int)" (??0?$basic_ifstream@DU?$char_traits@D@std@@@std@@QEAA@PEBDHH@Z) déjà défini(e) dans GraphiqueImage.obj
+
 #include "NanoSurface.h"
 #include "ImageInfo.h"
+#include "Fenetre3D.h"
 #include <iostream>
 #include <fstream>
 #include <strstream>
@@ -7,40 +11,7 @@
 #include <wx/thread.h>
 using namespace std;
 
-#include <osgDB/ReadFile>
-
-
-class ProcessLectureFichier : public wxThread
-{
-osg::Image	**im;
-char		*nomFichier;	
-
-public:
-    ProcessLectureFichier(char *nom,osg::Image	**i);
-
-    // thread execution starts here
-    virtual void *Entry();
-
-    // called when the thread exits - whether it terminates normally or is
-    // stopped with Delete() (but not when it is Kill()ed!)
-    virtual void OnExit(){};
-
-public:
-    unsigned m_count;
-};
-
-ProcessLectureFichier::ProcessLectureFichier(char *nom,osg::Image	**i)
-{
-nomFichier = new char[strlen(nom)];
-strcpy(nomFichier ,nom);
-im=i;
-
-}
-void *ProcessLectureFichier::Entry()
-{
-*im = osgDB::readImageFile(nomFichier);
-return NULL;
-}
+//
 
 
 
@@ -201,11 +172,6 @@ nbL=-1;
 nbC=-1;
 indGrid=0;
 nbGrid=nbImage;
-if (im[0]->LitMini()>=0 && im[0]->LitMaxi()>im[0]->LitMini())
-	{
-	debNivPalette = im[0]->LitMini();
-	finNivPalette = im[0]->LitMaxi();
-	}
 
 etat= new osg::StateSet; 
 nbL=im[0]->LitNbLigne();
@@ -213,7 +179,7 @@ nbC=im[0]->LitNbColonne();
 
 for (int i=0;i<nbGrid;i++)
 	{
-	LireFichierImage(im[i]);
+//	LireFichierImage(im[i]);
 	imValide.push_back(true);
 	topoValide.push_back(false);
 	}
@@ -298,113 +264,6 @@ NanoSurface::NanoSurface(char *nomSeq)
 \param nomSeq nom du fichier contenant la liste des noms des fichiers de surface 
 */
 {
-InitNanoSurface();
-/* Initialisation des noms des fichiers des hauteurs et des noms de fichiers des images */
-LireSequence(nomSeq);
-
-nbL=-1;
-nbC=-1;
-indGrid=0;
-
-
-etat= new osg::StateSet; 
-
-for (int ind=0;ind<nbGrid;ind++)
-	{
-	if (ind<tabNomFichier.size())
-		topoValide.push_back(LireFichier(tabNomFichier[ind],ind));
-	if (ind<tabNomImage.size())
-		{
-		int x=0;//LireFichierImage(tabNomImage[ind],ind);
-		if (x)
-			imValide.push_back(x);
-		else
-			{
-			ImageInfoCV ima(tabNomImage[ind]);
-			if (ind==0)
-				{
-				nbL = ima.LitNbLigne();
-				nbC = ima.LitNbColonne();
-				VerificationGrille();
-				}
-			LireFichierImage(&ima);
-			imValide.push_back(1);
-			AjouteImage(&ima);
-			}
-		}
-	else
-			imValide.push_back(0);
-//	tex[ind]=new  osg::Texture2D(imSurface[ind]);
-	} // for (int ind=0;ind<nbGrid;ind++)
-/** initialisation de la grille */
-//for (int ind=0;ind<nbGrid;ind++)
-//	AjouteImage(imSurface[ind]);
-
-{
-int i=0;
-
-deque<osg::Image*>::iterator wi=imSurface.begin();
-while (i<nbGrid && !imValide[i] && tabNomImage.size())
-	{
-	i++;
-	wi++;
-	}
-if (i<nbGrid && tabNomImage.size())
-	imTexture = new osg::Image(**wi);
-else
-	imTexture = new osg::Image;
-}
-tex[0]=new  osg::Texture2D(imTexture);
-for (int i=0;i<TAILLEMAXDUFILTRE;i++)
-	{
-	//imTexture->scaleImage(nbC/(i+1),nbL/(i+1),imTexture->r());
-	gridAffichee[i]  = new osg::HeightField;
-	gridAffichee[i]->allocate(nbC/(i+1),nbL/(i+1));
-	gridAffichee[i]->setXInterval(echX*(i+1));
-	gridAffichee[i]->setYInterval(echY*(i+1));
-	if (tabNomFichier.size()==0)
-		{
-		gridAfficheeg[i]  = new osg::HeightField;
-		gridAfficheeg[i]->allocate(nbC/(i+1),nbL/(i+1));
-		gridAfficheeg[i]->setXInterval(echX*(i+1));
-		gridAfficheeg[i]->setYInterval(echY*(i+1));
-		gridAfficheeb[i]  = new osg::HeightField;
-		gridAfficheeb[i]->allocate(nbC/(i+1),nbL/(i+1));
-		gridAfficheeb[i]->setXInterval(echX*(i+1));
-		gridAfficheeb[i]->setYInterval(echY*(i+1));
-		}
-	}
-
-for (int i=0;i<nbL;i++)
-	for (int j=0;j<nbC;j++)
-		{
-		float	z=grid[0]->getHeight(j,i);
-		gridAffichee[0]->setHeight(j,i,z*echZ);
-		gridMAJ[0][0]=true;	
-		if (tabNomFichier.size()==0)
-			{
-			z=gridv[0]->getHeight(j,i);
-			gridAfficheeg[0]->setHeight(j,i,z*echZ);	
-			gridMAJ[1][0]=true;	
-			z=gridb[0]->getHeight(j,i);
-			gridAfficheeb[0]->setHeight(j,i,z*echZ);
-			gridMAJ[2][0]=true;	
-			}	
-		}
-
-for (int i=0;i<TAILLEMAXDUFILTRE;i++)
-	surface[i]= new osg::ShapeDrawable(gridAffichee[i]);
-if (tabNomFichier.size()==0)
-	for (int i=0;i<TAILLEMAXDUFILTRE;i++)
-		{
-		surfacev[i]= new osg::ShapeDrawable(gridAfficheeg[i]);
-		surfaceb[i]= new osg::ShapeDrawable(gridAfficheeb[i]);
-		}
-etat=getOrCreateStateSet();
-osg::Image *im=tex[0]->getImage();
-im->copySubImage(0,0,0,imSurface[0]);
-tex[0]->dirtyTextureObject();
-etat->setTextureAttributeAndModes(0,tex[0]);
 
 }
 
@@ -417,24 +276,6 @@ int NanoSurface::LireFichierImage(char *nomFichier,int ind)
 \param ind l'image sera mis à la position ind du tableau imSurface
 */
 {
-osg::Image *im;
-ProcessLectureFichier *p = new ProcessLectureFichier(nomFichier,&im);
-p->Create();
-//p->Run();
-p->Entry();
-//while (p->IsRunning());
-if (!im)
-	return 0;
-if (ind==0 && imageFondPresente==1)
-	{
-	imFond = new ImageInfoCV(im->t(),im->s(),3);
-/*
-	imFond->DefDataRGBVersPlan(im->data());
-	imFond->DefFctImage("symétrique");
-*/	
-	}
-
-imSurface.push_back(im);
 return 1;
 }
 
@@ -447,145 +288,6 @@ int NanoSurface::LireFichier(char *nomFichier,int ind)
 \param ind les altitudes  seront mis à la position ind du tableau grid
 */
 {
-static	float **hauteur=NULL;
-#ifndef FICHIERFLOAT
-string	wF(nomFichier);
-if (wF.find(".tif"))
-	{
-	ImageInfo imZ(nomFichier);
-	int nbLigne=-1,nbColonne;
-	if (nbLigne==-1)
-		{
-		nbColonne=imZ.LitNbColonne();
-		nbLigne= imZ.LitNbLigne();
-		nbLigne =nbLigne;
-		nbColonne =nbColonne;
-		nbL=nbLigne;
-		nbC=nbColonne;
-		}
-	if (hauteur ==NULL)
-		{
-		hauteur=new float*[nbLigne+1];
-		for (int i=0;i<nbLigne+1;i++)
-			hauteur[i]=new float[nbColonne+1];
-		}
-	float	*dataF;
-	unsigned short *datas;
-	for (int i=0;i<=nbLigne;i++)
-		for (int j=0;j<=nbColonne;j++)
-			if (imZ.LitTypePixel()==ENTIER_IMAGE)
-				hauteur[i][j]=imZ.LitPixelEntier(i,j)/16384.;	
-			else
-				hauteur[i][j]=imZ.LitPixelReel(i,j)/16384.;	
-	
-	}
-else
-	{
-	wF=wF+".bin";		
-	fstream f(wF.c_str(),ios_base::in | ios_base::binary );
-	if (!f.is_open())
-		return 0;
-	int nbLigne=-1,nbColonne;
-	if (nbLigne==-1)
-		{
-		nbColonne=735;
-		nbLigne=573 ;
-		nbLigne =nbLigne;
-		nbColonne =nbColonne;
-		nbL=nbLigne;
-		nbC=nbColonne;
-		}
-	if (hauteur ==NULL)
-		{
-		hauteur=new float*[nbLigne+1];
-		for (int i=0;i<nbLigne+1;i++)
-			hauteur[i]=new float[nbColonne+1];
-		}
-	int	i=0,j=0;
-	for (i=0;i<=nbLigne;i++)
-		for (j=0;j<=nbColonne;j++)
-			hauteur[i][j]=0;	
-	for (i=0;i<nbLigne;i++)
-		f.read((char*)hauteur[i],sizeof(float)*(nbColonne+1));
-	}
-#else
-/* Ouverture du fichier et lecture de l'ensemble du fichier en mémoire */
-fstream		f(nomFichier,ios_base::in | ios_base::binary );
-f.seekg( 0, ios_base::end);
-int	tailleFichier=(int)f.tellg()+1;
-f.seekg( 0, ios_base::beg);
-unsigned char	*c=new unsigned char[tailleFichier];
-f.read((char *)c,tailleFichier);
-c[tailleFichier-1]=0;
-/* Détermination du nombre de lignes et colonnes du fichier en exploitant
-la dernière ligne du fichier */
-unsigned char *ptr=c+tailleFichier-8;
-while (*ptr!=13 && ptr>c)
-	ptr--;
-istrstream gg((char *)ptr);
-int nbLigne=-1,nbColonne;
-if (nbLigne==-1)
-	{
-	gg>>nbColonne>>nbLigne ;
-	nbLigne =nbLigne;
-	nbColonne =nbColonne;
-	nbL=nbLigne;
-	nbC=nbColonne;
-	}
-if (hauteur ==NULL)
-	{
-	hauteur=new float*[nbLigne+1];
-	for (int i=0;i<nbLigne+1;i++)
-		hauteur[i]=new float[nbColonne+1];
-	}
-/** initialisation de la grille */
-int	i=0,j=0;
-for (i=0;i<=nbL;i++)
-	for (j=0;j<=nbC;j++)
-		hauteur[i][j]=0;	
-i=0;
-j=0;
-int		col,lig;
-while (i<tailleFichier)
-	{
-	char		tmp[1024];
-	float		z;
-	
-	j=i;
-	while (c[j]!=13 && j<tailleFichier)
-		j++;
-	c[j]=0;
-	while (c[j]<=31 && j<tailleFichier)
-		j++;
-	strcpy(tmp,(char*)c+i);
-	i=j;
-	istrstream g(tmp);
-	
-	g>>col>>lig>>z;
-//	col = col/2;
-//	lig = lig/2;
-	hauteur[nbLigne-lig][col]=z;
-	}
-string	wF(nomFichier);
-wF=wF+".bin";		
-fstream ggc(wF.c_str(),ios_base::out | ios_base::binary );
-for (i=0;i<nbL;i++)
-	ggc.write((const char*)hauteur[i],sizeof(float)*(nbColonne+1));
-delete c;
-#endif
-/** initialisation de la grille */
-osg::HeightField *g = new osg::HeightField;
-g->allocate((nbC),(nbL));
-g->setXInterval(echX);
-g->setYInterval(echY);
-for (int i=0;i<nbL;i++)
-	for (int j=0;j<nbC;j++)
-		{
-		float z=(hauteur[zoom*i][zoom*j]+hauteur[zoom*i+1][zoom*j]+hauteur[zoom*i][zoom*j+1]+hauteur[zoom*i+1][zoom*j+1])/4;
-		z=(hauteur[zoom*i][zoom*j]);
-		g->setHeight(j,i,z*echZ);	
-		}
-grid.push_back(g);
 return 1;
 }
 
@@ -648,7 +350,7 @@ case 16:
 case 24:
 default :
 	imOrig = new ImageInfoCV(im->t(),im->s(),CV_16UC3); 
-	imOrig->DefDataRGBVersPlan(data);
+//	imOrig->DefDataRGBVersPlan(data);
 	break;
 	}
 /*
@@ -660,54 +362,47 @@ else if (imageFondPresente==2)
 switch(imOrig->type()){
 case CV_8U :
 	{
-	unsigned char *datar=(unsigned char *)imOrig->LitPlan(0);
-	unsigned char *datav=(unsigned char *)imOrig->LitPlan(1);
-	unsigned char *datab=(unsigned char *)imOrig->LitPlan(2);
-	if (datav==NULL)
-		datav=datar;
-	if (datab==NULL)
-		datab=datar;
-	for (int i=0;i<im->t();i++)
-		for (int j=0;j<im->s();j++)
-			if (preImage && imageFondPresente==1)
+	for (int i=0;i<imOrig->rows;i++)		
+		{
+		unsigned char *d=imOrig->data+i*imOrig->step[0];
+		for (int j=0;j<imOrig->cols;j++)
+			for (int indCanal=0;indCanal<imOrig->channels();indCanal++,d++)
 				{
-				gr->setHeight(j,i,(255-(*datar++))/255.0);	
-				gv->setHeight(j,i,(255-(*datav++))/255.0);	
-				gb->setHeight(j,i,(255-(*datab++))/255.0);	
+				switch(indCanal){
+				case 0:
+					gr->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 1:
+					gv->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 2:
+					gb->setHeight(j,i,((*d))/255.0);
+					break;
+					}
 				}
-			else
-				{
-				gr->setHeight(j,i,((*datar++))/255.0);	
-				gv->setHeight(j,i,((*datav++))/255.0);	
-				gb->setHeight(j,i,((*datab++))/255.0);	
-				}
+		}
 	}
 	break;
-case T_SHORT_IMAGE :
-	{
-	unsigned short *datar=(unsigned short *)imOrig->LitPlan(0);
-	unsigned short *datav=(unsigned short *)imOrig->LitPlan(1);
-	unsigned short *datab=(unsigned short *)imOrig->LitPlan(2);
-	if (datav==NULL)
-		datav=datar;
-	if (datab==NULL)
-		datab=datar;
-	float maxNiv=16384.0;
-	for (int i=0;i<im->t();i++)
-		for (int j=0;j<im->s();j++)
-			if (preImage && imageFondPresente==1)
+case CV_16U :
+	for (int i=0;i<imOrig->rows;i++)		
+		{
+		unsigned short *d=(unsigned short *)imOrig->data+i*imOrig->step[0];
+		for (int j=0;j<imOrig->cols;j++)
+			for (int indCanal=0;indCanal<imOrig->channels();indCanal++,d++)
 				{
-				gr->setHeight(j,i,(maxNiv-(*datar++)));	
-				gv->setHeight(j,i,(maxNiv-(*datav++))/maxNiv);	
-				gb->setHeight(j,i,(maxNiv-(*datab++))/maxNiv);	
+				switch(indCanal){
+				case 0:
+					gr->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 1:
+					gv->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 2:
+					gb->setHeight(j,i,((*d))/255.0);
+					break;
+					}
 				}
-			else
-				{
-				gr->setHeight(j,im->t()-i-1,((*datar++)));	
-				gv->setHeight(j,im->t()-i-1,((*datav++)));	
-				gb->setHeight(j,im->t()-i-1,((*datab++)));	
-				}
-	}
+		}
 	break;
 	}
 preImage=1;
@@ -733,43 +428,55 @@ gb->allocate((nbC+1),(nbL+1));
 gb->setXInterval(echX);
 gb->setYInterval(echY);
 gridb.push_back(gb);
-switch(im->LitTaillePixel()){
-case T_OCTET_IMAGE :
+switch(im->type()){
+case CV_8U :
 	{
-	unsigned char *datar=(unsigned char *)im->LitPlan(0);
-	unsigned char *datav=(unsigned char *)im->LitPlan(1);
-	unsigned char *datab=(unsigned char *)im->LitPlan(2);
-	if (datav==NULL)
-		datav=datar;
-	if (datab==NULL)
-		datab=datar;
-	for (int i=0;i<im->LitNbLigne();i++)
-		for (int j=0;j<im->LitNbColonne();j++)
+	for (int i=0;i<im->rows;i++)		
+		{
+		unsigned char *d=im->data+i*im->step[0];
+		for (int j=0;j<im->cols;j++)
+			{
+			for (int indCanal=0;indCanal<im->channels();indCanal++,d++)
 				{
-				gr->setHeight(j,i,((*datar++))/255.0);	
-				gv->setHeight(j,i,((*datav++))/255.0);	
-				gb->setHeight(j,i,((*datab++))/255.0);	
+				switch(indCanal){
+				case 0:
+					gr->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 1:
+					gv->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 2:
+					gb->setHeight(j,i,((*d))/255.0);
+					break;
+					}
 				}
+			}
+	
+		}
 	}
 	break;
-case T_SHORT_IMAGE :
-	{
-	unsigned short *datar=(unsigned short *)im->LitPlan(0);
-	unsigned short *datav=(unsigned short *)im->LitPlan(1);
-	unsigned short *datab=(unsigned short *)im->LitPlan(2);
-	if (datav==NULL)
-		datav=datar;
-	if (datab==NULL)
-		datab=datar;
-	float maxNiv=16384.0;
-	for (int i=0;i<im->LitNbLigne();i++)
-		for (int j=0;j<im->LitNbColonne();j++)
+case CV_16U :
+	for (int i=0;i<im->rows;i++)		
+		{
+		short *d=(short*)im->ptr(i);
+		for (int j=0;j<im->cols;j++)
+			{
+			for (int indCanal=0;indCanal<im->channels();indCanal++,d++)
 				{
-				gr->setHeight(j,im->LitNbLigne()-i-1,((*datar++)));	
-				gv->setHeight(j,im->LitNbLigne()-i-1,((*datav++)));	
-				gb->setHeight(j,im->LitNbLigne()-i-1,((*datab++)));	
+				switch(indCanal){
+				case 0:
+					gr->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 1:
+					gv->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 2:
+					gb->setHeight(j,i,((*d))/255.0);
+					break;
+					}
 				}
-	}
+			}
+		}
 	break;
 	}
 }
@@ -850,139 +557,6 @@ for (i=0;i<nbCouleur;i++)
 
 
 
-void NanoSurface::LireFichierImage(Image *im)
-{
-float kPalette;
-if (indPalette==0 || indPalette>=6)
-	kPalette=16384./(finNivPalette-debNivPalette+1);
-else
-	kPalette=256./(finNivPalette-debNivPalette+1);
-
-if (im->LitTaillePixel()&T_OCTET_IMAGE)
-	{
-	unsigned char *datar = (unsigned char*)im->LitPlan(0);
-	unsigned char *datav = (unsigned char*)im->LitPlan(1);
-	unsigned char *datab = (unsigned char*)im->LitPlan(2);
-
-	tabNomImage.push_back("xxxx");
-	osg::Image* iFond = new osg::Image;
-	iFond->setImage( im->LitNbColonne(),im->LitNbLigne(), 1,
-				3, GL_RGB, GL_UNSIGNED_BYTE,
-				new unsigned char[im->LitNbColonne()* im->LitNbLigne()* 3],
-				osg::Image::USE_NEW_DELETE);
-	unsigned char *data ;
-
-	//iFond->setImage(
-	for (int i=0;i<im->LitNbLigne();i++)
-		{
-		data = iFond->data()+3*(im->LitNbLigne()-i-1)*im->LitNbColonne();
-		for (int j=0;j<im->LitNbColonne();j++)
-			{
-			if (im->LitNbPlan()==3)
-				{
-				*data++=*datav++;
-				*data++=*datab++;
-				}
-			else	
-				{
-				*data++=*datar;
-				*data++=*datar;
-				}
-			*data++=*datar++;
-			} // for (int j=0;j<im->LitNbColonne();j++)
-		}
-	imSurface.push_back(iFond);
-	}
-else if (im->LitTaillePixel()==T_SHORT_IMAGE)
-	{
-	unsigned short *datar = (unsigned short*)im->LitPlan(0);
-	unsigned short *datav = (unsigned short*)im->LitPlan(1);
-	unsigned short *datab = (unsigned short*)im->LitPlan(2);
-
-	tabNomImage.push_back("xxxx");
-	osg::Image* iFond = new osg::Image;
-	iFond->setImage( im->LitNbColonne(),im->LitNbLigne(), 1,
-				3, GL_RGB, GL_UNSIGNED_BYTE,
-				new unsigned char[im->LitNbColonne()* im->LitNbLigne()* 3],
-				osg::Image::USE_NEW_DELETE);
-	unsigned char *data ;
-
-	//iFond->setImage(
-	for (int i=0;i<im->LitNbLigne();i++)
-		{
-		data = iFond->data()+3*(im->LitNbLigne()-i-1)*im->LitNbColonne();
-		for (int j=0;j<im->LitNbColonne();j++)
-			if (datav)
-				{
-				*data++=(*datar++)/256;
-				*data++=(*datav++)/256;
-				*data++=(*datab++)/256;
-				} // for (int j=0;j<im->LitNbColonne();j++)
-			else
-				{
-				unsigned short val = (*datar-debNivPalette); 
-				if (*datar<debNivPalette)
-					val=0;
-				if (kPalette!=1)
-					val = val *kPalette;
-				if (val>=nbCouleurPalette)
-					val=nbCouleurPalette-1;
-				*data++=pCouleur[val].Red();
-				*data++=pCouleur[val].Green();
-				*data++=pCouleur[val].Blue();
-				} // for (int j=0;j<im->LitNbColonne();j++)
-		}
-	imSurface.push_back(iFond);
-	}
-else if (im->LitTaillePixel()==T_LONG_IMAGE && im->LitTypePixel()==REEL_IMAGE)
-	{
-	float	max[3]={-1e8,-1e8,-1e8};
-	float	min[3]={1e8,1e8,1e8};
-	for (int k=0;k<im->LitNbPlan();k++)
-		{
-		float *data = (float*)im->LitPlan(k);
-		for (int i=0;i<im->LitNbLigne();i++)
-			for (int j=0;j<im->LitNbColonne();j++,data++)
-				if (*data>max[k])
-					max[k]=*data;
-				else if (*data<min[k])
-					min[k] = *data;
-		}
-	float *datar = (float*)im->LitPlan(0);
-	float *datav = (float*)im->LitPlan(1);
-	float *datab = (float*)im->LitPlan(2);
-
-	tabNomImage.push_back("xxxx");
-	osg::Image* iFond = new osg::Image;
-	iFond->setImage( im->LitNbColonne(),im->LitNbLigne(), 1,
-				3, GL_RGB, GL_UNSIGNED_BYTE,
-				new unsigned char[im->LitNbColonne()* im->LitNbLigne()* 3],
-				osg::Image::USE_NEW_DELETE);
-	unsigned char *data ;
-
-	//iFond->setImage(
-	for (int i=0;i<im->LitNbLigne();i++)
-		{
-		data = iFond->data()+3*(im->LitNbLigne()-i-1)*im->LitNbColonne();
-		for (int j=0;j<im->LitNbColonne();j++)
-			{
-			if (im->LitNbPlan()==1)
-				{
-				*data++=(*datar-min[0])*256/(max[0]-min[0]);
-				*data++=(*datar-min[0])*256/(max[0]-min[0]);
-				*data++=(*datar++-min[0])*256/(max[0]-min[0]);
-				}
-			else
-				{
-				*data++=(*datar++ -min[0])*256/(max[0]-min[0]);
-				*data++=(*datav++ -min[1])*256/(max[1]-min[1]);
-				*data++=(*datab++ -min[2])*256/(max[2]-min[2]);
-				}
-			} // for (int j=0;j<im->LitNbColonne();j++)
-		}
-	imSurface.push_back(iFond);
-	}
-}
 
 void NanoSurface::Maj(int d)
 {
@@ -1224,7 +798,7 @@ case 'B':
 if (!gridMAJ[canal][tailleDuFiltre] )
 	{
 	Maj(0);
-	((wxOsgApp*)osgApp)->MAJGraphiqueNanoSurface(0);
+//	((Fenetre3D*)fenParent)->MAJGraphiqueNanoSurface(0);
 	}
 switch(c){
 case 'R':
@@ -1296,59 +870,11 @@ return topoValide[ind];
 
 
 
-void NanoSurface::AjouteImage(ImageInfo **im)
+void NanoSurface::AjouteImage(ImageInfoCV **im)
 /*! 
 \param nomSeq nom du fichier contenant la liste des noms des fichiers de surface 
 */
 {
-//InitNanoSurface();
-SelectPalette(8);
-nbL=-1;
-nbC=-1;
-
-nbGrid++;
-etat= new osg::StateSet; 
-nbL=im[0]->LitNbLigne();
-nbC=im[0]->LitNbColonne();
-
-	LireFichierImage(im[0]);
-	imValide.push_back(true);
-	topoValide.push_back(false);
-/** initialisation de la grille */
-AjouteImage(im[0]);
-
-//VerificationGrille();
-deque<osg::Image*>::iterator wi=imSurface.begin();
-int ib=0;
-while (ib<nbGrid && !imValide[ib] && tabNomImage.size())
-	{
-	ib++;
-	wi++;
-	}
-
-for (int i=0;i<nbL;i++)
-	for (int j=0;j<nbC;j++)
-		{
-		float	z=grid[0]->getHeight(j,i);
-		gridAffichee[0]->setHeight(j,i,z*echZ);
-		gridMAJ[0][0]=true;	
-		if (tabNomFichier.size()==0)
-			{
-			z=gridv[0]->getHeight(j,i);
-			gridAfficheeg[0]->setHeight(j,i,z*echZ);	
-			gridMAJ[1][0]=true;	
-			z=gridb[0]->getHeight(j,i);
-			gridAfficheeb[0]->setHeight(j,i,z*echZ);
-			gridMAJ[2][0]=true;	
-			}	
-		}
-
-//im->copySubImage(0,0,0,imSurface[indGrid]);
-//im->scaleImage(0,0,0,imSurface[indGrid]);
-osg::Image *imS=tex[0]->getImage();
-imS->copySubImage(0,0,0,imSurface[ib]);
-tex[0]->dirtyTextureObject();
-etat->setTextureAttributeAndModes(0,tex[0]);
 }
 
 void NanoSurface::SelectPalette(int ind)

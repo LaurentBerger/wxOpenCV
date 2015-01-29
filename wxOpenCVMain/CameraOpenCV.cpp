@@ -1,7 +1,7 @@
 #include "ImageInfo.h"
 #include "CameraOpenCV.h"
 #include "EvenementCamera.h"
-#include <fstream>
+//#include <fstream>
 #include <wx/time.h> 
 
 using namespace std;
@@ -186,6 +186,7 @@ char CameraOpenCV::Image(unsigned short *data,unsigned long &taille)
 chaineErreur="";
 if (TestDriver()==0)
 	{
+/*
 	ifstream g("imagepardefaut.txt");
 	char	nomFichier[1024];
 	static ImageInfoCV *imTest= NULL;
@@ -204,6 +205,7 @@ if (TestDriver()==0)
 			*data =*dataTest;
 			}
 	return 1;
+*/
 	}
 taille=0;return 1;
 }
