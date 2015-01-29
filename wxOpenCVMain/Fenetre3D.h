@@ -19,6 +19,7 @@ void MAJAxe();
 void MAJNoeud(int);
 
 void SetViewer(osgViewer::Viewer *viewer);
+void DefPlanRefence(PlanReference *t){surfaceReference=t;};
 void OnIdle(wxIdleEvent& event);
 void OnClose(wxCloseEvent& event);
 void OnOuvrir(wxCommandEvent& event);
@@ -40,6 +41,7 @@ void ActiveGeode(int i);
 void DeplaceCurseur(float,float,float);
 void DeplaceCurseur(int,int);
 void MAJGraphiqueNanoSurface(int d);
+NanoSurface			*Surface(){return surface;};
 
 osg::Drawable* CreateSquare(const osg::Vec3& corner,const osg::Vec3& width,const osg::Vec3& height, osg::Image* image=NULL);
 osg::Drawable* CreerLigne(const osg::Vec3& corner,const osg::Vec3& xdir,float epaisseurTrait=4);

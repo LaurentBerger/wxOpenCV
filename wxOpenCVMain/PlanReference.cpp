@@ -1,11 +1,12 @@
-#include "PlanReference.h"
-#include "Appli.h"
+//#include "Appli.h"
 #include <osg/Texture2D>
+#include "PlanReference.h"
+#include "Fenetre3D.h"
 
 PlanReference::PlanReference(void *x)
 {
 DefOSGApp(x);
-((wxOsgApp*)osgApp)->DefPlanRefence(this);
+((Fenetre3D*)fenParent)->DefPlanRefence(this);
 dz=0.1;
 transparence=0.5;
 a=0;
@@ -14,8 +15,8 @@ c=0;
 d=0;
 e=0;
 f=1;
-float	 echx=((wxOsgApp*)osgApp)->nanoSurf->EchX();
-float	 echy=((wxOsgApp*)osgApp)->nanoSurf->EchY();
+float	 echx=((Fenetre3D*)fenParent)->Surface()->EchX();
+float	 echy=((Fenetre3D*)fenParent)->Surface()->EchY();
 
 
 pl = new osg::HeightField(); 
@@ -57,11 +58,11 @@ surface->setUseDisplayList(true);
 
 void PlanReference::MAJPlan()
 {
-float		echx=((wxOsgApp*)osgApp)->nanoSurf->EchX();
-float		echy=((wxOsgApp*)osgApp)->nanoSurf->EchY();
-float		echz=((wxOsgApp*)osgApp)->nanoSurf->EchZ();
-int			nbL=((wxOsgApp*)osgApp)->nanoSurf->NbLigneImage(0);
-int			nbC=((wxOsgApp*)osgApp)->nanoSurf->NbColonneImage(0);
+float		echx=((Fenetre3D*)fenParent)->Surface()->EchX();
+float		echy=((Fenetre3D*)fenParent)->Surface()->EchY();
+float		echz=((Fenetre3D*)fenParent)->Surface()->EchZ();
+int			nbL=((Fenetre3D*)fenParent)->Surface()->NbLigneImage(0);
+int			nbC=((Fenetre3D*)fenParent)->Surface()->NbColonneImage(0);
 
 
 

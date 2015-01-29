@@ -11,6 +11,7 @@ private :
 osg::HeightField	*pl;
 osg::ShapeDrawable	*surface;	
 void				*osgApp;
+void				*fenParent;
 
 float	a,b,c,d,e,f;	/*<! Coefficient de la quadrique */
 float	xMin,xMax,yMin,yMax;
