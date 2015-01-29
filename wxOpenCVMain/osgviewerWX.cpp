@@ -42,7 +42,8 @@
 #include <math.h>
 
 #include "FenetreGraphiqueWX.h"
-#include "CaptureInfo3D.h"
+#include "Fenetre3D.h"
+#include "BarreEchelle.h"
 
 using namespace osgSim;
 using namespace std;
@@ -70,7 +71,7 @@ END_EVENT_TABLE()
 typedef std::vector< osg::ref_ptr<osg::Image> > ImageList;
 
 /** create quad at specified position. */
-osg::Drawable* FenetrePrincipale::CreateSquare(const osg::Vec3& corner,const osg::Vec3& width,const osg::Vec3& height, osg::Image* image)
+osg::Drawable* Fenetre3D::CreateSquare(const osg::Vec3& corner,const osg::Vec3& width,const osg::Vec3& height, osg::Image* image)
 {
     // set up the Geometry.
     osg::Geometry* geom = new osg::Geometry;
@@ -113,7 +114,7 @@ osg::Drawable* FenetrePrincipale::CreateSquare(const osg::Vec3& corner,const osg
 }
 
 
-osg::Drawable* FenetrePrincipale::CreerLigne(const osg::Vec3& corner,const osg::Vec3& xdir,float epaisseurTrait)
+osg::Drawable* Fenetre3D::CreerLigne(const osg::Vec3& corner,const osg::Vec3& xdir,float epaisseurTrait)
 {
     // set up the Geometry.
     osg::Geometry* geom = new osg::Geometry;
@@ -146,7 +147,7 @@ osg::Drawable* FenetrePrincipale::CreerLigne(const osg::Vec3& corner,const osg::
 }
 
 
-osg::Drawable* FenetrePrincipale::CreateAxis(const osg::Vec3& corner,const osg::Vec3& xdir,const osg::Vec3& ydir,const osg::Vec3& zdir)
+osg::Drawable* Fenetre3D::CreateAxis(const osg::Vec3& corner,const osg::Vec3& xdir,const osg::Vec3& ydir,const osg::Vec3& zdir)
 {
     // set up the Geometry.
     osg::Geometry* geom = new osg::Geometry;
@@ -189,7 +190,7 @@ osg::Drawable* FenetrePrincipale::CreateAxis(const osg::Vec3& corner,const osg::
 }
 
 
-osg::Group* FenetrePrincipale::CreerTriede()
+osg::Group* Fenetre3D::CreerTriede()
 {
 	float	longueurAxeX=surface->EchX()*surface->NbColonneImage(0);
 	float	longueurAxeY=surface->EchY()*surface->NbLigneImage(0);
@@ -336,7 +337,7 @@ osg::Group* FenetrePrincipale::CreerTriede()
 
 
 
-osg::Group* FenetrePrincipale::CreateScalarBar()
+osg::Group* Fenetre3D::CreateScalarBar()
 {
 
     // Create a custom color set
@@ -366,7 +367,7 @@ osg::Group* FenetrePrincipale::CreateScalarBar()
 }
 
 
-osg::Group * FenetrePrincipale::CreateScalarBar_HUD()
+osg::Group * Fenetre3D::CreateScalarBar_HUD()
 {
 std::vector<osg::Vec4> cs;
 cs.push_back(osg::Vec4(1.0f,0.0f,0.0f,1.0f));   // R
@@ -412,282 +413,16 @@ return projection; //make sure you delete the return sb line
 
 
 
-/* My frame constructor */
-FenetrePrincipale::FenetrePrincipale(wxFrame *frame, const wxString& title, const wxPoint& pos,
-    const wxSize& size, long style)
-    : wxFrame(frame, wxID_ANY, title, pos, size, style)
-{
-// Installation des menus 
-wxMenu *menuFile = new wxMenu;
-wxMenu *menuEdition = new wxMenu;
-// Menu Fichier
-menuFile->Append(OUVRIR_FICHIER, _T("&Ouvrir\tCtrl-O"), _T("Ouvrir"));
-menuFile->Append(QUITTER_, _T("&Quitter\tCtrl-Q"), _T("Quitter"));
-wxMenuBar *menuBar = new wxMenuBar();
-// Ajout des menus à la barre des menus 
-menuBar->Append(menuFile, _T("&Fichier"));
-((wxFrame*)this)->SetBackgroundColour(*wxBLACK);
-// Association barre des menus avec la trame
-SetMenuBar(menuBar);
-SetViewer(NULL);
-
-listeObjets=NULL;
-systemAxe=NULL;
-legendePalette=NULL;
-imageSurface=NULL;
-
-
-
-SetIcon(wxIcon("seec64.bmp",wxBITMAP_TYPE_ICO ));
-fenImage=NULL;
-modeVideo=0;
-tabSurface = new NanoSurface*[NBSURFACEMAX];
-indSurface = 0;
-surface=NULL;
-for (int i=0;i<NBSURFACEMAX;i++)
-	tabSurface[i]=NULL;
-}
-
-
-/**
-Ouvrir l'image calibre et la ranger dans la classe NanoRaptor 
-*/
-void FenetrePrincipale::OnOuvrir(wxCommandEvent& event)
-{
-wxFileDialog ouverture(this, "Ouvrir Séquence", "", "", "*.listez;*.listei;*.bmp");
-if (ouverture.ShowModal()!=wxID_OK)
-	return;
-string s(ouverture.GetFilename());
-s = ouverture.GetDirectory()+"\\"+s;
-if (s.find(".listez")!=string::npos || s.find(".listei")!=string::npos)
-	{
-	//InstallGraphique((char*)s.c_str());
-	
-	InstallGraphiquePhase1();
-	surface=new NanoSurface((char*)s.c_str());
-
-	surface->DefOSGApp(osgApp);
-	osgApp->nanoSurf=surface;
-	fgOSGWX->DefSurface(surface);
-	surface->addDrawable(surface->LitShapeDrawable().get());
-	imageSurface = (osg::Group *)surface;
-	osgDB::writeNodeFile(*surface,std::string("test.osg"));
-	InstallGraphiquePhase2(NULL);
-	
-	
-	osgApp->OuvertureOngletFichier(surface); 
-	osgApp->OuvertureOngletCurseur(surface); 
-	osgApp->OuvertureOngletEchelle(surface); 
-	osgApp->OuvertureOngletCourbe(surface); 
-	osgApp->OuvertureOngletControlFiltre(surface); 
-	osgApp->OuvertureOngletControlVue(surface); 
-
-	osgApp->OuvertureOngletPositionCamera(surface);
-	osgApp->OuvertureOngletControlQuadric(surface);
-	}
-else 
-	{
-	if(!fenImage)
-		fenImage= new FenetreImage(NULL,wxT("Image"),wxDefaultPosition, wxDefaultSize);
-	fenImage->DefOSGApp(osgApp);
-	fenImage->DefFenParametrage(osgApp->parametrage );
-	osgApp->DefFenetreImage(fenImage);
-	fenImage->OuvertureOngletImage(NULL,(char*)s.c_str());
-	fenImage->Show(true);
-	osgApp->OuvertureOngletParametreImage(fenImage->ImNano());
-	osgApp->OuvertureOngletInfoImage(fenImage->ImNano());
-	osgApp->OuvertureOngletInfoRegion(fenImage->ImNano());
-	osgApp->OuvertureOngletInfoQuadrique(fenImage->ImNano());
-
-	}
-}
 
 
 
 
 
-void FenetrePrincipale::InstallGraphiquePhase1()
-{
-
-int width = 600;
-int height = 600;
-GetClientSize(&width, &height);
-width = 600;
-height = 600;
-
-int *attributes = new int[7];
-attributes[0] = int(WX_GL_DOUBLEBUFFER);
-attributes[1] = WX_GL_RGBA;
-attributes[2] = WX_GL_DEPTH_SIZE;
-attributes[3] = 8;
-attributes[4] = WX_GL_STENCIL_SIZE;
-attributes[5] = 8;
-attributes[6] = 0;
 
 
-fgOSGWX = new FenetreGraphiqueWX(this, wxID_ANY, wxDefaultPosition,
-                                            wxSize(width, height), wxSUNKEN_BORDER, wxT("osgviewerWX"), attributes);
-fgOSGWX->DefOSGApp((void*)osgApp);
-
-GraphicsOSGWX* gw = new GraphicsOSGWX(fgOSGWX);
-
-fgOSGWX->SetGraphicsWindow(gw);
 
 
-// construct the viewer.
-double fovy,aspectRatio,zNear,zFar;
-viewer= new osgViewer::Viewer;
-viewer->getCamera()->getProjectionMatrixAsPerspective(fovy,aspectRatio,zNear,zFar);
-viewer->getCamera()->setProjectionMatrixAsPerspective(fovy,1,zNear,zFar);
-
-viewer->getCamera()->setGraphicsContext(gw);
-viewer->getCamera()->setViewport(0,0,width,height);
-// add the stats handler
-viewer->addEventHandler(new osgViewer::StatsHandler);
-viewer->setThreadingModel(osgViewer::Viewer::SingleThreaded);
-
-
-		{
-		wxGLContext *glContexte =new wxGLContext(fgOSGWX);
-		fgOSGWX->SetCurrent(*glContexte);
-		}
-
-/*fgOSGWX->Show(true);
-    wxGLContext *glContexte =new wxGLContext(fgOSGWX);
-    fgOSGWX->SetCurrent(*glContexte);
-	GLubyte *verGl=(GLubyte*)glGetString(GL_VERSION);
-	HGLRC WINAPI wwww=wglGetCurrentContext();*/
-
-
-return ;
-}
-
-
-void FenetrePrincipale::InstallGraphique(char *nomFichier)
-{
-InstallGraphiquePhase1();
-
-surface=new NanoSurface(nomFichier);
-surface->DefOSGApp(osgApp);
-osgApp->nanoSurf=surface;
-fgOSGWX->DefSurface(surface);
-surface->addDrawable(surface->LitShapeDrawable().get());
-osg::Node* model = surface;
-osg::Group* group = new osg::Group;
-if (listeObjets==NULL)
-	listeObjets = new osg::Switch;
-//group->addChild(model);
-//InstallGraphiquePhase2(group);
-listeObjets->addChild(surface,false);
-InstallGraphiquePhase2(listeObjets);
-
-}
-
-
-void FenetrePrincipale::MAJAxe()
-{
-bool x;
-
-x=listeObjets->getChildValue(systemAxe);
-listeObjets->removeChild(systemAxe);
-systemAxe=CreerTriede();
-listeObjets->addChild(systemAxe,x);
-}
-
-void FenetrePrincipale::MAJEchelleCouleur(float deb,float fin)
-{
-osg::Group *group=(osg::Group *)viewer->getSceneData();
-	
-
-osg::MatrixTransform* echelle=(osg::MatrixTransform*)group->getChild(1);
-osgSim::ScalarBar *g= (osgSim::ScalarBar *)(((osg::MatrixTransform*)(echelle->getChild(0)))->getChild(0));
-
-
-wxColor*p=surface->Lirepalette();
-s
-std::vector< osg::Vec4 > paletteTopographique;
-for (int i=0;i<=255;i++)
-	paletteTopographique.push_back( osg::Vec4(p[i*64].Red()/255.0f,p[i*64].Green()/255.0f,p[i*64].Blue()/255.0f,1.0f));
-ColorRange* cr = new ColorRange(deb,fin,paletteTopographique);
-
-
-g->setScalarsToColors(cr);
-
-	g->update();
-
-
-} 
-
-void FenetrePrincipale::InstallGraphiquePhase2(osg::Group *group)
-{
-	
-legendePalette=CreateScalarBar_HUD();
-systemAxe=CreerTriede();
-
-// load the nodes from the commandline arguments.
-surfaceReference= new PlanReference(osgApp);
-if (!surfaceReference)
-	return ;
-fgOSGWX->DefSurfaceReference(surfaceReference);
-//group->addChild(echelle);
-//group->addChild(surfaceReference);
-//group->addChild(pyr);
-
-if (listeObjets==NULL)
-	listeObjets = new osg::Switch;
-listeObjets->addChild(imageSurface,true);
-listeObjets->addChild(legendePalette,false);
-listeObjets->addChild(surfaceReference,false);
-listeObjets->addChild(systemAxe,false);
-viewer->setSceneData(listeObjets);
-
-    
-//viewer->setSceneData(group);
-viewer->setCameraManipulator(new osgGA::TrackballManipulator);
-//cInfo3D = new CaptureInfo3D(group);
-cInfo3D = new CaptureInfo3D(listeObjets);
-cInfo3D->DefOSGApp(osgApp);
-viewer->addEventHandler(cInfo3D);
-}
-
-void FenetrePrincipale::MAJNoeud(int key)
-{
-bool x;
-switch (key){
-case '1':
-	x=listeObjets->getChildValue(imageSurface);
-	listeObjets->setChildValue(imageSurface,!x);
-	break;
-case '2':
-	x=listeObjets->getChildValue(legendePalette);
-	listeObjets->setChildValue(legendePalette,!x);
-	break;
-case '3':
-	x=listeObjets->getChildValue(surfaceReference);
-	listeObjets->setChildValue(surfaceReference,!x);
-	break;
-case '4':
-	x=listeObjets->getChildValue(systemAxe);
-	listeObjets->setChildValue(systemAxe,!x);
-	break;
-	}
-}
-
-void FenetrePrincipale::AvanceVideo()
-{
-if (surface && modeVideo)
-	{
-	//surface->LitShapeDrawable()->setUseDisplayList(false);
-	surface->Maj(1);
-	osgApp->MAJFichier();
-	osgApp->MAJEchelle();
-	osgApp->MAJCurseur();
-	//surface->LitShapeDrawable()->dirtyBound(); 
-	}
-}
-
-
-void FenetrePrincipale::OnIdle(wxIdleEvent &event)
+void Fenetre3D::OnIdle(wxIdleEvent &event)
 {
 if (viewer.get())
     {
@@ -698,57 +433,6 @@ if (viewer.get())
 event.RequestMore();
 }
 
-void FenetrePrincipale::DeplaceCurseur(float x,float y,float z)
-{
-int ind=cInfo3D->LireActiveGeode();
-cInfo3D->DeplaceCurseur(x,y,z,viewer);
-};
-
-
-void FenetrePrincipale::AjouteNanoSurface(int nb,ImageInfo **tab)
-{
-static int nbScene=0;
-if (!surface)
-	{
-	InstallGraphiquePhase1();
-	surface=new NanoSurface(nb,tab);
-
-	surface->DefOSGApp(osgApp);
-	osgApp->nanoSurf=surface;
-	fgOSGWX->DefSurface(surface);
-	surface->addDrawable(surface->LitShapeDrawable().get());
-	imageSurface = (osg::Group *)surface;
-	osgDB::writeNodeFile(*surface,std::string("test.osg"));
-	InstallGraphiquePhase2(NULL);
-	osgApp->OuvertureOngletFichier(surface); 
-	osgApp->OuvertureOngletCurseur(surface); 
-	osgApp->OuvertureOngletEchelle(surface); 
-	osgApp->OuvertureOngletCourbe(surface); 
-	osgApp->OuvertureOngletControlFiltre(surface); 
-	osgApp->OuvertureOngletControlVue(surface); 
-
-	osgApp->OuvertureOngletPositionCamera(surface);
-	osgApp->OuvertureOngletControlQuadric(surface);
-	fenImage->DefQuadrique('R');
-	surface->Maj(0);
-	}
-else
-	{
-	surface->AjouteImage(tab);
-
-/*	surface->addDrawable(surface->LitShapeDrawable().get());
-	osg::Node* model = surface;
-	osg::ref_ptr<osg::Group> group = new osg::Group;
-	group->addChild(model);
-	InstallGraphiquePhase2(group);
-	scene[nbScene]=group;
-	nbScene++;
-	if (nbScene==10)
-		nbScene=0;*/
-MAJEchelleCouleur(surface->DebPalette(),surface->FinPalette());
-
-	}	
-}
 
 
 

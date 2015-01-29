@@ -1,8 +1,9 @@
 #include "FenetreGraphiqueWX.h"
 #include "Fenetre3D.h"
-#include "wxOSGApp.h"
-#include "wx/wxprec.h"
+//#include "wxOSGApp.h"
 
+#ifdef __WWWWWWW__ 
+#endif
 
 FenetreGraphiqueWX::FenetreGraphiqueWX(wxWindow *parent, wxWindowID id,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name, int *attributes)
@@ -324,7 +325,7 @@ void FenetreGraphiqueWX::OnMouse(wxMouseEvent& event)
         if (_graphics_window.valid())
 			_graphics_window->getEventQueue()->mouseMotion(event.GetX(), event.GetY());
         
-        osg::ref_ptr<osgViewer::Viewer>	viewer=((wxOsgApp*)osgApp)->LireViewer();
+/*        osg::ref_ptr<osgViewer::Viewer>	viewer=((wxOsgApp*)osgApp)->LireViewer();
 		osg::Matrixd m= viewer->getCamera()->getProjectionMatrix();
         double left,right,bottom,top,zNear,zFar;
    		double fovy,aspectRatio;
@@ -338,7 +339,7 @@ void FenetreGraphiqueWX::OnMouse(wxMouseEvent& event)
 			((wxOsgApp*)osgApp)->MAJPositionCameraPerspective();
         ((wxOsgApp*)osgApp)->MAJPositionCamera(m);
 		((wxOsgApp*)osgApp)->MAJControlVuePerpective();
-		}
+		*/}
 }
 
 void FenetreGraphiqueWX::OnTimer(wxTimerEvent& event)
@@ -510,3 +511,5 @@ void GraphicsOSGWX::swapBuffersImplementation()
 {
     _canvas->SwapBuffers();
 }
+
+

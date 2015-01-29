@@ -20,6 +20,7 @@
 #include "BarreEchelle.h"
 
 
+
 void Fenetre3D::ActiveGeode(int i)
 {
 cInfo3D->ActiveGeode(i);
