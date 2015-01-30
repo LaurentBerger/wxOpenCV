@@ -30,6 +30,8 @@ void InstallGraphique(char *nomFichier);
 void InstallGraphiquePhase1();
 void InstallGraphiquePhase2(osg::Group *);
 void DefOSGApp(void *w){osgApp=w;};
+void DeffParent(void *w){fenParent=w;};
+
 
 void AutoriseCapture(){cInfo3D->AutoriseCapture();};
 void InterditCapture(){cInfo3D->InterditCapture();};
@@ -74,6 +76,7 @@ CaptureInfo3D		*cInfo3D;
 char				modeVideo;
 
 void *osgApp;
+void *fenParent;
 
 };
 

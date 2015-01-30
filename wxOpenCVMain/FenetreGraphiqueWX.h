@@ -52,6 +52,7 @@ public:
     void SetGraphicsWindow(osgViewer::GraphicsWindow *gw)   { _graphics_window = gw; }
     void init();
 	void DefOSGApp(void *w){osgApp=w;};
+	void DeffParent(void *w){fenParent=w;};
 
     void OnPaint(wxPaintEvent& event);				/*!< Tracer de la fenetre graphique */
     void OnSize(wxSizeEvent& event);				/*!< Gestion du redimensionement de la fenetre */

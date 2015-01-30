@@ -284,6 +284,7 @@ private:
 	void GestionCurseurSouris(wxMouseEvent &event);
 	void OnMenuContext(wxContextMenuEvent& event);
 	void ShowContextMenu(const wxPoint& pos);
+	void Vue3D(wxCommandEvent& event);
 	void SelectPalette(wxCommandEvent& event);
 	void ModeComplexe(wxCommandEvent& event);
 	void MAJZoom(wxCommandEvent& event);
@@ -652,6 +653,7 @@ void DIBImage(ImageInfoCV *im,int	indPlanTransparent=0);
 void RAZTransparence();
 
 void DefOSGApp(wxOsgApp *w){osgApp=w;if (feuille) feuille->DefOSGApp(w); };
+void *OSGApp(){return osgApp; };
 void  DefZoom(FenetreZoom *f){fenZoom=f;};
 void  DefImgStat(ImageStatistiques *f){imgStatIm=f;};
 ImageStatistiques  *ImgStat(){return imgStatIm;};
@@ -825,6 +827,7 @@ enum
 
     Menu_Popup_ToBeDeleted = 2000,
     Menu_Popup_ToBeGreyed,
+    Menu_3D ,
     Menu_Rectangle,
     Menu_Coupe,
     Menu_FilMax,

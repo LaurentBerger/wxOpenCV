@@ -18,6 +18,7 @@
 
 #include "Fenetre3D.h"
 #include "BarreEchelle.h"
+#include "FenetrePrincipale.h"
 
 
 
@@ -62,7 +63,9 @@ attributes[6] = 0;
 
 fgOSGWX = new FenetreGraphiqueWX(this, wxID_ANY, wxDefaultPosition,
                                             wxSize(width, height), wxSUNKEN_BORDER, wxT("osgviewerWX"), attributes);
-fgOSGWX->DefOSGApp((void*)osgApp);
+fgOSGWX->DefOSGApp(((FenetrePrincipale*)frame)->OSGApp());
+fgOSGWX->DeffParent((void*)frame);
+fenParent = frame;
 
 GraphicsOSGWX* gw = new GraphicsOSGWX(fgOSGWX);
 
@@ -82,11 +85,13 @@ viewer->addEventHandler(new osgViewer::StatsHandler);
 viewer->setThreadingModel(osgViewer::Viewer::SingleThreaded);
 
 
-		{
 		wxGLContext *glContexte =new wxGLContext(fgOSGWX);
 		fgOSGWX->SetCurrent(*glContexte);
-		}
-
+ImageInfoCV *tabImage[1];
+tabImage[0]=((FenetrePrincipale*)frame)->ImAcq();
+surface = new NanoSurface(1,tabImage);
+	fgOSGWX->DefSurface(surface);
+	InstallGraphiquePhase2(NULL);
 /*fgOSGWX->Show(true);
     wxGLContext *glContexte =new wxGLContext(fgOSGWX);
     fgOSGWX->SetCurrent(*glContexte);

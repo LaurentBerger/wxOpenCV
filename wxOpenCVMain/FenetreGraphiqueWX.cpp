@@ -3,6 +3,17 @@
 //#include "wxOSGApp.h"
 
 #ifdef __WWWWWWW__ 
+
+
+BEGIN_EVENT_TABLE(FenetreGraphiqueWX, wxGLCanvas)
+    EVT_KEY_DOWN        (FenetreGraphiqueWX::OnKeyDown)
+    EVT_KEY_UP            (FenetreGraphiqueWX::OnKeyUp)
+    EVT_MOUSE_EVENTS    (FenetreGraphiqueWX::OnMouse)
+ 	EVT_TIMER(1, FenetreGraphiqueWX::OnTimer)
+ 	EVT_TIMER(2, FenetreGraphiqueWX::OnTimerCopy)
+ 	
+   EVT_JOYSTICK_EVENTS(FenetreGraphiqueWX::OnJoystickEvent)
+END_EVENT_TABLE()
 #endif
 
 FenetreGraphiqueWX::FenetreGraphiqueWX(wxWindow *parent, wxWindowID id,
@@ -18,6 +29,14 @@ FenetreGraphiqueWX::FenetreGraphiqueWX(wxWindow *parent, wxWindowID id,
 	horlogeSeq=NULL;
 	horlogeCopy=NULL;
 	fenParent=parent;
+Bind(wxEVT_MOTION, &FenetreGraphiqueWX::OnMouse,this);
+Bind(wxEVT_ERASE_BACKGROUND, &FenetreGraphiqueWX::OnEraseBackground,this);
+Bind(wxEVT_PAINT,&FenetreGraphiqueWX::OnPaint,this);
+Bind(wxEVT_SIZE, &FenetreGraphiqueWX::OnSize,this);
+Bind(wxEVT_KEY_DOWN ,&FenetreGraphiqueWX::OnKeyDown,this,wxID_ANY);
+Bind(wxEVT_KEY_UP,&FenetreGraphiqueWX::OnKeyUp,this,wxID_ANY);
+Bind(wxEVT_TIMER, &FenetreGraphiqueWX::OnTimer,this,1);
+Bind(wxEVT_TIMER, &FenetreGraphiqueWX::OnTimerCopy,this,2);
 
 
 }
@@ -469,7 +488,7 @@ void GraphicsOSGWX::init()
     {
         setState( new osg::State );
         getState()->setGraphicsContext(this);
-
+/*
         if (_traits.valid() && _traits->sharedContext.valid())
         {
             getState()->setContextID( _traits->sharedContext->getState()->getContextID() );
@@ -478,7 +497,7 @@ void GraphicsOSGWX::init()
         else
         {
             getState()->setContextID( osg::GraphicsContext::createNewContextID() );
-        }
+        }*/
     }
 }
 
