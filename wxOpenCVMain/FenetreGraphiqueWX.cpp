@@ -42,6 +42,7 @@ Bind(wxEVT_KEY_DOWN ,&FenetreGraphiqueWX::OnKeyDown,this,wxID_ANY);
 Bind(wxEVT_KEY_UP,&FenetreGraphiqueWX::OnKeyUp,this,wxID_ANY);
 Bind(wxEVT_TIMER, &FenetreGraphiqueWX::OnTimer,this,1);
 Bind(wxEVT_TIMER, &FenetreGraphiqueWX::OnTimerCopy,this,2);
+Bind(wxEVT_ENTER_WINDOW,&FenetreGraphiqueWX::OnMouseEnter,this);
 
 
 }
@@ -451,6 +452,11 @@ void FenetreGraphiqueWX::OnJoystickEvent(wxJoystickEvent& event)
 #endif // wxUSE_SOUND
 }
 
+void FenetreGraphiqueWX::OnMouseEnter(wxMouseEvent &event)
+{
+    // Set focus to ourselves, so keyboard events get directed to us
+    SetFocus();
+}
 
 GraphicsOSGWX::GraphicsOSGWX(FenetreGraphiqueWX *canvas)
 {
@@ -513,7 +519,7 @@ void GraphicsOSGWX::useCursor(bool cursorOn)
 
 bool GraphicsOSGWX::makeCurrentImplementation()
 {
-//   _canvas->SetCurrent();
+   _canvas->SetCurrent();
     return true;
 }
 
