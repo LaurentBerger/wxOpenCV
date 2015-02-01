@@ -578,8 +578,42 @@ PopupMenu(&menu, pos.x, pos.y);
 
 void ZoneImage::Vue3D(wxCommandEvent& event)
 {
-Fenetre3D *g=new Fenetre3D(f,_("3D"),wxPoint(0,0), wxSize(530,570));
-g->Show();
+wxSize sfen(530,570);
+Fenetre3D *g=new Fenetre3D(NULL,_("3D"),wxPoint(0,0), sfen);
+g->DeffParent(f);
+
+int *attributes = new int[7];
+attributes[0] = int(WX_GL_DOUBLEBUFFER);
+attributes[1] = WX_GL_RGBA;
+attributes[2] = WX_GL_DEPTH_SIZE;
+attributes[3] = 8;
+attributes[4] = WX_GL_STENCIL_SIZE;
+attributes[5] = 8;
+attributes[6] = 0;
+
+
+FenetreGraphiqueWX *fgOSGWX = new FenetreGraphiqueWX(g, wxID_ANY, wxDefaultPosition,
+                                           sfen, wxSUNKEN_BORDER, wxT("osgviewerWX"), attributes);
+fgOSGWX->DefOSGApp(((FenetrePrincipale*)g)->OSGApp());
+fgOSGWX->DeffParent((void*)g);
+g->DeffParent(f);
+
+GraphicsOSGWX* gw = new GraphicsOSGWX(fgOSGWX);
+
+fgOSGWX->SetGraphicsWindow(gw);
+
+g->InstallGraphiquePhase1(fgOSGWX,gw);
+// construct the viewer.
+	g->InstallGraphiquePhase2(NULL);
+/*fgOSGWX->Show(true);
+    wxGLContext *glContexte =new wxGLContext(fgOSGWX);
+    fgOSGWX->SetCurrent(*glContexte);
+	GLubyte *verGl=(GLubyte*)glGetString(GL_VERSION);
+	HGLRC WINAPI wwww=wglGetCurrentContext();*/
+//fgOSGWX->Show(true);
+
+
+g->Show(true);
 }
 
 

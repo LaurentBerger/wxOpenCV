@@ -22,6 +22,7 @@
 
 
 
+
 void Fenetre3D::ActiveGeode(int i)
 {
 cInfo3D->ActiveGeode(i);
@@ -43,7 +44,7 @@ fgOSGWX->MAJ(d);
 };
 
 Fenetre3D::Fenetre3D(wxFrame *frame, const wxString& title, const wxPoint& pos, 
-    const wxSize& size, long style ): wxFrame(frame, wxID_ANY, title, pos, size, style)
+    const wxSize& size, long style ): wxFrame(NULL, wxID_ANY, title, pos, size, style)
 {
 int width = 600;
 int height = 600;
@@ -51,108 +52,67 @@ GetClientSize(&width, &height);
 width = 600;
 height = 600;
 
-int *attributes = new int[7];
-attributes[0] = int(WX_GL_DOUBLEBUFFER);
-attributes[1] = WX_GL_RGBA;
-attributes[2] = WX_GL_DEPTH_SIZE;
-attributes[3] = 8;
-attributes[4] = WX_GL_STENCIL_SIZE;
-attributes[5] = 8;
-attributes[6] = 0;
-
-
-fgOSGWX = new FenetreGraphiqueWX(this, wxID_ANY, wxDefaultPosition,
-                                            wxSize(width, height), wxSUNKEN_BORDER, wxT("osgviewerWX"), attributes);
-fgOSGWX->DefOSGApp(((FenetrePrincipale*)frame)->OSGApp());
-fgOSGWX->DeffParent((void*)frame);
-fenParent = frame;
-
-GraphicsOSGWX* gw = new GraphicsOSGWX(fgOSGWX);
-
-fgOSGWX->SetGraphicsWindow(gw);
-
-
-// construct the viewer.
-double fovy,aspectRatio,zNear,zFar;
-viewer= new osgViewer::Viewer;
-viewer->getCamera()->getProjectionMatrixAsPerspective(fovy,aspectRatio,zNear,zFar);
-viewer->getCamera()->setProjectionMatrixAsPerspective(fovy,1,zNear,zFar);
-
-viewer->getCamera()->setGraphicsContext(gw);
-viewer->getCamera()->setViewport(0,0,width,height);
-// add the stats handler
-viewer->addEventHandler(new osgViewer::StatsHandler);
-viewer->setThreadingModel(osgViewer::Viewer::SingleThreaded);
-
-
-		wxGLContext *glContexte =new wxGLContext(fgOSGWX);
-		fgOSGWX->SetCurrent(*glContexte);
-ImageInfoCV *tabImage[1];
-tabImage[0]=((FenetrePrincipale*)frame)->ImAcq();
-surface = new NanoSurface(1,tabImage);
-	fgOSGWX->DefSurface(surface);
-	InstallGraphiquePhase2(NULL);
-/*fgOSGWX->Show(true);
-    wxGLContext *glContexte =new wxGLContext(fgOSGWX);
-    fgOSGWX->SetCurrent(*glContexte);
-	GLubyte *verGl=(GLubyte*)glGetString(GL_VERSION);
-	HGLRC WINAPI wwww=wglGetCurrentContext();*/
 
 
 return ;
 }
 
-void Fenetre3D::InstallGraphiquePhase1()
+
+
+void Fenetre3D::SetViewer(osgViewer::Viewer *v)
+{
+    viewer = v;
+}
+
+void Fenetre3D::OnIdle(wxIdleEvent &event)
+{
+if (!viewer->isRealized())
+    return;
+
+    {
+    viewer->frame();
+    }
+
+event.RequestMore();
+}
+
+
+void Fenetre3D::InstallGraphiquePhase1(FenetreGraphiqueWX *osg,GraphicsOSGWX *gOSG)
 {
 
-int width = 600;
-int height = 600;
-GetClientSize(&width, &height);
-width = 600;
-height = 600;
-
-int *attributes = new int[7];
-attributes[0] = int(WX_GL_DOUBLEBUFFER);
-attributes[1] = WX_GL_RGBA;
-attributes[2] = WX_GL_DEPTH_SIZE;
-attributes[3] = 8;
-attributes[4] = WX_GL_STENCIL_SIZE;
-attributes[5] = 8;
-attributes[6] = 0;
+    int width, height;
+    GetClientSize(&width, &height);
 
 
-fgOSGWX = new FenetreGraphiqueWX(this, wxID_ANY, wxDefaultPosition,
-                                            wxSize(width, height), wxSUNKEN_BORDER, wxT("osgviewerWX"), attributes);
+fgOSGWX = osg;
 fgOSGWX->DefOSGApp((void*)osgApp);
 
-GraphicsOSGWX* gw = new GraphicsOSGWX(fgOSGWX);
-
-fgOSGWX->SetGraphicsWindow(gw);
 
 
 // construct the viewer.
 double fovy,aspectRatio,zNear,zFar;
 viewer= new osgViewer::Viewer;
+viewer->getCamera()->setGraphicsContext(gOSG);
+viewer->getCamera()->setViewport(0,0,width,height);
 viewer->getCamera()->getProjectionMatrixAsPerspective(fovy,aspectRatio,zNear,zFar);
 viewer->getCamera()->setProjectionMatrixAsPerspective(fovy,1,zNear,zFar);
 
-viewer->getCamera()->setGraphicsContext(gw);
-viewer->getCamera()->setViewport(0,0,width,height);
 // add the stats handler
 viewer->addEventHandler(new osgViewer::StatsHandler);
-viewer->setThreadingModel(osgViewer::Viewer::SingleThreaded);
+viewer->setThreadingModel(osgViewer::Viewer::ThreadPerContext);
 
 
-		{
-		wxGLContext *glContexte =new wxGLContext(fgOSGWX);
-		fgOSGWX->SetCurrent(*glContexte);
-		}
+wxGLContext *glContexte =new wxGLContext(fgOSGWX);
+fgOSGWX->SetCurrent(*glContexte);
 
-/*fgOSGWX->Show(true);
-    wxGLContext *glContexte =new wxGLContext(fgOSGWX);
-    fgOSGWX->SetCurrent(*glContexte);
-	GLubyte *verGl=(GLubyte*)glGetString(GL_VERSION);
-	HGLRC WINAPI wwww=wglGetCurrentContext();*/
+ImageInfoCV *tabImage[1];
+tabImage[0]=((FenetrePrincipale*)fenParent)->ImAcq();
+surface = new NanoSurface(1,tabImage);
+	surface->addDrawable(surface->LitShapeDrawable().get());
+	imageSurface = (osg::Group *)surface;
+	fgOSGWX->DefSurface(surface);
+	surface->Maj(0);
+
 
 
 return ;
@@ -161,21 +121,6 @@ return ;
 
 void Fenetre3D::InstallGraphique(char *nomFichier)
 {
-InstallGraphiquePhase1();
-
-surface=new NanoSurface(nomFichier);
-surface->DefOSGApp(osgApp);
-//osgApp->nanoSurf=surface;
-fgOSGWX->DefSurface(surface);
-surface->addDrawable(surface->LitShapeDrawable().get());
-osg::Node* model = surface;
-osg::Group* group = new osg::Group;
-if (listeObjets==NULL)
-	listeObjets = new osg::Switch;
-//group->addChild(model);
-//InstallGraphiquePhase2(group);
-listeObjets->addChild(surface,false);
-InstallGraphiquePhase2(listeObjets);
 
 }
 
@@ -221,7 +166,7 @@ legendePalette=CreateScalarBar_HUD();
 systemAxe=CreerTriede();
 
 // load the nodes from the commandline arguments.
-surfaceReference= new PlanReference(osgApp);
+surfaceReference= new PlanReference(osgApp,this);
 if (!surfaceReference)
 	return ;
 fgOSGWX->DefSurfaceReference(surfaceReference);
@@ -244,6 +189,7 @@ viewer->setCameraManipulator(new osgGA::TrackballManipulator);
 cInfo3D = new CaptureInfo3D(listeObjets);
 cInfo3D->DefOSGApp(osgApp);
 viewer->addEventHandler(cInfo3D);
+Bind(wxEVT_IDLE,&Fenetre3D::OnIdle,this);
 }
 
 void Fenetre3D::MAJNoeud(int key)

@@ -18,16 +18,18 @@ void MAJEchelleCouleur(float =0,float =16384.);
 void MAJAxe();
 void MAJNoeud(int);
 
+void OnIdle(wxIdleEvent &event);
+
+
 void SetViewer(osgViewer::Viewer *viewer);
 void DefPlanRefence(PlanReference *t){surfaceReference=t;};
-void OnIdle(wxIdleEvent& event);
 void OnClose(wxCloseEvent& event);
 void OnOuvrir(wxCommandEvent& event);
 void OnOuvrir(ImageInfoCV *imReseau,int ,int);
 void AjouteNanoSurface(int ,ImageInfoCV **);
 void Quitter(wxCommandEvent& event);
 void InstallGraphique(char *nomFichier);
-void InstallGraphiquePhase1();
+void InstallGraphiquePhase1(FenetreGraphiqueWX *osg,GraphicsOSGWX *gOSG);
 void InstallGraphiquePhase2(osg::Group *);
 void DefOSGApp(void *w){osgApp=w;};
 void DeffParent(void *w){fenParent=w;};
@@ -44,6 +46,10 @@ void DeplaceCurseur(float,float,float);
 void DeplaceCurseur(int,int);
 void MAJGraphiqueNanoSurface(int d);
 NanoSurface			*Surface(){return surface;};
+void Composante(char c)
+{
+if (surface) surface->SelectionComposante(c);
+};
 
 osg::Drawable* CreateSquare(const osg::Vec3& corner,const osg::Vec3& width,const osg::Vec3& height, osg::Image* image=NULL);
 osg::Drawable* CreerLigne(const osg::Vec3& corner,const osg::Vec3& xdir,float epaisseurTrait=4);

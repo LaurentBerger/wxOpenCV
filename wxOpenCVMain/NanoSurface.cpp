@@ -179,7 +179,7 @@ nbC=im[0]->LitNbColonne();
 
 for (int i=0;i<nbGrid;i++)
 	{
-//	LireFichierImage(im[i]);
+	AssocierImageTexture(im[i]);
 	imValide.push_back(true);
 	topoValide.push_back(false);
 	}
@@ -249,11 +249,12 @@ if (tabNomFichier.size()==0)
 		}
 etat=getOrCreateStateSet();
 tex[0]=new  osg::Texture2D;
+tex[0]->setDataVariance(osg::Object::DYNAMIC); // protect from being optimized away as static state.
 tex[0]->setImage(imSurface[0]);
-osg::Image *imS=tex[0]->getImage();
-imS->copySubImage(0,0,0,imSurface[0]);
+/*osg::Image *imS=tex[0]->getImage();
+imS->copySubImage(0,0,0,imSurface[0]);*/
+etat->setTextureAttributeAndModes(0,tex[0],osg::StateAttribute::ON);
 tex[0]->dirtyTextureObject();
-etat->setTextureAttributeAndModes(0,tex[0]);
 
 }
 
@@ -428,7 +429,7 @@ gb->allocate((nbC+1),(nbL+1));
 gb->setXInterval(echX);
 gb->setYInterval(echY);
 gridb.push_back(gb);
-switch(im->type()){
+switch(im->depth()){
 case CV_8U :
 	{
 	for (int i=0;i<im->rows;i++)		
@@ -440,13 +441,13 @@ case CV_8U :
 				{
 				switch(indCanal){
 				case 0:
-					gr->setHeight(j,i,((*d))/255.0);	
+					gr->setHeight(j,i,((*d))*16);	
 					break;
 				case 1:
-					gv->setHeight(j,i,((*d))/255.0);	
+					gv->setHeight(j,i,((*d))*16);	
 					break;
 				case 2:
-					gb->setHeight(j,i,((*d))/255.0);
+					gb->setHeight(j,i,((*d))*16);
 					break;
 					}
 				}
@@ -480,6 +481,57 @@ case CV_16U :
 	break;
 	}
 }
+
+void NanoSurface::AssocierImageTexture(ImageInfoCV *im)
+{
+float kPalette;
+if (indPalette==0 || indPalette>=6)
+	kPalette=16384./(finNivPalette-debNivPalette+1);
+else
+	kPalette=256./(finNivPalette-debNivPalette+1);
+
+if (im->depth()==CV_8U)
+	{
+
+	tabNomImage.push_back("xxxx");
+	osg::Image* iFond = new osg::Image;
+	iFond->setImage( im->LitNbColonne(),im->LitNbLigne(), 3,
+				GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE,
+				new unsigned char[im->cols* im->rows* 3],
+				osg::Image::USE_NEW_DELETE);
+	unsigned char *data ;
+	unsigned char *dataSrc ;
+
+	//iFond->setImage(
+	for (int i=0;i<im->LitNbLigne();i++)
+		{
+		data = iFond->data()+3*i*im->LitNbColonne();
+		dataSrc = im->ptr(i);
+		for (int j=0;j<im->LitNbColonne();j++)
+			{
+			if (im->channels()==3)
+				{
+				*data++= *dataSrc++;
+				*data++= *dataSrc++;
+				}
+			else	
+				{
+				*data++=*dataSrc;
+				*data++=*dataSrc;
+				}
+			*data++= *dataSrc++;
+			} // for (int j=0;j<im->LitNbColonne();j++)
+		}
+	imSurface.push_back(iFond);
+	}
+else if (im->depth()==CV_16U)
+	{
+	}
+else if (im->depth()==CV_32F)
+	{
+	}
+}
+
 
 void NanoSurface::InitPalette(int nbCouleur)
 {
@@ -633,7 +685,7 @@ for (int i=tailleDuFiltre,y=0;i<nbL;i+=pas,y++)
 			
 
 osg::Image *im=tex[0]->getImage();
-if (im->getPixelSizeInBits()==24)
+/*if (im->getPixelSizeInBits()==24)
 	{
 	float kPalette;
 	if (indPalette==0 || indPalette>=6)
@@ -644,7 +696,7 @@ if (im->getPixelSizeInBits()==24)
 	for (int i=tailleDuFiltre,y=0;i<nbL;i+=pas,y++)
 		for (int j=tailleDuFiltre,x=0;j<nbC;j+= pas,x++)
 			{
-			double z=gridSrc->getHeight(j,i);
+ 			double z=gridSrc->getHeight(j,i);
 			for (int l=i-tailleDuFiltre;l<=i+tailleDuFiltre;l++)
 				if (l>=0 && l<nbL)
 					for (int k=j-tailleDuFiltre;k<=j+tailleDuFiltre;k++)
@@ -690,7 +742,7 @@ else if (im->getPixelSizeInBits()==16)
 //tex[0]->setImage(imSurface[indGrid]);
 
 //im->copySubImage(0,0,0,imSurface[indGrid]);
-//im->scaleImage(0,0,0,imSurface[indGrid]);
+//im->scaleImage(0,0,0,imSurface[indGrid]);*/
 tex[0]->dirtyTextureObject();
 etat->setTextureAttributeAndModes(0,tex[0]);
 

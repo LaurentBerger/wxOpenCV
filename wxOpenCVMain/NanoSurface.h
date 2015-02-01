@@ -106,6 +106,8 @@ int LireFichierImage(char *nomFichier,int ind);
 void Maj(int d);		/*!< Mise à jour de la surface affichée lors d'un changement  de variable t */
 osg::Texture2D *LitTexture(){return tex[tailleDuFiltre];};
 
+void AssocierImageTexture(ImageInfoCV *im);
+
 void AjouteImage(osg::Image *);
 void AjouteImage(ImageInfoCV *im);
 void AjouteImage(ImageInfoCV **);

@@ -79,7 +79,6 @@ public:
 private:
     wxCursor _oldCursor;
 
-    DECLARE_EVENT_TABLE()
 };
 
 

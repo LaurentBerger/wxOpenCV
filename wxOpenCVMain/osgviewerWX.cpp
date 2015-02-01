@@ -54,18 +54,6 @@ using namespace std;
 
 
 
-BEGIN_EVENT_TABLE(FenetreGraphiqueWX, wxGLCanvas)
-    EVT_SIZE            (FenetreGraphiqueWX::OnSize)
-    EVT_PAINT            (FenetreGraphiqueWX::OnPaint)
-    EVT_ERASE_BACKGROUND(FenetreGraphiqueWX::OnEraseBackground)
-    EVT_KEY_DOWN        (FenetreGraphiqueWX::OnKeyDown)
-    EVT_KEY_UP            (FenetreGraphiqueWX::OnKeyUp)
-    EVT_MOUSE_EVENTS    (FenetreGraphiqueWX::OnMouse)
- 	EVT_TIMER(1, FenetreGraphiqueWX::OnTimer)
- 	EVT_TIMER(2, FenetreGraphiqueWX::OnTimerCopy)
- 	
-   EVT_JOYSTICK_EVENTS(FenetreGraphiqueWX::OnJoystickEvent)
-END_EVENT_TABLE()
 
 
 typedef std::vector< osg::ref_ptr<osg::Image> > ImageList;
@@ -201,9 +189,10 @@ osg::Group* Fenetre3D::CreerTriede()
     // add the drawable into a single goede to be shared...
     osg::Billboard* center = new osg::Billboard();
     center->setMode(osg::Billboard::POINT_ROT_EYE);
+	osg::Image *im=osgDB::readImageFile("F:\\Lib\\OpenSceneGraph-Data-3.0.0\\Images\\reflect.rgb");
     center->addDrawable(
         CreateSquare(osg::Vec3(-0.5f,0.0f,-0.5f),osg::Vec3(1.0f,0.0f,0.0f),osg::Vec3(0.0f,0.0f,1.0f),
-        osgDB::readImageFile("C:\\lib\\OpenSceneGraph-2.8.3\\OpenSceneGraph-Data-2.8.0\\Images/reflect.rgb")),
+        im),
         osg::Vec3(0.0f,0.0f,0.0f));
         
     osg::Billboard* x_arrow = new osg::Billboard();
@@ -212,7 +201,7 @@ osg::Group* Fenetre3D::CreerTriede()
     x_arrow->setNormal(osg::Vec3(0.0f,-1.0f,0.0f));
     x_arrow->addDrawable(
        CreateSquare(osg::Vec3(-0.5f,0.0f,-0.5f),osg::Vec3(1.0f,0.0f,0.0f),osg::Vec3(0.0f,0.0f,1.0f),
-       osgDB::readImageFile("C:\\lib\\OpenSceneGraph-2.8.3\\OpenSceneGraph-Data-2.8.0\\Cubemap_axis\\posx.png")),
+       osgDB::readImageFile("F:/Lib/OpenSceneGraph-Data-3.0.0/Cubemap_axis/posx.png")),
        osg::Vec3(5.0f,0.0f,0.0f));
 
     osg::Billboard* y_arrow = new osg::Billboard();
@@ -221,7 +210,7 @@ osg::Group* Fenetre3D::CreerTriede()
     y_arrow->setNormal(osg::Vec3(1.0f,0.0f,0.0f));
     y_arrow->addDrawable(
         CreateSquare(osg::Vec3(0.0f,-0.5f,-0.5f),osg::Vec3(0.0f,1.0f,0.0f),osg::Vec3(0.0f,0.0f,1.0f),
-        osgDB::readImageFile("C:\\lib\\OpenSceneGraph-2.8.3\\OpenSceneGraph-Data-2.8.0\\Cubemap_axis\\posy.png")),
+        osgDB::readImageFile("F:/Lib/OpenSceneGraph-Data-3.0.0/Cubemap_axis/posy.png")),
         osg::Vec3(0.0f,5.0f,0.0f));
 
     osg::Billboard* z_arrow = new osg::Billboard();
@@ -230,7 +219,7 @@ osg::Group* Fenetre3D::CreerTriede()
     z_arrow->setNormal(osg::Vec3(0.0f,-1.0f,0.0f));
     z_arrow->addDrawable(
         CreateSquare(osg::Vec3(-0.5f,0.0f,-0.5f),osg::Vec3(1.0f,0.0f,0.0f),osg::Vec3(0.0f,0.0f,1.0f),
-        osgDB::readImageFile("C:\\lib\\OpenSceneGraph-2.8.3\\OpenSceneGraph-Data-2.8.0\\Cubemap_axis\\posz.png")),
+        osgDB::readImageFile("F:/Lib/OpenSceneGraph-Data-3.0.0/Cubemap_axis/posz.png")),
         osg::Vec3(0.0f,0.0f,5.0f));
 
 
@@ -380,9 +369,11 @@ std::vector< osg::Vec4 > paletteTopographique;
 wxColor*p=surface->Lirepalette();
 
 for (int i=0;i<=255;i++)
-paletteTopographique.push_back( osg::Vec4(p[i*64].Red()/255.0f,p[i*64].Green()/255.0f,p[i*64].Blue()/255.0f,1.0f));
+	paletteTopographique.push_back( osg::Vec4(p[i*64].Red()/255.0f,p[i*64].Green()/255.0f,p[i*64].Blue()/255.0f,1.0f));
 ColorRange* cr = new ColorRange(surface->DebPalette(),surface->FinPalette(),paletteTopographique);
-// cr->setColors();
+//ColorRange* cr = new ColorRange(0.0,255.0,paletteTopographique);
+//ColorRange* cr = new ColorRange(0.0,255.0);
+//cr->setColors();
 osgSim::ScalarBar * geode = new ScalarBar(256,11, cr, "Scalar Height (nm)",ScalarBar::HORIZONTAL,0.1, new EchelleHauteur);
 osgSim::ScalarBar::TextProperties tp;
 tp._fontFile = "fonts/times.ttf";
@@ -419,19 +410,6 @@ return projection; //make sure you delete the return sb line
 
 
 
-
-
-
-void Fenetre3D::OnIdle(wxIdleEvent &event)
-{
-if (viewer.get())
-    {
-
-
-    viewer->frame();
-    }
-event.RequestMore();
-}
 
 
 

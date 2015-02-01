@@ -19,7 +19,7 @@ float	z;
 float	dz;
 float	transparence;
 public:
-PlanReference(void *);
+PlanReference(void *,void *);
 void DefZRelatif(float dz){z=z+dz;};
 void DefZ(float da){z=da;MAJPlan();};
 void Descendre(float k){f = f -k*dz;MAJPlan();};

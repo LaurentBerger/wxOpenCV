@@ -1,3 +1,6 @@
+#include <osgViewer/ViewerEventHandlers>
+#include <osgGA/TrackballManipulator>
+#include <osgDB/ReadFile>
 #include "ImageInfo.h"
 #include "wx/wxprec.h"
 #include "wx/splash.h"
@@ -949,6 +952,8 @@ void wxOsgApp::Erosion(wxCommandEvent &w)
 // `Main program' equivalent, creating windows and returning main app frame
 bool wxOsgApp::OnInit()
 {
+	osg::Image *im=osgDB::readImageFile("F:\\Lib\\OpenSceneGraph-Data-3.0.0\\Images\\reflect.rgb");
+
 	quitter=false;
 	serveur = NULL;
     configApp=new wxFileConfig("wxOpenCV","LB","wxOpenCV.ini",wxEmptyString);

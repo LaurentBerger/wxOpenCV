@@ -18,7 +18,7 @@ END_EVENT_TABLE()
 
 FenetreGraphiqueWX::FenetreGraphiqueWX(wxWindow *parent, wxWindowID id,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name, int *attributes)
-    : wxGLCanvas(parent, id, attributes, pos, size, style|wxFULL_REPAINT_ON_RESIZE, name)
+    : wxGLCanvas(parent, id,  pos, size, style|wxFULL_REPAINT_ON_RESIZE, name,attributes)
 {
 
     // Make the new context current (activate it for use) with this canvas.
@@ -30,6 +30,11 @@ FenetreGraphiqueWX::FenetreGraphiqueWX(wxWindow *parent, wxWindowID id,
 	horlogeCopy=NULL;
 	fenParent=parent;
 Bind(wxEVT_MOTION, &FenetreGraphiqueWX::OnMouse,this);
+Bind(wxEVT_LEFT_DOWN, &FenetreGraphiqueWX::OnMouse,this);
+Bind(wxEVT_LEFT_UP, &FenetreGraphiqueWX::OnMouse,this);
+Bind(wxEVT_RIGHT_DOWN, &FenetreGraphiqueWX::OnMouse,this);
+Bind(wxEVT_RIGHT_UP, &FenetreGraphiqueWX::OnMouse,this);
+
 Bind(wxEVT_ERASE_BACKGROUND, &FenetreGraphiqueWX::OnEraseBackground,this);
 Bind(wxEVT_PAINT,&FenetreGraphiqueWX::OnPaint,this);
 Bind(wxEVT_SIZE, &FenetreGraphiqueWX::OnSize,this);
@@ -117,7 +122,7 @@ void FenetreGraphiqueWX::OnPaint( wxPaintEvent& WXUNUSED(event) )
 void FenetreGraphiqueWX::OnSize(wxSizeEvent& event)
 {
     // this is also necessary to update the context on some platforms
-//    wxGLCanvas::OnSize(event);
+    wxGLCanvas::OnSize(event);
 
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
     int width, height;
@@ -239,7 +244,7 @@ if (key==WXK_UP)
 	((Fenetre3D*)fenParent)->DeplaceCurseur(0,1);
 if (key==WXK_DOWN)
 	((Fenetre3D*)fenParent)->DeplaceCurseur(0,-1);
-/*
+
 if (key=='R')
 	{
 	((Fenetre3D*)fenParent)->Composante('R');
@@ -252,7 +257,7 @@ if (key=='B')
 	{
 	((Fenetre3D*)fenParent)->Composante('B');
 	}
-*/
+
 if (d!=0)
 	{
 	MAJ(d);
@@ -344,21 +349,7 @@ void FenetreGraphiqueWX::OnMouse(wxMouseEvent& event)
         if (_graphics_window.valid())
 			_graphics_window->getEventQueue()->mouseMotion(event.GetX(), event.GetY());
         
-/*        osg::ref_ptr<osgViewer::Viewer>	viewer=((wxOsgApp*)osgApp)->LireViewer();
-		osg::Matrixd m= viewer->getCamera()->getProjectionMatrix();
-        double left,right,bottom,top,zNear,zFar;
-   		double fovy,aspectRatio;
-		if (viewer->getCamera()->getProjectionMatrixAsOrtho(left,right,bottom,top,zNear,zFar))
-			((wxOsgApp*)osgApp)->MAJPositionCameraOrtho(left,right,bottom,top,zNear,zFar);
-		else
-			((wxOsgApp*)osgApp)->MAJPositionCameraOrtho();
-		if (viewer->getCamera()->getProjectionMatrixAsPerspective(fovy,aspectRatio,zNear,zFar))
-			((wxOsgApp*)osgApp)->MAJPositionCameraPerspective(fovy,aspectRatio,zNear,zFar);
-		else
-			((wxOsgApp*)osgApp)->MAJPositionCameraPerspective();
-        ((wxOsgApp*)osgApp)->MAJPositionCamera(m);
-		((wxOsgApp*)osgApp)->MAJControlVuePerpective();
-		*/}
+		}
 }
 
 void FenetreGraphiqueWX::OnTimer(wxTimerEvent& event)
@@ -488,16 +479,16 @@ void GraphicsOSGWX::init()
     {
         setState( new osg::State );
         getState()->setGraphicsContext(this);
-/*
-        if (_traits.valid() && _traits->sharedContext.valid())
+
+ /*       if (_traits.valid() /*&& _traits->sharedContext.valid())
         {
             getState()->setContextID( _traits->sharedContext->getState()->getContextID() );
             incrementContextIDUsageCount( getState()->getContextID() );
         }
-        else
+        else*/
         {
             getState()->setContextID( osg::GraphicsContext::createNewContextID() );
-        }*/
+        }
     }
 }
 

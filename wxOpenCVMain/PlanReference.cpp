@@ -3,10 +3,11 @@
 #include "PlanReference.h"
 #include "Fenetre3D.h"
 
-PlanReference::PlanReference(void *x)
+PlanReference::PlanReference(void *x,void *fen)
 {
+fenParent =fen;
 DefOSGApp(x);
-((Fenetre3D*)fenParent)->DefPlanRefence(this);
+//((Fenetre3D*)fenParent)->DefPlanRefence(this);
 dz=0.1;
 transparence=0.5;
 a=0;
