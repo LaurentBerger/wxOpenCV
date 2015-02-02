@@ -61,7 +61,7 @@ SelectPalette(indPalette);
 
 echX=1;
 echY=1;
-echZ=0.1;
+echZ=1;
 offsetZ0=0;
 nbL=-1;
 nbC=-1;
@@ -441,13 +441,13 @@ case CV_8U :
 				{
 				switch(indCanal){
 				case 0:
-					gr->setHeight(j,i,((*d))*16);	
+					gr->setHeight(j,i,((*d))*EchZ());	
 					break;
 				case 1:
-					gv->setHeight(j,i,((*d))*16);	
+					gv->setHeight(j,i,((*d))*EchZ());	
 					break;
 				case 2:
-					gb->setHeight(j,i,((*d))*16);
+					gb->setHeight(j,i,((*d))*EchZ());
 					break;
 					}
 				}
@@ -466,13 +466,13 @@ case CV_16U :
 				{
 				switch(indCanal){
 				case 0:
-					gr->setHeight(j,i,((*d))/255.0);	
+					gr->setHeight(j,i,((*d))*EchZ());	
 					break;
 				case 1:
-					gv->setHeight(j,i,((*d))/255.0);	
+					gv->setHeight(j,i,((*d))*EchZ());	
 					break;
 				case 2:
-					gb->setHeight(j,i,((*d))/255.0);
+					gb->setHeight(j,i,((*d))*EchZ());
 					break;
 					}
 				}

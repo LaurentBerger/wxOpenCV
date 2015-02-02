@@ -62,6 +62,7 @@ public:
     void OnKeyUp(wxKeyEvent &event);				/*!< Gestion du clavier */
     void OnMouse(wxMouseEvent &event);				/*!< Gestion déplacement souris */
 	void OnJoystickEvent(wxJoystickEvent& event);	/*!< Gestion du joystickTimer pour vidéo */
+	void OnMouseWheel(wxMouseEvent &event);			/*!< Gestion de la molette */
 	void OnTimer(wxTimerEvent& event);		/*!< Gestion du joystickTimer pour vidéo */
 	void OnTimerCopy(wxTimerEvent& event);		/*!< Gestion du joystickTimer pour vidéo */
 	void MAJ(int d);								/*!< Mise à jour du graphique suite à un changement */

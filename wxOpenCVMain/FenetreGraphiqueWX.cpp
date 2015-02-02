@@ -43,10 +43,22 @@ Bind(wxEVT_KEY_UP,&FenetreGraphiqueWX::OnKeyUp,this,wxID_ANY);
 Bind(wxEVT_TIMER, &FenetreGraphiqueWX::OnTimer,this,1);
 Bind(wxEVT_TIMER, &FenetreGraphiqueWX::OnTimerCopy,this,2);
 Bind(wxEVT_ENTER_WINDOW,&FenetreGraphiqueWX::OnMouseEnter,this);
+Bind(wxEVT_MOUSEWHEEL,&FenetreGraphiqueWX::OnMouseWheel,this);
 
 
 }
 
+void FenetreGraphiqueWX::OnMouseWheel(wxMouseEvent &event)
+{
+    int delta = event.GetWheelRotation() / event.GetWheelDelta() * event.GetLinesPerAction();
+
+    if (_graphics_window.valid()) {
+        _graphics_window->getEventQueue()->mouseScroll(
+            delta>0 ? 
+            osgGA::GUIEventAdapter::SCROLL_UP : 
+            osgGA::GUIEventAdapter::SCROLL_DOWN);
+    }
+}
 
 
 void FenetreGraphiqueWX::UseCursor(bool value)
@@ -155,6 +167,18 @@ int d=0;
 if (key>='1' && key<='4')
 	{
 	((Fenetre3D*)fenParent)->MAJNoeud(key);
+	}
+if (key==WXK_NUMPAD_ADD)
+	{
+	((Fenetre3D*)fenParent)->Surface()->DefEchZ(((Fenetre3D*)fenParent)->Surface()->EchZ()*1.1);
+	((Fenetre3D*)fenParent)->Surface()->Maj(0);
+	((Fenetre3D*)fenParent)->Surface()->DefTailleFiltre(0);
+	}
+if (key==    WXK_NUMPAD_SUBTRACT)
+	{
+	((Fenetre3D*)fenParent)->Surface()->DefEchZ(((Fenetre3D*)fenParent)->Surface()->EchZ()/1.1);
+	((Fenetre3D*)fenParent)->Surface()->Maj(0);
+	((Fenetre3D*)fenParent)->Surface()->DefTailleFiltre(0);
 	}
 
 

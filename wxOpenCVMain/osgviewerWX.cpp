@@ -44,6 +44,7 @@
 #include "FenetreGraphiqueWX.h"
 #include "Fenetre3D.h"
 #include "BarreEchelle.h"
+#include "fenetrePrincipale.h"
 
 using namespace osgSim;
 using namespace std;
@@ -180,9 +181,10 @@ osg::Drawable* Fenetre3D::CreateAxis(const osg::Vec3& corner,const osg::Vec3& xd
 
 osg::Group* Fenetre3D::CreerTriede()
 {
-	float	longueurAxeX=surface->EchX()*surface->NbColonneImage(0);
-	float	longueurAxeY=surface->EchY()*surface->NbLigneImage(0);
-	float	longueurAxeZ=surface->FinPalette()*surface->EchZ();
+	
+	float	longueurAxeX=((FenetrePrincipale*)fenParent)->ImAcq()->cols;;
+	float	longueurAxeY=((FenetrePrincipale*)fenParent)->ImAcq()->rows;;
+	float	longueurAxeZ=((FenetrePrincipale*)fenParent)->ImAcq()->MaxIm()[0];
     // create the root node which will hold the model.
     osg::Group* root = new osg::Group();
 
@@ -245,7 +247,7 @@ osg::Group* Fenetre3D::CreerTriede()
     osg::Vec3(0.0f,-longueurAxeY,0.0f),
     osg::Vec3(0.0f,0.0f,longueurAxeZ)));
 
-    float characterSize=100;
+    float characterSize=longueurAxeX/20;
 	for (int i=1;i<=5;i++)
 		{
 		char	s[20];
