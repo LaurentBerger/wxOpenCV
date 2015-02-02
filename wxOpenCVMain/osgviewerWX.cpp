@@ -44,7 +44,7 @@
 #include "FenetreGraphiqueWX.h"
 #include "Fenetre3D.h"
 #include "BarreEchelle.h"
-#include "fenetrePrincipale.h"
+#include "FenetrePrincipale.h"
 
 using namespace osgSim;
 using namespace std;
