@@ -435,7 +435,10 @@ f->ModeCamera(w);
 
 void wxOsgApp::Ouvrir(wxCommandEvent &w)
 {
-wxFileDialog ouverture(NULL, "Ouvrir ", wxEmptyString, wxEmptyString, "*.tif;*.jpg;*.bmp;*.ymlgz");
+wxString dossier;
+configApp->Read("/dossier",&dossier,wxEmptyString);
+
+wxFileDialog ouverture(NULL, "Ouvrir ", dossier, wxEmptyString, "*.tif;*.jpg;*.bmp;*.ymlgz");
 if (ouverture.ShowModal()!=wxID_OK)
 	return;
 FenetrePrincipale *f = new FenetrePrincipale(NULL, "wxOpenCV",
@@ -443,6 +446,7 @@ FenetrePrincipale *f = new FenetrePrincipale(NULL, "wxOpenCV",
 
 FenetreZoom *fenZoom = new FenetreZoom(f);
 f->DefOSGApp(this);
+configApp->Write("/dossier",ouverture.GetDirectory());
 #ifdef __WINDOWS__
 wxString s(ouverture.GetDirectory()+"\\"+ouverture.GetFilename ());
 #else
