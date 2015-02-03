@@ -29,6 +29,7 @@
 #include <wx/image.h>
 #include <wx/menu.h>
 #include <wx/datetime.h>
+
 #include <wx/filename.h>
 
 #include <iostream>
@@ -958,7 +959,7 @@ bool wxOsgApp::OnInit()
 	serveur = NULL;
     configApp=new wxFileConfig("wxOpenCV","LB","wxOpenCV.ini",wxEmptyString);
 	LectureFichierConfig();
-#ifdef __MULTILANGUE__
+#ifndef __MULTILANGUE__
 	langue=(wxLanguage)configApp->Read("/langue",langue);
 //gestion du langage
     if ( langue == wxLANGUAGE_UNKNOWN )
@@ -2403,7 +2404,7 @@ if (ind1!=-1)
 	if (pOCV)
 		origineImage.pOCV=*pOCV;
 	}
-/*
+
 if (idFenetre>=0)
 	{
 	wxString param;
@@ -2448,7 +2449,7 @@ if (idFenetre>=0)
 		nb++;
 		}
 	}
-*/
+
 }
 
 wxMenu *FenetrePrincipale::CreateMenuPalette(wxString *title)

@@ -169,12 +169,18 @@ delete []slGain;
 delete []slNivMin;
 delete curseur;
 delete excelPalette;
-ongletFocus->Destroy();		/*!< Pointeur pour accès informations sur Focus variance fft */
-ongletHistogramme->Destroy();	/*!< Pointeur pour accès informations sur hsitogramme image */
-ongletDistribRadiale->Destroy(); /*!< Pointeur pour accès informations sur distrib radiale */
-ongletDistribAngulaire->Destroy(); /*!< Pointeur pour accès informations sur distrib radiale */
-ongletCoupe->Destroy();	/*!< Pointeur pour accès informations sur hsitogramme image */
-ongletRegion->Destroy();
+if (ongletFocus)
+	ongletFocus->Destroy();		/*!< Pointeur pour accès informations sur Focus variance fft */
+if (ongletHistogramme)
+	ongletHistogramme->Destroy();	/*!< Pointeur pour accès informations sur hsitogramme image */
+if (ongletDistribRadiale)
+	ongletDistribRadiale->Destroy(); /*!< Pointeur pour accès informations sur distrib radiale */
+if (ongletDistribAngulaire)
+	ongletDistribAngulaire->Destroy(); /*!< Pointeur pour accès informations sur distrib radiale */
+if (ongletCoupe)
+	ongletCoupe->Destroy();	/*!< Pointeur pour accès informations sur hsitogramme image */
+if (ongletRegion)
+	ongletRegion->Destroy();
 wxFrame::OnCloseWindow(event);
 }
 
