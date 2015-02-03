@@ -103,7 +103,7 @@ viewer->setThreadingModel(osgViewer::Viewer::ThreadPerContext);
 
 
 wxGLContext *glContexte =new wxGLContext(fgOSGWX);
-fgOSGWX->SetCurrent(*glContexte);
+//fgOSGWX->SetCurrent(*glContexte);
 
 ImageInfoCV *tabImage[1];
 tabImage[0]=((FenetrePrincipale*)fenParent)->ImAcq();

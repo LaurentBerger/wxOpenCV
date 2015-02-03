@@ -39,6 +39,7 @@ Bind(wxEVT_ERASE_BACKGROUND, &FenetreGraphiqueWX::OnEraseBackground,this);
 Bind(wxEVT_PAINT,&FenetreGraphiqueWX::OnPaint,this);
 Bind(wxEVT_SIZE, &FenetreGraphiqueWX::OnSize,this);
 Bind(wxEVT_KEY_DOWN ,&FenetreGraphiqueWX::OnKeyDown,this,wxID_ANY);
+Bind(wxEVT_CHAR ,&FenetreGraphiqueWX::OnChar,this,wxID_ANY);
 Bind(wxEVT_KEY_UP,&FenetreGraphiqueWX::OnKeyUp,this,wxID_ANY);
 Bind(wxEVT_TIMER, &FenetreGraphiqueWX::OnTimer,this,1);
 Bind(wxEVT_TIMER, &FenetreGraphiqueWX::OnTimerCopy,this,2);
@@ -162,12 +163,7 @@ void FenetreGraphiqueWX::OnKeyDown(wxKeyEvent &event)
 #else
     int key = event.GetKeyCode();
 #endif
-     key = event.GetKeyCode();
 int d=0;
-if (key>='1' && key<='4')
-	{
-	((Fenetre3D*)fenParent)->MAJNoeud(key);
-	}
 if (key==WXK_NUMPAD_ADD)
 	{
 	((Fenetre3D*)fenParent)->Surface()->DefEchZ(((Fenetre3D*)fenParent)->Surface()->EchZ()*1.1);
@@ -180,10 +176,66 @@ if (key==    WXK_NUMPAD_SUBTRACT)
 	((Fenetre3D*)fenParent)->Surface()->Maj(0);
 	((Fenetre3D*)fenParent)->Surface()->DefTailleFiltre(0);
 	}
+if (key==WXK_F1)
+	((Fenetre3D*)fenParent)->ActiveGeode(0);
+if (key==WXK_F2)
+	((Fenetre3D*)fenParent)->ActiveGeode(1);
+if (key==WXK_F3)
+	((Fenetre3D*)fenParent)->ActiveGeode(2);
+if (key==WXK_F4)
+	((Fenetre3D*)fenParent)->ActiveGeode(3);
+if (key==WXK_F5)
+	((Fenetre3D*)fenParent)->ActiveGeode(4);
+if (key==WXK_F6)
+	((Fenetre3D*)fenParent)->ActiveGeode(5);
+if (key==WXK_F7)
+	((Fenetre3D*)fenParent)->ActiveGeode(6);
+if (key==WXK_F8)
+	((Fenetre3D*)fenParent)->ActiveGeode(7);
+if (key==WXK_F9)
+	((Fenetre3D*)fenParent)->ActiveGeode(8);
+if (key==WXK_F10)
+	((Fenetre3D*)fenParent)->ActiveGeode(9);
+if (key==WXK_F11)
+	((Fenetre3D*)fenParent)->ActiveGeode(10);
+if (key==WXK_F12)
+	((Fenetre3D*)fenParent)->ActiveGeode(11);
+if (key==WXK_LEFT)
+	((Fenetre3D*)fenParent)->DeplaceCurseur(-1,0);
+if (key==WXK_RIGHT)
+	((Fenetre3D*)fenParent)->DeplaceCurseur(1,0);
+if (key==WXK_UP)
+	((Fenetre3D*)fenParent)->DeplaceCurseur(0,1);
+if (key==WXK_DOWN)
+	((Fenetre3D*)fenParent)->DeplaceCurseur(0,-1);
 
 
+if (d!=0)
+	{
+	MAJ(d);
+	}
+    if (_graphics_window.valid())
+    {
+        // update the window dimensions, in case the window has been resized.
+        _graphics_window->getEventQueue()->keyPress(key);
+    }
 
+    // propagate event
+event.Skip();
+}
 
+void FenetreGraphiqueWX::OnChar(wxKeyEvent &event)
+{
+#if wxUSE_UNICODE
+    int key = event.GetUnicodeKey();
+#else
+    int key = event.GetKeyCode();
+#endif
+int d=0;
+if (key>='1' && key<='4')
+	{
+	((Fenetre3D*)fenParent)->MAJNoeud(key);
+	}
 if (key=='7')
 	d=+1;
 else if (key=='6')	
@@ -237,38 +289,6 @@ if (key=='X' && event.ShiftDown())
 	surfaceReference->Monter(100);
 	surfaceReference->Maj();
 	} // if (key=='X' && event.ShiftDown())
-if (key==WXK_F1)
-	((Fenetre3D*)fenParent)->ActiveGeode(0);
-if (key==WXK_F2)
-	((Fenetre3D*)fenParent)->ActiveGeode(1);
-if (key==WXK_F3)
-	((Fenetre3D*)fenParent)->ActiveGeode(2);
-if (key==WXK_F4)
-	((Fenetre3D*)fenParent)->ActiveGeode(3);
-if (key==WXK_F5)
-	((Fenetre3D*)fenParent)->ActiveGeode(4);
-if (key==WXK_F6)
-	((Fenetre3D*)fenParent)->ActiveGeode(5);
-if (key==WXK_F7)
-	((Fenetre3D*)fenParent)->ActiveGeode(6);
-if (key==WXK_F8)
-	((Fenetre3D*)fenParent)->ActiveGeode(7);
-if (key==WXK_F9)
-	((Fenetre3D*)fenParent)->ActiveGeode(8);
-if (key==WXK_F10)
-	((Fenetre3D*)fenParent)->ActiveGeode(9);
-if (key==WXK_F11)
-	((Fenetre3D*)fenParent)->ActiveGeode(10);
-if (key==WXK_F12)
-	((Fenetre3D*)fenParent)->ActiveGeode(11);
-if (key==WXK_LEFT)
-	((Fenetre3D*)fenParent)->DeplaceCurseur(-1,0);
-if (key==WXK_RIGHT)
-	((Fenetre3D*)fenParent)->DeplaceCurseur(1,0);
-if (key==WXK_UP)
-	((Fenetre3D*)fenParent)->DeplaceCurseur(0,1);
-if (key==WXK_DOWN)
-	((Fenetre3D*)fenParent)->DeplaceCurseur(0,-1);
 
 if (key=='R')
 	{
@@ -296,6 +316,7 @@ if (d!=0)
     // propagate event
 event.Skip();
 }
+
 
 void FenetreGraphiqueWX::MAJ(int d)
 {

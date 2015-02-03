@@ -58,6 +58,7 @@ public:
     void OnSize(wxSizeEvent& event);				/*!< Gestion du redimensionement de la fenetre */
     void OnEraseBackground(wxEraseEvent& event);
 	void OnMouseEnter(wxMouseEvent &event);			/*!< Focus pour la fenetre */
+    void OnChar(wxKeyEvent &event);				/*!< Gestion du clavier */
     void OnKeyDown(wxKeyEvent &event);				/*!< Gestion du clavier */
     void OnKeyUp(wxKeyEvent &event);				/*!< Gestion du clavier */
     void OnMouse(wxMouseEvent &event);				/*!< Gestion déplacement souris */
