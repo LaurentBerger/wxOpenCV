@@ -27,7 +27,7 @@ class FenetreGraphiqueWX : public wxGLCanvas
 protected :
 
 wxSound			m_fire;
-NanoSurface		*surface;
+NanoSurface		*surface; 
 PlanReference	*surfaceReference;
 void			*osgApp;
 void			*fenParent;
