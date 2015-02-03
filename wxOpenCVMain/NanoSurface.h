@@ -89,7 +89,7 @@ void InitNanoSurface(); /*!< Initialisation des paramètres */
 public :
 NanoSurface();			/*!< Constructeur par défaut utilisé pour les tests*/
 NanoSurface(char *nomSequence );
-NanoSurface::NanoSurface(int ,ImageInfoCV **);
+NanoSurface(int ,ImageInfoCV **);
 void InitPalette(int nbCouleur);
 void SelectPalette(int ind);
 int	LireNbCouleur(){return nbCouleurPalette;};
