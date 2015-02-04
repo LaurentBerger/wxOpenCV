@@ -136,6 +136,7 @@ void	DefEchY(float x){echY=x;};
 void	DefEchZ(float x){echZ=x;};
 void	DefOffsetZ0(float x){offsetZ0=x;};
 void	DefTailleFiltre(int i);
+void	MajSurface();
 void	SelectionComposante(char c);
 
 

@@ -26,6 +26,7 @@ public :
 FenetrePrincipale	*fPrin;
 FenetreZoom			*fZoom;
 ImageStatistiques	*fStat;
+void				*f3D;
 EnvFenetre(FenetrePrincipale *ff,FenetreZoom *ffz,ImageStatistiques *fs){fPrin=ff;fZoom=ffz;fStat=fs;};
 };
 

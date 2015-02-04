@@ -160,6 +160,8 @@ void FenetreGraphiqueWX::OnKeyDown(wxKeyEvent &event)
 {
 #if wxUSE_UNICODE
     int key = event.GetUnicodeKey();
+	if (key==WXK_NONE )
+		key = event.GetKeyCode();
 #else
     int key = event.GetKeyCode();
 #endif
@@ -168,13 +170,13 @@ if (key==WXK_NUMPAD_ADD)
 	{
 	((Fenetre3D*)fenParent)->Surface()->DefEchZ(((Fenetre3D*)fenParent)->Surface()->EchZ()*1.1);
 	((Fenetre3D*)fenParent)->Surface()->Maj(0);
-	((Fenetre3D*)fenParent)->Surface()->DefTailleFiltre(0);
+	((Fenetre3D*)fenParent)->Surface()->MajSurface();
 	}
 if (key==    WXK_NUMPAD_SUBTRACT)
 	{
 	((Fenetre3D*)fenParent)->Surface()->DefEchZ(((Fenetre3D*)fenParent)->Surface()->EchZ()/1.1);
 	((Fenetre3D*)fenParent)->Surface()->Maj(0);
-	((Fenetre3D*)fenParent)->Surface()->DefTailleFiltre(0);
+	((Fenetre3D*)fenParent)->Surface()->MajSurface();
 	}
 if (key==WXK_F1)
 	((Fenetre3D*)fenParent)->ActiveGeode(0);

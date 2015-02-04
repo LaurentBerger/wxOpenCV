@@ -16,6 +16,7 @@ modeCoupe=false;
 facteurZoom=-1;
 osgApp=NULL;
 bitmapAffiche=NULL;
+f3D=NULL;
 //SetBackgroundStyle(wxBG_STYLE_PAINT);
 for (int i=0;i<10;i++)
 	{
@@ -27,6 +28,7 @@ indCoupe=0;
 modeComplexe=0;
 Bind(wxEVT_MOTION, &ZoneImage::OnMouseMove,this);
 Bind(wxEVT_PAINT,&ZoneImage::OnPaint,this);
+Bind(wxEVT_DESTROY,&ZoneImage::OnClose,this);
 Bind(wxEVT_ACTIVATE, &ZoneImage::OnActivate,this);
 Bind(wxEVT_LEFT_UP, &ZoneImage::OnLeftButtonUp,this);
 Bind(wxEVT_LEFT_DOWN, &ZoneImage::OnLeftButtonDown,this);
@@ -49,6 +51,17 @@ void ZoneImage::OnSize( wxSizeEvent &w)
 
 wxClientDC dc(this);
 //f->DrawWindow(dc);
+
+}
+
+void ZoneImage::OnClose(wxWindowDestroyEvent& event)
+{
+delete bitmapAffiche;
+if (f3D)
+	{
+	wxCloseEvent w;
+	((Fenetre3D*)f3D)->OnClose(w);
+	}
 
 }
 
@@ -579,7 +592,13 @@ PopupMenu(&menu, pos.x, pos.y);
 void ZoneImage::Vue3D(wxCommandEvent& event)
 {
 wxSize sfen(530,570);
+if (f3D)
+	{
+	wxMessageBox(_("3D view already opened"));
+	return;
+	}
 Fenetre3D *g=new Fenetre3D(NULL,_("3D"),wxPoint(0,0), sfen);
+f3D=g;
 g->DeffParent(f);
 
 int *attributes = new int[7];

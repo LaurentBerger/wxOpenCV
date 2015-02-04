@@ -2220,7 +2220,6 @@ detectionUtilisateur->Stop();delete detectionUtilisateur;
 
 delete []seuilNivBas;
 delete []coeffCanal;
-delete feuille->BitmapAffichee();
 delete imAcq;
 
 delete imAcq2;

@@ -61,6 +61,7 @@ class ZoneImage : public  wxScrolled<wxWindow>
 {
 FenetrePrincipale	*f;				/*!< Cadre où est affichée la fenêtre avec ascenseur */
 wxOsgApp			*osgApp;		/*!< lien sur l'application */
+void				*f3D;			/*!< lien sur la fenetre 3D représentant l'image */
 int					facteurZoom;	/*!< zoom=2^facteurZoom*/
 wxRect				rectSelect[NB_MAX_RECTANGLE]; /*!< zone rectangulaire sélectionnée*/
 wxRect				rectCoupe[NB_MAX_RECTANGLE]; /*!< diagonale d'un rectangle associée à une coupe*/
@@ -94,6 +95,13 @@ void DefOSGApp(wxOsgApp *w){osgApp=w;};
      *  \brief DefOSGApp
      *
      *  Définition de l'application
+	 * \param w : application
+	 */
+void F3D(void *f){f3D=f;};
+    /*!
+     *  \brief F3D
+     *
+     *  Fenetre 3D (OSG) assoicée à l'image
 	 * \param w : application
 	 */
 void OnSize( wxSizeEvent &w);
@@ -277,6 +285,7 @@ void FacteurZoom(int f){facteurZoom=f;};
 
 private:
     void OnPaint(wxPaintEvent& WXUNUSED(event));
+	void OnClose(wxWindowDestroyEvent& event);
 	void OnActivate(wxActivateEvent &w);
 	void OnLeftButtonUp(wxMouseEvent &event);
 	void OnLeftButtonDown(wxMouseEvent &event);
@@ -653,6 +662,7 @@ void DIBImage(ImageInfoCV *im,int	indPlanTransparent=0);
 void RAZTransparence();
 
 void DefOSGApp(wxOsgApp *w){osgApp=w;if (feuille) feuille->DefOSGApp(w); };
+void F3D(void *f){if (feuille) feuille->F3D(f);};
 void *OSGApp(){return osgApp; };
 void  DefZoom(FenetreZoom *f){fenZoom=f;};
 void  DefImgStat(ImageStatistiques *f){imgStatIm=f;};

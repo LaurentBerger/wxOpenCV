@@ -76,6 +76,24 @@ if (!viewer->isRealized())
 event.RequestMore();
 }
 
+void Fenetre3D::OnClose(wxCloseEvent& event)
+{
+((FenetrePrincipale*)fenParent)->F3D(NULL);
+Unbind(wxEVT_IDLE,&Fenetre3D::OnIdle,this);
+viewer->removeEventHandler(cInfo3D);
+listeObjets->removeChild(imageSurface);
+listeObjets->removeChild(legendePalette);
+listeObjets->removeChild(surfaceReference);
+listeObjets->removeChild(systemAxe);
+//delete surfaceReference;
+//delete surface;
+//delete viewer;
+
+    
+
+wxFrame::OnCloseWindow(event);
+}
+
 
 void Fenetre3D::InstallGraphiquePhase1(FenetreGraphiqueWX *osg,GraphicsOSGWX *gOSG)
 {
@@ -190,6 +208,7 @@ cInfo3D = new CaptureInfo3D(listeObjets);
 cInfo3D->DefOSGApp(osgApp);
 viewer->addEventHandler(cInfo3D);
 Bind(wxEVT_IDLE,&Fenetre3D::OnIdle,this);
+Bind(wxEVT_CLOSE_WINDOW,&Fenetre3D::OnClose,this);
 }
 
 void Fenetre3D::MAJNoeud(int key)

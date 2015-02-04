@@ -19,11 +19,11 @@ void MAJAxe();
 void MAJNoeud(int);
 
 void OnIdle(wxIdleEvent &event);
+void OnClose(wxCloseEvent& event);
 
 
 void SetViewer(osgViewer::Viewer *viewer);
 void DefPlanRefence(PlanReference *t){surfaceReference=t;};
-void OnClose(wxCloseEvent& event);
 void OnOuvrir(wxCommandEvent& event);
 void OnOuvrir(ImageInfoCV *imReseau,int ,int);
 void AjouteNanoSurface(int ,ImageInfoCV **);

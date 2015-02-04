@@ -85,9 +85,9 @@ for (int ii=0;ii<s[0]->rows;ii++)
 	{
 	
 	listeRegion->DefCellule(ii,0,ii, "%5d");
-		listeRegion->DefCellule(ii,3,(s[0])->at<int>(ii,cv::CC_STAT_AREA), "%7d");
-		listeRegion->DefCellule(ii,5,(g[0])->at<double>(ii,0), "%6.1f");
-		listeRegion->DefCellule(ii,6,(g[0])->at<double>(ii,1), "%6.1f");
+	listeRegion->DefCellule(ii,3,(s[0])->at<int>(ii,cv::CC_STAT_AREA), "%7d");
+	listeRegion->DefCellule(ii,5,(g[0])->at<double>(ii,0), "%6.1f");
+	listeRegion->DefCellule(ii,6,(g[0])->at<double>(ii,1), "%6.1f");
 	}
 	
 /*static wxClipboard	*pressePapier=NULL;

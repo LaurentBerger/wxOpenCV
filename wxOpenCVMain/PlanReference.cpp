@@ -3,6 +3,13 @@
 #include "PlanReference.h"
 #include "Fenetre3D.h"
 
+
+PlanReference::~PlanReference()
+{
+removeDrawable(surface);
+}
+
+
 PlanReference::PlanReference(void *x,void *fen)
 {
 fenParent =fen;

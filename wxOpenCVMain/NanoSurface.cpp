@@ -441,13 +441,13 @@ case CV_8U :
 				{
 				switch(indCanal){
 				case 0:
-					gr->setHeight(j,i,((*d))*EchZ());	
+					gr->setHeight(j,im->rows-1-i,((*d))*EchZ());	
 					break;
 				case 1:
-					gv->setHeight(j,i,((*d))*EchZ());	
+					gv->setHeight(j,im->rows-1-i,((*d))*EchZ());	
 					break;
 				case 2:
-					gb->setHeight(j,i,((*d))*EchZ());
+					gb->setHeight(j,im->rows-1-i,((*d))*EchZ());
 					break;
 					}
 				}
@@ -506,7 +506,7 @@ if (im->depth()==CV_8U)
 	for (int i=0;i<im->LitNbLigne();i++)
 		{
 		data = iFond->data()+3*i*im->LitNbColonne();
-		dataSrc = im->ptr(i);
+		dataSrc = im->ptr(im->rows-1-i);
 		for (int j=0;j<im->LitNbColonne();j++)
 			{
 			if (im->channels()==3)
@@ -739,10 +739,10 @@ else if (im->getPixelSizeInBits()==16)
 			}
 	}
 
-//tex[0]->setImage(imSurface[indGrid]);
 
 //im->copySubImage(0,0,0,imSurface[indGrid]);
 //im->scaleImage(0,0,0,imSurface[indGrid]);*/
+//tex[0]->setImage(imSurface[indGrid]);
 tex[0]->dirtyTextureObject();
 etat->setTextureAttributeAndModes(0,tex[0]);
 
@@ -779,12 +779,8 @@ if (ind<0 || ind>=nbGrid)
 return grid[ind]->getHeight(c,l);
 }
 
-
-void	NanoSurface::DefTailleFiltre(int i)
+void NanoSurface::MajSurface()
 {
-if (i<0 || i>=TAILLEMAXDUFILTRE || i==tailleDuFiltre)
-	return; 
-//osg::Group* root = dynamic_cast<osg::Group*>(((wxOsgApp*)osgApp)->LireViewer()->getSceneData());
 switch(couleurActive){
 case 'R':
 	removeDrawable(surface[tailleDuFiltre].get());
@@ -797,9 +793,9 @@ case 'B':
 	break;
 	}
 
-tailleDuFiltre=i;
 switch(couleurActive){
 case 'R':
+	surface[tailleDuFiltre]->dirtyDisplayList();
 	addDrawable(surface[tailleDuFiltre].get());
 	break;
 case 'G':
@@ -809,7 +805,14 @@ case 'B':
 	addDrawable(surfaceb[tailleDuFiltre].get());
 	break;
 	}
+}
 
+void	NanoSurface::DefTailleFiltre(int i)
+{
+if (i<0 || i>=TAILLEMAXDUFILTRE || i==tailleDuFiltre)
+	return; 
+//osg::Group* root = dynamic_cast<osg::Group*>(((wxOsgApp*)osgApp)->LireViewer()->getSceneData());
+MajSurface();
 }
 
 void	NanoSurface::SelectionComposante(char c)
