@@ -17,28 +17,29 @@ FenetreRegion::FenetreRegion( wxFrame* frame) : wxWindow(frame,-1,wxPoint(0,0),w
 {
 gestionControlDown=0;
 osgApp=NULL;
+fenParent=NULL;
 nbRegionMax=4000;
-regionSelect=new char[nbRegionMax];
-cleTri =  new long[nbRegionMax];
-valTri = new float[nbRegionMax];
+regionSelect=NULL;
+cleTri =  NULL;
+valTri = NULL;
 
 listeRegion = new Tableur((wxFrame*)this,0,13); 
 listeRegion->SetSize(wxSize(800,400));
 //listeRegion->Refresh();
-listeRegion->DefTitreColonne(0, "Index");
-listeRegion->DefTitreColonne(1, "Gray Level");
-listeRegion->DefTitreColonne(2, "Gray Level\n(wo gradient)");
-listeRegion->DefTitreColonne(3, "Surface");
-listeRegion->DefTitreColonne(4, "Surface\n(wo gradient) ");
-listeRegion->DefTitreColonne(5, "xg");
-listeRegion->DefTitreColonne(6, "yg");
-listeRegion->DefTitreColonne(7, "semi\nmajor\naxis");
-listeRegion->DefTitreColonne(8, "semi\nminor\naxis");
-listeRegion->DefTitreColonne(9, "theta");
-listeRegion->DefTitreColonne(10, "Level\ndeviation");
-listeRegion->DefTitreColonne(11, "Level\ndeviation\n(wo gradient)");
-listeRegion->DefTitreColonne(12, "Height\nDifference");
-listeRegion->DefTitreColonne(13, "Level\nIndex");
+listeRegion->DefTitreColonne(0, _("Index"));
+listeRegion->DefTitreColonne(1, _("Gray Level"));
+listeRegion->DefTitreColonne(2, _("Gray Level\n(wo gradient)"));
+listeRegion->DefTitreColonne(3, _("Surface"));
+listeRegion->DefTitreColonne(4, _("Surface\n(wo gradient) "));
+listeRegion->DefTitreColonne(5, _("xg"));
+listeRegion->DefTitreColonne(6, _("yg"));
+listeRegion->DefTitreColonne(7, _("semi\nmajor\naxis"));
+listeRegion->DefTitreColonne(8, _("semi\nminor\naxis"));
+listeRegion->DefTitreColonne(9, _("theta"));
+listeRegion->DefTitreColonne(10, _("Level\ndeviation"));
+listeRegion->DefTitreColonne(11, _("Level\ndeviation\n(wo gradient)"));
+listeRegion->DefTitreColonne(12, _("Height\nDifference"));
+listeRegion->DefTitreColonne(13, _("Level\nIndex"));
 listeRegion->SetColLabelSize(wxGRID_AUTOSIZE );
 listeRegion->SetColSize(0, 40);
 listeRegion->SetColSize(1, 50);
@@ -63,30 +64,15 @@ void FenetreRegion::ListerRegion()
 {
 if (!osgApp)
 	return;
-/*
-GrapheImageInfo*	grapheRegion=NULL;//((wxOsgApp*)osgApp)->Graphique()->GrapheImage();
-nbZoneId=0;
-if (listeRegion->GetNumberRows()!=grapheRegion->nbSommets)
-	{
-	if (grapheRegion->nbSommets>nbRegionMax)
-		{
-		delete regionSelect;
-		delete cleTri;
-		delete valTri;
-		nbRegionMax = grapheRegion->nbSommets;
-		regionSelect =  new char[nbRegionMax];
-		cleTri =  new long[nbRegionMax];
-		valTri = new float[nbRegionMax];
-		}
-    }
-for (int i=0;i<grapheRegion->nbSommets;i++)
-	{
-	regionSelect[i]=0;
-	cleTri[i]=i;
-	valTri[i]=(*grapheRegion)[i].moyImage[5];
-	}
-grapheRegion->trier(valTri,0,grapheRegion->nbSommets-1,cleTri);
-int nb=listeRegion->GetNumberRows()-grapheRegion->nbSommets;
+if (!fenParent)
+	return;
+if (!((FenetrePrincipale*)fenParent)->ImAcq())
+	return;
+cv::Mat	**s=((FenetrePrincipale*)fenParent)->ImAcq()->StatComposante();
+cv::Mat	**g=((FenetrePrincipale*)fenParent)->ImAcq()->CentreGComposante();
+if (!s || !g)
+	return;
+int nb=listeRegion->GetNumberRows()-s[0]->rows;
 if (nb>0) 
 	{
 	listeRegion->EffaceLigne(nb);
@@ -94,60 +80,16 @@ if (nb>0)
 	}
 else if (nb<0)
 	listeRegion->AjouteLigne(-nb);
-float	*par=NULL;
-if(((wxOsgApp*)osgApp)->Graphique()->ModeRectangle())
+
+for (int ii=0;ii<s[0]->rows;ii++)
 	{
-	wxRect r(*((wxOsgApp*)osgApp)->Graphique()->RectangleSelec());
-//	grapheRegion->InitGraphe(((wxOsgApp*)osgApp)->Graphique()->ImRegion(),r.GetLeft(),r.GetTop(),r.GetWidth(),r.GetHeight());
+	
+	listeRegion->DefCellule(ii,0,ii, "%5d");
+		listeRegion->DefCellule(ii,3,(s[0])->at<int>(ii,cv::CC_STAT_AREA), "%7d");
+		listeRegion->DefCellule(ii,5,(g[0])->at<double>(ii,0), "%6.1f");
+		listeRegion->DefCellule(ii,6,(g[0])->at<double>(ii,1), "%6.1f");
 	}
-for (int ii=0;ii<grapheRegion->nbSommets;ii++)
-	{
-	int i=cleTri[ii];
-	listeRegion->DefCellule(ii,0,i, "%5d");
-		{
-		if(((wxOsgApp*)osgApp)->Graphique()->ModeRectangle() && (*grapheRegion)[i].moyImage[4]>0)
-			{
-			wxString	s;
-			s.Printf(_T("%7.1f(%7.1f)"),(*grapheRegion)[i].moyImage[0],(*grapheRegion)[i].moyImage[4]);
-			
-			listeRegion->DefCellule(ii,1,&s);
-			s.Printf(_T("%7.1f"),(*grapheRegion)[i].moyImage[5]);
-			
-			listeRegion->DefCellule(ii,2,&s);
-			
-			s.Printf(_T("%7.0f(%7.0f)"),(*grapheRegion)[i].surface,(*grapheRegion)[i].moyImage[1]);
-			listeRegion->DefCellule(ii,3,&s);
-			s.Printf(_T("%7.0f"),(*grapheRegion)[i].nbPixels[5]);
-			listeRegion->DefCellule(ii,4,&s);
-			
-			s.Printf(_T("%5.1f(%5.1f)"),(*grapheRegion)[i].xg,(*grapheRegion)[i].moyImage[2]);
-			listeRegion->DefCellule(ii,5, &s);
-			s.Printf(_T("%5.1f(%5.1f)"),(*grapheRegion)[i].yg,(*grapheRegion)[i].moyImage[3]);
-			listeRegion->DefCellule(ii,6,&s);
-			}
-		else
-			{
-			listeRegion->DefCellule(ii,1,(*grapheRegion)[i].moyImage[0], "%7.1f");
-			listeRegion->DefCellule(ii,2,(*grapheRegion)[i].moyImage[5], "%7.1f");
-			listeRegion->DefCellule(ii,3,(*grapheRegion)[i].surface, "%7.0f");
-			listeRegion->DefCellule(ii,4,(*grapheRegion)[i].nbPixels[5], "%7.0f");
-			listeRegion->DefCellule(ii,5,(*grapheRegion)[i].xg, "%6.1f");
-			listeRegion->DefCellule(ii,6,(*grapheRegion)[i].yg, "%6.1f");
-			}
-		listeRegion->DefCellule(ii,7,sqrt(2*(*grapheRegion)[i].v1), "%6.1f");
-		listeRegion->DefCellule(ii,8,sqrt(2*(*grapheRegion)[i].v2), "%6.1f");
-		listeRegion->DefCellule(ii,9,(*grapheRegion)[i].theta, "%6.1f");
-		listeRegion->DefCellule(ii,10,sqrt((*grapheRegion)[i].varImage[0]), "%6.1f");
-		listeRegion->DefCellule(ii,11,sqrt((*grapheRegion)[i].varImage[5]), "%6.1f");
-		if (ii>0)
-			{
-			double x=(*grapheRegion)[i].moyImage[5]-(*grapheRegion)[cleTri[ii-1]].moyImage[5];
-			listeRegion->DefCellule(ii,12, x,"%4.1f");
-			}
-		listeRegion->DefCellule(ii,13, 0,"%3d");
-		}
-	}
-*/	
+	
 /*static wxClipboard	*pressePapier=NULL;
 if (!pressePapier)
 	pressePapier =new wxClipboard;

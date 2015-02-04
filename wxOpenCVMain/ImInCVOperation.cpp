@@ -557,16 +557,37 @@ ImageInfoCV *ImageInfoCV::ComposanteConnexe(ImageInfoCV *im1,Parametre &paramOCV
 ImageInfoCV	*im =new ImageInfoCV;
 if (im1->channels()==1)
 	{
-	connectedComponents(*im1, *im, paramOCV.intParam["connectivity"].valeur, CV_16U);
+	if (im->statComposante==NULL)
+		{
+		im->statComposante = new cv::Mat*[im1->channels()]; 
+		im->centreGComposante = new cv::Mat*[im1->channels()]; 
+		for (int i=0;i<im1->channels();i++)
+			{
+			im->statComposante[i] = new cv::Mat; 
+			im->centreGComposante[i] = new cv::Mat; 
+			}
+		}
+	connectedComponentsWithStats(*im1, *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV.intParam["connectivity"].valeur, CV_16U);
 	}
 else
 	{
 	std::vector<Mat> planCouleur;
 	Mat *d=new Mat[im1->channels()];
+	if (im->statComposante==NULL)
+		{
+		im->statComposante = new cv::Mat*[im1->channels()]; 
+		im->centreGComposante = new cv::Mat*[im1->channels()]; 
+		for (int i=0;i<im1->channels();i++)
+			{
+			im->statComposante[i] = new cv::Mat; 
+			im->centreGComposante[i] = new cv::Mat; 
+			}
+		}
+		
 	cv::split( *im1, planCouleur );
 	for (int i=0;i<im1->channels();i++)
 		{
-		connectedComponents(planCouleur[i], d[i], paramOCV.intParam["connectivity"].valeur, CV_16U);
+		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV.intParam["connectivity"].valeur, CV_16U);
 		}
 	cv::merge((const cv::Mat *)d, im1->channels(), *im);
 	delete []d;

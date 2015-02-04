@@ -51,10 +51,12 @@ void	DefCellule(int l,int c, double val,char *format=NULL);
 void	DefCellule(int l,int c, int val,char *format=NULL);
 void	DefCellule(int l,int c, char *);
 void	DefCellule(int l,int c, wxString *);
+void	DefCellule(int l,int c, wxString );
 double	LitCellule(int l,int c,char	&status);
 void	DefTitreColonne(int c, char *s);
 void	DefTitreLigne(int l, char *s);
-void	DefTitreColonne(int c, wxString &s);
+void	DefTitreColonne(int c, const wxString s);
+//void	DefTitreColonne(int c, wxString &s);
 void	DefTitreLigne(int l, wxString &s);
 
 void	SelectionLigne(int l);

@@ -141,6 +141,9 @@ double *minIm;			/*< Minimimum pour chaque plan de l'image */
 double *maxIm;			/*< Maximimum pour chaque plan de l'image */
 cv::Point	*locMin;	/*< Position du miminmu pour chaque plan */
 cv::Point	*locMax;	/*< Position du miminmu pour chaque plan */
+cv::Mat		**statComposante; /*< Statistique des composantes de chaque plan http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
+cv::Mat		**centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
+
 
 public : 
 //	********* Constructeurs et destructeur
@@ -153,11 +156,6 @@ void DoEnregistrer(char **nomFic,long =0,void * = NULL);
 void SauverProprieteProjet(char *);
 void DefProprieteImage(char *);
 // Lecture des images JPEG
-#ifdef WIN32
-void LectureImageJpeg(char *nomDuFichier,long &nbL,long &nbC,long &nbP);
-#else
-void LectureImageJpeg(char *nomDuFichier,long &nbL,long &nbC,long &nbP){};
-#endif
 
 
 private :
@@ -230,6 +228,9 @@ char    *LitTypeOndelette(void);
 long	LitTailleOndelette(void);
 long  	LitNbIterOperateur(void);
 char  	LitConverCplxEnt(void);
+
+cv::Mat	**StatComposante(){return statComposante;};
+cv::Mat	**CentreGComposante(){return centreGComposante;};
 
 char* 	LitNomImage(void);
 char* 	LitNatureImage(void);

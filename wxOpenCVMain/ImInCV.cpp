@@ -49,6 +49,8 @@ minIm = NULL;			/*< Minimimum pour chaque plan de l'image */
 maxIm = NULL;			/*< Maximimum pour chaque plan de l'image */
 locMin = NULL;			/*< Position du miminmu pour chaque plan */
 locMax = NULL;			/*< Position du miminmu pour chaque plan */
+statComposante = NULL; 
+centreGComposante = NULL; 
 #ifdef _INFOTEXTE__
 nbChampGonfle=0;
 gonfle = NULL;

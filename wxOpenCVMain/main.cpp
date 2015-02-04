@@ -925,6 +925,7 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	imgStatIm->OuvertureOngletCouleur();
 	imgStatIm->OuvertureOngletPalette();
 	imgStatIm->OuvertureOngletRegion();
+	imgStatIm->ListerRegion();
 	imgStatIm->OuvertureOngletCurseur();
 	f->DefHistorique();
 	f->Show(true);

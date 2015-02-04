@@ -15,6 +15,7 @@ public:
 FenetreRegion( wxFrame * );
 ~FenetreRegion( ){delete []regionSelect;delete []cleTri;delete []valTri;};
 void DefOsgApp(void *w){osgApp=w;};
+void DefParent(void *w){fenParent=w;};
 
 void ListerRegion(); 
 void DefRegionSelect(int i,int val){regionSelect[i]=val;};;
@@ -34,6 +35,7 @@ void DefinirNiveau(wxCommandEvent &w);
 char *RegionSelect(){return regionSelect;};
 private:
 void *osgApp;
+void *fenParent;
 Tableur *listeRegion;
 int		nbRegionMax;
 char	*regionSelect;

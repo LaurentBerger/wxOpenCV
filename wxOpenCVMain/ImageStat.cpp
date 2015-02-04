@@ -665,6 +665,7 @@ void ImageStatistiques::OuvertureOngletRegion()
 {
 ongletRegion = new FenetreRegion((wxFrame*)listeFenetreOnglet); 
 ongletRegion->DefOsgApp(osgApp);
+ongletRegion->DefParent(fenMere);
 
 listeFenetreOnglet->AddPage(ongletRegion, _T("Region"));
 ongletRegion->Refresh();

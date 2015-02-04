@@ -120,6 +120,16 @@ if (l>=0 && l<nbLigne && c>=0 && c<nbColonne && s)
 	}
 }
 
+void Tableur::DefCellule(int l,int c, wxString s)
+{
+if (l>=0 && l<nbLigne && c>=0 && c<nbColonne )
+	{	
+
+	SetCellValue(l, c, s);
+
+	}
+}
+
 void Tableur::DefTitreColonne(int c, char *s)
 {
 if ( c>=0 && c<nbColonne)
@@ -129,13 +139,22 @@ if ( c>=0 && c<nbColonne)
 	}
 }
 
-void Tableur::DefTitreColonne(int c, wxString &s)
+/*void Tableur::DefTitreColonne(int c, wxString &s)
+{
+if ( c>=0 && c<nbColonne)
+	{
+	SetColLabelValue(c, s);
+	}
+}*/
+
+void Tableur::DefTitreColonne(int c,const wxString s)
 {
 if ( c>=0 && c<nbColonne)
 	{
 	SetColLabelValue(c, s);
 	}
 }
+
 
 void Tableur::DefTitreLigne(int l, char *s)
 {
