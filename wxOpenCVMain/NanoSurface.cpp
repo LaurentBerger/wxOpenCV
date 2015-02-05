@@ -456,10 +456,56 @@ case CV_8U :
 		}
 	}
 	break;
-case CV_16U :
+case CV_32F :
+	for (int i=0;i<im->rows;i++)		
+		{
+		float *d=(float*)im->ptr(i);
+		for (int j=0;j<im->cols;j++)
+			{
+			for (int indCanal=0;indCanal<im->channels();indCanal++,d++)
+				{
+				switch(indCanal){
+				case 0:
+					gr->setHeight(j,i,((*d))*EchZ());	
+					break;
+				case 1:
+					gv->setHeight(j,i,((*d))*EchZ());	
+					break;
+				case 2:
+					gb->setHeight(j,i,((*d))*EchZ());
+					break;
+					}
+				}
+			}
+		}
+	break;
+case CV_16S :
 	for (int i=0;i<im->rows;i++)		
 		{
 		short *d=(short*)im->ptr(i);
+		for (int j=0;j<im->cols;j++)
+			{
+			for (int indCanal=0;indCanal<im->channels();indCanal++,d++)
+				{
+				switch(indCanal){
+				case 0:
+					gr->setHeight(j,i,((*d))*EchZ());	
+					break;
+				case 1:
+					gv->setHeight(j,i,((*d))*EchZ());	
+					break;
+				case 2:
+					gb->setHeight(j,i,((*d))*EchZ());
+					break;
+					}
+				}
+			}
+		}
+	break;
+case CV_16U :
+	for (int i=0;i<im->rows;i++)		
+		{
+		unsigned short *d=(unsigned short*)im->ptr(i);
 		for (int j=0;j<im->cols;j++)
 			{
 			for (int indCanal=0;indCanal<im->channels();indCanal++,d++)
@@ -526,9 +572,102 @@ if (im->depth()==CV_8U)
 	}
 else if (im->depth()==CV_16U)
 	{
+	tabNomImage.push_back("xxxx");
+	osg::Image* iFond = new osg::Image;
+	iFond->setImage( im->LitNbColonne(),im->LitNbLigne(), 3,
+				GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE,
+				new unsigned char[im->cols* im->rows* 3],
+				osg::Image::USE_NEW_DELETE);
+	unsigned char *data ;
+	unsigned short *dataSrc ;
+
+	//iFond->setImage(
+	for (int i=0;i<im->LitNbLigne();i++)
+		{
+		data = iFond->data()+3*i*im->LitNbColonne();
+		dataSrc = (unsigned short *)im->ptr(im->rows-1-i);
+		for (int j=0;j<im->LitNbColonne();j++)
+			{
+			if (im->channels()==3)
+				{
+				*data++= *dataSrc++;
+				*data++= *dataSrc++;
+				}
+			else	
+				{
+				*data++=*dataSrc;
+				*data++=*dataSrc;
+				}
+			*data++= *dataSrc++;
+			} // for (int j=0;j<im->LitNbColonne();j++)
+		}
+	imSurface.push_back(iFond);
+	}
+else if (im->depth()==CV_16S)
+	{
+	tabNomImage.push_back("xxxx");
+	osg::Image* iFond = new osg::Image;
+	iFond->setImage( im->LitNbColonne(),im->LitNbLigne(), 3,
+				GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE,
+				new unsigned char[im->cols* im->rows* 3],
+				osg::Image::USE_NEW_DELETE);
+	unsigned char *data ;
+	short *dataSrc ;
+
+	//iFond->setImage(
+	for (int i=0;i<im->LitNbLigne();i++)
+		{
+		data = iFond->data()+3*i*im->LitNbColonne();
+		dataSrc = (short *)im->ptr(im->rows-1-i);
+		for (int j=0;j<im->LitNbColonne();j++)
+			{
+			if (im->channels()==3)
+				{
+				*data++= *dataSrc++;
+				*data++= *dataSrc++;
+				}
+			else	
+				{
+				*data++=*dataSrc;
+				*data++=*dataSrc;
+				}
+			*data++= *dataSrc++;
+			} // for (int j=0;j<im->LitNbColonne();j++)
+		}
+	imSurface.push_back(iFond);
 	}
 else if (im->depth()==CV_32F)
 	{
+	tabNomImage.push_back("xxxx");
+	osg::Image* iFond = new osg::Image;
+	iFond->setImage( im->LitNbColonne(),im->LitNbLigne(), 3,
+				GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE,
+				new unsigned char[im->cols* im->rows* 3],
+				osg::Image::USE_NEW_DELETE);
+	unsigned char *data ;
+	float *dataSrc ;
+
+	//iFond->setImage(
+	for (int i=0;i<im->LitNbLigne();i++)
+		{
+		data = iFond->data()+3*i*im->LitNbColonne();
+		dataSrc = (float *)im->ptr(im->rows-1-i);
+		for (int j=0;j<im->LitNbColonne();j++)
+			{
+			if (im->channels()==3)
+				{
+				*data++= *dataSrc++;
+				*data++= *dataSrc++;
+				}
+			else	
+				{
+				*data++=*dataSrc;
+				*data++=*dataSrc;
+				}
+			*data++= *dataSrc++;
+			} // for (int j=0;j<im->LitNbColonne();j++)
+		}
+	imSurface.push_back(iFond);
 	}
 }
 
