@@ -1122,7 +1122,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("binarize").Caption("binarize").
-					  ToolbarPane().Top().Row(2));
+					  ToolbarPane().Top().Row(3));
 		}
 	break;
 	case 7 : // Outils couleur, normalisation
@@ -1158,7 +1158,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Color").Caption("Color").
-					  ToolbarPane().Top().Row(2));
+					  ToolbarPane().Top().Row(3));
 		}
 	break;
 	case 6 : // Ouverture, fermeture de fichiers

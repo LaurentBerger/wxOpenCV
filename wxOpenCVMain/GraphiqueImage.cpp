@@ -290,7 +290,7 @@ case CV_32F :
 	for (int i=0;i<im->rows;i++)		
 		if (nbCanaux%2==1)	// Nombre réel
 			{
-			float *d=(float*)im->data+i*im->step[0];
+			float *d=(float*)im->ptr(i);
 			unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 			for (int j=0;j<im->cols;j++,debLigne+=3)
 				{

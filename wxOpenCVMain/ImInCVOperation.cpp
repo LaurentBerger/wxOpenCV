@@ -262,7 +262,7 @@ ImageInfoCV 	*ImageInfoCV::Laplacien(ImageInfoCV	*im1,Parametre &pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::Laplacian( *im1, *im, pOCV.intParam["ddepth"].valeur,pOCV.intParam["ksize"].valeur,
+cv::Laplacian( *im1, *im, typeResultat,pOCV.intParam["ksize"].valeur,
 	pOCV.doubleParam["scale"].valeur,pOCV.doubleParam["delta"].valeur,pOCV.intParam["borderType"].valeur );
 return im;
 }

@@ -572,8 +572,8 @@ if (s.Cmp("Convolution")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Convolution;
 	nomOperation = s;
-	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#subtract";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=172&zoom=70,250,100";
+	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#filter2d";
+	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100";
 	}
 if (s.Cmp("Dilatation")==0)
 	{
