@@ -86,7 +86,7 @@ virtual	char IsEMCCD(){if (TestDriver()) return true;return false;};
 virtual void DefEMCCDGain(int);
 virtual void DefModeGain(int);
 virtual void LireIntervalGain(int *x,int *y);
-virtual float TempsExposition (){return tempsExposition;};
+virtual double TempsExposition (){return tempsExposition;};
 virtual float TempsPose(){return 0;};
 virtual float GainEMCCD(){return valGain;};
 virtual int ModeGainEMCCD(){return 0;};
