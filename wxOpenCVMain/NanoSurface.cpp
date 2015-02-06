@@ -711,7 +711,7 @@ if (!pCouleur)
 		}
 	}
 	{
-	ifstream ff("palperso.txt");
+	ifstream ff("palPerso.txt");
 	if (ff.is_open())
 		{
 		for (int i=0;i<16384;i++)
@@ -723,7 +723,7 @@ if (!pCouleur)
 		}
 	}
 	{
-	ifstream ff("palpersoinv.txt");
+	ifstream ff("palPersoinv.txt");
 	if (ff.is_open())
 		{
 		for (int i=0;i<16384;i++)
