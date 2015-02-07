@@ -5,6 +5,7 @@
 
 
 #define NBCAMERA 10
+#define NBFILTRE 11 // Coefficent du filtre de butterworth
 
 /*! \class CameraOpenCV
    * \brief La classe permet de gérer un flux vidéo reconnu par OpenCV
@@ -18,6 +19,22 @@ static char	indIdVideo[NBCAMERA];
 int			indId; // Indice du périphérique vidéo;
 long		expoMin,expoMax;
 long		gainMin,gainMax;
+
+double aaButter[11];
+double bbButter[11];
+
+
+ImageInfoCV			*nivBiais;			/*!< image du niveau zéro*/
+ImageInfoCV			*imAcqBrutFilMax;	/*!< résultat de la moyenne glissante avec filtrage maximum imAcqBrutFil = b(imAcqBrut1+imAcqBrut2)-a imAcqBrutFil */
+ImageInfoCV			*imAcqBrutFil;		/*!< résultat de la moyenne glissante imAcqBrutFil = b(imAcqBrut1+imAcqBrut2)-a imAcqBrutFil */
+ImageInfoCV			*imAcqBrut1;		/*!< Dernière image acquise à insérer dans la moyenne glissante*/
+ImageInfoCV			*imAcqBrut2;		/*!< Avant Dernière image acquise à insérer dans la moyenne glissante*/
+ImageInfoCV			*imAcq2;			/*!< Dernière image calculée incluant les corrections avec filtre maximum */
+ImageInfoCV			*imTache;			/*!< Image du gain à appliquer pour supprimer les tâches optiques indépendantes de l'échantillon */
+ImageInfoCV			*imRefTache;		/*!< Image des tâches optiques indépendantes de l'échantillon */
+ImageInfoCV			*imQuadrique;		/*!< Valeur de correction l'intensité trouvées à partir de la quadrique */
+
+
 
 public : 
 ImageInfoCV			*imAcq;

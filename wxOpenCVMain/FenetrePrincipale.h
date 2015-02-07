@@ -26,7 +26,6 @@ class DragShape;
 class GlisserImage;
 
 
-#define NBFILTRE 11
 
 // Constante pour usage de la souris
 #define SOURIS_STD 0
@@ -349,16 +348,7 @@ int					nbMarcheFit;
 double				**poly;				/*!< Coefficient de la quadrique pour la correction du fond */ 
 
 
-ImageInfoCV			*nivBiais;			/*!< image du niveau zéro*/
-ImageInfoCV			*imAcqBrutFilMax;	/*!< résultat de la moyenne glissante avec filtrage maximum imAcqBrutFil = b(imAcqBrut1+imAcqBrut2)-a imAcqBrutFil */
-ImageInfoCV			*imAcqBrutFil;		/*!< résultat de la moyenne glissante imAcqBrutFil = b(imAcqBrut1+imAcqBrut2)-a imAcqBrutFil */
-ImageInfoCV			*imAcqBrut1;		/*!< Dernière image acquise à insérer dans la moyenne glissante*/
-ImageInfoCV			*imAcqBrut2;		/*!< Avant Dernière image acquise à insérer dans la moyenne glissante*/
 ImageInfoCV			*imAcq;				/*!< Dernière image calculée incluant les corrections */
-ImageInfoCV			*imAcq2;			/*!< Dernière image calculée incluant les corrections avec filtre maximum */
-ImageInfoCV			*imTache;			/*!< Image du gain à appliquer pour supprimer les tâches optiques indépendantes de l'échantillon */
-ImageInfoCV			*imRefTache;		/*!< Image des tâches optiques indépendantes de l'échantillon */
-ImageInfoCV			*imQuadrique;		/*!< Valeur de correction l'intensité trouvées à partir de la quadrique */
 
 double				alphad,alpham;		/*!< Paramétres pour le filtre de deriche */
 double				seuilModuleHaut;	/*!< Seuil du module pour limiter les régions */
@@ -408,8 +398,6 @@ bool				zoomActif;
 bool				statActif;
 wxTimer				*detectionUtilisateur;
 
-static double aaButter[11];
-static double bbButter[11];
 static FenetrePrincipale *fenDrag;
 
 private : // Gestion du curseur*
@@ -575,7 +563,7 @@ wxRect *RectangleSelec(){return feuille->RectangleSelec();};
 wxRect *Rectangle(int i){if (i>=0 && i<NB_MAX_RECTANGLE) return feuille->Rectangle(i);return NULL;};
 int IndiceRectangleSelec(){return feuille->IndiceRectangleSelec();};
 int FacteurZoom(){return feuille->FacteurZoom();};
-ImageInfoCV	*	ImAcq(void){if (modeFiltre) return imAcq2;return imAcq;};
+ImageInfoCV	*	ImAcq(void){return imAcq;};
 
 void DefinitionFondMicro();
 void DefinitionFondQuadrique(wxCommandEvent& event);

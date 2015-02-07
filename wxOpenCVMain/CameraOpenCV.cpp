@@ -29,10 +29,46 @@ CameraOpenCV::CameraOpenCV(void)
 wxString		repTravail=wxGetCwd();
 strcpy(nomCamera,"OpenCV");
 wxString nomOrdinateur(wxGetHostName());
+//double FenetrePrincipale::aaButter[NBFILTRE]={-0.9996859,-0.9993719,-0.9968633,-0.9937365,-0.9690674,-0.9390625,-0.7265425,-0.5095254,-0.3249,-0.1584,-0.0,};
+//double FenetrePrincipale::bbButter[NBFILTRE]={0.0001571,0.0003141,0.0015683,0.0031318,0.0154663,0.0304687,0.1367287,0.2452373,0.3375,0.4208,0.5,};
 
 parent=NULL;
 captureVideo=NULL;
 imAcq=NULL;
+imAcq2 = NULL;
+imAcqBrutFil = NULL;
+imAcqBrutFilMax = NULL;
+imAcqBrut1 = NULL;
+imAcqBrut2 = NULL;
+imTache = NULL;
+imRefTache = NULL;
+imQuadrique = NULL;
+nivBiais = NULL;
+
+/*
+imAcq2 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imAcqBrutFil = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imAcqBrutFilMax = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imAcqBrut1 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imAcqBrut2 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imTache = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imRefTache = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imQuadrique = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+nivBiais = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+
+delete imAcq2;
+delete imAcqBrutFil;
+delete imAcqBrutFilMax;
+delete imAcqBrut1;
+delete imAcqBrut2;
+delete imTache;
+delete imRefTache;
+delete imQuadrique;
+delete nivBiais;
+
+
+*/
+
 // Appel de VideoCapture pour récupérer la taille de la vidéo
 #ifdef _FLUXHTTP__
 captureVideo = new cv::VideoCapture("192.168.0.1:8080"); 
@@ -331,7 +367,7 @@ if (captureVideo->isOpened())
 				x->ptApp=repere;
 				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
 				wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
-				this->Sleep(20);
+//				this->Sleep(20);
 				}
 			else
 				break;
