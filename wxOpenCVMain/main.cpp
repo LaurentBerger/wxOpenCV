@@ -1410,6 +1410,7 @@ gg>>x>>y;
 wxLogVerbose(_T("Mean mode %d b0=%f b1=%f"),int(modeMoyenne),x,y);
 float dMin=3000;
 int pos=0;
+/*
 for (int i=0;i<NBFILTRE;i++)
 	{
 	float d=fabs(x-bbButter[i]);
@@ -1419,6 +1420,7 @@ for (int i=0;i<NBFILTRE;i++)
 		pos=i;
 		}
 	}
+*/
 if (modeMoyenne)
 	indFiltreMoyenne=pos;
 gg>>correctionBiais;
@@ -1474,10 +1476,12 @@ if (osgApp->CtrlCamera())
 	wgg<<osgApp->CtrlCamera()->TempsExposition()<<"\t"<<osgApp->CtrlCamera()->ModeGainEMCCD()<<"\t"<<osgApp->CtrlCamera()->GainEMCCD()<<"\t";
 else
 	wgg<<1.0<<"\t"<<1.0<<"\t"<<1.0<<"\t";
+/*
 if (modeMoyenne)
 	wgg<<"1\t"<<bbButter[indFiltreMoyenne]<<"\t"<<aaButter[indFiltreMoyenne]<<"\t";
 else
 	wgg<<"0\t-1\t-1\t";
+*/
 if (correctionBiais)
 	wgg<<"1\t"<<nomImageBiais<<"\t";
 else
@@ -1621,15 +1625,6 @@ tabRGBTransparence=NULL;
 imAcq=NULL;
 imAffichee=NULL;
 imAcq = NULL;
-imAcq2 = NULL;
-imAcqBrutFil = NULL;
-imAcqBrutFilMax = NULL;
-imAcqBrut1 = NULL;
-imAcqBrut2 = NULL;
-imTache = NULL;
-imRefTache = NULL;
-imQuadrique =NULL;
-nivBiais = NULL;
 indPalette=0;
 nbImageBiais=0;
 nbImageTache=0;
@@ -1668,15 +1663,6 @@ cam =NULL;
 tabRGB=NULL;
 imAcq=NULL;
 imAffichee=NULL;
-imAcq2 = NULL;
-imAcqBrutFil = NULL;
-imAcqBrutFilMax = NULL;
-imAcqBrut1 = NULL;
-imAcqBrut2 = NULL;
-imTache = NULL;
-imRefTache = NULL;
-imQuadrique = NULL;
-nivBiais = NULL;
 
 imAcq = new ImageInfoCV(1002,1004,CV_16UC1);
 seuilNivBas=new double[imAcq->channels()];
@@ -1739,15 +1725,6 @@ feuille->DefFenetrePrincipale(this);
 //feuille->SetClientSize(tailleUtile);
 feuille->Show();
 
-imAcq2 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imAcqBrutFil = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imAcqBrutFilMax = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imAcqBrut1 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imAcqBrut2 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imTache = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imRefTache = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imQuadrique = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-nivBiais = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
 
 
 if (imAffichee)
@@ -2222,15 +2199,6 @@ delete []seuilNivBas;
 delete []coeffCanal;
 delete imAcq;
 
-delete imAcq2;
-delete imAcqBrutFil;
-delete imAcqBrutFilMax;
-delete imAcqBrut1;
-delete imAcqBrut2;
-delete imTache;
-delete imRefTache;
-delete imQuadrique;
-delete nivBiais;
 
 delete imAffichee;
 delete []pLineaire;
@@ -2628,7 +2596,7 @@ if (dateSeq->IndiceImageEnCours()==0)
 			nom=nomVolume+nomImage.GetVolumeSeparator()+repImageBiais+nomImage.GetPathSeparator()+
 				n3+_T(".")+extension;
 			strcpy(t[0],nom.char_str());
-			nivBiais->DoEnregistrer(t);
+//			nivBiais->DoEnregistrer(t);
 			wxLogVerbose(_T("Image saved %s "),t[0]);
 			}
 		if (correctionFonction)
@@ -2637,7 +2605,7 @@ if (dateSeq->IndiceImageEnCours()==0)
 			nom=nomVolume+nomImage.GetVolumeSeparator()+repImageBiais+nomImage.GetPathSeparator()+
 				n3+_T(".")+extension;
 			strcpy(t[0],nom.char_str());
-			imQuadrique->DoEnregistrer(t);
+			//imQuadrique->DoEnregistrer(t);
 			wxLogVerbose(_T("Image saved %s "),t[0]);
 			}
 		if (correctionTache)
@@ -2646,7 +2614,7 @@ if (dateSeq->IndiceImageEnCours()==0)
 			nom=nomVolume+nomImage.GetVolumeSeparator()+repImageBiais+nomImage.GetPathSeparator()+
 				n3+_T(".")+extension;
 			strcpy(t[0],nom.char_str());
-			imTache->DoEnregistrer(t);
+//			imTache->DoEnregistrer(t);
 			wxLogVerbose(_T("Image saved %s "),t[0]);
 			}
 
@@ -2664,8 +2632,8 @@ wxString	s=osgApp->ImgStat()->LireInfo(5)+_T("\n")+osgApp->ImgStat()->LireInfo(7
 if (s.length())
 	{
 	imAcq->DefDescription((char*)s.char_str());
-	imAcq2->DefDescription((char*)s.char_str());
-	imAcqBrut2->DefDescription((char*)s.char_str());
+//	imAcq2->DefDescription((char*)s.char_str());
+//	imAcqBrut2->DefDescription((char*)s.char_str());
 	}
 if (modeMoyenne || correctionBiais || correctionFonction || correctionTache)
 	{
@@ -2678,7 +2646,7 @@ if (modeMoyenne || correctionBiais || correctionFonction || correctionTache)
 	{
 	nom=nomVolume+nomImage.GetVolumeSeparator()+repImageFiltre+nomImage.GetPathSeparator()+nomFic+_T("corFilmax.")+extension;
 	strcpy(t[0],nom.char_str());
-	imAcq2->DoEnregistrer(t);
+//	imAcq2->DoEnregistrer(t);
 			wxLogVerbose(_T("Image saved %s "),t[0]);
 	}
 
@@ -2695,10 +2663,11 @@ if (osgApp->CtrlCamera())
 	gg<<osgApp->CtrlCamera()->TempsExposition()<<"\t"<<osgApp->CtrlCamera()->ModeGainEMCCD()<<"\t"<<osgApp->CtrlCamera()->GainEMCCD()<<"\t";
 else
 	gg<<1<<"\t"<<1<<"\t"<<1<<"\t";
-if (modeMoyenne)
+/*if (modeMoyenne)
 	gg<<"1\t"<<bbButter[indFiltreMoyenne]<<"\t"<<aaButter[indFiltreMoyenne]<<"\t";
 else
 	gg<<"0\t-1\t-1\t";
+*/
 if (correctionBiais)
 	gg<<"1\t"<<nomImageBiais<<"\t";
 else
@@ -2723,7 +2692,7 @@ gg<<"\n";
 	{
 	nom=nomVolume+nomImage.GetVolumeSeparator()+repImageBrute+nomImage.GetPathSeparator()+nomFic+_T(".")+extension;
 	strcpy(t[0],nom.char_str());
-	imAcqBrut2->DoEnregistrer(t);
+//	imAcqBrut2->DoEnregistrer(t);
 	wxLogVerbose(_T("Image saved %s "),t[0]);
 	}
 osgApp->ImgStat()->MAJInfo(3,dateSeq->DateImage());
@@ -2812,7 +2781,7 @@ char	nomFichier[2048];
 char *t[1];
 t[0]=nomFichier;
 strcpy(t[0],nomImageBiais.ToAscii());
-nivBiais->DoEnregistrer(t);
+//nivBiais->DoEnregistrer(t);
 wxString message(_("Bias image saved in "));
 message=message+nomImageBiais+_T(". Do you want to save it in another folder?");
 int reponse = wxMessageBox(message,_T("Bias Info"),wxYES_NO );
@@ -2829,7 +2798,7 @@ if (reponse==wxYES)
 		if (!wxMessageBox(_("File already exist"), _("Message"), wxYES_NO))
 			return;
 	strcpy(t[0],nomImageTache.ToAscii());
-	nivBiais->DoEnregistrer(t);
+//	nivBiais->DoEnregistrer(t);
 
 	}
 
@@ -2856,13 +2825,13 @@ char	nomFichier[2048];
 char *t[1];
 t[0]=nomFichier;
 strcpy(t[0],nomImageTache.ToAscii());
-imRefTache->DoEnregistrer(t);
+//imRefTache->DoEnregistrer(t);
 DefinitionFondMicro();
 nomImageTache=_T("Tache")+sd+_T("_")+sh+_T(".tif");
 nomImageTache=rep+nomImageTache;
 t[0]=nomFichier;
 strcpy(t[0],nomImageTache.ToAscii());
-imTache->DoEnregistrer(t);
+//imTache->DoEnregistrer(t);
 wxString message(_T("Background image saved in "));
 message=message+nomImageTache+_T(". Do you want to save it in another folder?");
 int reponse = wxMessageBox(message,_T("Background Info"),wxYES_NO );
@@ -2879,7 +2848,7 @@ if (reponse==wxYES)
 		if (!wxMessageBox(_T("File already exist"), _T("Message"), wxYES_NO))
 			return;
 	strcpy(t[0],nomImageTache.ToAscii());
-	imTache->DoEnregistrer(t);
+//	imTache->DoEnregistrer(t);
 
 	}
 

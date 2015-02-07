@@ -29,10 +29,57 @@ CameraOpenCV::CameraOpenCV(void)
 wxString		repTravail=wxGetCwd();
 strcpy(nomCamera,"OpenCV");
 wxString nomOrdinateur(wxGetHostName());
+aaButter[0]=-0.9996859;
+aaButter[1]=-0.9993719;
+aaButter[2]=-0.9968633;
+aaButter[3]=-0.9937365;
+aaButter[4]=-0.9690674;
+aaButter[5]=-0.9390625;
+aaButter[6]=-0.7265425;
+aaButter[7]=-0.5095254;
+aaButter[8]=-0.3249;
+aaButter[9]=-0.1584;
+aaButter[10]=-0.0;
+bbButter[0]=0.0001571;
+bbButter[1]=0.0003141;
+bbButter[2]=0.0015683;
+bbButter[3]=0.0031318;
+bbButter[4]=0.0154663;
+bbButter[5]=0.0304687;
+bbButter[6]=0.1367287;
+bbButter[7]=0.2452373;
+bbButter[8]=0.3375;
+bbButter[9]=0.4208;
+bbButter[10]=0.5;
 
 parent=NULL;
 captureVideo=NULL;
 imAcq=NULL;
+imAcq2 = NULL;
+imAcqBrutFil = NULL;
+imAcqBrutFilMax = NULL;
+imAcqBrut1 = NULL;
+imAcqBrut2 = NULL;
+imTache = NULL;
+imRefTache = NULL;
+imQuadrique = NULL;
+nivBiais = NULL;
+
+/*
+imAcq2 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imAcqBrutFil = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imAcqBrutFilMax = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imAcqBrut1 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imAcqBrut2 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imTache = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imRefTache = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+imQuadrique = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+nivBiais = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+
+
+
+*/
+
 // Appel de VideoCapture pour récupérer la taille de la vidéo
 #ifdef _FLUXHTTP__
 captureVideo = new cv::VideoCapture("192.168.0.1:8080"); 
@@ -273,6 +320,19 @@ captureVideo= new VideoCapture(indId);
 #endif
 if (captureVideo->isOpened())
 	{
+	Mat imAcq2;
+	Mat imAcqBrutFil;
+	Mat imAcqBrutFilMax;
+	Mat imAcqBrut1;
+	Mat imAcqBrut2;
+	Mat imTache;
+	Mat imRefTache;
+	Mat	 imQuadrique;
+	Mat nivBiais;
+
+
+
+
 	Mat edges; 
 	Mat frame;
 	std::vector<cv::Point2f> repereIni,repere;
@@ -331,7 +391,7 @@ if (captureVideo->isOpened())
 				x->ptApp=repere;
 				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
 				wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
-				this->Sleep(20);
+//				this->Sleep(20);
 				}
 			else
 				break;

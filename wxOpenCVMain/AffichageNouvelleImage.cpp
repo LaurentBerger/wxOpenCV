@@ -2,8 +2,6 @@
 #include "ControleCamera.h"
 #include "imagestat.h"
 
-double FenetrePrincipale::aaButter[NBFILTRE]={-0.9996859,-0.9993719,-0.9968633,-0.9937365,-0.9690674,-0.9390625,-0.7265425,-0.5095254,-0.3249,-0.1584,-0.0,};
-double FenetrePrincipale::bbButter[NBFILTRE]={0.0001571,0.0003141,0.0015683,0.0031318,0.0154663,0.0304687,0.1367287,0.2452373,0.3375,0.4208,0.5,};
 
 
 /*!< La fonction nouvelle Image est appelée pour mettre à jour les données de l'image imAcq. 
@@ -161,7 +159,7 @@ if (osgApp->ImgStat())
 	osgApp->ImgStat()->Plot(modeCamera);
 switch(modeImage){
 case 0:
-	if (modeFiltre==0)
+//	if (modeFiltre==0)
 		{
 		if (cam && cam->IsRunning())
 			{
@@ -171,8 +169,8 @@ case 0:
 		else
 			DIB(imAcq);
 		}
-	else
-		DIB(imAcq2);
+//	else
+//		DIB(imAcq2);
 	break;
 case 1:
 case 2:
