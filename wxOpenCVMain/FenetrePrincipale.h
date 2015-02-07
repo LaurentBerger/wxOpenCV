@@ -492,7 +492,7 @@ void OnThreadUpdateQueue(EvtPointSuivis &w);
 
 
 void OnOuvrir(wxString &);
-void OuvrirVideo();
+void OuvrirVideo(int);
 void InitImageFenetre();
 void OuvrirBiais(wxCommandEvent& event);
 void OuvrirBiais(char	*nomFichier);
@@ -768,6 +768,7 @@ void UpdateClock();
 void UpdateCurseur(int x,int y,int val);
 void UpdateCurseur(int x,int y,double val);
 void UpdateCurseur(int x,int y,int r,int g,int b);
+void UpdateCurseur(int x,int y,float r,float g,float b);
 void UpdateCurseur(int x,int y,std::complex<float> r,std::complex<float> g,std::complex<float> b);
 
     // event handlers

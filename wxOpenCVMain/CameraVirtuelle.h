@@ -60,6 +60,7 @@ unsigned int	drapeauErreur; /*!< activation d'erreur*/
 std::string		chaineErreur; /*!< Message d'erreur*/
 
 char			nomCamera[256];/*!<  IDENTIFICATEUR CAMERA*/
+int				typeAcq;		/*!< Type de l'acquisition CV_UC3 CV_32_FC3 */
 int				nbColonnePhys; /*!< NOMBRE DE colonne PHYSIQUE DU DETECTEUR*/
 
 int				nbLignePhys;/*!<NOMBRE DE ligne PHYSIQUE DU DETECTEUR*/
@@ -93,6 +94,7 @@ virtual int NbColonne(){ return 0;};
 virtual int NbLigne(){return 0;};
 virtual int NbCanaux(){return 0;};
 virtual double TempsExposition (){return -1.0;};
+virtual void DefTypeAcq(int x){typeAcq=x;};
 virtual void DefCoinGauche(int){return;};
 virtual void DefCoinDroit(int){return;};
 virtual void DefCoinHaut(int){return;};

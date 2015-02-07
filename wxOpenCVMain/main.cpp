@@ -354,14 +354,14 @@ delete imAcq;*/
 delete c;*/
 };
 
-void wxOsgApp::Video(wxCommandEvent &w)
+void wxOsgApp::Video(wxCommandEvent &w,int type)
 {
 static int nbFenVideo=0;
 wxString s("Video");
 s.Printf("Video %d",nbFenVideo++);
 FenetrePrincipale *f = new FenetrePrincipale(NULL, s,
     wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
-f->OuvrirVideo();
+f->OuvrirVideo(type);
 if (!f->Cam()->Connectee())
 	{
 	delete f;
@@ -1710,7 +1710,7 @@ for (int i=0;i<nbPixels;i++,ds++)
 Ouvrir un flux video
 */
 
-void FenetrePrincipale::OuvrirVideo()
+void FenetrePrincipale::OuvrirVideo(int type)
 {
 cam = new  CameraOpenCV();
 if (!cam->Connectee())
@@ -1720,7 +1720,17 @@ barreEtat->ActiveVideo();
 fenetreSauvee=1;
 //ImageInfoCV *imtmp=new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
 wxString userName=wxGetUserName();
-imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+
+if (type==8)
+	{
+	imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+	cam->DefTypeAcq(CV_8UC3);
+	}
+if (type==32)
+	{
+	imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),CV_32FC3);
+	cam->DefTypeAcq(CV_32FC3);
+	}
 feuille = new ZoneImage(this,wxSize(imAcq->cols/2, imAcq->rows/2));
 feuille->DefFenetrePrincipale(this);
 //feuille->SetClientSize(tailleUtile);

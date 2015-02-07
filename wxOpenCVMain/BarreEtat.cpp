@@ -357,6 +357,13 @@ s.Printf(_T("(%d,%d)=(%d,%d,%d)"),x,y,r,g,b);
     SetStatusText(s, Champ_Text);
 
 }
+void BarreInfo::UpdateCurseur(int x,int y,float r,float g,float b)
+{
+wxString	s;
+s.Printf(_T("(%d,%d)=(%f,%f,%f)"),x,y,r,g,b);
+    SetStatusText(s, Champ_Text);
+
+}
 void BarreInfo::UpdateCurseur(int x,int y,std::complex<float> r,std::complex<float> g,std::complex<float> b)
 {
 wxString	s;

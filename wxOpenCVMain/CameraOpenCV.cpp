@@ -394,12 +394,15 @@ captureVideo= new VideoCapture(indId);
 #endif
 if (captureVideo->isOpened())
 	{
-	Mat frame1;
-	Mat frame2;
+	Mat frameFlt1;
+	Mat frameFlt2;
 	Mat frame;
+	Mat frameFlt;
 	std::vector<cv::Point2f> repereIni,repere;
-	while (!captureVideo->retrieve(frame2));
-	while (!captureVideo->retrieve(frame1));
+	while (!captureVideo->retrieve(frame));
+	frame.convertTo(frameFlt2,CV_32FC3);
+	while (!captureVideo->retrieve(frame));
+	frame.convertTo(frameFlt1,CV_32FC3);
 
 	for(;true;)
 		{
@@ -412,28 +415,29 @@ if (captureVideo->isOpened())
 				if (!modeMoyenne)	// Pas de filtrage Butterworth
 					{
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
-
-					(*((Mat *)imAcq)) =frame; // get a new frame from camera
+					frame.convertTo(frameFlt,CV_32FC3);
+					(*((Mat *)imAcq)) =frameFlt; // get a new frame from camera
 					}
 				else
 					{
 					{
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+					frame.convertTo(frameFlt,CV_32FC3);
 
-					(*((Mat *)imAcq)) =frame; // get a new frame from camera
+					(*((Mat *)imAcq)) =frameFlt; // get a new frame from camera
 					for (int i=0;i<frame.rows;i++)
 						{
-						unsigned char *val=frame.ptr(i);
-						unsigned char *valB1=frame1.ptr(i);
-						unsigned char *valB2=frame2.ptr(i);
+						float *val=(float *)frameFlt.ptr(i);
+						float *valB1=(float *)frameFlt1.ptr(i);
+						float *valB2=(float *)frameFlt2.ptr(i);
 						for (int j=0;j<frame.cols;j++)
 							for (int k=0;k<frame.channels();k++,valB1++,valB2++,val++)
 								*val = bbButter[indFiltreMoyenne]*(*valB1 + *valB2)-aaButter[indFiltreMoyenne]* *val;
 						
 						}
 					}
-					frame1.copyTo(frame2);
-					frame.copyTo(frame1);
+					frameFlt1.copyTo(frameFlt2);
+					frameFlt.copyTo(frameFlt1);
 					}
 
 				}
@@ -465,8 +469,10 @@ wxThread::ExitCode CameraOpenCV::Entry()
 {
 if (indId<0 || indId>=NBCAMERA)
 	return (wxThread::ExitCode)-1; 	
-	
-return Acquisition8BitsRGB();	
+if (typeAcq==CV_8UC3)
+	return Acquisition8BitsRGB();	
+else if (typeAcq==CV_32FC3)
+	return Acquisition32BitsFloatRGB();	
 }
 
 void FenetrePrincipale::OnThreadUpdateQueue(EvtPointSuivis &w)

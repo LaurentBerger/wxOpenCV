@@ -89,7 +89,7 @@ wxOsgApp() { langue = wxLANGUAGE_UNKNOWN; }
 bool OnInit();
 void Quitter(wxFrame *g);
 void Ouvrir(wxCommandEvent &);
-void Video(wxCommandEvent &);
+void Video(wxCommandEvent &,int);
 void Enregistrer(wxCommandEvent& event);
 
 void OuvertureOutils();
