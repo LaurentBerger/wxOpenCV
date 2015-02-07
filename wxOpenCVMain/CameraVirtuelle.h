@@ -6,6 +6,9 @@
 #include "opencv2/opencv.hpp"
 #include <wx/wx.h>
 
+
+#define NB_COEFF_FILTRE 11
+
 /*! \class EvtPointSuivis
    * \brief la classe définit un les caractéristiques d'un évènement
    *
@@ -59,12 +62,19 @@ std::string		chaineErreur; /*!< Message d'erreur*/
 char			nomCamera[256];/*!<  IDENTIFICATEUR CAMERA*/
 int				nbColonnePhys; /*!< NOMBRE DE colonne PHYSIQUE DU DETECTEUR*/
 
-int nbLignePhys;/*!<NOMBRE DE ligne PHYSIQUE DU DETECTEUR*/
+int				nbLignePhys;/*!<NOMBRE DE ligne PHYSIQUE DU DETECTEUR*/
+
+double		aaButter[NB_COEFF_FILTRE],bbButter[NB_COEFF_FILTRE];
+int			indFiltreMoyenne;	/*!< Indice des coefficients du filtre Butterworth*/ 
+bool		modeMoyenne;		/*!< Moyenne temporelle active lors de l'acquisition */
+
+
 
 public :
 void				*parent;		/*!< Pointeur sur la fenêtre principale*/
 wxBitmap			m_bitmap;		/*!< bitmap inutilisé*/
 wxImage				*image;			/*!< Image contenant la vidéo*/
+
 
 
 public :
@@ -109,6 +119,12 @@ virtual char Image(unsigned short *data,unsigned long &taille){taille=0;return 1
 virtual char TailleImage(unsigned long &taille){taille=0;return 1;};;
 virtual	char IsEMCCD(){return false;};
 virtual	char Erreur(){return drapeauErreur;};
+
+virtual void ActiveModeMoyenne(){modeMoyenne=true;};
+virtual void DesActiveModeMoyenne(){modeMoyenne=false;};
+virtual bool ModeMoyenne(){return modeMoyenne;};
+virtual int IndFiltreMoyenne(){return indFiltreMoyenne;};
+virtual void DefIndFiltreMoyenne(int x){indFiltreMoyenne=x;};
 };
 
 #endif

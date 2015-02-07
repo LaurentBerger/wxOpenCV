@@ -1264,6 +1264,7 @@ if (osgApp)
 		wxString s= "Control :" +GetTitle();
 		osgApp->CtrlCamera()->SetTitle(s);
 		osgApp->CtrlCamera()->DefCamera(cam);
+		osgApp->CtrlCamera()->DefParent(this);
 		}
 	}
 }
@@ -1403,11 +1404,12 @@ if (osgApp->CtrlCamera())
 	osgApp->CtrlCamera()->DefModeGainEMCCD(modeGainEMCCD);
 	osgApp->CtrlCamera()->DefGainEMCCD(gainEMCCD);
 	}
+/*
 gg>>modeMoyenne;
 modeMoyenne=modeMoyenne-48;
-
+*/
 gg>>x>>y;
-wxLogVerbose(_T("Mean mode %d b0=%f b1=%f"),int(modeMoyenne),x,y);
+//wxLogVerbose(_T("Mean mode %d b0=%f b1=%f"),int(modeMoyenne),x,y);
 float dMin=3000;
 int pos=0;
 /*
@@ -1421,8 +1423,8 @@ for (int i=0;i<NBFILTRE;i++)
 		}
 	}
 */
-if (modeMoyenne)
-	indFiltreMoyenne=pos;
+//if (modeMoyenne)
+//	indFiltreMoyenne=pos;
 gg>>correctionBiais;
 correctionBiais=correctionBiais-48;
 gg>>sd;
@@ -1594,7 +1596,6 @@ cTransparence[2]=0;
 cTransparence[3]=0;
 modeCamera=false;
 imageTraitee=true;
-modeMoyenne=false;
 interdireAffichage=false;
 typeAcqImage =0;
 indFiltreMoyenne=0;
@@ -2635,14 +2636,14 @@ if (s.length())
 //	imAcq2->DefDescription((char*)s.char_str());
 //	imAcqBrut2->DefDescription((char*)s.char_str());
 	}
-if (modeMoyenne || correctionBiais || correctionFonction || correctionTache)
+if (cam->ModeMoyenne() || correctionBiais || correctionFonction || correctionTache)
 	{
 	nom=nomVolume+nomImage.GetVolumeSeparator()+repImageCorrigee+nomImage.GetPathSeparator()+nomFic+_T("cor.")+extension;
 	strcpy(t[0],nom.char_str());
 	imAcq->DoEnregistrer(t);
 			wxLogVerbose(_T("Image saved %s "),t[0]);
 	}
-if (modeMoyenne || correctionBiais || correctionFonction || correctionTache)
+if (cam->ModeMoyenne() || correctionBiais || correctionFonction || correctionTache)
 	{
 	nom=nomVolume+nomImage.GetVolumeSeparator()+repImageFiltre+nomImage.GetPathSeparator()+nomFic+_T("corFilmax.")+extension;
 	strcpy(t[0],nom.char_str());

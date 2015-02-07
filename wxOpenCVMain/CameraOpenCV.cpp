@@ -29,6 +29,8 @@ CameraOpenCV::CameraOpenCV(void)
 wxString		repTravail=wxGetCwd();
 strcpy(nomCamera,"OpenCV");
 wxString nomOrdinateur(wxGetHostName());
+modeMoyenne=false;
+indFiltreMoyenne=1;
 aaButter[0]=-0.9996859;
 aaButter[1]=-0.9993719;
 aaButter[2]=-0.9968633;
@@ -55,15 +57,14 @@ bbButter[10]=0.5;
 parent=NULL;
 captureVideo=NULL;
 imAcq=NULL;
-imAcq2 = NULL;
+/*imAcq2 = NULL;
 imAcqBrutFil = NULL;
 imAcqBrutFilMax = NULL;
 imAcqBrut1 = NULL;
 imAcqBrut2 = NULL;
 imTache = NULL;
 imRefTache = NULL;
-imQuadrique = NULL;
-nivBiais = NULL;
+imQuadrique = NULL;*/
 
 /*
 imAcq2 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
@@ -309,10 +310,8 @@ char CameraOpenCV::GetFunctionEMCCDGain()
 	return 0;
 }
 
-wxThread::ExitCode CameraOpenCV::Entry()
+wxThread::ExitCode CameraOpenCV::Acquisition8BitsRGB()
 {
-if (indId<0 || indId>=NBCAMERA)
-	return (wxThread::ExitCode)-1; 		
 #ifdef _FLUXHTTP__
 captureVideo = new cv::VideoCapture("192.168.0.1:8080"); 
 #else
@@ -320,51 +319,12 @@ captureVideo= new VideoCapture(indId);
 #endif
 if (captureVideo->isOpened())
 	{
-	Mat imAcq2;
-	Mat imAcqBrutFil;
-	Mat imAcqBrutFilMax;
-	Mat imAcqBrut1;
-	Mat imAcqBrut2;
-	Mat imTache;
-	Mat imRefTache;
-	Mat	 imQuadrique;
-	Mat nivBiais;
-
-
-
-
-	Mat edges; 
+	Mat frame1;
+	Mat frame2;
 	Mat frame;
 	std::vector<cv::Point2f> repereIni,repere;
-	std::vector<unsigned char> statusPtsSuivis;
-	std::vector<float> errPtsSuivis;
-	(*captureVideo) >> frame;
-    TermCriteria termcrit(3, 20, 0.03);
-    Size subPixWinSize(10,10), winSize(31,31);
-
-	Mat imGris,imGrisIni;
-	int	nbMax=1000;
-	double	qlevel=0.01;
-	double	minDistance =10;
-	int tailleFen=10;
-	this->Sleep(100);
-//	repere.resize(nbMax);
-	for (int i=0;i<1;i++)
-			(*captureVideo) >> frame;
-	cvtColor(frame, imGrisIni, COLOR_BGR2GRAY);
-	goodFeaturesToTrack(imGrisIni, repereIni,  nbMax,  qlevel,minDistance,Mat(),3, 0, 0.04);
-	try 
-		{
-		cornerSubPix(imGrisIni, repereIni, subPixWinSize, Size(-1, -1),termcrit);
-		}
-	catch(exception& e)
-		{
-		}
-
-
-	std::vector<cv::Mat>  pyrIni;
-	std::vector<cv::Mat>  pyr;
-	buildPyramid(imGrisIni,pyrIni,5);
+	while (!captureVideo->retrieve(frame2));
+	while (!captureVideo->retrieve(frame1));
 
 	for(;true;)
 		{
@@ -373,15 +333,33 @@ if (captureVideo->isOpened())
 			if (parent)
 				{
 
-				wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-				(*((Mat *)imAcq)) =frame; // get a new frame from camera
-		/*		cvtColor(frame, imGris, CV_BGR2GRAY);
+				if (!modeMoyenne)	// Pas de filtrage Butterworth
+					{
+					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-				calcOpticalFlowPyrLK( imGrisIni, imGris,  repereIni, repere,
-					statusPtsSuivis,errPtsSuivis, cvSize( tailleFen, tailleFen ), 5, 
-					cvTermCriteria( CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 0.3 ), 0 );
-		*/
+					(*((Mat *)imAcq)) =frame; // get a new frame from camera
+					}
+				else
+					{
+					{
+					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+
+					(*((Mat *)imAcq)) =frame; // get a new frame from camera
+					for (int i=0;i<frame.rows;i++)
+						{
+						unsigned char *val=frame.ptr(i);
+						unsigned char *valB1=frame1.ptr(i);
+						unsigned char *valB2=frame2.ptr(i);
+						for (int j=0;j<frame.cols;j++)
+							for (int k=0;k<frame.channels();k++,valB1++,valB2++,val++)
+								*val = bbButter[indFiltreMoyenne]*(*valB1 + *valB2)-aaButter[indFiltreMoyenne]* *val;
+						
+						}
+					}
+					frame1.copyTo(frame2);
+					frame.copyTo(frame1);
+					}
 
 				}
 			if (parent)
@@ -391,7 +369,8 @@ if (captureVideo->isOpened())
 				x->ptApp=repere;
 				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
 				wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
-//				this->Sleep(20);
+
+				this->Sleep(20);
 				}
 			else
 				break;
@@ -404,6 +383,90 @@ if (captureVideo->isOpened())
 captureVideo=NULL;
 
 return (wxThread::ExitCode)0;  
+}
+
+wxThread::ExitCode CameraOpenCV::Acquisition32BitsFloatRGB()
+{
+#ifdef _FLUXHTTP__
+captureVideo = new cv::VideoCapture("192.168.0.1:8080"); 
+#else
+captureVideo= new VideoCapture(indId); 
+#endif
+if (captureVideo->isOpened())
+	{
+	Mat frame1;
+	Mat frame2;
+	Mat frame;
+	std::vector<cv::Point2f> repereIni,repere;
+	while (!captureVideo->retrieve(frame2));
+	while (!captureVideo->retrieve(frame1));
+
+	for(;true;)
+		{
+		if (captureVideo->retrieve(frame)) // get a new frame from camera
+			{
+			if (parent)
+				{
+
+
+				if (!modeMoyenne)	// Pas de filtrage Butterworth
+					{
+					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+
+					(*((Mat *)imAcq)) =frame; // get a new frame from camera
+					}
+				else
+					{
+					{
+					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+
+					(*((Mat *)imAcq)) =frame; // get a new frame from camera
+					for (int i=0;i<frame.rows;i++)
+						{
+						unsigned char *val=frame.ptr(i);
+						unsigned char *valB1=frame1.ptr(i);
+						unsigned char *valB2=frame2.ptr(i);
+						for (int j=0;j<frame.cols;j++)
+							for (int k=0;k<frame.channels();k++,valB1++,valB2++,val++)
+								*val = bbButter[indFiltreMoyenne]*(*valB1 + *valB2)-aaButter[indFiltreMoyenne]* *val;
+						
+						}
+					}
+					frame1.copyTo(frame2);
+					frame.copyTo(frame1);
+					}
+
+				}
+			if (parent)
+				{
+				EvtPointSuivis *x= new EvtPointSuivis(VAL_EVT_PTS_SUIVIS);
+				x->ptId=repereIni;
+				x->ptApp=repere;
+				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
+				wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
+
+				this->Sleep(20);
+				}
+			else
+				break;
+			if (TestDestroy())
+				break;
+			}
+		}
+	delete captureVideo;
+	}
+captureVideo=NULL;
+
+return (wxThread::ExitCode)0;  
+}
+
+
+wxThread::ExitCode CameraOpenCV::Entry()
+{
+if (indId<0 || indId>=NBCAMERA)
+	return (wxThread::ExitCode)-1; 	
+	
+return Acquisition8BitsRGB();	
 }
 
 void FenetrePrincipale::OnThreadUpdateQueue(EvtPointSuivis &w)

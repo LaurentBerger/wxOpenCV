@@ -19,6 +19,7 @@ int			indId; // Indice du périphérique vidéo;
 long		expoMin,expoMax;
 long		gainMin,gainMax;
 
+
 public : 
 ImageInfoCV			*imAcq;
 
@@ -76,6 +77,9 @@ virtual char TailleImage(unsigned long &taille);
 virtual int NbColonne(){ return colonneFin-colonneDebut+1;};
 virtual int NbLigne(){return ligneFin-ligneDebut+1;};
 virtual int NbCanaux(){return nbCanauxAD;};
+
+virtual ExitCode Acquisition8BitsRGB();
+virtual ExitCode Acquisition32BitsFloatRGB();
 
 char EMGain8Bit();
 char EMGain12Bit();
