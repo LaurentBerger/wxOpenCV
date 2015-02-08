@@ -404,6 +404,7 @@ HorodatageSequence  *dateSeq;
 wxTimer				*horlogeSeq;
 BarreInfo			*barreEtat;
 CameraVirtuelle		*cam;
+long				tpsPreEvt;			/*!<Instant de l'événement précédent de l'acquisition de l'image */
 public :
 
 wxCriticalSection	travailCam; /*!< Utilisé pour bloquer la mémoire image ou communiquer avec le thread */
@@ -562,6 +563,8 @@ Parametre *ParamOCV(){return &origineImage.pOCV;}
      */
 
 CameraVirtuelle* Cam(){return cam;};
+long DefTpspreEvt( long  x=-1){if (x!=-1) tpsPreEvt=x;return tpsPreEvt;};
+
 BarreInfo *BarreEtat(){return barreEtat;};
 void RepertoireDoc(wxString &s){repertoireDuDocument=s;};
 void NomDoc(wxString &s){nomDuDocument=s;};

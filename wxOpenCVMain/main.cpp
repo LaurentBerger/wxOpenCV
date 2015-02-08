@@ -334,8 +334,6 @@ for (pp=listeFenetre.begin();pp!=listeFenetre.end();pp++)
 		pp->second->fZoom->Destroy();
 		pp->second->fStat->Destroy();
 		pp->second->fPrin->Destroy();
-	
-		
 		}
 for (int i = 0; i < listeFenetre.size(); i++)
 	delete listeFenetre[i];
@@ -1203,7 +1201,7 @@ if (!outils)
 	outils->OuvertureOngletMoyenne();
 	}*/
 if (ctrlCamera)
-	ctrlCamera->Show(true);
+	ctrlCamera->Show(false);
 //outils->Show(true);
 }
 
@@ -1264,6 +1262,7 @@ if (osgApp)
 		wxString s= "Control :" +GetTitle();
 		osgApp->CtrlCamera()->SetTitle(s);
 		osgApp->CtrlCamera()->DefCamera(cam);
+		osgApp->CtrlCamera()->Show(true);
 		osgApp->CtrlCamera()->DefParent(this);
 		}
 	}
@@ -1379,6 +1378,7 @@ void FenetrePrincipale::DefCurseur(int r,int xc,int yc)
 
 void FenetrePrincipale::RecupDerniereConfig()
 {
+return;
 wxString	repUtilAppli(wxGetUserHome(wxGetUserName()));
 repUtilAppli=repUtilAppli+_T("\\TraiMisc");
 
@@ -1564,6 +1564,7 @@ origineImage.indOp1=-1;
 origineImage.indOp2=-1;
 origineImage.op1=NULL;
 origineImage.op2=NULL;
+tpsPreEvt=-1;
 
 
 for (int i=0;i<10;i++)
@@ -2087,6 +2088,7 @@ void FenetrePrincipale::MAJZoom(wxCommandEvent& event)
 {
 if(event.GetId()>=ZOOM8SUR1)
 	fenZoom->Show(true);
+tpsPreEvt=-1;
 feuille->FacteurZoom(event.GetId()-ZOOM1SUR1);
 //AdjustHV(wxHORIZONTAL);
 //AdjustHV(wxVERTICAL);

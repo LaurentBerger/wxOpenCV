@@ -88,7 +88,7 @@ void	DefCamera(CameraVirtuelle *c);
 void	DefImagePrete(char	x){imagePrete=1;};
 char	CommunicationEvenement(){return commEvt;};
 char	ImagePrete(void);
-char	Image(unsigned short *,unsigned long &);
+char	Image();
 int		NbColonne(){ return cam->NbColonne();};
 int		NbLigne(){return cam->NbLigne();};
 

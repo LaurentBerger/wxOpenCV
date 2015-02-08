@@ -8,7 +8,7 @@
 
 
 #define NB_COEFF_FILTRE 11
-
+#define NB_TAILLE_VIDEO 20
 /*! \class EvtPointSuivis
    * \brief la classe définit un les caractéristiques d'un évènement
    *
@@ -68,8 +68,9 @@ int				nbLignePhys;/*!<NOMBRE DE ligne PHYSIQUE DU DETECTEUR*/
 double		aaButter[NB_COEFF_FILTRE],bbButter[NB_COEFF_FILTRE];
 int			indFiltreMoyenne;	/*!< Indice des coefficients du filtre Butterworth*/ 
 bool		modeMoyenne;		/*!< Moyenne temporelle active lors de l'acquisition */
-
-
+long		tpsInactif;
+wxSize		tailleCapteur[NB_TAILLE_VIDEO];
+bool		tailleAutorisee[NB_TAILLE_VIDEO];		
 
 public :
 void				*parent;		/*!< Pointeur sur la fenêtre principale*/
@@ -84,6 +85,8 @@ CameraVirtuelle(void): wxThread(wxTHREAD_DETACHED){testDriver=0;drapeauErreur=0;
 void AjouteMsgErreur(char *msg){chaineErreur+=msg;drapeauErreur+=1;};
 void AjouteMsgErreur(char *msg,unsigned int x){chaineErreur+=msg;drapeauErreur+=1;};
 
+virtual wxSize* LitTailleCapteur(){return tailleCapteur;};
+virtual bool*	LitTailleAutorisee(){return tailleAutorisee;};
 virtual bool Connectee(){return 0;};
 virtual	char TestDriver(void){return testDriver;};
 virtual int Acquisition(void){return 0;};
@@ -95,6 +98,7 @@ virtual int NbLigne(){return 0;};
 virtual int NbCanaux(){return 0;};
 virtual double TempsExposition (){return -1.0;};
 virtual void DefTypeAcq(int x){typeAcq=x;};
+virtual long DefTpsInactif( long  x=-1){if (x!=-1) tpsInactif=x;return tpsInactif;};
 virtual void DefCoinGauche(int){return;};
 virtual void DefCoinDroit(int){return;};
 virtual void DefCoinHaut(int){return;};

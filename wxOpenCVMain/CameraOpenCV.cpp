@@ -9,7 +9,6 @@ using namespace cv;
 
 char CameraOpenCV::indIdVideo[NBCAMERA]={0,0,0,0,0,0,0,0,0,0};
 
-wxDECLARE_EVENT(VAL_EVT_PTS_SUIVIS, EvtPointSuivis);
 
 //#define _FLUXHTTP__
 
@@ -29,8 +28,19 @@ CameraOpenCV::CameraOpenCV(void)
 wxString		repTravail=wxGetCwd();
 strcpy(nomCamera,"OpenCV");
 wxString nomOrdinateur(wxGetHostName());
+tailleCapteur[0]=wxSize(160,120);tailleCapteur[1]=wxSize(176,144);tailleCapteur[2]=wxSize(320,176);
+tailleCapteur[3]=wxSize(320,240);tailleCapteur[4]=wxSize(352,288);tailleCapteur[5]=wxSize(432,240);
+tailleCapteur[6]=wxSize(544,288);tailleCapteur[7]=wxSize(640,360);tailleCapteur[8]=wxSize(640,480);
+tailleCapteur[9]=wxSize(752,416);tailleCapteur[10]=wxSize(800,448);tailleCapteur[11]=wxSize(800,600);
+tailleCapteur[12]=wxSize(864,480);tailleCapteur[13]=wxSize(960,544);tailleCapteur[14]=wxSize(960,720);
+tailleCapteur[15]=wxSize(1024,576);tailleCapteur[16]=wxSize(1184,656);tailleCapteur[17]=wxSize(1280,720);
+tailleCapteur[16]=wxSize(1280,960);tailleCapteur[17]=wxSize(-1,-1);tailleCapteur[18]=wxSize(-1,-1);
+tailleCapteur[19]=wxSize(-1,-1);
+for (int i=15;i<NB_TAILLE_VIDEO;i++)
+	tailleAutorisee[false];
 modeMoyenne=false;
 indFiltreMoyenne=1;
+tpsInactif =30;
 aaButter[0]=-0.9996859;
 aaButter[1]=-0.9993719;
 aaButter[2]=-0.9968633;
@@ -104,6 +114,13 @@ if (indId==NBCAMERA)
 if(captureVideo->isOpened())  // check if we succeeded
 	{
 	cv::Mat frame;
+	float x,y;
+	bool status;
+	for (int i=15;i<NB_TAILLE_VIDEO;i++)
+		{
+		status=captureVideo->set(cv::CAP_PROP_FRAME_WIDTH,tailleCapteur[i].GetX());
+		tailleAutorisee[i]=captureVideo->set(cv::CAP_PROP_FRAME_HEIGHT,tailleCapteur[i].GetY());
+		}
 	(*captureVideo) >> frame; // get a new frame from camera
 	nbColonnePhys = frame.cols;
 	nbLignePhys = frame.rows;
@@ -221,6 +238,30 @@ chaineErreur="";
 void CameraOpenCV::DefZoneLecture(int article)
 {
 chaineErreur="";
+}
+
+
+int	CameraOpenCV::Acquisition(void) /*<! Acquisition d'une image */
+{
+if (typeAcq==CV_32FC3)
+	{
+	Mat frame;
+	Mat frameFlt;
+	while (!captureVideo->retrieve(frame));
+	wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+	frame.convertTo(frameFlt,CV_32FC3);
+	(*((Mat *)imAcq)) =frameFlt; // get a new frame from camera
+	}
+else if (typeAcq==CV_8UC3)
+	{
+	Mat frame;
+	while (!captureVideo->retrieve(frame));
+	wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+
+	(*((Mat *)imAcq)) =frame; // get a new frame from camera
+	}
+
+return 1;
 }
 
 char CameraOpenCV::ImagePrete()
@@ -370,7 +411,7 @@ if (captureVideo->isOpened())
 				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
 				wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
 
-				this->Sleep(20);
+				this->Sleep(tpsInactif);
 				}
 			else
 				break;
@@ -449,7 +490,7 @@ if (captureVideo->isOpened())
 				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
 				wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
 
-				this->Sleep(20);
+				this->Sleep(tpsInactif);
 				}
 			else
 				break;
@@ -473,21 +514,36 @@ if (typeAcq==CV_8UC3)
 	return Acquisition8BitsRGB();	
 else if (typeAcq==CV_32FC3)
 	return Acquisition32BitsFloatRGB();	
+return (wxThread::ExitCode)0;  
 }
 
 void FenetrePrincipale::OnThreadUpdateQueue(EvtPointSuivis &w)
 {
-if (!cam->IsRunning())
-	return;
-//wxClientDC dc(this);
-//DrawWindow (dc);
-long x=wxGetUTCTimeMillis().GetLo()-w.GetTimestamp();
-if (x<10)
+
+if (cam->IsRunning() || cam->IsPaused())
 	{
+	long x=wxGetUTCTimeMillis().GetLo();
+//	if (x<10)
 	delete feuille->BitmapAffichee();
 	feuille->BitmapAffichee(NULL);
 	MAJNouvelleImage();
+	x=wxGetUTCTimeMillis().GetLo()-x;
+	if (tpsPreEvt==-1)
+		{
+		tpsPreEvt=w.GetTimestamp();
+		}
+	else if ( tpsPreEvt!=-2)
+		{
+		long t=cam->DefTpsInactif();
+		t= w.GetTimestamp()-tpsPreEvt-t-x;
+		if(t<=0)
+			t=60;
+		t=60;
+		cam->DefTpsInactif((max((int)x,25)*110)/100);
+		tpsPreEvt=-2;
+		}
 	}
+return;
 }
 
 void FenetrePrincipale::DoPauseThread()

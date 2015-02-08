@@ -54,7 +54,8 @@ int	nbCanauxAD;				// p 126 SDK
 public :
 CameraOpenCV(void);
 ~CameraOpenCV(void);
-int	Acquisition(void){return 0;};
+cv::VideoCapture *CamVideo(){return captureVideo;};
+int	Acquisition(void); /*<! Acquisition d'une image */
 virtual bool Connectee(){return indId>=0 && indId<NBCAMERA;};
 virtual void DefCoinGauche(int x);
 virtual void DefCoinDroit(int x);
@@ -99,5 +100,8 @@ virtual int ModeGainEMCCD(){return 0;};
 
 
 };
+
+
+wxDECLARE_EVENT(VAL_EVT_PTS_SUIVIS, EvtPointSuivis);
 
 #endif
