@@ -1565,6 +1565,7 @@ origineImage.indOp2=-1;
 origineImage.op1=NULL;
 origineImage.op2=NULL;
 tpsPreEvt=-1;
+imGain=NULL;
 
 
 for (int i=0;i<10;i++)
@@ -1665,6 +1666,7 @@ cam =NULL;
 tabRGB=NULL;
 imAcq=NULL;
 imAffichee=NULL;
+imGain=NULL;
 
 imAcq = new ImageInfoCV(1002,1004,CV_16UC1);
 seuilNivBas=new double[imAcq->channels()];
@@ -1717,11 +1719,12 @@ cam = new  CameraOpenCV();
 if (!cam->Connectee())
 	return;
 barreEtat->ActiveVideo();
-
+correctionGain=false;
 fenetreSauvee=1;
 //ImageInfoCV *imtmp=new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
 wxString userName=wxGetUserName();
 
+imGain = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),CV_32FC3);
 if (type==8)
 	{
 	imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
@@ -2211,6 +2214,7 @@ detectionUtilisateur->Stop();delete detectionUtilisateur;
 delete []seuilNivBas;
 delete []coeffCanal;
 delete imAcq;
+delete imGain;
 
 
 delete imAffichee;

@@ -290,6 +290,9 @@ case CV_32F :
 	for (int i=0;i<im->rows;i++)		
 		if (nbCanaux%2==1)	// Nombre réel
 			{
+			float *g=NULL;
+			if (correctionGain && imGain)
+				g=(float*)imGain->ptr(i);
 			float *d=(float*)im->ptr(i);
 			unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 			for (int j=0;j<im->cols;j++,debLigne+=3)
@@ -297,6 +300,8 @@ case CV_32F :
 				for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
 					{
 					double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
+					if (correctionGain)
+						v=*g++*v;
 					if (v<0)
 						v =0;
 					if (v>=nbCouleurPalette)
@@ -390,11 +395,16 @@ case CV_16U :
 		{
 		unsigned short *d=(unsigned short*)im->data+i*im->step[0];
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
+		float *g=NULL;
+		if (correctionGain && imGain)
+			g=(float*)imGain->ptr(i);
 		for (int j=0;j<im->cols;j++,debLigne+=3)
 			{
 			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
 				{
 				double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
+				if (correctionGain)
+					v=*g++*v;
 				if (v<0)
 					v =0;
 				if (v>=nbCouleurPalette)
@@ -431,11 +441,16 @@ case CV_16S :
 		{
 		short *d=(short*)im->ptr(i);
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
+		float *g=NULL;
+		if (correctionGain && imGain)
+			g=(float*)imGain->ptr(i);
 		for (int j=0;j<im->cols;j++,debLigne+=3)
 			{
 			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
 				{
 				double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
+				if (correctionGain)
+					v=*g++*v;
 				if (v<0)
 					v =0;
 				if (v>=nbCouleurPalette)
@@ -472,11 +487,16 @@ case CV_8U :
 		{
 		unsigned char *d=im->data+i*im->step[0];
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
+		float *g=NULL;
+		if (correctionGain && imGain)
+			g=(float*)imGain->ptr(i);
 		for (int j=0;j<im->cols;j++,debLigne+=3)
 			{
 			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
 				{
 				double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
+				if (correctionGain)
+					v=*g++*v;
 				if (v<0)
 					v =0;
 				if (v>=nbCouleurPalette)

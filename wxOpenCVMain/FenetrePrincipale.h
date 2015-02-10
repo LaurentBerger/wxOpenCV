@@ -328,12 +328,13 @@ Operation			origineImage;
 //wxString			nomOperationPre;	 /*!< Pour image issue d'une opération : nom de l'opération */
 //Parametre			pOCVPre;		 /*!< Pour image issue d'une opération : parametre de l'opération précédente*/
 
-char				modeCamera;			/*!< 1 affichage de l'image capturée */
-char				imageTraitee;		/*!< 1 si traitement de l'image captureée est terminé  */	
-char				interdireAffichage;
-char				correctionTache;	/*!< 1 active correction tache */
-char				correctionFonction; /*!< 1 active correction fonction fond */
-char				correctionBiais;	/*!< 1 active correction du biais du CCD */
+bool				modeCamera;			/*!< 1 affichage de l'image capturée */
+bool				imageTraitee;		/*!< 1 si traitement de l'image captureée est terminé  */	
+bool				interdireAffichage;
+bool				correctionGain;		/*!< 1 active correction gain */
+bool				correctionTache;	/*!< 1 active correction tache */
+bool				correctionFonction; /*!< 1 active correction fonction fond */
+bool				correctionBiais;	/*!< 1 active correction du biais du CCD */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
 char				modeFiltre;			/*!< 0 image standard, image filtrée avec passe bas le + fort */
 char				typeAcqImage;		/*!< 0 Standard, 1 Acquisition image noire, 2 Image des taches, 3 Image fonction fond */
@@ -349,6 +350,7 @@ double				**poly;				/*!< Coefficient de la quadrique pour la correction du fond
 
 
 ImageInfoCV			*imAcq;				/*!< Dernière image calculée incluant les corrections */
+ImageInfoCV			*imGain;			/*!< Image (type CV_32F)du gain appliqué pour chaque pixel.*/
 #ifdef __OBSOLETE__
 ImageInfoCV			*nivBiais;			/*!< image du niveau zéro*/
 ImageInfoCV			*imAcqBrutFilMax;	/*!< résultat de la moyenne glissante avec filtrage maximum imAcqBrutFil = b(imAcqBrut1+imAcqBrut2)-a imAcqBrutFil */
@@ -582,6 +584,7 @@ int IndiceRectangleSelec(){return feuille->IndiceRectangleSelec();};
 int FacteurZoom(){return feuille->FacteurZoom();};
 //ImageInfoCV	*	ImAcq(void){if (modeFiltre) return imAcq2;return imAcq;};
 ImageInfoCV	*	ImAcq(void){return imAcq;};
+ImageInfoCV	*	ImGain(void){return imGain;};
 
 void DefinitionFondMicro();
 void DefinitionFondQuadrique(wxCommandEvent& event);
@@ -590,8 +593,10 @@ void OnMenuContext(wxContextMenuEvent& event);
 void ShowContextMenu(const wxPoint& pos);
 void OnTimer(wxTimerEvent& event);
 void DetectionUtilisateur(wxTimerEvent& event);
-char CorrectionBiais(){return correctionBiais;};
-char CorrectionFond(){return correctionTache;}; 
+bool CorrectionBiais(){return correctionBiais;};
+bool CorrectionFond(){return correctionTache;}; 
+bool CorrectionGain(){return correctionGain;}; 
+bool DefCorrectionGain(bool x){correctionGain =x;return correctionGain;}; 
 void ActiveCorrectionFonction(){correctionFonction=1;fondDejaDefini=1;};
 void ActiveCorrectionTache(){correctionTache=1;fondDejaDefini=1;};
 void ActiveCorrectionBiais(){correctionBiais=1;};

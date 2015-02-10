@@ -3,27 +3,27 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: wxOpenCV\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-09 18:41+0100\n"
-"PO-Revision-Date: 2014-11-09 18:49+0100\n"
-"Last-Translator: Laurent Berger <laurent.berger@univ-lemans.fr>\n"
-"Language-Team: LANGUAGE <laurent.berger@univ-lemans.fr>\n"
-"Language: fr\n"
+"POT-Creation-Date: 2015-02-10 09:08+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
 
 msgid "&File"
 msgstr "&Fichier"
 
 msgid "&parameters"
-msgstr "&paramètres"
+msgstr "&param\303\250tres"
 
-msgid "16 bits signé"
+msgid "16 bits sign\303\251"
 msgstr ""
 
 msgid "2"
@@ -35,13 +35,28 @@ msgstr ""
 msgid "About wxAUI Demo"
 msgstr "A propos de wxOpenCV"
 
+msgid "About wxOpenCV"
+msgstr ""
+
+msgid "AdaptatifSeuillage"
+msgstr ""
+
+msgid "Adaptive Thereshold"
+msgstr ""
+
 msgid "Add"
 msgstr "Addition"
 
 msgid "Add 2 images"
 msgstr ""
 
+msgid "Addition"
+msgstr ""
+
 msgid "Another choice"
+msgstr ""
+
+msgid "Are you sure you want to close/hide page?"
 msgstr ""
 
 msgid "Are you sure you want to close/hide this notebook page?"
@@ -63,15 +78,27 @@ msgid "Blur (mean)"
 msgstr "Flou (moyenne)"
 
 msgid "Blur (median filter)"
-msgstr "Flou (filtre médian)"
+msgstr "Flou (filtre m\303\251dian)"
 
 msgid "Blur (median)"
-msgstr "Flou (médian)"
+msgstr "Flou (m\303\251dian)"
 
 msgid "Border type"
 msgstr ""
 
 msgid "Canny"
+msgstr ""
+
+msgid "Chapeau bas"
+msgstr ""
+
+msgid "Chapeau haut"
+msgstr ""
+
+msgid "ChapeauBas"
+msgstr ""
+
+msgid "ChapeauHaut"
 msgstr ""
 
 msgid "Check 1"
@@ -87,6 +114,15 @@ msgid "Check 4"
 msgstr ""
 
 msgid "Client Size Reporter"
+msgstr ""
+
+msgid "Color"
+msgstr ""
+
+msgid "ComposanteConnexe"
+msgstr ""
+
+msgid "Connected component"
 msgstr ""
 
 msgid "Constant"
@@ -116,13 +152,16 @@ msgstr ""
 msgid "Depth of destination"
 msgstr ""
 
+msgid "Difference between 2 images"
+msgstr ""
+
 msgid "Difffenrence between 2 images"
 msgstr ""
 
-msgid "Différence x"
+msgid "Diff\303\251rence x"
 msgstr ""
 
-msgid "Différence y"
+msgid "Diff\303\251rence y"
 msgstr ""
 
 msgid "Dilatation"
@@ -132,6 +171,12 @@ msgid "Dilation"
 msgstr ""
 
 msgid "Disabled"
+msgstr ""
+
+msgid "Divide"
+msgstr ""
+
+msgid "Division"
 msgstr ""
 
 msgid "Drop Down Item 1"
@@ -161,13 +206,31 @@ msgstr ""
 msgid "FFT"
 msgstr ""
 
+msgid "Fermeture"
+msgstr ""
+
+msgid "Filter"
+msgstr ""
+
 msgid "Filter name"
+msgstr ""
+
+msgid "Filtre de convolution"
+msgstr ""
+
+msgid "Filtre de morphologie"
 msgstr ""
 
 msgid "Frei Chen x"
 msgstr ""
 
 msgid "Frei Chen y"
+msgstr ""
+
+msgid "FusionPlan"
+msgstr ""
+
+msgid "GradMorph"
 msgstr ""
 
 msgid "Gradient"
@@ -213,6 +276,12 @@ msgstr ""
 msgid "Item 8"
 msgstr ""
 
+msgid "Laplacian"
+msgstr ""
+
+msgid "Laplacien"
+msgstr ""
+
 msgid "Laplacien 4 connexe"
 msgstr ""
 
@@ -231,6 +300,12 @@ msgstr ""
 msgid "Log window "
 msgstr ""
 
+msgid "Merge color plan"
+msgstr ""
+
+msgid "Morphologic operation"
+msgstr ""
+
 msgid "Morphology parameters"
 msgstr ""
 
@@ -243,13 +318,16 @@ msgstr ""
 msgid "Moyenne 7x7"
 msgstr ""
 
-msgid "Moyenne Pondérée"
+msgid "Moyenne Pond\303\251r\303\251e"
 msgstr ""
 
-msgid "Moyenne Pondérée 5x5"
+msgid "Moyenne Pond\303\251r\303\251e 5x5"
 msgstr ""
 
-msgid "Moyenne Pondérée 7x7"
+msgid "Moyenne Pond\303\251r\303\251e 7x7"
+msgstr ""
+
+msgid "Multiplication"
 msgstr ""
 
 msgid "Notebook"
@@ -294,6 +372,15 @@ msgstr ""
 msgid "Operator size"
 msgstr ""
 
+msgid "Ouverture"
+msgstr ""
+
+msgid "Parameters Operators"
+msgstr ""
+
+msgid "Param\303\250trage des op\303\251rateurs"
+msgstr ""
+
 msgid "Pattern morphology"
 msgstr ""
 
@@ -308,6 +395,9 @@ msgid "Prewitt x"
 msgstr ""
 
 msgid "Prewitt y"
+msgstr ""
+
+msgid "Probleme"
 msgstr ""
 
 msgid "Radio 1"
@@ -328,10 +418,16 @@ msgstr ""
 msgid "Radio 3 (Group 2)"
 msgstr ""
 
+msgid "Rapport"
+msgstr ""
+
 msgid "Ready"
 msgstr ""
 
 msgid "Rectangle"
+msgstr ""
+
+msgid "Reset Windows"
 msgstr ""
 
 msgid "Roberts x"
@@ -346,6 +442,12 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
+msgid "Scale/Frequency"
+msgstr ""
+
+msgid "SeparationPlan"
+msgstr ""
+
 msgid "Seuillage"
 msgstr ""
 
@@ -353,6 +455,12 @@ msgid "Sobel x"
 msgstr ""
 
 msgid "Sobel y"
+msgstr ""
+
+msgid "Soustraction"
+msgstr ""
+
+msgid "Statistic component"
 msgstr ""
 
 msgid "Sub"
@@ -455,7 +563,16 @@ msgstr ""
 msgid "Welcome to wxAUI (this is a page tooltip)"
 msgstr ""
 
+msgid "You must defined convolution operator first!"
+msgstr ""
+
 msgid "You must defined morphological operator first!"
+msgstr ""
+
+msgid "binarize"
+msgstr ""
+
+msgid "conv"
 msgstr ""
 
 msgid "double"
@@ -467,6 +584,9 @@ msgstr ""
 msgid "float"
 msgstr ""
 
+msgid "gradient morph."
+msgstr ""
+
 msgid "grid_content"
 msgstr ""
 
@@ -476,7 +596,16 @@ msgstr ""
 msgid "inverse FFT"
 msgstr ""
 
+msgid "morph"
+msgstr ""
+
 msgid "notebook_content"
+msgstr ""
+
+msgid "pb"
+msgstr ""
+
+msgid "product"
 msgstr ""
 
 msgid "same"
@@ -486,6 +615,9 @@ msgid "settings"
 msgstr ""
 
 msgid "sizereport_content"
+msgstr ""
+
+msgid "split color plan"
 msgstr ""
 
 msgid "tb1"
@@ -528,6 +660,11 @@ msgid "wxAUI Project"
 msgstr ""
 
 msgid "wxAUI Test"
+msgstr ""
+
+msgid ""
+"wxOpenCV \n"
+"Image processing using libraries wxWidgets, OpenCv and Plplot\n"
 msgstr ""
 
 msgid "wxSpinCtrl:"

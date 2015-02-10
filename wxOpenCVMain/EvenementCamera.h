@@ -21,6 +21,8 @@ public:
     // called when the thread exits - whether it terminates normally or is
     // stopped with Delete() (but not when it is Kill()ed!)
     virtual void OnExit(){};
+	void *AcquisitionCV_32F();
+	void *AcquisitionCV_8U();
 
 public:
     unsigned m_count;

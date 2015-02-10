@@ -49,12 +49,16 @@ void OnSpinDown(wxScrollEvent &w);
 		/*!< Gestion des boutons spins */
 void OnChoice( wxCommandEvent& event );
 		/*!< Gestion des menus choix */
+void OnCaseCocher( wxCommandEvent& event );
+		/*!< Gestion des cases à cocher*/
 void OnTextValider(wxCommandEvent &w);
 
 void OnClose(wxCloseEvent& event);
 		/*!< Fermeture de la fenetre parametrage */
 void NouvelleImage(wxCommandEvent& );
 		/*! Evenement déclenché lors de l'arrivée d'une nouvelle image */
+void EstimationGain(wxCommandEvent& );
+		/*! Evenement déclenché pour débuter ou arrêter l'estimation du gain */
 void ExpositionAutomatique(wxCommandEvent& );
 		/*! Détermination d'un temps de pose maximisant la fonction contraste xxx */
 void ModeMoyenne(wxCommandEvent &w);
@@ -91,6 +95,7 @@ char	ImagePrete(void);
 char	Image();
 int		NbColonne(){ return cam->NbColonne();};
 int		NbLigne(){return cam->NbLigne();};
+void	PThread(void *);
 
 public:
     DECLARE_EVENT_TABLE()

@@ -12,6 +12,21 @@ cam=cc;
 void *ProcessGestionCamera::Entry()
 {
 FenetrePrincipale *parent=(FenetrePrincipale *)cam->parent;
+ImageInfoCV *imAcq =parent->ImGain(); 
+wxThread::ExitCode r=0;
+	r=AcquisitionCV_32F();
+wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+ctrlCam->PThread(NULL);
+
+return r;  
+
+}
+
+
+void *ProcessGestionCamera::AcquisitionCV_32F()
+{
+FenetrePrincipale *parent=(FenetrePrincipale *)cam->parent;
+ImageInfoCV *imAcq =parent->ImGain(); 
 cv::VideoCapture *captureVideo= ((CameraOpenCV*)cam)->CamVideo(); 
 if (captureVideo->isOpened())
 	{
@@ -19,7 +34,6 @@ if (captureVideo->isOpened())
 	cv::Mat frameFlt2;
 	cv::Mat frame;
 	cv::Mat frameFlt;
-	ImageInfoCV *imAcq =parent->ImAcq(); 
 	std::vector<cv::Point2f> repereIni,repere;
 	while (!captureVideo->retrieve(frame));
 	frame.convertTo(frameFlt2,CV_32FC3);
@@ -60,14 +74,25 @@ if (captureVideo->isOpened())
 					}
 
 				}
-			if (TestDestroy())
-				break;
 			}
+		if (TestDestroy())
+			break;
 		}
+	cv::Scalar x=cv::mean(*imAcq);
+	for (int i=0;i<frame.rows;i++)
+		{
+		float *val=(float *)imAcq->ptr(i);
+		for (int j=0;j<frame.cols;j++)
+			for (int k=0;k<frame.channels();k++,val++)
+				*val = *val/x[k] ;
+						
+		}
+
 	}
-
-return (wxThread::ExitCode)0;  
-
+return (wxThread::ExitCode)0;
 }
 
-
+void *ProcessGestionCamera::AcquisitionCV_8U()
+{
+return (wxThread::ExitCode)0;
+}

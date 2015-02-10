@@ -9,6 +9,7 @@
 #include "CameraOpenCV.h"
 
 
+#define ID_CORRECTION_GAIN 201 // Estimation Bruit additif
 #define ID_DEB_ESTIM_FOND 204 // Estimation Bruit additif
 #define ID_FIN_ESTIM_FOND 205
 #define ID_DEB_ESTIM_GAIN 208 // Estimation Gain
@@ -21,8 +22,10 @@ BEGIN_EVENT_TABLE(ControleCamera, wxFrame)
     EVT_CHOICE(wxID_ANY, ControleCamera::OnChoice)  
     EVT_TEXT_ENTER(wxID_ANY, ControleCamera::OnTextValider) 
     EVT_BUTTON(220, ControleCamera::ExpositionAutomatique)
-    EVT_BUTTON(204, ControleCamera::NouvelleImage)
+    EVT_BUTTON(ID_DEB_ESTIM_GAIN, ControleCamera::EstimationGain)
+    EVT_BUTTON(ID_FIN_ESTIM_GAIN, ControleCamera::EstimationGain)
 	EVT_CHECKBOX(211,ControleCamera::ModeMoyenne)
+	EVT_CHECKBOX(ID_CORRECTION_GAIN,ControleCamera::OnCaseCocher)
 
 END_EVENT_TABLE()
 
@@ -32,6 +35,16 @@ ProcessGestionCamera *pThread=NULL;
 #define ID_GLI_BUTTER 2501
 
 
+void	ControleCamera::PThread(void *t)
+{
+if (pThread && !t)
+	{
+	wxStaticText *s=(wxStaticText*)FindWindowById(ID_DEB_ESTIM_GAIN,ongletFond);
+	s->SetLabelText(_("Start"));
+	}
+
+pThread=(ProcessGestionCamera *)t;
+}
 
 ControleCamera::ControleCamera(wxFrame *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size, long style)
@@ -96,13 +109,39 @@ if (cam->IsRunning())
 	}
 if (event.GetId()==ID_DEB_ESTIM_FOND)
 	{
-	if (pThread!=NULL && pThread->IsRunning())
-		return;
-	
-	pThread= new ProcessGestionCamera(this,cam);
-	pThread->Run();
 	}
 
+}
+
+void ControleCamera::EstimationGain(wxCommandEvent& event)
+{
+if (!cam || !parent)
+	return;
+if (cam->IsRunning())
+	{
+	wxMessageBox(_("Camera must be paused first!"));
+	return;
+	}
+if (event.GetId()==ID_DEB_ESTIM_GAIN)
+	{
+	if (pThread==NULL)
+		{
+		wxStaticText *s=(wxStaticText*)FindWindowById(ID_DEB_ESTIM_GAIN,ongletFond);
+		s->SetLabelText(_("Stop"));
+		pThread= new ProcessGestionCamera(this,cam);
+		pThread->Run();
+		}
+	else if (pThread!=NULL && pThread->IsRunning())
+		{
+		if (pThread->Delete()!= wxTHREAD_NO_ERROR)
+			{
+			wxMessageBox(_("Process is stopped!"));
+			pThread=NULL;
+			}
+		else;
+			wxMessageBox(_("Cannot stop Process!"));
+		}
+	}
 }
 
 
@@ -179,6 +218,22 @@ if(w.GetId()==ID_GLI_BUTTER)
 	} // if(w.GetEventObject()==slZFar)
 
 }
+
+void ControleCamera::OnCaseCocher( wxCommandEvent& event )
+{
+if  (!parent || !cam)
+	return;
+FenetrePrincipale *p=((FenetrePrincipale*)parent);
+switch(event.GetId()){
+case ID_CORRECTION_GAIN:
+	p->DefCorrectionGain(!p->CorrectionGain());
+	break;
+default:
+	break;
+	}
+}
+
+
 
 
 void ControleCamera::OnSpinUp(wxScrollEvent &w)
@@ -346,9 +401,9 @@ wxSize(160,30),wxSize(110,30),wxSize(110,30),wxSize(110,30),
 wxSize(160,30),wxSize(110,30),wxSize(110,30),wxSize(110,30)};
 long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
 
-wxString	legende[]={_T("Enable bias correction"),_T("Enable background correction"),_T("Enable function correction"),
+wxString	legende[]={_T("Enable bias correction"),_T("Enable background correction "),_T("Enable function correction"),
 _T("Cumulate Bias Image"),_T("Start"),_T("Reset Dark Image"),_T("Load Dark Image"),
-_T("Cumulate Background Image"),_T("Start"),_T("Reset Background"),_T("Load Background"),
+_T("Cumulate Background Image (gain)"),_T("Start"),_T("Reset Background"),_T("Load Background"),
 _T("Cumulate Zero level Function "),_T("Start"),_T("Reset Function")
 };
 ongletFond = new wxWindow(listeFenetreOnglet,-1); 
@@ -357,7 +412,7 @@ wxCheckBox *t=new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i])
 i++;
 if (osgApp)
 	t->SetValue(((wxOsgApp*)osgApp)->Graphique()->CorrectionBiais());
-t=new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]); // background 201
+t=new wxCheckBox(ongletFond,ID_CORRECTION_GAIN,legende[i],position[i], taille[i]); // background 201
 if (osgApp)
 	t->SetValue(((wxOsgApp*)osgApp)->Graphique()->CorrectionFond());
 i++;
