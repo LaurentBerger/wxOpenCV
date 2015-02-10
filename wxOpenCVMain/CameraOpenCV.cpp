@@ -9,7 +9,6 @@ using namespace cv;
 
 char CameraOpenCV::indIdVideo[NBCAMERA]={0,0,0,0,0,0,0,0,0,0};
 
-wxDECLARE_EVENT(VAL_EVT_PTS_SUIVIS, EvtPointSuivis);
 
 //#define _FLUXHTTP__
 
@@ -29,21 +28,53 @@ CameraOpenCV::CameraOpenCV(void)
 wxString		repTravail=wxGetCwd();
 strcpy(nomCamera,"OpenCV");
 wxString nomOrdinateur(wxGetHostName());
-//double FenetrePrincipale::aaButter[NBFILTRE]={-0.9996859,-0.9993719,-0.9968633,-0.9937365,-0.9690674,-0.9390625,-0.7265425,-0.5095254,-0.3249,-0.1584,-0.0,};
-//double FenetrePrincipale::bbButter[NBFILTRE]={0.0001571,0.0003141,0.0015683,0.0031318,0.0154663,0.0304687,0.1367287,0.2452373,0.3375,0.4208,0.5,};
+tailleCapteur[0]=wxSize(160,120);tailleCapteur[1]=wxSize(176,144);tailleCapteur[2]=wxSize(320,176);
+tailleCapteur[3]=wxSize(320,240);tailleCapteur[4]=wxSize(352,288);tailleCapteur[5]=wxSize(432,240);
+tailleCapteur[6]=wxSize(544,288);tailleCapteur[7]=wxSize(640,360);tailleCapteur[8]=wxSize(640,480);
+tailleCapteur[9]=wxSize(752,416);tailleCapteur[10]=wxSize(800,448);tailleCapteur[11]=wxSize(800,600);
+tailleCapteur[12]=wxSize(864,480);tailleCapteur[13]=wxSize(960,544);tailleCapteur[14]=wxSize(960,720);
+tailleCapteur[15]=wxSize(1024,576);tailleCapteur[16]=wxSize(1184,656);tailleCapteur[17]=wxSize(1280,720);
+tailleCapteur[16]=wxSize(1280,960);tailleCapteur[17]=wxSize(-1,-1);tailleCapteur[18]=wxSize(-1,-1);
+tailleCapteur[19]=wxSize(-1,-1);
+for (int i=15;i<NB_TAILLE_VIDEO;i++)
+	tailleAutorisee[false];
+modeMoyenne=false;
+indFiltreMoyenne=1;
+tpsInactif =30;
+aaButter[0]=-0.9996859;
+aaButter[1]=-0.9993719;
+aaButter[2]=-0.9968633;
+aaButter[3]=-0.9937365;
+aaButter[4]=-0.9690674;
+aaButter[5]=-0.9390625;
+aaButter[6]=-0.7265425;
+aaButter[7]=-0.5095254;
+aaButter[8]=-0.3249;
+aaButter[9]=-0.1584;
+aaButter[10]=-0.0;
+bbButter[0]=0.0001571;
+bbButter[1]=0.0003141;
+bbButter[2]=0.0015683;
+bbButter[3]=0.0031318;
+bbButter[4]=0.0154663;
+bbButter[5]=0.0304687;
+bbButter[6]=0.1367287;
+bbButter[7]=0.2452373;
+bbButter[8]=0.3375;
+bbButter[9]=0.4208;
+bbButter[10]=0.5;
 
 parent=NULL;
 captureVideo=NULL;
 imAcq=NULL;
-imAcq2 = NULL;
+/*imAcq2 = NULL;
 imAcqBrutFil = NULL;
 imAcqBrutFilMax = NULL;
 imAcqBrut1 = NULL;
 imAcqBrut2 = NULL;
 imTache = NULL;
 imRefTache = NULL;
-imQuadrique = NULL;
-nivBiais = NULL;
+imQuadrique = NULL;*/
 
 /*
 imAcq2 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
@@ -56,15 +87,6 @@ imRefTache = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
 imQuadrique = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
 nivBiais = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
 
-delete imAcq2;
-delete imAcqBrutFil;
-delete imAcqBrutFilMax;
-delete imAcqBrut1;
-delete imAcqBrut2;
-delete imTache;
-delete imRefTache;
-delete imQuadrique;
-delete nivBiais;
 
 
 */
@@ -92,6 +114,13 @@ if (indId==NBCAMERA)
 if(captureVideo->isOpened())  // check if we succeeded
 	{
 	cv::Mat frame;
+	float x,y;
+	bool status;
+	for (int i=15;i<NB_TAILLE_VIDEO;i++)
+		{
+		status=captureVideo->set(cv::CAP_PROP_FRAME_WIDTH,tailleCapteur[i].GetX());
+		tailleAutorisee[i]=captureVideo->set(cv::CAP_PROP_FRAME_HEIGHT,tailleCapteur[i].GetY());
+		}
 	(*captureVideo) >> frame; // get a new frame from camera
 	nbColonnePhys = frame.cols;
 	nbLignePhys = frame.rows;
@@ -211,6 +240,30 @@ void CameraOpenCV::DefZoneLecture(int article)
 chaineErreur="";
 }
 
+
+int	CameraOpenCV::Acquisition(void) /*<! Acquisition d'une image */
+{
+if (typeAcq==CV_32FC3)
+	{
+	Mat frame;
+	Mat frameFlt;
+	while (!captureVideo->retrieve(frame));
+	wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+	frame.convertTo(frameFlt,CV_32FC3);
+	(*((Mat *)imAcq)) =frameFlt; // get a new frame from camera
+	}
+else if (typeAcq==CV_8UC3)
+	{
+	Mat frame;
+	while (!captureVideo->retrieve(frame));
+	wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+
+	(*((Mat *)imAcq)) =frame; // get a new frame from camera
+	}
+
+return 1;
+}
+
 char CameraOpenCV::ImagePrete()
 {
 return 0;
@@ -298,10 +351,8 @@ char CameraOpenCV::GetFunctionEMCCDGain()
 	return 0;
 }
 
-wxThread::ExitCode CameraOpenCV::Entry()
+wxThread::ExitCode CameraOpenCV::Acquisition8BitsRGB()
 {
-if (indId<0 || indId>=NBCAMERA)
-	return (wxThread::ExitCode)-1; 		
 #ifdef _FLUXHTTP__
 captureVideo = new cv::VideoCapture("192.168.0.1:8080"); 
 #else
@@ -309,38 +360,12 @@ captureVideo= new VideoCapture(indId);
 #endif
 if (captureVideo->isOpened())
 	{
-	Mat edges; 
+	Mat frame1;
+	Mat frame2;
 	Mat frame;
 	std::vector<cv::Point2f> repereIni,repere;
-	std::vector<unsigned char> statusPtsSuivis;
-	std::vector<float> errPtsSuivis;
-	(*captureVideo) >> frame;
-    TermCriteria termcrit(3, 20, 0.03);
-    Size subPixWinSize(10,10), winSize(31,31);
-
-	Mat imGris,imGrisIni;
-	int	nbMax=1000;
-	double	qlevel=0.01;
-	double	minDistance =10;
-	int tailleFen=10;
-	this->Sleep(100);
-//	repere.resize(nbMax);
-	for (int i=0;i<1;i++)
-			(*captureVideo) >> frame;
-	cvtColor(frame, imGrisIni, COLOR_BGR2GRAY);
-	goodFeaturesToTrack(imGrisIni, repereIni,  nbMax,  qlevel,minDistance,Mat(),3, 0, 0.04);
-	try 
-		{
-		cornerSubPix(imGrisIni, repereIni, subPixWinSize, Size(-1, -1),termcrit);
-		}
-	catch(exception& e)
-		{
-		}
-
-
-	std::vector<cv::Mat>  pyrIni;
-	std::vector<cv::Mat>  pyr;
-	buildPyramid(imGrisIni,pyrIni,5);
+	while (!captureVideo->retrieve(frame2));
+	while (!captureVideo->retrieve(frame1));
 
 	for(;true;)
 		{
@@ -349,15 +374,33 @@ if (captureVideo->isOpened())
 			if (parent)
 				{
 
-				wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-				(*((Mat *)imAcq)) =frame; // get a new frame from camera
-		/*		cvtColor(frame, imGris, CV_BGR2GRAY);
+				if (!modeMoyenne)	// Pas de filtrage Butterworth
+					{
+					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-				calcOpticalFlowPyrLK( imGrisIni, imGris,  repereIni, repere,
-					statusPtsSuivis,errPtsSuivis, cvSize( tailleFen, tailleFen ), 5, 
-					cvTermCriteria( CV_TERMCRIT_ITER | CV_TERMCRIT_EPS, 20, 0.3 ), 0 );
-		*/
+					(*((Mat *)imAcq)) =frame; // get a new frame from camera
+					}
+				else
+					{
+					{
+					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+
+					(*((Mat *)imAcq)) =frame; // get a new frame from camera
+					for (int i=0;i<frame.rows;i++)
+						{
+						unsigned char *val=frame.ptr(i);
+						unsigned char *valB1=frame1.ptr(i);
+						unsigned char *valB2=frame2.ptr(i);
+						for (int j=0;j<frame.cols;j++)
+							for (int k=0;k<frame.channels();k++,valB1++,valB2++,val++)
+								*val = bbButter[indFiltreMoyenne]*(*valB1 + *valB2)-aaButter[indFiltreMoyenne]* *val;
+						
+						}
+					}
+					frame1.copyTo(frame2);
+					frame.copyTo(frame1);
+					}
 
 				}
 			if (parent)
@@ -367,7 +410,8 @@ if (captureVideo->isOpened())
 				x->ptApp=repere;
 				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
 				wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
-//				this->Sleep(20);
+
+				this->Sleep(tpsInactif);
 				}
 			else
 				break;
@@ -382,19 +426,124 @@ captureVideo=NULL;
 return (wxThread::ExitCode)0;  
 }
 
+wxThread::ExitCode CameraOpenCV::Acquisition32BitsFloatRGB()
+{
+#ifdef _FLUXHTTP__
+captureVideo = new cv::VideoCapture("192.168.0.1:8080"); 
+#else
+captureVideo= new VideoCapture(indId); 
+#endif
+if (captureVideo->isOpened())
+	{
+	Mat frameFlt1;
+	Mat frameFlt2;
+	Mat frame;
+	Mat frameFlt;
+	std::vector<cv::Point2f> repereIni,repere;
+	while (!captureVideo->retrieve(frame));
+	frame.convertTo(frameFlt2,CV_32FC3);
+	while (!captureVideo->retrieve(frame));
+	frame.convertTo(frameFlt1,CV_32FC3);
+
+	for(;true;)
+		{
+		if (captureVideo->retrieve(frame)) // get a new frame from camera
+			{
+			if (parent)
+				{
+
+
+				if (!modeMoyenne)	// Pas de filtrage Butterworth
+					{
+					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+					frame.convertTo(frameFlt,CV_32FC3);
+					(*((Mat *)imAcq)) =frameFlt; // get a new frame from camera
+					}
+				else
+					{
+					{
+					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+					frame.convertTo(frameFlt,CV_32FC3);
+
+					(*((Mat *)imAcq)) =frameFlt; // get a new frame from camera
+					for (int i=0;i<frame.rows;i++)
+						{
+						float *val=(float *)frameFlt.ptr(i);
+						float *valB1=(float *)frameFlt1.ptr(i);
+						float *valB2=(float *)frameFlt2.ptr(i);
+						for (int j=0;j<frame.cols;j++)
+							for (int k=0;k<frame.channels();k++,valB1++,valB2++,val++)
+								*val = bbButter[indFiltreMoyenne]*(*valB1 + *valB2)-aaButter[indFiltreMoyenne]* *val;
+						
+						}
+					}
+					frameFlt1.copyTo(frameFlt2);
+					frameFlt.copyTo(frameFlt1);
+					}
+
+				}
+			if (parent)
+				{
+				EvtPointSuivis *x= new EvtPointSuivis(VAL_EVT_PTS_SUIVIS);
+				x->ptId=repereIni;
+				x->ptApp=repere;
+				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
+				wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
+
+				this->Sleep(tpsInactif);
+				}
+			else
+				break;
+			if (TestDestroy())
+				break;
+			}
+		}
+	delete captureVideo;
+	}
+captureVideo=NULL;
+
+return (wxThread::ExitCode)0;  
+}
+
+
+wxThread::ExitCode CameraOpenCV::Entry()
+{
+if (indId<0 || indId>=NBCAMERA)
+	return (wxThread::ExitCode)-1; 	
+if (typeAcq==CV_8UC3)
+	return Acquisition8BitsRGB();	
+else if (typeAcq==CV_32FC3)
+	return Acquisition32BitsFloatRGB();	
+return (wxThread::ExitCode)0;  
+}
+
 void FenetrePrincipale::OnThreadUpdateQueue(EvtPointSuivis &w)
 {
-if (!cam->IsRunning())
-	return;
-//wxClientDC dc(this);
-//DrawWindow (dc);
-long x=wxGetUTCTimeMillis().GetLo()-w.GetTimestamp();
-if (x<10)
+
+if (cam->IsRunning() || cam->IsPaused())
 	{
+	long x=wxGetUTCTimeMillis().GetLo();
+//	if (x<10)
 	delete feuille->BitmapAffichee();
 	feuille->BitmapAffichee(NULL);
 	MAJNouvelleImage();
+	x=wxGetUTCTimeMillis().GetLo()-x;
+	if (tpsPreEvt==-1)
+		{
+		tpsPreEvt=w.GetTimestamp();
+		}
+	else if ( tpsPreEvt!=-2)
+		{
+		long t=cam->DefTpsInactif();
+		t= w.GetTimestamp()-tpsPreEvt-t-x;
+		if(t<=0)
+			t=60;
+		t=60;
+		cam->DefTpsInactif((max((int)x,25)*110)/100);
+		tpsPreEvt=-2;
+		}
 	}
+return;
 }
 
 void FenetrePrincipale::DoPauseThread()

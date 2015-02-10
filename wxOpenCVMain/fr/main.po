@@ -3,21 +3,19 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: wxOpenCV\n"
+"Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2014-11-09 17:39+0100\n"
-"PO-Revision-Date: 2014-11-09 18:30+0100\n"
-"Last-Translator: Laurent Berger <laurent.berger@univ-lemans.fr>\n"
-"Language-Team: LANGUAGE <laurent.berger@univ-lemans.fr>\n"
-"Language: fr\n"
+"POT-Creation-Date: 2015-02-10 09:09+0100\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
-"X-Generator: Poedit 1.6.10\n"
-"X-Poedit-SourceCharset: windows-1252\n"
 
 msgid "\t"
 msgstr ""
@@ -29,23 +27,38 @@ msgid " "
 msgstr ""
 
 #, c-format
+msgid "%d"
+msgstr ""
+
+#, c-format
+msgid "%d : %s of image %d "
+msgstr ""
+
+#, c-format
 msgid "%d : %s(%d) of %d "
 msgstr ""
 
+#, c-format
+msgid "%d : %s(operator %d) of image %d "
+msgstr ""
+
 msgid "&About"
+msgstr "A propos"
+
+msgid "&Aleatoire\t"
 msgstr ""
 
 msgid "&Arcenciel\tCtrl-F2"
-msgstr ""
+msgstr "&Arcenciel\tCtrl-F2"
 
 msgid "&Arcenciel 8bits\t"
-msgstr ""
+msgstr "&Arcenciel 8bits\t"
 
 msgid "&Arcenciel circulaire 8 bits\t"
-msgstr ""
+msgstr "&Arcenciel 8bits\t"
 
 msgid "&Gris\tCtrl-F1"
-msgstr ""
+msgstr "&Arcenciel 8bits\t"
 
 msgid "&Gris 8 bits\tCtrl-F2"
 msgstr ""
@@ -95,13 +108,91 @@ msgstr ""
 msgid "*.tif;*.jpg;*.bmp"
 msgstr ""
 
+msgid "*.tif;*.jpg;*.bmp;*.ymlgz"
+msgstr ""
+
 msgid "."
 msgstr ""
 
 msgid ". Do you want to save it in another folder?"
 msgstr "Voulez vous l'enregistrer dans un autre dossier?"
 
+msgid "../lang"
+msgstr ""
+
 msgid ".tif"
+msgstr ""
+
+msgid "/"
+msgstr ""
+
+msgid "/convolution"
+msgstr ""
+
+#, c-format
+msgid "/convolution/%d/"
+msgstr ""
+
+msgid "/dossier"
+msgstr ""
+
+msgid "/langue"
+msgstr ""
+
+msgid "/maxVal"
+msgstr ""
+
+msgid "/minVal"
+msgstr ""
+
+msgid "/morphologie"
+msgstr ""
+
+#, c-format
+msgid "/morphologie/%d/"
+msgstr ""
+
+msgid "/nom"
+msgstr ""
+
+msgid "/operateur"
+msgstr ""
+
+#, c-format
+msgid "/operateur/%d/"
+msgstr ""
+
+#, c-format
+msgid "/operateur/%d/paramDouble/%d"
+msgstr ""
+
+#, c-format
+msgid "/operateur/%d/paramEntier/%d"
+msgstr ""
+
+#, c-format
+msgid "/operateur/%d/paramSize/%d"
+msgstr ""
+
+msgid "/paramDouble"
+msgstr ""
+
+msgid "/paramEntier"
+msgstr ""
+
+msgid "/pasVal"
+msgstr ""
+
+msgid "/plplotwxwidgetsd"
+msgstr ""
+
+msgid "/svg"
+msgstr ""
+
+msgid "/valeur"
+msgstr ""
+
+msgid "/wxwidgets"
 msgstr ""
 
 msgid "0\t-1\t-1\t"
@@ -122,7 +213,22 @@ msgstr ""
 msgid ":"
 msgstr ""
 
+msgid "AdaptatifSeuillage"
+msgstr ""
+
+msgid "Addition"
+msgstr ""
+
+msgid "An error occured in binary operator :"
+msgstr ""
+
+msgid "An error occured in surjection operator :"
+msgstr ""
+
 msgid "An error occured in unary operator :"
+msgstr "Erreur dans op\303\251ratuer unaire"
+
+msgid "An error occured while saving file :"
 msgstr ""
 
 msgid "Arabic"
@@ -172,7 +278,7 @@ msgid "C:/Program Files (x86)/plplot/lib/plplot5.10.0/driversd/wxwidgets"
 msgstr ""
 
 msgid "Camera Control"
-msgstr "Contrôle caméra"
+msgstr "Contr\303\264le cam\303\251ra"
 
 msgid "Cancel"
 msgstr ""
@@ -180,10 +286,19 @@ msgstr ""
 msgid "Canny"
 msgstr ""
 
+msgid "ChapeauBas"
+msgstr ""
+
+msgid "ChapeauHaut"
+msgstr ""
+
 msgid "Close"
 msgstr ""
 
 msgid "Close window"
+msgstr ""
+
+msgid "ComposanteConnexe"
 msgstr ""
 
 msgid "Contour"
@@ -202,8 +317,12 @@ msgstr ""
 msgid "Couldn't find/load the 'internat' catalog for locale '%s'."
 msgstr ""
 
+#, c-format
+msgid "Couldn't find/load the 'main' catalog for locale '%s'."
+msgstr ""
+
 msgid "Create a report"
-msgstr "Créer un rapport"
+msgstr "Cr\303\251er un rapport"
 
 msgid "Czech"
 msgstr ""
@@ -211,8 +330,14 @@ msgstr ""
 msgid "Dilatation"
 msgstr ""
 
+msgid "Division"
+msgstr ""
+
 msgid "Do you want to cancel operation?"
-msgstr "Voulez vous annuler l'opération ?"
+msgstr "Voulez vous annuler l'op\303\251ration ?"
+
+msgid "Do you want to save it?"
+msgstr ""
 
 msgid "Document is empty"
 msgstr "Document vide"
@@ -235,7 +360,13 @@ msgstr "Erreur d'enregistrement"
 msgid "Execute "
 msgstr "Executer"
 
+msgid "F:\\Lib\\OpenSceneGraph-Data-3.0.0\\Images\\reflect.rgb"
+msgstr ""
+
 msgid "FFT"
+msgstr ""
+
+msgid "Fermeture"
 msgstr ""
 
 #, c-format
@@ -246,7 +377,7 @@ msgid "File Format Error "
 msgstr ""
 
 msgid "File already exist"
-msgstr "Fichier existe déjà"
+msgstr "Fichier existe d\303\251j\303\240"
 
 msgid "File already exist. Overwrite it?"
 msgstr ""
@@ -260,6 +391,9 @@ msgstr ""
 msgid "French"
 msgstr ""
 
+msgid "FusionPlan"
+msgstr ""
+
 msgid "Georgian"
 msgstr ""
 
@@ -269,7 +403,13 @@ msgstr ""
 msgid "Grabbing images stopped!"
 msgstr ""
 
+msgid "GradMorph"
+msgstr ""
+
 msgid "IFFT"
+msgstr ""
+
+msgid "Image"
 msgstr ""
 
 msgid "Image "
@@ -311,7 +451,13 @@ msgstr ""
 msgid "Japanese"
 msgstr ""
 
+msgid "LB"
+msgstr ""
+
 msgid "Language"
+msgstr ""
+
+msgid "Laplacien"
 msgstr ""
 
 msgid "LissageGaussien"
@@ -330,40 +476,45 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
+msgid "Multiplication"
+msgstr ""
+
 msgid "NULL\t"
 msgstr ""
 
 msgid "No Bias Image "
-msgstr ""
+msgstr "pas d'image de biais"
 
 msgid "No background Image"
 msgstr "Pas d'image de fond"
 
 msgid "Open Sequence"
-msgstr "Ouvrir séquence"
+msgstr "Ouvrir s\303\251quence"
 
 #, c-format
 msgid "OpenCV compatible camera detected (%dX%d : %d)"
-msgstr "Caméra compatible OpenCV détectée (%dX%d : %d)"
+msgstr "Cam\303\251ra compatible OpenCV d\303\251tect\303\251e (%dX%d : %d)"
 
 msgid "OpenCV compatible camera not detected"
-msgstr "pas de caméra OpenCv compatible détectée"
+msgstr "pas de cam\303\251ra OpenCv compatible d\303\251tect\303\251e"
 
 msgid "Operation canceled"
-msgstr "opération annulée"
+msgstr "op\303\251ration annul\303\251e"
 
-msgid "Ouvrir "
+msgid "Ouverture"
 msgstr ""
 
-msgid ""
-"PNG files (*.png)|*.png|JPG files (*.jpg)|*.jpg|TIFF files (*.tif)|*.tif"
+msgid "Ouvrir "
+msgstr "Ouvrir"
+
+msgid "PNG files (*.png)|*.png|JPG files (*.jpg)|*.jpg|TIFF files (*.tif)|*.tif"
 msgstr ""
 
 msgid "Parametrage Algo."
-msgstr ""
+msgstr "Parametrage Algo."
 
 msgid "Please choose language:"
-msgstr ""
+msgstr "Chox de la langue"
 
 msgid "Polish"
 msgstr ""
@@ -375,10 +526,10 @@ msgid "Quit Application"
 msgstr "Quitter l'application"
 
 msgid "RefTache"
-msgstr ""
+msgstr "RefTache"
 
-msgid "Resultat de l'opération vide"
-msgstr ""
+msgid "Resultat de l'op\303\251ration vide"
+msgstr "Resultat de l'op\303\251ration vide"
 
 msgid "Russian"
 msgstr ""
@@ -390,33 +541,39 @@ msgid "Save As"
 msgstr "Enregistrer sous"
 
 msgid "Section"
+msgstr "Section"
+
+msgid "SeparationPlan"
 msgstr ""
 
 msgid "Seq"
-msgstr ""
+msgstr "Seq"
 
 #, c-format
 msgid "Server %s failed to start"
-msgstr ""
+msgstr "Serveur %s \303\251chec du d\303\251marrage"
 
 #, c-format
 msgid "Server %s started"
-msgstr ""
+msgstr "Serveur %s d\303\251marr\303\251"
 
 msgid "Server uses DDE"
-msgstr ""
+msgstr "Serveur DDE"
 
 msgid "Server uses TCP"
-msgstr ""
+msgstr "Serveur TCP"
 
 msgid "Seuillage"
+msgstr "Seuillage"
+
+msgid "Soustraction"
 msgstr ""
 
 msgid "Stat : "
-msgstr ""
+msgstr "Stat : "
 
 msgid "Stat Rectangle"
-msgstr ""
+msgstr "Stat Rectangle"
 
 msgid "Swedish"
 msgstr ""
@@ -424,30 +581,33 @@ msgstr ""
 msgid "System default"
 msgstr ""
 
-msgid "Tache"
+msgid "TEST"
 msgstr ""
+
+msgid "Tache"
+msgstr "Tache"
 
 msgid "The OpenCV Reference Manual, Release 2.4.9.0 p325"
 msgstr ""
 
 msgid "This language is not supported by the system."
-msgstr ""
+msgstr "Cette langue n'est pas support\303\251e"
 
 msgid "Timestamp ended!"
-msgstr ""
+msgstr "horodatage termin\303\251"
 
 msgid "Undefined"
-msgstr "indéfini"
+msgstr "ind\303\251fini"
 
 msgid "Video"
-msgstr "Vidéo"
+msgstr "Vid\303\251o"
 
 #, c-format
 msgid "Video %d"
-msgstr "Vidéo %d"
+msgstr "Vid\303\251o %d"
 
 msgid "Video opened"
-msgstr "Vidéo ouverte"
+msgstr "Vid\303\251o ouverte"
 
 msgid "Warning"
 msgstr "Attention"
@@ -456,13 +616,13 @@ msgid "Warning "
 msgstr "Attention"
 
 msgid "You must stop grabbing image before!"
-msgstr "Vous devez arrêter l'acquisition avant!"
+msgstr "Vous devez arr\303\252ter l'acquisition avant!"
 
 msgid "You must stop grabbing sequence before!"
-msgstr "Vous devez arrêter l'acquisition de la séquence avant!"
+msgstr "Vous devez arr\303\252ter l'acquisition de la s\303\251quence avant!"
 
 msgid "You've probably entered an invalid number."
-msgstr ""
+msgstr "Nombre invalide"
 
 msgid "\\"
 msgstr ""
@@ -485,17 +645,29 @@ msgstr ""
 msgid "_"
 msgstr ""
 
-msgid "anchor"
+msgid "adaptiveMethod"
 msgstr ""
 
+msgid "anchor"
+msgstr "Ancre"
+
 msgid "aperture_size"
-msgstr ""
+msgstr "Ouverture"
 
 #, c-format
 msgid "background Image %s"
+msgstr "Image de fond %s"
+
+msgid "blockSize"
 msgstr ""
 
 msgid "borderType"
+msgstr ""
+
+msgid "connectivity"
+msgstr ""
+
+msgid "conv"
 msgstr ""
 
 msgid "cor."
@@ -504,39 +676,107 @@ msgstr ""
 msgid "corFilmax."
 msgstr ""
 
+msgid "ddepth"
+msgstr ""
+
+msgid "delta"
+msgstr ""
+
 msgid "e:\\test.yml.gz"
 msgstr ""
 
 #, c-format
 msgid "exposure Time %6.3f Mode Gain %d EMCCDGain %6.3f "
-msgstr ""
+msgstr "Temps de pose %6.3f Mode Gain %d EMCCDGain %6.3f "
 
 msgid "fileutils"
+msgstr ""
+
+msgid "gz"
+msgstr ""
+
+msgid "hauteur"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#add"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#divide"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#merge"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#multiply"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#split"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#subtract"
 msgstr ""
 
 msgid "http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny"
 msgstr ""
 
-msgid ""
-"http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=blur#blur"
+msgid "http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#findContour"
 msgstr ""
 
-msgid ""
-"http://docs.opencv.org/modules/imgproc/doc/filtering.html?"
-"highlight=gaussianblur#gaussianblur"
+msgid "http://docs.opencv.org/modules/imgproc/doc/filtering.html#dilate"
 msgstr ""
 
-msgid ""
-"http://docs.opencv.org/modules/imgproc/doc/filtering.html?"
-"highlight=medianblur#medianblur"
+msgid "http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode"
 msgstr ""
 
-msgid ""
-"http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations."
-"html?highlight=threshold#threshold"
+msgid "http://docs.opencv.org/modules/imgproc/doc/filtering.html#filter2d"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=blur#blur"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=gaussianblur#gaussianblur"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=medianblur#medianblur"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=morphologyex#morphologyex"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html?highlight=threshold#adaptivethreshold"
+msgstr ""
+
+msgid "http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html?highlight=threshold#threshold"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=133&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=136&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=149&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=153&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=172&zoom=70,250,100"
 msgstr ""
 
 msgid "http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=261&zoom=70,250,100"
 msgstr ""
 
 msgid "http://docs.opencv.org/opencv2refman.pdf#page=263&zoom=70,250,100"
@@ -545,13 +785,31 @@ msgstr ""
 msgid "http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100"
 msgstr ""
 
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=280&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=291&zoom=70,250,100"
+msgstr ""
+
 msgid "http://docs.opencv.org/opencv2refman.pdf#page=298&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv2refman.pdf#page=308&zoom=70,250,100"
 msgstr ""
 
 msgid "http://docs.opencv.org/opencv2refman.pdf#page=325&zoom=70,250,100"
 msgstr ""
 
 msgid "http://docs.opencv.org/opencv2refman.pdf#page=331&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/opencv3refman.pdf#page=263&zoom=70,250,100"
+msgstr ""
+
+msgid "http://docs.opencv.org/trunk/modules/imgproc/doc/filtering.html#laplacian"
+msgstr ""
+
+msgid "http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#connectedcomponents"
 msgstr ""
 
 msgid "internat"
@@ -561,7 +819,7 @@ msgid "jpg"
 msgstr ""
 
 msgid "kernel_size"
-msgstr ""
+msgstr "Taille du noyau"
 
 msgid "ksize"
 msgstr ""
@@ -569,17 +827,68 @@ msgstr ""
 msgid "lang"
 msgstr ""
 
+msgid "largeur"
+msgstr ""
+
 #, c-format
 msgid "last config %s %s"
 msgstr ""
 
+msgid "ltype"
+msgstr ""
+
+msgid "main"
+msgstr ""
+
+msgid "maxVal"
+msgstr ""
+
+msgid "maxValue"
+msgstr ""
+
 msgid "maxval"
+msgstr ""
+
+msgid "method"
+msgstr ""
+
+msgid "minVal"
+msgstr ""
+
+msgid "mode"
+msgstr ""
+
+msgid "morph"
+msgstr ""
+
+msgid "morph_taille"
+msgstr ""
+
+msgid "morph_type"
+msgstr ""
+
+msgid "nom"
+msgstr ""
+
+msgid "op"
+msgstr ""
+
+msgid "op1"
+msgstr ""
+
+msgid "op2"
+msgstr ""
+
+msgid "pasVal"
 msgstr ""
 
 msgid "plplotwxwidgetsd"
 msgstr ""
 
 msgid "png"
+msgstr ""
+
+msgid "scale"
 msgstr ""
 
 msgid "seec64.bmp"
@@ -595,20 +904,26 @@ msgstr ""
 msgid "sigmaY"
 msgstr ""
 
-msgid "thresh"
+msgid "splash.png"
 msgstr ""
+
+msgid "thresh"
+msgstr "Seuiller"
 
 msgid "threshold1"
-msgstr ""
+msgstr "Seuillage1"
 
 msgid "threshold2"
+msgstr "Seuillage2"
+
+msgid "thresholdType"
 msgstr ""
 
 msgid "threshold_type"
-msgstr ""
+msgstr "Type de seuillage"
 
 msgid "unable to load plplot"
-msgstr "échec chargement plplot"
+msgstr "\303\251chec chargement plplot"
 
 msgid "unable to load svg"
 msgstr "echec chargement driver svg"
@@ -617,16 +932,34 @@ msgid "unable to load wxwidgets"
 msgstr "echec chargement driver wxwidgets"
 
 msgid "unknown"
-msgstr ""
+msgstr "Inconnu"
 
 msgid "untitle"
+msgstr "Sans titre"
+
+msgid "valeur"
+msgstr ""
+
+msgid "wxIUA"
 msgstr ""
 
 msgid "wxOpenCV"
 msgstr ""
 
+msgid "wxOpenCV.ini"
+msgstr ""
+
 msgid "wxstd"
 msgstr ""
 
+msgid "yml"
+msgstr ""
+
+msgid "ymlgz"
+msgstr ""
+
 msgid "|XML files (*.yaml)|*yaml"
+msgstr ""
+
+msgid "|XML files (*.yml)|*.yml"
 msgstr ""

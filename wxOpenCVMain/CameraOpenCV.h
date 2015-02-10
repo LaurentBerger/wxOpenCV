@@ -5,7 +5,6 @@
 
 
 #define NBCAMERA 10
-#define NBFILTRE 11 // Coefficent du filtre de butterworth
 
 /*! \class CameraOpenCV
    * \brief La classe permet de gérer un flux vidéo reconnu par OpenCV
@@ -19,21 +18,6 @@ static char	indIdVideo[NBCAMERA];
 int			indId; // Indice du périphérique vidéo;
 long		expoMin,expoMax;
 long		gainMin,gainMax;
-
-double aaButter[11];
-double bbButter[11];
-
-
-ImageInfoCV			*nivBiais;			/*!< image du niveau zéro*/
-ImageInfoCV			*imAcqBrutFilMax;	/*!< résultat de la moyenne glissante avec filtrage maximum imAcqBrutFil = b(imAcqBrut1+imAcqBrut2)-a imAcqBrutFil */
-ImageInfoCV			*imAcqBrutFil;		/*!< résultat de la moyenne glissante imAcqBrutFil = b(imAcqBrut1+imAcqBrut2)-a imAcqBrutFil */
-ImageInfoCV			*imAcqBrut1;		/*!< Dernière image acquise à insérer dans la moyenne glissante*/
-ImageInfoCV			*imAcqBrut2;		/*!< Avant Dernière image acquise à insérer dans la moyenne glissante*/
-ImageInfoCV			*imAcq2;			/*!< Dernière image calculée incluant les corrections avec filtre maximum */
-ImageInfoCV			*imTache;			/*!< Image du gain à appliquer pour supprimer les tâches optiques indépendantes de l'échantillon */
-ImageInfoCV			*imRefTache;		/*!< Image des tâches optiques indépendantes de l'échantillon */
-ImageInfoCV			*imQuadrique;		/*!< Valeur de correction l'intensité trouvées à partir de la quadrique */
-
 
 
 public : 
@@ -70,7 +54,8 @@ int	nbCanauxAD;				// p 126 SDK
 public :
 CameraOpenCV(void);
 ~CameraOpenCV(void);
-int	Acquisition(void){return 0;};
+cv::VideoCapture *CamVideo(){return captureVideo;};
+int	Acquisition(void); /*<! Acquisition d'une image */
 virtual bool Connectee(){return indId>=0 && indId<NBCAMERA;};
 virtual void DefCoinGauche(int x);
 virtual void DefCoinDroit(int x);
@@ -94,6 +79,9 @@ virtual int NbColonne(){ return colonneFin-colonneDebut+1;};
 virtual int NbLigne(){return ligneFin-ligneDebut+1;};
 virtual int NbCanaux(){return nbCanauxAD;};
 
+virtual ExitCode Acquisition8BitsRGB();
+virtual ExitCode Acquisition32BitsFloatRGB();
+
 char EMGain8Bit();
 char EMGain12Bit();
 char EMGainLinear12Bit();
@@ -112,5 +100,8 @@ virtual int ModeGainEMCCD(){return 0;};
 
 
 };
+
+
+wxDECLARE_EVENT(VAL_EVT_PTS_SUIVIS, EvtPointSuivis);
 
 #endif

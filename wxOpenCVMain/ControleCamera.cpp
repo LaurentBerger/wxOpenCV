@@ -1,26 +1,50 @@
 #include "wx/wxprec.h"
 
 #include "ControleCamera.h"
-#include "CameraAndor.h"
 #include "FenetrePrincipale.h"
 #include "imagestat.h"
 #include "EvenementCamera.h"
 #include <wx/string.h>
+#include "CameraAndor.h"
+#include "CameraOpenCV.h"
+
+
+#define ID_CORRECTION_GAIN 201 // Estimation Bruit additif
+#define ID_DEB_ESTIM_FOND 204 // Estimation Bruit additif
+#define ID_FIN_ESTIM_FOND 205
+#define ID_DEB_ESTIM_GAIN 208 // Estimation Gain
+#define ID_FIN_ESTIM_GAIN 209
+
 
 BEGIN_EVENT_TABLE(ControleCamera, wxFrame)
     EVT_CLOSE(ControleCamera::OnClose)
     EVT_SCROLL(ControleCamera::OnSlider)
     EVT_CHOICE(wxID_ANY, ControleCamera::OnChoice)  
     EVT_TEXT_ENTER(wxID_ANY, ControleCamera::OnTextValider) 
-    EVT_MENU(358, ControleCamera::NouvelleImage)
     EVT_BUTTON(220, ControleCamera::ExpositionAutomatique)
+    EVT_BUTTON(ID_DEB_ESTIM_GAIN, ControleCamera::EstimationGain)
+    EVT_BUTTON(ID_FIN_ESTIM_GAIN, ControleCamera::EstimationGain)
+	EVT_CHECKBOX(211,ControleCamera::ModeMoyenne)
+	EVT_CHECKBOX(ID_CORRECTION_GAIN,ControleCamera::OnCaseCocher)
 
 END_EVENT_TABLE()
 
 ProcessGestionCamera *pThread=NULL;
 
+#define ID_GAIN_CAM 2500
+#define ID_GLI_BUTTER 2501
 
 
+void	ControleCamera::PThread(void *t)
+{
+if (pThread && !t)
+	{
+	wxStaticText *s=(wxStaticText*)FindWindowById(ID_DEB_ESTIM_GAIN,ongletFond);
+	s->SetLabelText(_("Start"));
+	}
+
+pThread=(ProcessGestionCamera *)t;
+}
 
 ControleCamera::ControleCamera(wxFrame *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size, long style)
@@ -29,6 +53,8 @@ ControleCamera::ControleCamera(wxFrame *frame, const wxString& title, const wxPo
 commEvt=1;
 imagePrete=0;
 cam =NULL;
+osgApp=NULL;
+parent=NULL;
 
 SetIcon(wxIcon(_T("seec64.bmp"),wxBITMAP_TYPE_ICO ));
 panneau = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -44,16 +70,19 @@ panneau->SetSizer(m_sizerFrame);
 OuvertureOngletStatus();
 if (cam && !strcmp(cam->NomCamera(),"ANDOR"))
 	{
-	OuvertureOngletParametresGeometries();
+	OuvertureOngletEMCCD();
 	}
-OuvertureOngletEMCCD();
+//OuvertureOngletParametresGeometries();
 OuvertureOngletParametresTemporels();
+OuvertureOngletFond();
+OuvertureOngletMoyenne();
 
 //m_sizerFrame->Fit(this);
 //m_sizerFrame->SetSizeHints(this);
 m_sizerFrame->Insert(0, listeFenetreOnglet, 5, wxEXPAND | wxALL, 4);                 
 m_sizerFrame->Hide(listeFenetreOnglet);                                                   
 m_sizerFrame->Show(listeFenetreOnglet);                                                                           
+Show(false);
 
 }
 
@@ -71,17 +100,48 @@ pThread->Kill();
 
 void ControleCamera::NouvelleImage(wxCommandEvent& event)
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if (!cam || !parent)
 	return;
-if (!((wxOsgApp*)osgApp)->Graphique()->ModeCamera())
+if (cam->IsRunning())
+	{
+	wxMessageBox(_("Camera must be paused first!"));
 	return;
-if (!((wxOsgApp*)osgApp)->Graphique()->ImageTraitee())
-	return;
-(((wxOsgApp*)osgApp)->m_critsectWork).Enter();
+	}
+if (event.GetId()==ID_DEB_ESTIM_FOND)
+	{
+	}
 
-((wxOsgApp*)osgApp)->Graphique()->NouvelleImage();
-(((wxOsgApp*)osgApp)->m_critsectWork).Leave();
-((wxOsgApp*)osgApp)->Graphique()->MAJNouvelleImage();
+}
+
+void ControleCamera::EstimationGain(wxCommandEvent& event)
+{
+if (!cam || !parent)
+	return;
+if (cam->IsRunning())
+	{
+	wxMessageBox(_("Camera must be paused first!"));
+	return;
+	}
+if (event.GetId()==ID_DEB_ESTIM_GAIN)
+	{
+	if (pThread==NULL)
+		{
+		wxStaticText *s=(wxStaticText*)FindWindowById(ID_DEB_ESTIM_GAIN,ongletFond);
+		s->SetLabelText(_("Stop"));
+		pThread= new ProcessGestionCamera(this,cam);
+		pThread->Run();
+		}
+	else if (pThread!=NULL && pThread->IsRunning())
+		{
+		if (pThread->Delete()!= wxTHREAD_NO_ERROR)
+			{
+			wxMessageBox(_("Process is stopped!"));
+			pThread=NULL;
+			}
+		else;
+			wxMessageBox(_("Cannot stop Process!"));
+		}
+	}
 }
 
 
@@ -89,9 +149,22 @@ void ControleCamera::OnClose(wxCloseEvent& event)
 {
 }
 
+
+void ControleCamera::ModeMoyenne(wxCommandEvent &w)
+{
+if (!cam || !parent)
+	return;
+wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+if (cam->ModeMoyenne())
+	cam->DesActiveModeMoyenne();
+else
+	cam->ActiveModeMoyenne();
+}
+
 void ControleCamera::DefTempsExposition(float x)
 {
-if (cam)
+if (!cam)
+	return;
 	cam->DefTempsExposition(x);
 wxString s;
 s.Printf(_T("%f"),x);
@@ -124,17 +197,43 @@ if (x==cam->ModeGainEMCCD())
 
 void ControleCamera::OnSlider(wxScrollEvent &w)
 {
-if (!cam)
+if (!cam || !parent)
 	return;
-if(w.GetEventObject()==slEMGain)
+
+wxSlider *cb=(wxSlider*)wxWindow::FindWindowById(w.GetId(),this);
+
+if(w.GetId()==ID_GAIN_CAM)
 	{
 	int x=w.GetInt();
 	cam->DefEMCCDGain(x);
 	if (cam->Erreur())
 		wxMessageBox(_T("not a valid value"));
 	} // if(w.GetEventObject()==slZFar)
-((wxOsgApp*)osgApp)->SauverConfiguration();
+if(w.GetId()==ID_GLI_BUTTER)
+	{
+	int x=w.GetInt();
+	wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+	cam->DefIndFiltreMoyenne(x);
+
+	} // if(w.GetEventObject()==slZFar)
+
 }
+
+void ControleCamera::OnCaseCocher( wxCommandEvent& event )
+{
+if  (!parent || !cam)
+	return;
+FenetrePrincipale *p=((FenetrePrincipale*)parent);
+switch(event.GetId()){
+case ID_CORRECTION_GAIN:
+	p->DefCorrectionGain(!p->CorrectionGain());
+	break;
+default:
+	break;
+	}
+}
+
+
 
 
 void ControleCamera::OnSpinUp(wxScrollEvent &w)
@@ -288,6 +387,86 @@ default :
 }
 
 
+void ControleCamera::OuvertureOngletFond()
+{
+wxPoint	position[]={
+// Texte		Réglette
+wxPoint(10,10),wxPoint(170,10),wxPoint(280,10),
+wxPoint(10,60),wxPoint(170,60),wxPoint(280,60),wxPoint(390,60),
+wxPoint(10,100),wxPoint(170,100),wxPoint(280,100),wxPoint(390,100)};
+wxSize	taille[]={
+// Texte		Réglette
+wxSize(160,30),wxSize(110,30),wxSize(110,30),
+wxSize(160,30),wxSize(110,30),wxSize(110,30),wxSize(110,30),
+wxSize(160,30),wxSize(110,30),wxSize(110,30),wxSize(110,30)};
+long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
+
+wxString	legende[]={_T("Enable bias correction"),_T("Enable background correction "),_T("Enable function correction"),
+_T("Cumulate Bias Image"),_T("Start"),_T("Reset Dark Image"),_T("Load Dark Image"),
+_T("Cumulate Background Image (gain)"),_T("Start"),_T("Reset Background"),_T("Load Background"),
+_T("Cumulate Zero level Function "),_T("Start"),_T("Reset Function")
+};
+ongletFond = new wxWindow(listeFenetreOnglet,-1); 
+int i=0;
+wxCheckBox *t=new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]); //bias 200
+i++;
+if (osgApp)
+	t->SetValue(((wxOsgApp*)osgApp)->Graphique()->CorrectionBiais());
+t=new wxCheckBox(ongletFond,ID_CORRECTION_GAIN,legende[i],position[i], taille[i]); // background 201
+if (osgApp)
+	t->SetValue(((wxOsgApp*)osgApp)->Graphique()->CorrectionFond());
+i++;
+new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]);// function 202
+i++;
+new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]);// cumul biais 203 
+i++;
+new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);//start 204 
+i++;
+new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// reset 205 
+i++;
+new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// load 206 
+i++;
+new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]);// cumul fond 207 
+i++;
+new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// start 208
+i++;
+new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// reset 209
+i++;
+new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// load 210
+i++;
+listeFenetreOnglet->AddPage(ongletFond, _T("Background Settings"));
+ongletFond->Refresh();
+}	
+
+void ControleCamera::OuvertureOngletMoyenne()
+{
+wxPoint	position[]={
+// Texte		Réglette
+wxPoint(10,10),wxPoint(110,10),
+wxPoint(10,40),wxPoint(110,40)};
+wxSize	taille[]={
+// Texte		Réglette
+wxSize(100,30),wxSize(100,30),wxSize(100,30),wxSize(150,50)};
+long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
+
+wxString	legende[]={_("Mean Mode"),_(""),_("Frequency cut off ([0. 1.0] "),_("")};
+ongletMoyenne = new wxWindow(listeFenetreOnglet,-1); 
+int i=0;
+new wxStaticText(ongletMoyenne,-1,legende[i],position[i], taille[i]);
+i++;
+new wxCheckBox(ongletMoyenne,211,legende[i],position[i], taille[i]);
+i++;
+new wxStaticText(ongletMoyenne,-1,legende[i],position[i], taille[i]);
+i++;
+wxSlider *slIndFiltre=new wxSlider(ongletMoyenne,ID_GLI_BUTTER,0, 0,10 ,position[i], taille[i],style);
+slIndFiltre->SetLabel(legende[i]);
+i++;
+listeFenetreOnglet->AddPage(ongletMoyenne, _("Time Filtering"));
+ongletMoyenne->Refresh();
+}	
+
+
+
 void ControleCamera::OuvertureOngletStatus()
 {
 ongletStatus = new wxWindow(listeFenetreOnglet,-1); 
@@ -311,8 +490,24 @@ ongletStatus->Refresh();
 
 void	ControleCamera::DefCamera(CameraVirtuelle *c)
 {
+if (c==NULL)
+	{
+	Show(false);
+	cam=c;
+	return;
+	}
+if (cam==NULL && c)
+	Show(true);
 cam=c;
+
 DrawOngletStatus();
+wxCheckBox *cb=(wxCheckBox*)wxWindow::FindWindowById(211,ongletMoyenne);	
+if (cam->ModeMoyenne())
+	cb->SetValue(true);
+else
+	cb->SetValue(false);
+wxSlider *cs=(wxSlider*)wxWindow::FindWindowById(ID_GLI_BUTTER,ongletMoyenne);	
+cs->SetValue(cam->IndFiltreMoyenne());
 };
 
 
@@ -324,7 +519,7 @@ wxWindowList&w=ongletStatus->GetChildren();
 wxString s(cam->NomCamera(), wxConvUTF8);;
 int wx=cam->NbColonnePhys(),wy=cam->NbLignePhys();
 w[1]->SetLabel(s);
-s.Printf(_T("x = %6d pixels y = %6d pixels"), wx,wy);
+s.Printf(_T("x = %6d pixels y = %6d pixels Fps =%f"), wx,wy,1000.0/cam->DefTpsInactif());
 
 w[3]->SetLabel(s);
 
@@ -353,15 +548,20 @@ int i=0;
 new wxStaticText(ongletGeometries,-1,legende[i],position[i], taille[i]);
 i++;
 wxArrayString sousImage;
-sousImage.Add(_T("1004x1002"));
-sousImage.Add(_T("512x512"));
-sousImage.Add(_T("256x256"));
-sousImage.Add(_T("128x128"));
-sousImage.Add(_T("custom"));
+wxSize *w=cam->LitTailleCapteur();
+bool *b=cam->LitTailleAutorisee();
+for (int i=0;i<NB_TAILLE_VIDEO;i++)
+	if (b[i])
+		{
+		wxString s;
+		s.Printf("%dX%d",w[i].GetY(),w[i].GetX());
+		sousImage.Add(s);
+		}
+
 wxChoice *t=new wxChoice(ongletGeometries,100,position[i],taille[i], sousImage);
 t->SetSelection(0);
 i++;
-new wxStaticText(ongletGeometries,101,legende[i],position[i], taille[i]);
+/*new wxStaticText(ongletGeometries,101,legende[i],position[i], taille[i]);
 i++;
 wxArrayString taillePixel;
 taillePixel.Add(_T("1x1"));
@@ -398,6 +598,7 @@ for (int j=4;j<=11;j++)
 
 
 listeFenetreOnglet->AddPage(ongletGeometries, _T("Geometry Settings"));
+*/
 ongletGeometries->Refresh();
 }	
 
@@ -499,19 +700,23 @@ if (!cam)
 return cam->ImagePrete();
 }
 
-char ControleCamera::Image(unsigned short *data,unsigned long &taille)
+char ControleCamera::Image()
 {
-if (!cam)
+if (!cam || !parent)
 	return 1;
-if (data)
-	return cam->Image(data,taille);	
-else
-	cam->TailleImage(taille);
-	return 2;
+cam->Acquisition();
+std::vector<cv::Point2f> repereIni,repere;
+EvtPointSuivis *x= new EvtPointSuivis(VAL_EVT_PTS_SUIVIS);
+x->ptId=repereIni;
+x->ptApp=repere;
+x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
+wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
 }
 
 void ControleCamera::OuvertureOngletEMCCD()
 {
+if (!cam)
+	return;
 /*if (strcmp(cam->NomCamera(),"Luca")!=0)
 	return; 
 */
@@ -566,7 +771,7 @@ if (cam)
 i++;
 int	gain=(minGain+maxGain)/2;
 //GetEMCCDGain(&gain);
-slEMGain=new wxSlider(ongletEMCCD,i,gain, minGain,maxGain ,position[i], taille[i],style);
+slEMGain=new wxSlider(ongletEMCCD,ID_GAIN_CAM,gain, minGain,maxGain ,position[i], taille[i],style);
 slEMGain->SetLabel(legende[i]);
 i++;
 if (nbMode==0)
@@ -583,6 +788,8 @@ ongletStatus->Refresh();
 
 void ControleCamera::ExpositionAutomatique(wxCommandEvent& c)
 {
+if (!cam)
+	return;
 if ( !((wxOsgApp*)osgApp)->VerifFenetre())
 	return;
 float tpsPause=cam->TempsExposition();

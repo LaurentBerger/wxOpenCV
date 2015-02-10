@@ -26,6 +26,7 @@ class DragShape;
 class GlisserImage;
 
 
+#define NBFILTRE 11
 
 // Constante pour usage de la souris
 #define SOURIS_STD 0
@@ -327,15 +328,15 @@ Operation			origineImage;
 //wxString			nomOperationPre;	 /*!< Pour image issue d'une opération : nom de l'opération */
 //Parametre			pOCVPre;		 /*!< Pour image issue d'une opération : parametre de l'opération précédente*/
 
-char				modeCamera;			/*!< 1 affichage de l'image capturée */
-char				imageTraitee;		/*!< 1 si traitement de l'image captureée est terminé  */	
-char				interdireAffichage;
-char				correctionTache;	/*!< 1 active correction tache */
-char				correctionFonction; /*!< 1 active correction fonction fond */
-char				correctionBiais;	/*!< 1 active correction du biais du CCD */
+bool				modeCamera;			/*!< 1 affichage de l'image capturée */
+bool				imageTraitee;		/*!< 1 si traitement de l'image captureée est terminé  */	
+bool				interdireAffichage;
+bool				correctionGain;		/*!< 1 active correction gain */
+bool				correctionTache;	/*!< 1 active correction tache */
+bool				correctionFonction; /*!< 1 active correction fonction fond */
+bool				correctionBiais;	/*!< 1 active correction du biais du CCD */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
 char				modeFiltre;			/*!< 0 image standard, image filtrée avec passe bas le + fort */
-char				modeMoyenne;		/*!< Moyenne temporelle active lors de l'acquisition */
 char				typeAcqImage;		/*!< 0 Standard, 1 Acquisition image noire, 2 Image des taches, 3 Image fonction fond */
 int					nbImageBiais;
 int					dImageBiais;
@@ -349,6 +350,21 @@ double				**poly;				/*!< Coefficient de la quadrique pour la correction du fond
 
 
 ImageInfoCV			*imAcq;				/*!< Dernière image calculée incluant les corrections */
+ImageInfoCV			*imGain;			/*!< Image (type CV_32F)du gain appliqué pour chaque pixel.*/
+#ifdef __OBSOLETE__
+ImageInfoCV			*nivBiais;			/*!< image du niveau zéro*/
+ImageInfoCV			*imAcqBrutFilMax;	/*!< résultat de la moyenne glissante avec filtrage maximum imAcqBrutFil = b(imAcqBrut1+imAcqBrut2)-a imAcqBrutFil */
+ImageInfoCV			*imAcqBrutFil;		/*!< résultat de la moyenne glissante imAcqBrutFil = b(imAcqBrut1+imAcqBrut2)-a imAcqBrutFil */
+ImageInfoCV			*imAcqBrut1;		/*!< Dernière image acquise à insérer dans la moyenne glissante*/
+ImageInfoCV			*imAcqBrut2;		/*!< Avant Dernière image acquise à insérer dans la moyenne glissante*/
+ImageInfoCV			*imAcq2;			/*!< Dernière image calculée incluant les corrections avec filtre maximum */
+ImageInfoCV			*imTache;			/*!< Image du gain à appliquer pour supprimer les tâches optiques indépendantes de l'échantillon */
+ImageInfoCV			*imRefTache;		/*!< Image des tâches optiques indépendantes de l'échantillon */
+ImageInfoCV			*imQuadrique;		/*!< Valeur de correction l'intensité trouvées à partir de la quadrique */
+static double aaButter[11];
+static double bbButter[11];
+
+#endif
 
 double				alphad,alpham;		/*!< Paramétres pour le filtre de deriche */
 double				seuilModuleHaut;	/*!< Seuil du module pour limiter les régions */
@@ -390,6 +406,7 @@ HorodatageSequence  *dateSeq;
 wxTimer				*horlogeSeq;
 BarreInfo			*barreEtat;
 CameraVirtuelle		*cam;
+long				tpsPreEvt;			/*!<Instant de l'événement précédent de l'acquisition de l'image */
 public :
 
 wxCriticalSection	travailCam; /*!< Utilisé pour bloquer la mémoire image ou communiquer avec le thread */
@@ -478,7 +495,7 @@ void OnThreadUpdateQueue(EvtPointSuivis &w);
 
 
 void OnOuvrir(wxString &);
-void OuvrirVideo();
+void OuvrirVideo(int);
 void InitImageFenetre();
 void OuvrirBiais(wxCommandEvent& event);
 void OuvrirBiais(char	*nomFichier);
@@ -548,6 +565,8 @@ Parametre *ParamOCV(){return &origineImage.pOCV;}
      */
 
 CameraVirtuelle* Cam(){return cam;};
+long DefTpspreEvt( long  x=-1){if (x!=-1) tpsPreEvt=x;return tpsPreEvt;};
+
 BarreInfo *BarreEtat(){return barreEtat;};
 void RepertoireDoc(wxString &s){repertoireDuDocument=s;};
 void NomDoc(wxString &s){nomDuDocument=s;};
@@ -563,7 +582,9 @@ wxRect *RectangleSelec(){return feuille->RectangleSelec();};
 wxRect *Rectangle(int i){if (i>=0 && i<NB_MAX_RECTANGLE) return feuille->Rectangle(i);return NULL;};
 int IndiceRectangleSelec(){return feuille->IndiceRectangleSelec();};
 int FacteurZoom(){return feuille->FacteurZoom();};
+//ImageInfoCV	*	ImAcq(void){if (modeFiltre) return imAcq2;return imAcq;};
 ImageInfoCV	*	ImAcq(void){return imAcq;};
+ImageInfoCV	*	ImGain(void){return imGain;};
 
 void DefinitionFondMicro();
 void DefinitionFondQuadrique(wxCommandEvent& event);
@@ -572,16 +593,18 @@ void OnMenuContext(wxContextMenuEvent& event);
 void ShowContextMenu(const wxPoint& pos);
 void OnTimer(wxTimerEvent& event);
 void DetectionUtilisateur(wxTimerEvent& event);
-char CorrectionBiais(){return correctionBiais;};
-char CorrectionFond(){return correctionTache;}; 
+bool CorrectionBiais(){return correctionBiais;};
+bool CorrectionFond(){return correctionTache;}; 
+bool CorrectionGain(){return correctionGain;}; 
+bool DefCorrectionGain(bool x){correctionGain =x;return correctionGain;}; 
 void ActiveCorrectionFonction(){correctionFonction=1;fondDejaDefini=1;};
 void ActiveCorrectionTache(){correctionTache=1;fondDejaDefini=1;};
 void ActiveCorrectionBiais(){correctionBiais=1;};
 void DesactiveCorrectionBiais(){correctionBiais=0;};
 void DesactiveCorrectionFonction(){correctionFonction=0;};
 void DesactiveCorrectionTache(){correctionTache=0;};
-void ActiveModeMoyenne(){modeMoyenne=1;};
-void DesactiveModeMoyenne(){modeMoyenne=0;};
+void ActiveModeMoyenne(){if (cam) cam->ActiveModeMoyenne();};
+void DesactiveModeMoyenne(){if (cam) cam->DesActiveModeMoyenne();};
 void ActiveTransparence(){modeTransparence=1;};
 void DesactiveTransparence(){modeTransparence=0;};
 int	 LireCoefTransparence(int i){if (i>=0 &&i<=3)	return cTransparence[i];return 0;};
@@ -753,6 +776,7 @@ void UpdateClock();
 void UpdateCurseur(int x,int y,int val);
 void UpdateCurseur(int x,int y,double val);
 void UpdateCurseur(int x,int y,int r,int g,int b);
+void UpdateCurseur(int x,int y,float r,float g,float b);
 void UpdateCurseur(int x,int y,std::complex<float> r,std::complex<float> g,std::complex<float> b);
 
     // event handlers

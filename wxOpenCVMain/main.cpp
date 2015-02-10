@@ -334,8 +334,6 @@ for (pp=listeFenetre.begin();pp!=listeFenetre.end();pp++)
 		pp->second->fZoom->Destroy();
 		pp->second->fStat->Destroy();
 		pp->second->fPrin->Destroy();
-	
-		
 		}
 for (int i = 0; i < listeFenetre.size(); i++)
 	delete listeFenetre[i];
@@ -354,14 +352,14 @@ delete imAcq;*/
 delete c;*/
 };
 
-void wxOsgApp::Video(wxCommandEvent &w)
+void wxOsgApp::Video(wxCommandEvent &w,int type)
 {
 static int nbFenVideo=0;
 wxString s("Video");
 s.Printf("Video %d",nbFenVideo++);
 FenetrePrincipale *f = new FenetrePrincipale(NULL, s,
     wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
-f->OuvrirVideo();
+f->OuvrirVideo(type);
 if (!f->Cam()->Connectee())
 	{
 	delete f;
@@ -1203,7 +1201,7 @@ if (!outils)
 	outils->OuvertureOngletMoyenne();
 	}*/
 if (ctrlCamera)
-	ctrlCamera->Show(true);
+	ctrlCamera->Show(false);
 //outils->Show(true);
 }
 
@@ -1264,6 +1262,8 @@ if (osgApp)
 		wxString s= "Control :" +GetTitle();
 		osgApp->CtrlCamera()->SetTitle(s);
 		osgApp->CtrlCamera()->DefCamera(cam);
+		osgApp->CtrlCamera()->Show(true);
+		osgApp->CtrlCamera()->DefParent(this);
 		}
 	}
 }
@@ -1378,6 +1378,7 @@ void FenetrePrincipale::DefCurseur(int r,int xc,int yc)
 
 void FenetrePrincipale::RecupDerniereConfig()
 {
+return;
 wxString	repUtilAppli(wxGetUserHome(wxGetUserName()));
 repUtilAppli=repUtilAppli+_T("\\TraiMisc");
 
@@ -1403,11 +1404,12 @@ if (osgApp->CtrlCamera())
 	osgApp->CtrlCamera()->DefModeGainEMCCD(modeGainEMCCD);
 	osgApp->CtrlCamera()->DefGainEMCCD(gainEMCCD);
 	}
+/*
 gg>>modeMoyenne;
 modeMoyenne=modeMoyenne-48;
-
+*/
 gg>>x>>y;
-wxLogVerbose(_T("Mean mode %d b0=%f b1=%f"),int(modeMoyenne),x,y);
+//wxLogVerbose(_T("Mean mode %d b0=%f b1=%f"),int(modeMoyenne),x,y);
 float dMin=3000;
 int pos=0;
 /*
@@ -1421,8 +1423,8 @@ for (int i=0;i<NBFILTRE;i++)
 		}
 	}
 */
-if (modeMoyenne)
-	indFiltreMoyenne=pos;
+//if (modeMoyenne)
+//	indFiltreMoyenne=pos;
 gg>>correctionBiais;
 correctionBiais=correctionBiais-48;
 gg>>sd;
@@ -1562,6 +1564,8 @@ origineImage.indOp1=-1;
 origineImage.indOp2=-1;
 origineImage.op1=NULL;
 origineImage.op2=NULL;
+tpsPreEvt=-1;
+imGain=NULL;
 
 
 for (int i=0;i<10;i++)
@@ -1594,7 +1598,6 @@ cTransparence[2]=0;
 cTransparence[3]=0;
 modeCamera=false;
 imageTraitee=true;
-modeMoyenne=false;
 interdireAffichage=false;
 typeAcqImage =0;
 indFiltreMoyenne=0;
@@ -1663,6 +1666,7 @@ cam =NULL;
 tabRGB=NULL;
 imAcq=NULL;
 imAffichee=NULL;
+imGain=NULL;
 
 imAcq = new ImageInfoCV(1002,1004,CV_16UC1);
 seuilNivBas=new double[imAcq->channels()];
@@ -1709,17 +1713,28 @@ for (int i=0;i<nbPixels;i++,ds++)
 Ouvrir un flux video
 */
 
-void FenetrePrincipale::OuvrirVideo()
+void FenetrePrincipale::OuvrirVideo(int type)
 {
 cam = new  CameraOpenCV();
 if (!cam->Connectee())
 	return;
 barreEtat->ActiveVideo();
-
+correctionGain=false;
 fenetreSauvee=1;
 //ImageInfoCV *imtmp=new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
 wxString userName=wxGetUserName();
-imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+
+imGain = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),CV_32FC3);
+if (type==8)
+	{
+	imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+	cam->DefTypeAcq(CV_8UC3);
+	}
+if (type==32)
+	{
+	imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),CV_32FC3);
+	cam->DefTypeAcq(CV_32FC3);
+	}
 feuille = new ZoneImage(this,wxSize(imAcq->cols/2, imAcq->rows/2));
 feuille->DefFenetrePrincipale(this);
 //feuille->SetClientSize(tailleUtile);
@@ -2076,6 +2091,7 @@ void FenetrePrincipale::MAJZoom(wxCommandEvent& event)
 {
 if(event.GetId()>=ZOOM8SUR1)
 	fenZoom->Show(true);
+tpsPreEvt=-1;
 feuille->FacteurZoom(event.GetId()-ZOOM1SUR1);
 //AdjustHV(wxHORIZONTAL);
 //AdjustHV(wxVERTICAL);
@@ -2198,6 +2214,7 @@ detectionUtilisateur->Stop();delete detectionUtilisateur;
 delete []seuilNivBas;
 delete []coeffCanal;
 delete imAcq;
+delete imGain;
 
 
 delete imAffichee;
@@ -2635,14 +2652,14 @@ if (s.length())
 //	imAcq2->DefDescription((char*)s.char_str());
 //	imAcqBrut2->DefDescription((char*)s.char_str());
 	}
-if (modeMoyenne || correctionBiais || correctionFonction || correctionTache)
+if (cam->ModeMoyenne() || correctionBiais || correctionFonction || correctionTache)
 	{
 	nom=nomVolume+nomImage.GetVolumeSeparator()+repImageCorrigee+nomImage.GetPathSeparator()+nomFic+_T("cor.")+extension;
 	strcpy(t[0],nom.char_str());
 	imAcq->DoEnregistrer(t);
 			wxLogVerbose(_T("Image saved %s "),t[0]);
 	}
-if (modeMoyenne || correctionBiais || correctionFonction || correctionTache)
+if (cam->ModeMoyenne() || correctionBiais || correctionFonction || correctionTache)
 	{
 	nom=nomVolume+nomImage.GetVolumeSeparator()+repImageFiltre+nomImage.GetPathSeparator()+nomFic+_T("corFilmax.")+extension;
 	strcpy(t[0],nom.char_str());

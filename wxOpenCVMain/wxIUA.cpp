@@ -60,7 +60,8 @@ enum
 	ID_FUSIONPLAN,
 	ID_SEPARATIONPLAN,
 	ID_FIN_OP, // Fin des opérateurs sur les images
-	ID_VIDEO,
+	ID_VIDEO_8_UC3,
+	ID_VIDEO_32_FC3,
 
 };
 
@@ -76,7 +77,8 @@ BEGIN_EVENT_TABLE(InterfaceAvance, wxFrame)
     EVT_MENU(wxID_OPEN, InterfaceAvance::Ouvrir)
     EVT_MENU_RANGE(ID_ADDITION,ID_FIN_OP, InterfaceAvance::SelectOperation)
 
-	EVT_MENU(ID_VIDEO, InterfaceAvance::Video)
+	EVT_MENU(ID_VIDEO_8_UC3, InterfaceAvance::Video)
+	EVT_MENU(ID_VIDEO_32_FC3, InterfaceAvance::Video)
 
 
     EVT_MENU(InterfaceAvance::ID_CreateTree, InterfaceAvance::OnCreateTree)
@@ -1073,7 +1075,8 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 											 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
 		tb->SetToolBitmapSize(wxSize(48,48));
-		tb->AddTool(ID_VIDEO, wxT("Test"), wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE));
+		tb->AddTool(ID_VIDEO_8_UC3, wxT("Test"), wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE));
+		tb->AddTool(ID_VIDEO_32_FC3, wxT("Test"), wxArtProvider::GetBitmap(wxART_HARDDISK));
 		tb->AddSeparator();
 		tb->Realize();
 		m_mgr.AddPane(tb, wxAuiPaneInfo().
@@ -1231,7 +1234,10 @@ void InterfaceAvance::Ouvrir(wxCommandEvent& event)
 
 void InterfaceAvance::Video(wxCommandEvent& event)
 {
-	((wxOsgApp*)osgApp)->Video(event);
+if (event.GetId()==ID_VIDEO_32_FC3)
+	((wxOsgApp*)osgApp)->Video(event,32);
+if (event.GetId()==ID_VIDEO_8_UC3)
+	((wxOsgApp*)osgApp)->Video(event,8);
 
 }
 

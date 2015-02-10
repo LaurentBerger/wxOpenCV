@@ -34,3 +34,7 @@ commande git
 git commit -F commit.txt
 git clone ssh://git@git.renater.fr:2222/wxopencv.git
 
+Creation des fichiers de traduction ( gettext)
+
+dir /b *.cpp >liste.txt
+xgettext --from-code=cp1252 -a --no-location -s --no-wrap --join-existing --escape main.cpp -o fr/main.po

@@ -6,6 +6,9 @@
 #include "opencv2/opencv.hpp"
 #include <wx/wx.h>
 
+
+#define NB_COEFF_FILTRE 11
+#define NB_TAILLE_VIDEO 20
 /*! \class EvtPointSuivis
    * \brief la classe définit un les caractéristiques d'un évènement
    *
@@ -57,14 +60,23 @@ unsigned int	drapeauErreur; /*!< activation d'erreur*/
 std::string		chaineErreur; /*!< Message d'erreur*/
 
 char			nomCamera[256];/*!<  IDENTIFICATEUR CAMERA*/
+int				typeAcq;		/*!< Type de l'acquisition CV_UC3 CV_32_FC3 */
 int				nbColonnePhys; /*!< NOMBRE DE colonne PHYSIQUE DU DETECTEUR*/
 
-int nbLignePhys;/*!<NOMBRE DE ligne PHYSIQUE DU DETECTEUR*/
+int				nbLignePhys;/*!<NOMBRE DE ligne PHYSIQUE DU DETECTEUR*/
+
+double		aaButter[NB_COEFF_FILTRE],bbButter[NB_COEFF_FILTRE];
+int			indFiltreMoyenne;	/*!< Indice des coefficients du filtre Butterworth*/ 
+bool		modeMoyenne;		/*!< Moyenne temporelle active lors de l'acquisition */
+long		tpsInactif;
+wxSize		tailleCapteur[NB_TAILLE_VIDEO];
+bool		tailleAutorisee[NB_TAILLE_VIDEO];		
 
 public :
 void				*parent;		/*!< Pointeur sur la fenêtre principale*/
 wxBitmap			m_bitmap;		/*!< bitmap inutilisé*/
 wxImage				*image;			/*!< Image contenant la vidéo*/
+
 
 
 public :
@@ -73,6 +85,8 @@ CameraVirtuelle(void): wxThread(wxTHREAD_DETACHED){testDriver=0;drapeauErreur=0;
 void AjouteMsgErreur(char *msg){chaineErreur+=msg;drapeauErreur+=1;};
 void AjouteMsgErreur(char *msg,unsigned int x){chaineErreur+=msg;drapeauErreur+=1;};
 
+virtual wxSize* LitTailleCapteur(){return tailleCapteur;};
+virtual bool*	LitTailleAutorisee(){return tailleAutorisee;};
 virtual bool Connectee(){return 0;};
 virtual	char TestDriver(void){return testDriver;};
 virtual int Acquisition(void){return 0;};
@@ -83,6 +97,8 @@ virtual int NbColonne(){ return 0;};
 virtual int NbLigne(){return 0;};
 virtual int NbCanaux(){return 0;};
 virtual double TempsExposition (){return -1.0;};
+virtual void DefTypeAcq(int x){typeAcq=x;};
+virtual long DefTpsInactif( long  x=-1){if (x!=-1) tpsInactif=x;return tpsInactif;};
 virtual void DefCoinGauche(int){return;};
 virtual void DefCoinDroit(int){return;};
 virtual void DefCoinHaut(int){return;};
@@ -109,6 +125,12 @@ virtual char Image(unsigned short *data,unsigned long &taille){taille=0;return 1
 virtual char TailleImage(unsigned long &taille){taille=0;return 1;};;
 virtual	char IsEMCCD(){return false;};
 virtual	char Erreur(){return drapeauErreur;};
+
+virtual void ActiveModeMoyenne(){modeMoyenne=true;};
+virtual void DesActiveModeMoyenne(){modeMoyenne=false;};
+virtual bool ModeMoyenne(){return modeMoyenne;};
+virtual int IndFiltreMoyenne(){return indFiltreMoyenne;};
+virtual void DefIndFiltreMoyenne(int x){indFiltreMoyenne=x;};
 };
 
 #endif
