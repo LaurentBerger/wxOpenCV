@@ -390,6 +390,52 @@ case CV_32F :
 				}
 			}
 	break;
+case CV_32S :
+	for (int i=0;i<im->rows;i++)		
+		{
+		long *d=(long*)im->ptr(i);
+		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
+		float *g=NULL;
+		if (correctionGain && imGain)
+			g=(float*)imGain->ptr(i);
+		for (int j=0;j<im->cols;j++,debLigne+=3)
+			{
+			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
+				{
+				double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
+				if (correctionGain)
+					v=*g++*v;
+				if (v<0)
+					v =0;
+				if (v>=nbCouleurPalette)
+					v=nbCouleurPalette-1;
+				unsigned short val=(unsigned short)v;
+				if (!planActif[indCanal])
+					val=0;
+				switch(indCanal){
+				case 0:
+					debLigne[2] = pCouleur[val].Blue(); 
+					if (nbCanaux==1)
+						{
+						debLigne[1] = pCouleur[val].Green();
+						debLigne[0] = pCouleur[val].Red();
+						}
+					break;
+				case 1:
+					debLigne[1] = pCouleur[val].Green(); 
+					if (nbCanaux==2)
+						{
+						debLigne[0] = pCouleur[val].Red();
+						}
+					break;
+				case 2:
+					debLigne[0] = pCouleur[val].Red(); 
+					break;
+					}
+				}
+			}
+		}
+	break;
 case CV_16U :
 	for (int i=0;i<im->rows;i++)		
 		{

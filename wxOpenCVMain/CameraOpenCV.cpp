@@ -36,8 +36,8 @@ tailleCapteur[12]=wxSize(864,480);tailleCapteur[13]=wxSize(960,544);tailleCapteu
 tailleCapteur[15]=wxSize(1024,576);tailleCapteur[16]=wxSize(1184,656);tailleCapteur[17]=wxSize(1280,720);
 tailleCapteur[16]=wxSize(1280,960);tailleCapteur[17]=wxSize(-1,-1);tailleCapteur[18]=wxSize(-1,-1);
 tailleCapteur[19]=wxSize(-1,-1);
-for (int i=15;i<NB_TAILLE_VIDEO;i++)
-	tailleAutorisee[false];
+/*for (int i=15;i<NB_TAILLE_VIDEO;i++)
+	tailleAutorisee[false];*/
 modeMoyenne=false;
 indFiltreMoyenne=1;
 tpsInactif =30;
@@ -116,11 +116,11 @@ if(captureVideo->isOpened())  // check if we succeeded
 	cv::Mat frame;
 	float x,y;
 	bool status;
-	for (int i=15;i<NB_TAILLE_VIDEO;i++)
+/*	for (int i=15;i<NB_TAILLE_VIDEO;i++)
 		{
 		status=captureVideo->set(cv::CAP_PROP_FRAME_WIDTH,tailleCapteur[i].GetX());
 		tailleAutorisee[i]=captureVideo->set(cv::CAP_PROP_FRAME_HEIGHT,tailleCapteur[i].GetY());
-		}
+		}*/
 	(*captureVideo) >> frame; // get a new frame from camera
 	nbColonnePhys = frame.cols;
 	nbLignePhys = frame.rows;
@@ -524,23 +524,25 @@ if (cam->IsRunning() || cam->IsPaused())
 	{
 	long x=wxGetUTCTimeMillis().GetLo();
 //	if (x<10)
+	{
+	wxCriticalSectionLocker enter(travailCam);
+
 	delete feuille->BitmapAffichee();
 	feuille->BitmapAffichee(NULL);
 	MAJNouvelleImage();
-	x=wxGetUTCTimeMillis().GetLo()-x;
-	if (tpsPreEvt==-1)
+	}
+	if (tpsPreEvt>=-1)
 		{
-		tpsPreEvt=w.GetTimestamp();
+		tpsPreEvt++;
+		if (tpsPreEvt==10)
+			{
+			x=wxGetUTCTimeMillis().GetLo()-x;
+			long t=cam->DefTpsInactif();
+			t= max(x,t);
+			wxCriticalSectionLocker enter(travailCam);
+			cam->DefTpsInactif(x+10);
+			tpsPreEvt=-2;
 		}
-	else if ( tpsPreEvt!=-2)
-		{
-		long t=cam->DefTpsInactif();
-		t= w.GetTimestamp()-tpsPreEvt-t-x;
-		if(t<=0)
-			t=60;
-		t=60;
-		cam->DefTpsInactif((max((int)x,25)*110)/100);
-		tpsPreEvt=-2;
 		}
 	}
 return;

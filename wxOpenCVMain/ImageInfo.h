@@ -143,6 +143,8 @@ cv::Point	*locMin;	/*< Position du miminmu pour chaque plan */
 cv::Point	*locMax;	/*< Position du miminmu pour chaque plan */
 cv::Mat		**statComposante; /*< Statistique des composantes de chaque plan http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
 cv::Mat		**centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
+std::vector<std::vector<cv::Point> > *contours; /*< Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
+std::vector<cv::Vec4i> *arbreContour; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 
 
 public : 
@@ -231,6 +233,8 @@ char  	LitConverCplxEnt(void);
 
 cv::Mat	**StatComposante(){return statComposante;};
 cv::Mat	**CentreGComposante(){return centreGComposante;};
+std::vector<std::vector<cv::Point> > *PtContours(){return contours;};
+std::vector<cv::Vec4i> *ArboContour(){return arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 
 char* 	LitNomImage(void);
 char* 	LitNatureImage(void);

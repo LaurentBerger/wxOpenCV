@@ -51,6 +51,7 @@ locMin = NULL;			/*< Position du miminmu pour chaque plan */
 locMax = NULL;			/*< Position du miminmu pour chaque plan */
 statComposante = NULL; 
 centreGComposante = NULL; 
+contours=NULL;
 #ifdef _INFOTEXTE__
 nbChampGonfle=0;
 gonfle = NULL;
@@ -152,6 +153,16 @@ delete []minIm;			/*< Minimimum pour chaque plan de l'image */
 delete[]maxIm;			/*< Maximimum pour chaque plan de l'image */
 delete[]locMin ;	/*< Position du miminmu pour chaque plan */
 delete[]locMax;	/*< Position du miminmu pour chaque plan */
+delete[]contours;
+for (int i=0;i<channels();i++)
+	{
+	if (statComposante)
+		delete statComposante[i]; 
+	if (centreGComposante)
+		delete centreGComposante[i]; 
+	}
+delete []statComposante; 
+delete []centreGComposante; 
 
 }
 

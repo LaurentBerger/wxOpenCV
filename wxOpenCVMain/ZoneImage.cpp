@@ -75,6 +75,7 @@ void ZoneImage::OnPaint(wxPaintEvent &evt)
     PrepareDC(dc);
 
 	f->DrawWindow (dc);
+	f->TracerContour(dc);
 /*        dc.SetPen( *wxRED_PEN );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
     dc.DrawRectangle( 0, 0, 200, 200 );*/
@@ -468,7 +469,6 @@ return wxRect(p1Img,p2Img);
 }
 
 
-
 wxMenu *ZoneImage::CreateMenuPalette(wxString *title)
 {
     wxMenu *menu = new wxMenu;
@@ -538,8 +538,10 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.AppendCheckItem(Menu_Rectangle, _T("Stat Rectangle"));
 	menu.AppendCheckItem(Menu_Coupe, _T("Section"));
 	menu.AppendCheckItem(Menu_FilMax, _T("Filtrage Max"));
+	if (f->ImAcq()->PtContours())
+		menu.AppendCheckItem(Menu_Contour, _T("Draw Contour "));
 	if (osgApp->Fenetre(f->IdFenetreOp1pre()))
-		menu.AppendCheckItem(Menu_ParAlg, _T("Parametrage Algo."));
+		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
 	if(imAcq->depth()==CV_32F && imAcq->channels()%2==0)
 		{
 		menu.AppendSeparator();
@@ -676,3 +678,45 @@ RefreshRect (r, false);
 Update();
 }
 
+void FenetrePrincipale::TracerContour(wxCommandEvent& event)
+{
+tracerContour=!tracerContour;
+if( tracerContour)
+	{
+	wxClientDC hdc(feuille);
+	feuille->DoPrepareDC(hdc);
+	TracerContour(hdc);
+	}
+}
+
+void FenetrePrincipale::TracerContour(wxDC &hdc)
+{
+if (!tracerContour || !imAcq)
+	return;
+if (!imAcq->PtContours())
+	{
+	tracerContour=false;
+	return;
+	}
+std::vector<std::vector<cv::Point> > *ptCtr=imAcq->PtContours();
+std::vector<cv::Vec4i> *arbre=imAcq->ArboContour();
+wxPen crayon[3]={*wxBLACK_PEN,*wxBLACK_PEN,*wxBLACK_PEN};
+for (int i=0;i<imAcq->channels()&& i<3;i++)
+	{
+	crayon[i].SetWidth(3);
+	hdc.SetPen(crayon[i]);
+	int nbContour=ptCtr[i].size();
+	for (int j=0;j<nbContour;j++)
+		for (int k=1;k<ptCtr[i][j].size();k++)
+		{
+		;
+		
+		wxPoint p1(RepereImageEcran(wxPoint(ptCtr[i][j][k-1].x,ptCtr[i][j][k-1].y)));
+		wxPoint p2(RepereImageEcran(wxPoint(ptCtr[i][j][k].x,ptCtr[i][j][k].y)));
+
+		hdc.DrawLine(p1,p2);
+		}
+	}
+
+
+}

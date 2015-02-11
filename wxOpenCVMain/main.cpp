@@ -204,6 +204,7 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
 	EVT_MENU(Menu_Coupe,  FenetrePrincipale::MAJCoupe)
 	EVT_MENU(Menu_FilMax,  FenetrePrincipale::MAJFiltreMax)
 	EVT_MENU(Menu_ParAlg,  FenetrePrincipale::ParamAlgo)
+	EVT_MENU(Menu_Contour,  FenetrePrincipale::TracerContour)
 	EVT_MENU(MENU_OP1,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP2,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_EXEC_OP,  FenetrePrincipale::PrepOperation)
@@ -403,27 +404,14 @@ f->MAJNouvelleImage();
 f->RecupDerniereConfig();
 nbFenetre++;
 f->InitIHM();
-wxImage image;
-
-for (int i = 1; i < 4; i++)
-    {
-    /* For some reason under wxX11, the 2nd LoadFile in this loop fails, with
-       a BadMatch inside CreateFromImage (inside ConvertToBitmap). This happens even if you copy
-       the first file over the second file. */
-        if (image.LoadFile(wxString::Format("shape0%d.png",  i), wxBITMAP_TYPE_PNG))
-        {
-            DragShape* newShape = new DragShape(wxBitmap(image));
-            newShape->SetPosition(wxPoint(i*50, i*50));
-
-            if (i == 2)
-                newShape->SetDragMethod(SHAPE_DRAG_TEXT);
-            else if (i == 3)
-                newShape->SetDragMethod(SHAPE_DRAG_ICON);
-            else
-                newShape->SetDragMethod(SHAPE_DRAG_BITMAP);
-             f->GetDisplayList().Append(newShape);
-       }
-    }
+	if (CtrlCamera())
+		{
+		wxString s= "Control :" +f->GetTitle();
+		CtrlCamera()->SetTitle(s);
+		CtrlCamera()->DefCamera(f->Cam());
+		CtrlCamera()->Show(true);
+		CtrlCamera()->DefParent(f);
+		}
 
 f->ModeCamera(w);
 }
@@ -955,7 +943,10 @@ void wxOsgApp::Erosion(wxCommandEvent &w)
 
 // `Main program' equivalent, creating windows and returning main app frame
 bool wxOsgApp::OnInit()
-{
+{bool b=false;
+//b=wxUnsetEnv("PLPLOT_HOME");
+//b=wxUnsetEnv("PLPLOT_LIB");
+//b=wxUnsetEnv("PLPLOT_DRV_DIR");
 	osg::Image *im=osgDB::readImageFile("F:\\Lib\\OpenSceneGraph-Data-3.0.0\\Images\\reflect.rgb");
 
 	quitter=false;
@@ -1536,6 +1527,7 @@ void FenetrePrincipale::BasculeZoom()
 
 void FenetrePrincipale::BasculeStat()
 {
+	tpsPreEvt=-1;
 	if (statActif)
 		statActif=false;
 	else
@@ -1566,7 +1558,8 @@ origineImage.op1=NULL;
 origineImage.op2=NULL;
 tpsPreEvt=-1;
 imGain=NULL;
-
+correctionGain=false;
+tracerContour=false;
 
 for (int i=0;i<10;i++)
 	planActif[i]=true;
@@ -2226,6 +2219,19 @@ delete []pPerso;
 delete []pPersoInv;
 // est déjà fait par delete imAffichee delete tabRGB;
 delete []tabRGBTransparence;
+
+seuilNivBas=NULL;
+coeffCanal=NULL;
+imAcq=NULL;
+imGain=NULL;
+imAffichee=NULL;
+pLineaire=NULL;
+pAleatoire=NULL;
+pJet=NULL;
+pRainbow=NULL;
+pPerso=NULL;
+pPersoInv=NULL;
+tabRGBTransparence=NULL;
 
 wxFrame::OnCloseWindow(event);
 }

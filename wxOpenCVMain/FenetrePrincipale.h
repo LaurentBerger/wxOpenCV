@@ -335,6 +335,7 @@ bool				correctionGain;		/*!< 1 active correction gain */
 bool				correctionTache;	/*!< 1 active correction tache */
 bool				correctionFonction; /*!< 1 active correction fonction fond */
 bool				correctionBiais;	/*!< 1 active correction du biais du CCD */
+bool				tracerContour;		/*!< 1 tracer des contours des régions */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
 char				modeFiltre;			/*!< 0 image standard, image filtrée avec passe bas le + fort */
 char				typeAcqImage;		/*!< 0 Standard, 1 Acquisition image noire, 2 Image des taches, 3 Image fonction fond */
@@ -515,6 +516,16 @@ void ModeCamera(wxCommandEvent& event);
     /*!
      *  \brief ModeCamera
      *  bascule pour activer ou désactiver la caméra
+     */
+void TracerContour(wxCommandEvent& event);
+    /*!
+     *  \brief ModeCamera
+     *  tracer des contours d'une image
+     */
+void TracerContour(wxDC &hdc);
+    /*!
+     *  \brief ModeCamera
+     *  tracer des contours d'une image
      */
 void DoPauseThread();
     /*!
@@ -854,6 +865,7 @@ enum
     Menu_Coupe,
     Menu_FilMax,
 	Menu_ParAlg,
+	Menu_Contour,
     Menu_Popup_Palette,
     Menu_Popup_Zoom,
     ARCENCIEL_ = 2684,

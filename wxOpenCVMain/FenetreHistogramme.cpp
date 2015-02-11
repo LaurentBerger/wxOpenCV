@@ -317,7 +317,6 @@ etendu[1]=maxHisto[0];
 // 255 (pure spectrum color)
 const float* listeEtendu[] = { etendu }; 
 vector<Mat> planCouleur;
-wxCriticalSectionLocker enter(((FenetrePrincipale*)fenMere)->travailCam);
 
 try
 	{
@@ -407,7 +406,7 @@ catch(cv::Exception& e)
 	{
 	wxString s(e.msg);
 
-	wxMessageBox("An error occured in calculation histogram  :"+s);
+	wxMessageBox(_("An error occured in calculation histogram  :")+s);
 	}
 }
 
