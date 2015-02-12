@@ -563,7 +563,7 @@ if (im1->channels()==1)
 		im->statComposante = new cv::Mat*[im1->channels()]; 
 		im->centreGComposante = new cv::Mat*[im1->channels()]; 
 		im->contours = new std::vector<std::vector<cv::Point> >[im1->channels()]; 
-		arbreContour = new std::vector<cv::Vec4i> [im1->channels()]; 
+		im->arbreContour = new std::vector<cv::Vec4i> [im1->channels()]; 
 
 		for (int i=0;i<im1->channels();i++)
 			{
@@ -573,7 +573,9 @@ if (im1->channels()==1)
 		}
 
 	connectedComponentsWithStats(*im1, *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV.intParam["connectivity"].valeur, CV_32S);
-	findContours(*im, *(im->contours),*arbreContour, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
+	ImageInfoCV	imCtr ;
+	im->copyTo(imCtr);
+	findContours(imCtr, *(im->contours),*im->arbreContour, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
 	}
 else
 	{
@@ -584,7 +586,7 @@ else
 		im->statComposante = new cv::Mat*[im1->channels()]; 
 		im->centreGComposante = new cv::Mat*[im1->channels()]; 
 		im->contours = new std::vector<std::vector<cv::Point> >[im1->channels()]; 
-		arbreContour = new std::vector<cv::Vec4i> [im1->channels()]; 
+		im->arbreContour = new std::vector<cv::Vec4i> [im1->channels()]; 
 		for (int i=0;i<im1->channels();i++)
 			{
 			im->statComposante[i] = new cv::Mat; 
@@ -596,10 +598,24 @@ else
 	for (int i=0;i<im1->channels();i++)
 		{
 		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV.intParam["connectivity"].valeur, CV_32S);
-		findContours(d[i], im->contours[i],arbreContour[i], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
+		ImageInfoCV	imCtr ;
+		d[i].copyTo(imCtr);
+		findContours(imCtr, im->contours[i],im->arbreContour[i], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
 		}
 	cv::merge((const cv::Mat *)d, im1->channels(), *im);
 	delete []d;
 	}
+return im;
+}
+
+
+ImageInfoCV *ImageInfoCV::PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+
+{
+ImageInfoCV	*im =new ImageInfoCV;
+if (!im2)
+	return im;
+im2->convertTo(*im, CV_32S);
+watershed(*im1, *im);
 return im;
 }

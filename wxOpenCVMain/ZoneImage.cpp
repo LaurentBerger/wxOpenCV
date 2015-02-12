@@ -146,6 +146,14 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 		xx=imAcq->at<cv::Vec3d>(point.y,point.x);;
 		barreEtat->UpdateCurseur(point.x,point.y,xx[2],xx[1],xx[0]);
 		break;
+	case CV_32SC1:
+		val = imAcq->at<int>(point.y,point.x);
+		barreEtat->UpdateCurseur(point.x,point.y,val);
+		break;
+	case CV_32SC3:
+		x=imAcq->at<cv::Vec3i>(point.y,point.x);;
+		barreEtat->UpdateCurseur(point.x,point.y,x[2],x[1],x[0]);
+		break;
 	case CV_8UC1:
 		val = imAcq->at<unsigned char>(point.y,point.x);
 		barreEtat->UpdateCurseur(point.x,point.y,val);
@@ -354,7 +362,10 @@ if (ModeCoupe())
 
 void ZoneImage::GestionCurseurSouris(wxMouseEvent &event)
 {
-osgApp->DefOperande1(f->ImAcq(),f->IdFenetre());
+if (osgApp->Op1()==NULL)
+	osgApp->DefOperande1(f->ImAcq(),f->IdFenetre());
+else if (osgApp->Op2()==NULL)
+	osgApp->DefOperande2(f->ImAcq(),f->IdFenetre());
 }
 
 
@@ -563,19 +574,37 @@ else
 	{
 	if (osgApp->OpBinaire())
 		{
-		menu.AppendCheckItem(MENU_OP1, "Image as A");
-		menu.AppendCheckItem(MENU_OP2, "Image as B");
+		if (osgApp->Op1()!=NULL)
+			{
+			wxString s=osgApp->Fenetre(osgApp->IndOp1())->GetTitle();
+			menu.AppendCheckItem(MENU_OP1, _("First Op.")+s);
+			}
+		else
+			menu.AppendCheckItem(MENU_OP1, "Image as A");
+		if (osgApp->Op2()!=NULL)
+			{
+			wxString s=osgApp->Fenetre(osgApp->IndOp2())->GetTitle();
+			menu.AppendCheckItem(MENU_OP2, _("Second Op.")+s);
+			}
+		else
+			menu.AppendCheckItem(MENU_OP2, "Image as B");
 		}
 	else if (osgApp->OpUnaire())
 		{
-		menu.AppendCheckItem(MENU_OP1, "Image as A");
+		if (osgApp->Op1()!=NULL)
+			{
+			wxString s=osgApp->Fenetre(osgApp->IndOp1())->GetTitle();
+			menu.AppendCheckItem(MENU_OP1, _("First Op.")+s);
+			}
+		else
+			menu.AppendCheckItem(MENU_OP1, "Image as A");
 		}
 	menu.AppendSeparator();
 	menu.AppendCheckItem(MENU_EXEC_OP, "Execute "+*osgApp->NomOperation());
 	menu.Append(RESET_OP,  "Operation canceled");
 	if (osgApp->Op1()==f->ImAcq())
 		menu.Check(MENU_OP1, true);
-	if (osgApp->Op2()==f->ImAcq())
+	if (osgApp->OpBinaire() && osgApp->Op2()==f->ImAcq())
 		menu.Check(MENU_OP2, true);
 
 	}

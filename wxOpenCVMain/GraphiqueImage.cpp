@@ -577,9 +577,13 @@ case CV_8U :
 
 if (imAffichee==NULL)
 	{
-	imAffichee=new wxImage((int)im->cols,(int)im->rows);
-	delete imAffichee;
-	imAffichee=new wxImage((int)im->cols,(int)im->rows);
+
+//	imAffichee=new wxImage((int)im->cols,(int)im->rows);
+//	delete imAffichee;
+	if (taille==0)
+		imAffichee=new wxImage(1,1);
+	else
+		imAffichee=new wxImage((int)im->cols,(int)im->rows);
 	imAffichee->SetMask(0);
 	imAffichee->SetData(tabRGB);
 	}

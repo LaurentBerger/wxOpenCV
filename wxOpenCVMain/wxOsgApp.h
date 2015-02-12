@@ -104,6 +104,8 @@ bool OpUnaire(){return opUnaireSelec!=NULL || opSurjecUnaire!=NULL;} /*!< Vrai s
 bool OpBinaire(){return opBinaireSelec!=NULL;} /*!< Vrai si opération binaire sélectionnée */
 ImageInfoCV *Op1(){return op1;};
 ImageInfoCV *Op2(){return op2;};
+int IndOp1(){return indOp1Fenetre;};
+int IndOp2(){return indOp2Fenetre;};
 void AnnuleOp();
 ImageInfoCV **ExecuterOperation(Parametre * = NULL);
     /*!

@@ -506,6 +506,14 @@ pOCV.intParam.clear();
 pOCV.sizeParam.clear();
 pOCV.pointParam.clear();
 
+if (s.Cmp("PartageEaux")==0)
+	{
+	pOCV.nomOperation=s;
+	opBinaireSelec = &ImageInfoCV::PartageEaux;
+	nomOperation = s;
+	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#watershed";
+	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+	}
 if (s.Cmp("SeparationPlan")==0)
 	{
 	pOCV.nomOperation=s;
@@ -610,6 +618,14 @@ if (s.Cmp("ChapeauBas")==0)
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	}
 if (s.Cmp("GradMorph")==0)
+	{
+	pOCV.nomOperation=s;
+	opBinaireSelec = &ImageInfoCV::GradMorph;
+	nomOperation = s;
+	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
+	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
+	}
+if (s.Cmp("Scharr")==0)
 	{
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::GradMorph;

@@ -54,7 +54,7 @@ enum
 	ID_ADATHRESHOLD,
 	ID_CONTOUR,
 	ID_COMPCONNEXE,
-	ID_STATCONNEXE,
+	ID_PARTAGE_EAUX,
 	ID_FFT,
 	ID_IFFT,
 	ID_FUSIONPLAN,
@@ -1120,7 +1120,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb->AddTool(ID_ADATHRESHOLD, _(""), toolBarBitmaps[Tool_seuillageada], _("Adaptive Thereshold"));
 		tb->AddTool(ID_CONTOUR, _("Contour"), toolBarBitmaps[Tool_contour], _("Contour"));
 		tb->AddTool(ID_COMPCONNEXE, _(""), toolBarBitmaps[Tool_cmpconnexe], _("Connected component"));
-		tb->AddTool(ID_STATCONNEXE, _(""), toolBarBitmaps[Tool_statconnexe], _("Statistic component"));
+		tb->AddTool(ID_PARTAGE_EAUX, _(""), toolBarBitmaps[Tool_statconnexe], _("Watershed"));
 		//tb->SetCustomOverflowItems(prepend_items, append_items);
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
@@ -1367,6 +1367,7 @@ case ID_GRADMORPH:
 	}
 	break;
 case ID_GRADIENT:
+	s="Scharr";
 	break;
 case ID_LAPLACIEN:
 	s="Laplacien";
@@ -1382,6 +1383,9 @@ case ID_ADATHRESHOLD:
 	break;
 case ID_CONTOUR:
 	s="Contour";
+	break;
+case ID_PARTAGE_EAUX:
+	s="PartageEaux";
 	break;
 case ID_COMPCONNEXE:
 	s="ComposanteConnexe";

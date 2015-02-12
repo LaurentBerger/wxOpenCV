@@ -109,6 +109,8 @@ Tableur *excel;
 void *fenMere;
 void *osgApp;
 double **dr;
+int		nbPlan;
+int		nbVal;
 PLFLT *x;
 PLFLT *y;
 

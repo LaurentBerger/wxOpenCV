@@ -89,7 +89,6 @@ int x=0;
 
 void FenetrePrincipale::GestionCurseurSouris(wxMouseEvent &event)
 {
-osgApp->DefOperande1(ImAcq(),idFenetre);
 }
 
 

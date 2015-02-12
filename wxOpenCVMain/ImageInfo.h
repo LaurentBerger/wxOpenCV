@@ -301,6 +301,7 @@ ImageInfoCV 	*ChapeauHaut(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NUL
 ImageInfoCV 	*ChapeauBas(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
 ImageInfoCV 	*GradMorph(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
 ImageInfoCV 	*Convolution(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
+ImageInfoCV		*PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
 ImageInfoCV 	*Laplacien(ImageInfoCV	*,Parametre &pOCV);
 ImageInfoCV 	*Scharr(ImageInfoCV	*im1,Parametre &pOCV);
 ImageInfoCV 	*Canny(ImageInfoCV	*,Parametre &paramOCV);

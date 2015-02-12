@@ -85,21 +85,21 @@ if (((wxOsgApp*)osgApp)->Graphique(id)->ModeImage()!=1)
 else
 	return;
 long nbLig=imAcq->rows,nbCol=imAcq->cols;
-int nbVal=imAcq->rows+imAcq->cols;
+nbVal=imAcq->rows+imAcq->cols;
 const size_t np=16384;
+nbPlan=imAcq->LitNbPlan();
 if (dr==NULL)
 	{
-	int nb=imAcq->LitNbPlan();
-	dr= new double *[5*nb];
-	for (int i=0;i<5*nb;i++)
+	dr= new double *[5*nbPlan];
+	for (int i=0;i<5*nbPlan;i++)
 		dr[i]=new double[nbVal];
 	x=new PLFLT[np];
 	y=new PLFLT[np];
 	}
 long ligDeb=0,colDeb=0;
-	for (int i=0;i<5*imAcq->LitNbPlan();i++)
-		for (int j=0;j<nbVal;j++)
-			dr[i][j]=0;
+for (int i=0;i<5*nbPlan;i++)
+	for (int j=0;j<nbVal;j++)
+		dr[i][j]=0;
 
 if (((wxOsgApp*)osgApp)->Graphique()->ModeRectangle())
 	{
@@ -151,15 +151,8 @@ if (!fenMere)
 	return;
 if (!dr)
 	return;
-int id=((FenetrePrincipale *)fenMere)->IdFenetre();
 
-ImageInfoCV			*imAcq;
-if (((wxOsgApp*)osgApp)->Graphique(id)->ModeImage()!=1)
-	imAcq =((wxOsgApp*)osgApp)->Graphique(id)->ImAcq();
-else
-	return;
-int nb=imAcq->LitNbPlan();
-for (int i=0;i<5*nb;i++)
+for (int i=0;i<5*nbPlan;i++)
 	delete [](dr[i]);
 delete []dr;
 delete []x;
