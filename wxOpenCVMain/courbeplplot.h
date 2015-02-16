@@ -23,6 +23,7 @@ private:
   wxFrame	*mframe;
 };
 
+#define NB_MAX_CANAUX 5
 // Define a new frame type: this is going to be our main frame
 class FenetreHistogramme : public wxWindow
 {
@@ -30,10 +31,10 @@ Tableur *excel;
 wxPanel* panel;
 wxSizer *box;
 // L'image a au maximum 5 canaux */
-PLFLT	*x[5],*y[5],*yFiltre[5];  /*!< courbe des histogrammes pour les trois plans */
+PLFLT	*x[NB_MAX_CANAUX],*y[NB_MAX_CANAUX],*yFiltre[NB_MAX_CANAUX];  /*!< courbe des histogrammes pour les trois plans */
 int		nbGraines[5]; /*!< Nombre de graines pour l'histogramme des canaux */
-float	minHisto[5],maxHisto[5]; /*!< Minimum et maximum de l'histogramme */
-cv::Mat	histoImage[5];
+float	minHisto[NB_MAX_CANAUX],maxHisto[NB_MAX_CANAUX]; /*!< Minimum et maximum de l'histogramme */
+cv::Mat	histoImage[NB_MAX_CANAUX];
 
 void *osgApp;
 void *fenMere;
@@ -75,7 +76,7 @@ wxRect	rCoupe;
 Tableur *excel;
 wxSizer *box;
 wxPanel* panel;
-PLFLT *x[3],*y[3],*yFiltre[3];  /*!< courbe des coupes pour les trois plans */
+PLFLT *x[NB_MAX_CANAUX],*y[NB_MAX_CANAUX],*yFiltre[NB_MAX_CANAUX];  /*!< courbe des coupes pour les trois plans */
 void *osgApp;
 void *fenMere;
 public:

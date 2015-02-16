@@ -35,16 +35,16 @@ else
 			for (int j=0;j<cols;j++)
 				{
 				
-				for (int k=0;k<channels();k++)
+				for (int k=0;k<channels();k++,d++)
 					{
-					if (d[k]<minIm[k])
+					if (*d<minIm[k])
 						{
-						minIm[k]= d[k];
+						minIm[k]= *d;
 						locMin[k]= cv::Point(i,j);
 						}
-					if (d[k]>maxIm[k])
+					if (*d>maxIm[k])
 						{
-						maxIm[k]= d[k];
+						maxIm[k]= *d;
 						locMax[k]= cv::Point(i,j);
 						}
 					}
@@ -68,16 +68,16 @@ else
 			for (int j=0;j<cols;j++)
 				{
 				
-				for (int k=0;k<channels();k++)
+				for (int k=0;k<channels();k++,d++)
 					{
-					if (d[k]<minIm[k])
+					if (*d<minIm[k])
 						{
-						minIm[k]= d[k];
+						minIm[k]= *d;
 						locMin[k]= cv::Point(i,j);
 						}
-					if (d[k]>maxIm[k])
+					if (*d>maxIm[k])
 						{
-						maxIm[k]= d[k];
+						maxIm[k]= *d;
 						locMax[k]= cv::Point(i,j);
 						}
 					}
@@ -100,16 +100,16 @@ else
 			for (int j=0;j<cols;j++)
 				{
 				
-				for (int k=0;k<channels();k++)
+				for (int k=0;k<channels();k++,d++)
 					{
-					if (d[k]<minIm[k])
+					if (*d<minIm[k])
 						{
-						minIm[k]= d[k];
+						minIm[k]= *d;
 						locMin[k]= cv::Point(i,j);
 						}
-					if (d[k]>maxIm[k])
+					if (*d>maxIm[k])
 						{
-						maxIm[k]= d[k];
+						maxIm[k]= *d;
 						locMax[k]= cv::Point(i,j);
 						}
 					}
@@ -132,16 +132,16 @@ else
 			for (int j=0;j<cols;j++)
 				{
 				
-				for (int k=0;k<channels();k++)
+				for (int k=0;k<channels();k++,d++)
 					{
-					if (d[k]<minIm[k])
+					if (*d<minIm[k])
 						{
-						minIm[k]= d[k];
+						minIm[k]= *d;
 						locMin[k]= cv::Point(i,j);
 						}
-					if (d[k]>maxIm[k])
+					if (*d>maxIm[k])
 						{
-						maxIm[k]= d[k];
+						maxIm[k]= *d;
 						locMax[k]= cv::Point(i,j);
 						}
 					}
@@ -164,16 +164,16 @@ else
 			for (int j=0;j<cols;j++)
 				{
 				
-				for (int k=0;k<channels();k++)
+				for (int k=0;k<channels();k++,d++)
 					{
-					if (d[k]<minIm[k])
+					if (*d<minIm[k])
 						{
-						minIm[k]= d[k];
+						minIm[k]= *d;
 						locMin[k]= cv::Point(i,j);
 						}
-					if (d[k]>maxIm[k])
+					if (*d>maxIm[k])
 						{
-						maxIm[k]= d[k];
+						maxIm[k]= *d;
 						locMax[k]= cv::Point(i,j);
 						}
 					}
@@ -197,16 +197,16 @@ else
 			for (int j=0;j<cols;j++)
 				{
 				
-				for (int k=0;k<channels();k++)
+				for (int k=0;k<channels();k++,d++)
 					{
-					if (d[k]<minIm[k])
+					if (*d<minIm[k])
 						{
-						minIm[k]= d[k];
+						minIm[k]= *d;
 						locMin[k]= cv::Point(i,j);
 						}
-					if (d[k]>maxIm[k])
+					if (*d>maxIm[k])
 						{
-						maxIm[k]= d[k];
+						maxIm[k]= *d;
 						locMax[k]= cv::Point(i,j);
 						}
 					}

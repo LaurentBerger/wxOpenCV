@@ -439,7 +439,7 @@ case CV_32S :
 case CV_16U :
 	for (int i=0;i<im->rows;i++)		
 		{
-		unsigned short *d=(unsigned short*)im->data+i*im->step[0];
+		unsigned short *d=(unsigned short*)im->ptr(i);
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 		float *g=NULL;
 		if (correctionGain && imGain)

@@ -120,7 +120,7 @@ if (!fenMere)
  delete panel;
  if (x[0])
 	{
-	for (int i=0;i<3;i++)
+	for (int i=0;i<NB_MAX_CANAUX;i++)
 		{
 		delete []x[i];
 		delete []y[i];
@@ -160,14 +160,22 @@ case 1 :
 	if (imAcq && c>=0&& c<imAcq->channels())
 		{
 		event.GetString().ToDouble(&v);
-		minHisto[c]=v;
+		if( v<maxHisto[c])
+			minHisto[c]=v;
+		else
+			{
+			excel->DefCellule(l,c,minHisto[c]);
+			}
 		}
 	break;
 case 2 :
 	if (imAcq && c>=0&& c<imAcq->channels())
 		{
 		event.GetString().ToDouble(&v);
-		maxHisto[c]=v;
+		if( v>minHisto[c])
+			maxHisto[c]=v;
+		else
+			excel->DefCellule(l,c,maxHisto[c]);
 		}
 	break;
 	}
@@ -200,67 +208,39 @@ if (nbGraines[0]==-1)
 
 	if (imAcq->MinIm()==NULL)
 		imAcq->ExtremumLoc();
-	switch(imAcq->type())
+	switch(imAcq->depth())
 	{
-	case CV_32FC1:
-		nbGraines[0]=256;
-		minHisto[0]=imAcq->MinIm()[0];
-		maxHisto[0]=imAcq->MaxIm()[0]; 
-
-		break;
-	case CV_16UC1:
-		nbGraines[0]=65536;
-		minHisto[0]=0;
-		maxHisto[0]=65535; 
-		break;
-	case CV_8UC1:
-		nbGraines[0]=256;
-		minHisto[0]=0;
-		maxHisto[0]=255; 
-		break;
-	case CV_8SC1:
-		nbGraines[0]=256;
-		minHisto[0]=-128;
-		maxHisto[0]=127; 
-		break;
-	case CV_8UC3:
-		for (int i=0;i<3;i++)
+	case CV_32F:
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
-			minHisto[i]=0;
-			maxHisto[i]=255; 
 			nbGraines[i]=256;
-			}
-		break;
-	case CV_8SC3:
-		for (int i=0;i<3;i++)
-			{
-			minHisto[i]=-128;
-			maxHisto[i]=127; 
-			nbGraines[i]=256;
-			}
-		break;
-	case CV_16SC3:
-		for (int i=0;i<3;i++)
-			{
-			minHisto[i]=-32768;
-			maxHisto[i]=32767; 
-			nbGraines[i]=65536;
-			}
-		break;
-	case CV_16UC3:
-		for (int i=0;i<3;i++)
-			{
-			minHisto[i]=0;
-			maxHisto[i]=65535; 
-			nbGraines[i]=65536;
-			}
-		break;
-	case CV_32FC3:
-		for (int i=0;i<3;i++)
-			{
 			minHisto[i]=imAcq->MinIm()[i];
 			maxHisto[i]=imAcq->MaxIm()[i]; 
+			}
+
+		break;
+	case CV_16U:
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
+			{
+			nbGraines[i]=65536;
+			minHisto[i]=imAcq->MinIm()[i];
+			maxHisto[i]=imAcq->MaxIm()[i]; 
+			}
+		break;
+	case CV_8U:
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
+			{
 			nbGraines[i]=256;
+			minHisto[i]=0;
+			maxHisto[i]=255; 
+			}
+		break;
+	case CV_8S:
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
+			{
+			nbGraines[i]=256;
+			minHisto[i]=-128;
+			maxHisto[i]=127; 
 			}
 		break;
 		}
@@ -344,7 +324,7 @@ try
 		break;
 	case CV_8UC3:
 		split( *imAcq, planCouleur );
-		for (int i=0;i<3;i++)
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
 			etendu[0]=minHisto[i];
 			etendu[1]=maxHisto[i];

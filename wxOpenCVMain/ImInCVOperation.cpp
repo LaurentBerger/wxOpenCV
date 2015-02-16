@@ -268,14 +268,48 @@ return im;
 }
 
 /**
- * @function Dilatation
+ * @function ScharrModule
+ * @brief Module du gradient Scharr d'une image im1 
+ */
+ImageInfoCV 	*ImageInfoCV::ScharrModule(ImageInfoCV	*im1,Parametre &pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+ImageInfoCV	imx ;
+ImageInfoCV	imy;
+ImageInfoCV	imAbsx;
+ImageInfoCV	imAbsy;
+
+cv::Scharr( *im1, imx, pOCV.intParam["ddepth"].valeur,1,0,pOCV.doubleParam["scale"].valeur,pOCV.doubleParam["delta"].valeur,pOCV.intParam["borderType"].valeur );
+cv::Scharr( *im1, imy, pOCV.intParam["ddepth"].valeur,0,1,pOCV.doubleParam["scale"].valeur,pOCV.doubleParam["delta"].valeur,pOCV.intParam["borderType"].valeur );
+cv::convertScaleAbs( imx, imAbsx);
+cv::convertScaleAbs( imy, imAbsy);
+addWeighted( imAbsx, 0.5, imAbsy, 0.5, 0, *im );
+
+return im;
+}
+
+/**
+ * @function ScharrX
  * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-ImageInfoCV 	*ImageInfoCV::Scharr(ImageInfoCV	*im1,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::ScharrX(ImageInfoCV	*im1,Parametre &pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::Scharr( *im1, *im, pOCV.intParam["ddepth"].valeur,pOCV.intParam["ksize"].valeur,
+cv::Scharr( *im1, *im, pOCV.intParam["ddepth"].valeur,1,0,pOCV.doubleParam["scale"].valeur,pOCV.doubleParam["delta"].valeur,pOCV.intParam["borderType"].valeur );
+return im;
+}
+
+
+/**
+ * @function ScharrY
+ * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
+ */
+ImageInfoCV 	*ImageInfoCV::ScharrY(ImageInfoCV	*im1,Parametre &pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+
+cv::Scharr( *im1, *im, pOCV.intParam["ddepth"].valeur,0,1,
 	pOCV.doubleParam["scale"].valeur,pOCV.doubleParam["delta"].valeur,pOCV.intParam["borderType"].valeur );
 return im;
 }

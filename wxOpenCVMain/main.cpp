@@ -363,7 +363,9 @@ FenetrePrincipale *f = new FenetrePrincipale(NULL, s,
 f->OuvrirVideo(type);
 if (!f->Cam()->Connectee())
 	{
-	delete f;
+	wxCloseEvent evt;
+
+	f->OnClose(evt);
 	return;
 	}
 FenetreZoom *fenZoom = new FenetreZoom(f);
@@ -442,8 +444,10 @@ wxString sd(ouverture.GetDirectory());
 f->RepertoireDoc(sd);
 sd=ouverture.GetFilename ();
 f->NomDoc(sd);
-f->SetLabel(s);
 f->OnOuvrir(s);
+s.Printf("%d : %s",nbFenetre,s);
+f->SetLabel(s);
+
 ImageStatistiques *imgStatIm = new ImageStatistiques(NULL, "Image Statistic",
 	wxPoint(530,0), wxSize(430,570),
 	wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
@@ -496,7 +500,6 @@ for (int i = 1; i < 4; i++)
              f->GetDisplayList().Append(newShape);
        }
     }
-
 }
 
 void wxOsgApp::DefOperateurImage(wxString &s)
@@ -625,13 +628,41 @@ if (s.Cmp("GradMorph")==0)
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	}
-if (s.Cmp("Scharr")==0)
+if (s.Cmp("Scharr_mod")==0)
 	{
 	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::GradMorph;
+	opUnaireSelec = &ImageInfoCV::ScharrModule;
 	nomOperation = s;
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
+	pOCV.intParam["ddepth"]=DomaineParametre<int>(-1,-1,CV_32F,1);
+	pOCV.doubleParam["scale"]=DomaineParametre<double>(1,0.01,10,1);
+	pOCV.doubleParam["delta"]=DomaineParametre<double>(0,0.0,1000,1);
+	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+	}
+if (s.Cmp("Scharr_x")==0)
+	{
+	pOCV.nomOperation=s;
+	opUnaireSelec = &ImageInfoCV::ScharrX;
+	nomOperation = s;
+	pOCV.intParam["ddepth"]=DomaineParametre<int>(-1,-1,CV_32F,1);
+	pOCV.doubleParam["scale"]=DomaineParametre<double>(1,0.01,10,1);
+	pOCV.doubleParam["delta"]=DomaineParametre<double>(0,0.0,1000,1);
+	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+	}
+if (s.Cmp("Scharr_y")==0)
+	{
+	pOCV.nomOperation=s;
+	opUnaireSelec = &ImageInfoCV::ScharrY;
+	nomOperation = s;
+	pOCV.intParam["ddepth"]=DomaineParametre<int>(-1,-1,CV_32F,1);
+	pOCV.doubleParam["scale"]=DomaineParametre<double>(1,0.01,10,1);
+	pOCV.doubleParam["delta"]=DomaineParametre<double>(0,0.0,1000,1);
+	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
 	}
 if (s.Cmp("Laplacien")==0)
 	{
@@ -1610,6 +1641,7 @@ imageTraitee=true;
 interdireAffichage=false;
 typeAcqImage =0;
 indFiltreMoyenne=0;
+pLineaire=NULL;
 pCouleur=NULL;
 pAleatoire=NULL;
 pJet=NULL;
@@ -2175,7 +2207,7 @@ if (horlogeSeq && horlogeSeq->IsRunning())
 	return;
 
 	}*/
-if (!osgApp->Quitter())
+if (osgApp && !osgApp->Quitter())
 	{
 	wxMessageDialog w(this, _T("Close window") , _T("Quit"), wxYES_NO|wxCENTRE|wxSTAY_ON_TOP);
 	if (w.ShowModal()==wxID_YES)
@@ -2200,7 +2232,7 @@ if (!osgApp->Quitter())
 	}
 if (cam!=NULL )
 	{
-	if (osgApp->CtrlCamera()  && osgApp->CtrlCamera()->Camera()==cam)
+	if (osgApp && osgApp->CtrlCamera()  && osgApp->CtrlCamera()->Camera()==cam)
 		{
 		osgApp->CtrlCamera()->DefCamera(NULL);
 		osgApp->CtrlCamera()->SetTitle(_("Undefined"));
@@ -2212,13 +2244,14 @@ if (cam!=NULL )
 		}
 }
 
-if (!osgApp->Quitter())
+if (osgApp && !osgApp->Quitter())
 	osgApp->RetirerListe(this);
 wxThread::ExitCode rc;
 if (cam)
 	OnCloseThread(event);
 
-detectionUtilisateur->Stop();delete detectionUtilisateur;
+detectionUtilisateur->Stop();
+delete detectionUtilisateur;
 
 delete []seuilNivBas;
 delete []coeffCanal;

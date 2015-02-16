@@ -44,7 +44,9 @@ enum
     ID_CHAPHAUTNO,
     ID_GRADMORPH,
     ID_CONVOLUTION,
-    ID_GRADIENT,
+    ID_GRADIENT_MOD,
+    ID_GRADIENT_X,
+    ID_GRADIENT_Y,
 	ID_LAPLACIEN,
  	ID_LISMOY,
 	ID_LISGAU,
@@ -138,7 +140,9 @@ END_EVENT_TABLE()
     #include "bitmaps/gradmorph.xpm"
 // Barre outils convolution
     #include "bitmaps/convolution.xpm"
-    #include "bitmaps/gradient.xpm"
+    #include "bitmaps/gradient_mod.xpm"
+    #include "bitmaps/gradient_x.xpm"
+    #include "bitmaps/gradient_y.xpm"
     #include "bitmaps/laplacien.xpm"
     #include "bitmaps/flou.xpm"
     #include "bitmaps/LisMoy.xpm"
@@ -880,7 +884,9 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			Tool_gradmorph,
 			Tool_chaphautblanc,
 			Tool_chaphautnoir,
-			Tool_gradient,
+			Tool_gradient_mod,
+			Tool_gradient_x,
+			Tool_gradient_y,
 			Tool_laplacien,
 			Tool_canny,
 			Tool_fft,
@@ -1039,7 +1045,9 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
 		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
 
-			INIT_TOOL_BMP(gradient);
+			INIT_TOOL_BMP(gradient_mod);
+			INIT_TOOL_BMP(gradient_x);
+			INIT_TOOL_BMP(gradient_y);
 			INIT_TOOL_BMP(laplacien);
 			INIT_TOOL_BMP(LisMoy);
 			INIT_TOOL_BMP(LisMed);
@@ -1059,7 +1067,9 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
         tb->SetMargins(5,5);
 		tb->AddTool(ID_CONVOLUTION, _("Convolution"), toolBarBitmaps[Tool_convolution], _("Convolution"));
-		tb->AddTool(ID_GRADIENT, _("Gradient"), toolBarBitmaps[Tool_gradient], _("Gradient"));
+		tb->AddTool(ID_GRADIENT_MOD, _("Gradient Modulus"), toolBarBitmaps[Tool_gradient_mod], _("Gradient modulus"));
+		tb->AddTool(ID_GRADIENT_X, _("Gradient X"), toolBarBitmaps[Tool_gradient_x], _("Gradient X"));
+		tb->AddTool(ID_GRADIENT_Y, _("Gradient Y"), toolBarBitmaps[Tool_gradient_y], _("Gradient Y"));
 		tb->AddTool(ID_LAPLACIEN, _("Laplacien"), toolBarBitmaps[Tool_laplacien], _("Laplacian"));
 		tb->AddTool(ID_LISMOY, _("Blur (mean)"), toolBarBitmaps[Tool_LisMoy], _("Blur (mean)"));
 		tb->AddTool(ID_LISMED, _("Blur (median filter)"), toolBarBitmaps[Tool_LisMed], _("Blur (median)"));
@@ -1366,8 +1376,14 @@ case ID_GRADMORPH:
 	s="GradMorph";
 	}
 	break;
-case ID_GRADIENT:
-	s="Scharr";
+case ID_GRADIENT_X:
+	s="Scharr_x";
+	break;
+case ID_GRADIENT_Y:
+	s="Scharr_y";
+	break;
+case ID_GRADIENT_MOD:
+	s="Scharr_mod";
 	break;
 case ID_LAPLACIEN:
 	s="Laplacien";

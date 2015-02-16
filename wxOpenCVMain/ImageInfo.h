@@ -303,7 +303,9 @@ ImageInfoCV 	*GradMorph(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL)
 ImageInfoCV 	*Convolution(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
 ImageInfoCV		*PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
 ImageInfoCV 	*Laplacien(ImageInfoCV	*,Parametre &pOCV);
-ImageInfoCV 	*Scharr(ImageInfoCV	*im1,Parametre &pOCV);
+ImageInfoCV 	*ScharrX(ImageInfoCV	*im1,Parametre &pOCV);
+ImageInfoCV 	*ScharrY(ImageInfoCV	*im1,Parametre &pOCV);
+ImageInfoCV 	*ScharrModule(ImageInfoCV	*im1,Parametre &pOCV);
 ImageInfoCV 	*Canny(ImageInfoCV	*,Parametre &paramOCV);
 ImageInfoCV 	*Contour(ImageInfoCV	*,Parametre &paramOCV);
 ImageInfoCV 	*Seuillage(ImageInfoCV	*,Parametre &paramOCV);

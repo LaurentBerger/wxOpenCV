@@ -120,9 +120,9 @@ fenMere=NULL;
   }
   //SetTitle( m_title );  
 excel->Show();
-wxPLplotstream* pls=plotwindow->GetStream();
+//wxPLplotstream* pls=plotwindow->GetStream();
     
-    int x=pls->MergeOpts( options, "x01c options", notes);
+//    int x=pls->MergeOpts( options, "x01c options", notes);
 	Plot(false);
 }
 

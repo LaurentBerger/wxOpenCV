@@ -405,6 +405,48 @@ case CV_16U :
 				}
 		}
 	break;
+case CV_32S :
+	for (int i=0;i<imOrig->rows;i++)		
+		{
+		int *d=(int *)imOrig->data+i*imOrig->step[0];
+		for (int j=0;j<imOrig->cols;j++)
+			for (int indCanal=0;indCanal<imOrig->channels();indCanal++,d++)
+				{
+				switch(indCanal){
+				case 0:
+					gr->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 1:
+					gv->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 2:
+					gb->setHeight(j,i,((*d))/255.0);
+					break;
+					}
+				}
+		}
+	break;
+case CV_32F:
+	for (int i=0;i<imOrig->rows;i++)		
+		{
+		float *d=(float *)imOrig->data+i*imOrig->step[0];
+		for (int j=0;j<imOrig->cols;j++)
+			for (int indCanal=0;indCanal<imOrig->channels();indCanal++,d++)
+				{
+				switch(indCanal){
+				case 0:
+					gr->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 1:
+					gv->setHeight(j,i,((*d))/255.0);	
+					break;
+				case 2:
+					gb->setHeight(j,i,((*d))/255.0);
+					break;
+					}
+				}
+		}
+	break;
 	}
 preImage=1;
 }
