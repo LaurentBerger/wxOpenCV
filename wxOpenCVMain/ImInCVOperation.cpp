@@ -653,3 +653,57 @@ im2->convertTo(*im, CV_32S);
 watershed(*im1, *im);
 return im;
 }
+
+ImageInfoCV		*ImageInfoCV::DistanceDiscrete (ImageInfoCV *im1,Parametre &paramOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+if (im1->channels()==1)
+	{
+	cv::distanceTransform(*im1, *im, cv::DIST_L2, 3);
+	}
+else
+	{
+	std::vector<Mat> planCouleur;
+	Mat *d=new Mat[im1->channels()];
+		
+	cv::split( *im1, planCouleur );
+	for (int i=0;i<im1->channels();i++)
+		{
+		cv::distanceTransform(planCouleur[i], d[i], cv::DIST_L2, 3);
+		}
+	cv::merge((const cv::Mat *)d, im1->channels(), *im);
+	delete []d;
+	}
+return im;
+}
+
+
+ImageInfoCV		*ImageInfoCV::Voronoi (ImageInfoCV *imSrc,Parametre &paramOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+if (imSrc->channels()==1)
+	{
+
+	connectedComponentsWithStats(*imSrc, *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV.intParam["connectivity"].valeur, CV_32S);
+	ImageInfoCV	imCtr ;
+	im->copyTo(imCtr);
+	findContours(imCtr, *(im->contours),*im->arbreContour, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
+	}
+else
+	{
+	std::vector<Mat> planCouleur;
+	Mat *d=new Mat[imSrc->channels()];
+		
+	cv::split( *imSrc, planCouleur );
+	for (int i=0;i<imSrc->channels();i++)
+		{
+		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV.intParam["connectivity"].valeur, CV_32S);
+		ImageInfoCV	imCtr ;
+		d[i].copyTo(imCtr);
+		findContours(imCtr, im->contours[i],im->arbreContour[i], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
+		}
+	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
+	delete []d;
+	}
+return im;
+}

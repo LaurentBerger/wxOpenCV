@@ -6,6 +6,7 @@
 */
 
 #include <wx/colour.h>
+#include <wx/image.h>
 #include <osg/ShapeDrawable>
 #include <osg/Geode>
 #include <osg/Texture2D>
@@ -67,6 +68,7 @@ float	offsetZ0;		/*!< offset pour définir le niveau 0 utilisé pour la palette 
 int		zoom;			/*!< zoom variable utilisée pour le lissage */
 
 void	*osgApp;
+void	*fenParent;
 double	**poly;			/*!< Quadrique à utiliser pour corriger les images */
 
 
@@ -89,7 +91,7 @@ void InitNanoSurface(); /*!< Initialisation des paramètres */
 public :
 NanoSurface();			/*!< Constructeur par défaut utilisé pour les tests*/
 NanoSurface(char *nomSequence );
-NanoSurface(int ,ImageInfoCV **);
+NanoSurface(int ,ImageInfoCV **,void * = NULL);
 void InitPalette(int nbCouleur);
 void SelectPalette(int ind);
 int	LireNbCouleur(){return nbCouleurPalette;};
@@ -107,6 +109,7 @@ void Maj(int d);		/*!< Mise à jour de la surface affichée lors d'un changement
 osg::Texture2D *LitTexture(){return tex[tailleDuFiltre];};
 
 void AssocierImageTexture(ImageInfoCV *im);
+void AssocierImageTexture(wxImage *im);
 
 void AjouteImage(osg::Image *);
 void AjouteImage(ImageInfoCV *im);

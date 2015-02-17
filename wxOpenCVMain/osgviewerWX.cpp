@@ -184,8 +184,16 @@ osg::Group* Fenetre3D::CreerTriede()
 	
 	float	longueurAxeX=((FenetrePrincipale*)fenParent)->ImAcq()->cols;;
 	float	longueurAxeY=((FenetrePrincipale*)fenParent)->ImAcq()->rows;;
-	float	longueurAxeZ=((FenetrePrincipale*)fenParent)->ImAcq()->MaxIm()[0];
-    // create the root node which will hold the model.
+	float	longueurAxeZ=255*surface->EchZ();
+	double	maxZ=0;
+	for (int i=0;i<((FenetrePrincipale*)fenParent)->ImAcq()->channels();i++)
+		{
+		if (maxZ<fabs(((FenetrePrincipale*)fenParent)->ImAcq()->MaxIm()[i]))
+			maxZ=fabs(((FenetrePrincipale*)fenParent)->ImAcq()->MaxIm()[i]);
+		if (maxZ<fabs(((FenetrePrincipale*)fenParent)->ImAcq()->MinIm()[i]))
+			maxZ=fabs(((FenetrePrincipale*)fenParent)->ImAcq()->MinIm()[i]);
+		}
+	// create the root node which will hold the model.
     osg::Group* root = new osg::Group();
 
     // add the drawable into a single goede to be shared...
@@ -285,7 +293,7 @@ osg::Group* Fenetre3D::CreerTriede()
 	for (int i=1;i<=5;i++)
 		{
 		char	s[20];
-		sprintf(s,"%.1f",i*longueurAxeZ/5/surface->EchZ());
+		sprintf(s,"%.1lf",i*maxZ/5);
 		osg::Geode* ligneGrille1 = new osg::Geode();
 		osg::Vec3 posZ(0.0,0.0f,i*longueurAxeZ/5);
 		osg::Vec3 dZ(-00,-100.0f,0.0f);

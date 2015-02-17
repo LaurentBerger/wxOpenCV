@@ -125,7 +125,7 @@ wxGLContext *glContexte =new wxGLContext(fgOSGWX);
 
 ImageInfoCV *tabImage[1];
 tabImage[0]=((FenetrePrincipale*)fenParent)->ImAcq();
-surface = new NanoSurface(1,tabImage);
+surface = new NanoSurface(1,tabImage,fenParent);
 	surface->addDrawable(surface->LitShapeDrawable().get());
 	imageSurface = (osg::Group *)surface;
 	fgOSGWX->DefSurface(surface);

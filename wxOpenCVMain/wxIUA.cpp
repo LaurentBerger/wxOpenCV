@@ -54,6 +54,8 @@ enum
     ID_CANNY,
 	ID_THRESHOLD,
 	ID_ADATHRESHOLD,
+    ID_DISTANCEDISCRETE,
+    ID_VORONOI,
 	ID_CONTOUR,
 	ID_COMPCONNEXE,
 	ID_PARTAGE_EAUX,
@@ -151,6 +153,8 @@ END_EVENT_TABLE()
 // Barre outils binarization
     #include "bitmaps/seuillage.xpm"
     #include "bitmaps/seuillageada.xpm"
+    #include "bitmaps/distancediscrete.xpm"
+    #include "bitmaps/voronoi.xpm"
     #include "bitmaps/canny.xpm"
     #include "bitmaps/contour.xpm"
    #include "bitmaps/statconnexe.xpm"
@@ -894,6 +898,8 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			Tool_contour,
 			Tool_seuillage,
 			Tool_seuillageada,
+			Tool_distancediscrete,
+			Tool_voronoi,
 			Tool_cmpconnexe,
 			Tool_statconnexe,
 			Tool_LisMoy,
@@ -1111,6 +1117,8 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			INIT_TOOL_BMP(contour);
 			INIT_TOOL_BMP(seuillage);
 			INIT_TOOL_BMP(seuillageada);
+			INIT_TOOL_BMP(distancediscrete);
+			INIT_TOOL_BMP(voronoi);
 			INIT_TOOL_BMP(cmpconnexe);
 			INIT_TOOL_BMP(statconnexe);
 			toolBarBitmaps[Tool_fft]= wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(64,64));
@@ -1128,6 +1136,8 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb->AddTool(ID_CANNY, _("Canny"), toolBarBitmaps[Tool_canny], _("Canny"));
 		tb->AddTool(ID_THRESHOLD, _(""), toolBarBitmaps[Tool_seuillage], _("Thereshold"));
 		tb->AddTool(ID_ADATHRESHOLD, _(""), toolBarBitmaps[Tool_seuillageada], _("Adaptive Thereshold"));
+		tb->AddTool(ID_DISTANCEDISCRETE, _(""), toolBarBitmaps[Tool_distancediscrete], _("Transform distance"));
+		tb->AddTool(ID_VORONOI, _(""), toolBarBitmaps[Tool_voronoi], _("Voronoi"));
 		tb->AddTool(ID_CONTOUR, _("Contour"), toolBarBitmaps[Tool_contour], _("Contour"));
 		tb->AddTool(ID_COMPCONNEXE, _(""), toolBarBitmaps[Tool_cmpconnexe], _("Connected component"));
 		tb->AddTool(ID_PARTAGE_EAUX, _(""), toolBarBitmaps[Tool_statconnexe], _("Watershed"));
@@ -1421,6 +1431,10 @@ case ID_LISGAU:
 	break;
 case ID_LISMED:
 	s="LissageMedian";
+	break;
+case ID_DISTANCEDISCRETE:
+case ID_VORONOI:
+	s="DistanceDiscrete";
 	break;
 	}
 ((wxOsgApp*)osgApp)->DefOperateurImage(s);

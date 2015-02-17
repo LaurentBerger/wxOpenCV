@@ -4,6 +4,7 @@
 #include "NanoSurface.h"
 #include "ImageInfo.h"
 #include "Fenetre3D.h"
+#include "FenetrePrincipale.h"
 #include <iostream>
 #include <fstream>
 #include <strstream>
@@ -161,11 +162,15 @@ if (j>=0)
 nbGrid = nbFichier;
 }
 
-NanoSurface::NanoSurface(int nbImage,ImageInfoCV **im)
+NanoSurface::NanoSurface(int nbImage,ImageInfoCV **im,void *f)
 /*! 
 \param nomSeq nom du fichier contenant la liste des noms des fichiers de surface 
 */
 {
+if (f)
+	fenParent=f;
+else
+	fenParent=NULL;
 InitNanoSurface();
 
 nbL=-1;
@@ -179,7 +184,10 @@ nbC=im[0]->LitNbColonne();
 
 for (int i=0;i<nbGrid;i++)
 	{
-	AssocierImageTexture(im[i]);
+	if (fenParent)
+		AssocierImageTexture(((FenetrePrincipale*)fenParent)->ImageAffichee());
+	else
+		AssocierImageTexture(im[i]);
 	imValide.push_back(true);
 	topoValide.push_back(false);
 	}
@@ -474,6 +482,15 @@ gridb.push_back(gb);
 switch(im->depth()){
 case CV_8U :
 	{
+	double maxZ=0;
+	for (int indCanal=0;indCanal<im->channels();indCanal++)
+		{
+		if( maxZ<fabs(im->MaxIm()[indCanal]))
+			maxZ=fabs(im->MaxIm()[indCanal]);
+		if( maxZ<fabs(im->MinIm()[indCanal]))
+			maxZ=fabs(im->MinIm()[indCanal]);
+		}
+	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
 		{
 		unsigned char *d=im->data+i*im->step[0];
@@ -499,6 +516,16 @@ case CV_8U :
 	}
 	break;
 case CV_32F :
+	{
+	double maxZ=0;
+	for (int indCanal=0;indCanal<im->channels();indCanal++)
+		{
+		if( maxZ<fabs(im->MaxIm()[indCanal]))
+			maxZ=fabs(im->MaxIm()[indCanal]);
+		if( maxZ<fabs(im->MinIm()[indCanal]))
+			maxZ=fabs(im->MinIm()[indCanal]);
+		}
+	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
 		{
 		float *d=(float*)im->ptr(i);
@@ -508,20 +535,31 @@ case CV_32F :
 				{
 				switch(indCanal){
 				case 0:
-					gr->setHeight(j,i,((*d))*EchZ());	
+					gr->setHeight(j,im->rows-1-i,((*d))*echZ);	
 					break;
 				case 1:
-					gv->setHeight(j,i,((*d))*EchZ());	
+					gv->setHeight(j,im->rows-1-i,((*d))*echZ);	
 					break;
 				case 2:
-					gb->setHeight(j,i,((*d))*EchZ());
+					gb->setHeight(j,im->rows-1-i,((*d))*echZ);
 					break;
 					}
 				}
 			}
 		}
+	}
 	break;
 case CV_16S :
+	{
+	double maxZ=0;
+	for (int indCanal=0;indCanal<im->channels();indCanal++)
+		{
+		if( maxZ<fabs(im->MaxIm()[indCanal]))
+			maxZ=fabs(im->MaxIm()[indCanal]);
+		if( maxZ<fabs(im->MinIm()[indCanal]))
+			maxZ=fabs(im->MinIm()[indCanal]);
+		}
+	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
 		{
 		short *d=(short*)im->ptr(i);
@@ -543,8 +581,19 @@ case CV_16S :
 				}
 			}
 		}
+	}
 	break;
 case CV_16U :
+	{
+	double maxZ=0;
+	for (int indCanal=0;indCanal<im->channels();indCanal++)
+		{
+		if( maxZ<fabs(im->MaxIm()[indCanal]))
+			maxZ=fabs(im->MaxIm()[indCanal]);
+		if( maxZ<fabs(im->MinIm()[indCanal]))
+			maxZ=fabs(im->MinIm()[indCanal]);
+		}
+	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
 		{
 		unsigned short *d=(unsigned short*)im->ptr(i);
@@ -566,8 +615,10 @@ case CV_16U :
 				}
 			}
 		}
+	}
 	break;
 	}
+echZ=1.0;
 }
 
 void NanoSurface::AssocierImageTexture(ImageInfoCV *im)
@@ -711,6 +762,33 @@ else if (im->depth()==CV_32F)
 		}
 	imSurface.push_back(iFond);
 	}
+}
+
+void NanoSurface::AssocierImageTexture(wxImage *im)
+{
+
+	tabNomImage.push_back("xxxx");
+	osg::Image* iFond = new osg::Image;
+	iFond->setImage( im->GetWidth(),im->GetHeight(), 3,
+				GL_RGB8, GL_BGR, GL_UNSIGNED_BYTE,
+				new unsigned char[im->GetWidth()*im->GetHeight()* 3],
+				osg::Image::USE_NEW_DELETE);
+	unsigned char *data ;
+	unsigned char *dataSrc ;
+
+	//iFond->setImage(
+	for (int i=0;i<im->GetHeight();i++)
+		{
+		data = iFond->data()+3*i*im->GetWidth();
+		dataSrc = im->GetData()+3*(im->GetHeight()-1-i)*im->GetWidth();
+		for (int j=0;j<im->GetWidth();j++,dataSrc+=3)
+			{
+			*data++= dataSrc[2];
+			*data++= dataSrc[1];
+			*data++= *dataSrc;
+			} // for (int j=0;j<im->LitNbColonne();j++)
+		}
+	imSurface.push_back(iFond);
 }
 
 

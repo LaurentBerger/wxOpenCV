@@ -781,6 +781,14 @@ if (s.Cmp("ComposanteConnexe")==0)
 	opUnaireSelec = &ImageInfoCV::ComposanteConnexe;
 	nomOperation = s;
 	}
+if (s.Cmp("DistanceDiscrete")==0)
+	{
+	pOCV.lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/miscellaneous_transformations.html#distancetransform";
+	pOCV.refPDF="http://docs.opencv.org/opencv3refman.pdf#page=287&zoom=70,250,100";
+	pOCV.nomOperation=s;
+	opUnaireSelec = &ImageInfoCV::DistanceDiscrete;
+	nomOperation = s;
+	}
 
 
 }
