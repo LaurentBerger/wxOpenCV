@@ -1,5 +1,5 @@
 /* XPM */
-static char * statconnexe_xpm[] = {
+static char * voronoi_xpm[] = {
 "32 32 16 1",
 " 	c #000000",
 ".	c #800000",

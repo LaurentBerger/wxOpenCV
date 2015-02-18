@@ -82,7 +82,11 @@
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/CameraOpenCV.cpp">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/CaptureInfo3D.cpp">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/ControleCamera.cpp">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/Fenetre3D.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreAlgo.cpp">
       </Unit>
@@ -91,6 +95,8 @@
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreDistribradiale.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreFocus.cpp">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreGraphiqueWX.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreHistogramme.cpp">
       </Unit>
@@ -126,6 +132,10 @@
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/InterfaceQuadriqueMulti.cpp">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/NanoSurface.cpp">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/PlanReference.cpp">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/RapportAOO_LO.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/ServeurScilab.cpp">
@@ -138,7 +148,11 @@
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/main.cpp">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/osgviewerWX.cpp">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/wxIUA.cpp">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/BarreEchelle.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/CameraAndor.h">
       </Unit>
@@ -146,13 +160,19 @@
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/CameraVirtuelle.h">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/CaptureInfo3D.h">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/ConnexionDDE.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/ControleCamera.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/EvenementCamera.h">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/Fenetre3D.h">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreAlgo.h">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreGraphiqueWX.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreInfo.h">
       </Unit>
@@ -170,6 +190,10 @@
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/InterfaceAvance.h">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/NanoSurface.h">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/PlanReference.h">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/TableauBord.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/Tableur.h">
@@ -181,6 +205,8 @@
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/resource.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/toolbar.rc">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/wxOpenCVConfig.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/wxOsgApp.h">
       </Unit>

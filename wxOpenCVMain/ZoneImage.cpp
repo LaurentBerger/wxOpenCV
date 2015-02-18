@@ -180,7 +180,7 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 		if (event.m_shiftDown)
 			{
 			//osgApp->Outils()->RegionPrincipaleSelect(numRegion);
-/*				
+/*
 			if (imCtr)
 				{
 				int i1=NULL;//imRegionBrute->LitPixelEntier(point.y,point.x);
@@ -214,13 +214,13 @@ if (event.ShiftDown())
 	case 4:
 		t = imAcq;
 		break;
-		}	
+		}
 	if (t)
 		{
 		osgApp->ImgStat()->AfficheValCurseur(t,point.y,point.x);
 		}
 	}
-		
+
 if (!f->ModeRectangle() && !f->ModeCoupe())
 	return;
 if (f->ModeRectangle())
@@ -265,12 +265,12 @@ if (modeCoupe)
 		RefreshRect(rTmp2,false);
 		rectCoupe[indCoupe].SetRight(point.x);
 		rectCoupe[indCoupe].SetBottom(point.y);
-		
+
 		rTmp=rectCoupe[indCoupe];
 		rTmp2=RepereImageEcran(rTmp);
 		f->RedresseRectangle(rTmp2);
 		//rTmp.Inflate(2,2);
-		
+
 		rTmp2=RepereImageEcran(rTmp);
 		RefreshRect(rTmp2,false);
 		// you may or may not need to do an update to draw now.
@@ -286,7 +286,7 @@ if (modeCoupe)
 		TracerLesCoupes(dc);
 		}
 	}
-	
+
 }
 
 void ZoneImage::OnLeftButtonUp(wxMouseEvent &event)
@@ -321,7 +321,7 @@ if (modeRect)
 	}
 if (modeCoupe)
 	if ( rectCoupe[indCoupe].width )
-		osgApp->ImgStat()->MAJCoupe(rectCoupe[indCoupe]);	
+		osgApp->ImgStat()->MAJCoupe(rectCoupe[indCoupe]);
 }
 
 void ZoneImage::OnLeftButtonDown(wxMouseEvent &event)
@@ -738,10 +738,10 @@ for (int i=0;i<imAcq->channels()&& i<3;i++)
 	for (int j=0;j<nbContour;j++)
 		for (int k=1;k<ptCtr[i][j].size();k++)
 		{
-		;
-		
-		wxPoint p1(RepereImageEcran(wxPoint(ptCtr[i][j][k-1].x,ptCtr[i][j][k-1].y)));
-		wxPoint p2(RepereImageEcran(wxPoint(ptCtr[i][j][k].x,ptCtr[i][j][k].y)));
+		wxPoint p_1(ptCtr[i][j][k-1].x,ptCtr[i][j][k-1].y),p_2(ptCtr[i][j][k].x,ptCtr[i][j][k].y);
+
+		wxPoint p1(RepereImageEcran(p_1));
+		wxPoint p2(RepereImageEcran(p_2));
 
 		hdc.DrawLine(p1,p2);
 		}

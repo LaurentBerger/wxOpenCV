@@ -212,6 +212,30 @@ CameraOpenCV.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.s
 .PHONY : CameraOpenCV.cpp.s
 
+CaptureInfo3D.o: CaptureInfo3D.cpp.o
+.PHONY : CaptureInfo3D.o
+
+# target to build an object file
+CaptureInfo3D.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CaptureInfo3D.cpp.o
+.PHONY : CaptureInfo3D.cpp.o
+
+CaptureInfo3D.i: CaptureInfo3D.cpp.i
+.PHONY : CaptureInfo3D.i
+
+# target to preprocess a source file
+CaptureInfo3D.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CaptureInfo3D.cpp.i
+.PHONY : CaptureInfo3D.cpp.i
+
+CaptureInfo3D.s: CaptureInfo3D.cpp.s
+.PHONY : CaptureInfo3D.s
+
+# target to generate assembly for a file
+CaptureInfo3D.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CaptureInfo3D.cpp.s
+.PHONY : CaptureInfo3D.cpp.s
+
 ControleCamera.o: ControleCamera.cpp.o
 .PHONY : ControleCamera.o
 
@@ -235,6 +259,30 @@ ControleCamera.s: ControleCamera.cpp.s
 ControleCamera.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ControleCamera.cpp.s
 .PHONY : ControleCamera.cpp.s
+
+Fenetre3D.o: Fenetre3D.cpp.o
+.PHONY : Fenetre3D.o
+
+# target to build an object file
+Fenetre3D.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Fenetre3D.cpp.o
+.PHONY : Fenetre3D.cpp.o
+
+Fenetre3D.i: Fenetre3D.cpp.i
+.PHONY : Fenetre3D.i
+
+# target to preprocess a source file
+Fenetre3D.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Fenetre3D.cpp.i
+.PHONY : Fenetre3D.cpp.i
+
+Fenetre3D.s: Fenetre3D.cpp.s
+.PHONY : Fenetre3D.s
+
+# target to generate assembly for a file
+Fenetre3D.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Fenetre3D.cpp.s
+.PHONY : Fenetre3D.cpp.s
 
 FenetreAlgo.o: FenetreAlgo.cpp.o
 .PHONY : FenetreAlgo.o
@@ -331,6 +379,30 @@ FenetreFocus.s: FenetreFocus.cpp.s
 FenetreFocus.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.s
 .PHONY : FenetreFocus.cpp.s
+
+FenetreGraphiqueWX.o: FenetreGraphiqueWX.cpp.o
+.PHONY : FenetreGraphiqueWX.o
+
+# target to build an object file
+FenetreGraphiqueWX.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.o
+.PHONY : FenetreGraphiqueWX.cpp.o
+
+FenetreGraphiqueWX.i: FenetreGraphiqueWX.cpp.i
+.PHONY : FenetreGraphiqueWX.i
+
+# target to preprocess a source file
+FenetreGraphiqueWX.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.i
+.PHONY : FenetreGraphiqueWX.cpp.i
+
+FenetreGraphiqueWX.s: FenetreGraphiqueWX.cpp.s
+.PHONY : FenetreGraphiqueWX.s
+
+# target to generate assembly for a file
+FenetreGraphiqueWX.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.s
+.PHONY : FenetreGraphiqueWX.cpp.s
 
 FenetreHistogramme.o: FenetreHistogramme.cpp.o
 .PHONY : FenetreHistogramme.o
@@ -740,6 +812,54 @@ InterfaceQuadriqueMulti.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.s
 .PHONY : InterfaceQuadriqueMulti.cpp.s
 
+NanoSurface.o: NanoSurface.cpp.o
+.PHONY : NanoSurface.o
+
+# target to build an object file
+NanoSurface.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.o
+.PHONY : NanoSurface.cpp.o
+
+NanoSurface.i: NanoSurface.cpp.i
+.PHONY : NanoSurface.i
+
+# target to preprocess a source file
+NanoSurface.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.i
+.PHONY : NanoSurface.cpp.i
+
+NanoSurface.s: NanoSurface.cpp.s
+.PHONY : NanoSurface.s
+
+# target to generate assembly for a file
+NanoSurface.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.s
+.PHONY : NanoSurface.cpp.s
+
+PlanReference.o: PlanReference.cpp.o
+.PHONY : PlanReference.o
+
+# target to build an object file
+PlanReference.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o
+.PHONY : PlanReference.cpp.o
+
+PlanReference.i: PlanReference.cpp.i
+.PHONY : PlanReference.i
+
+# target to preprocess a source file
+PlanReference.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.i
+.PHONY : PlanReference.cpp.i
+
+PlanReference.s: PlanReference.cpp.s
+.PHONY : PlanReference.s
+
+# target to generate assembly for a file
+PlanReference.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.s
+.PHONY : PlanReference.cpp.s
+
 RapportAOO_LO.o: RapportAOO_LO.cpp.o
 .PHONY : RapportAOO_LO.o
 
@@ -884,6 +1004,30 @@ main.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/main.cpp.s
 .PHONY : main.cpp.s
 
+osgviewerWX.o: osgviewerWX.cpp.o
+.PHONY : osgviewerWX.o
+
+# target to build an object file
+osgviewerWX.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.o
+.PHONY : osgviewerWX.cpp.o
+
+osgviewerWX.i: osgviewerWX.cpp.i
+.PHONY : osgviewerWX.i
+
+# target to preprocess a source file
+osgviewerWX.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.i
+.PHONY : osgviewerWX.cpp.i
+
+osgviewerWX.s: osgviewerWX.cpp.s
+.PHONY : osgviewerWX.s
+
+# target to generate assembly for a file
+osgviewerWX.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.s
+.PHONY : osgviewerWX.cpp.s
+
 wxIUA.o: wxIUA.cpp.o
 .PHONY : wxIUA.o
 
@@ -929,9 +1073,15 @@ help:
 	@echo "... CameraOpenCV.o"
 	@echo "... CameraOpenCV.i"
 	@echo "... CameraOpenCV.s"
+	@echo "... CaptureInfo3D.o"
+	@echo "... CaptureInfo3D.i"
+	@echo "... CaptureInfo3D.s"
 	@echo "... ControleCamera.o"
 	@echo "... ControleCamera.i"
 	@echo "... ControleCamera.s"
+	@echo "... Fenetre3D.o"
+	@echo "... Fenetre3D.i"
+	@echo "... Fenetre3D.s"
 	@echo "... FenetreAlgo.o"
 	@echo "... FenetreAlgo.i"
 	@echo "... FenetreAlgo.s"
@@ -944,6 +1094,9 @@ help:
 	@echo "... FenetreFocus.o"
 	@echo "... FenetreFocus.i"
 	@echo "... FenetreFocus.s"
+	@echo "... FenetreGraphiqueWX.o"
+	@echo "... FenetreGraphiqueWX.i"
+	@echo "... FenetreGraphiqueWX.s"
 	@echo "... FenetreHistogramme.o"
 	@echo "... FenetreHistogramme.i"
 	@echo "... FenetreHistogramme.s"
@@ -995,6 +1148,12 @@ help:
 	@echo "... InterfaceQuadriqueMulti.o"
 	@echo "... InterfaceQuadriqueMulti.i"
 	@echo "... InterfaceQuadriqueMulti.s"
+	@echo "... NanoSurface.o"
+	@echo "... NanoSurface.i"
+	@echo "... NanoSurface.s"
+	@echo "... PlanReference.o"
+	@echo "... PlanReference.i"
+	@echo "... PlanReference.s"
 	@echo "... RapportAOO_LO.o"
 	@echo "... RapportAOO_LO.i"
 	@echo "... RapportAOO_LO.s"
@@ -1013,6 +1172,9 @@ help:
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"
+	@echo "... osgviewerWX.o"
+	@echo "... osgviewerWX.i"
+	@echo "... osgviewerWX.s"
 	@echo "... wxIUA.o"
 	@echo "... wxIUA.i"
 	@echo "... wxIUA.s"

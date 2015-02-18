@@ -1,4 +1,5 @@
 file(REMOVE_RECURSE
+  "CMakeFiles/wxOpenCVMain.dir/Fenetre3D.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/ZoneImage.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.o"
@@ -15,9 +16,12 @@ file(REMOVE_RECURSE
   "CMakeFiles/wxOpenCVMain.dir/GestioncurseurSourisGlisser.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/FenetrePalette.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/IMulti.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/GestionZone.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/CaptureInfo3D.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/wxIUA.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/RapportAOO_LO.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/AffichageNouvelleImage.cpp.o"
@@ -31,7 +35,9 @@ file(REMOVE_RECURSE
   "CMakeFiles/wxOpenCVMain.dir/ThreadEventCamera.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/GraphiqueImage.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/ImInCVInitOp.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o"
   "CMakeFiles/wxOpenCVMain.dir/FenetrePrincipaleClavier.cpp.o"
+  "CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.o"
   "wxOpenCVMain.pdb"
   "wxOpenCVMain"
 )

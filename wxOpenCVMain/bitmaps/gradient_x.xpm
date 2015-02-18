@@ -1,5 +1,5 @@
 /* XPM */
-static const char *const gradient_xpm[] = {
+static const char *const gradient_x_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 15 21 1",
 ": c #AAC1E8",
