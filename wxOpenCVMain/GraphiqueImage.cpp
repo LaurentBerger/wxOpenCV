@@ -79,6 +79,8 @@ wxPaintDC	hdc(this);
 
 void FenetrePrincipale::DrawWindow (wxDC &hdc)
 {
+if (!imAcq)
+	return;
 if (!imAffichee)
 	if (imAcq)
 		DIB(imAcq);
