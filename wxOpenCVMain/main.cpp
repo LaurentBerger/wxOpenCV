@@ -426,7 +426,7 @@ void wxOsgApp::Ouvrir(wxCommandEvent &w)
 wxString dossier;
 configApp->Read("/dossier",&dossier,wxEmptyString);
 
-wxFileDialog ouverture(NULL, "Ouvrir ", dossier, wxEmptyString, "*.tif;*.jpg;*.bmp;*.ymlgz");
+wxFileDialog ouverture(NULL, "Ouvrir ", dossier, wxEmptyString, "*.tif;*.jpg;*.bmp;*.png;*.ymlgz;*.is2");
 if (ouverture.ShowModal()!=wxID_OK)
 	return;
 FenetrePrincipale *f = new FenetrePrincipale(NULL, "wxOpenCV",
@@ -1091,7 +1091,7 @@ InterfaceAvance *frame = new InterfaceAvance(NULL,
                                  wxID_ANY,
                                  "wxOpenCV",
                                  wxDefaultPosition,
-                                 wxSize(800, 600));
+                                 wxSize(1000, 800));
 
 wxBitmap bitmap;
 bool  m_isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
@@ -1843,6 +1843,42 @@ if (s.Find("ymlgz")>=0)
 
 		wxMessageBox(_("An error occured while saving file :")+s);
 		}
+	}
+else if (s.Find(".is2")>=0 ||s.Find(".IS2")>=0)
+	{
+/*	imAcq =new ImageInfoCV(480,640,CV_8UC3);
+	ifstream fs;
+	fs.open(nomFichier,ios::binary);
+	unsigned short *tmp=new unsigned short[640*480*2];
+	fs.seekg(169642);
+	fs.read((char*)tmp,640*480*2);
+	fs.close();
+	for (int i=0;i<480;i++)
+		for (int j=0;j<640;j++)
+			{
+			char r,g,b;
+			r=(tmp[i*640+j]&0xF800)>>8;
+			g=(tmp[i*640+j]&0x07D0)>>3;
+			b=(tmp[i*640+j]&0x001F)<<3;
+			cv::Vec3b v(b,g,r);
+			imAcq->at< cv::Vec3b >(i,j)=v;
+			}
+	*/
+	imAcq =new ImageInfoCV(240,320,CV_16UC1);
+	ifstream fs;
+	fs.open(nomFichier,ios::binary);
+	unsigned short *tmp=new unsigned short[320*240*2];
+	fs.seekg(169642-320*240*2-28*2);
+	fs.read((char*)tmp,320*240*2);
+	fs.close();
+	for (int i=0;i<240;i++)
+		for (int j=0;j<320;j++)
+			{
+			imAcq->at< unsigned short >(i,j)=tmp[i*320+j];
+			}
+	
+
+
 	}
 else
 	{
