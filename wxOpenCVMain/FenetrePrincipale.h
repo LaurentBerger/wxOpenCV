@@ -47,7 +47,14 @@ ImageInfoCV *op2;	/*!< Opérande 2 pour l'opération demandée */
 // Si les valeurs précédentes sont nulles on met un indice
 long indOp1;	/*!< Indice de la fenêtre contenant l'opérande 1 */
 long indOp2;	/*!< Indice de la fenêtre contenant l'opérande 2 */
-Parametre pOCV;	/*!< parametre de l'opérateur Unaire */
+long indRes;	/*!< Indice de la fenêtre contenant le résultat */
+long indEtape;	/*!< Indice de l'opération dans la séquence */
+Parametre pOCV;	/*!< parametre de l'opérateur */
+int	idOperation;/*!< identificateur de l'opération unique dans wxOpenCv.ini*/	
+Operation()
+{
+op1=NULL;op2=NULL;indOp1=-1;indOp2=-1;indRes=-1;idOperation=-1;indEtape=-1;
+}
 };
 
 
@@ -555,7 +562,7 @@ void	SourisQuitterFen(wxMouseEvent &event);
 
 // Gestion de l'image par rapport à la fenêtre
 void AssosierImage(ImageInfoCV *);	/*< Associer une image à une fenêtre*/
-void DefHistorique(int ind1=-1,int ind2=-1 ,wxString nomF=wxEmptyString,Parametre *pOCV=NULL); /*< Associer origine à une image */
+void DefHistorique(int ind1=-1,int ind2=-1,int idOpe=-1,int numE=-1 ,wxString nomF=wxEmptyString,Parametre *pOCV=NULL); /*< Associer origine à une image */
     /*!
      *  \brief Fonction DefHistorique
      *
@@ -563,6 +570,8 @@ void DefHistorique(int ind1=-1,int ind2=-1 ,wxString nomF=wxEmptyString,Parametr
      *
      *  \param ind1 : premier argument de l'opérande
 	 *  \param ind2 : deuxième argument de l'opérande -1 sinon
+	 *  \param idOpe : idOperation unique dans wxOpenCV.ini -1 sinon
+	 *  \param numE : numéro de l'étape dans la séquence sinon
 	 *  \param nomF : nom de l'opération
 	 *  \param pOCV : parametre de l'opération NULL s'il n'existe pas
      */

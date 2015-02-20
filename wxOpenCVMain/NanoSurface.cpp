@@ -569,13 +569,13 @@ case CV_16S :
 				{
 				switch(indCanal){
 				case 0:
-					gr->setHeight(j,i,((*d))*EchZ());	
+					gr->setHeight(j,im->rows-1-i,((*d))*EchZ());	
 					break;
 				case 1:
-					gv->setHeight(j,i,((*d))*EchZ());	
+					gv->setHeight(j,im->rows-1-i,((*d))*EchZ());	
 					break;
 				case 2:
-					gb->setHeight(j,i,((*d))*EchZ());
+					gb->setHeight(j,im->rows-1-i,((*d))*EchZ());
 					break;
 					}
 				}
@@ -603,13 +603,13 @@ case CV_16U :
 				{
 				switch(indCanal){
 				case 0:
-					gr->setHeight(j,i,((*d))*EchZ());	
+					gr->setHeight(j,im->rows-1-i,((*d))*EchZ());	
 					break;
 				case 1:
-					gv->setHeight(j,i,((*d))*EchZ());	
+					gv->setHeight(j,im->rows-1-i,((*d))*EchZ());	
 					break;
 				case 2:
-					gb->setHeight(j,i,((*d))*EchZ());
+					gb->setHeight(j,im->rows-1-i,((*d))*EchZ());
 					break;
 					}
 				}

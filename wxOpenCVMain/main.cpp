@@ -339,9 +339,11 @@ for (pp=listeFenetre.begin();pp!=listeFenetre.end();pp++)
 for (int i = 0; i < listeFenetre.size(); i++)
 	delete listeFenetre[i];
 delete serveur;
+#ifdef _DLL_DETECTION__
 delete dllplplot;
 delete dllWXplplotdrv;
 delete dllSVGplplotdrv;
+#endif
 outils=NULL;
 ctrlCamera=NULL;
 ImageInfoCV i;
@@ -929,10 +931,40 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 		ind = im[nbres]->IndOpMorphologie();
 		pOCV.doubleParam["IndOpDilatation"].valeur=ind;
 		}
+	int idOperation=-1;
+	int numEtape=-1;
+	if (indOp1Fenetre!=-1)
+		{
+		FenetrePrincipale *f=Fenetre(indOp1Fenetre);
+		
+		if (f!=NULL)
+			{
+			if(f->OrigineImage()!=NULL)
+				{
+				idOperation=f->OrigineImage()->idOperation;
+				if (idOperation>=0)
+					numEtape=f->OrigineImage()->indEtape+1;
+				}
+			}
+		if (idOperation==-1 && indOp2Fenetre>=0)
+			{
+			f=Fenetre(indOp2Fenetre);
+			if(f->OrigineImage()!=NULL)
+				{
+				idOperation=f->OrigineImage()->idOperation;
+				if (idOperation>=0)
+					numEtape=f->OrigineImage()->indEtape+1;
+				}
+			}
+		}
+	if (numEtape==-1)
+		numEtape=0;
+	if (idOperation==-1)
+		idOperation=numOpFaite++;
 	if (opUnaireSelec)
-		f->DefHistorique(indOp1Fenetre,-1,nomOperation,&pOCV);
+		f->DefHistorique(indOp1Fenetre,-1,idOperation,numEtape,nomOperation,&pOCV);
 	if (opBinaireSelec)
-		f->DefHistorique(indOp1Fenetre,indOp2Fenetre,nomOperation,NULL);
+		f->DefHistorique(indOp1Fenetre,indOp2Fenetre,idOperation,numEtape,nomOperation,NULL);
 	if (ind!=-1)
 		s.Printf("%d : %s(operator %d) of image %d ",nbFenetre,nomOperation,ind,indOp1Fenetre );
 	else
@@ -955,7 +987,9 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	imgStatIm->DefOSGApp(this);
 	f->DefZoom(fenZoom);
 	f->DefImgStat(imgStatIm);
+#ifdef _DLL_DETECTION__
 	if (dllplplot->IsLoaded() && dllSVGplplotdrv->IsLoaded())
+#endif
 		{
 		imgStatIm->OuvertureOngletHistogramme();
 		imgStatIm->OuvertureOngletCoupe();
@@ -998,12 +1032,13 @@ void wxOsgApp::Erosion(wxCommandEvent &w)
 
 // `Main program' equivalent, creating windows and returning main app frame
 bool wxOsgApp::OnInit()
-{bool b=false;
+{
+bool b=false;
 //b=wxUnsetEnv("PLPLOT_HOME");
 //b=wxUnsetEnv("PLPLOT_LIB");
 //b=wxUnsetEnv("PLPLOT_DRV_DIR");
-	osg::Image *im=osgDB::readImageFile("F:\\Lib\\OpenSceneGraph-Data-3.0.0\\Images\\reflect.rgb");
-
+//	osg::Image *im=osgDB::readImageFile("F:\\Lib\\OpenSceneGraph-Data-3.0.0\\Images\\reflect.rgb");
+	numOpFaite=0;
 	quitter=false;
 	serveur = NULL;
     configApp=new wxFileConfig("wxOpenCV","LB","wxOpenCV.ini",wxEmptyString);
@@ -1084,9 +1119,10 @@ wxString	wxPlPlotDrv(cheminPlplotDrv+"/wxwidgets");
 
 
 
-dllplplot=new wxDynamicLibrary(plPlotLibWX);
-dllWXplplotdrv=new wxDynamicLibrary(wxPlPlotDrv);
-dllSVGplplotdrv=new wxDynamicLibrary(svgPlPlotDrv);
+new wxDynamicLibrary(plPlotLibWX);
+new wxDynamicLibrary(wxPlPlotDrv);
+new wxDynamicLibrary(svgPlPlotDrv);
+
 InterfaceAvance *frame = new InterfaceAvance(NULL,
                                  wxID_ANY,
                                  "wxOpenCV",
@@ -1165,12 +1201,14 @@ else
 
 delete cam;
 
+#ifdef _DLL_DETECTION__
 if (!dllplplot || !dllplplot->IsLoaded())
 	wxLogWarning(_("unable to load plplot"));
 if (!dllplplot || !dllWXplplotdrv->IsLoaded())
 	wxLogWarning(_("unable to load wxwidgets"));
 if (!dllplplot || !dllSVGplplotdrv->IsLoaded())
 	wxLogWarning(_("unable to load svg"));
+#endif
 
 nbFenetre=0;
 indFenetre=-1;
@@ -1866,18 +1904,42 @@ else if (s.Find(".is2")>=0 ||s.Find(".IS2")>=0)
 	*/
 	imAcq =new ImageInfoCV(240,320,CV_16UC1);
 	ifstream fs;
+	float t[10];
 	fs.open(nomFichier,ios::binary);
 	unsigned short *tmp=new unsigned short[320*240*2];
-	fs.seekg(169642-320*240*2-28*2);
+	fs.seekg(5880);
+	fs.read((char*)t,10*4);
+	fs.seekg(5882);
+	fs.read((char*)t,10*4);
+	fs.seekg(15986);
 	fs.read((char*)tmp,320*240*2);
+
+	float *t1=new float[4000];
+	float *t2=new float[4000];
+	int *i1=new int[4000];
+	int *i2=new int[4000];
+	fs.seekg(0);
+	fs.read((char*)t1,4000*4);
+	fs.seekg(0);
+	fs.read((char*)i1,4000*4);
+	fs.seekg(2);
+	fs.read((char*)t2,4000*4);
+	fs.seekg(2);
+	fs.read((char*)i2,4000*4);
+
 	fs.close();
+	ofstream fsr;
+	fsr.open("float.txt");
+
+	for (int i=0;i<4000;i++)
+		fsr<<t1[i]<<"\t"<<t2[i]<<"\t"<<i1[i]<<"\t"<<i2[i]<<"\n";
 	for (int i=0;i<240;i++)
 		for (int j=0;j<320;j++)
 			{
 			imAcq->at< unsigned short >(i,j)=tmp[i*320+j];
 			}
 	
-
+	delete tmp;
 
 	}
 else
@@ -2479,12 +2541,15 @@ case RESET_OP :
 	}
 }
 
-void FenetrePrincipale::DefHistorique(int ind1,int ind2 ,wxString nomF,Parametre *pOCV) /*< Associer origine à une image */
+void FenetrePrincipale::DefHistorique(int ind1,int ind2,int idOpe,int numE ,wxString nomF,Parametre *pOCV) /*< Associer origine à une image */
 {
 if (ind1!=-1)
 	{
 	origineImage.indOp1=ind1;
 	origineImage.indOp2=ind2;
+	origineImage.indRes=idFenetre;
+	origineImage.idOperation=idOpe;
+	origineImage.indEtape=numE;
 	origineImage.op1 = osgApp->Fenetre(ind1)->ImAcq();
 	if (ind2>=0)
 		origineImage.op2 = osgApp->Fenetre(ind2)->ImAcq();
@@ -2498,15 +2563,21 @@ if (idFenetre>=0)
 	wxString param;
 	wxString chemin;
 	wxString chaine;
-	chemin.Printf("/operateur/%d/",idFenetre);
+	origineImage.indRes=idFenetre;
+	chemin.Printf("/operateur/%d/",origineImage.idOperation);
+	osgApp->SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
+	chemin.Printf("/operateur/%d/%d/",origineImage.idOperation,origineImage.indEtape);
 	osgApp->SauverFichierConfig(chemin,"op",origineImage.nomOperation);
 	osgApp->SauverFichierConfig(chemin,"op1",(long)origineImage.indOp1);
 	osgApp->SauverFichierConfig(chemin,"op2",(long)origineImage.indOp2);
+	osgApp->SauverFichierConfig(chemin,"res",(long)origineImage.indRes);
+	osgApp->SauverFichierConfig(chemin,"indEtape",(long)origineImage.indEtape);
+	osgApp->SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
 	std::map<std::string,DomaineParametre<int> >::iterator iti;
 	int nb=0;
 	for (iti=origineImage.pOCV.intParam.begin();iti!=origineImage.pOCV.intParam.end();iti++)
 		{
-		chemin.Printf("/operateur/%d/paramEntier/%d",idFenetre,nb);
+		chemin.Printf("/operateur/%d/%d/paramEntier/%d",origineImage.idOperation,origineImage.indEtape,nb);
 		osgApp->SauverFichierConfig(chemin,"nom",iti->first);
 		osgApp->SauverFichierConfig(chemin,"valeur",(long)iti->second.valeur);
 		osgApp->SauverFichierConfig(chemin,"minVal",(long)iti->second.mini);
@@ -2518,7 +2589,7 @@ if (idFenetre>=0)
 	std::map<std::string,DomaineParametre<double> >::iterator itd;
 	for (itd=origineImage.pOCV.doubleParam.begin();itd!=origineImage.pOCV.doubleParam.end();itd++)
 		{
-		chemin.Printf("/operateur/%d/paramDouble/%d",idFenetre,nb);
+		chemin.Printf("/operateur/%d/%d/paramDouble/%d",origineImage.idOperation,origineImage.indEtape,nb);
 		osgApp->SauverFichierConfig(chemin,"nom",itd->first);
 		osgApp->SauverFichierConfig(chemin,"valeur",itd->second.valeur);
 		osgApp->SauverFichierConfig(chemin,"minVal",(long)itd->second.mini);
@@ -2530,7 +2601,7 @@ if (idFenetre>=0)
 	std::map<std::string,DomaineParametre<cv::Size> >::iterator its;
 	for (its=origineImage.pOCV.sizeParam.begin();its!=origineImage.pOCV.sizeParam.end();its++)
 		{
-		chemin.Printf("/operateur/%d/paramSize/%d",idFenetre,nb);
+		chemin.Printf("/operateur/%d/%d/paramSize/%d",origineImage.idOperation,origineImage.indEtape,nb);
 		osgApp->SauverFichierConfig(chemin,"nom",its->first);
 		osgApp->SauverFichierConfig(chemin,"largeur",(long)its->second.valeur.width);
 		osgApp->SauverFichierConfig(chemin,"hauteur",(long)its->second.valeur.height);
@@ -3207,7 +3278,8 @@ configApp->Flush();
 void wxOsgApp::LectureFichierConfig()
 {
 ImageInfoCV xx;
-// Lecture des opérateurs de convolution
+// Lecture des opérateurs de convolution commençant par /convolution
+// les opérateurs trouvés sont insérés dans le tableau static opnn 
 wxString chemin;
 chemin.Printf("/convolution");
 configApp->SetPath(chemin);
@@ -3239,7 +3311,8 @@ while ( bCont )
 	bCont = configApp->GetNextGroup(str, dummy);
 	}
 
-// Lecture des opérateurs de morphologie
+// Lecture des opérateurs de morphologie commençant par /morphologie
+// les opérateurs trouvés sont insérés dans le tableau static opMorph 
 chemin.Printf("/morphologie");
 configApp->SetPath(chemin);
 bCont = configApp->GetFirstGroup(str, dummy);
@@ -3272,108 +3345,150 @@ while ( bCont )
 	dummy=tmp2;
 	bCont = configApp->GetNextGroup(str, dummy);
 	}
-// Lecture des opérations prédéfinies
+// Lecture des opérations prédéfinies commençant par /opérateur
+// Chaque opération est définie par son nom, opérande 1, opérande 2 puis les paramètres 
+// entiers, réels de l'opération
 int nbOperation=0;
 configApp->SetPath("/operateur");
 wxString	cleIndOperateur;
-listeOperation.resize(configApp->GetNumberOfGroups());
+int nbOpConfig=10;
+listeOperation.resize(nbOpConfig);
 bCont = configApp->GetFirstGroup(cleIndOperateur, dummy);
 bool opValide;
 while ( bCont )
 	{
 	wxString tmp1(cleIndOperateur);
-	long tmp2=dummy;
-	wxString chemin=configApp->GetPath();
-// Lecture d'une opération
-	configApp->SetPath(chemin+"/"+cleIndOperateur);
-// Cette opération est composée d'un nom et de deux opérateurs
+	long tmpDummy=dummy;
+	wxString cheminSeq=configApp->GetPath();
+// Lecture d'une séquence d'opération
+	configApp->SetPath(cheminSeq+"/"+cleIndOperateur);
+// Cette séquence est composée d'opérations
 	opValide=true;
-	if(!configApp->Read(wxString("op"),&listeOperation[nbOperation].nomOperation))
+// Une opération est composée d'un nom et de deux opérateurs
+	if(!configApp->Read(wxString("idOperation"),&listeOperation[nbOperation].idOperation))
 		{
 		opValide=false;
 		}
-	if (opValide && !configApp->Read("op1",&listeOperation[nbOperation].indOp1))
-		opValide=false;
-	if (opValide && !configApp->Read("op2",&listeOperation[nbOperation].indOp2))
-		opValide=false;
-	if (opValide)
+	wxString	cleIndEtape;
+	bool bSeqOp;
+	bSeqOp = configApp->GetFirstGroup(cleIndEtape, dummy);
+	int	nbEtape=0;
+	while(bSeqOp)
 		{
-		wxString cheminParam(chemin+"/"+cleIndOperateur+"/paramEntier");
-		configApp->SetPath(cheminParam);
-		bCont = configApp->GetFirstGroup(str, dummy);
-		while (bCont && opValide)
+		if (nbOperation>=nbOpConfig)
 			{
-			wxString cle(cheminParam+"/"+str+"/nom");
-			wxString nom;
-			if (opValide && !configApp->Read(cle,&nom))
-				opValide=false;
-			cle=cheminParam+"/"+str+"/valeur";
-			long val;
-			if (opValide && !configApp->Read(cle,&val))
-				opValide=false;
-			long minVal,maxVal,pasVal;
-			cle=cheminParam+"/"+str+"/minVal";
-			if (opValide && !configApp->Read(cle,&minVal))
-				opValide=false;
-			cle=cheminParam+"/"+str+"/maxVal";
-			if (opValide && !configApp->Read(cle,&maxVal))
-				opValide=false;
-			cle=cheminParam+"/"+str+"/pasVal";
-			if (opValide && !configApp->Read(cle,&pasVal))
-				opValide=false;
-			if (opValide)
-				{
-				std::string s(nom.ToAscii());
-				listeOperation[nbOperation].pOCV.intParam[s]=DomaineParametre<int>(val,minVal,maxVal,pasVal);
-				}
-			bCont = configApp->GetNextGroup(str, dummy);
+			nbOpConfig+=10;
+			listeOperation.resize(nbOpConfig);
 			}
-		}
-	if (opValide)
-		{
-		wxString cheminParam(chemin+"/"+cleIndOperateur+"/paramDouble");
-		configApp->SetPath(cheminParam);
-		bCont = configApp->GetFirstGroup(str, dummy);
-		while (bCont && opValide)
+		wxString tmpCle(cleIndEtape);
+		long tmp2=dummy;
+		wxString chemin=configApp->GetPath();
+	// Lecture d'une séquence d'opération
+		configApp->SetPath(chemin+"/"+cleIndOperateur);
+		if (opValide && !configApp->Read("op1",&listeOperation[nbOperation].indOp1))
+			opValide=false;
+		if (opValide && !configApp->Read("op2",&listeOperation[nbOperation].indOp2))
+			opValide=false;
+		if (opValide && !configApp->Read("res",&listeOperation[nbOperation].indRes))
+			opValide=false;
+		if (opValide && !configApp->Read("idOperation",&listeOperation[nbOperation].idOperation))
+			opValide=false;
+		if (opValide && !configApp->Read("indEtape",&listeOperation[nbOperation].indEtape))
+			opValide=false;
+		if (opValide)
 			{
-			wxString cle(cheminParam+"/"+str+"/nom");
-			wxString nom;
-			if (opValide && !configApp->Read(cle,&nom))
-				opValide=false;
-			cle=cheminParam+"/"+str+"/valeur";
-			double val;
-			if (opValide && !configApp->Read(cle,&val))
-				opValide=false;
-			double minVal,maxVal,pasVal;
-			cle=cheminParam+"/"+str+"/minVal";
-			if (opValide && !configApp->Read(cle,&minVal))
-				opValide=false;
-			cle=cheminParam+"/"+str+"/maxVal";
-			if (opValide && !configApp->Read(cle,&maxVal))
-				opValide=false;
-			cle=cheminParam+"/"+str+"/pasVal";
-			if (opValide && !configApp->Read(cle,&pasVal))
-				opValide=false;
-			if (opValide)
+			listeOperation[nbOperation].op1=NULL;
+			listeOperation[nbOperation].op2=NULL;
+			if (listeOperation[nbOperation].idOperation>numOpFaite)
+				numOpFaite =listeOperation[nbOperation].idOperation;
+			wxString cheminParam(chemin+"/"+cleIndOperateur+"/paramEntier");
+			configApp->SetPath(cheminParam);
+			bCont = configApp->GetFirstGroup(str, dummy);
+			while (bCont && opValide)
 				{
-				std::string s(nom.ToAscii());
-				listeOperation[nbOperation].pOCV.doubleParam[s]=DomaineParametre<double>(val,minVal,maxVal,pasVal);
+				wxString cle(cheminParam+"/"+str+"/nom");
+				wxString nom;
+				if (opValide && !configApp->Read(cle,&nom))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/valeur";
+				long val;
+				if (opValide && !configApp->Read(cle,&val))
+					opValide=false;
+				long minVal,maxVal,pasVal;
+				cle=cheminParam+"/"+str+"/minVal";
+				if (opValide && !configApp->Read(cle,&minVal))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/maxVal";
+				if (opValide && !configApp->Read(cle,&maxVal))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/pasVal";
+				if (opValide && !configApp->Read(cle,&pasVal))
+					opValide=false;
+				if (opValide)
+					{
+					std::string s(nom.ToAscii());
+					listeOperation[nbOperation].pOCV.intParam[s]=DomaineParametre<int>(val,minVal,maxVal,pasVal);
+					}
+				bCont = configApp->GetNextGroup(str, dummy);
 				}
-			bCont = configApp->GetNextGroup(str, dummy);
 			}
+		if (opValide)
+			{
+			wxString cheminParam(chemin+"/"+cleIndOperateur+"/paramDouble");
+			configApp->SetPath(cheminParam);
+			bCont = configApp->GetFirstGroup(str, dummy);
+			while (bCont && opValide)
+				{
+				wxString cle(cheminParam+"/"+str+"/nom");
+				wxString nom;
+				if (opValide && !configApp->Read(cle,&nom))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/valeur";
+				double val;
+				if (opValide && !configApp->Read(cle,&val))
+					opValide=false;
+				double minVal,maxVal,pasVal;
+				cle=cheminParam+"/"+str+"/minVal";
+				if (opValide && !configApp->Read(cle,&minVal))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/maxVal";
+				if (opValide && !configApp->Read(cle,&maxVal))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/pasVal";
+				if (opValide && !configApp->Read(cle,&pasVal))
+					opValide=false;
+				if (opValide)
+					{
+					std::string s(nom.ToAscii());
+					listeOperation[nbOperation].pOCV.doubleParam[s]=DomaineParametre<double>(val,minVal,maxVal,pasVal);
+					}
+				bCont = configApp->GetNextGroup(str, dummy);
+				}
+			
+			}
+		if (opValide)
+			{
+			GenerationGraphDot(&listeOperation[nbOperation]);
+			nbOperation++;
+			nbEtape++;
+			}
+		configApp->SetPath(chemin);
+		str=tmp1;
+		dummy=tmp2;
+		bSeqOp = configApp->GetNextGroup(cleIndEtape, dummy);
 
 		}
-			
-	if (opValide)
-		{
-		GenerationGraphDot(&listeOperation[nbOperation]);
-		nbOperation++;
-		}
-	configApp->SetPath(chemin);
+	tabOperation[listeOperation[nbOperation-1].idOperation].resize(nbEtape);
+	for (int i=0;i<nbEtape;i++)
+		tabOperation[listeOperation[nbOperation-1].idOperation][i]=&listeOperation[nbOperation-nbEtape+i];
+		
+	configApp->SetPath(cheminSeq);
 	str=tmp1;
-	dummy=tmp2;
+	dummy=tmpDummy;
 	bCont = configApp->GetNextGroup(cleIndOperateur, dummy);
 	}
+if (numOpFaite>=0)
+	numOpFaite++;
 }
 
 void wxOsgApp::GenerationGraphDot(Operation *op)

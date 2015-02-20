@@ -35,9 +35,13 @@ EnvFenetre(FenetrePrincipale *ff,FenetreZoom *ffz,ImageStatistiques *fs){fPrin=f
 class wxOsgApp : public wxApp
 {
 protected:
-wxLanguage	langue;		/*!< language choisi */
-wxLocale	locale;		/*!< locale we'll be using */
-wxFileConfig *configApp;/*!< Fichier de configuration de l'application */
+wxLanguage	langue;							/*!< language choisi */
+wxLocale	locale;							/*!< locale we'll be using */
+wxFileConfig *configApp;					/*!< Fichier de configuration de l'application */
+
+std::vector<Operation> listeOperation;		/*<! Liste des opérations individuelles */
+std::map <int,std::vector <Operation *> > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
+int	numOpFaite;											/*!< Nombre d'opération faites ou sauvgardées dans le fivhier INI */		
 
 char	utilisateurAbsent;
 bool	quitter;
@@ -46,10 +50,12 @@ public:
 wxCriticalSection m_critsectWork;
 
 private :
+#ifdef _DLL_DETECTION__
 wxDynamicLibrary *dllAndor;
 wxDynamicLibrary *dllplplot;
 wxDynamicLibrary *dllWXplplotdrv;
 wxDynamicLibrary *dllSVGplplotdrv;
+#endif
 
 char	camAndor;	/*!< égal à 1 si une caméra Andor est branchée */
 char	camOpenCV;	/*!< égal à 1 si une caméra est détectée par OpenCv */
@@ -82,7 +88,6 @@ Parametre pOCV;	/*!< parametre de l'opérateur Unaire */
 int	indOp1Fenetre;	/*!< Indice de la fenêtre contenant l'image de opérande 1 */
 int indOp2Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
 
-std::vector<Operation> listeOperation;
 
 public :	
 wxOsgApp() { langue = wxLANGUAGE_UNKNOWN; }
@@ -211,7 +216,7 @@ void	DefUtilisateurAbsent(char x){if (x==0)utilisateurAbsent=0;utilisateurAbsent
 void	SauverConfiguration();
 
 int					VerifFenetre(){if (nbFenetre==0 || indFenetre==-1) return 0;else return 1;};
-void IdFenetreActive(int x);
+void				IdFenetreActive(int x);
 int					RechercheFenetre(ImageInfoCV*); /*<! recherche dans quelle fenêtre est associée à l'image */
 FenetrePrincipale	*Fenetre(int id){if (id>=0) return Graphique(id);return NULL;};
 FenetrePrincipale	*Graphique(int =-1);

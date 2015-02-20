@@ -134,7 +134,7 @@ if (!fenMere)
  delete excel;
  delete panel;
  if (x[0])
- for (int i=0;i<3;i++)
+ for (int i=0;i<NB_MAX_CANAUX;i++)
 	{
 	delete []x[i];
 	delete []y[i];
@@ -175,36 +175,77 @@ int nbVal=0;
 // from 8-bit 3-channel image to the buffer
 cv::LineIterator it(*imAcq, pt1, pt2, 8);
 cv::LineIterator it2 = it;
-vector<cv::Vec3b> buf(it.count);
 const size_t np=16384;
 
 if (x[0]==NULL)
-	for (int i=0;i<3;i++)	
+	for (int i=0;i<NB_MAX_CANAUX;i++)	
 		{
 		x[i]=new PLFLT[np];
 		y[i]=new PLFLT[np];
 		yFiltre[i]=new PLFLT[np];
 		}
-switch(imAcq->type())
+switch(imAcq->depth())
 {
-case CV_8UC1:
-case CV_16UC1:
+case CV_8U:
 	for(int i = 0; i < it.count; i++, ++it)
 		{
-		x[0][i] =  norm(it.pos()-it2.pos());
-		y[0][i]=((const cv::Vec3b)*it)[0];
+		for (int k=0;k<imAcq->channels() && k<NB_MAX_CANAUX;k++)
+			{
+			x[k][i] =  norm(it.pos()-it2.pos());
+			y[k][i]=((const cv::Vec<unsigned char ,5> )*it)[k];
+			}
 		nbVal++;
 		}
 	break;
-case CV_8UC3:
+case CV_16U:
 	for(int i = 0; i < it.count; i++, ++it)
 		{
-		x[0][i] = norm(it.pos()-it2.pos());
-		y[0][i]=((const cv::Vec3b)*it)[0];
-		y[1][i]=((const cv::Vec3b)*it)[1];
-		y[2][i]=((const cv::Vec3b)*it)[2];
+		for (int k=0;k<imAcq->channels() && k<NB_MAX_CANAUX;k++)
+			{
+			x[k][i] =  norm(it.pos()-it2.pos());
+			cv::Point p=it.pos();
+			y[k][i]=((unsigned short*)imAcq->ptr(p.y)+p.x*imAcq->channels())[k];
+
+			}
 		nbVal++;
 		}
+	break;
+case CV_16S:
+	for(int i = 0; i < it.count; i++, ++it)
+		{
+		for (int k=0;k<imAcq->channels() && k<NB_MAX_CANAUX;k++)
+			{
+			x[k][i] =  norm(it.pos()-it2.pos());
+			cv::Point p=it.pos();
+			y[k][i]=((short*)imAcq->ptr(p.y)+p.x*imAcq->channels())[k];
+			}
+		nbVal++;
+		}
+	break;
+case CV_32S:
+	for(int i = 0; i < it.count; i++, ++it)
+		{
+		for (int k=0;k<imAcq->channels() && k<NB_MAX_CANAUX;k++)
+			{
+			x[k][i] =  norm(it.pos()-it2.pos());
+			cv::Point p=it.pos();
+			y[k][i]=((int*)imAcq->ptr(p.y)+p.x*imAcq->channels())[k];
+			}
+		nbVal++;
+		}
+	break;
+case CV_32F:
+	for(int i = 0; i < it.count; i++, ++it)
+		{
+		for (int k=0;k<imAcq->channels() && k<NB_MAX_CANAUX;k++)
+			{
+			x[k][i] =  norm(it.pos()-it2.pos());
+			cv::Point p=it.pos();
+			y[k][i]=((float*)imAcq->ptr(p.y)+p.x*imAcq->channels())[k];
+			}
+		nbVal++;
+		}
+	break;
 	break;
 }
 

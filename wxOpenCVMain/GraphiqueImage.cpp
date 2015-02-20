@@ -179,7 +179,7 @@ if (!pCouleur)
 	ifstream ff("rainbow16384.txt");
 	if (ff.is_open())
 		{
-		for (int i=0;i<16384;i+=4)
+		for (int i=0;i<16384;i++)
 			{
 			ff>>red>>green>>blue;
 			pRainbow[4*i].Set(red*255,green*255,blue*255);
@@ -194,7 +194,7 @@ if (!pCouleur)
 	ifstream ff("palPerso.txt");
 	if (ff.is_open())
 		{
-		for (int i=0;i<16384;i+=4)
+		for (int i=0;i<16384;i++)
 			{
 			ff>>red>>green>>blue;
 			pPerso[4*i].Set(rand()&0xFF,rand()&0xFF,rand()&0xFF);
@@ -209,7 +209,7 @@ if (!pCouleur)
 	ifstream ff("palPersoInv.txt");
 	if (ff.is_open())
 		{
-		for (int i=0;i<16384;i+=4)
+		for (int i=0;i<16384;i++)
 			{
 			ff>>red>>green>>blue;
 			pPersoInv[4*i].Set(red*255,green*255,blue*255);
