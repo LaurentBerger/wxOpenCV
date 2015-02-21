@@ -304,6 +304,7 @@ private:
 	void SelectPalette(wxCommandEvent& event);
 	void ModeComplexe(wxCommandEvent& event);
 	void MAJZoom(wxCommandEvent& event);
+	void SequenceOperation(wxCommandEvent& event);
 
 wxMenu *CreateMenuComplex(wxString *title);
 wxMenu *CreateMenuPalette(wxString *title);
@@ -892,6 +893,7 @@ enum
     ZOOM2SUR1,
     ZOOM4SUR1,
     ZOOM8SUR1,
+	SEQ_OPE,
     NEW_LEVEL,
     MERGE_LEVEL,
     RESET_LEVEL,

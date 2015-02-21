@@ -4,6 +4,7 @@
 #include "imagestat.h"
 #include "ControleCamera.h"
 #include "Fenetre3D.h"
+#include "FenetreSeqOpe.h"
 
 ZoneImage::ZoneImage(wxWindow *parent,wxSize w)
     : wxScrolled<wxWindow>(parent, wxID_ANY)   {
@@ -37,6 +38,7 @@ Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::Vue3D,this,Menu_3D);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SelectPalette,this,NOIRETBLANC_,NOIRETBLANC_+9);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::ModeComplexe,this,M_MODULE_,PHASE_RD);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR2,ZOOM8SUR1);
+Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SequenceOperation,this,SEQ_OPE);
 /*Connect(ZOOM1SUR2,ZOOM8SUR1  ,wxCommandEventHandler(ZoneImage::MAJZoom));
 Connect(ZOOM1SUR1,wxEVT_MENU,  wxCommandEventHandler(ZoneImage::MAJZoom));
 Connect(ZOOM2SUR1,wxEVT_MENU,  wxCommandEventHandler(ZoneImage::MAJZoom));
@@ -548,11 +550,11 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.Append(Menu_Popup_Zoom, _T("&Zoom"), CreateMenuZoom(NULL));
 	menu.AppendCheckItem(Menu_Rectangle, _T("Stat Rectangle"));
 	menu.AppendCheckItem(Menu_Coupe, _T("Section"));
-	menu.AppendCheckItem(Menu_FilMax, _T("Filtrage Max"));
 	if (f->ImAcq()->PtContours())
 		menu.AppendCheckItem(Menu_Contour, _T("Draw Contour "));
 	if (osgApp->Fenetre(f->IdFenetreOp1pre()))
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
+	menu.AppendCheckItem(SEQ_OPE, _T("Sequenceoperation"));
 	if(imAcq->depth()==CV_32F && imAcq->channels()%2==0)
 		{
 		menu.AppendSeparator();
@@ -706,6 +708,17 @@ wxRect r=GetClientRect();
 RefreshRect (r, false);
 Update();
 }
+
+void ZoneImage::SequenceOperation(wxCommandEvent& event)
+{
+if (osgApp->FenetreSeqOpe()==NULL)
+	{
+	FenetreSequenceOperation *fs=new FenetreSequenceOperation(f,f->GetTitle(),wxPoint(530,0), wxSize(430,570),this->osgApp);
+	osgApp->FenetreSeqOpe(fs);
+	}
+((FenetreSequenceOperation *)osgApp->FenetreSeqOpe())->Show(true);
+}
+
 
 void FenetrePrincipale::TracerContour(wxCommandEvent& event)
 {

@@ -22,19 +22,19 @@ void							*osgApp;
 std::map<wxWindow*,std::pair<wxString,int> >	listeOnglet;/*<! Onglet associé à chaque opération */
 std::vector<std::pair<Operation*,int> >			listeOp;	/*<! Onglet associé à chaque opération */
 
-int								nbParamMax;	/*<! Nombre de parametre maximum de l'ensemble de opérations */
-int								nbEtape;	/*<! Nombre d'étape nécessaire pour effectuer l'opération */
 wxPanel							*panneau;	/*!< Pointeur sur le panneau contenant le classeur */
 wxNotebook						*classeur;	/*!< le classeur avec ses différents onglets*/
-
+wxString						*nomEtape;	/*!< Nom des étapes dans la listeBox */
+int								nbEtape;	/*!< nombre de chaines maximum */
+wxListBox						*choixOp;
 public :
 FenetreSequenceOperation(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos, 
         const wxSize& size,wxOsgApp *, long style = wxDEFAULT_FRAME_STYLE);
         /*!< Constructeur de la fenetre parametrage */
 ~FenetreSequenceOperation();
         /*!< destructeur de la fenetre parametrage */
-wxWindow *CreerOngletEtape(wxNotebook *,int);
-        /*!< Création d'un onglet pour une étape */
+void InsererCtrlEtape(Operation *);
+        /*!< Création des Ctrl pour une étape de la séquence*/
 // Gestion des évènements
 void OnActivate(wxActivateEvent& event);
 		/*!< Gestion pour maj palette */
@@ -47,6 +47,8 @@ void OnSpinReel(wxSpinDoubleEvent &w);
 void  OnSpinMoins(wxSpinEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 void  OnSpinPlus(wxSpinEvent& event);
+	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
+void  OnOpeSelec(wxCommandEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 
 void OnTextValider(wxCommandEvent &w);

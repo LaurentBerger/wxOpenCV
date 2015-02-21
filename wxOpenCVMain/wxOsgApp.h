@@ -40,8 +40,9 @@ wxLocale	locale;							/*!< locale we'll be using */
 wxFileConfig *configApp;					/*!< Fichier de configuration de l'application */
 
 std::vector<Operation> listeOperation;		/*<! Liste des opérations individuelles */
-std::map <int,std::vector <Operation *> > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
-int	numOpFaite;											/*!< Nombre d'opération faites ou sauvgardées dans le fivhier INI */		
+std::map <int,std::vector <Operation > > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
+int	numOpFaite;											/*!< Nombre d'opération faites ou sauvgardées dans le fichier INI */
+int numSeqOpe;								/*!< Nombre de séquence d'opérations faites ou sauvgardées dans le fichier INI */
 
 char	utilisateurAbsent;
 bool	quitter;
@@ -71,6 +72,7 @@ int					modeSouris;				// utilisé pour la sélection d'image
 
 ControleCamera		*ctrlCamera;
 OutilsImage			*outils;
+void				*fSeqOpe;
 
 // surjection nombre d'images, les images dans un tableau et les paramètres
 ImageInfoCV**  (ImageInfoCV::*opSurjecMultiple)(int,ImageInfoCV **,Parametre *) ;
@@ -112,6 +114,7 @@ ImageInfoCV *Op2(){return op2;};
 int IndOp1(){return indOp1Fenetre;};
 int IndOp2(){return indOp2Fenetre;};
 void AnnuleOp();
+std::map <int,std::vector <Operation > >  *TabSeqOperation(){return &tabOperation;}
 ImageInfoCV **ExecuterOperation(Parametre * = NULL);
     /*!
      *  \brief Fonction ExecuterOperation
@@ -223,6 +226,8 @@ FenetrePrincipale	*Graphique(int =-1);
 ControleCamera		*CtrlCamera(){return ctrlCamera;};
 ImageStatistiques	*ImgStat(){if (nbFenetre>0 && indFenetre>=0) return listeFenetre[indFenetre]->fStat;else return NULL;};
 OutilsImage			*Outils(){return outils;};
+void				*FenetreSeqOpe(void *f){fSeqOpe=f;return fSeqOpe;};
+void				*FenetreSeqOpe(){return fSeqOpe;};
 ServeurScilab		*Serveur(){return serveur;};
 
 void TracerZoom(wxPoint p);

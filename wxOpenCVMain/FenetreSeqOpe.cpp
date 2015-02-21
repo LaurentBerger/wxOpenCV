@@ -5,80 +5,62 @@
 using namespace std;
 
 
- 
+#define IND_OPE 100 
+#define LISTE_OP_SEQ 101
+#define IND_HYPER 10
+#define IND_STATIC 200
+#define IND_SPIN 300
+
 FenetreSequenceOperation::FenetreSequenceOperation(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size,wxOsgApp *osg, long style)
      : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
 {
-panneau=new wxPanel(this, wxID_ANY,  pos, size, wxTAB_TRAVERSAL  | wxNO_BORDER | wxNO_FULL_REPAINT_ON_RESIZE);
-int hMax=0,lMax=0;
-Parametre *pOCV=frame->ParamOCV();
-fenMere= frame;
-osgApp=osg;
+ImageInfoCV xx;
+panneau = new wxPanel( this,wxID_ANY ,wxPoint(0,0),wxSize(400,400));
+//wxPanel	*panneauCtrl = new wxPanel( panel,  -1, wxDefaultPosition, wxSize(400,400));
+this->osgApp =osg;
+std::map <int,std::vector <Operation > >  *t=osg->TabSeqOperation();
 
-classeur = new wxNotebook(panneau, wxID_ANY);
-wxBoxSizer *m_sizerFrame = new wxBoxSizer(wxVERTICAL);
-panneau->SetSizer(m_sizerFrame);
-m_sizerFrame->Insert(0, classeur, 5, wxEXPAND | wxALL, 4);                 
-m_sizerFrame->Hide(classeur);                                                   
-m_sizerFrame->Show(classeur);                                                                           
-panneau->Show(true);
-FenetrePrincipale *f=fenMere;
-nbEtape=0;
-nbParamMax=0;
-while(f && f->OrigineImage()->indOp1>=0)
-	{
-	int id=f->OrigineImage()->indOp1;
-	if (id>=0)
-		{
-		int nbParam=f->OrigineImage()->pOCV.intParam.size();
-		nbParam+=f->OrigineImage()->pOCV.doubleParam.size();
-		nbParam+=2*f->OrigineImage()->pOCV.pointParam.size();
-		nbParam+=2*f->OrigineImage()->pOCV.sizeParam.size();
-		if (nbParamMax<nbParam)
-			nbParamMax=nbParam;
-		nbEtape++;
-		f=((wxOsgApp *)osgApp)->Fenetre(id);
-		}
-	else 
-		f=NULL;
-	}
-nbParamMax=2*(nbParamMax+2);
-f=fenMere;
-int nb=nbEtape-1;
-listeOp.resize(nbEtape);
-while(f && f->OrigineImage()->indOp1>=0)
-	{
-	if (f->OrigineImage())
-		{
-		listeOp[nb]=std::pair< Operation*,int>(f->OrigineImage(),f->IdFenetre()) ;
-		wxWindow *w=CreerOngletEtape(classeur,nb);
-		listeOnglet[w]=std::pair<wxString,int>(f->OrigineImage()->nomOperation,nb);
-		wxString nom(_("Etape"));
-		nom.Printf("%s %d : %s",nom,nb,f->OrigineImage()->nomOperation);
-		classeur->InsertPage(0,w,nom,nbEtape==1);
-		w->Refresh(true);
-		int id=f->OrigineImage()->indOp1;
-		if (id>=0)
-			f=((wxOsgApp *)osgApp)->Fenetre(id);
-		else 
-			f=NULL;
-		nb--;
-		}
-	else 
-		f=NULL;
-	}
+new wxStaticText( panneau, -1, _("Sequence"),wxPoint(10,20) );
+wxSpinCtrl *spw=new wxSpinCtrl(panneau,IND_OPE,_("Sequence"),wxPoint(80,20));
+spw->SetRange(0,t->size()-1);
+spw->SetValue(0);
+nbEtape=100;
+if (nbEtape<(*t)[0].size())
+	nbEtape=(*t)[0].size();
+nomEtape=new wxString[nbEtape];
+int i=0;
+for (std::vector <Operation >::iterator it = (*t)[0].begin() ; it != (*t)[0].end(); ++it,++i)
+    nomEtape[i]=(*it).nomOperation;
+choixOp=new wxListBox( panneau,LISTE_OP_SEQ,wxPoint(80,50),wxSize(150,-1),(*t)[0].size(),nomEtape);
+choixOp->SetSelection(0);
+InsererCtrlEtape(&((*t)[0][0]));
+Bind(wxEVT_SPINCTRL, &FenetreSequenceOperation::OnSpinEntier,this);
+Bind(wxEVT_COMMAND_LISTBOX_SELECTED, &FenetreSequenceOperation::OnOpeSelec,this);
 }
 
-wxWindow *FenetreSequenceOperation::CreerOngletEtape(wxNotebook *classeur,int indOp)
+void FenetreSequenceOperation::InsererCtrlEtape(Operation *op)
 {
-wxWindow *page = new wxWindow(classeur,-1);
-Parametre *pOCV=&listeOp[indOp].first->pOCV;
-int nbParam=1;
-int ligne=50;
-int indOriCtrl=1+indOp*nbParamMax;
-new wxHyperlinkCtrl (page,indOriCtrl," OpenCV Documentation",pOCV->lienHtml,wxPoint(10,10),wxSize(400,20));
-new wxHyperlinkCtrl(page,indOriCtrl+1,"PDF Documentation",pOCV->refPDF,wxPoint(10,30),wxSize(400,20));
+Parametre *pOCV=&op->pOCV;
+int ligne=150;
+int	indStatic=IND_STATIC;
+int indSpin=IND_SPIN;
+int indHyper=IND_HYPER;
+
+wxStaticText		*wst;
+wxHyperlinkCtrl		*whc;
+wxSpinCtrlDouble	*wsd;
+
+if ((whc=(wxHyperlinkCtrl*)wxWindow::FindWindowById(indHyper,panneau))!=NULL)
+	whc->SetURL(pOCV->lienHtml);
+else
+	new wxHyperlinkCtrl (panneau,indHyper," OpenCV Documentation",pOCV->lienHtml,wxPoint(10,ligne-50),wxSize(400,20));
+indHyper++;
+if ((whc=(wxHyperlinkCtrl*)wxWindow::FindWindowById(indHyper,panneau))!=NULL)
+	whc->SetURL(pOCV->lienHtml);
+else
+	new wxHyperlinkCtrl(panneau,indHyper,"PDF Documentation",pOCV->refPDF,wxPoint(10,ligne-20),wxSize(400,20));
+indHyper++;
 std::map<std::string,DomaineParametre<cv::Size> >::iterator its;
 for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	{
@@ -86,25 +68,49 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	nombre.Printf("%d",its->second.valeur.width);
 	wxPoint p(10,ligne);
 	wxSize	s(100,20);
-	new wxStaticText(page,indOriCtrl+2*nbParam,its->first,p, s);
+	if ((wst=(wxStaticText*)panneau->FindWindowById(indStatic,panneau))!=NULL)
+		{
+		wst->SetLabel(its->first);
+		wst->Move(p);
+		}
+	else
+		wst = new wxStaticText(panneau,indStatic,its->first,p, s);
+	wst->Show(true);
+	indStatic++;
 	p += wxPoint(s.GetX(),0);
 //	wxSpinCtrl *spw=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-	wxSpinCtrlDouble *spw=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	spw->SetRange(0,256); 
-	spw->SetIncrement((double)its->second.pas.width); 
-	spw->SetRange(0,256); 
+	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
+		wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+	wsd->SetRange(0,256); 
+	wsd->SetIncrement((double)its->second.pas.width); 
+	wsd->SetValue(its->second.valeur.width);
+	wsd->SetRange(0,256); 
+	wsd->Show(true);
+	indSpin++;
 	p += wxPoint(s.GetX(),0);
-	nbParam++;
-	new wxStaticText(page,indOriCtrl+2*nbParam,its->first,p, s);
+	if ((wst=(wxStaticText*)panneau->FindWindowById(indStatic,panneau))!=NULL)
+		{
+		wst->SetLabel(its->first);
+		wst->Move(p);
+		}
+	else
+		wst =new wxStaticText(panneau,indStatic,its->first,p, s);
+	wst->Show(true);
+	indStatic++;
 	p += wxPoint(s.GetX(),0);
 	nombre.Printf("%d",its->second.valeur.height);
 //	wxSpinCtrl *sph=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 //	sph->SetRange(0,256); 
-	wxSpinCtrlDouble *sph=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	sph->SetRange(0,256); 
-	sph->SetIncrement((double)its->second.pas.height); 
-		
-	nbParam++;
+	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
+		wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+	else
+		wsd->Move(p);
+
+	wsd->SetRange(0,256); 
+	wsd->SetIncrement((double)its->second.pas.height); 
+	wsd->SetValue(its->second.valeur.height);
+	wsd->Show(true);
+	indSpin++;	
 	ligne+=20;
 	}
 std::map<std::string,DomaineParametre<int> >::iterator iti;
@@ -114,14 +120,27 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 	nombre.Printf("%d",iti->second.valeur);
 	wxPoint p(10,ligne);
 	wxSize	s(100,20);
-	new wxStaticText(page,indOriCtrl+2*nbParam,iti->first,p, s);
+	if ((wst=(wxStaticText*)panneau->FindWindowById(indStatic,panneau))!=NULL)
+		{
+		wst->SetLabel(iti->first);
+		wst->Move(p);
+		}
+	else
+		wst = new wxStaticText(panneau,indStatic,iti->first,p, s);
+	wst->Show(true);
+	indStatic++;
 	p += wxPoint(s.GetX(),0);
 //	wxSpinCtrl *sp=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 //	sp->SetRange(iti->second.mini,iti->second.maxi); 
-	wxSpinCtrlDouble *sp=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	sp->SetRange(iti->second.mini,iti->second.maxi); 
-	sp->SetIncrement(iti->second.pas); 
-	nbParam++;
+	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
+		wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+	else
+		wsd->Move(p);
+	wsd->SetRange(iti->second.mini,iti->second.maxi); 
+	wsd->SetValue(iti->second.valeur);
+	wsd->SetIncrement(iti->second.pas); 
+	wsd->Show(true);
+	indSpin++;
 	ligne+=20;
 	}
 std::map<std::string,DomaineParametre<double> >::iterator itd;
@@ -131,23 +150,47 @@ for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
 	nombre.Printf("%f",itd->second.valeur);
 	wxPoint p(10,ligne);
 	wxSize	s(100,20);
-	new wxStaticText(page,indOriCtrl+2*nbParam,itd->first,p, s);
+	if ((wst=(wxStaticText*)panneau->FindWindowById(indStatic,panneau))!=NULL)
+		{
+		wst->SetLabel(itd->first);
+		wst->Move(p);
+		}
+	else
+		wst = new wxStaticText(panneau,indStatic,itd->first,p, s);
+	wst->Show(true);
+	indStatic++;
 	p += wxPoint(s.GetX(),0);
-	wxSpinCtrlDouble *sp=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	sp->SetRange(itd->second.mini,itd->second.maxi); 
-	sp->SetIncrement(itd->second.pas); 
-	nbParam++;
+	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
+		wsd=new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+	wsd->SetRange(itd->second.mini,itd->second.maxi); 
+	wsd->SetIncrement(itd->second.pas); 
+	wsd->SetValue(itd->second.valeur);
+	wsd->Show(true);
+	indSpin++;
 	ligne+=20;
 	}
+int i=indStatic;
+while (panneau->FindWindowById(i,panneau)&& i<IND_SPIN)
+	{
+	panneau->FindWindowById(i,panneau)->Show(false);
+	i++;
+	}
+i=indSpin;
+while (panneau->FindWindowById(i,panneau))
+	{
+	panneau->FindWindowById(i,panneau)->Show(false);
+	i++;
+	}
 SetClientSize(250,ligne+20);
-return page;
+panneau->Update();
 }
 
 
 FenetreSequenceOperation::~FenetreSequenceOperation()
 {
-fenMere->RAZFenAlgo();
-
+//delete nomEtape;
+if (osgApp)
+	((wxOsgApp*)osgApp)->FenetreSeqOpe(NULL);
 }
 
 void FenetreSequenceOperation::OnActivate(wxActivateEvent& event)
@@ -163,78 +206,45 @@ void FenetreSequenceOperation::OnSpinEntier(wxSpinEvent &w)
 wxOsgApp *app=(wxOsgApp *)osgApp;
 if (!osgApp)
 	return;
-string nom;
-int ind=listeOnglet[classeur->GetCurrentPage()].second;
-
-Parametre *pOCV=&listeOp[ind].first->pOCV;
-wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
-nom=st->GetLabel();
-if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
+int opSelec=w.GetValue();
+std::map <int,std::vector <Operation > >  *t=((wxOsgApp*)osgApp)->TabSeqOperation();
+std::map <int,std::vector <Operation > >::iterator it=(*t).begin();
+for (int i=0;i<opSelec;i++,it++);
+choixOp->Clear();
+if (nbEtape<it->second.size())
 	{
-	int ds=pOCV->intParam[nom].valeur-((wxSpinCtrl*)(w.GetEventObject()))->GetValue();
-	if (ds==0)
-		return;
-	int valeur=pOCV->intParam[nom].maxi+1;
-	if(ds<0 )
-		valeur = pOCV->intParam[nom].valeur + pOCV->intParam[nom].pas;
-	if(ds>0 )
-		valeur = pOCV->intParam[nom].valeur - pOCV->intParam[nom].pas;
-	if (	valeur >=pOCV->intParam[nom].mini && valeur <pOCV->intParam[nom].maxi && 
-		(valeur%pOCV->intParam[nom].pas)==(pOCV->intParam[nom].mini%pOCV->intParam[nom].pas))
-		{
-		pOCV->intParam[nom].valeur=valeur;
-		((wxSpinCtrl*)(w.GetEventObject()))->SetValue(pOCV->intParam[nom].valeur);
-			ExecuterOperation(ind);
-		}
-	else
-		wxMessageBox("Selected value is out of range or forbidden");
+	nbEtape=(*t)[opSelec].size();
+	delete nomEtape;
+	nomEtape=new wxString[nbEtape];
 	}
-if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
-	{
-	if ((w.GetId()-1)%4==0)
-		{
-		if (pOCV->sizeParam[nom].valeur.width==((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
-			return;
-		int ds=pOCV->sizeParam[nom].valeur.width-((wxSpinCtrl*)(w.GetEventObject()))->GetValue();
-		if (ds==0)
-			return;
-		int valeur=pOCV->sizeParam[nom].maxi.width+1;
-		if(ds<0 )
-			valeur = pOCV->sizeParam[nom].valeur.width + pOCV->sizeParam[nom].pas.width;
-		if(ds>0 )
-			valeur = pOCV->sizeParam[nom].valeur.width - pOCV->sizeParam[nom].pas.width;
-		if (	valeur >=pOCV->sizeParam[nom].mini.width && valeur <pOCV->sizeParam[nom].maxi.width && 
-			(valeur%pOCV->sizeParam[nom].pas.width)==(pOCV->sizeParam[nom].mini.width%pOCV->sizeParam[nom].pas.width))
-			{
-			pOCV->sizeParam[nom].valeur.width=valeur;
-			((wxSpinCtrl*)(w.GetEventObject()))->SetValue(pOCV->sizeParam[nom].valeur.width);
-			ExecuterOperation(ind);
-			}
-		}
-	else
-		{
-		if (pOCV->sizeParam[nom].valeur.height==((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
-			return;
-		int ds=pOCV->sizeParam[nom].valeur.height-((wxSpinCtrl*)(w.GetEventObject()))->GetValue();
-		if (ds==0)
-			return;
-		int valeur=pOCV->sizeParam[nom].maxi.height+1;
-		if(ds<0 )
-			valeur = pOCV->sizeParam[nom].valeur.height + pOCV->sizeParam[nom].pas.height;
-		if(ds>0 )
-			valeur = pOCV->sizeParam[nom].valeur.height - pOCV->sizeParam[nom].pas.height;
-		if (	valeur >=pOCV->sizeParam[nom].mini.height && valeur <pOCV->sizeParam[nom].maxi.height && 
-			(valeur%pOCV->sizeParam[nom].pas.height)==(pOCV->sizeParam[nom].mini.height%pOCV->sizeParam[nom].pas.height))
-			{
-			pOCV->sizeParam[nom].valeur.height=valeur;
-			((wxSpinCtrl*)(w.GetEventObject()))->SetValue(pOCV->sizeParam[nom].valeur.height);
-			ExecuterOperation(ind);
-
-			}
-		}
-	}
+int i=0;
+for (std::vector <Operation >::iterator it2 = it->second.begin() ; it2 != it->second.end(); ++it2,++i)
+    nomEtape[i]=(*it2).nomOperation;
+choixOp->Insert((*it).second.size(),nomEtape,0);
+choixOp->SetSelection(0);
+InsererCtrlEtape(&(it->second)[0]);
 
 }
+
+void FenetreSequenceOperation::OnOpeSelec(wxCommandEvent& event)
+{
+int opSelec;
+wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
+if (ws==NULL)
+	return;
+if (!osgApp)
+	return;
+wxOsgApp *app=(wxOsgApp *)osgApp;
+std::map <int,std::vector <Operation > >  *t=app->TabSeqOperation();
+opSelec=ws->GetValue();
+std::map <int,std::vector <Operation > >::iterator it=(*t).begin();
+for (int i=0;i<opSelec;i++,it++);
+int indOpe=event.GetInt();
+if (indOpe<0 || indOpe>=it->second.size())
+	return;
+InsererCtrlEtape(&(it->second[indOpe]));
+}
+
 
 void FenetreSequenceOperation::OnSpinReel(wxSpinDoubleEvent &w)
 {
@@ -368,7 +378,7 @@ void FenetreSequenceOperation::OnKeyDown(wxKeyEvent &)
 
 void FenetreSequenceOperation::OnClose(wxCloseEvent& event)
 {
-fenMere->RAZFenAlgo();
+((wxOsgApp *)osgApp)->FenetreSeqOpe((void*)0xFFFFFFFF);
 wxFrame::OnCloseWindow(event);
 
 }

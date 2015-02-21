@@ -280,7 +280,7 @@ if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
 	}
 if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 	{
-	if ((w.GetId()-1)%4==0)
+	if ((w.GetId())%4==0)
 		{
 		if (pOCV->sizeParam[nom].valeur.width==((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
 			return;
@@ -291,7 +291,7 @@ if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 		if (pOCV->sizeParam[nom].valeur.height==((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
 			return;
 		pOCV->sizeParam[nom].valeur.height=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
-			}
+		}
 	}
 ExecuterOperation(ind);
 }

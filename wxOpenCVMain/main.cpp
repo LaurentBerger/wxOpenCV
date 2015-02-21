@@ -17,6 +17,7 @@
 
 #include "ControleCamera.h"
 #include "imagestat.h"
+#include "FenetreSeqOpe.h"
 //#include "OutilsImage.h"
 #include "wxOsgApp.h"
 #include "FenetrePrincipale.h"
@@ -336,6 +337,8 @@ for (pp=listeFenetre.begin();pp!=listeFenetre.end();pp++)
 		pp->second->fStat->Destroy();
 		pp->second->fPrin->Destroy();
 		}
+if (fSeqOpe)
+	((FenetreSequenceOperation *)fSeqOpe)->Close(true);
 for (int i = 0; i < listeFenetre.size(); i++)
 	delete listeFenetre[i];
 delete serveur;
@@ -1039,8 +1042,10 @@ bool b=false;
 //b=wxUnsetEnv("PLPLOT_DRV_DIR");
 //	osg::Image *im=osgDB::readImageFile("F:\\Lib\\OpenSceneGraph-Data-3.0.0\\Images\\reflect.rgb");
 	numOpFaite=0;
+	numSeqOpe=0;
 	quitter=false;
 	serveur = NULL;
+	fSeqOpe=NULL;
     configApp=new wxFileConfig("wxOpenCV","LB","wxOpenCV.ini",wxEmptyString);
 	LectureFichierConfig();
 #ifndef __MULTILANGUE__
@@ -2605,6 +2610,12 @@ if (idFenetre>=0)
 		osgApp->SauverFichierConfig(chemin,"nom",its->first);
 		osgApp->SauverFichierConfig(chemin,"largeur",(long)its->second.valeur.width);
 		osgApp->SauverFichierConfig(chemin,"hauteur",(long)its->second.valeur.height);
+		osgApp->SauverFichierConfig(chemin,"larMin",(long)its->second.mini.width);
+		osgApp->SauverFichierConfig(chemin,"hauMin",(long)its->second.mini.height);
+		osgApp->SauverFichierConfig(chemin,"larMax",(long)its->second.maxi.width);
+		osgApp->SauverFichierConfig(chemin,"hauMax",(long)its->second.maxi.height);
+		osgApp->SauverFichierConfig(chemin,"larPas",(long)its->second.pas.width);
+		osgApp->SauverFichierConfig(chemin,"hauPas",(long)its->second.pas.height);
 		nb++;
 		}
 	}
@@ -3357,6 +3368,11 @@ bCont = configApp->GetFirstGroup(cleIndOperateur, dummy);
 bool opValide;
 while ( bCont )
 	{
+	if (nbOperation==nbOpConfig)
+		{
+		nbOpConfig+=nbOperation;
+		listeOperation.resize(nbOpConfig);
+		}
 	wxString tmp1(cleIndOperateur);
 	long tmpDummy=dummy;
 	wxString cheminSeq=configApp->GetPath();
@@ -3384,7 +3400,9 @@ while ( bCont )
 		long tmp2=dummy;
 		wxString chemin=configApp->GetPath();
 	// Lecture d'une séquence d'opération
-		configApp->SetPath(chemin+"/"+cleIndOperateur);
+		configApp->SetPath(chemin+"/"+cleIndEtape);
+		if (opValide && !configApp->Read("op",&listeOperation[nbOperation].nomOperation))
+			opValide=false;
 		if (opValide && !configApp->Read("op1",&listeOperation[nbOperation].indOp1))
 			opValide=false;
 		if (opValide && !configApp->Read("op2",&listeOperation[nbOperation].indOp2))
@@ -3401,7 +3419,7 @@ while ( bCont )
 			listeOperation[nbOperation].op2=NULL;
 			if (listeOperation[nbOperation].idOperation>numOpFaite)
 				numOpFaite =listeOperation[nbOperation].idOperation;
-			wxString cheminParam(chemin+"/"+cleIndOperateur+"/paramEntier");
+			wxString cheminParam(chemin+"/"+cleIndEtape+"/paramEntier");
 			configApp->SetPath(cheminParam);
 			bCont = configApp->GetFirstGroup(str, dummy);
 			while (bCont && opValide)
@@ -3434,7 +3452,7 @@ while ( bCont )
 			}
 		if (opValide)
 			{
-			wxString cheminParam(chemin+"/"+cleIndOperateur+"/paramDouble");
+			wxString cheminParam(chemin+"/"+cleIndEtape+"/paramDouble");
 			configApp->SetPath(cheminParam);
 			bCont = configApp->GetFirstGroup(str, dummy);
 			while (bCont && opValide)
@@ -3468,6 +3486,52 @@ while ( bCont )
 			}
 		if (opValide)
 			{
+			wxString cheminParam(chemin+"/"+cleIndEtape+"/paramSize");
+			configApp->SetPath(cheminParam);
+			bCont = configApp->GetFirstGroup(str, dummy);
+			while (bCont && opValide)
+				{
+				wxString cle(cheminParam+"/"+str+"/nom");
+				wxString nom;
+				if (opValide && !configApp->Read(cle,&nom))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/largeur";
+				int largeur,larMin,larMax,larPas;
+				if (opValide && !configApp->Read(cle,&largeur))
+					opValide=false;
+				int hauteur,hauMin,hauMax,hauPas;
+				cle=cheminParam+"/"+str+"/hauteur";
+				if (opValide && !configApp->Read(cle,&hauteur))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/larMin";
+				if (opValide && !configApp->Read(cle,&larMin))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/hauMin";
+				if (opValide && !configApp->Read(cle,&hauMin))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/larMax";
+				if (opValide && !configApp->Read(cle,&larMax))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/hauMax";
+				if (opValide && !configApp->Read(cle,&hauMax))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/larPas";
+				if (opValide && !configApp->Read(cle,&larPas))
+					opValide=false;
+				cle=cheminParam+"/"+str+"/hauPas";
+				if (opValide && !configApp->Read(cle,&hauPas))
+					opValide=false;
+				if (opValide)
+					{
+					std::string s(nom.ToAscii());
+					listeOperation[nbOperation].pOCV.sizeParam[s]=DomaineParametre<cv::Size>(cv::Size(largeur,hauteur),cv::Size(larMin,hauMin),cv::Size(larMax,hauMax),cv::Size(larPas,larPas));
+					}
+				bCont = configApp->GetNextGroup(str, dummy);
+				}
+			
+			}
+		if (opValide)
+			{
 			GenerationGraphDot(&listeOperation[nbOperation]);
 			nbOperation++;
 			nbEtape++;
@@ -3478,9 +3542,16 @@ while ( bCont )
 		bSeqOp = configApp->GetNextGroup(cleIndEtape, dummy);
 
 		}
+	numSeqOpe++;
+	if (numSeqOpe>=tabOperation.size())
+		{
+		cout <<"pb";
+
+		}
+
 	tabOperation[listeOperation[nbOperation-1].idOperation].resize(nbEtape);
 	for (int i=0;i<nbEtape;i++)
-		tabOperation[listeOperation[nbOperation-1].idOperation][i]=&listeOperation[nbOperation-nbEtape+i];
+		tabOperation[listeOperation[nbOperation-1].idOperation][i]=listeOperation[nbOperation-nbEtape+i];
 		
 	configApp->SetPath(cheminSeq);
 	str=tmp1;
