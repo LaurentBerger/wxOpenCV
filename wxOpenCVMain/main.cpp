@@ -1141,7 +1141,7 @@ if (m_isPda)
 
 bool ok = m_isPda
         ? bitmap.IsOk()
-        : bitmap.LoadFile(wxT("splash.png"), wxBITMAP_TYPE_PNG);
+        : bitmap.LoadFile(_("splash.png"), wxBITMAP_TYPE_PNG);
 
 if (ok)
 {
@@ -1275,7 +1275,7 @@ wxString userName=wxGetUserName();
 /*
 if (!outils)
 	{
-	outils = new OutilsImage (NULL, wxT("Image Tools"),
+	outils = new OutilsImage (NULL, _("Image Tools"),
 		wxPoint(0,570), wxSize(600,250),
 		wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
 	outils->DefOSGApp(this);

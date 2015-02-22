@@ -262,7 +262,7 @@ private:
         wxString s;
         int h, w, height;
 
-        s.Printf(wxT("Size: %d x %d"), size.x, size.y);
+        s.Printf(_("Size: %d x %d"), size.x, size.y);
 
         dc.SetFont(*wxNORMAL_FONT);
         dc.GetTextExtent(s, &w, &height);
@@ -279,19 +279,19 @@ private:
         {
             wxAuiPaneInfo pi = m_mgr->GetPane(this);
 
-            s.Printf(wxT("Layer: %d"), pi.dock_layer);
+            s.Printf(_("Layer: %d"), pi.dock_layer);
             dc.GetTextExtent(s, &w, &h);
             dc.DrawText(s, (size.x-w)/2, ((size.y-(height*5))/2)+(height*1));
 
-            s.Printf(wxT("Dock: %d Row: %d"), pi.dock_direction, pi.dock_row);
+            s.Printf(_("Dock: %d Row: %d"), pi.dock_direction, pi.dock_row);
             dc.GetTextExtent(s, &w, &h);
             dc.DrawText(s, (size.x-w)/2, ((size.y-(height*5))/2)+(height*2));
 
-            s.Printf(wxT("Position: %d"), pi.dock_pos);
+            s.Printf(_("Position: %d"), pi.dock_pos);
             dc.GetTextExtent(s, &w, &h);
             dc.DrawText(s, (size.x-w)/2, ((size.y-(height*5))/2)+(height*3));
 
-            s.Printf(wxT("Proportion: %d"), pi.dock_proportion);
+            s.Printf(_("Proportion: %d"), pi.dock_proportion);
             dc.GetTextExtent(s, &w, &h);
             dc.DrawText(s, (size.x-w)/2, ((size.y-(height*5))/2)+(height*4));
         }

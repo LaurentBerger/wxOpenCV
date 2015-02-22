@@ -15,7 +15,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxString s1,wxString s2)
             )
 {
     m_shapeKind = Shape_Star;
-    //m_bmp = wxBitmap(wxT("star.png"), wxBITMAP_TYPE_PNG);
+    //m_bmp = wxBitmap(_("star.png"), wxBITMAP_TYPE_PNG);
 
 	
 

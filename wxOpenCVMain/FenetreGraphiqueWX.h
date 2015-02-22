@@ -44,7 +44,7 @@ public:
     FenetreGraphiqueWX(wxWindow *parent, wxWindowID id = wxID_ANY,
         const wxPoint& pos = wxDefaultPosition,
         const wxSize& size = wxDefaultSize, long style = 0,
-        const wxString& name = wxT("TestGLCanvas"),
+        const wxString& name = _("TestGLCanvas"),
         int *attributes = 0);
 
     ~FenetreGraphiqueWX();

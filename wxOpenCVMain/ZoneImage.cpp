@@ -645,7 +645,7 @@ attributes[6] = 0;
 
 
 FenetreGraphiqueWX *fgOSGWX = new FenetreGraphiqueWX(g, wxID_ANY, wxDefaultPosition,
-                                           sfen, wxSUNKEN_BORDER, wxT("osgviewerWX"), attributes);
+                                           sfen, wxSUNKEN_BORDER, _("osgviewerWX"), attributes);
 fgOSGWX->DefOSGApp(((FenetrePrincipale*)f)->OSGApp());
 fgOSGWX->DeffParent((void*)g);
 g->DeffParent(f);

@@ -82,7 +82,7 @@ class TableauDeBord: public wxFrame
 public:
     TableauDeBord(wxFrame *parent,
             wxWindowID id = wxID_ANY,
-            const wxString& title = wxT("wxToolBar Sample"),
+            const wxString& title = _("wxToolBar Sample"),
             const wxPoint& pos = wxDefaultPosition,
             const wxSize& size = wxDefaultSize,
             long style = wxDEFAULT_FRAME_STYLE|wxCLIP_CHILDREN|wxNO_FULL_REPAINT_ON_RESIZE);

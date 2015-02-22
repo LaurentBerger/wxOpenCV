@@ -107,13 +107,13 @@ fenMere=NULL;
   wxString m_title=_T("Histogram");
   switch(plotwindow->getBackend()) {
   case wxPLPLOT_BACKEND_DC:
-  	m_title += wxT(" (basic)");
+  	m_title += _(" (basic)");
   	break;
   case wxPLPLOT_BACKEND_GC:
-  	m_title += wxT(" (wxGC)");
+  	m_title += _(" (wxGC)");
   	break;
   case wxPLPLOT_BACKEND_AGG:
-  	m_title += wxT(" (AGG)");
+  	m_title += _(" (AGG)");
   	break;
   default:
   	break;

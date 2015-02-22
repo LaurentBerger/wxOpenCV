@@ -227,7 +227,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
     iconSize &= ~1;
 
     m_mgr.AddPane(wnd10, wxAuiPaneInfo().
-                  Name(wxT("Rapport")).Caption(_("Log window ")).
+                  Name(_("Rapport")).Caption(_("Log window ")).
                   Bottom().Layer(1).Position(1).
                   Icon(wxArtProvider::GetBitmap(wxART_WARNING,
                                                 wxART_OTHER,
@@ -292,7 +292,7 @@ void InterfaceAvance::OnSize(wxSizeEvent& event)
 void InterfaceAvance::OnSettings(wxCommandEvent& WXUNUSED(evt))
 {
     // show the settings pane, and float it
-    wxAuiPaneInfo& floating_pane = m_mgr.GetPane(wxT("settings")).Float().Show();
+    wxAuiPaneInfo& floating_pane = m_mgr.GetPane(_("settings")).Float().Show();
 
     if (floating_pane.floating_pos == wxDefaultPosition)
         floating_pane.FloatingPosition(GetStartPosition());
@@ -301,7 +301,7 @@ void InterfaceAvance::OnSettings(wxCommandEvent& WXUNUSED(evt))
 }
 void InterfaceAvance::OnPaneClose(wxAuiManagerEvent& evt)
 {
- if (evt.pane->name == wxT("test10"))
+ if (evt.pane->name == _("test10"))
     {
         int res = wxMessageBox(_("Are you sure you want to close/hide this pane?"),
                                _("wxAUI"),
@@ -327,7 +327,7 @@ void InterfaceAvance::OnNotebookPageClose(wxAuiNotebookEvent& evt)
 	if (ctrl->GetPageIndex(ongletConvol)==ctrl->GetSelection())
         {
 		int res = wxMessageBox(_("Are you sure you want to close/hide this notebook page?"),
-                       wxT("wxAUI"),
+                       _("wxAUI"),
                        wxYES_NO,
                        this);
         if (res != wxYES)
@@ -338,7 +338,7 @@ void InterfaceAvance::OnNotebookPageClose(wxAuiNotebookEvent& evt)
 	if (ctrl->GetPageIndex(ongletParamImage)==ctrl->GetSelection())
         {
 		int res = wxMessageBox(_("Are you sure you want to close/hide page?"),
-                       wxT("wxAUI"),
+                       _("wxAUI"),
                        wxYES_NO,
                        this);
         if (res != wxYES)
@@ -349,7 +349,7 @@ void InterfaceAvance::OnNotebookPageClose(wxAuiNotebookEvent& evt)
 	if (ctrl->GetPageIndex(ongletMorphologie)==ctrl->GetSelection())
         {
 		int res = wxMessageBox(_("Are you sure you want to close/hide page?"),
-                       wxT("wxAUI"),
+                       _("wxAUI"),
                        wxYES_NO,
                        this);
         if (res != wxYES)
@@ -360,7 +360,7 @@ void InterfaceAvance::OnNotebookPageClose(wxAuiNotebookEvent& evt)
     if (ctrl->GetPage(evt.GetSelection())->IsKindOf(CLASSINFO(wxHtmlWindow)))
     {
         int res = wxMessageBox(_("Are you sure you want to close/hide page?"),
-                       wxT("wxAUI"),
+                       _("wxAUI"),
                        wxYES_NO,
                        this);
         if (res != wxYES)
@@ -392,7 +392,7 @@ wxPoint InterfaceAvance::GetStartPosition()
 void InterfaceAvance::OnCreateTree(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateTreeCtrl(), wxAuiPaneInfo().
-                  Caption(wxT("Tree Control")).
+                  Caption(_("Tree Control")).
                   Float().FloatingPosition(GetStartPosition()).
                   FloatingSize(wxSize(150,300)));
     m_mgr.Update();
@@ -425,7 +425,7 @@ if (ongletMorphologie==NULL)
 void InterfaceAvance::OnCreateNotebook(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreerChoixOperateur(), wxAuiPaneInfo().
-                  Caption(wxT("Notebook")).
+                  Caption(_("Notebook")).
                   Float().FloatingPosition(GetStartPosition()).
                   //FloatingSize(300,200).
                   CloseButton(true).MaximizeButton(true));
@@ -435,7 +435,7 @@ void InterfaceAvance::OnCreateNotebook(wxCommandEvent& WXUNUSED(event))
 void InterfaceAvance::OnCreateText(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateTextCtrl(), wxAuiPaneInfo().
-                  Caption(wxT("Text Control")).
+                  Caption(_("Text Control")).
                   Float().FloatingPosition(GetStartPosition()));
     m_mgr.Update();
 }
@@ -443,7 +443,7 @@ void InterfaceAvance::OnCreateText(wxCommandEvent& WXUNUSED(event))
 void InterfaceAvance::OnCreateSizeReport(wxCommandEvent& WXUNUSED(event))
 {
     m_mgr.AddPane(CreateSizeReportCtrl(), wxAuiPaneInfo().
-                  Caption(wxT("Client Size Reporter")).
+                  Caption(_("Client Size Reporter")).
                   Float().FloatingPosition(GetStartPosition()).
                   CloseButton(true).MaximizeButton(true));
     m_mgr.Update();
@@ -773,27 +773,27 @@ wxTreeCtrl* InterfaceAvance::CreateTreeCtrl()
     imglist->Add(wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxSize(16,16)));
     tree->AssignImageList(imglist);
 
-    wxTreeItemId root = tree->AddRoot(wxT("wxAUI Project"), 0);
+    wxTreeItemId root = tree->AddRoot(_("wxAUI Project"), 0);
     wxArrayTreeItemIds items;
 
 
 
-    items.Add(tree->AppendItem(root, wxT("Item 1"), 0));
-    items.Add(tree->AppendItem(root, wxT("Item 2"), 0));
-    items.Add(tree->AppendItem(root, wxT("Item 3"), 0));
-    items.Add(tree->AppendItem(root, wxT("Item 4"), 0));
-    items.Add(tree->AppendItem(root, wxT("Item 5"), 0));
+    items.Add(tree->AppendItem(root, _("Item 1"), 0));
+    items.Add(tree->AppendItem(root, _("Item 2"), 0));
+    items.Add(tree->AppendItem(root, _("Item 3"), 0));
+    items.Add(tree->AppendItem(root, _("Item 4"), 0));
+    items.Add(tree->AppendItem(root, _("Item 5"), 0));
 
 
     int i, count;
     for (i = 0, count = items.Count(); i < count; ++i)
     {
         wxTreeItemId id = items.Item(i);
-        tree->AppendItem(id, wxT("Subitem 1"), 1);
-        tree->AppendItem(id, wxT("Subitem 2"), 1);
-        tree->AppendItem(id, wxT("Subitem 3"), 1);
-        tree->AppendItem(id, wxT("Subitem 4"), 1);
-        tree->AppendItem(id, wxT("Subitem 5"), 1);
+        tree->AppendItem(id, _("Subitem 1"), 1);
+        tree->AppendItem(id, _("Subitem 2"), 1);
+        tree->AppendItem(id, _("Subitem 3"), 1);
+        tree->AppendItem(id, _("Subitem 4"), 1);
+        tree->AppendItem(id, _("Subitem 5"), 1);
     }
 
 
@@ -1091,12 +1091,12 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 											 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
 		tb->SetToolBitmapSize(wxSize(48,48));
-		tb->AddTool(ID_VIDEO_8_UC3, wxT("Test"), wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE));
-		tb->AddTool(ID_VIDEO_32_FC3, wxT("Test"), wxArtProvider::GetBitmap(wxART_HARDDISK));
+		tb->AddTool(ID_VIDEO_8_UC3, _("Test"), wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE));
+		tb->AddTool(ID_VIDEO_32_FC3, _("Test"), wxArtProvider::GetBitmap(wxART_HARDDISK));
 		tb->AddSeparator();
 		tb->Realize();
 		m_mgr.AddPane(tb, wxAuiPaneInfo().
-					  Name("tbVideo").Caption(wxT("Video Toolbar")).
+					  Name("tbVideo").Caption(_("Video Toolbar")).
 					  ToolbarPane().Left().
 					  GripperTop());
 		break;
@@ -1238,7 +1238,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb->SetCustomOverflowItems(prepend_items, append_items);
 		tb->Realize();
 		m_mgr.AddPane(tb, wxAuiPaneInfo().
-					  Name(wxT("tb5")).Caption(wxT("Big Toolbar")).
+					  Name(_("tb5")).Caption(_("Big Toolbar")).
 					  ToolbarPane().Top());
 		}
 	}
