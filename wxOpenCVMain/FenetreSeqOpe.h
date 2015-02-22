@@ -27,6 +27,8 @@ wxNotebook						*classeur;	/*!< le classeur avec ses différents onglets*/
 wxString						*nomEtape;	/*!< Nom des étapes dans la listeBox */
 int								nbEtape;	/*!< nombre de chaines maximum */
 wxListBox						*choixOp;
+
+wxSize							tailleMax;	/*!< taille maximale de la fenêtre */
 public :
 FenetreSequenceOperation(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos, 
         const wxSize& size,wxOsgApp *, long style = wxDEFAULT_FRAME_STYLE);
@@ -61,7 +63,8 @@ void OnClose(wxCloseEvent& event);
 void DefOSGApp(void *w){osgApp=w;};
 void DefFenMere(FenetrePrincipale *f){fenMere =f;};
 		/*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
-void ExecuterOperation(int indEtape);/*!<Excute l'opération après modification des paramètres à partir de l'étape indEtape */
+void Executer(wxCommandEvent& event);/*!<Excute la séquence d'opération après modification des paramètres à partir de l'étape indEtape */
+void ExecuterSequence(std::vector <Operation> *sq);/*!<Excute la séquence d'opération après modification des paramètres à partir de l'étape indEtape */
 public:
 };
 
