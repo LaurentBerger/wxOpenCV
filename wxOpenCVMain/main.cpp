@@ -790,6 +790,14 @@ if (s.Cmp("DistanceDiscrete")==0)
 	opUnaireSelec = &ImageInfoCV::DistanceDiscrete;
 	nomOperation = s;
 	}
+if (s.Cmp("Squelette")==0)
+	{
+	pOCV.lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/miscellaneous_transformations.html#distancetransform";
+	pOCV.refPDF="http://docs.opencv.org/opencv3refman.pdf#page=287&zoom=70,250,100";
+	pOCV.nomOperation=s;
+	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	nomOperation = s;
+	}
 
 
 }

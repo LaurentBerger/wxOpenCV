@@ -1323,24 +1323,6 @@ result->DefNbEltParPixel(r->LitNbEltParPixel());
 return(result);
 }
 
-ImageInfoCV 	*ImageInfoCV::LigneMediane ()
-{
-ImageInfoCV	*result=new ImageInfoCV;
-/*
-Image	*op1=(Image*)this;
-Image	*r=	op1->LigneMediane();
-
-result->DefNbColonne(r->LitNbColonne());
-result->DefNbLigne(r->LitNbLigne());
-result->DefNbPlan(r->LitNbPlan());
-result->DefTaillePixel(r->LitTaillePixel());
-result->DefTypePixel(r->LitTypePixel()|r->LitAttributPixel());
-result->DefPlan(r->LitPlan());
-result->DefInfoImage(r->LitInfoImage());
-result->DefNbEltParPixel(r->LitNbEltParPixel());
-*/
-return(result);
-}
 
 ImageInfoCV 	*ImageInfoCV::Voronoi (ImageInfoCV	&z)
 {

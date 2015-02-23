@@ -203,13 +203,22 @@ if (nbGraines[0]==-1)
 	if (!fenMere)
 		return;
 	int id=((FenetrePrincipale *)fenMere)->IdFenetre();
-	if (((wxOsgApp*)osgApp)->Graphique(id)->ModeImage()!=1)
-		imAcq =((wxOsgApp*)osgApp)->Graphique(id)->ImAcq();
+	if (((FenetrePrincipale *)fenMere)->ModeImage()!=1)
+		imAcq =((FenetrePrincipale *)fenMere)->ImAcq();
 
 	if (imAcq->MinIm()==NULL)
 		imAcq->ExtremumLoc();
 	switch(imAcq->depth())
 	{
+	case CV_32S:
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
+			{
+			minHisto[i]=imAcq->MinIm()[i];
+			maxHisto[i]=imAcq->MaxIm()[i]; 
+			nbGraines[i]=maxHisto[i]-minHisto[i]+1;
+			}
+
+		break;
 	case CV_32F:
 		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{

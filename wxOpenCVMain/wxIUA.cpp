@@ -55,6 +55,7 @@ enum
 	ID_THRESHOLD,
 	ID_ADATHRESHOLD,
     ID_DISTANCEDISCRETE,
+    ID_SQUELETTE,
     ID_VORONOI,
 	ID_CONTOUR,
 	ID_COMPCONNEXE,
@@ -154,6 +155,7 @@ END_EVENT_TABLE()
     #include "bitmaps/seuillage.xpm"
     #include "bitmaps/seuillageada.xpm"
     #include "bitmaps/distancediscrete.xpm"
+    #include "bitmaps/squelette.xpm"
     #include "bitmaps/voronoi.xpm"
     #include "bitmaps/canny.xpm"
     #include "bitmaps/contour.xpm"
@@ -900,6 +902,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			Tool_seuillage,
 			Tool_seuillageada,
 			Tool_distancediscrete,
+			Tool_squelette,
 			Tool_voronoi,
 			Tool_cmpconnexe,
 			Tool_statconnexe,
@@ -1119,6 +1122,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			INIT_TOOL_BMP(seuillage);
 			INIT_TOOL_BMP(seuillageada);
 			INIT_TOOL_BMP(distancediscrete);
+			INIT_TOOL_BMP(squelette);
 			INIT_TOOL_BMP(voronoi);
 			INIT_TOOL_BMP(cmpconnexe);
 			INIT_TOOL_BMP(statconnexe);
@@ -1138,6 +1142,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb->AddTool(ID_THRESHOLD, _(""), toolBarBitmaps[Tool_seuillage], _("Thereshold"));
 		tb->AddTool(ID_ADATHRESHOLD, _(""), toolBarBitmaps[Tool_seuillageada], _("Adaptive Thereshold"));
 		tb->AddTool(ID_DISTANCEDISCRETE, _(""), toolBarBitmaps[Tool_distancediscrete], _("Transform distance"));
+		tb->AddTool(ID_SQUELETTE, _(""), toolBarBitmaps[Tool_squelette], _("Skeleton"));
 		tb->AddTool(ID_VORONOI, _(""), toolBarBitmaps[Tool_voronoi], _("Voronoi"));
 		tb->AddTool(ID_CONTOUR, _("Contour"), toolBarBitmaps[Tool_contour], _("Contour"));
 		tb->AddTool(ID_COMPCONNEXE, _(""), toolBarBitmaps[Tool_cmpconnexe], _("Connected component"));
@@ -1432,6 +1437,9 @@ case ID_LISGAU:
 	break;
 case ID_LISMED:
 	s="LissageMedian";
+	break;
+case ID_SQUELETTE:
+	s="Squelette";
 	break;
 case ID_DISTANCEDISCRETE:
 case ID_VORONOI:

@@ -250,7 +250,6 @@ if (im2==NULL)
 else
 	cv::filter2D( *im1, *im,typeResultat, *im2);
 
-im->ExtremumLoc(NULL);
 return im;
 }
 

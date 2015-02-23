@@ -321,6 +321,7 @@ ImageInfoCV		*ComposanteConnexe (ImageInfoCV *result,Parametre &paramOCV);
 ImageInfoCV		**SeparationPlan(ImageInfoCV	*,Parametre &paramOCV);
 ImageInfoCV		*DistanceDiscrete (ImageInfoCV *result,Parametre &paramOCV);
 ImageInfoCV		*Voronoi (ImageInfoCV *result,Parametre &paramOCV);
+ImageInfoCV		*LigneMediane(ImageInfoCV *result,Parametre &paramOCV);
 
 void ExtremumLoc(ImageInfoCV *mask=NULL );
 
@@ -360,7 +361,12 @@ ImageInfoCV 	*Voronoi (ImageInfoCV	&z);
 
 // Squelette
 ImageInfoCV	*DistObjetFond();
-ImageInfoCV	*LigneMediane();
+bool MaxLocal(int c,int i,int j);
+bool TraiterMediane(int c,int &r,int &s,int dr,int ds,int &q,ImageInfoCV &im);
+void SuiviChemin(int c,int i,int j,ImageInfoCV &im);
+bool MaxLocal(int i,int j);
+bool TraiterMediane(int &r,int &s,int dr,int ds,int &q,ImageInfoCV &im);
+void SuiviChemin(int i,int j,ImageInfoCV &im);
 
 // Reconstruction d'image
 ImageInfoCV *Recons2d(long nbPts,long tailleOperateur=0);

@@ -149,6 +149,38 @@ else
 			}
 		}
 		break;
+	case CV_32S:
+		{
+		for (int i=0;i<channels();i++)
+			{
+			minIm[i]=INT_MAX;
+			maxIm[i]=INT_MIN;
+			locMin[i] = cv::Point(0,0);
+			locMax[i] = cv::Point(0,0);
+			}
+		for (int i=0;i<rows;i++)		
+			{
+			int *d=(int*)ptr(i);
+			for (int j=0;j<cols;j++)
+				{
+				
+				for (int k=0;k<channels();k++,d++)
+					{
+					if (*d<minIm[k])
+						{
+						minIm[k]= *d;
+						locMin[k]= cv::Point(i,j);
+						}
+					if (*d>maxIm[k])
+						{
+						maxIm[k]= *d;
+						locMax[k]= cv::Point(i,j);
+						}
+					}
+				}
+			}
+		}
+		break;
 	case CV_32F:
 		{
 		for (int i=0;i<channels();i++)
