@@ -434,12 +434,11 @@ configApp->Read("/dossier",&dossier,wxEmptyString);
 wxFileDialog ouverture(NULL, "Ouvrir ", dossier, wxEmptyString, "*.tif;*.jpg;*.bmp;*.png;*.ymlgz;*.is2");
 if (ouverture.ShowModal()!=wxID_OK)
 	return;
+configApp->Write("/dossier",ouverture.GetDirectory());
 FenetrePrincipale *f = new FenetrePrincipale(NULL, "wxOpenCV",
     wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
 
-FenetreZoom *fenZoom = new FenetreZoom(f);
 f->DefOSGApp(this);
-configApp->Write("/dossier",ouverture.GetDirectory());
 #ifdef __WINDOWS__
 wxString s(ouverture.GetDirectory()+"\\"+ouverture.GetFilename ());
 #else
@@ -452,10 +451,18 @@ f->NomDoc(sd);
 f->OnOuvrir(s);
 s.Printf("%d : %s",nbFenetre,s);
 f->SetLabel(s);
+InitFenAssociee(f);
+//nbFenetre++;
+f->InitIHM();
+}
 
+void wxOsgApp::InitFenAssociee(FenetrePrincipale *f)
+{
 ImageStatistiques *imgStatIm = new ImageStatistiques(NULL, "Image Statistic",
 	wxPoint(530,0), wxSize(430,570),
 	wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
+FenetreZoom *fenZoom = new FenetreZoom(f);
+wxString s(f->GetTitle());
 imgStatIm->SetLabel("Stat : "+s);
 imgStatIm->DefFenMere(f);
 imgStatIm->OuvertureOngletStatus();
@@ -473,42 +480,23 @@ f->DefImgStat(imgStatIm);
 imgStatIm->OuvertureOngletCouleur();
 imgStatIm->OuvertureOngletPalette();
 imgStatIm->OuvertureOngletRegion();
+	imgStatIm->ListerRegion();
 imgStatIm->OuvertureOngletCurseur();
 listeFenetre[nbFenetre]=new EnvFenetre(f,fenZoom,imgStatIm);
 indFenetre=nbFenetre;
-f->DefId(nbFenetre);
+f->DefId(nbFenetre++);
 f->Show(true);
 
 f->NouvelleImage();
 f->MAJNouvelleImage();
 f->RecupDerniereConfig();
-nbFenetre++;
-f->InitIHM();
-wxImage image;
-
-for (int i = 1; i < 4; i++)
-    {
-    /* For some reason under wxX11, the 2nd LoadFile in this loop fails, with
-       a BadMatch inside CreateFromImage (inside ConvertToBitmap). This happens even if you copy
-       the first file over the second file. */
-        if (image.LoadFile(wxString::Format("shape0%d.png",  i), wxBITMAP_TYPE_PNG))
-        {
-            DragShape* newShape = new DragShape(wxBitmap(image));
-            newShape->SetPosition(wxPoint(i*50, i*50));
-
-            if (i == 2)
-                newShape->SetDragMethod(SHAPE_DRAG_TEXT);
-            else if (i == 3)
-                newShape->SetDragMethod(SHAPE_DRAG_ICON);
-            else
-                newShape->SetDragMethod(SHAPE_DRAG_BITMAP);
-             f->GetDisplayList().Append(newShape);
-       }
-    }
 }
+
+
 
 void wxOsgApp::DefOperateurImage(wxString &s)
 {
+ImageInfoCV xx;
 pOCV.doubleParam.clear();
 pOCV.intParam.clear();
 pOCV.sizeParam.clear();
@@ -574,6 +562,7 @@ if (s.Cmp("Convolution")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Convolution;
 	nomOperation = s;
+	pOCV.intParam["IndOpConvolution"]=DomaineParametre<int>(xx.IndOpConvolution(),0,NB_OP_CONVOLUTION,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#filter2d";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100";
 	}
@@ -582,6 +571,7 @@ if (s.Cmp("Dilatation")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Dilatation;
 	nomOperation = s;
+	pOCV.intParam["IndOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#dilate";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100";
 	}
@@ -590,6 +580,7 @@ if (s.Cmp("Erosion")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Erosion;
 	nomOperation = s;
+	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100";
 	}
@@ -598,6 +589,7 @@ if (s.Cmp("Ouverture")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Ouverture;
 	nomOperation = s;
+	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=morphologyex#morphologyex";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	}
@@ -606,6 +598,7 @@ if (s.Cmp("Fermeture")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Fermeture;
 	nomOperation = s;
+	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	}
@@ -614,6 +607,7 @@ if (s.Cmp("ChapeauHaut")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::ChapeauHaut;
 	nomOperation = s;
+	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	}
@@ -622,6 +616,7 @@ if (s.Cmp("ChapeauBas")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::ChapeauBas;
 	nomOperation = s;
+	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	}
@@ -630,6 +625,7 @@ if (s.Cmp("GradMorph")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::GradMorph;
 	nomOperation = s;
+	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	}
@@ -813,9 +809,15 @@ if (opBinaireSelec)
 	try
 		{
 		if (op2==NULL)
-			im =((*op1).*opBinaireSelec)(op1,NULL,NULL);
+			if (pOCVNouveau==NULL)
+				im =((*op1).*opBinaireSelec)(op1,NULL,&pOCV);
+			else
+				im =((*op1).*opBinaireSelec)(op1,NULL,pOCVNouveau);
 		else
-			im =((*op1).*opBinaireSelec)(op1,op2,NULL);
+			if (pOCVNouveau==NULL)
+				im =((*op1).*opBinaireSelec)(op1,op2,&pOCV);
+			else
+				im =((*op1).*opBinaireSelec)(op1,op2,pOCVNouveau);
 		}
 	catch(cv::Exception& e)
 		{
@@ -922,17 +924,14 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	if (nomOperation.Cmp("Convolution")==0)
 		{
 		ind = im[nbres]->IndOpConvolution();
-		pOCV.doubleParam["IndOpConvolution"].valeur=ind;
 		}
 	if (nomOperation.Cmp("Erosion")==0)
 		{
 		ind = im[nbres]->IndOpMorphologie();
-		pOCV.doubleParam["IndOpErosion"].valeur=ind;
 		}
 	if (nomOperation.Cmp("Dilatation")==0)
 		{
 		ind = im[nbres]->IndOpMorphologie();
-		pOCV.doubleParam["IndOpDilatation"].valeur=ind;
 		}
 	int idOperation=-1;
 	int numEtape=-1;
@@ -967,7 +966,7 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	if (opUnaireSelec)
 		f->DefHistorique(indOp1Fenetre,-1,idOperation,numEtape,nomOperation,&pOCV);
 	if (opBinaireSelec)
-		f->DefHistorique(indOp1Fenetre,indOp2Fenetre,idOperation,numEtape,nomOperation,NULL);
+		f->DefHistorique(indOp1Fenetre,indOp2Fenetre,idOperation,numEtape,nomOperation,&pOCV);
 	if (ind!=-1)
 		s.Printf("%d : %s(operator %d) of image %d ",nbFenetre,nomOperation,ind,indOp1Fenetre );
 	else
@@ -1027,9 +1026,6 @@ pOCV.intParam.clear();
 }
 
 
-void wxOsgApp::Erosion(wxCommandEvent &w)
-{
-}
 
 
 

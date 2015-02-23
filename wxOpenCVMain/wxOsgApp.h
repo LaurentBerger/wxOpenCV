@@ -95,7 +95,9 @@ public :
 wxOsgApp() { langue = wxLANGUAGE_UNKNOWN; }
 bool OnInit();
 void Quitter(wxFrame *g);
-void Ouvrir(wxCommandEvent &);
+void Ouvrir(wxCommandEvent &);	/*!< Ouverture d'un document */	
+void InitFenAssociee(FenetrePrincipale *f); /*!< Ouvrir les fenetres associées à la fenetre principale */
+
 void Video(wxCommandEvent &,int);
 void Enregistrer(wxCommandEvent& event);
 
@@ -131,7 +133,6 @@ void CreerFenetreOperation();
      */
 
 
-void Erosion(wxCommandEvent &w);
 
 wxString *NomOperation(){return &nomOperation;};
 
@@ -219,6 +220,7 @@ void	DefUtilisateurAbsent(char x){if (x==0)utilisateurAbsent=0;utilisateurAbsent
 void	SauverConfiguration();
 
 int					VerifFenetre(){if (nbFenetre==0 || indFenetre==-1) return 0;else return 1;};
+int					NbFenetre(){return nbFenetre;};
 void				IdFenetreActive(int x);
 int					RechercheFenetre(ImageInfoCV*); /*<! recherche dans quelle fenêtre est associée à l'image */
 FenetrePrincipale	*Fenetre(int id){if (id>=0) return Graphique(id);return NULL;};

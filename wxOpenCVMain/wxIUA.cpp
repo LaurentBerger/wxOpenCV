@@ -244,9 +244,9 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
     for (i = 0, count = all_panes.GetCount(); i < count; ++i)
         if (!all_panes.Item(i).IsToolbar())
             all_panes.Item(i).Hide();
-    m_mgr.GetPane("Parameters Operators").Show();
-    m_mgr.GetPane("grid_content").Show();
-    m_mgr.GetPane("Rapport").Show().Bottom().Layer(0).Row(0).Position(0);
+    m_mgr.GetPane(_("Parameters Operators")).Show();
+    m_mgr.GetPane(_("grid_content")).Show();
+    m_mgr.GetPane(_("Rapport")).Show().Bottom().Layer(0).Row(0).Position(0);
 
     wxString perspective_default = m_mgr.SavePerspective();
 
@@ -373,7 +373,7 @@ void InterfaceAvance::OnNotebookPageClosed(wxAuiNotebookEvent& evt)
     wxAuiNotebook* ctrl = (wxAuiNotebook*)evt.GetEventObject();
     // selection should always be a valid index
     wxASSERT_MSG(ctrl->GetSelection()  < (int)ctrl->GetPageCount(),
-                  wxString::Format("Invalid selection %d, only %d pages left",
+                  wxString::Format(_("Invalid selection %d, only %d pages left"),
                                    ctrl->GetSelection(),
                                    (int)ctrl->GetPageCount()) );
 
@@ -481,16 +481,16 @@ ImageInfoCV xx;
 wxPanel* panel = new wxPanel( parent,wxID_ANY ,wxPoint(0,0),wxSize(400,400));
 wxPanel	*panneauCtrl = new wxPanel( panel,  -1, wxDefaultPosition, wxSize(400,400));
 
-wxString  bord[]={"Constant","Symetric/limit","Symetric/last pixel", "equal last pixel",
-		"Periodic boundary"};
-wxString  tailleRes[]={"same","16 bits signé","float", "double",
-		"Periodic boundary"};
+wxString  bord[]={_("Constant"),_("Symetric/limit"),_("Symetric/last pixel"), _("equal last pixel"),
+		_("Periodic boundary")};
+wxString  tailleRes[]={_("same"),_("16 bits signed"),_("float"), _("double"),
+		_("Periodic boundary")};
 int		valeurBord[]={cv::BORDER_CONSTANT,cv::BORDER_REFLECT,cv::BORDER_REFLECT_101,cv::BORDER_REPLICATE,
 		cv::BORDER_WRAP};
-new wxStaticText( panneauCtrl, -1, "Border type",wxPoint(10,20) );
+new wxStaticText( panneauCtrl, -1, _("Border type"),wxPoint(10,20) );
 wxListBox *frontiere=new wxListBox( panneauCtrl,LBBord,wxPoint(100,20),wxSize(-1,-1),5,bord);
 frontiere->SetSelection(xx.FctImage());
-new wxStaticText( panneauCtrl, -1, "Depth of destination",wxPoint(10,120) );
+new wxStaticText( panneauCtrl, -1, _("Depth of destination"),wxPoint(10,120) );
 wxListBox *precision=new wxListBox( panneauCtrl,LBPrecision,wxPoint(100,120),wxSize(-1,-1),4,tailleRes);
 precision->SetSelection(xx.FctImage());
 
@@ -530,7 +530,7 @@ for (int i=xx.opnn[idFiltre]->cols;i<21;i++)
 	for (int i=0;i<xx.opnn[idFiltre]->rows;i++)
 		for (int j=0;j<xx.opnn[idFiltre]->cols;j++)
 			g->DefCellule(i,j,xx.opnn[idFiltre]->at<float>(i,j));
-if (cb->GetStringSelection().Find("Utilisateur")!=wxNOT_FOUND)
+if (cb->GetStringSelection().Find(_("Utilisateur"))!=wxNOT_FOUND)
 	g->EnableEditing (true);
 else
 	g->EnableEditing (false);
@@ -563,12 +563,12 @@ if (event.GetString().ToDouble(&val))
 wxPanel* InterfaceAvance::OngletConvolution(wxWindow* parent)
 {
 ImageInfoCV xx;
-wxString  mnxn[]={_("Moyenne"),_("Moyenne Pondérée"),_("Différence x"),_("Différence y"),_("Roberts x"),
+wxString  mnxn[]={_("Mean"),_("Mean Pondérée"),_("x Difference"),_("y Difference"),_("Roberts x"),
 _("Roberts y"),_("Prewitt x"),_("Prewitt y"),_("Sobel x"),_("Sobel y"),_("Frei Chen x"),
-		_("Frei Chen y"),_("Laplacien 4 connexe"),_("Laplacien 8 connexe"),_("Utilisateur 1"),_("Utilisateur 2"),
-		_("Utilsateur 3"),_("Utilisateur 4"),_("Utilisateur 5"),_("Moyenne 5x5"),_("Moyenne Pondérée 5x5"),_("Utilisateur 1 5x5"),_("Utilisateur 2 5x5"),
-		_("Utilsateur 3 5x5"),_("Utilisateur 45x5 "),_("Moyenne 7x7"),_("Moyenne Pondérée 7x7"),_("Utilisateur 1 7x7"),_("Utilisateur 2 7x7"),
-		_("Utilsateur 3 7x7"),_("Utilisateur 4 7x7")};
+		_("Frei Chen y"),_("Laplacien 4 connexe"),_("Laplacien 8 connexe"),_("User 1"),_("User 2"),
+		_("User 3"),_("User 4"),_("User 5"),_("Moyenne 5x5"),_("Mean Pondérée 5x5"),_("User 1 5x5"),_("User 2 5x5"),
+		_("User 3 5x5"),_("User 45x5 "),_("Mean 7x7"),_("Mean Pondérée 7x7"),_("User 1 7x7"),_("User 2 7x7"),
+		_("User 3 7x7"),_("User 4 7x7")};
 	// add the wxPLplot
 wxPanel* panel = new wxPanel( parent,wxID_ANY ,wxPoint(0,0),wxSize(400,400));
 
@@ -594,7 +594,7 @@ wxPanel	*panneauCtrl = new wxPanel( panel,  -1, wxDefaultPosition, wxSize(400,40
 	flex->AddGrowableCol( 1 );
 	wxListBox *choix3x3=new wxListBox( panneauCtrl,LBnxn,wxDefaultPosition,wxSize(100,-1),30,mnxn);
 	choix3x3->SetSelection(0);
-    flex->Add( new wxStaticText( panneauCtrl, -1, "Filter name" ), 1, wxALL|wxALIGN_CENTRE, 5 );
+    flex->Add( new wxStaticText( panneauCtrl, -1, _("Filter name") ), 1, wxALL|wxALIGN_CENTRE, 5 );
 	flex->Add( choix3x3, 1, wxALL|wxALIGN_CENTRE, 5 );
 
    panneauCtrl->SetSizer( flex );
@@ -609,7 +609,7 @@ box->Add( excel, 0, wxALL | wxEXPAND, 10 );
 	SetSize( 640, 500 );  // set frame size
   SetSizeHints( 220, 150 );  // set minimum frame size
 
-  wxString m_title=_T("Histogram");
+  wxString m_title=_("Histogram");
 excel->Show();
 
 return panel;
@@ -618,9 +618,9 @@ return panel;
 wxPanel* InterfaceAvance::OngletMorphologie(wxWindow* parent)
 {
 	ImageInfoCV xx;
-	wxString  mnxn[]={"Rectangle","Cross","Ellipse"};
-	wxString  nomOp[]={ "Operator 1","Operator 2","Operator 3","Operator 4","Operator 5",
-						"Operator 6","Operator 7","Operator 8","Operator 9","Operator 10"};
+	wxString  mnxn[]={_("Rectangle"),_("Cross"),_("Ellipse")};
+	wxString  nomOp[]={ _("Operator 1"),_("Operator 2"),_("Operator 3"),_("Operator 4"),_("Operator 5"),
+						_("Operator 6"),_("Operator 7"),_("Operator 8"),_("Operator 9"),_("Operator 10")};
 	wxPanel* panel = new wxPanel( parent,wxID_ANY ,wxPoint(0,0),wxSize(400,400));
 	wxFlexGridSizer *box = new wxFlexGridSizer(2,1,0);
 	wxPanel	*panneauCtrl = new wxPanel( panel,  -1, wxDefaultPosition, wxSize(400,400));
@@ -631,11 +631,11 @@ wxPanel* InterfaceAvance::OngletMorphologie(wxWindow* parent)
 	wxListBox *lbMorph=new wxListBox( panneauCtrl,LBTY_MORPH,wxDefaultPosition,wxSize(100,-1),3,mnxn);
 	wxListBox *lbNomMorph=new wxListBox( panneauCtrl,LBIND_MORPH,wxDefaultPosition,wxSize(100,-1),10,nomOp);
 	lbMorph->SetSelection(0);
-	flex->Add( new wxStaticText( panneauCtrl, -1, "Pattern morphology" ), 1, wxALL|wxALIGN_CENTRE, 5 );
+	flex->Add( new wxStaticText( panneauCtrl, -1, _("Pattern morphology") ), 1, wxALL|wxALIGN_CENTRE, 5 );
 	flex->Add( lbMorph, 1, wxALL|wxALIGN_CENTRE, 5 );
 	flex->Add( lbNomMorph, 2, wxALL|wxALIGN_CENTRE, 5 );
 
-	flex->Add( new wxStaticText( panneauCtrl, -1, "Operator size" ), 0, wxALL|wxALIGN_CENTRE, 5 );
+	flex->Add( new wxStaticText( panneauCtrl, -1, _("Operator size") ), 0, wxALL|wxALIGN_CENTRE, 5 );
 	flex->Add( new wxSpinCtrl( panneauCtrl, ROUETAILLE_MORPH, "2", wxDefaultPosition, wxSize(100,-1),
 			wxSP_ARROW_KEYS, 3, 32, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
 
@@ -648,7 +648,7 @@ wxPanel* InterfaceAvance::OngletMorphologie(wxWindow* parent)
 	SetSize( 640, 500 );  // set frame size
 	SetSizeHints( 220, 150 );  // set minimum frame size
 
-	wxString m_title=_T("Histogram");
+	wxString m_title=_("Histogram");
 
 	return panel;
 }
@@ -826,17 +826,17 @@ wxBitmap page_bmp = wxArtProvider::GetBitmap(wxART_NORMAL_FILE, wxART_OTHER, wxS
 if (ongletConvol==NULL)
 	{
 	ongletConvol = OngletConvolution(ctrl);
-	ctrl->AddPage(ongletConvol, _("Filtre de convolution"), false, page_bmp);
+	ctrl->AddPage(ongletConvol, _("Convolution filter"), false, page_bmp);
 	}
 if (ongletMorphologie==NULL)
 	{
 	ongletMorphologie = OngletMorphologie(ctrl);
-	ctrl->AddPage(ongletMorphologie, _("Filtre de morphologie") , false, page_bmp);
+	ctrl->AddPage(ongletMorphologie, _("Morphology filter") , false, page_bmp);
 	}
 if (ongletParamImage==NULL)
 	{
 	ongletParamImage = OngletParamImage(ctrl);
-	ctrl->AddPage(ongletParamImage, _("Paramètrage des opérateurs") , false, page_bmp);
+	ctrl->AddPage(ongletParamImage, _("Operator parameters") , false, page_bmp);
 	}
 
 ctrl->Thaw();
@@ -851,6 +851,7 @@ void InterfaceAvance::InstallationBarreMenu()
 
     wxMenu* file_menu = new wxMenu;
     file_menu->Append(wxID_EXIT);
+    file_menu->Append(wxID_OPEN);
     wxMenu* param_menu = new wxMenu;
     param_menu->Append(ID_RAZIHM, _("Reset Windows"));
 

@@ -713,7 +713,8 @@ void ZoneImage::SequenceOperation(wxCommandEvent& event)
 {
 if (osgApp->FenetreSeqOpe()==NULL)
 	{
-	FenetreSequenceOperation *fs=new FenetreSequenceOperation(f,f->GetTitle(),wxPoint(530,0), wxSize(430,570),this->osgApp);
+	wxString s(_("Sequence on ")+f->GetTitle());
+	FenetreSequenceOperation *fs=new FenetreSequenceOperation(f,s,wxPoint(530,0), wxSize(430,570),this->osgApp);
 	osgApp->FenetreSeqOpe(fs);
 	}
 ((FenetreSequenceOperation *)osgApp->FenetreSeqOpe())->Show(true);

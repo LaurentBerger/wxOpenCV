@@ -15,6 +15,7 @@ FenetreSequenceOperation::FenetreSequenceOperation(FenetrePrincipale *frame, con
      : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
 {
 ImageInfoCV xx;
+fenMere=frame;
 tailleMax=wxSize(0,0);
 panneau = new wxPanel( this,wxID_ANY ,wxPoint(0,0),wxSize(400,400));
 //wxPanel	*panneauCtrl = new wxPanel( panel,  -1, wxDefaultPosition, wxSize(400,400));
@@ -27,15 +28,16 @@ new wxButton( panneau,wxID_OK,_("Execute all"),wxPoint(150,20),wxSize(70,20));
 spw->SetRange(0,t->size()-1);
 spw->SetValue(0);
 nbEtape=100;
-if (nbEtape<(*t)[0].size())
-	nbEtape=(*t)[0].size();
+int n=(*t).begin()->first;
+if (nbEtape<(*t)[n].size())
+	nbEtape=(*t)[n].size();
 nomEtape=new wxString[nbEtape];
 int i=0;
-for (std::vector <Operation >::iterator it = (*t)[0].begin() ; it != (*t)[0].end(); ++it,++i)
+for (std::vector <Operation >::iterator it = (*t)[n].begin() ; it != (*t)[n].end(); ++it,++i)
     nomEtape[i]=(*it).nomOperation;
-choixOp=new wxListBox( panneau,LISTE_OP_SEQ,wxPoint(80,50),wxSize(150,-1),(*t)[0].size(),nomEtape);
+choixOp=new wxListBox( panneau,LISTE_OP_SEQ,wxPoint(80,50),wxSize(150,-1),(*t)[n].size(),nomEtape);
 choixOp->SetSelection(0);
-InsererCtrlEtape(&((*t)[0][0]));
+InsererCtrlEtape(&((*t)[n][0]));
 Bind(wxEVT_SPINCTRL, &FenetreSequenceOperation::OnSpinEntier,this);
 Bind(wxEVT_COMMAND_LISTBOX_SELECTED, &FenetreSequenceOperation::OnOpeSelec,this);
 Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::Executer,this,wxID_OK);
@@ -315,50 +317,63 @@ if (!osgApp)
 	return;
 wxOsgApp	*app=(wxOsgApp *)osgApp;
 ImageInfoCV **im=NULL;
-/*for (int i=indEtape;i<nbEtape;i++)
+ImageInfoCV *imTmp=NULL;
+int i=0;
+
+for (std::vector <Operation > ::iterator it=sq->begin();it!=sq->end();it++)
 	{
-	int indFen1=app->RechercheFenetre(listeOp[i].first->op1);
-	if (indFen1<0 )
-		{
-		wxMessageBox(_("Previous image is closed?"),_("Problem"), wxOK );
-		return ;
-		}
-	}
-for (int i=indEtape;i<nbEtape;i++)
-	{
-	Parametre *pOCV=&listeOp[i].first->pOCV;
-	wxString  nomOperation(listeOp[i].first->nomOperation);
+	Parametre pOCV=it->pOCV;
+	wxString  nomOperation(it->nomOperation);
 	app->DefOperateurImage(nomOperation);
-	int indFen1=app->RechercheFenetre(listeOp[i].first->op1);
+	int indFen1=fenMere->IdFenetre();
 	if (indFen1<0 )
 		{
 		wxMessageBox(_("Previous image is closed?"),_("Problem"), wxOK );
 		return ;
 		}
-//	if (im==NULL)
-		app->DefOperande1(listeOp[i].first->op1,indFen1);
-	//else
-//		app->DefOperande1(im[0]);
-	int indFen2=app->RechercheFenetre(listeOp[i].first->op2);
-	app->DefOperande2(listeOp[i].first->op2,indFen2);
-	im=app->ExecuterOperation(pOCV);
-	if (im!=NULL)
+	if (im==NULL)
+		app->DefOperande1(fenMere->ImAcq(),indFen1);
+	else
 		{
-		FenetrePrincipale *f;
-
-		f =app->Fenetre(listeOp[i].second);
-		f->AssosierImage(im[0]);
-		if (i<nbEtape-1)
-			{
-			listeOp[i+1].first->op1 =im[0];
-			}
-
-		f->NouvelleImage();
-		f->MAJNouvelleImage();
-		if (f->ImgStat())
-			f->ImgStat()->Plot(true);
-		f->DefHistorique();
+		if (imTmp)
+			delete imTmp;
+		imTmp=im[0];
+		app->DefOperande1(im[0],-1);
 		}
+
+	int indFen2=it->indOp2;
+	if (indFen2>=0)
+		{
+		wxMessageBox(_("Operation with two images not supported?"),_("Problem"), wxOK );
+		return ;
+		}
+//	if (pOCV.intParam.find(
+	im=app->ExecuterOperation(&pOCV);
 	}
-*/
+if (im!=NULL)
+	{
+	wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
+	int opSelec;
+	if (ws)
+		opSelec=ws->GetValue();
+	else
+		opSelec=9999;
+	FenetrePrincipale *f = new FenetrePrincipale(NULL, "wxOpenCV",
+		wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
+	wxString s;
+	s.Printf("%d : %s( %d) of image %d ",app->NbFenetre(),_("Sequence"),opSelec,fenMere->IdFenetre());	
+	f->SetTitle(s);
+	f->DefOSGApp(app);
+	
+	f->AssosierImage(im[0]);
+	app->InitFenAssociee(f);
+	f->InitIHM();
+
+
+	f->NouvelleImage();
+	f->MAJNouvelleImage();
+	if (f->ImgStat())
+		f->ImgStat()->Plot(true);
+	f->DefHistorique();
+	}
 }

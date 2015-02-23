@@ -151,7 +151,9 @@ if ( !((wxOsgApp*)osgApp)->VerifFenetre())
 	return;
 if (!b)
 	return;
-ImageInfoCV			*imAcq=((wxOsgApp*)osgApp)->Graphique()->ImAcq();
+if (!fenMere)
+	return;
+ImageInfoCV			*imAcq=((FenetrePrincipale *)fenMere)->ImAcq();
 long nbLig=imAcq->LitNbLigne(),nbCol=imAcq->LitNbColonne();
 static long*h=new long[nbLig+nbCol];
 long ligDeb=0,colDeb=0;

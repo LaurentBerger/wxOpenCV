@@ -83,7 +83,7 @@ ImageInfoCV 	*ImageInfoCV::Erosion(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *
 ImageInfoCV	*im =new ImageInfoCV;
 
 if (im2==NULL)
-	cv::erode( *im1, *im, *im1->opMorph[im1->indOpMorphologie] );
+	cv::erode( *im1, *im, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 else
 	cv::erode( *im1, *im, *im2 );
 return im;
@@ -98,7 +98,7 @@ ImageInfoCV 	*ImageInfoCV::Dilatation(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametr
 ImageInfoCV	*im =new ImageInfoCV;
 
 if (im2==NULL)
-	cv::dilate( *im1, *im, *im1->opMorph[im1->indOpMorphologie] );
+	cv::dilate( *im1, *im, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 else
 	cv::dilate( *im1, *im, *im2 );
 return im;
@@ -119,13 +119,13 @@ if (pOCV)
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
 	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_OPEN, *im1->opMorph[im1->indOpMorphologie],ancrage,nbIter,borderType,borderValue );
+		cv::morphologyEx( *im1, *im,cv::MORPH_OPEN, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
 		cv::morphologyEx( *im1, *im,cv::MORPH_OPEN, *im2,ancrage,nbIter,borderType,borderValue);
 	}
 else
 	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_OPEN, *im1->opMorph[im1->indOpMorphologie] );
+		cv::morphologyEx( *im1, *im,cv::MORPH_OPEN, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 	else
 		cv::morphologyEx( *im1, *im,cv::MORPH_OPEN, *im2);
 return im;
@@ -145,13 +145,13 @@ if (pOCV)
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
 	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_CLOSE, *im1->opMorph[im1->indOpMorphologie],ancrage,nbIter,borderType,borderValue );
+		cv::morphologyEx( *im1, *im,cv::MORPH_CLOSE, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
 		cv::morphologyEx( *im1, *im,cv::MORPH_CLOSE, *im2,ancrage,nbIter,borderType,borderValue);
 	}
 else
 	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_CLOSE, *im1->opMorph[im1->indOpMorphologie] );
+		cv::morphologyEx( *im1, *im,cv::MORPH_CLOSE, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 	else
 		cv::morphologyEx( *im1, *im,cv::MORPH_CLOSE, *im2);
 return im;
@@ -171,13 +171,13 @@ if (pOCV)
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
 	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_TOPHAT, *im1->opMorph[im1->indOpMorphologie],ancrage,nbIter,borderType,borderValue );
+		cv::morphologyEx( *im1, *im,cv::MORPH_TOPHAT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
 		cv::morphologyEx( *im1, *im,cv::MORPH_TOPHAT, *im2,ancrage,nbIter,borderType,borderValue);
 	}
 else
 	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_TOPHAT, *im1->opMorph[im1->indOpMorphologie] );
+		cv::morphologyEx( *im1, *im,cv::MORPH_TOPHAT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 	else
 		cv::morphologyEx( *im1, *im,cv::MORPH_TOPHAT, *im2);
 return im;
@@ -197,13 +197,13 @@ if (pOCV)
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
 	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_BLACKHAT, *im1->opMorph[im1->indOpMorphologie],ancrage,nbIter,borderType,borderValue );
+		cv::morphologyEx( *im1, *im,cv::MORPH_BLACKHAT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
 		cv::morphologyEx( *im1, *im,cv::MORPH_BLACKHAT, *im2,ancrage,nbIter,borderType,borderValue);
 	}
 else
 	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_BLACKHAT, *im1->opMorph[im1->indOpMorphologie] );
+		cv::morphologyEx( *im1, *im,cv::MORPH_BLACKHAT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 	else
 		cv::morphologyEx( *im1, *im,cv::MORPH_BLACKHAT, *im2);
 return im;
@@ -223,13 +223,13 @@ if (pOCV)
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
 	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_GRADIENT, *im1->opMorph[im1->indOpMorphologie],ancrage,nbIter,borderType,borderValue );
+		cv::morphologyEx( *im1, *im,cv::MORPH_GRADIENT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
 		cv::morphologyEx( *im1, *im,cv::MORPH_GRADIENT, *im2,ancrage,nbIter,borderType,borderValue);
 	}
 else
 	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_GRADIENT, *im1->opMorph[im1->indOpMorphologie] );
+		cv::morphologyEx( *im1, *im,cv::MORPH_GRADIENT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 	else
 		cv::morphologyEx( *im1, *im,cv::MORPH_GRADIENT, *im2);
 return im;
@@ -246,7 +246,7 @@ ImageInfoCV 	*ImageInfoCV::Convolution(ImageInfoCV	*im1,ImageInfoCV	*im2,Paramet
 ImageInfoCV	*im =new ImageInfoCV;
 
 if (im2==NULL)
-	cv::filter2D( *im1, *im,typeResultat, *im1->opnn[im1->indOpConvolution] );
+	cv::filter2D( *im1, *im,typeResultat, *im1->opnn[pOCV->intParam["IndOpConvolution"].valeur] );
 else
 	cv::filter2D( *im1, *im,typeResultat, *im2);
 

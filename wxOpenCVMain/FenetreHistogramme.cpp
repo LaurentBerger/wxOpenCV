@@ -148,8 +148,8 @@ int id=((FenetrePrincipale *)fenMere)->IdFenetre();
 CameraVirtuelle *cam=((FenetrePrincipale *)fenMere)->Cam();
 //wxCriticalSectionLocker enter(((FenetrePrincipale*)fenMere)->travailCam);
 
-if (((wxOsgApp*)osgApp)->Graphique(id)->ModeImage()!=1)
-	imAcq =((wxOsgApp*)osgApp)->Graphique(id)->ImAcq();
+if (((FenetrePrincipale *)fenMere)->ModeImage()!=1)
+	imAcq =((FenetrePrincipale *)fenMere)->ImAcq();
 double v;
 switch (l){
 case 0 :
@@ -194,8 +194,8 @@ if (!fenMere)
 	return;
 int id=((FenetrePrincipale *)fenMere)->IdFenetre();
 CameraVirtuelle *cam=((FenetrePrincipale *)fenMere)->Cam();
-if (((wxOsgApp*)osgApp)->Graphique(id)->ModeImage()!=1)
-	imAcq =((wxOsgApp*)osgApp)->Graphique(id)->ImAcq();
+if (((FenetrePrincipale *)fenMere)->ModeImage()!=1)
+	imAcq =((FenetrePrincipale *)fenMere)->ImAcq();
 
 if (nbGraines[0]==-1)
 	{
@@ -300,29 +300,9 @@ vector<Mat> planCouleur;
 
 try
 	{
-	switch(imAcq->type())
+	switch(imAcq->depth())
 	{
-	case CV_32FC1:
-		calcHist(imAcq,1,nbCanaux,masque, histoImage[0], 1, &(nbGraines[0]), listeEtendu,
-					 true, 
-					 false);
-		break;
-	case CV_16UC1:
-		calcHist(imAcq,1,nbCanaux,masque, histoImage[0], 1, &nbGraines[0], listeEtendu,
-					 true, 
-					 false);
-		break;
-	case CV_8UC1:
-		calcHist(imAcq,1,nbCanaux,masque, histoImage[0], 1, &nbGraines[0], listeEtendu,
-					 true, 
-					 false);
-		break;
-	case CV_8SC1:
-		calcHist(imAcq,1,nbCanaux,masque, histoImage[0], 1, &nbGraines[0], listeEtendu,
-					 true, 
-					 false);
-		break;
-	case CV_8UC3:
+	case CV_8U:
 		split( *imAcq, planCouleur );
 		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
@@ -333,9 +313,9 @@ try
 						 false);
 			}
 		break;
-	case CV_8SC3:
+	case CV_8S:
 		split( *imAcq, planCouleur );
-		for (int i=0;i<3;i++)
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
 			etendu[0]=minHisto[i];
 			etendu[1]=maxHisto[i];
@@ -344,9 +324,9 @@ try
 						 false);
 			}
 		break;
-	case CV_16SC3:
+	case CV_16S:
 		split( *imAcq, planCouleur );
-		for (int i=0;i<3;i++)
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
 			ImageInfoCV imSrc;
 			etendu[0]=minHisto[i];
@@ -358,9 +338,23 @@ try
 						 false);
 			}
 		break;
-	case CV_16UC3:
+	case CV_16U:
 		split( *imAcq, planCouleur );
-		for (int i=0;i<3;i++)
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
+			{
+			etendu[0]=minHisto[i];
+			etendu[1]=maxHisto[i];
+			ImageInfoCV imF;
+			planCouleur[i].convertTo(imF, CV_32F);
+
+			calcHist(&imF,1,nbCanaux,masque, histoImage[i], 1, &nbGraines[i], listeEtendu,
+						 true, 
+						 false);
+			}
+		break;
+	case CV_32F:
+		split( *imAcq, planCouleur );
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
 			etendu[0]=minHisto[i];
 			etendu[1]=maxHisto[i];
@@ -369,13 +363,16 @@ try
 						 false);
 			}
 		break;
-	case CV_32FC3:
+	case CV_32S:
 		split( *imAcq, planCouleur );
-		for (int i=0;i<3;i++)
+		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
 			etendu[0]=minHisto[i];
 			etendu[1]=maxHisto[i];
-			calcHist(&planCouleur[i],1,nbCanaux,masque, histoImage[i], 1, &nbGraines[i], listeEtendu,
+			ImageInfoCV imF;
+			planCouleur[i].convertTo(imF, CV_32F);
+
+			calcHist(&imF,1,nbCanaux,masque, histoImage[i], 1, &nbGraines[i], listeEtendu,
 						 true, 
 						 false);
 			}
@@ -402,8 +399,8 @@ int id=((FenetrePrincipale *)fenMere)->IdFenetre();
 
 ImageInfoCV			*imAcq;
 CameraVirtuelle *cam=((FenetrePrincipale *)fenMere)->Cam();
-if (((wxOsgApp*)osgApp)->Graphique(id)->ModeImage()!=1)
-	imAcq =((wxOsgApp*)osgApp)->Graphique(id)->ImAcq();
+if (((FenetrePrincipale *)fenMere)->ModeImage()!=1)
+	imAcq =((FenetrePrincipale *)fenMere)->ImAcq();
 int nbPlan=imAcq->channels();
 if (histoImage[0].cols==0 || fenetreActive)
 	{
@@ -426,7 +423,7 @@ if (selection.size()!=0)
 	}
 const size_t np=65536;
 if (x[0]==NULL)
-	for (int i=0;i<3;i++)	
+	for (int i=0;i<NB_MAX_CANAUX;i++)	
 		{
 		x[i]=new PLFLT[np];
 		y[i]=new PLFLT[np];
@@ -448,7 +445,7 @@ excel->DefTitreLigne(8,"Kurtosis");
 excel->DefTitreLigne(9,"SeuilKurtosis");
 excel->DefTitreLigne(10,"Asymetrie");
 excel->DefTitreLigne(11,"Seuil");
-for (int j=0;j<nbPlan;j++)
+for (int j=0;j<nbPlan && j<NB_MAX_CANAUX && histoImage[j].cols;j++)
 	{
 	xmin=minHisto[j];
 	xmax=maxHisto[j];
@@ -457,7 +454,7 @@ for (int j=0;j<nbPlan;j++)
 	excel->DefTitreColonne(j,titre[j]);
 	double moyenneH=0,varianceH=0,cumulH=0;
 	int mode=iMin;
-	for( int i = 0; i<nbGraines[j]; i++ ) 
+	for( int i = 0; i<nbGraines[j] ; i++ ) 
 		{
 		cumulH += histoImage[j].at<float>(i);
 		x[j][i] = xmin+(xmax-xmin)/nbGraines[j]*i;
@@ -544,7 +541,7 @@ pls->col0( 1 );
 pls->env( xmin, xmax, ymin*.99, ymax*1.01, 0, 0 );
 pls->col0( 2 );
 pls->lab( "x", "y", "Histogram");
-for (int j=0;j<nbPlan;j++)
+for (int j=0;j<nbPlan && j<NB_MAX_CANAUX;j++)
 	if(((FenetrePrincipale *)fenMere)->PlanActif(nbPlan-1-j))
 		{
 		pls->col0( 3+2*j);

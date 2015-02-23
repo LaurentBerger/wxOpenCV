@@ -80,8 +80,8 @@ if (!fenMere)
 int id=((FenetrePrincipale *)fenMere)->IdFenetre();
 
 ImageInfoCV			*imAcq;
-if (((wxOsgApp*)osgApp)->Graphique(id)->ModeImage()!=1)
-	imAcq =((wxOsgApp*)osgApp)->Graphique(id)->ImAcq();
+if (((FenetrePrincipale *)fenMere)->ModeImage()!=1)
+	imAcq =((FenetrePrincipale *)fenMere)->ImAcq();
 else
 	return;
 long nbLig=imAcq->rows,nbCol=imAcq->cols;
@@ -256,8 +256,8 @@ if (!fenMere)
 int id=((FenetrePrincipale *)fenMere)->IdFenetre();
 
 ImageInfoCV			*imAcq;
-if (((wxOsgApp*)osgApp)->Graphique(id)->ModeImage()!=1)
-	imAcq =((wxOsgApp*)osgApp)->Graphique(id)->ImAcq();
+if (((FenetrePrincipale *)fenMere)->ModeImage()!=1)
+	imAcq =((FenetrePrincipale *)fenMere)->ImAcq();
 else
 	return;
 long nbLig=imAcq->rows,nbCol=imAcq->cols;
