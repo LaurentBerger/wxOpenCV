@@ -658,7 +658,7 @@ ImageInfoCV		*ImageInfoCV::DistanceDiscrete (ImageInfoCV *im1,Parametre &paramOC
 ImageInfoCV	*im =new ImageInfoCV;
 if (im1->channels()==1)
 	{
-	cv::distanceTransform(*im1, *im, cv::DIST_L2, 3);
+	cv::distanceTransform(*im1, *im, cv::DIST_L1, 3);
 	}
 else
 	{
@@ -668,7 +668,7 @@ else
 	cv::split( *im1, planCouleur );
 	for (int i=0;i<im1->channels();i++)
 		{
-		cv::distanceTransform(planCouleur[i], d[i], cv::DIST_L2, 3);
+		cv::distanceTransform(planCouleur[i], d[i], cv::DIST_L1, 3);
 		}
 	cv::merge((const cv::Mat *)d, im1->channels(), *im);
 	delete []d;

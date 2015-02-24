@@ -9,17 +9,31 @@ if (depth()!=CV_32F && depth()!=CV_8U)
 	return imRes;
 	}
 long			i,j;
-unsigned char 	*ptc;
 
-ImageInfoCV	*imRes=new ImageInfoCV(rows,cols,(CV_32F<<3)&(channels()<-1));
+ImageInfoCV	*imRes=new ImageInfoCV(rows,cols,CV_MAKETYPE(CV_32F,channels()));
 float *ptf;
-for (int k=0;k<channels();k++)
-	for (int i=0;i<rows;i++)
-		{
-		ptf=(float*)imRes->ptr(k,i);
-		for (int j=0;j<cols;j++,ptf++)
+for (int i=0;i<rows;i++)
+	{
+	ptf=(float*)imRes->ptr(i);
+	for (int j=0;j<cols;j++)
+		for (int k=0;k<channels();k++,ptf++)
 			*ptf=0;
 		}
+
+for (int c=0;c<channels();c++)
+	{
+	ptf=(float*)ptr(0)+c;
+	for (int j=0;j<cols;j++,ptf+=channels())
+		*ptf=0;
+	ptf=(float*)ptr(rows-1)+c;
+	for (int j=0;j<cols;j++,ptf+=channels())
+		*ptf=0;
+	for (int i=0;i<rows;i++)
+		{
+		*((float*)ptr(i,0)+c)=0;
+		*((float*)ptr(i,cols-1)+c)=0;
+		}
+	}
 
 for (int c=0;c<channels();c++)
 	if (depth()==CV_32F)
@@ -31,8 +45,8 @@ for (int c=0;c<channels();c++)
 				if ((*((float*)ptr(i,j)+c)!=0)&&(*ptf==0))
 					{
 					float 	k= *((float*)ptr(i,j)+c);
-					if ((*((float*)ptr(i+1,j+1)+c)==k)&&(*((float*)ptr(i+1,j)+c)==k-1)&&
-						(*((float*)ptr(i,j-1)+c)==k-1))
+					if ((*((float*)ptr(i+1,j+1)+c)==k)&&(*((float*)ptr(i+1,j)+c)>k)&&
+						(*((float*)ptr(i,j+1)+c)>k))
 						{
 						if (!MaxLocal(c,i,j))
 							{
@@ -45,8 +59,8 @@ for (int c=0;c<channels();c++)
 							SuiviChemin(c,i+1,j+1,*imRes);
 							}
 						}
-					else if ((*((float*)ptr(i+1,j-1)+c)==k)&&(*((float*)ptr(i,j-1)+c)==k-1)&&
-								(*((float*)ptr(i+1,j)+c)==k-1))
+					else if ((*((float*)ptr(i+1,j-1)+c)==k)&&(*((float*)ptr(i,j-1)+c)>k)&&
+								(*((float*)ptr(i+1,j)+c)>k))
 						{
 						if (!MaxLocal(c,i,j))
 							{
@@ -75,7 +89,7 @@ for (int c=0;c<channels();c++)
 							z++;
 						if (z==4)
 							{
-							*ptc = k;
+							*ptf = k;
 							if ((!MaxLocal(c,i-1,j-1))&&(k+1==*((float*)ptr(i-1,j-1)+c)))
 								{
 								ptf[(-cols-1)*channels()] = *((float*)ptr(i-1,j-1)+c);
@@ -99,7 +113,7 @@ for (int c=0;c<channels();c++)
 							}
 						else if (z==3)
 							{
-							*ptc = (unsigned char)k;
+							*ptf = (unsigned char)k;
 							SuiviChemin(c,i,j,*imRes);
 							}
 						}
@@ -116,8 +130,8 @@ for (int c=0;c<channels();c++)
 				if ((*((float*)ptr(i,j)+c)!=0)&&(*ptf==0))
 					{
 					float 	k= *(ptr(i,j)+c);
-					if ((*(ptr(i+1,j+1)+c)==k)&&(*(ptr(i+1,j)+c)==k-1)&&
-						(*(ptr(i,j-1)+c)==k-1))
+					if ((*(ptr(i+1,j+1)+c)==k)&&(*(ptr(i+1,j)+c)>k)&&
+						(*(ptr(i,j-1)+c)>k))
 						{
 						if (!MaxLocal(c,i,j))
 							{
@@ -130,8 +144,8 @@ for (int c=0;c<channels();c++)
 							SuiviChemin(c,i+1,j+1,*imRes);
 							}
 						}
-					else if ((*(ptr(i+1,j-1)+c)==k)&&(*(ptr(i,j-1)+c)==k-1)&&
-								(*(ptr(i+1,j)+c)==k-1))
+					else if ((*(ptr(i+1,j-1)+c)==k)&&(*(ptr(i,j-1)+c)>k)&&
+								(*(ptr(i+1,j)+c)>k))
 						{
 						if (!MaxLocal(c,i,j))
 							{
@@ -160,7 +174,7 @@ for (int c=0;c<channels();c++)
 							z++;
 						if (z==4)
 							{
-							*ptc = k;
+							*ptf = k;
 							if ((!MaxLocal(c,i-1,j-1))&&(k+1==*(ptr(i-1,j-1)+c)))
 								{
 								ptf[(-cols-1)*channels()] = *(ptr(i-1,j-1)+c);
@@ -184,7 +198,7 @@ for (int c=0;c<channels();c++)
 							}
 						else if (z==3)
 							{
-							*ptc = (unsigned char)k;
+							*ptf = k;
 							SuiviChemin(c,i,j,*imRes);
 							}
 						}
@@ -267,21 +281,21 @@ if (depth()==CV_32F)
 	l=j;
 	while (!fini)
 		{
-		if (*((float*)ptr(k-1,l))==q+1)
+		if (*((float*)ptr(k-1,l))>q)
 			fini = TraiterMediane(k,l,-1,0,q,im);
-		else if (*((float*)ptr(k+1,l))==q+1)
+		else if (*((float*)ptr(k+1,l))>q)
 			fini = TraiterMediane(k,l,1,0,q,im);
-		else if (*((float*)ptr(k,l-1))==q+1)
+		else if (*((float*)ptr(k,l-1))>q)
 			fini = TraiterMediane(k,l,0,-1,q,im);
-		else if (*((float*)ptr(k,l+1))==q+1)
+		else if (*((float*)ptr(k,l+1))>q)
 			fini = TraiterMediane(k,l,0,1,q,im);
-		else if (*((float*)ptr(k-1,l-1))==q+1)
+		else if (*((float*)ptr(k-1,l-1))>q)
 			fini = TraiterMediane(k,l,-1,-1,q,im);
-		else if (*((float*)ptr(k-1,l+1))==q+1)
+		else if (*((float*)ptr(k-1,l+1))>q)
 			fini = TraiterMediane(k,l,-1,1,q,im);
-		else if (*((float*)ptr(k+1,l-1))==q+1)
+		else if (*((float*)ptr(k+1,l-1))>q)
 			fini = TraiterMediane(k,l,1,-1,q,im);
-		else if (*((float*)ptr(i+1,j+1))==q+1)
+		else if (*((float*)ptr(k+1,l+1))>q)
 			fini = TraiterMediane(k,l,1,1,q,im);
 		}
 	}
@@ -292,21 +306,21 @@ else
 	l=j;
 	while (!fini)
 		{
-		if (*(ptr(k-1,l))==q+1)
+		if (*(ptr(k-1,l))>q)
 			fini = TraiterMediane(k,l,-1,0,q,im);
-		else if (*(ptr(k+1,l))==q+1)
+		else if (*(ptr(k+1,l))>q)
 			fini = TraiterMediane(k,l,1,0,q,im);
-		else if (*(ptr(k,l-1))==q+1)
+		else if (*(ptr(k,l-1))>q)
 			fini = TraiterMediane(k,l,0,-1,q,im);
-		else if (*(ptr(k,l+1))==q+1)
+		else if (*(ptr(k,l+1))>q)
 			fini = TraiterMediane(k,l,0,1,q,im);
-		else if (*(ptr(k-1,l-1))==q+1)
+		else if (*(ptr(k-1,l-1))>q)
 			fini = TraiterMediane(k,l,-1,-1,q,im);
-		else if (*(ptr(k-1,l+1))==q+1)
+		else if (*(ptr(k-1,l+1))>q)
 			fini = TraiterMediane(k,l,-1,1,q,im);
-		else if (*(ptr(k+1,l-1))==q+1)
+		else if (*(ptr(k+1,l-1))>q)
 			fini = TraiterMediane(k,l,1,-1,q,im);
-		else if (*(ptr(i+1,j+1))==q+1)
+		else if (*(ptr(i+1,j+1))>q)
 			fini = TraiterMediane(k,l,1,1,q,im);
 		}
 	}
@@ -326,21 +340,21 @@ if (depth()==CV_32F)
 	l=j;
 	while (!fini)
 		{
-		if (*((float*)ptr(k-1,l)+c)==q+1)
+		if (*((float*)ptr(k-1,l)+c)>q)
 			fini = TraiterMediane(c,k,l,-1,0,q,im);
-		else if (*((float*)ptr(k+1,l)+c)==q+1)
+		else if (*((float*)ptr(k+1,l)+c)>q)
 			fini = TraiterMediane(c,k,l,1,0,q,im);
-		else if (*((float*)ptr(k,l-1)+c)==q+1)
+		else if (*((float*)ptr(k,l-1)+c)>q)
 			fini = TraiterMediane(c,k,l,0,-1,q,im);
-		else if (*((float*)ptr(k,l+1)+c)==q+1)
+		else if (*((float*)ptr(k,l+1)+c)>q)
 			fini = TraiterMediane(c,k,l,0,1,q,im);
-		else if (*((float*)ptr(k-1,l-1)+c)==q+1)
+		else if (*((float*)ptr(k-1,l-1)+c)>q)
 			fini = TraiterMediane(c,k,l,-1,-1,q,im);
-		else if (*((float*)ptr(k-1,l+1)+c)==q+1)
+		else if (*((float*)ptr(k-1,l+1)+c)>q)
 			fini = TraiterMediane(c,k,l,-1,1,q,im);
-		else if (*((float*)ptr(k+1,l-1)+c)==q+1)
+		else if (*((float*)ptr(k+1,l-1)+c)>q)
 			fini = TraiterMediane(c,k,l,1,-1,q,im);
-		else if (*((float*)ptr(i+1,j+1)+c)==q+1)
+		else if (*((float*)ptr(k+1,l+1)+c)>q)
 			fini = TraiterMediane(c,k,l,1,1,q,im);
 		}
 	}
@@ -351,21 +365,21 @@ else
 	l=j;
 	while (!fini)
 		{
-		if (*(ptr(k-1,l)+c)==q+1)
+		if (*(ptr(k-1,l)+c)>q)
 			fini = TraiterMediane(c,k,l,-1,0,q,im);
-		else if (*(ptr(k+1,l)+c)==q+1)
+		else if (*(ptr(k+1,l)+c)>q)
 			fini = TraiterMediane(c,k,l,1,0,q,im);
-		else if (*(ptr(k,l-1)+c)==q+1)
+		else if (*(ptr(k,l-1)+c)>q)
 			fini = TraiterMediane(c,k,l,0,-1,q,im);
-		else if (*(ptr(k,l+1)+c)==q+1)
+		else if (*(ptr(k,l+1)+c)>q)
 			fini = TraiterMediane(c,k,l,0,1,q,im);
-		else if (*(ptr(k-1,l-1)+c)==q+1)
+		else if (*(ptr(k-1,l-1)+c)>q)
 			fini = TraiterMediane(c,k,l,-1,-1,q,im);
-		else if (*(ptr(k-1,l+1)+c)==q+1)
+		else if (*(ptr(k-1,l+1)+c)>q)
 			fini = TraiterMediane(c,k,l,-1,1,q,im);
-		else if (*(ptr(k+1,l-1)+c)==q+1)
+		else if (*(ptr(k+1,l-1)+c)>q)
 			fini = TraiterMediane(c,k,l,1,-1,q,im);
-		else if (*(ptr(i+1,j+1)+c)==q+1)
+		else if (*(ptr(i+1,j+1)+c)>q)
 			fini = TraiterMediane(c,k,l,1,1,q,im);
 		}
 	}
@@ -375,9 +389,9 @@ else
 
 bool	ImageInfoCV::TraiterMediane(int c,int &r,int &s,int dr,int ds,int &q,ImageInfoCV &im)
 {
-float *pt=(float *)im.ptr(0);
+float *pt=(float *)im.ptr(r+dr,s+ds)+c;
 
-pt =pt+(r+dr)*cols+ds+s;
+
 
 if ((MaxLocal(c,r+dr,s+ds))||(*pt!=0))
 	return 1;
