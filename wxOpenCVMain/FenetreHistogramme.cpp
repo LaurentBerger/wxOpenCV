@@ -196,15 +196,10 @@ int id=((FenetrePrincipale *)fenMere)->IdFenetre();
 CameraVirtuelle *cam=((FenetrePrincipale *)fenMere)->Cam();
 if (((FenetrePrincipale *)fenMere)->ModeImage()!=1)
 	imAcq =((FenetrePrincipale *)fenMere)->ImAcq();
-
+if (imAcq==NULL)
+	return;
 if (nbGraines[0]==-1)
 	{
-	ImageInfoCV			*imAcq;
-	if (!fenMere)
-		return;
-	int id=((FenetrePrincipale *)fenMere)->IdFenetre();
-	if (((FenetrePrincipale *)fenMere)->ModeImage()!=1)
-		imAcq =((FenetrePrincipale *)fenMere)->ImAcq();
 
 	if (imAcq->MinIm()==NULL)
 		imAcq->ExtremumLoc();

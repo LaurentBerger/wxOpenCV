@@ -608,6 +608,9 @@ if (s.Cmp("ChapeauHaut")==0)
 	opBinaireSelec = &ImageInfoCV::ChapeauHaut;
 	nomOperation = s;
 	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	pOCV.intParam["nbIter"]=DomaineParametre<int>(1,1,10,1);
+	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pOCV.pointParam["anchor"]=DomaineParametre<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	}
@@ -617,6 +620,9 @@ if (s.Cmp("ChapeauBas")==0)
 	opBinaireSelec = &ImageInfoCV::ChapeauBas;
 	nomOperation = s;
 	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	pOCV.intParam["nbIter"]=DomaineParametre<int>(1,1,10,1);
+	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pOCV.pointParam["anchor"]=DomaineParametre<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	}
@@ -626,6 +632,9 @@ if (s.Cmp("GradMorph")==0)
 	opBinaireSelec = &ImageInfoCV::GradMorph;
 	nomOperation = s;
 	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	pOCV.intParam["nbIter"]=DomaineParametre<int>(1,1,10,1);
+	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pOCV.pointParam["anchor"]=DomaineParametre<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	}
@@ -753,7 +762,7 @@ if (s.Cmp("LissageMoyenneur")==0)
 	{
 	pOCV.sizeParam["ksize"]=DomaineParametre<cv::Size>(cv::Size(3,3),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
 	pOCV.pointParam["anchor"]=DomaineParametre<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_DEFAULT,0,255,1);
+	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=blur#blur";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100";
 	pOCV.nomOperation=s;
@@ -765,7 +774,7 @@ if (s.Cmp("LissageGaussien")==0)
 	pOCV.sizeParam["ksize"]=DomaineParametre<cv::Size>(cv::Size(3,3),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
 	pOCV.doubleParam["sigmaX"]=DomaineParametre<double>(0.1,0,255.0,0.1);
 	pOCV.doubleParam["sigmaY"]=DomaineParametre<double>(0.1,0,255.0,0.1);
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_DEFAULT,0,255,1);
+	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=gaussianblur#gaussianblur";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=263&zoom=70,250,100";
 	pOCV.nomOperation=s;

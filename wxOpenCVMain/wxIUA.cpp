@@ -942,16 +942,15 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
                                          wxAUI_TB_TEXT |
                                          wxAUI_TB_HORZ_TEXT);
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(5,5);
+        tb->SetMargins(1,1);
 		tb->AddTool(ID_ADDITION, "", toolBarBitmaps[Tool_addition], _("Add 2 images"), wxITEM_CHECK);
-		tb->AddSeparator();
 		tb->AddTool(ID_SOUSTRACTION, "", toolBarBitmaps[Tool_soustraction], _("Difference between 2 images"));
-		tb->AddSeparator();
 		tb->AddTool(ID_MULTIPLICATION, "", toolBarBitmaps[Tool_multiplication], _("product"));
-		tb->AddSeparator();
 		tb->AddTool(ID_DIVISION, "", toolBarBitmaps[Tool_division], _("Divide"));
+		wxColour c(255,0,0);;
+		tb->SetBackgroundColour(c);
 		//tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
+//		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Arithmetic operation").Caption("Arithmetic operation").
 					  ToolbarPane().Top().Row(1));
@@ -985,19 +984,13 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
                                          wxAUI_TB_TEXT |
                                          wxAUI_TB_HORZ_TEXT);
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(5,5);
+        tb->SetMargins(1,1);
 		tb->AddTool(ID_EROSION, "", toolBarBitmaps[Tool_erosion], _("Erosion"));
-		tb->AddSeparator();
 		tb->AddTool(ID_DILATATION, "", toolBarBitmaps[Tool_dilatation], _("Dilatation"));
-		tb->AddSeparator();
 		tb->AddTool(ID_OUVERTURE, "", toolBarBitmaps[Tool_ouverture], _("Ouverture"));
-		tb->AddSeparator();
 		tb->AddTool(ID_FERMETURE,"", toolBarBitmaps[Tool_fermeture], _("Fermeture"));
-		tb->AddSeparator();
 		tb->AddTool(ID_CHAPHAUTBL, "", toolBarBitmaps[Tool_chaphautblanc], _("Chapeau haut"));
-		tb->AddSeparator();
 		tb->AddTool(ID_CHAPHAUTNO, "", toolBarBitmaps[Tool_chaphautnoir], _("Chapeau bas"));
-		tb->AddSeparator();
 		tb->AddTool(ID_GRADMORPH, "", toolBarBitmaps[Tool_gradmorph], _("gradient morph."));
 //		tb->SetCustomOverflowItems(prepend_items, append_items);
 		tb->Realize();
@@ -1032,7 +1025,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
                                          wxAUI_TB_HORZ_TEXT);
 		tbOperation= tb;
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(5,5);
+        tb->SetMargins(1,1);
 		tb->AddTool(ID_FFT, _("FFT"), toolBarBitmaps[Tool_fft], _("FFT"));
 		tb->AddTool(ID_IFFT, _("inverse FFT"), toolBarBitmaps[Tool_ifft], _("Inverse FFT"));
 //		tb->SetCustomOverflowItems(prepend_items, append_items);
@@ -1075,15 +1068,15 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
                                          wxAUI_TB_HORZ_TEXT);
 		tbOperation= tb;
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(5,5);
-		tb->AddTool(ID_CONVOLUTION, _("Convolution"), toolBarBitmaps[Tool_convolution], _("Convolution"));
-		tb->AddTool(ID_GRADIENT_MOD, _("Gradient Modulus"), toolBarBitmaps[Tool_gradient_mod], _("Gradient modulus"));
-		tb->AddTool(ID_GRADIENT_X, _("Gradient X"), toolBarBitmaps[Tool_gradient_x], _("Gradient X"));
-		tb->AddTool(ID_GRADIENT_Y, _("Gradient Y"), toolBarBitmaps[Tool_gradient_y], _("Gradient Y"));
-		tb->AddTool(ID_LAPLACIEN, _("Laplacien"), toolBarBitmaps[Tool_laplacien], _("Laplacian"));
-		tb->AddTool(ID_LISMOY, _("Blur (mean)"), toolBarBitmaps[Tool_LisMoy], _("Blur (mean)"));
-		tb->AddTool(ID_LISMED, _("Blur (median filter)"), toolBarBitmaps[Tool_LisMed], _("Blur (median)"));
-		tb->AddTool(ID_LISGAU, _("Blur (gaussian)"), toolBarBitmaps[Tool_LisGau], _("Blur (gaussian)"));
+        tb->SetMargins(1,1);
+		tb->AddTool(ID_CONVOLUTION, "", toolBarBitmaps[Tool_convolution], _("Convolution"));
+		tb->AddTool(ID_GRADIENT_MOD, "", toolBarBitmaps[Tool_gradient_mod], _("Gradient modulus"));
+		tb->AddTool(ID_GRADIENT_X, "", toolBarBitmaps[Tool_gradient_x], _("Gradient X"));
+		tb->AddTool(ID_GRADIENT_Y, "", toolBarBitmaps[Tool_gradient_y], _("Gradient Y"));
+		tb->AddTool(ID_LAPLACIEN, "", toolBarBitmaps[Tool_laplacien], _("Laplacian"));
+		tb->AddTool(ID_LISMOY, "", toolBarBitmaps[Tool_LisMoy], _("Blur (mean)"));
+		tb->AddTool(ID_LISMED, "", toolBarBitmaps[Tool_LisMed], _("Blur (median filter)"));
+		tb->AddTool(ID_LISGAU, "", toolBarBitmaps[Tool_LisGau], _("Blur (gaussian)"));
 //		tb->SetCustomOverflowItems(prepend_items, append_items);
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
@@ -1137,7 +1130,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
                                          wxAUI_TB_HORZ_TEXT);
 		tbOperation= tb;
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(5,5);
+        tb->SetMargins(1,1);
 		tb->AddTool(ID_CANNY, _("Canny"), toolBarBitmaps[Tool_canny], _("Canny"));
 		tb->AddTool(ID_THRESHOLD, _(""), toolBarBitmaps[Tool_seuillage], _("Thereshold"));
 		tb->AddTool(ID_ADATHRESHOLD, _(""), toolBarBitmaps[Tool_seuillageada], _("Adaptive Thereshold"));
@@ -1180,7 +1173,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
                                          wxAUI_TB_HORZ_TEXT);
 		tbOperation= tb;
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(5,5);
+        tb->SetMargins(1,1);
 		tb->AddTool(ID_FUSIONPLAN, _(""), toolBarBitmaps[Tool_fusionplan], _("Merge color plan"));
 		tb->AddTool(ID_SEPARATIONPLAN, _(""), toolBarBitmaps[Tool_separationplan], _("split color plan"));
 		//tb->SetCustomOverflowItems(prepend_items, append_items);
@@ -1312,7 +1305,7 @@ case ID_EROSION:
 	{
 	ImageInfoCV x;
 
-	if (x.opMorph[x.IndOpMorphologie()]==NULL)
+	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
 		{
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
@@ -1324,7 +1317,7 @@ case ID_DILATATION:
 	{
 	ImageInfoCV x;
 
-	if (x.opMorph[x.IndOpMorphologie()]==NULL)
+	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
 		{
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
@@ -1336,7 +1329,7 @@ case ID_OUVERTURE:
 	{
 	ImageInfoCV x;
 
-	if (x.opMorph[x.IndOpMorphologie()]==NULL)
+	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
 		{
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
@@ -1348,7 +1341,7 @@ case ID_FERMETURE:
 	{
 	ImageInfoCV x;
 
-	if (x.opMorph[x.IndOpMorphologie()]==NULL)
+	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
 		{
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
@@ -1360,7 +1353,7 @@ case ID_CHAPHAUTBL:
 	{
 	ImageInfoCV x;
 
-	if (x.opMorph[x.IndOpMorphologie()]==NULL)
+	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
 		{
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
@@ -1372,7 +1365,7 @@ case ID_CHAPHAUTNO:
 	{
 	ImageInfoCV x;
 
-	if (x.opMorph[x.IndOpMorphologie()]==NULL)
+	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
 		{
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
@@ -1384,7 +1377,7 @@ case ID_GRADMORPH:
 	{
 	ImageInfoCV x;
 
-	if (x.opMorph[x.IndOpMorphologie()]==NULL)
+	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
 		{
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
