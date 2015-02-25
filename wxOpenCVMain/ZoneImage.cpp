@@ -574,40 +574,42 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	}
 else
 	{
-	if (osgApp->OpBinaire())
+	if (osgApp->Op1()!=NULL)
 		{
-		if (osgApp->Op1()!=NULL)
-			{
-			wxString s=osgApp->Fenetre(osgApp->IndOp1())->GetTitle();
-			menu.AppendCheckItem(MENU_OP1, _("First Op.")+s);
-			}
-		else
-			menu.AppendCheckItem(MENU_OP1, "Image as A");
+		wxString s=osgApp->Fenetre(osgApp->IndOp1())->GetTitle();
+		menu.AppendCheckItem(MENU_OP1, _("A = ")+s);
+		}
+	else
+		menu.AppendCheckItem(MENU_OP1, "Image as A");
+	if (osgApp->OpBinaire() || osgApp->OpNaire())
+		{
 		if (osgApp->Op2()!=NULL)
 			{
 			wxString s=osgApp->Fenetre(osgApp->IndOp2())->GetTitle();
-			menu.AppendCheckItem(MENU_OP2, _("Second Op.")+s);
+			menu.AppendCheckItem(MENU_OP2, _("B =")+s);
 			}
 		else
 			menu.AppendCheckItem(MENU_OP2, "Image as B");
 		}
-	else if (osgApp->OpUnaire())
+	if (osgApp->OpNaire())
 		{
-		if (osgApp->Op1()!=NULL)
+		if (osgApp->Op3()!=NULL)
 			{
-			wxString s=osgApp->Fenetre(osgApp->IndOp1())->GetTitle();
-			menu.AppendCheckItem(MENU_OP1, _("First Op.")+s);
+			wxString s=osgApp->Fenetre(osgApp->IndOp3())->GetTitle();
+			menu.AppendCheckItem(MENU_OP3, _("C =")+s);
 			}
 		else
-			menu.AppendCheckItem(MENU_OP1, "Image as A");
+			menu.AppendCheckItem(MENU_OP3, "Image as C");
 		}
 	menu.AppendSeparator();
 	menu.AppendCheckItem(MENU_EXEC_OP, "Execute "+*osgApp->NomOperation());
 	menu.Append(RESET_OP,  "Operation canceled");
 	if (osgApp->Op1()==f->ImAcq())
 		menu.Check(MENU_OP1, true);
-	if (osgApp->OpBinaire() && osgApp->Op2()==f->ImAcq())
+	if ((osgApp->OpNaire() || osgApp->OpBinaire()) && osgApp->Op2()==f->ImAcq())
 		menu.Check(MENU_OP2, true);
+	if (osgApp->OpNaire() && osgApp->Op3()==f->ImAcq())
+		menu.Check(MENU_OP3, true);
 
 	}
 

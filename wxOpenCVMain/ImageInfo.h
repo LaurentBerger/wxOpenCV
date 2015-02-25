@@ -316,7 +316,7 @@ ImageInfoCV 	*LissageGaussien(ImageInfoCV	*,Parametre &paramOCV);
 ImageInfoCV 	*LissageBilateral(ImageInfoCV	*,Parametre &paramOCV);
 ImageInfoCV 	*FFT(ImageInfoCV	*,Parametre &paramOCV);
 ImageInfoCV 	*IFFT(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV		*FusionPlan(ImageInfoCV	*,Parametre &paramOCV);
+ImageInfoCV		*FusionPlan(int nbPlan,ImageInfoCV	**,Parametre *paramOCV);
 ImageInfoCV		*ComposanteConnexe (ImageInfoCV *result,Parametre &paramOCV);
 ImageInfoCV		**SeparationPlan(ImageInfoCV	*,Parametre &paramOCV);
 ImageInfoCV		*DistanceDiscrete (ImageInfoCV *result,Parametre &paramOCV);

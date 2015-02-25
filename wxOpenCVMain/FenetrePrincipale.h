@@ -44,9 +44,11 @@ public :
 wxString	nomOperation; /*!< Nom de l'opération demandée */
 ImageInfoCV *op1;	/*!< Opérande 1 pour l'opération demandée */
 ImageInfoCV *op2;	/*!< Opérande 2 pour l'opération demandée */
+ImageInfoCV *op3;	/*!< Opérande 3 pour l'opération demandée */
 // Si les valeurs précédentes sont nulles on met un indice
 long indOp1;	/*!< Indice de la fenêtre contenant l'opérande 1 */
 long indOp2;	/*!< Indice de la fenêtre contenant l'opérande 2 */
+long indOp3;	/*!< Indice de la fenêtre contenant l'opérande 3 */
 long indRes;	/*!< Indice de la fenêtre contenant le résultat */
 long indEtape;	/*!< Indice de l'opération dans la séquence */
 Parametre pOCV;	/*!< parametre de l'opérateur */
@@ -563,7 +565,7 @@ void	SourisQuitterFen(wxMouseEvent &event);
 
 // Gestion de l'image par rapport à la fenêtre
 void AssosierImage(ImageInfoCV *);	/*< Associer une image à une fenêtre*/
-void DefHistorique(int ind1=-1,int ind2=-1,int idOpe=-1,int numE=-1 ,wxString nomF=wxEmptyString,Parametre *pOCV=NULL); /*< Associer origine à une image */
+void DefHistorique(int ind1=-1,int ind2=-1,int ind3=-1,int idOpe=-1,int numE=-1 ,wxString nomF=wxEmptyString,Parametre *pOCV=NULL); /*< Associer origine à une image */
     /*!
      *  \brief Fonction DefHistorique
      *
@@ -899,6 +901,7 @@ enum
     RESET_LEVEL,
 	MENU_OP1,
 	MENU_OP2,
+	MENU_OP3,
 	MENU_EXEC_OP,
 	RESET_OP,
 	LBnxn,		// ListBox pour filtre nxn

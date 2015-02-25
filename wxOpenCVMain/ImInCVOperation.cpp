@@ -564,10 +564,20 @@ return im;
 }
 
 
-ImageInfoCV *ImageInfoCV::FusionPlan(ImageInfoCV *ve,Parametre &paramOCV)
+ImageInfoCV *ImageInfoCV::FusionPlan(int nbPlan,ImageInfoCV **ve,Parametre *paramOCV)
 {
 ImageInfoCV	*result=new ImageInfoCV;
-return(result);
+std::vector<cv::Mat> listePlan;
+if (nbPlan>=1)
+	listePlan.push_back(*(ve[0]));
+else 
+	return result;
+if (nbPlan>=2)
+        listePlan.push_back(*(ve[1]));
+if (nbPlan>=3)
+        listePlan.push_back(*(ve[2]));
+cv::merge(listePlan,*result);
+return result;
 }
 
 ImageInfoCV **ImageInfoCV::SeparationPlan(ImageInfoCV *im1,Parametre &paramOCV)

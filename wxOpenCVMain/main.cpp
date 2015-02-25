@@ -208,6 +208,7 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
 	EVT_MENU(Menu_Contour,  FenetrePrincipale::TracerContour)
 	EVT_MENU(MENU_OP1,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP2,  FenetrePrincipale::PrepOperation)
+	EVT_MENU(MENU_OP3,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_EXEC_OP,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(RESET_OP,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(ENREGISTRER_FICHIER,FenetrePrincipale::Enregistrer)
@@ -506,6 +507,7 @@ if (s.Cmp("PartageEaux")==0)
 	{
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::PartageEaux;
+	nbOperande= 1;
 	nomOperation = s;
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#watershed";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
@@ -514,14 +516,16 @@ if (s.Cmp("SeparationPlan")==0)
 	{
 	pOCV.nomOperation=s;
 	opSurjecUnaire = &ImageInfoCV::SeparationPlan;
+	nbOperande= 1;
 	nomOperation = s;
 	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#split";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
 	}
 if (s.Cmp("FusionPlan")==0)
 	{
-	opUnaireSelec = &ImageInfoCV::FusionPlan;
+	opNaireSelec = &ImageInfoCV::FusionPlan;
 	nomOperation = s;
+	nbOperande= 3;
 	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#merge";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=149&zoom=70,250,100";
 	}
@@ -530,6 +534,7 @@ if (s.Cmp("Addition")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Add;
 	nomOperation = s;
+	nbOperande= 2;
 	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#add";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
 	}
@@ -538,6 +543,7 @@ if (s.Cmp("Soustraction")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Sub;
 	nomOperation = s;
+	nbOperande= 2;
 	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#subtract";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=172&zoom=70,250,100";
 	}
@@ -546,6 +552,7 @@ if (s.Cmp("Multiplication")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Mul;
 	nomOperation = s;
+	nbOperande= 2;
 	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#multiply";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=153&zoom=70,250,100";
 	}
@@ -554,6 +561,7 @@ if (s.Cmp("Division")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Div;
 	nomOperation = s;
+	nbOperande= 2;
 	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#divide";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=136&zoom=70,250,100";
 	}
@@ -562,6 +570,7 @@ if (s.Cmp("Convolution")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Convolution;
 	nomOperation = s;
+	nbOperande= 2;
 	pOCV.intParam["IndOpConvolution"]=DomaineParametre<int>(xx.IndOpConvolution(),0,NB_OP_CONVOLUTION,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#filter2d";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100";
@@ -571,6 +580,7 @@ if (s.Cmp("Dilatation")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Dilatation;
 	nomOperation = s;
+	nbOperande= 2;
 	pOCV.intParam["IndOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#dilate";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100";
@@ -579,6 +589,7 @@ if (s.Cmp("Erosion")==0)
 	{
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Erosion;
+	nbOperande= 2;
 	nomOperation = s;
 	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
@@ -589,6 +600,7 @@ if (s.Cmp("Ouverture")==0)
 	pOCV.nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Ouverture;
 	nomOperation = s;
+	nbOperande= 2;
 	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=morphologyex#morphologyex";
 	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
@@ -820,6 +832,39 @@ if (pOCVNouveau==NULL)
 	pOCV.nbImageRes=1;
 else
 	pOCVNouveau->nbImageRes=1;
+if (opNaireSelec)
+	{
+	ImageInfoCV *imOp[3]={op1,op2,op3};
+	try
+		{
+		if (pOCVNouveau==NULL)
+			im =((*op1).*opNaireSelec)(3,imOp,&pOCV);
+		else
+			im =((*op1).*opNaireSelec)(3,imOp,pOCVNouveau);
+		}
+	catch(cv::Exception& e)
+		{
+		wxString s(e.msg);
+
+		wxMessageBox("An error occured in naire operator :"+s);
+		}
+	DefPointeurSouris(0,0);
+
+	if (im==NULL)
+		{
+		opNaireSelec=NULL;
+		op1=NULL;
+		op2=NULL;
+		op3=NULL;
+		return imTab;
+		}
+	else
+		{
+		imTab = new ImageInfoCV*[1];
+		imTab[0]=im;
+		}
+	}
+
 if (opBinaireSelec)
 	{
 	
@@ -920,7 +965,7 @@ return imTab; // Le pointeur imTab n'est pas libéré
 
 void wxOsgApp::CreerFenetreOperation()
 {
-if ((opBinaireSelec==NULL && opUnaireSelec==NULL && opSurjecMultiple==NULL) || op1==NULL)
+if ((opBinaireSelec==NULL && opUnaireSelec==NULL && opSurjecMultiple==NULL && opNaireSelec==NULL) || op1==NULL)
 	return;
 
 ImageInfoCV	**im=ExecuterOperation();
@@ -981,9 +1026,11 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	if (idOperation==-1)
 		idOperation=numOpFaite++;
 	if (opUnaireSelec)
-		f->DefHistorique(indOp1Fenetre,-1,idOperation,numEtape,nomOperation,&pOCV);
+		f->DefHistorique(indOp1Fenetre,-1,-1,idOperation,numEtape,nomOperation,&pOCV);
 	if (opBinaireSelec)
-		f->DefHistorique(indOp1Fenetre,indOp2Fenetre,idOperation,numEtape,nomOperation,&pOCV);
+		f->DefHistorique(indOp1Fenetre,indOp2Fenetre,-1,idOperation,numEtape,nomOperation,&pOCV);
+	if (opNaireSelec)
+		f->DefHistorique(indOp1Fenetre,indOp2Fenetre,indOp3Fenetre,idOperation,numEtape,nomOperation,&pOCV);
 	if (ind!=-1)
 		s.Printf("%d : %s(operator %d) of image %d ",nbFenetre,nomOperation,ind,indOp1Fenetre );
 	else
@@ -1034,10 +1081,13 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 opBinaireSelec=NULL;
 opUnaireSelec=NULL;
 opSurjecUnaire=NULL;
+opNaireSelec=NULL;
 op1=NULL;
 op2=NULL;
+op3=NULL;
 indOp1Fenetre=-1;
 indOp2Fenetre=-1;
+indOp3Fenetre=-1;
 pOCV.doubleParam.clear();
 pOCV.intParam.clear();
 }
@@ -1234,11 +1284,14 @@ modeSouris = SOURIS_STD;
 indPointeurSouris=0;
 op1=NULL;
 op2=NULL;
+op3=NULL;
 indOp1Fenetre=-1;
 indOp2Fenetre=-1;
+indOp3Fenetre=-1;
 opBinaireSelec=NULL;
 opUnaireSelec=NULL;
 opSurjecUnaire=NULL;
+opNaireSelec=NULL;
 ctrlCamera=NULL;
 utilisateurAbsent=0;
 #ifndef ___AUI__
@@ -2544,6 +2597,12 @@ case MENU_OP2 :
 	else
 		osgApp->DefOperande2(imAcq,idFenetre);
 	break;
+case MENU_OP3 :
+	if (osgApp->Op3()==imAcq)
+		osgApp->DefOperande3(NULL);
+	else
+		osgApp->DefOperande3(imAcq,idFenetre);
+	break;
 case MENU_EXEC_OP:
 	osgApp->CreerFenetreOperation();
 
@@ -2559,18 +2618,21 @@ case RESET_OP :
 	}
 }
 
-void FenetrePrincipale::DefHistorique(int ind1,int ind2,int idOpe,int numE ,wxString nomF,Parametre *pOCV) /*< Associer origine à une image */
+void FenetrePrincipale::DefHistorique(int ind1,int ind2,int ind3,int idOpe,int numE ,wxString nomF,Parametre *pOCV) /*< Associer origine à une image */
 {
 if (ind1!=-1)
 	{
 	origineImage.indOp1=ind1;
 	origineImage.indOp2=ind2;
+	origineImage.indOp3=ind3;
 	origineImage.indRes=idFenetre;
 	origineImage.idOperation=idOpe;
 	origineImage.indEtape=numE;
 	origineImage.op1 = osgApp->Fenetre(ind1)->ImAcq();
 	if (ind2>=0)
 		origineImage.op2 = osgApp->Fenetre(ind2)->ImAcq();
+	if (ind3>=0)
+		origineImage.op3 = osgApp->Fenetre(ind3)->ImAcq();
 	origineImage.nomOperation=nomF;
 	if (pOCV)
 		origineImage.pOCV=*pOCV;

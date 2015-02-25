@@ -76,6 +76,8 @@ void				*fSeqOpe;
 
 // surjection nombre d'images, les images dans un tableau et les paramètres
 ImageInfoCV**  (ImageInfoCV::*opSurjecMultiple)(int,ImageInfoCV **,Parametre *) ;
+// Opération programmée ternaire : Fusion plan
+ImageInfoCV*  (ImageInfoCV::*opNaireSelec)(int ,ImageInfoCV **,Parametre *) ;
 // Opération programmée binaire
 ImageInfoCV*  (ImageInfoCV::*opBinaireSelec)(ImageInfoCV *,ImageInfoCV *,Parametre *) ;
 // Opération programmée unaire avec parametre
@@ -83,12 +85,15 @@ ImageInfoCV*  (ImageInfoCV::*opUnaireSelec)(ImageInfoCV *,Parametre &) ;
 // Surjection (plusieurs résultats   avec parametre
 ImageInfoCV**  (ImageInfoCV::*opSurjecUnaire)(ImageInfoCV *,Parametre &) ;
 wxString	nomOperation;
+int nbOperande;	/*!< Nombre d'opérande pour l'opération 1 unaire, 2 binaire, 3 fusion plan */
 // Opérande sélectionnée
 ImageInfoCV *op1;	/*!< Opérande 1 pour l'opération demandée */
 ImageInfoCV *op2;	/*!< Opérande 2 pour l'opération demandée */
+ImageInfoCV *op3;	/*!< Opérande 3 pour l'opération demandée uniquement fusion plan*/
 Parametre pOCV;	/*!< parametre de l'opérateur Unaire */
 int	indOp1Fenetre;	/*!< Indice de la fenêtre contenant l'image de opérande 1 */
 int indOp2Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
+int indOp3Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
 
 
 public :	
@@ -108,13 +113,18 @@ void RetirerListe(FenetrePrincipale *);
 void DefOperateurImage(wxString &);
 void DefOperande1(ImageInfoCV* im,int i=-1){op1=im;indOp1Fenetre=i;};
 void DefOperande2(ImageInfoCV* im,int i=-1){op2=im;indOp2Fenetre=i;};
+void DefOperande3(ImageInfoCV* im,int i=-1){op3=im;indOp3Fenetre=i;};
 void DefParametreOCV(Parametre &x){pOCV=x;};
 bool OpUnaire(){return opUnaireSelec!=NULL || opSurjecUnaire!=NULL;} /*!< Vrai si opération unaire sélectionnée */
 bool OpBinaire(){return opBinaireSelec!=NULL;} /*!< Vrai si opération binaire sélectionnée */
+bool OpNaire(){return opNaireSelec!=NULL;};
 ImageInfoCV *Op1(){return op1;};
 ImageInfoCV *Op2(){return op2;};
+ImageInfoCV *Op3(){return op3;};
 int IndOp1(){return indOp1Fenetre;};
 int IndOp2(){return indOp2Fenetre;};
+int IndOp3(){return indOp3Fenetre;};
+int NbOperande(){return nbOperande;};
 void AnnuleOp();
 std::map <int,std::vector <Operation > >  *TabSeqOperation(){return &tabOperation;}
 ImageInfoCV **ExecuterOperation(Parametre * = NULL);
