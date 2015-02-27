@@ -386,12 +386,21 @@ double				diffHauteur;		/*!< Différence de hauteur pour fusion des régions */
 wxImage				*imAffichee;		/*!< wxImage affichée résultant de l'image opencv et de la palette*/
 
 wxColor				*pCouleur;
-wxColor				*pLineaire;
-wxColor				*pAleatoire;
-wxColor				*pJet;
-wxColor				*pRainbow;
-wxColor				*pPerso;
-wxColor				*pPersoInv;
+public :
+static wxColor		*pLineaire;
+static wxColor		*pAleatoire;
+static wxColor		*pJet;
+static wxColor		*pRainbow;
+static wxColor		*pPerso;
+static wxColor		*pPersoInv;
+static wxColor		*pLin256Boucle;
+static wxColor		*pRainbow256Boucle;
+static wxColor		*pLin256;
+static wxColor		*pRainbow256;
+static wxColor		*pThermique;
+static wxColor		*pThermique256;
+static wxColor		*pThermique256Boucle;
+private:
 wxColor				*paletteChargee[10];
 bool				planActif[10];		/*!< plan couleur actif pour l'affichage */
 
@@ -599,6 +608,7 @@ char ModeImage(){return modeImage;};
 wxImage* ImageAffichee(){return imAffichee;};
 int NbMarcheFit(){return nbMarcheFit;};
 wxColor *Palette(){return pCouleur;};
+int IndPalette(){return indPalette;};
 char ModeRectangle(){return feuille->ModeRectangle();};
 char ModeCoupe(){return feuille->ModeCoupe();};
 wxRect *RectangleSelec(){return feuille->RectangleSelec();};
@@ -882,6 +892,15 @@ enum
     Menu_Popup_Zoom,
     ARCENCIEL_ = 2684,
     NOIRETBLANC_,
+    NOIRETBLANC1_,
+    NOIRETBLANC2_,
+    NOIRETBLANC3_,
+    NOIRETBLANC4_,
+    NOIRETBLANC5_,
+    NOIRETBLANC6_,
+    NOIRETBLANC7_,
+    NOIRETBLANC8_,
+    NOIRETBLANC9_,
     M_MODULE_, 
     PARTIE_REELLE,
     PARTIE_IMAGINAIRE, 

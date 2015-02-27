@@ -4,6 +4,21 @@
 using namespace std;
 
 
+wxColor		*FenetrePrincipale::pLineaire=NULL;
+wxColor		*FenetrePrincipale::pAleatoire=NULL;
+wxColor		*FenetrePrincipale::pJet=NULL;
+wxColor		*FenetrePrincipale::pRainbow=NULL;
+wxColor		*FenetrePrincipale::pPerso=NULL;
+wxColor		*FenetrePrincipale::pPersoInv=NULL;
+wxColor		*FenetrePrincipale::pLin256Boucle=NULL;
+wxColor		*FenetrePrincipale::pRainbow256Boucle=NULL;
+wxColor		*FenetrePrincipale::pLin256=NULL;
+wxColor		*FenetrePrincipale::pRainbow256=NULL;
+wxColor		*FenetrePrincipale::pThermique=NULL;
+wxColor		*FenetrePrincipale::pThermique256=NULL;
+wxColor		*FenetrePrincipale::pThermique256Boucle=NULL;
+
+
 void FenetrePrincipale::DefSeuilNivBas(double x,int plan)
 {
 if (plan==-1)
@@ -147,23 +162,29 @@ void FenetrePrincipale::InitPalette(int nbCouleur)
 double pi=acos(-1.0);
 long i;
 nbCouleurPalette=nbCouleur;
-if (!pCouleur)
+if (!pLineaire)
 	{
 	pLineaire = new wxColour[nbCouleur];
 	pJet = new wxColour[65536];
 	pRainbow = new wxColour[65536];
 	pPerso = new wxColour[65536];
 	pPersoInv = new wxColour[65536];
-	paletteChargee[0]=pJet;
-	paletteChargee[1]=pRainbow;
-	paletteChargee[2]=pPerso;
-	paletteChargee[3]=pPersoInv;
+	pRainbow256 = new wxColour[65536];
+	pRainbow256Boucle = new wxColour[65536];
+	pLin256 = new wxColour[65536];
+	pLin256Boucle = new wxColour[65536];
+	pThermique = new wxColour[65536];
+	pThermique256 = new wxColour[65536];
+	pThermique256Boucle = new wxColour[65536];
+	pAleatoire= new wxColour[nbCouleur];
+	for (i=0;i<nbCouleur;i++)
+			pLineaire[i].Set(i/256,i/256,i/256);
 	float red,green,blue;
 	{
 	ifstream ff("jetcolor16384.txt");
 	if (ff.is_open())
 		{
-		for (int i=0;i<16384;i+=4)
+		for (int i=0;i<16384;i++)
 			{
 			ff>>red>>green>>blue;
 			pJet[4*i].Set(red*255,green*255,blue*255);
@@ -197,7 +218,7 @@ if (!pCouleur)
 		for (int i=0;i<16384;i++)
 			{
 			ff>>red>>green>>blue;
-			pPerso[4*i].Set(rand()&0xFF,rand()&0xFF,rand()&0xFF);
+			pPerso[4*i].Set(red*255,green*255,blue*255);
 			pPerso[4*i+1].Set(pJet[4*i].Red(),pJet[4*i].Green(),pJet[4*i].Blue());
 			pPerso[4*i+2].Set(pJet[4*i].Red(),pJet[4*i].Green(),pJet[4*i].Blue());
 			pPerso[4*i+3].Set(pJet[4*i].Red(),pJet[4*i].Green(),pJet[4*i].Blue());
@@ -219,14 +240,21 @@ if (!pCouleur)
 			}
 		ff.close();
 		}
+	for (int i=0;i<256;i++)
+		{
+		for (int j=0;j<256;j++)
+			{
+			pRainbow256[i*256+j].Set(pRainbow[i*256].Red(),pRainbow[i*256].Green(),pRainbow[i*256].Blue());
+			pRainbow256Boucle[j*256+i].Set(pRainbow[i*256].Red(),pRainbow[i*256].Green(),pRainbow[i*256].Blue());
+			pLin256[i*256+j].Set(pLineaire[i*256].Red(),pLineaire[i*256].Green(),pLineaire[i*256].Blue());
+			pLin256Boucle[j*256+i].Set(pLineaire[i*256].Red(),pLineaire[i*256].Green(),pLineaire[i*256].Blue());
+			}
+		}
 	}
+	for (i=0;i<nbCouleur;i++)
+			pAleatoire[i].Set(rand()&0xFF,rand()&0xFF,rand()&0xFF);
 	
-	pAleatoire= new wxColour[nbCouleur];
 	}
-for (i=0;i<nbCouleur;i++)
-		pLineaire[i].Set(i/256,i/256,i/256);
-for (i=0;i<nbCouleur;i++)
-		pAleatoire[i].Set(rand()&0xFF,rand()&0xFF,rand()&0xFF);
 pCouleur=pLineaire;
 }
 

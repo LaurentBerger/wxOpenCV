@@ -485,16 +485,17 @@ return wxRect(p1Img,p2Img);
 wxMenu *ZoneImage::CreateMenuPalette(wxString *title)
 {
     wxMenu *menu = new wxMenu;
-    menu->Append(NOIRETBLANC_, _("&Linear\tCtrl-F1"));
-    menu->Append(NOIRETBLANC_+1, _("&rainbow 12bits\tCtrl-F2"));
-    menu->Append(NOIRETBLANC_+2, _("&Rainbow 8bits\t"));
-    menu->Append(NOIRETBLANC_+3, _("&Gray 8 bits\tCtrl-F2"));
-    menu->Append(NOIRETBLANC_+4, _("&Rainbow loop 8 bits\t"));
-    menu->Append(NOIRETBLANC_+5, _("&Gray loop 8 bis\t"));
-    menu->Append(NOIRETBLANC_+6, _("&Jet\t"));
-    menu->Append(NOIRETBLANC_+7, _("&Rainbow\t"));
-    menu->Append(NOIRETBLANC_+8, _("&Owner\t"));
-    menu->Append(NOIRETBLANC_+9, _("&Reverse Owner\t"));
+    menu->AppendCheckItem(NOIRETBLANC_, _("&Linear\tCtrl-F1"));
+    menu->AppendCheckItem(NOIRETBLANC_+1, _("&Jet\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+2, _("&Rainbow\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+3, _("&Owner\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+4, _("&Reverse Owner\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+5, _("&Gray 8 bits\tCtrl-F2"));
+    menu->AppendCheckItem(NOIRETBLANC_+6, _("&Rainbow 8bits\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+7, _("&Gray loop 8 bis\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+8, _("&Rainbow loop 8 bits\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+9, _("&Randomize\t"));
+	menu->Check(f->IndPalette()+NOIRETBLANC_,true);
 
     return menu;
 }
@@ -688,6 +689,7 @@ return;
 
 void ZoneImage::SelectPalette(wxCommandEvent& event)
 {
+
 f->SelectPalette(event);
 
 f->MAJNouvelleImage();

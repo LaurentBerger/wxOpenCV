@@ -343,6 +343,19 @@ if (fSeqOpe)
 for (int i = 0; i < listeFenetre.size(); i++)
 	delete listeFenetre[i];
 delete serveur;
+if (FenetrePrincipale::pLineaire)
+	{
+	delete [](FenetrePrincipale::pLineaire);
+	delete [](FenetrePrincipale::pLin256);
+	delete [](FenetrePrincipale::pLin256Boucle);
+	delete [](FenetrePrincipale::pAleatoire);
+	delete [](FenetrePrincipale::pJet);
+	delete [](FenetrePrincipale::pRainbow);
+	delete [](FenetrePrincipale::pRainbow256);
+	delete [](FenetrePrincipale::pRainbow256Boucle);
+	delete [](FenetrePrincipale::pPerso);
+	delete [](FenetrePrincipale::pPersoInv);
+	}
 #ifdef _DLL_DETECTION__
 delete dllplplot;
 delete dllWXplplotdrv;
@@ -1758,13 +1771,7 @@ imageTraitee=true;
 interdireAffichage=false;
 typeAcqImage =0;
 indFiltreMoyenne=0;
-pLineaire=NULL;
 pCouleur=NULL;
-pAleatoire=NULL;
-pJet=NULL;
-pRainbow=NULL;
-pPerso=NULL;
-pPersoInv=NULL;
 horlogeSeq=NULL;
 imAcq = NULL;
 poly=NULL;
@@ -2437,12 +2444,6 @@ delete imGain;
 
 
 delete imAffichee;
-delete []pLineaire;
-delete []pAleatoire;
-delete []pJet;
-delete []pRainbow;
-delete []pPerso;
-delete []pPersoInv;
 // est déjà fait par delete imAffichee delete tabRGB;
 delete []tabRGBTransparence;
 
@@ -2734,23 +2735,35 @@ void FenetrePrincipale::SelectPalette(wxCommandEvent& event)
 wxColour	*p=NULL;
 indPalette=event.GetId()-NOIRETBLANC_;
 switch(indPalette){
-case 6:
-	pCouleur=pJet;
-	break;
-case 7:
-	pCouleur=pRainbow;
-	break;
-case 8:
-	pCouleur=pPerso;
-	break;
-case 9:
-	pCouleur=pAleatoire;
-	break;
 case 0:
 	pCouleur=pLineaire;
 	break;
+case 1:
+	pCouleur=pJet;
+	break;
 case 2:
-//	pCouleur=palArcEnCiel;
+	pCouleur=pRainbow;
+	break;
+case 3:
+	pCouleur=pPerso;
+	break;
+case 4:
+	pCouleur=pPersoInv;
+	break;
+case 5:
+	pCouleur=pLin256;
+	break;
+case 6:
+	pCouleur=pRainbow256;
+	break;
+case 7:
+	pCouleur=pLin256Boucle;
+	break;
+case 8:
+	pCouleur=pRainbow256Boucle;
+	break;
+case 9:
+	pCouleur=pAleatoire;
 	break;
 	}
 
