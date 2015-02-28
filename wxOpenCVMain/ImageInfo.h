@@ -17,47 +17,13 @@
 
 #include "opencv2/opencv.hpp" 
 #include "ImageConstante.h"
+#include "ParametreOperation.h"
 typedef short CodeErreur;
 #define ERREUR OuiERREUR
 
 #define NB_OP_MORPHOLOGIE 10
 #define NB_OP_CONVOLUTION 40
 
-/*! \class DomaineParametre
-   * \brief la classe¨DomaineParametre définit la valeur, le domaine de définition, le pas de la valeur
-   * utilisé pour un paramètre de fonctions. Le pas est utilisé pour modifier l'opération dans une fenêtre de dialogue.
-   */
-
-template <class TypeValeur>
-class DomaineParametre {
-public :
-TypeValeur valeur;		/*< Valeur actuelle du paramètre*/
-TypeValeur mini,maxi;	/*< Valeur extremum du paramètre */
-TypeValeur pas;		/*< Pas entre deux valeurs */
-DomaineParametre(TypeValeur a,TypeValeur b,TypeValeur c,TypeValeur d):valeur(a),mini(b),maxi(c),pas(d){};
-DomaineParametre(TypeValeur a):valeur(a),mini(a),maxi(a),pas(a){};
-DomaineParametre():valeur(TypeValeur()),mini(TypeValeur()),maxi(TypeValeur()),pas(TypeValeur()){};
-//DomaineParametre():valeur(cv:Point(0,0)),mini(cv:Point(0,0)),maxi(cv:Point(0,0)),pas(cv:Point(0,0)){};
-};
-
-/*! \class Parametre
-   * \brief la classe¨Parametre définit les noms et domaine des paramètres nécessaires pour effectuer une opération.
-   * les paramètres peuvent être du type int, double size ou point (type OpenCV). Un lien sur la doc de la fonction 
-   * est associé aux paramètres
-   * nbImageRes désigne le nombre d'image résultat.  
-   */
-
-class Parametre {
-public :
-std::string	nomOperation;
-std::map<std::string,DomaineParametre<double> > doubleParam;
-std::map<std::string,DomaineParametre<int> > intParam;
-std::map<std::string,DomaineParametre<cv::Size> > sizeParam;
-std::map<std::string,DomaineParametre<cv::Point> > pointParam;
-std::string lienHtml;
-std::string refPDF;
-int nbImageRes;		
-};
 
 
 
@@ -289,39 +255,39 @@ ImageInfoCV 	&operator= (ImageInfoCV	&z);
 ImageInfoCV	*Variance (long);
 
 // Fonctions membres equivalentes aux opérateurs utilisant OPENCV
-ImageInfoCV 	*Add(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
-ImageInfoCV 	*Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
-ImageInfoCV 	*Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
-ImageInfoCV 	*Div(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
-ImageInfoCV 	*Erosion(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
-ImageInfoCV 	*Dilatation(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
-ImageInfoCV 	*Ouverture(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
-ImageInfoCV 	*Fermeture(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
-ImageInfoCV 	*ChapeauHaut(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
-ImageInfoCV 	*ChapeauBas(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
-ImageInfoCV 	*GradMorph(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
-ImageInfoCV 	*Convolution(ImageInfoCV	*,ImageInfoCV	* = NULL,Parametre *pOCV=NULL);
-ImageInfoCV		*PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV=NULL);
-ImageInfoCV 	*Laplacien(ImageInfoCV	*,Parametre &pOCV);
-ImageInfoCV 	*ScharrX(ImageInfoCV	*im1,Parametre &pOCV);
-ImageInfoCV 	*ScharrY(ImageInfoCV	*im1,Parametre &pOCV);
-ImageInfoCV 	*ScharrModule(ImageInfoCV	*im1,Parametre &pOCV);
-ImageInfoCV 	*Canny(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV 	*Contour(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV 	*Seuillage(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV 	*SeuillageAdaptatif(ImageInfoCV	*imSrc,Parametre &pOCV);
-ImageInfoCV 	*LissageMedian(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV 	*LissageMoyenne(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV 	*LissageGaussien(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV 	*LissageBilateral(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV 	*FFT(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV 	*IFFT(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV		*FusionPlan(int nbPlan,ImageInfoCV	**,Parametre *paramOCV);
-ImageInfoCV		*ComposanteConnexe (ImageInfoCV *result,Parametre &paramOCV);
-ImageInfoCV		**SeparationPlan(ImageInfoCV	*,Parametre &paramOCV);
-ImageInfoCV		*DistanceDiscrete (ImageInfoCV *result,Parametre &paramOCV);
-ImageInfoCV		*Voronoi (ImageInfoCV *result,Parametre &paramOCV);
-ImageInfoCV		*LigneMediane(ImageInfoCV *result,Parametre &paramOCV);
+ImageInfoCV 	*Add(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*Div(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*Erosion(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*Dilatation(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*Ouverture(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*Fermeture(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*ChapeauHaut(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*ChapeauBas(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*GradMorph(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*Convolution(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+ImageInfoCV		*PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*Laplacien(ImageInfoCV	*,ParametreOperation *pOCV);
+ImageInfoCV 	*ScharrX(ImageInfoCV	*im1,ParametreOperation *pOCV);
+ImageInfoCV 	*ScharrY(ImageInfoCV	*im1,ParametreOperation *pOCV);
+ImageInfoCV 	*ScharrModule(ImageInfoCV	*im1,ParametreOperation *pOCV);
+ImageInfoCV 	*Canny(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*Contour(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*Seuillage(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*SeuillageAdaptatif(ImageInfoCV	*imSrc,ParametreOperation *pOCV);
+ImageInfoCV 	*LissageMedian(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*LissageMoyenne(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*LissageGaussien(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*LissageBilateral(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*FFT(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*IFFT(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV		*FusionPlan(int nbPlan,ImageInfoCV	**,ParametreOperation *paramOCV);
+ImageInfoCV		*ComposanteConnexe (ImageInfoCV *result,ParametreOperation *paramOCV);
+ImageInfoCV		**SeparationPlan(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV		*DistanceDiscrete (ImageInfoCV *result,ParametreOperation *paramOCV);
+ImageInfoCV		*Voronoi (ImageInfoCV *result,ParametreOperation *paramOCV);
+ImageInfoCV		*LigneMediane(ImageInfoCV *result,ParametreOperation *paramOCV);
 
 void ExtremumLoc(ImageInfoCV *mask=NULL );
 

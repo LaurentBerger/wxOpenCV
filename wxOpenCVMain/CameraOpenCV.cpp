@@ -114,8 +114,6 @@ if (indId==NBCAMERA)
 if(captureVideo->isOpened())  // check if we succeeded
 	{
 	cv::Mat frame;
-	float x,y;
-	bool status;
 /*	for (int i=15;i<NB_TAILLE_VIDEO;i++)
 		{
 		status=captureVideo->set(cv::CAP_PROP_FRAME_WIDTH,tailleCapteur[i].GetX());

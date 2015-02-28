@@ -4,6 +4,7 @@
 
 using namespace std;
 
+#define IDSAUVER 500
 #define IND_OPE 100 
 #define LISTE_OP_SEQ 101
 #define IND_HYPER 10
@@ -20,7 +21,7 @@ tailleMax=wxSize(0,0);
 panneau = new wxPanel( this,wxID_ANY ,wxPoint(0,0),wxSize(400,400));
 //wxPanel	*panneauCtrl = new wxPanel( panel,  -1, wxDefaultPosition, wxSize(400,400));
 this->osgApp =osg;
-std::map <int,std::vector <Operation > >  *t=osg->TabSeqOperation();
+std::map <int,std::vector <ParametreOperation > >  *t=osg->TabSeqOperation();
 
 new wxStaticText( panneau, -1, _("Sequence"),wxPoint(10,20),wxSize(60,20) );
 wxSpinCtrl *spw=new wxSpinCtrl(panneau,IND_OPE,_("Sequence"),wxPoint(80,20),wxSize(60,20));
@@ -33,7 +34,7 @@ if (nbEtape<(*t)[n].size())
 	nbEtape=(*t)[n].size();
 nomEtape=new wxString[nbEtape];
 int i=0;
-for (std::vector <Operation >::iterator it = (*t)[n].begin() ; it != (*t)[n].end(); ++it,++i)
+for (std::vector <ParametreOperation >::iterator it = (*t)[n].begin() ; it != (*t)[n].end(); ++it,++i)
     nomEtape[i]=(*it).nomOperation;
 choixOp=new wxListBox( panneau,LISTE_OP_SEQ,wxPoint(80,50),wxSize(150,-1),(*t)[n].size(),nomEtape);
 choixOp->SetSelection(0);
@@ -43,9 +44,9 @@ Bind(wxEVT_COMMAND_LISTBOX_SELECTED, &FenetreSequenceOperation::OnOpeSelec,this)
 Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::Executer,this,wxID_OK);
 }
 
-void FenetreSequenceOperation::InsererCtrlEtape(Operation *op)
+void FenetreSequenceOperation::InsererCtrlEtape(ParametreOperation *op)
 {
-Parametre *pOCV=&op->pOCV;
+ParametreOperation *pOCV=op;
 int ligne=150;
 int	indStatic=IND_STATIC;
 int indSpin=IND_SPIN;
@@ -65,7 +66,7 @@ if ((whc=(wxHyperlinkCtrl*)wxWindow::FindWindowById(indHyper,panneau))!=NULL)
 else
 	new wxHyperlinkCtrl(panneau,indHyper,"PDF Documentation",pOCV->refPDF,wxPoint(10,ligne-20),wxSize(400,20));
 indHyper++;
-std::map<std::string,DomaineParametre<cv::Size> >::iterator its;
+std::map<std::string,DomaineParametreOp<cv::Size> >::iterator its;
 if (tailleMax.x<410)
 	tailleMax.x= 410;
 if (tailleMax.y<ligne)
@@ -125,7 +126,7 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 		tailleMax.y= p.y+s.y;
 	ligne+=20;
 	}
-std::map<std::string,DomaineParametre<int> >::iterator iti;
+std::map<std::string,DomaineParametreOp<int> >::iterator iti;
 for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 	{
 	wxString nombre;
@@ -159,7 +160,7 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 		tailleMax.y= p.y+s.y;
 	ligne+=20;
 	}
-std::map<std::string,DomaineParametre<double> >::iterator itd;
+std::map<std::string,DomaineParametreOp<double> >::iterator itd;
 for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
 	{
 	wxString nombre;
@@ -229,8 +230,8 @@ wxOsgApp *app=(wxOsgApp *)osgApp;
 if (!osgApp)
 	return;
 int opSelec=w.GetValue();
-std::map <int,std::vector <Operation > >  *t=((wxOsgApp*)osgApp)->TabSeqOperation();
-std::map <int,std::vector <Operation > >::iterator it=(*t).begin();
+std::map <int,std::vector <ParametreOperation > >  *t=((wxOsgApp*)osgApp)->TabSeqOperation();
+std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
 for (int i=0;i<opSelec;i++,it++);
 choixOp->Clear();
 if (nbEtape<it->second.size())
@@ -240,7 +241,7 @@ if (nbEtape<it->second.size())
 	nomEtape=new wxString[nbEtape];
 	}
 int i=0;
-for (std::vector <Operation >::iterator it2 = it->second.begin() ; it2 != it->second.end(); ++it2,++i)
+for (std::vector <ParametreOperation >::iterator it2 = it->second.begin() ; it2 != it->second.end(); ++it2,++i)
     nomEtape[i]=(*it2).nomOperation;
 choixOp->Insert((*it).second.size(),nomEtape,0);
 choixOp->SetSelection(0);
@@ -257,9 +258,9 @@ if (ws==NULL)
 if (!osgApp)
 	return;
 wxOsgApp *app=(wxOsgApp *)osgApp;
-std::map <int,std::vector <Operation > >  *t=app->TabSeqOperation();
+std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
 opSelec=ws->GetValue();
-std::map <int,std::vector <Operation > >::iterator it=(*t).begin();
+std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
 for (int i=0;i<opSelec;i++,it++);
 int indOpe=event.GetInt();
 if (indOpe<0 || indOpe>=it->second.size())
@@ -304,14 +305,14 @@ if (ws==NULL)
 if (!osgApp)
 	return;
 wxOsgApp *app=(wxOsgApp *)osgApp;
-std::map <int,std::vector <Operation > >  *t=app->TabSeqOperation();
+std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
 opSelec=ws->GetValue();
-std::map <int,std::vector <Operation > >::iterator it=(*t).begin();
+std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
 for (int i=0;i<opSelec;i++,it++);
 ExecuterSequence(&(it->second));
 }
 
-void FenetreSequenceOperation::ExecuterSequence(std::vector <Operation> *sq)
+void FenetreSequenceOperation::ExecuterSequence(std::vector <ParametreOperation> *sq)
 {
 if (!osgApp)
 	return;
@@ -320,9 +321,9 @@ ImageInfoCV **im=NULL;
 ImageInfoCV *imTmp=NULL;
 int i=0;
 
-for (std::vector <Operation > ::iterator it=sq->begin();it!=sq->end();it++)
+for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();it++)
 	{
-	Parametre pOCV=it->pOCV;
+	ParametreOperation pOCV=*it;
 	wxString  nomOperation(it->nomOperation);
 	app->DefOperateurImage(nomOperation);
 	int indFen1=fenMere->IdFenetre();
@@ -341,7 +342,7 @@ for (std::vector <Operation > ::iterator it=sq->begin();it!=sq->end();it++)
 		app->DefOperande1(im[0],-1);
 		}
 
-	int indFen2=it->indOp2;
+	int indFen2=it->indOp2Fenetre;
 	if (indFen2>=0)
 		{
 		wxMessageBox(_("Operation with two images not supported?"),_("Problem"), wxOK );

@@ -515,345 +515,30 @@ pOCV.doubleParam.clear();
 pOCV.intParam.clear();
 pOCV.sizeParam.clear();
 pOCV.pointParam.clear();
-
-if (s.Cmp("PartageEaux")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::PartageEaux;
-	nbOperande= 1;
-	nomOperation = s;
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#watershed";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
-	}
-if (s.Cmp("SeparationPlan")==0)
-	{
-	pOCV.nomOperation=s;
-	opSurjecUnaire = &ImageInfoCV::SeparationPlan;
-	nbOperande= 1;
-	nomOperation = s;
-	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#split";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
-	}
-if (s.Cmp("FusionPlan")==0)
-	{
-	opNaireSelec = &ImageInfoCV::FusionPlan;
-	nomOperation = s;
-	nbOperande= 3;
-	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#merge";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=149&zoom=70,250,100";
-	}
-if (s.Cmp("Addition")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::Add;
-	nomOperation = s;
-	nbOperande= 2;
-	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#add";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
-	}
-if (s.Cmp("Soustraction")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::Sub;
-	nomOperation = s;
-	nbOperande= 2;
-	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#subtract";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=172&zoom=70,250,100";
-	}
-if (s.Cmp("Multiplication")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::Mul;
-	nomOperation = s;
-	nbOperande= 2;
-	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#multiply";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=153&zoom=70,250,100";
-	}
-if (s.Cmp("Division")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::Div;
-	nomOperation = s;
-	nbOperande= 2;
-	pOCV.lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#divide";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=136&zoom=70,250,100";
-	}
-if (s.Cmp("Convolution")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::Convolution;
-	nomOperation = s;
-	nbOperande= 2;
-	pOCV.intParam["IndOpConvolution"]=DomaineParametre<int>(xx.IndOpConvolution(),0,NB_OP_CONVOLUTION,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#filter2d";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100";
-	}
-if (s.Cmp("Dilatation")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::Dilatation;
-	nomOperation = s;
-	nbOperande= 2;
-	pOCV.intParam["IndOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#dilate";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100";
-	}
-if (s.Cmp("Erosion")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::Erosion;
-	nbOperande= 2;
-	nomOperation = s;
-	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100";
-	}
-if (s.Cmp("Ouverture")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::Ouverture;
-	nomOperation = s;
-	nbOperande= 2;
-	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=morphologyex#morphologyex";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
-	}
-if (s.Cmp("Fermeture")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::Fermeture;
-	nomOperation = s;
-	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
-	}
-if (s.Cmp("ChapeauHaut")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::ChapeauHaut;
-	nomOperation = s;
-	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
-	pOCV.intParam["nbIter"]=DomaineParametre<int>(1,1,10,1);
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pOCV.pointParam["anchor"]=DomaineParametre<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
-	}
-if (s.Cmp("ChapeauBas")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::ChapeauBas;
-	nomOperation = s;
-	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
-	pOCV.intParam["nbIter"]=DomaineParametre<int>(1,1,10,1);
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pOCV.pointParam["anchor"]=DomaineParametre<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
-	}
-if (s.Cmp("GradMorph")==0)
-	{
-	pOCV.nomOperation=s;
-	opBinaireSelec = &ImageInfoCV::GradMorph;
-	nomOperation = s;
-	pOCV.intParam["indOpMorphologie"]=DomaineParametre<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
-	pOCV.intParam["nbIter"]=DomaineParametre<int>(1,1,10,1);
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pOCV.pointParam["anchor"]=DomaineParametre<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
-	}
-if (s.Cmp("Scharr_mod")==0)
-	{
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::ScharrModule;
-	nomOperation = s;
-	pOCV.intParam["ddepth"]=DomaineParametre<int>(-1,-1,CV_32F,1);
-	pOCV.doubleParam["scale"]=DomaineParametre<double>(1,0.01,10,1);
-	pOCV.doubleParam["delta"]=DomaineParametre<double>(0,0.0,1000,1);
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
-	}
-if (s.Cmp("Scharr_x")==0)
-	{
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::ScharrX;
-	nomOperation = s;
-	pOCV.intParam["ddepth"]=DomaineParametre<int>(-1,-1,CV_32F,1);
-	pOCV.doubleParam["scale"]=DomaineParametre<double>(1,0.01,10,1);
-	pOCV.doubleParam["delta"]=DomaineParametre<double>(0,0.0,1000,1);
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
-	}
-if (s.Cmp("Scharr_y")==0)
-	{
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::ScharrY;
-	nomOperation = s;
-	pOCV.intParam["ddepth"]=DomaineParametre<int>(-1,-1,CV_32F,1);
-	pOCV.doubleParam["scale"]=DomaineParametre<double>(1,0.01,10,1);
-	pOCV.doubleParam["delta"]=DomaineParametre<double>(0,0.0,1000,1);
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
-	}
-if (s.Cmp("Laplacien")==0)
-	{
-	pOCV.intParam["ddepth"]=DomaineParametre<int>(50.,0.0,255.0,1.0);
-	pOCV.doubleParam["scale"]=DomaineParametre<double>(1,0.0,255.0,1.0);
-	pOCV.doubleParam["delta"]=DomaineParametre<double>(0,0.0,255.0,1.0);
-	pOCV.intParam["ksize"]=DomaineParametre<int>(3,1,7,2);
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pOCV.lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/filtering.html#laplacian";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=261&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::Laplacien;
-	nomOperation = s;
-	}
-if (s.Cmp("Canny")==0)
-	{
-	pOCV.doubleParam["threshold1"]=DomaineParametre<double>(50.,0.0,255.0,1.0);
-	pOCV.doubleParam["threshold2"]=DomaineParametre<double>(100,0.0,255.0,1.0);
-	pOCV.intParam["aperture_size"]=DomaineParametre<int>((int)3,(int)1,(int)255,(int)2);
-	pOCV.intParam["kernel_size"]=DomaineParametre<int>(3,1,255,2);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=331&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::Canny;
-	nomOperation = s;
-	}
-if (s.Cmp("Contour")==0)
-	{
-	pOCV.intParam["mode"]=DomaineParametre<int>(cv::RETR_EXTERNAL,cv::RETR_EXTERNAL,cv::RETR_TREE,1);
-	pOCV.intParam["method"]=DomaineParametre<int>(cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_TC89_L1 ,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#findContour";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=308&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::Contour;
-	nomOperation = s;
-	}
-if (s.Cmp("FFT")==0)
-	{
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=133&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::FFT;
-	nomOperation = s;
-	}
-if (s.Cmp("IFFT")==0)
-	{
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny";
-	pOCV.refPDF="The OpenCV Reference Manual, Release 2.4.9.0 p325";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::IFFT;
-	nomOperation = s;
-	}
-if (s.Cmp("Seuillage")==0)
-	{
-	pOCV.doubleParam["thresh"]=DomaineParametre<double>(50.,0.0,255.0,1.0);
-	pOCV.doubleParam["maxval"]=DomaineParametre<double>(255.,0.0,255.0,1.0);
-	pOCV.intParam["threshold_type"]=DomaineParametre<int>(cv::THRESH_BINARY,cv::THRESH_BINARY,cv::THRESH_TOZERO_INV,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html?highlight=threshold#threshold";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=291&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::Seuillage;
-	nomOperation = s;
-	}
-if (s.Cmp("AdaptatifSeuillage")==0)
-	{
-	pOCV.doubleParam["maxValue"]=DomaineParametre<double>(255.,0.0,255.0,1.0);
-	pOCV.intParam["thresholdType"]=DomaineParametre<int>(cv::THRESH_BINARY,cv::THRESH_BINARY,cv::THRESH_TOZERO_INV,1);
-	pOCV.intParam["adaptiveMethod"]=DomaineParametre<int>(cv::ADAPTIVE_THRESH_GAUSSIAN_C,cv::ADAPTIVE_THRESH_GAUSSIAN_C,cv::ADAPTIVE_THRESH_MEAN_C,1);
-	pOCV.intParam["blockSize"]=DomaineParametre<int>(21,3,1000,2);
-	pOCV.doubleParam["C"]=DomaineParametre<double>(-0,-255,255,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html?highlight=threshold#adaptivethreshold";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=280&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::SeuillageAdaptatif;
-	nomOperation = s;
-	}
-if (s.Cmp("LissageMedian")==0)
-	{
-	pOCV.intParam["ksize"]=DomaineParametre<int>(3,1,255,2);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=medianblur#medianblur";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::LissageMedian;
-	nomOperation = s;
-	}
-if (s.Cmp("LissageMoyenneur")==0)
-	{
-	pOCV.sizeParam["ksize"]=DomaineParametre<cv::Size>(cv::Size(3,3),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
-	pOCV.pointParam["anchor"]=DomaineParametre<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=blur#blur";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::LissageMoyenne;
-	nomOperation = s;
-	}
-if (s.Cmp("LissageGaussien")==0)
-	{
-	pOCV.sizeParam["ksize"]=DomaineParametre<cv::Size>(cv::Size(3,3),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
-	pOCV.doubleParam["sigmaX"]=DomaineParametre<double>(0.1,0,255.0,0.1);
-	pOCV.doubleParam["sigmaY"]=DomaineParametre<double>(0.1,0,255.0,0.1);
-	pOCV.intParam["borderType"]=DomaineParametre<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pOCV.lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=gaussianblur#gaussianblur";
-	pOCV.refPDF="http://docs.opencv.org/opencv2refman.pdf#page=263&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::LissageGaussien;
-	nomOperation = s;
-	}
-if (s.Cmp("ComposanteConnexe")==0)
-	{
-	pOCV.intParam["connectivity"]=DomaineParametre<int>(4,4,8,4);
-	pOCV.intParam["ltype"]=DomaineParametre<int>(CV_32S,CV_32S,CV_32S,0);
-	pOCV.lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#connectedcomponents";
-	pOCV.refPDF="http://docs.opencv.org/opencv3refman.pdf#page=263&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::ComposanteConnexe;
-	nomOperation = s;
-	}
-if (s.Cmp("DistanceDiscrete")==0)
-	{
-	pOCV.lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/miscellaneous_transformations.html#distancetransform";
-	pOCV.refPDF="http://docs.opencv.org/opencv3refman.pdf#page=287&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::DistanceDiscrete;
-	nomOperation = s;
-	}
-if (s.Cmp("Squelette")==0)
-	{
-	pOCV.lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/miscellaneous_transformations.html#distancetransform";
-	pOCV.refPDF="http://docs.opencv.org/opencv3refman.pdf#page=287&zoom=70,250,100";
-	pOCV.nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::LigneMediane;
-	nomOperation = s;
-	}
-
+if (!pOCV.InitOperation((string)s))
+	wxMessageBox(_("Undefined operation"));
 
 }
 
 
-ImageInfoCV	**wxOsgApp::ExecuterOperation(Parametre *pOCVNouveau)
+ImageInfoCV	**wxOsgApp::ExecuterOperation(ParametreOperation *pOCVNouveau)
 {
+ParametreOperation *pAct;
+
+
 ImageInfoCV	*im=NULL;
 ImageInfoCV	**imTab=NULL;
 if (pOCVNouveau==NULL)
-	pOCV.nbImageRes=1;
+	pAct=&pOCV;
 else
-	pOCVNouveau->nbImageRes=1;
-if (opNaireSelec)
+	pAct=pOCVNouveau;
+pAct->nbImageRes=1;
+if (pAct->opNaireSelec)
 	{
-	ImageInfoCV *imOp[3]={op1,op2,op3};
+	ImageInfoCV *imOp[3]={pAct->op1,pAct->op2,pAct->op3};
 	try
 		{
-		if (pOCVNouveau==NULL)
-			im =((*op1).*opNaireSelec)(3,imOp,&pOCV);
-		else
-			im =((*op1).*opNaireSelec)(3,imOp,pOCVNouveau);
+		im =((*pAct->op1).*pAct->opNaireSelec)(3,imOp,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -865,10 +550,10 @@ if (opNaireSelec)
 
 	if (im==NULL)
 		{
-		opNaireSelec=NULL;
+/*		opNaireSelec=NULL;
 		op1=NULL;
 		op2=NULL;
-		op3=NULL;
+		op3=NULL;*/
 		return imTab;
 		}
 	else
@@ -878,21 +563,15 @@ if (opNaireSelec)
 		}
 	}
 
-if (opBinaireSelec)
+if (pAct->opBinaireSelec)
 	{
 	
 	try
 		{
-		if (op2==NULL)
-			if (pOCVNouveau==NULL)
-				im =((*op1).*opBinaireSelec)(op1,NULL,&pOCV);
-			else
-				im =((*op1).*opBinaireSelec)(op1,NULL,pOCVNouveau);
+		if (pAct->op2==NULL)
+			im =((*pAct->op1).*pAct->opBinaireSelec)(pAct->op1,NULL,pAct);
 		else
-			if (pOCVNouveau==NULL)
-				im =((*op1).*opBinaireSelec)(op1,op2,&pOCV);
-			else
-				im =((*op1).*opBinaireSelec)(op1,op2,pOCVNouveau);
+			im =((*pAct->op1).*pAct->opBinaireSelec)(pAct->op1,pAct->op2,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -904,9 +583,9 @@ if (opBinaireSelec)
 
 	if (im==NULL)
 		{
-		opBinaireSelec=NULL;
+/*		opBinaireSelec=NULL;
 		op1=NULL;
-		op2=NULL;
+		op2=NULL;*/
 		return imTab;
 		}
 	else
@@ -915,15 +594,12 @@ if (opBinaireSelec)
 		imTab[0]=im;
 		}
 	}
-if (opUnaireSelec)
+if (pAct->opUnaireSelec)
 	{
 	try
 		{
 
-		if (pOCVNouveau==NULL)
-			im =((*op1).*opUnaireSelec)(op1,pOCV);
-		else
-			im =((*op1).*opUnaireSelec)(op1,*pOCVNouveau);
+		im =((*pAct->op1).*pAct->opUnaireSelec)(pAct->op1,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -935,8 +611,6 @@ if (opUnaireSelec)
 
 	if (im==NULL)
 		{
-		opUnaireSelec=NULL;
-		op1=NULL;
 		return imTab;
 		}
 	else
@@ -946,15 +620,12 @@ if (opUnaireSelec)
 		}
 	}
 
-if (opSurjecUnaire)
+if (pAct->opSurjecUnaire)
 	{
 	try
 		{
 
-		if (pOCVNouveau==NULL)
-			imTab =((*op1).*opSurjecUnaire)(op1,pOCV);
-		else
-			imTab =((*op1).*opSurjecUnaire)(op1,*pOCVNouveau);
+		imTab =((*pAct->op1).*pAct->opSurjecUnaire)(pAct->op1,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -966,8 +637,6 @@ if (opSurjecUnaire)
 
 	if (imTab==NULL)
 		{
-		opUnaireSelec=NULL;
-		op1=NULL;
 		return imTab;
 		}
 	}
@@ -978,7 +647,7 @@ return imTab; // Le pointeur imTab n'est pas libéré
 
 void wxOsgApp::CreerFenetreOperation()
 {
-if ((opBinaireSelec==NULL && opUnaireSelec==NULL && opSurjecMultiple==NULL && opNaireSelec==NULL) || op1==NULL)
+if ((pOCV.opBinaireSelec==NULL && pOCV.opUnaireSelec==NULL && pOCV.opSurjecMultiple==NULL && pOCV.opNaireSelec==NULL) || pOCV.op1==NULL)
 	return;
 
 ImageInfoCV	**im=ExecuterOperation();
@@ -990,29 +659,29 @@ if (im==NULL)
 	}
 for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	{
-	FenetrePrincipale *f = new FenetrePrincipale(NULL, nomOperation,
+	FenetrePrincipale *f = new FenetrePrincipale(NULL, pOCV.nomOperation,
 		wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
 	FenetreZoom *fenZoom = new FenetreZoom(f);
 	f->DefOSGApp(this);
 	wxString s;
 	int ind=-1;
-	if (nomOperation.Cmp("Convolution")==0)
+	if (pOCV.nomOperation=="Convolution")
 		{
 		ind = im[nbres]->IndOpConvolution();
 		}
-	if (nomOperation.Cmp("Erosion")==0)
+	if (pOCV.nomOperation=="Erosion")
 		{
 		ind = im[nbres]->IndOpMorphologie();
 		}
-	if (nomOperation.Cmp("Dilatation")==0)
+	if (pOCV.nomOperation=="Dilatation")
 		{
 		ind = im[nbres]->IndOpMorphologie();
 		}
 	int idOperation=-1;
 	int numEtape=-1;
-	if (indOp1Fenetre!=-1)
+	if (pOCV.indOp1Fenetre!=-1)
 		{
-		FenetrePrincipale *f=Fenetre(indOp1Fenetre);
+		FenetrePrincipale *f=Fenetre(pOCV.indOp1Fenetre);
 		
 		if (f!=NULL)
 			{
@@ -1023,9 +692,9 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 					numEtape=f->OrigineImage()->indEtape+1;
 				}
 			}
-		if (idOperation==-1 && indOp2Fenetre>=0)
+		if (idOperation==-1 && pOCV.indOp2Fenetre>=0)
 			{
-			f=Fenetre(indOp2Fenetre);
+			f=Fenetre(pOCV.indOp2Fenetre);
 			if(f->OrigineImage()!=NULL)
 				{
 				idOperation=f->OrigineImage()->idOperation;
@@ -1038,16 +707,16 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 		numEtape=0;
 	if (idOperation==-1)
 		idOperation=numOpFaite++;
-	if (opUnaireSelec)
-		f->DefHistorique(indOp1Fenetre,-1,-1,idOperation,numEtape,nomOperation,&pOCV);
-	if (opBinaireSelec)
-		f->DefHistorique(indOp1Fenetre,indOp2Fenetre,-1,idOperation,numEtape,nomOperation,&pOCV);
-	if (opNaireSelec)
-		f->DefHistorique(indOp1Fenetre,indOp2Fenetre,indOp3Fenetre,idOperation,numEtape,nomOperation,&pOCV);
+	if (pOCV.opUnaireSelec)
+		f->DefHistorique(pOCV.indOp1Fenetre,-1,-1,idOperation,numEtape,pOCV.nomOperation,&pOCV);
+	if (pOCV.opBinaireSelec)
+		f->DefHistorique(pOCV.indOp1Fenetre,pOCV.indOp2Fenetre,-1,idOperation,numEtape,pOCV.nomOperation,&pOCV);
+	if (pOCV.opNaireSelec)
+		f->DefHistorique(pOCV.indOp1Fenetre,pOCV.indOp2Fenetre,pOCV.indOp3Fenetre,idOperation,numEtape,pOCV.nomOperation,&pOCV);
 	if (ind!=-1)
-		s.Printf("%d : %s(operator %d) of image %d ",nbFenetre,nomOperation,ind,indOp1Fenetre );
+		s.Printf("%d : %s(operator %d) of image %d ",nbFenetre,pOCV.nomOperation,ind,pOCV.indOp1Fenetre );
 	else
-		s.Printf("%d : %s of image %d ",nbFenetre,nomOperation,indOp1Fenetre );
+		s.Printf("%d : %s of image %d ",nbFenetre,pOCV.nomOperation,pOCV.indOp1Fenetre );
 	f->SetLabel(s);
 
 
@@ -1090,17 +759,10 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	f->RecupDerniereConfig();
 	nbFenetre++;
 	f->InitIHM();
+	wxCommandEvent evt;
+	f->ParamAlgo(evt);
+
 	}
-opBinaireSelec=NULL;
-opUnaireSelec=NULL;
-opSurjecUnaire=NULL;
-opNaireSelec=NULL;
-op1=NULL;
-op2=NULL;
-op3=NULL;
-indOp1Fenetre=-1;
-indOp2Fenetre=-1;
-indOp3Fenetre=-1;
 pOCV.doubleParam.clear();
 pOCV.intParam.clear();
 }
@@ -1295,16 +957,7 @@ nbFenetre=0;
 indFenetre=-1;
 modeSouris = SOURIS_STD;
 indPointeurSouris=0;
-op1=NULL;
-op2=NULL;
-op3=NULL;
-indOp1Fenetre=-1;
-indOp2Fenetre=-1;
-indOp3Fenetre=-1;
-opBinaireSelec=NULL;
-opUnaireSelec=NULL;
-opSurjecUnaire=NULL;
-opNaireSelec=NULL;
+
 ctrlCamera=NULL;
 utilisateurAbsent=0;
 #ifndef ___AUI__
@@ -1336,7 +989,9 @@ return true;
 }
 
 void wxOsgApp::AnnuleOp()
-{opBinaireSelec=NULL;opUnaireSelec=NULL;op1=NULL;op2=NULL;};
+{
+pOCV.InitOperation("");
+};
 
 
 void wxOsgApp::OuvertureOutils()
@@ -1729,10 +1384,6 @@ FenetrePrincipale::FenetrePrincipale(wxFrame *frame, const wxString& title, cons
     const wxSize& size, long style)
     : wxFrame(frame, wxID_ANY, title , pos, size, style/*|wxVSCROLL |wxHSCROLL*/)
 {
-origineImage.indOp1=-1;
-origineImage.indOp2=-1;
-origineImage.op1=NULL;
-origineImage.op2=NULL;
 tpsPreEvt=-1;
 imGain=NULL;
 correctionGain=false;
@@ -2430,7 +2081,6 @@ if (cam!=NULL )
 
 if (osgApp && !osgApp->Quitter())
 	osgApp->RetirerListe(this);
-wxThread::ExitCode rc;
 if (cam)
 	OnCloseThread(event);
 
@@ -2542,7 +2192,7 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.AppendCheckItem(Menu_Rectangle, _T("Stat Rectangle"));
 	menu.AppendCheckItem(Menu_Coupe, _T("Section"));
 	menu.AppendCheckItem(Menu_FilMax, _T("Filtrage Max"));
-	if (osgApp->Fenetre(origineImage.indOp1))
+	if (osgApp->Fenetre(origineImage.indOp1Fenetre))
 		menu.AppendCheckItem(Menu_ParAlg, _T("Parametrage Algo."));
 	menu.AppendSeparator();
 	menu.Append(ENREGISTRER_FICHIER, _T("Save"));
@@ -2561,7 +2211,7 @@ else
 	menu.AppendCheckItem(MENU_OP1, "Image as Op1");
 	menu.AppendCheckItem(MENU_OP2, "Image as Op2");
 	menu.AppendSeparator();
-	menu.AppendCheckItem(MENU_EXEC_OP, "Execute "+*osgApp->NomOperation());
+	menu.AppendCheckItem(MENU_EXEC_OP, "Execute "+osgApp->NomOperation());
 	menu.Append(RESET_OP,  "Operation canceled");
 	if (osgApp->Op1()==imAcq)
 		menu.Check(MENU_OP1, true);
@@ -2619,13 +2269,15 @@ case RESET_OP :
 	}
 }
 
-void FenetrePrincipale::DefHistorique(int ind1,int ind2,int ind3,int idOpe,int numE ,wxString nomF,Parametre *pOCV) /*< Associer origine à une image */
+void FenetrePrincipale::DefHistorique(int ind1,int ind2,int ind3,int idOpe,int numE ,wxString nomF,ParametreOperation *pOCV) /*< Associer origine à une image */
 {
 if (ind1!=-1)
 	{
-	origineImage.indOp1=ind1;
-	origineImage.indOp2=ind2;
-	origineImage.indOp3=ind3;
+	if (pOCV)
+		origineImage=*pOCV;
+	origineImage.indOp1Fenetre=ind1;
+	origineImage.indOp2Fenetre=ind2;
+	origineImage.indOp3Fenetre=ind3;
 	origineImage.indRes=idFenetre;
 	origineImage.idOperation=idOpe;
 	origineImage.indEtape=numE;
@@ -2635,10 +2287,8 @@ if (ind1!=-1)
 	if (ind3>=0)
 		origineImage.op3 = osgApp->Fenetre(ind3)->ImAcq();
 	origineImage.nomOperation=nomF;
-	if (pOCV)
-		origineImage.pOCV=*pOCV;
 	}
-
+/*
 if (idFenetre>=0)
 	{
 	wxString param;
@@ -2649,14 +2299,14 @@ if (idFenetre>=0)
 	osgApp->SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
 	chemin.Printf("/operateur/%d/%d/",origineImage.idOperation,origineImage.indEtape);
 	osgApp->SauverFichierConfig(chemin,"op",origineImage.nomOperation);
-	osgApp->SauverFichierConfig(chemin,"op1",(long)origineImage.indOp1);
-	osgApp->SauverFichierConfig(chemin,"op2",(long)origineImage.indOp2);
+	osgApp->SauverFichierConfig(chemin,"op1",(long)origineImage.indOp1Fenetre);
+	osgApp->SauverFichierConfig(chemin,"op2",(long)origineImage.indOp2Fenetre);
 	osgApp->SauverFichierConfig(chemin,"res",(long)origineImage.indRes);
 	osgApp->SauverFichierConfig(chemin,"indEtape",(long)origineImage.indEtape);
 	osgApp->SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
-	std::map<std::string,DomaineParametre<int> >::iterator iti;
+	std::map<std::string,DomaineParametreOp<int> >::iterator iti;
 	int nb=0;
-	for (iti=origineImage.pOCV.intParam.begin();iti!=origineImage.pOCV.intParam.end();iti++)
+	for (iti=origineImage.intParam.begin();iti!=origineImage.intParam.end();iti++)
 		{
 		chemin.Printf("/operateur/%d/%d/paramEntier/%d",origineImage.idOperation,origineImage.indEtape,nb);
 		osgApp->SauverFichierConfig(chemin,"nom",iti->first);
@@ -2667,8 +2317,8 @@ if (idFenetre>=0)
 		nb++;
 		}
 	nb=0;
-	std::map<std::string,DomaineParametre<double> >::iterator itd;
-	for (itd=origineImage.pOCV.doubleParam.begin();itd!=origineImage.pOCV.doubleParam.end();itd++)
+	std::map<std::string,DomaineParametreOp<double> >::iterator itd;
+	for (itd=origineImage.doubleParam.begin();itd!=origineImage.doubleParam.end();itd++)
 		{
 		chemin.Printf("/operateur/%d/%d/paramDouble/%d",origineImage.idOperation,origineImage.indEtape,nb);
 		osgApp->SauverFichierConfig(chemin,"nom",itd->first);
@@ -2679,8 +2329,8 @@ if (idFenetre>=0)
 		nb++;
 		}
 	nb=0;
-	std::map<std::string,DomaineParametre<cv::Size> >::iterator its;
-	for (its=origineImage.pOCV.sizeParam.begin();its!=origineImage.pOCV.sizeParam.end();its++)
+	std::map<std::string,DomaineParametreOp<cv::Size> >::iterator its;
+	for (its=origineImage.sizeParam.begin();its!=origineImage.sizeParam.end();its++)
 		{
 		chemin.Printf("/operateur/%d/%d/paramSize/%d",origineImage.idOperation,origineImage.indEtape,nb);
 		osgApp->SauverFichierConfig(chemin,"nom",its->first);
@@ -2695,7 +2345,7 @@ if (idFenetre>=0)
 		nb++;
 		}
 	}
-
+*/
 }
 
 wxMenu *FenetrePrincipale::CreateMenuPalette(wxString *title)
@@ -3318,7 +2968,7 @@ void wxOsgApp::OnUseScreen(wxCommandEvent& WXUNUSED(event))
 
 ImageInfoCV *FenetrePrincipale::ImageOp1pre()
 {
-FenetrePrincipale *f=osgApp->Fenetre(origineImage.indOp1);
+FenetrePrincipale *f=osgApp->Fenetre(origineImage.indOp1Fenetre);
 if (f)
 	return f->ImAcq();
 return NULL;
@@ -3327,7 +2977,7 @@ return NULL;
 
 ImageInfoCV *FenetrePrincipale::ImageOp2pre()
 {
-FenetrePrincipale *f=osgApp->Fenetre(origineImage.indOp1);
+FenetrePrincipale *f=osgApp->Fenetre(origineImage.indOp1Fenetre);
 if (f)
 	return f->ImAcq();
 return NULL;
@@ -3491,9 +3141,9 @@ while ( bCont )
 		configApp->SetPath(chemin+"/"+cleIndEtape);
 		if (opValide && !configApp->Read("op",&listeOperation[nbOperation].nomOperation))
 			opValide=false;
-		if (opValide && !configApp->Read("op1",&listeOperation[nbOperation].indOp1))
+		if (opValide && !configApp->Read("op1",&listeOperation[nbOperation].indOp1Fenetre))
 			opValide=false;
-		if (opValide && !configApp->Read("op2",&listeOperation[nbOperation].indOp2))
+		if (opValide && !configApp->Read("op2",&listeOperation[nbOperation].indOp2Fenetre))
 			opValide=false;
 		if (opValide && !configApp->Read("res",&listeOperation[nbOperation].indRes))
 			opValide=false;
@@ -3533,7 +3183,7 @@ while ( bCont )
 				if (opValide)
 					{
 					std::string s(nom.ToAscii());
-					listeOperation[nbOperation].pOCV.intParam[s]=DomaineParametre<int>(val,minVal,maxVal,pasVal);
+					listeOperation[nbOperation].intParam[s]=DomaineParametreOp<int>(val,minVal,maxVal,pasVal);
 					}
 				bCont = configApp->GetNextGroup(str, dummy);
 				}
@@ -3566,7 +3216,7 @@ while ( bCont )
 				if (opValide)
 					{
 					std::string s(nom.ToAscii());
-					listeOperation[nbOperation].pOCV.doubleParam[s]=DomaineParametre<double>(val,minVal,maxVal,pasVal);
+					listeOperation[nbOperation].doubleParam[s]=DomaineParametreOp<double>(val,minVal,maxVal,pasVal);
 					}
 				bCont = configApp->GetNextGroup(str, dummy);
 				}
@@ -3612,7 +3262,7 @@ while ( bCont )
 				if (opValide)
 					{
 					std::string s(nom.ToAscii());
-					listeOperation[nbOperation].pOCV.sizeParam[s]=DomaineParametre<cv::Size>(cv::Size(largeur,hauteur),cv::Size(larMin,hauMin),cv::Size(larMax,hauMax),cv::Size(larPas,larPas));
+					listeOperation[nbOperation].sizeParam[s]=DomaineParametreOp<cv::Size>(cv::Size(largeur,hauteur),cv::Size(larMin,hauMin),cv::Size(larMax,hauMax),cv::Size(larPas,larPas));
 					}
 				bCont = configApp->GetNextGroup(str, dummy);
 				}
@@ -3650,7 +3300,7 @@ if (numOpFaite>=0)
 	numOpFaite++;
 }
 
-void wxOsgApp::GenerationGraphDot(Operation *op)
+void wxOsgApp::GenerationGraphDot(ParametreOperation *op)
 {
 }
 

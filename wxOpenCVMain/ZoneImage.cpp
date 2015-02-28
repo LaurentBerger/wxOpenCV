@@ -300,7 +300,6 @@ if (modeRect)
 	{
 	if ( abs(rectSelect[indRect].GetWidth()*rectSelect[indRect].GetWidth()))
 		{
-		float	stat[10];
 	 /*
 					// TODO: commit the lasso selected image to something.
 					wxMemoryDC dcMem;
@@ -603,7 +602,7 @@ else
 			menu.AppendCheckItem(MENU_OP3, "Image as C");
 		}
 	menu.AppendSeparator();
-	menu.AppendCheckItem(MENU_EXEC_OP, "Execute "+*osgApp->NomOperation());
+	menu.AppendCheckItem(MENU_EXEC_OP, "Execute "+osgApp->NomOperation());
 	menu.Append(RESET_OP,  "Operation canceled");
 	if (osgApp->Op1()==f->ImAcq())
 		menu.Check(MENU_OP1, true);
@@ -717,11 +716,17 @@ void ZoneImage::SequenceOperation(wxCommandEvent& event)
 {
 if (osgApp->FenetreSeqOpe()==NULL)
 	{
-	wxString s(_("Sequence on ")+f->GetTitle());
-	FenetreSequenceOperation *fs=new FenetreSequenceOperation(f,s,wxPoint(530,0), wxSize(430,570),this->osgApp);
-	osgApp->FenetreSeqOpe(fs);
+	if (osgApp->TabSeqOperation()->size()==0)
+		wxMessageBox(_("No sequence available"));
+	else
+		{
+		wxString s(_("Sequence on ")+f->GetTitle());
+		FenetreSequenceOperation *fs=new FenetreSequenceOperation(f,s,wxPoint(530,0), wxSize(430,570),this->osgApp);
+		osgApp->FenetreSeqOpe(fs);
+		}
 	}
-((FenetreSequenceOperation *)osgApp->FenetreSeqOpe())->Show(true);
+if (osgApp->FenetreSeqOpe())
+	((FenetreSequenceOperation *)osgApp->FenetreSeqOpe())->Show(true);
 }
 
 

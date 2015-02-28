@@ -711,6 +711,7 @@ x->ptId=repereIni;
 x->ptApp=repere;
 x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
 wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
+return 0;
 }
 
 void ControleCamera::OuvertureOngletEMCCD()

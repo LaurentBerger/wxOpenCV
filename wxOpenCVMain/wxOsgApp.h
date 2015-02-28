@@ -2,6 +2,7 @@
 #define __WXOSGAPP__
 
 #include "ImageInfo.h"
+#include "ParametreOperation.h"
 #include <wx/app.h>
 #include <wx/bitmap.h>
 #include <wx/timer.h>
@@ -39,8 +40,8 @@ wxLanguage	langue;							/*!< language choisi */
 wxLocale	locale;							/*!< locale we'll be using */
 wxFileConfig *configApp;					/*!< Fichier de configuration de l'application */
 
-std::vector<Operation> listeOperation;		/*<! Liste des opérations individuelles */
-std::map <int,std::vector <Operation > > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
+std::vector<ParametreOperation> listeOperation;		/*<! Liste des opérations individuelles */
+std::map <int,std::vector <ParametreOperation > > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
 int	numOpFaite;											/*!< Nombre d'opération faites ou sauvgardées dans le fichier INI */
 int numSeqOpe;								/*!< Nombre de séquence d'opérations faites ou sauvgardées dans le fichier INI */
 
@@ -74,26 +75,28 @@ ControleCamera		*ctrlCamera;
 OutilsImage			*outils;
 void				*fSeqOpe;
 
+#ifdef __CESTFINII__
 // surjection nombre d'images, les images dans un tableau et les paramètres
-ImageInfoCV**  (ImageInfoCV::*opSurjecMultiple)(int,ImageInfoCV **,Parametre *) ;
+ImageInfoCV**  (ImageInfoCV::*opSurjecMultiple)(int,ImageInfoCV **,ParametreOperation *) ;
 // Opération programmée ternaire : Fusion plan
-ImageInfoCV*  (ImageInfoCV::*opNaireSelec)(int ,ImageInfoCV **,Parametre *) ;
+ImageInfoCV*  (ImageInfoCV::*opNaireSelec)(int ,ImageInfoCV **,ParametreOperation *) ;
 // Opération programmée binaire
-ImageInfoCV*  (ImageInfoCV::*opBinaireSelec)(ImageInfoCV *,ImageInfoCV *,Parametre *) ;
+ImageInfoCV*  (ImageInfoCV::*opBinaireSelec)(ImageInfoCV *,ImageInfoCV *,ParametreOperation *) ;
 // Opération programmée unaire avec parametre
-ImageInfoCV*  (ImageInfoCV::*opUnaireSelec)(ImageInfoCV *,Parametre &) ;
+ImageInfoCV*  (ImageInfoCV::*opUnaireSelec)(ImageInfoCV *,ParametreOperation *) ;
 // Surjection (plusieurs résultats   avec parametre
-ImageInfoCV**  (ImageInfoCV::*opSurjecUnaire)(ImageInfoCV *,Parametre &) ;
+ImageInfoCV**  (ImageInfoCV::*opSurjecUnaire)(ImageInfoCV *,ParametreOperation *) ;
 wxString	nomOperation;
 int nbOperande;	/*!< Nombre d'opérande pour l'opération 1 unaire, 2 binaire, 3 fusion plan */
 // Opérande sélectionnée
 ImageInfoCV *op1;	/*!< Opérande 1 pour l'opération demandée */
 ImageInfoCV *op2;	/*!< Opérande 2 pour l'opération demandée */
 ImageInfoCV *op3;	/*!< Opérande 3 pour l'opération demandée uniquement fusion plan*/
-Parametre pOCV;	/*!< parametre de l'opérateur Unaire */
 int	indOp1Fenetre;	/*!< Indice de la fenêtre contenant l'image de opérande 1 */
 int indOp2Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
 int indOp3Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
+#endif
+ParametreOperation pOCV;	/*!< parametre de l'opérateur Unaire */
 
 
 public :	
@@ -111,23 +114,23 @@ void RetirerListe(FenetrePrincipale *);
 
 // Méthodes liées à des opérations sur les images
 void DefOperateurImage(wxString &);
-void DefOperande1(ImageInfoCV* im,int i=-1){op1=im;indOp1Fenetre=i;};
-void DefOperande2(ImageInfoCV* im,int i=-1){op2=im;indOp2Fenetre=i;};
-void DefOperande3(ImageInfoCV* im,int i=-1){op3=im;indOp3Fenetre=i;};
-void DefParametreOCV(Parametre &x){pOCV=x;};
-bool OpUnaire(){return opUnaireSelec!=NULL || opSurjecUnaire!=NULL;} /*!< Vrai si opération unaire sélectionnée */
-bool OpBinaire(){return opBinaireSelec!=NULL;} /*!< Vrai si opération binaire sélectionnée */
-bool OpNaire(){return opNaireSelec!=NULL;};
-ImageInfoCV *Op1(){return op1;};
-ImageInfoCV *Op2(){return op2;};
-ImageInfoCV *Op3(){return op3;};
-int IndOp1(){return indOp1Fenetre;};
-int IndOp2(){return indOp2Fenetre;};
-int IndOp3(){return indOp3Fenetre;};
-int NbOperande(){return nbOperande;};
+void DefOperande1(ImageInfoCV* im,int i=-1){pOCV.op1=im;pOCV.indOp1Fenetre=i;};
+void DefOperande2(ImageInfoCV* im,int i=-1){pOCV.op2=im;pOCV.indOp2Fenetre=i;};
+void DefOperande3(ImageInfoCV* im,int i=-1){pOCV.op3=im;pOCV.indOp3Fenetre=i;};
+void DefParametreOCV(ParametreOperation &x){pOCV=x;};
+bool OpUnaire(){return pOCV.opUnaireSelec!=NULL || pOCV.opSurjecUnaire!=NULL;} /*!< Vrai si opération unaire sélectionnée */
+bool OpBinaire(){return pOCV.opBinaireSelec!=NULL;} /*!< Vrai si opération binaire sélectionnée */
+bool OpNaire(){return pOCV.opNaireSelec!=NULL;};
+ImageInfoCV *Op1(){return pOCV.op1;};
+ImageInfoCV *Op2(){return pOCV.op2;};
+ImageInfoCV *Op3(){return pOCV.op3;};
+int IndOp1(){return pOCV.indOp1Fenetre;};
+int IndOp2(){return pOCV.indOp2Fenetre;};
+int IndOp3(){return pOCV.indOp3Fenetre;};
+int NbOperande(){return pOCV.nbOperande;};
 void AnnuleOp();
-std::map <int,std::vector <Operation > >  *TabSeqOperation(){return &tabOperation;}
-ImageInfoCV **ExecuterOperation(Parametre * = NULL);
+std::map <int,std::vector <ParametreOperation > >  *TabSeqOperation(){return &tabOperation;}
+ImageInfoCV **ExecuterOperation(ParametreOperation * = NULL);
     /*!
      *  \brief Fonction ExecuterOperation
      *
@@ -144,7 +147,7 @@ void CreerFenetreOperation();
 
 
 
-wxString *NomOperation(){return &nomOperation;};
+wxString NomOperation(){return pOCV.nomOperation;};
 
 void	SauverFichierConfig(wxString s,int id,int type=-1,int taille=-1);
     /*!
@@ -199,7 +202,7 @@ int		ModeSouris(){return modeSouris;};
 
 //// Operations
 void DefOperateurImage(ImageInfoCV* (ImageInfoCV::*f)(ImageInfoCV & ,ImageInfoCV &));
-void GenerationGraphDot(Operation *op);
+void GenerationGraphDot(ParametreOperation *op);
     /*!
      *  \brief Fonction GenerationGraphDot
      *

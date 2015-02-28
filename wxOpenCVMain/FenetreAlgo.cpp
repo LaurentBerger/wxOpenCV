@@ -13,7 +13,7 @@ fenAlgo->DefFenMere(this);
 fenAlgo->DefOSGApp(this->osgApp);
 fenAlgo->Show(true);
 fenAlgo->Refresh(true);
-fenAlgo->SendSizeEvent   ();
+//fenAlgo->SendSizeEvent   ();
 }
 
 
@@ -29,31 +29,56 @@ FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const 
     const wxSize& size,wxOsgApp *osg, long style)
      : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
 {
-panneau=new wxPanel(this, wxID_ANY,  pos, size, wxTAB_TRAVERSAL  | wxNO_BORDER | wxNO_FULL_REPAINT_ON_RESIZE);
+
+/*
+    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+
+    wxNotebook *notebook = new wxNotebook( this, wxID_ANY );
+    topsizer->Add( notebook, 1, wxGROW );
+
+    wxButton *button = new wxButton( this, wxID_OK, wxT("OK") );
+    topsizer->Add( button, 0, wxALIGN_RIGHT | wxALL, 10 );
+
+    // First page: one big text ctrl
+    wxTextCtrl *multi = new wxTextCtrl( notebook, wxID_ANY, wxT("TextCtrl."), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
+    notebook->AddPage( multi, wxT("Page One") );
+
+    // Second page: a text ctrl and a button
+    wxPanel *panel = new wxPanel( notebook, wxID_ANY );
+    notebook->AddPage( panel, wxT("Page Two") );
+
+
+    // Tell dialog to use sizer
+    SetSizerAndFit( topsizer );
+*/
+wxSize s(size);
+tailleMax=wxSize(0,0);
+wxPoint p(0,100);
+//panneau=new wxPanel(this, wxID_ANY,  p, s, wxTAB_TRAVERSAL  | wxNO_BORDER | wxNO_FULL_REPAINT_ON_RESIZE   );
+
 int hMax=0,lMax=0;
-Parametre *pOCV=frame->ParamOCV();
+ParametreOperation *pOCV=frame->ParamOCV();
 fenMere= frame;
 osgApp=osg;
 
-classeur = new wxNotebook(panneau, wxID_ANY);
-wxBoxSizer *m_sizerFrame = new wxBoxSizer(wxVERTICAL);
-panneau->SetSizer(m_sizerFrame);
-m_sizerFrame->Insert(0, classeur, 5, wxEXPAND | wxALL, 4);                 
-m_sizerFrame->Hide(classeur);                                                   
-m_sizerFrame->Show(classeur);                                                                           
-panneau->Show(true);
+wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+classeur = new wxNotebook(this, wxID_ANY,wxDefaultPosition,wxDefaultSize);
+topsizer->Add( classeur, 1, wxGROW|wxEXPAND  );
+wxButton *button = new wxButton( this, wxID_OK, _("Save all step as Macro") );
+topsizer->Add( button, 0, wxALL , 10 );
+Show(true);
 FenetrePrincipale *f=fenMere;
 nbEtape=0;
 nbParamMax=0;
-while(f && f->OrigineImage()->indOp1>=0)
+while(f && f->OrigineImage()->indOp1Fenetre>=0)
 	{
-	int id=f->OrigineImage()->indOp1;
+	int id=f->OrigineImage()->indOp1Fenetre;
 	if (id>=0)
 		{
-		int nbParam=f->OrigineImage()->pOCV.intParam.size();
-		nbParam+=f->OrigineImage()->pOCV.doubleParam.size();
-		nbParam+=2*f->OrigineImage()->pOCV.pointParam.size();
-		nbParam+=2*f->OrigineImage()->pOCV.sizeParam.size();
+		int nbParam=f->OrigineImage()->intParam.size();
+		nbParam+=f->OrigineImage()->doubleParam.size();
+		nbParam+=2*f->OrigineImage()->pointParam.size();
+		nbParam+=2*f->OrigineImage()->sizeParam.size();
 		if (nbParamMax<nbParam)
 			nbParamMax=nbParam;
 		nbEtape++;
@@ -66,18 +91,18 @@ nbParamMax=2*(nbParamMax+2);
 f=fenMere;
 int nb=nbEtape-1;
 listeOp.resize(nbEtape);
-while(f && f->OrigineImage()->indOp1>=0)
+while(f && f->OrigineImage()->indOp1Fenetre>=0)
 	{
 	if (f->OrigineImage())
 		{
-		listeOp[nb]=std::pair< Operation*,int>(f->OrigineImage(),f->IdFenetre()) ;
+		listeOp[nb]=std::pair< ParametreOperation*,int>(f->OrigineImage(),f->IdFenetre()) ;
 		wxWindow *w=CreerOngletEtape(classeur,nb);
 		listeOnglet[w]=std::pair<wxString,int>(f->OrigineImage()->nomOperation,nb);
-		wxString nom(_("Etape"));
+		wxString nom(_("Step"));
 		nom.Printf("%s %d : %s",nom,nb,f->OrigineImage()->nomOperation);
 		classeur->InsertPage(0,w,nom,nbEtape==1);
 		w->Refresh(true);
-		int id=f->OrigineImage()->indOp1;
+		int id=f->OrigineImage()->indOp1Fenetre;
 		if (id>=0)
 			f=((wxOsgApp *)osgApp)->Fenetre(id);
 		else 
@@ -87,18 +112,23 @@ while(f && f->OrigineImage()->indOp1>=0)
 	else 
 		f=NULL;
 	}
+SetSizerAndFit( topsizer );
 }
 
 wxWindow *FenetreAlgo::CreerOngletEtape(wxNotebook *classeur,int indOp)
 {
 wxWindow *page = new wxWindow(classeur,-1);
-Parametre *pOCV=&listeOp[indOp].first->pOCV;
+ParametreOperation *pOCV=listeOp[indOp].first;
 int nbParam=1;
 int ligne=50;
 int indOriCtrl=1+indOp*nbParamMax;
 new wxHyperlinkCtrl (page,indOriCtrl," OpenCV Documentation",pOCV->lienHtml,wxPoint(10,10),wxSize(400,20));
 new wxHyperlinkCtrl(page,indOriCtrl+1,"PDF Documentation",pOCV->refPDF,wxPoint(10,30),wxSize(400,20));
-std::map<std::string,DomaineParametre<cv::Size> >::iterator its;
+if (tailleMax.x<410)
+	tailleMax.x= 410;
+if (tailleMax.y<ligne)
+	tailleMax.y= ligne;
+std::map<std::string,DomaineParametreOp<cv::Size> >::iterator its;
 for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	{
 	wxString nombre;
@@ -125,8 +155,12 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 		
 	nbParam++;
 	ligne+=20;
+	if (tailleMax.x<p.x+s.x)
+		tailleMax.x= p.x+s.x;
+	if (tailleMax.y<p.y+s.y)
+		tailleMax.y= p.y+s.y;
 	}
-std::map<std::string,DomaineParametre<int> >::iterator iti;
+std::map<std::string,DomaineParametreOp<int> >::iterator iti;
 for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 	{
 	wxString nombre;
@@ -142,8 +176,12 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 	sp->SetIncrement(iti->second.pas); 
 	nbParam++;
 	ligne+=20;
+	if (tailleMax.x<p.x+s.x)
+		tailleMax.x= p.x+s.x;
+	if (tailleMax.y<p.y+s.y)
+		tailleMax.y= p.y+s.y;
 	}
-std::map<std::string,DomaineParametre<double> >::iterator itd;
+std::map<std::string,DomaineParametreOp<double> >::iterator itd;
 for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
 	{
 	wxString nombre;
@@ -157,8 +195,12 @@ for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
 	sp->SetIncrement(itd->second.pas); 
 	nbParam++;
 	ligne+=20;
+	if (tailleMax.x<p.x+s.x)
+		tailleMax.x= p.x+s.x;
+	if (tailleMax.y<p.y+s.y)
+		tailleMax.y= p.y+s.y;
 	}
-SetClientSize(250,ligne+20);
+page->SetClientSize(tailleMax+wxSize(20,40));
 return page;
 }
 
@@ -185,7 +227,7 @@ if (!osgApp)
 string nom;
 int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
-Parametre *pOCV=&listeOp[ind].first->pOCV;
+ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
 nom=st->GetLabel();
 if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
@@ -263,7 +305,7 @@ if (!osgApp)
 string nom;
 int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
-Parametre *pOCV=&listeOp[ind].first->pOCV;
+ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
 nom=st->GetLabel();
 if (pOCV->doubleParam.find(nom)!=pOCV->doubleParam.end())
@@ -309,7 +351,7 @@ if (!osgApp)
 string nom;
 int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
-Parametre *pOCV=&listeOp[ind].first->pOCV;
+ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
 nom=st->GetLabel();
 if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
@@ -409,7 +451,7 @@ for (int i=indEtape;i<nbEtape;i++)
 	}
 for (int i=indEtape;i<nbEtape;i++)
 	{
-	Parametre *pOCV=&listeOp[i].first->pOCV;
+	ParametreOperation *pOCV=listeOp[i].first;
 	wxString  nomOperation(listeOp[i].first->nomOperation);
 	app->DefOperateurImage(nomOperation);
 	int indFen1=app->RechercheFenetre(listeOp[i].first->op1);

@@ -55,7 +55,7 @@ return r;
 ImageInfoCV **OperateurConv(long nbOp,long nbL,long nbC)
 {
 ImageInfoCV 	**r;
-long		*d,i,j;
+long		i;
 float		s=0;
 int			nbLop=nbL,nbCop=nbC;
 int			indOp=0;

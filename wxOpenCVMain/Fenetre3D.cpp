@@ -30,7 +30,6 @@ cInfo3D->ActiveGeode(i);
 
 void Fenetre3D::DeplaceCurseur(int i,int j)
 {
-float	x,y,z;
 //parametrage->DefPositionCurseur(parametrage->IndCurseurActif(),x,y,z);
 //graphique->DeplaceCurseur(x,y,z);
 //MAJCurseur();

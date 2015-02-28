@@ -552,7 +552,6 @@ if (w.size()!=2)
 	return;
 Tableur *g=(Tableur *)w[0];
 ImageInfoCV xx;
-char status;
 double val;
 if (event.GetString().ToDouble(&val))
 	{
@@ -876,7 +875,6 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
     append_items.Add(item);
 	wxAuiToolBar* tb;
 	wxBitmap tb_bmp;
-	wxChoice* choice;
    // create some toolbars
 	enum
 		{

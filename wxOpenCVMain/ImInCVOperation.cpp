@@ -29,7 +29,7 @@ return indOpMorphologie;
  * @function Add
  * @brief Addition de deux images
  */
-ImageInfoCV 	*ImageInfoCV::Add(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::Add(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -41,7 +41,7 @@ return im;
  * @function Add
  * @brief Différence de deux images
  */
-ImageInfoCV 	*ImageInfoCV::Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -53,7 +53,7 @@ return im;
  * @function Prod
  * @brief Produit de deux images
  */
-ImageInfoCV 	*ImageInfoCV::Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -65,7 +65,7 @@ return im;
  * @function Prod
  * @brief Division de deux images
  */
-ImageInfoCV 	*ImageInfoCV::Div(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::Div(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -78,7 +78,7 @@ return im;
  * @function Erosion
  * @brief Erosion d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-ImageInfoCV 	*ImageInfoCV::Erosion(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::Erosion(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -93,7 +93,7 @@ return im;
  * @function Dilatation
  * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-ImageInfoCV 	*ImageInfoCV::Dilatation(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::Dilatation(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -104,7 +104,7 @@ else
 return im;
 }
 
-ImageInfoCV 	*ImageInfoCV::Ouverture(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::Ouverture(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -131,7 +131,7 @@ else
 return im;
 }
  
-ImageInfoCV 	*ImageInfoCV::Fermeture(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::Fermeture(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -157,7 +157,7 @@ else
 return im;
 }
 
-ImageInfoCV 	*ImageInfoCV::ChapeauHaut(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::ChapeauHaut(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -183,7 +183,7 @@ else
 return im;
 }
 
-ImageInfoCV 	*ImageInfoCV::ChapeauBas(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::ChapeauBas(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -209,7 +209,7 @@ else
 return im;
 }
 
-ImageInfoCV 	*ImageInfoCV::GradMorph(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::GradMorph(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -241,7 +241,7 @@ return im;
  * @function Convolution
  * @brief Convolution d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-ImageInfoCV 	*ImageInfoCV::Convolution(ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV 	*ImageInfoCV::Convolution(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -257,12 +257,12 @@ return im;
  * @function Dilatation
  * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-ImageInfoCV 	*ImageInfoCV::Laplacien(ImageInfoCV	*im1,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::Laplacien(ImageInfoCV	*im1,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::Laplacian( *im1, *im, typeResultat,pOCV.intParam["ksize"].valeur,
-	pOCV.doubleParam["scale"].valeur,pOCV.doubleParam["delta"].valeur,pOCV.intParam["borderType"].valeur );
+cv::Laplacian( *im1, *im, typeResultat,pOCV->intParam["ksize"].valeur,
+	pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
 return im;
 }
 
@@ -270,7 +270,7 @@ return im;
  * @function ScharrModule
  * @brief Module du gradient Scharr d'une image im1 
  */
-ImageInfoCV 	*ImageInfoCV::ScharrModule(ImageInfoCV	*im1,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::ScharrModule(ImageInfoCV	*im1,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 ImageInfoCV	imx ;
@@ -278,8 +278,8 @@ ImageInfoCV	imy;
 ImageInfoCV	imAbsx;
 ImageInfoCV	imAbsy;
 
-cv::Scharr( *im1, imx, pOCV.intParam["ddepth"].valeur,1,0,pOCV.doubleParam["scale"].valeur,pOCV.doubleParam["delta"].valeur,pOCV.intParam["borderType"].valeur );
-cv::Scharr( *im1, imy, pOCV.intParam["ddepth"].valeur,0,1,pOCV.doubleParam["scale"].valeur,pOCV.doubleParam["delta"].valeur,pOCV.intParam["borderType"].valeur );
+cv::Scharr( *im1, imx, pOCV->intParam["ddepth"].valeur,1,0,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
+cv::Scharr( *im1, imy, pOCV->intParam["ddepth"].valeur,0,1,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
 cv::convertScaleAbs( imx, imAbsx);
 cv::convertScaleAbs( imy, imAbsy);
 addWeighted( imAbsx, 0.5, imAbsy, 0.5, 0, *im );
@@ -291,11 +291,11 @@ return im;
  * @function ScharrX
  * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-ImageInfoCV 	*ImageInfoCV::ScharrX(ImageInfoCV	*im1,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::ScharrX(ImageInfoCV	*im1,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::Scharr( *im1, *im, pOCV.intParam["ddepth"].valeur,1,0,pOCV.doubleParam["scale"].valeur,pOCV.doubleParam["delta"].valeur,pOCV.intParam["borderType"].valeur );
+cv::Scharr( *im1, *im, pOCV->intParam["ddepth"].valeur,1,0,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
 return im;
 }
 
@@ -304,12 +304,12 @@ return im;
  * @function ScharrY
  * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-ImageInfoCV 	*ImageInfoCV::ScharrY(ImageInfoCV	*im1,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::ScharrY(ImageInfoCV	*im1,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::Scharr( *im1, *im, pOCV.intParam["ddepth"].valeur,0,1,
-	pOCV.doubleParam["scale"].valeur,pOCV.doubleParam["delta"].valeur,pOCV.intParam["borderType"].valeur );
+cv::Scharr( *im1, *im, pOCV->intParam["ddepth"].valeur,0,1,
+	pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
 return im;
 }
 
@@ -319,14 +319,14 @@ return im;
  * @function Canny
  * @brief filtrage de canny d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-ImageInfoCV 	*ImageInfoCV::Canny(ImageInfoCV	*imSrc,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::Canny(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
 if (imSrc->channels()==1)
 	{
-	cv::Canny(	*imSrc, *im, pOCV.doubleParam["threshold1"].valeur,
-				pOCV.doubleParam["threshold2"].valeur,pOCV.intParam["aperture_size"].valeur);
+	cv::Canny(	*imSrc, *im, pOCV->doubleParam["threshold1"].valeur,
+				pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
 	}
 else
 	{
@@ -335,8 +335,8 @@ else
 	cv::split( *imSrc, planCouleur );
 	for (int i=0;i<imSrc->channels();i++)
 		{
-		cv::Canny( planCouleur[i], d[i], pOCV.doubleParam["threshold1"].valeur,
-					pOCV.doubleParam["threshold2"].valeur,pOCV.intParam["aperture_size"].valeur);
+		cv::Canny( planCouleur[i], d[i], pOCV->doubleParam["threshold1"].valeur,
+					pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
 		}
 	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
 	delete []d;
@@ -348,13 +348,13 @@ return im;
  * @function Seuillage
  * @brief Seuillage d'une image imSrc 
  */
-ImageInfoCV 	*ImageInfoCV::SeuillageAdaptatif(ImageInfoCV	*imSrc,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::SeuillageAdaptatif(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 if (imSrc->channels()==1)
 	{
-	cv::adaptiveThreshold( *imSrc, *im, pOCV.doubleParam["maxValue"].valeur,pOCV.intParam["adaptiveMethod"].valeur,
-		pOCV.intParam["thresholdType"].valeur,pOCV.intParam["blockSize"].valeur,pOCV.doubleParam["C"].valeur);
+	cv::adaptiveThreshold( *imSrc, *im, pOCV->doubleParam["maxValue"].valeur,pOCV->intParam["adaptiveMethod"].valeur,
+		pOCV->intParam["thresholdType"].valeur,pOCV->intParam["blockSize"].valeur,pOCV->doubleParam["C"].valeur);
 	}
 else
 	{
@@ -363,8 +363,8 @@ else
 	cv::split( *imSrc, planCouleur );
 	for (int i=0;i<imSrc->channels();i++)
 		{
-	cv::adaptiveThreshold( planCouleur[i], d[i], pOCV.doubleParam["maxValue"].valeur,pOCV.intParam["adaptiveMethod"].valeur,
-		pOCV.intParam["thresholdType"].valeur,pOCV.intParam["blockSize"].valeur,pOCV.doubleParam["C"].valeur);
+	cv::adaptiveThreshold( planCouleur[i], d[i], pOCV->doubleParam["maxValue"].valeur,pOCV->intParam["adaptiveMethod"].valeur,
+		pOCV->intParam["thresholdType"].valeur,pOCV->intParam["blockSize"].valeur,pOCV->doubleParam["C"].valeur);
 		}
 	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
 	delete []d;
@@ -372,14 +372,14 @@ else
 return im;
 }
 
-ImageInfoCV 	*ImageInfoCV::Contour(ImageInfoCV	*imSrc,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::Contour(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
 {
 ImageInfoCV *im1=new ImageInfoCV;
 *(cv::Mat*)im1= imSrc->clone();
 std::vector<std::vector<cv::Point> > f;
 if (imSrc->channels()==1)
 	{
-	cv::findContours( *im1,  f,pOCV.intParam["mode"].valeur,pOCV.intParam["method"].valeur);	
+	cv::findContours( *im1,  f,pOCV->intParam["mode"].valeur,pOCV->intParam["method"].valeur);	
 	}
  else
 	{
@@ -398,18 +398,18 @@ void ImageInfoCV::Threshold( cv::InputArray _src, cv::OutputArray _dst, double t
 {
 }
 
-ImageInfoCV 	*ImageInfoCV::Seuillage(ImageInfoCV	*imSrc,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::Seuillage(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 if (imSrc->depth()==CV_16S)
 	{
-	pOCV.doubleParam["thresh"].maxi=32767; 
+	pOCV->doubleParam["thresh"].maxi=32767; 
 	}
 if (imSrc->channels()==1)
 	{
 	
-	threshold( *imSrc, *im, pOCV.doubleParam["thresh"].valeur,pOCV.doubleParam["maxval"].valeur,
-		pOCV.intParam["threshold_type"].valeur);
+	threshold( *imSrc, *im, pOCV->doubleParam["thresh"].valeur,pOCV->doubleParam["maxval"].valeur,
+		pOCV->intParam["threshold_type"].valeur);
 	}
 else
 	{
@@ -418,8 +418,8 @@ else
 	cv::split( *imSrc, planCouleur );
 	for (int i=0;i<imSrc->channels();i++)
 		{
-		cv::threshold(	planCouleur[i], d[i], pOCV.doubleParam["thresh"].valeur,
-						pOCV.doubleParam["maxval"].valeur,pOCV.intParam["threshold_type"].valeur);
+		cv::threshold(	planCouleur[i], d[i], pOCV->doubleParam["thresh"].valeur,
+						pOCV->doubleParam["maxval"].valeur,pOCV->intParam["threshold_type"].valeur);
 		}
 	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
 	delete []d;
@@ -427,33 +427,33 @@ else
 return im;
 
 }
-ImageInfoCV 	*ImageInfoCV::LissageMoyenne(ImageInfoCV	*imSrc,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::LissageMoyenne(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-cv::blur( *imSrc, *im, pOCV.sizeParam["ksize"].valeur,pOCV.pointParam["anchor"].valeur,pOCV.intParam["borderType"].valeur);
+cv::blur( *imSrc, *im, pOCV->sizeParam["ksize"].valeur,pOCV->pointParam["anchor"].valeur,pOCV->intParam["borderType"].valeur);
 
 return im;
 }
 
-ImageInfoCV 	*ImageInfoCV::LissageGaussien(ImageInfoCV	*imSrc,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::LissageGaussien(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-cv::GaussianBlur( *imSrc, *im, pOCV.sizeParam["ksize"].valeur,
-	pOCV.doubleParam["sigmaX"].valeur,pOCV.doubleParam["sigmaY"].valeur,
-	pOCV.intParam["borderType"].valeur);
+cv::GaussianBlur( *imSrc, *im, pOCV->sizeParam["ksize"].valeur,
+	pOCV->doubleParam["sigmaX"].valeur,pOCV->doubleParam["sigmaY"].valeur,
+	pOCV->intParam["borderType"].valeur);
 return im;
 }
 
-ImageInfoCV 	*ImageInfoCV::LissageMedian(ImageInfoCV	*imSrc,Parametre &pOCV)
+ImageInfoCV 	*ImageInfoCV::LissageMedian(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-cv::medianBlur( *imSrc, *im, pOCV.intParam["ksize"].valeur);
+cv::medianBlur( *imSrc, *im, pOCV->intParam["ksize"].valeur);
 
 return im;
 }
 
 
-ImageInfoCV 	*ImageInfoCV::FFT(ImageInfoCV	*im1,Parametre &paramOCV)
+ImageInfoCV 	*ImageInfoCV::FFT(ImageInfoCV	*im1,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 int m = cv::getOptimalDFTSize( im1->rows );
@@ -508,7 +508,7 @@ else
 return im;
 }
 
-ImageInfoCV 	*ImageInfoCV::IFFT(ImageInfoCV	*im1,Parametre &paramOCV)
+ImageInfoCV 	*ImageInfoCV::IFFT(ImageInfoCV	*im1,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 int m = cv::getOptimalDFTSize( im1->rows );
@@ -564,7 +564,7 @@ return im;
 }
 
 
-ImageInfoCV *ImageInfoCV::FusionPlan(int nbPlan,ImageInfoCV **ve,Parametre *paramOCV)
+ImageInfoCV *ImageInfoCV::FusionPlan(int nbPlan,ImageInfoCV **ve,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*result=new ImageInfoCV;
 std::vector<cv::Mat> listePlan;
@@ -580,7 +580,7 @@ cv::merge(listePlan,*result);
 return result;
 }
 
-ImageInfoCV **ImageInfoCV::SeparationPlan(ImageInfoCV *im1,Parametre &paramOCV)
+ImageInfoCV **ImageInfoCV::SeparationPlan(ImageInfoCV *im1,ParametreOperation *paramOCV)
 {
 ImageInfoCV	**result=new ImageInfoCV*[im1->channels()];
 std::vector<Mat> *planCouleurSrc=new std::vector<Mat>;
@@ -591,12 +591,12 @@ for (int i=0;i<im1->channels();i++)
 	result[i]=new ImageInfoCV;
 	cv::merge((const cv::Mat *)&(*planCouleurSrc)[i], 1, *result[i]);
 	}
-paramOCV.nbImageRes=im1->channels();
+paramOCV->nbImageRes=im1->channels();
 return(result);
 }
 
 
-ImageInfoCV *ImageInfoCV::ComposanteConnexe(ImageInfoCV *im1,Parametre &paramOCV)
+ImageInfoCV *ImageInfoCV::ComposanteConnexe(ImageInfoCV *im1,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 if (im1->channels()==1)
@@ -615,7 +615,7 @@ if (im1->channels()==1)
 			}
 		}
 
-	connectedComponentsWithStats(*im1, *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV.intParam["connectivity"].valeur, CV_32S);
+	connectedComponentsWithStats(*im1, *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV->intParam["connectivity"].valeur, CV_32S);
 	ImageInfoCV	imCtr ;
 	im->copyTo(imCtr);
 	findContours(imCtr, *(im->contours),*im->arbreContour, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
@@ -640,7 +640,7 @@ else
 	cv::split( *im1, planCouleur );
 	for (int i=0;i<im1->channels();i++)
 		{
-		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV.intParam["connectivity"].valeur, CV_32S);
+		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV->intParam["connectivity"].valeur, CV_32S);
 		ImageInfoCV	imCtr ;
 		d[i].copyTo(imCtr);
 		findContours(imCtr, im->contours[i],im->arbreContour[i], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
@@ -652,7 +652,7 @@ return im;
 }
 
 
-ImageInfoCV *ImageInfoCV::PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,Parametre *pOCV)
+ImageInfoCV *ImageInfoCV::PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
 
 {
 ImageInfoCV	*im =new ImageInfoCV;
@@ -663,7 +663,7 @@ watershed(*im1, *im);
 return im;
 }
 
-ImageInfoCV		*ImageInfoCV::DistanceDiscrete (ImageInfoCV *im1,Parametre &paramOCV)
+ImageInfoCV		*ImageInfoCV::DistanceDiscrete (ImageInfoCV *im1,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 if (im1->channels()==1)
@@ -687,13 +687,13 @@ return im;
 }
 
 
-ImageInfoCV		*ImageInfoCV::Voronoi (ImageInfoCV *imSrc,Parametre &paramOCV)
+ImageInfoCV		*ImageInfoCV::Voronoi (ImageInfoCV *imSrc,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 if (imSrc->channels()==1)
 	{
 
-	connectedComponentsWithStats(*imSrc, *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV.intParam["connectivity"].valeur, CV_32S);
+	connectedComponentsWithStats(*imSrc, *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV->intParam["connectivity"].valeur, CV_32S);
 	ImageInfoCV	imCtr ;
 	im->copyTo(imCtr);
 	findContours(imCtr, *(im->contours),*im->arbreContour, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
@@ -706,7 +706,7 @@ else
 	cv::split( *imSrc, planCouleur );
 	for (int i=0;i<imSrc->channels();i++)
 		{
-		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV.intParam["connectivity"].valeur, CV_32S);
+		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV->intParam["connectivity"].valeur, CV_32S);
 		ImageInfoCV	imCtr ;
 		d[i].copyTo(imCtr);
 		findContours(imCtr, im->contours[i],im->arbreContour[i], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));

@@ -35,7 +35,7 @@ FenetreSequenceOperation(FenetrePrincipale *frame, const wxString& title, const 
         /*!< Constructeur de la fenetre parametrage */
 ~FenetreSequenceOperation();
         /*!< destructeur de la fenetre parametrage */
-void InsererCtrlEtape(Operation *);
+void InsererCtrlEtape(ParametreOperation *);
         /*!< Création des Ctrl pour une étape de la séquence*/
 // Gestion des évènements
 void OnActivate(wxActivateEvent& event);
@@ -64,7 +64,7 @@ void DefOSGApp(void *w){osgApp=w;};
 void DefFenMere(FenetrePrincipale *f){fenMere =f;};
 		/*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
 void Executer(wxCommandEvent& event);/*!<Excute la séquence d'opération après modification des paramètres à partir de l'étape indEtape */
-void ExecuterSequence(std::vector <Operation> *sq);/*!<Excute la séquence d'opération après modification des paramètres à partir de l'étape indEtape */
+void ExecuterSequence(std::vector <ParametreOperation> *sq);/*!<Excute la séquence d'opération après modification des paramètres à partir de l'étape indEtape */
 public:
 };
 

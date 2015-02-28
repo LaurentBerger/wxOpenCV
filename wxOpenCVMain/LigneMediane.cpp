@@ -1,6 +1,6 @@
 #include "ImageInfo.h"
 
-ImageInfoCV		*ImageInfoCV::LigneMediane (ImageInfoCV *im1,Parametre &paramOCV)
+ImageInfoCV		*ImageInfoCV::LigneMediane (ImageInfoCV *im1,ParametreOperation *paramOCV)
 {
 
 if (depth()!=CV_32F && depth()!=CV_8U)
@@ -8,7 +8,6 @@ if (depth()!=CV_32F && depth()!=CV_8U)
 	ImageInfoCV	*imRes = new ImageInfoCV();
 	return imRes;
 	}
-long			i,j;
 
 ImageInfoCV	*imRes=new ImageInfoCV(rows,cols,CV_MAKETYPE(CV_32F,channels()));
 float *ptf;

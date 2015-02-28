@@ -32,7 +32,7 @@ class GlisserImage;
 #define SOURIS_STD 0
 #define SELECTION_EN_COURS 1
 
-
+#ifdef __TOTO__
 /*! \class Operation
    * \brief classe permettant de mémoriser une opération sur une image
    *
@@ -51,13 +51,14 @@ long indOp2;	/*!< Indice de la fenêtre contenant l'opérande 2 */
 long indOp3;	/*!< Indice de la fenêtre contenant l'opérande 3 */
 long indRes;	/*!< Indice de la fenêtre contenant le résultat */
 long indEtape;	/*!< Indice de l'opération dans la séquence */
-Parametre pOCV;	/*!< parametre de l'opérateur */
+ParametreOperation pOCV;	/*!< parametre de l'opérateur */
 int	idOperation;/*!< identificateur de l'opération unique dans wxOpenCv.ini*/	
 Operation()
 {
 op1=NULL;op2=NULL;indOp1=-1;indOp2=-1;indRes=-1;idOperation=-1;indEtape=-1;
 }
 };
+#endif
 
 
 
@@ -332,7 +333,7 @@ wxString			nomImageBiais;/*!< Nom de l'image du biais associé à cette image*/
 wxString			nomImageTache;/*!< Nom de l'image des tâches sur l'optique du capteur*/
 wxString			nomImageQuadrique;/*!< Nom de l'image du fond (une fois les tâches enlevées */
 
-Operation			origineImage;
+ParametreOperation	origineImage;
 //int					idFenetreOp1Pre; /*!< Pour image issue d'une opération : identifiant de operande1*/	
 //int					idFenetreOp2Pre; /*!< Pour image issue d'une opération : identifiant de operande2*/
 //wxString			nomOperationPre;	 /*!< Pour image issue d'une opération : nom de l'opération */
@@ -473,7 +474,7 @@ int IdFenetre(){return idFenetre;};
      *  \return identifiant unique de l'objet instancié
      *
      */
-int IdFenetreOp1pre(){return origineImage.indOp1;};
+int IdFenetreOp1pre(){return origineImage.indOp1Fenetre;};
     /*!
      *  \brief fonction IdFenetreOp1pre
      *  identificateur de la fenetre contenant l'image operateur1.
@@ -488,7 +489,7 @@ ImageInfoCV *ImageOp2pre();
      *  \brief fonction ImageOp2pre
      *  Image actuelle =im1 (OP) im2. Retourne im2 ou null si image non valide.
      */
-Operation *OrigineImage(){return &origineImage;};
+ParametreOperation *OrigineImage(){return &origineImage;};
     /*!
      *  \brief fonction OrigineImage
      *  caractéristiques de l'opération.
@@ -574,7 +575,7 @@ void	SourisQuitterFen(wxMouseEvent &event);
 
 // Gestion de l'image par rapport à la fenêtre
 void AssosierImage(ImageInfoCV *);	/*< Associer une image à une fenêtre*/
-void DefHistorique(int ind1=-1,int ind2=-1,int ind3=-1,int idOpe=-1,int numE=-1 ,wxString nomF=wxEmptyString,Parametre *pOCV=NULL); /*< Associer origine à une image */
+void DefHistorique(int ind1=-1,int ind2=-1,int ind3=-1,int idOpe=-1,int numE=-1 ,wxString nomF=wxEmptyString,ParametreOperation *pOCV=NULL); /*< Associer origine à une image */
     /*!
      *  \brief Fonction DefHistorique
      *
@@ -588,7 +589,7 @@ void DefHistorique(int ind1=-1,int ind2=-1,int ind3=-1,int idOpe=-1,int numE=-1 
 	 *  \param pOCV : parametre de l'opération NULL s'il n'existe pas
      */
 // Accès aux membres privés
-Parametre *ParamOCV(){return &origineImage.pOCV;}
+ParametreOperation *ParamOCV(){return &origineImage;}
     /*!
      *  \brief Fonction ParamOCV
      *
