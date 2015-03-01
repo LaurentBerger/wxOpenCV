@@ -49,6 +49,8 @@ void  OnSpinMoins(wxSpinEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 void  OnSpinPlus(wxSpinEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
+void FenetreAlgo::SauverSequence(wxCommandEvent &evt);
+	/*!< Sauvegarde des étapes comme séquence */
 
 void OnTextValider(wxCommandEvent &w);
 void OnKeyDown(wxKeyEvent &);
@@ -62,7 +64,6 @@ void DefFenMere(FenetrePrincipale *f){fenMere =f;};
 		/*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
 void ExecuterOperation(int indEtape);/*!<Excute l'opération après modification des paramètres à partir de l'étape indEtape */
 public:
-    DECLARE_EVENT_TABLE()
 };
 
 #endif

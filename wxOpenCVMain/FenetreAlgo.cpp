@@ -17,17 +17,14 @@ fenAlgo->Refresh(true);
 }
 
 
-BEGIN_EVENT_TABLE(FenetreAlgo, wxFrame)
-    EVT_CLOSE(FenetreAlgo::OnClose)
-//    EVT_SPINCTRL(-1,FenetreAlgo::OnSpinEntier) 
-    EVT_SPINCTRLDOUBLE(-1,FenetreAlgo::OnSpinReel) 
 
-END_EVENT_TABLE()
 
+#define ID_SAUVER_SEQ 1000
+#define ID_NOM_SEQUENCE 1001
  
 FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size,wxOsgApp *osg, long style)
-     : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
+     : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX  | wxCAPTION )
 {
 
 /*
@@ -61,12 +58,7 @@ ParametreOperation *pOCV=frame->ParamOCV();
 fenMere= frame;
 osgApp=osg;
 
-wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-classeur = new wxNotebook(this, wxID_ANY,wxDefaultPosition,wxDefaultSize);
-topsizer->Add( classeur, 1, wxGROW|wxEXPAND  );
-wxButton *button = new wxButton( this, wxID_OK, _("Save all step as Macro") );
-topsizer->Add( button, 0, wxALL , 10 );
-Show(true);
+classeur = new wxNotebook(this, wxID_ANY);
 FenetrePrincipale *f=fenMere;
 nbEtape=0;
 nbParamMax=0;
@@ -101,7 +93,6 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
 		wxString nom(_("Step"));
 		nom.Printf("%s %d : %s",nom,nb,f->OrigineImage()->nomOperation);
 		classeur->InsertPage(0,w,nom,nbEtape==1);
-		w->Refresh(true);
 		int id=f->OrigineImage()->indOp1Fenetre;
 		if (id>=0)
 			f=((wxOsgApp *)osgApp)->Fenetre(id);
@@ -112,8 +103,62 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
 	else 
 		f=NULL;
 	}
+wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
+topsizer->Add( classeur, 1, wxGROW|wxEXPAND,10  );
+wxBoxSizer *partieBasse=new wxBoxSizer(wxHORIZONTAL);
+panneau=new wxPanel(this, wxID_ANY);
+wxColour fond(*wxLIGHT_GREY);
+fond.Set(fond.Red(),255,fond.Blue());
+panneau->SetBackgroundColour(fond);
+topsizer->Add( panneau, 1, wxGROW|wxEXPAND,10  );
+
+wxButton *button = new wxButton( panneau, ID_SAUVER_SEQ, _("Save all step as Macro")  );
+wxStaticText *st = new wxStaticText( panneau, -1, _("         Name ")  );
+wxString nomMacro;
+nomMacro.Printf("Macro %d",osg->NumSeqOpe());
+wxTextCtrl *caseNomMacro = new wxTextCtrl( panneau, ID_NOM_SEQUENCE, nomMacro);
+partieBasse->Add(button,0, wxALIGN_CENTER_VERTICAL|wxALL);
+partieBasse->Add(st,0,wxALIGN_CENTER_VERTICAL| wxALL);
+partieBasse->Add(caseNomMacro,0, wxALIGN_CENTER_VERTICAL|wxALL);
+panneau->SetSizer(partieBasse);
+Bind(wxEVT_COMMAND_BUTTON_CLICKED,&FenetreAlgo::SauverSequence,this,ID_SAUVER_SEQ);
+Bind(wxEVT_SPINCTRLDOUBLE,&FenetreAlgo::OnSpinReel,this);
 SetSizerAndFit( topsizer );
+Show(true);
 }
+
+void FenetreAlgo::SauverSequence(wxCommandEvent &evt)
+{
+if (osgApp==NULL || fenMere==NULL)
+	return;
+FenetrePrincipale *f=fenMere;
+int nb=nbEtape-1;
+while(f && f->OrigineImage()->indOp1Fenetre>=0)
+	{
+	if (f->OrigineImage())
+		{
+		listeOp[nb]=std::pair< ParametreOperation*,int>(f->OrigineImage(),f->IdFenetre()) ;
+		listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
+		listeOp[nb].first->indEtape=nb;
+		wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
+		listeOp[nb].first->nomSequence=w->GetValue();
+		ParametreOperation p;
+		p=*(listeOp[nb].first);
+		((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+		int id=f->OrigineImage()->indOp1Fenetre;
+		if (id>=0)
+			f=((wxOsgApp *)osgApp)->Fenetre(id);
+		else 
+			f=NULL;
+		nb--;
+		}
+	else 
+		f=NULL;
+	}
+
+}
+
+
 
 wxWindow *FenetreAlgo::CreerOngletEtape(wxNotebook *classeur,int indOp)
 {
@@ -200,7 +245,7 @@ for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
 	if (tailleMax.y<p.y+s.y)
 		tailleMax.y= p.y+s.y;
 	}
-page->SetClientSize(tailleMax+wxSize(20,40));
+//page->SetClientSize(tailleMax+wxSize(20,40));
 return page;
 }
 

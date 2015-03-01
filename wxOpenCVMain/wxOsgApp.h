@@ -42,7 +42,7 @@ wxFileConfig *configApp;					/*!< Fichier de configuration de l'application */
 
 std::vector<ParametreOperation> listeOperation;		/*<! Liste des opérations individuelles */
 std::map <int,std::vector <ParametreOperation > > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
-int	numOpFaite;											/*!< Nombre d'opération faites ou sauvgardées dans le fichier INI */
+int	numOpFaite;								/*!< Nombre d'opération faites ou sauvgardées dans le fichier INI */
 int numSeqOpe;								/*!< Nombre de séquence d'opérations faites ou sauvgardées dans le fichier INI */
 
 char	utilisateurAbsent;
@@ -128,6 +128,7 @@ int IndOp1(){return pOCV.indOp1Fenetre;};
 int IndOp2(){return pOCV.indOp2Fenetre;};
 int IndOp3(){return pOCV.indOp3Fenetre;};
 int NbOperande(){return pOCV.nbOperande;};
+int NumSeqOpe(int *x=NULL){if (x!=NULL) numSeqOpe=*x;return numSeqOpe;};
 void AnnuleOp();
 std::map <int,std::vector <ParametreOperation > >  *TabSeqOperation(){return &tabOperation;}
 ImageInfoCV **ExecuterOperation(ParametreOperation * = NULL);
@@ -185,6 +186,13 @@ void	SauverFichierConfig(wxString chemin,wxString cle, double v);
      *  \param chemin : chemin de la cle
      *  \param cle : nom d'une cle
      *  \param v : valeur de la cle
+	 */
+void SauverOperationFichierConfig(ParametreOperation &v);
+   /*!
+     *  \brief Fonction SauverOperationFichierConfig
+     *
+     *  Sauvegarde d'un objet ParametreOpération dans le fichier de configuration
+     *  \param v : objet
 	 */
 
 void	LectureFichierConfig();

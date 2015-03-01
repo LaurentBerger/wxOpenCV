@@ -333,13 +333,17 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		return ;
 		}
 	if (im==NULL)
-		app->DefOperande1(fenMere->ImAcq(),indFen1);
+		{
+		pOCV.op1=fenMere->ImAcq();
+		pOCV.indOp1Fenetre=indFen1;
+		}
 	else
 		{
 		if (imTmp)
 			delete imTmp;
 		imTmp=im[0];
-		app->DefOperande1(im[0],-1);
+		pOCV.op1=im[0];
+		pOCV.indOp1Fenetre=-1;
 		}
 
 	int indFen2=it->indOp2Fenetre;

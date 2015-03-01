@@ -2288,64 +2288,6 @@ if (ind1!=-1)
 		origineImage.op3 = osgApp->Fenetre(ind3)->ImAcq();
 	origineImage.nomOperation=nomF;
 	}
-/*
-if (idFenetre>=0)
-	{
-	wxString param;
-	wxString chemin;
-	wxString chaine;
-	origineImage.indRes=idFenetre;
-	chemin.Printf("/operateur/%d/",origineImage.idOperation);
-	osgApp->SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
-	chemin.Printf("/operateur/%d/%d/",origineImage.idOperation,origineImage.indEtape);
-	osgApp->SauverFichierConfig(chemin,"op",origineImage.nomOperation);
-	osgApp->SauverFichierConfig(chemin,"op1",(long)origineImage.indOp1Fenetre);
-	osgApp->SauverFichierConfig(chemin,"op2",(long)origineImage.indOp2Fenetre);
-	osgApp->SauverFichierConfig(chemin,"res",(long)origineImage.indRes);
-	osgApp->SauverFichierConfig(chemin,"indEtape",(long)origineImage.indEtape);
-	osgApp->SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
-	std::map<std::string,DomaineParametreOp<int> >::iterator iti;
-	int nb=0;
-	for (iti=origineImage.intParam.begin();iti!=origineImage.intParam.end();iti++)
-		{
-		chemin.Printf("/operateur/%d/%d/paramEntier/%d",origineImage.idOperation,origineImage.indEtape,nb);
-		osgApp->SauverFichierConfig(chemin,"nom",iti->first);
-		osgApp->SauverFichierConfig(chemin,"valeur",(long)iti->second.valeur);
-		osgApp->SauverFichierConfig(chemin,"minVal",(long)iti->second.mini);
-		osgApp->SauverFichierConfig(chemin,"maxVal",(long)iti->second.maxi);
-		osgApp->SauverFichierConfig(chemin,"pasVal",(long)iti->second.pas);
-		nb++;
-		}
-	nb=0;
-	std::map<std::string,DomaineParametreOp<double> >::iterator itd;
-	for (itd=origineImage.doubleParam.begin();itd!=origineImage.doubleParam.end();itd++)
-		{
-		chemin.Printf("/operateur/%d/%d/paramDouble/%d",origineImage.idOperation,origineImage.indEtape,nb);
-		osgApp->SauverFichierConfig(chemin,"nom",itd->first);
-		osgApp->SauverFichierConfig(chemin,"valeur",itd->second.valeur);
-		osgApp->SauverFichierConfig(chemin,"minVal",(long)itd->second.mini);
-		osgApp->SauverFichierConfig(chemin,"maxVal",(long)itd->second.maxi);
-		osgApp->SauverFichierConfig(chemin,"pasVal",(long)itd->second.pas);
-		nb++;
-		}
-	nb=0;
-	std::map<std::string,DomaineParametreOp<cv::Size> >::iterator its;
-	for (its=origineImage.sizeParam.begin();its!=origineImage.sizeParam.end();its++)
-		{
-		chemin.Printf("/operateur/%d/%d/paramSize/%d",origineImage.idOperation,origineImage.indEtape,nb);
-		osgApp->SauverFichierConfig(chemin,"nom",its->first);
-		osgApp->SauverFichierConfig(chemin,"largeur",(long)its->second.valeur.width);
-		osgApp->SauverFichierConfig(chemin,"hauteur",(long)its->second.valeur.height);
-		osgApp->SauverFichierConfig(chemin,"larMin",(long)its->second.mini.width);
-		osgApp->SauverFichierConfig(chemin,"hauMin",(long)its->second.mini.height);
-		osgApp->SauverFichierConfig(chemin,"larMax",(long)its->second.maxi.width);
-		osgApp->SauverFichierConfig(chemin,"hauMax",(long)its->second.maxi.height);
-		osgApp->SauverFichierConfig(chemin,"larPas",(long)its->second.pas.width);
-		osgApp->SauverFichierConfig(chemin,"hauPas",(long)its->second.pas.height);
-		nb++;
-		}
-	}
-*/
 }
 
 wxMenu *FenetrePrincipale::CreateMenuPalette(wxString *title)
@@ -3119,10 +3061,11 @@ while ( bCont )
 // Cette séquence est composée d'opérations
 	opValide=true;
 // Une opération est composée d'un nom et de deux opérateurs
-	if(!configApp->Read(wxString("idOperation"),&listeOperation[nbOperation].idOperation))
+	if(!configApp->Read("idOperation",&listeOperation[nbOperation].idOperation))
 		{
 		opValide=false;
 		}
+	configApp->Read("nomSequence",&listeOperation[nbOperation].nomSequence);
 	wxString	cleIndEtape;
 	bool bSeqOp;
 	bSeqOp = configApp->GetFirstGroup(cleIndEtape, dummy);
@@ -3289,7 +3232,10 @@ while ( bCont )
 
 	tabOperation[listeOperation[nbOperation-1].idOperation].resize(nbEtape);
 	for (int i=0;i<nbEtape;i++)
+		{
+		listeOperation[nbOperation-nbEtape+i].InitPtrFonction();
 		tabOperation[listeOperation[nbOperation-1].idOperation][i]=listeOperation[nbOperation-nbEtape+i];
+		}
 		
 	configApp->SetPath(cheminSeq);
 	str=tmp1;
@@ -3338,3 +3284,60 @@ configApp->SetPath(s);
 
 
 void	wxOsgApp::SauverConfiguration(){listeFenetre[indFenetre]->fPrin->SauveDerniereConfig();};
+
+void wxOsgApp::SauverOperationFichierConfig(ParametreOperation &origineImage)
+{
+wxString param;
+wxString chemin;
+wxString chaine;
+chemin.Printf("/operateur/%d/",origineImage.idOperation);
+SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
+chemin.Printf("/operateur/%d/%d/",origineImage.idOperation,origineImage.indEtape);
+SauverFichierConfig(chemin,"op",origineImage.nomOperation);
+SauverFichierConfig(chemin,"op1",(long)origineImage.indOp1Fenetre);
+SauverFichierConfig(chemin,"op2",(long)origineImage.indOp2Fenetre);
+SauverFichierConfig(chemin,"res",(long)origineImage.indRes);
+SauverFichierConfig(chemin,"indEtape",(long)origineImage.indEtape);
+SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
+SauverFichierConfig(chemin,"nomSequence",origineImage.nomSequence);
+std::map<std::string,DomaineParametreOp<int> >::iterator iti;
+int nb=0;
+for (iti=origineImage.intParam.begin();iti!=origineImage.intParam.end();iti++)
+	{
+	chemin.Printf("/operateur/%d/%d/paramEntier/%d",origineImage.idOperation,origineImage.indEtape,nb);
+	SauverFichierConfig(chemin,"nom",iti->first);
+	SauverFichierConfig(chemin,"valeur",(long)iti->second.valeur);
+	SauverFichierConfig(chemin,"minVal",(long)iti->second.mini);
+	SauverFichierConfig(chemin,"maxVal",(long)iti->second.maxi);
+	SauverFichierConfig(chemin,"pasVal",(long)iti->second.pas);
+	nb++;
+	}
+nb=0;
+std::map<std::string,DomaineParametreOp<double> >::iterator itd;
+for (itd=origineImage.doubleParam.begin();itd!=origineImage.doubleParam.end();itd++)
+	{
+	chemin.Printf("/operateur/%d/%d/paramDouble/%d",origineImage.idOperation,origineImage.indEtape,nb);
+	SauverFichierConfig(chemin,"nom",itd->first);
+	SauverFichierConfig(chemin,"valeur",itd->second.valeur);
+	SauverFichierConfig(chemin,"minVal",(long)itd->second.mini);
+	SauverFichierConfig(chemin,"maxVal",(long)itd->second.maxi);
+	SauverFichierConfig(chemin,"pasVal",(long)itd->second.pas);
+	nb++;
+	}
+nb=0;
+std::map<std::string,DomaineParametreOp<cv::Size> >::iterator its;
+for (its=origineImage.sizeParam.begin();its!=origineImage.sizeParam.end();its++)
+	{
+	chemin.Printf("/operateur/%d/%d/paramSize/%d",origineImage.idOperation,origineImage.indEtape,nb);
+	SauverFichierConfig(chemin,"nom",its->first);
+	SauverFichierConfig(chemin,"largeur",(long)its->second.valeur.width);
+	SauverFichierConfig(chemin,"hauteur",(long)its->second.valeur.height);
+	SauverFichierConfig(chemin,"larMin",(long)its->second.mini.width);
+	SauverFichierConfig(chemin,"hauMin",(long)its->second.mini.height);
+	SauverFichierConfig(chemin,"larMax",(long)its->second.maxi.width);
+	SauverFichierConfig(chemin,"hauMax",(long)its->second.maxi.height);
+	SauverFichierConfig(chemin,"larPas",(long)its->second.pas.width);
+	SauverFichierConfig(chemin,"hauPas",(long)its->second.pas.height);
+	nb++;
+	}
+}
