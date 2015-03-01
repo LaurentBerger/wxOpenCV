@@ -35,6 +35,9 @@ DomaineParametreOp():valeur(TypeValeur()),mini(TypeValeur()),maxi(TypeValeur()),
    */
 
 class ParametreOperation {
+void InitParamType();
+
+
 public :
 wxString	nomSequence;
 wxString	nomOperation;
@@ -69,6 +72,8 @@ ImageInfoCV*  (ImageInfoCV::*opBinaireSelec)(ImageInfoCV *,ImageInfoCV *,Paramet
 ImageInfoCV*  (ImageInfoCV::*opUnaireSelec)(ImageInfoCV *,ParametreOperation *) ;
 // Surjection (plusieurs résultats   avec parametre
 ImageInfoCV**  (ImageInfoCV::*opSurjecUnaire)(ImageInfoCV *,ParametreOperation *) ;
+
+static std::map<wxString,std::map<wxString,int> > listeParam;
 
 
 ParametreOperation(string s);	

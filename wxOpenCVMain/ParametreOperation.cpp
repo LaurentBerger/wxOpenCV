@@ -1,167 +1,48 @@
 #include "ParametreOperation.h"
 #include "ImageInfo.h"
+#include <map>
+#include <wx/translation.h>
 
-bool ParametreOperation::InitPtrFonction()
+std::map<wxString,std::map<wxString,int> > ParametreOperation::listeParam;
+
+
+void ParametreOperation::InitParamType()
 {
-wxString s(nomOperation);
-if (s=="PartageEaux")
-	{
-	opBinaireSelec = &ImageInfoCV::PartageEaux;
-	return true;
-	}
-if (s=="SeparationPlan")
-	{
-	opSurjecUnaire = &ImageInfoCV::SeparationPlan;
-	return true;
-	}
-if (s=="FusionPlan")
-	{
-	opNaireSelec = &ImageInfoCV::FusionPlan;
-	return true;
-	}
-if (s=="Addition")
-	{
-	opBinaireSelec = &ImageInfoCV::Add;
-	return true;
-	}
-if (s=="Soustraction")
-	{
-	opBinaireSelec = &ImageInfoCV::Sub;
-	return true;
-	}
-if (s=="Multiplication")
-	{
-	opBinaireSelec = &ImageInfoCV::Mul;
-	return true;
-	}
-if (s=="Division")
-	{
-	opBinaireSelec = &ImageInfoCV::Div;
-	return true;
-	}
-if (s=="Convolution")
-	{
-	opBinaireSelec = &ImageInfoCV::Convolution;
-	return true;
-	}
-if (s=="Dilatation")
-	{
-	opBinaireSelec = &ImageInfoCV::Dilatation;
-	return true;
-	}
-if (s=="Erosion")
-	{
-	opBinaireSelec = &ImageInfoCV::Erosion;
-	return true;
-	}
-if (s=="Ouverture")
-	{
-	opBinaireSelec = &ImageInfoCV::Ouverture;
-	return true;
-	}
-if (s=="Fermeture")
-	{
-	opBinaireSelec = &ImageInfoCV::Fermeture;
-	return true;
-	}
-if (s=="ChapeauHaut")
-	{
-	opBinaireSelec = &ImageInfoCV::ChapeauHaut;
-	return true;
-	}
-if (s=="ChapeauBas")
-	{
-	opBinaireSelec = &ImageInfoCV::ChapeauBas;
-	return true;
-	}
-if (s=="GradMorph")
-	{
-	opBinaireSelec = &ImageInfoCV::GradMorph;
-	return true;
-	}
-if (s=="Scharr_mod")
-	{
-	opUnaireSelec = &ImageInfoCV::ScharrModule;
-	return true;
-	}
-if (s=="Scharr_x")
-	{
-	opUnaireSelec = &ImageInfoCV::ScharrX;
-	return true;
-	}
-if (s=="Scharr_y")
-	{
-	opUnaireSelec = &ImageInfoCV::ScharrY;
-	return true;
-	}
-if (s=="Laplacien")
-	{
-	opUnaireSelec = &ImageInfoCV::Laplacien;
-	return true;
-	}
-if (s=="Canny")
-	{
-	opUnaireSelec = &ImageInfoCV::Canny;
-	return true;
-	}
-if (s=="Contour")
-	{
-	opUnaireSelec = &ImageInfoCV::Contour;
-	return true;
-	}
-if (s=="FFT")
-	{
-	opUnaireSelec = &ImageInfoCV::FFT;
-	return true;
-	}
-if (s=="IFFT")
-	{
-	opUnaireSelec = &ImageInfoCV::IFFT;
-	return true;
-	}
-if (s=="Seuillage")
-	{
-	opUnaireSelec = &ImageInfoCV::Seuillage;
-	return true;
-	}
-if (s=="AdaptatifSeuillage")
-	{
-	opUnaireSelec = &ImageInfoCV::SeuillageAdaptatif;
-	return true;
-	}
-if (s=="LissageMedian")
-	{
-	opUnaireSelec = &ImageInfoCV::LissageMedian;
-	return true;
-	}
-if (s=="LissageMoyenneur")
-	{
-	opUnaireSelec = &ImageInfoCV::LissageMoyenne;
-	return true;
-	}
-if (s=="LissageGaussien")
-	{
-	opUnaireSelec = &ImageInfoCV::LissageGaussien;
-	return true;
-	}
-if (s=="ComposanteConnexe")
-	{
-	opUnaireSelec = &ImageInfoCV::ComposanteConnexe;
-	return true;
-	}
-if (s=="DistanceDiscrete")
-	{
-	opUnaireSelec = &ImageInfoCV::DistanceDiscrete;
-	return true;
-	}
-if (s=="LigneMediane")
-	{
-	opUnaireSelec = &ImageInfoCV::LigneMediane;
-	return true;
-	}
-return false;
-}
 
+listeParam["connectivity"].insert(std::pair<wxString,int>(_("4-connex"),4));
+listeParam["connectivity"].insert(std::pair<wxString,int>(_("8-connex"),8));
+
+listeParam["adaptiveMethod"].insert(std::pair<wxString,int>(_("threshold  mean of neighbourhood"),cv::ADAPTIVE_THRESH_MEAN_C ));
+listeParam["adaptiveMethod"].insert(std::pair<wxString,int>(_("threshold weighted sum of neighbourhood"),cv::ADAPTIVE_THRESH_GAUSSIAN_C));
+
+listeParam["threshold_type"].insert(std::pair<wxString,int>(_("A(x,y)>thresh maxValue else 0"),cv::THRESH_BINARY));
+listeParam["threshold_type"].insert(std::pair<wxString,int>(_("A(x,y)<thresh maxValue else 0"),cv::THRESH_BINARY_INV));
+listeParam["threshold_type"].insert(std::pair<wxString,int>(_("A(x,y)>thresh thresh else A(x,y)"),cv::THRESH_TRUNC));
+listeParam["threshold_type"].insert(std::pair<wxString,int>(_("A(x,y)>threshold 0 else A(x,y)"),cv::THRESH_TOZERO_INV));
+listeParam["threshold_type"].insert(std::pair<wxString,int>(_("A(x,y)<threshold 0 else A(x,y)"),cv::THRESH_TOZERO));
+
+listeParam["borderType"].insert(std::pair<wxString,int>(_("Replicate border aa|abcde|ee"),cv::BORDER_REPLICATE));
+listeParam["borderType"].insert(std::pair<wxString,int>(_("Reflect border   ba|abcde|ed"),cv::BORDER_REFLECT));
+listeParam["borderType"].insert(std::pair<wxString,int>(_("Reflect border   cb|abcde|dc"),cv::BORDER_REFLECT_101));
+listeParam["borderType"].insert(std::pair<wxString,int>(_("Reflect periodic de|abcde|ab"),cv::BORDER_WRAP));
+listeParam["borderType"].insert(std::pair<wxString,int>(_("Constant border  zz|abcde|zz"),cv::BORDER_CONSTANT));
+
+listeParam["ddepth"].insert(std::pair<wxString,int>(_("Same as input"),-1));
+listeParam["ddepth"].insert(std::pair<wxString,int>(_("16 signed bit"),CV_16S));
+listeParam["ddepth"].insert(std::pair<wxString,int>(_("32 signed bit"),CV_32S));
+listeParam["ddepth"].insert(std::pair<wxString,int>("float",CV_32F));
+listeParam["ddepth"].insert(std::pair<wxString,int>("double",CV_64F));
+
+listeParam["distance_type"].insert(std::pair<wxString,int>("|x1-x2| + |y1-y2|",cv::DIST_L1));
+listeParam["distance_type"].insert(std::pair<wxString,int>(_("euclidean distance"),cv::DIST_L2));
+listeParam["distance_type"].insert(std::pair<wxString,int>(_("max(|x1-x2|,|y1-y2|)"),cv::DIST_C));
+listeParam["distance_type"].insert(std::pair<wxString,int>(_("L1-L2 metric: distance = 2(sqrt(1+x*x/2) - 1))"),cv::DIST_L12));
+listeParam["distance_type"].insert(std::pair<wxString,int>(_("distance = c^2(|x|/c-log(1+|x|/c)), c = 1.3998"),cv::DIST_FAIR));
+listeParam["distance_type"].insert(std::pair<wxString,int>(_("distance = c^2/2(1-exp(-(x/c)^2)), c = 2.9846"),cv::DIST_WELSCH));
+listeParam["distance_type"].insert(std::pair<wxString,int>(_("distance = |x|<c ? x^2/2 : c(|x|-c/2), c=1.345"),cv::DIST_HUBER));
+
+
+}
 
 bool ParametreOperation::InitOperation(string s)
 {
@@ -511,3 +392,163 @@ InitOperation(s);
 }
 
 
+bool ParametreOperation::InitPtrFonction()
+{
+wxString s(nomOperation);
+if (s=="PartageEaux")
+	{
+	opBinaireSelec = &ImageInfoCV::PartageEaux;
+	return true;
+	}
+if (s=="SeparationPlan")
+	{
+	opSurjecUnaire = &ImageInfoCV::SeparationPlan;
+	return true;
+	}
+if (s=="FusionPlan")
+	{
+	opNaireSelec = &ImageInfoCV::FusionPlan;
+	return true;
+	}
+if (s=="Addition")
+	{
+	opBinaireSelec = &ImageInfoCV::Add;
+	return true;
+	}
+if (s=="Soustraction")
+	{
+	opBinaireSelec = &ImageInfoCV::Sub;
+	return true;
+	}
+if (s=="Multiplication")
+	{
+	opBinaireSelec = &ImageInfoCV::Mul;
+	return true;
+	}
+if (s=="Division")
+	{
+	opBinaireSelec = &ImageInfoCV::Div;
+	return true;
+	}
+if (s=="Convolution")
+	{
+	opBinaireSelec = &ImageInfoCV::Convolution;
+	return true;
+	}
+if (s=="Dilatation")
+	{
+	opBinaireSelec = &ImageInfoCV::Dilatation;
+	return true;
+	}
+if (s=="Erosion")
+	{
+	opBinaireSelec = &ImageInfoCV::Erosion;
+	return true;
+	}
+if (s=="Ouverture")
+	{
+	opBinaireSelec = &ImageInfoCV::Ouverture;
+	return true;
+	}
+if (s=="Fermeture")
+	{
+	opBinaireSelec = &ImageInfoCV::Fermeture;
+	return true;
+	}
+if (s=="ChapeauHaut")
+	{
+	opBinaireSelec = &ImageInfoCV::ChapeauHaut;
+	return true;
+	}
+if (s=="ChapeauBas")
+	{
+	opBinaireSelec = &ImageInfoCV::ChapeauBas;
+	return true;
+	}
+if (s=="GradMorph")
+	{
+	opBinaireSelec = &ImageInfoCV::GradMorph;
+	return true;
+	}
+if (s=="Scharr_mod")
+	{
+	opUnaireSelec = &ImageInfoCV::ScharrModule;
+	return true;
+	}
+if (s=="Scharr_x")
+	{
+	opUnaireSelec = &ImageInfoCV::ScharrX;
+	return true;
+	}
+if (s=="Scharr_y")
+	{
+	opUnaireSelec = &ImageInfoCV::ScharrY;
+	return true;
+	}
+if (s=="Laplacien")
+	{
+	opUnaireSelec = &ImageInfoCV::Laplacien;
+	return true;
+	}
+if (s=="Canny")
+	{
+	opUnaireSelec = &ImageInfoCV::Canny;
+	return true;
+	}
+if (s=="Contour")
+	{
+	opUnaireSelec = &ImageInfoCV::Contour;
+	return true;
+	}
+if (s=="FFT")
+	{
+	opUnaireSelec = &ImageInfoCV::FFT;
+	return true;
+	}
+if (s=="IFFT")
+	{
+	opUnaireSelec = &ImageInfoCV::IFFT;
+	return true;
+	}
+if (s=="Seuillage")
+	{
+	opUnaireSelec = &ImageInfoCV::Seuillage;
+	return true;
+	}
+if (s=="AdaptatifSeuillage")
+	{
+	opUnaireSelec = &ImageInfoCV::SeuillageAdaptatif;
+	return true;
+	}
+if (s=="LissageMedian")
+	{
+	opUnaireSelec = &ImageInfoCV::LissageMedian;
+	return true;
+	}
+if (s=="LissageMoyenneur")
+	{
+	opUnaireSelec = &ImageInfoCV::LissageMoyenne;
+	return true;
+	}
+if (s=="LissageGaussien")
+	{
+	opUnaireSelec = &ImageInfoCV::LissageGaussien;
+	return true;
+	}
+if (s=="ComposanteConnexe")
+	{
+	opUnaireSelec = &ImageInfoCV::ComposanteConnexe;
+	return true;
+	}
+if (s=="DistanceDiscrete")
+	{
+	opUnaireSelec = &ImageInfoCV::DistanceDiscrete;
+	return true;
+	}
+if (s=="LigneMediane")
+	{
+	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	return true;
+	}
+return false;
+}
