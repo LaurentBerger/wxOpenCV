@@ -57,6 +57,7 @@ CameraOpenCV(void);
 cv::VideoCapture *CamVideo(){return captureVideo;};
 int	Acquisition(void); /*<! Acquisition d'une image */
 virtual bool Connectee(){return indId>=0 && indId<NBCAMERA;};
+virtual void FermerVideo(){delete captureVideo;captureVideo=NULL;};
 virtual void DefCoinGauche(int x);
 virtual void DefCoinDroit(int x);
 virtual void DefCoinHaut(int x);

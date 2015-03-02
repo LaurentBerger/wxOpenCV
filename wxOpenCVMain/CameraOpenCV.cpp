@@ -506,6 +506,12 @@ return (wxThread::ExitCode)0;
 
 wxThread::ExitCode CameraOpenCV::Entry()
 {
+if (captureVideo==NULL)
+	{
+	captureVideo = new cv::VideoCapture(indId); 
+	if(!captureVideo || !captureVideo->isOpened())
+		return (wxThread::ExitCode)-1;
+	}
 if (indId<0 || indId>=NBCAMERA)
 	return (wxThread::ExitCode)-1; 	
 if (typeAcq==CV_8UC3)

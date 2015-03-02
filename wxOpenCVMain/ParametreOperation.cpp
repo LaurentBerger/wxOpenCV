@@ -8,6 +8,13 @@ std::map<wxString,std::map<wxString,int> > ParametreOperation::listeParam;
 
 void ParametreOperation::InitParamType()
 {
+listeParam["distance_type"].insert(std::pair<wxString,int>("|x1-x2| + |y1-y2|",cv::DIST_L1));
+listeParam["distance_type"].insert(std::pair<wxString,int>(_("euclidean distance"),cv::DIST_L2));
+listeParam["distance_type"].insert(std::pair<wxString,int>("max(|x1-x2|,|y1-y2|)",cv::DIST_C));
+listeParam["distance_type"].insert(std::pair<wxString,int>("L1-L2 metric: distance = 2(sqrt(1+x*x/2) - 1))",cv::DIST_L12));
+listeParam["distance_type"].insert(std::pair<wxString,int>("distance = c^2(|x|/c-log(1+|x|/c)), c = 1.3998",cv::DIST_FAIR));
+listeParam["distance_type"].insert(std::pair<wxString,int>("distance = c^2/2(1-exp(-(x/c)^2)), c = 2.9846",cv::DIST_WELSCH));
+listeParam["distance_type"].insert(std::pair<wxString,int>("distance = |x|<c ? x^2/2 : c(|x|-c/2), c=1.345",cv::DIST_HUBER));
 
 listeParam["connectivity"].insert(std::pair<wxString,int>(_("4-connex"),4));
 listeParam["connectivity"].insert(std::pair<wxString,int>(_("8-connex"),8));
@@ -33,13 +40,6 @@ listeParam["ddepth"].insert(std::pair<wxString,int>(_("32 signed bit"),CV_32S));
 listeParam["ddepth"].insert(std::pair<wxString,int>("float",CV_32F));
 listeParam["ddepth"].insert(std::pair<wxString,int>("double",CV_64F));
 
-listeParam["distance_type"].insert(std::pair<wxString,int>("|x1-x2| + |y1-y2|",cv::DIST_L1));
-listeParam["distance_type"].insert(std::pair<wxString,int>(_("euclidean distance"),cv::DIST_L2));
-listeParam["distance_type"].insert(std::pair<wxString,int>(_("max(|x1-x2|,|y1-y2|)"),cv::DIST_C));
-listeParam["distance_type"].insert(std::pair<wxString,int>(_("L1-L2 metric: distance = 2(sqrt(1+x*x/2) - 1))"),cv::DIST_L12));
-listeParam["distance_type"].insert(std::pair<wxString,int>(_("distance = c^2(|x|/c-log(1+|x|/c)), c = 1.3998"),cv::DIST_FAIR));
-listeParam["distance_type"].insert(std::pair<wxString,int>(_("distance = c^2/2(1-exp(-(x/c)^2)), c = 2.9846"),cv::DIST_WELSCH));
-listeParam["distance_type"].insert(std::pair<wxString,int>(_("distance = |x|<c ? x^2/2 : c(|x|-c/2), c=1.345"),cv::DIST_HUBER));
 
 
 }

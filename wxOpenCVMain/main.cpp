@@ -1953,6 +1953,7 @@ if (modeCamera )
 		cam->image=imAffichee;
 		((CameraOpenCV*)cam)->imAcq=imAcq;
 		cam->parent=(void*)this;
+		((CameraOpenCV*)cam)->FermerVideo();
 		cam->Run();
 		}
 	}
