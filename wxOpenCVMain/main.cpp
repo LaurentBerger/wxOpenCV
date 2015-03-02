@@ -3065,7 +3065,11 @@ while ( bCont )
 		{
 		opValide=false;
 		}
-	configApp->Read("nomSequence",&listeOperation[nbOperation].nomSequence);
+	wxString valCleChaine;
+	if (configApp->Read("nomSequence",&valCleChaine))
+		{
+		listeOperation[nbOperation].nomSequence=valCleChaine;
+		}
 	wxString	cleIndEtape;
 	bool bSeqOp;
 	bSeqOp = configApp->GetFirstGroup(cleIndEtape, dummy);
@@ -3082,8 +3086,10 @@ while ( bCont )
 		wxString chemin=configApp->GetPath();
 	// Lecture d'une séquence d'opération
 		configApp->SetPath(chemin+"/"+cleIndEtape);
-		if (opValide && !configApp->Read("op",&listeOperation[nbOperation].nomOperation))
+		if (opValide && !configApp->Read("op",&valCleChaine))
 			opValide=false;
+		else
+			listeOperation[nbOperation].nomOperation=valCleChaine;
 		if (opValide && !configApp->Read("op1",&listeOperation[nbOperation].indOp1Fenetre))
 			opValide=false;
 		if (opValide && !configApp->Read("op2",&listeOperation[nbOperation].indOp2Fenetre))

@@ -39,8 +39,8 @@ void InitParamType();
 
 
 public :
-wxString	nomSequence;
-wxString	nomOperation;
+std::string	nomSequence;
+std::string	nomOperation;
 std::map<std::string,DomaineParametreOp<double> > doubleParam;
 std::map<std::string,DomaineParametreOp<int> > intParam;
 std::map<std::string,DomaineParametreOp<cv::Size> > sizeParam;
