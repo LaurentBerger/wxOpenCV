@@ -49,9 +49,10 @@ void  OnSpinMoins(wxSpinEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 void  OnSpinPlus(wxSpinEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
-void FenetreAlgo::SauverSequence(wxCommandEvent &evt);
+void SauverSequence(wxCommandEvent &evt);
 	/*!< Sauvegarde des étapes comme séquence */
-
+void ComboBox(wxCommandEvent &evt);
+	/*!<Sélection d'un parametre à l'aide de sa description */
 void OnTextValider(wxCommandEvent &w);
 void OnKeyDown(wxKeyEvent &);
 

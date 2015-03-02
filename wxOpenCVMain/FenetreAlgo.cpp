@@ -123,9 +123,69 @@ partieBasse->Add(caseNomMacro,0, wxALIGN_CENTER_VERTICAL|wxALL);
 panneau->SetSizer(partieBasse);
 Bind(wxEVT_COMMAND_BUTTON_CLICKED,&FenetreAlgo::SauverSequence,this,ID_SAUVER_SEQ);
 Bind(wxEVT_SPINCTRLDOUBLE,&FenetreAlgo::OnSpinReel,this);
+Bind(wxEVT_COMMAND_COMBOBOX_SELECTED,&FenetreAlgo::ComboBox,this);
 SetSizerAndFit( topsizer );
 Show(true);
 }
+
+
+void FenetreAlgo::ComboBox(wxCommandEvent &w)
+{
+wxOsgApp *app=(wxOsgApp *)osgApp;
+if (!osgApp || !fenMere)
+	return;
+string nom;
+int ind=listeOnglet[classeur->GetCurrentPage()].second;
+
+ParametreOperation *pOCV=listeOp[ind].first;
+wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
+nom=st->GetLabel();
+if (pOCV->doubleParam.find(nom)!=pOCV->doubleParam.end())
+	{
+	if (pOCV->doubleParam[nom].valeur==((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+		return;
+	pOCV->doubleParam[nom].valeur=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+	}
+if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
+	{
+
+	if (ParametreOperation::listeParam.find(nom)!=ParametreOperation::listeParam.end())
+		{
+		int nb=	((wxComboBox*)(w.GetEventObject()))->GetCurrentSelection ();
+		int i=0;
+		std::map <string,int  >::iterator iter = pOCV->listeParam[nom].begin(); 
+		for (; iter !=pOCV->listeParam[nom].end() && i!=nb; ++iter,++i);
+		if (i==nb)
+			pOCV->intParam[nom].valeur=iter->second;
+		}
+	else 
+		{
+		if (pOCV->intParam[nom].valeur==((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+			return;
+		pOCV->intParam[nom].valeur=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		}
+	}
+if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
+	{
+	if ((w.GetId())%4==0)
+		{
+		if (pOCV->sizeParam[nom].valeur.width==((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
+			return;
+		pOCV->sizeParam[nom].valeur.width=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		}
+	else
+		{
+		if (pOCV->sizeParam[nom].valeur.height==((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
+			return;
+		pOCV->sizeParam[nom].valeur.height=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		}
+	}
+ExecuterOperation(ind);
+
+}
+
+
+
 
 void FenetreAlgo::SauverSequence(wxCommandEvent &evt)
 {
@@ -216,9 +276,26 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 	p += wxPoint(s.GetX(),0);
 //	wxSpinCtrl *sp=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 //	sp->SetRange(iti->second.mini,iti->second.maxi); 
-	wxSpinCtrlDouble *sp=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	sp->SetRange(iti->second.mini,iti->second.maxi); 
-	sp->SetIncrement(iti->second.pas); 
+	if (ParametreOperation::listeParam.find(iti->first)!=ParametreOperation::listeParam.end())
+		{
+		int nbChaine=pOCV->listeParam[iti->first].size();
+		wxString *choix=new wxString[nbChaine],choixDefaut;
+		int i=0;
+		for (std::map <string,int  >::iterator iter = pOCV->listeParam[iti->first].begin() ; iter !=pOCV->listeParam[iti->first].end(); ++iter,++i)
+			{
+			choix[i]=iter->first;
+			if (iter->second==iti->second.valeur)
+				choixDefaut=iter->first;
+			}
+		wxComboBox *choixOp=new wxComboBox(page,indOriCtrl+2*nbParam+1,choixDefaut,p,wxSize(250,-1),nbChaine,choix);
+
+		}
+	else
+		{
+		wxSpinCtrlDouble *sp=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+		sp->SetRange(iti->second.mini,iti->second.maxi); 
+		sp->SetIncrement(iti->second.pas); 
+		}
 	nbParam++;
 	ligne+=20;
 	if (tailleMax.x<p.x+s.x)

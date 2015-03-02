@@ -7,7 +7,6 @@
 
 class ImageInfoCV;
 
-using namespace std;
 
 
 /*! \class DomaineParametre
@@ -73,12 +72,12 @@ ImageInfoCV*  (ImageInfoCV::*opUnaireSelec)(ImageInfoCV *,ParametreOperation *) 
 // Surjection (plusieurs résultats   avec parametre
 ImageInfoCV**  (ImageInfoCV::*opSurjecUnaire)(ImageInfoCV *,ParametreOperation *) ;
 
-static std::map<wxString,std::map<wxString,int> > listeParam;
+static std::map<std::string,std::map<std::string,int> > listeParam;
 
 
-ParametreOperation(string s);	
+ParametreOperation(std::string s);	
 ParametreOperation(){InitOperation("");};	
-bool InitOperation(string s);
+bool InitOperation(std::string s);
 bool InitPtrFonction();
 };
 
