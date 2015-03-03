@@ -79,6 +79,8 @@ ParametreOperation(std::string s);
 ParametreOperation(){InitOperation("");};	
 bool InitOperation(std::string s);
 bool InitPtrFonction();
+ImageInfoCV	**ExecuterOperation();
+
 };
 
 /*

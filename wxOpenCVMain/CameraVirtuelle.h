@@ -5,7 +5,7 @@
 #include <vector>
 #include "opencv2/opencv.hpp"
 #include <wx/wx.h>
-
+#include "ParametreOperation.h"
 
 #define NB_COEFF_FILTRE 11
 #define NB_TAILLE_VIDEO 20
@@ -49,9 +49,13 @@ typedef void (wxEvtHandler::*EvtPointSuivisFonction)(EvtPointSuivis&);
    */
 
 class CameraVirtuelle : public wxThread{
+public:
+std::vector <ParametreOperation> seqOp;
+
 protected :
 virtual wxThread::ExitCode Entry(){return 0;};
 
+/*!< Séquence d'opération à appliquer sur une image recopier à partir de la fenetre mère */
 
 char			testDriver; /*!< test de la présence du driver*/
 

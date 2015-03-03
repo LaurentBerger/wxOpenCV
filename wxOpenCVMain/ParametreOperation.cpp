@@ -600,3 +600,110 @@ if (s=="LigneMediane")
 	}
 return false;
 }
+
+
+ImageInfoCV	**ParametreOperation::ExecuterOperation()
+{
+ImageInfoCV	*im=NULL;
+ImageInfoCV	**imTab=NULL;
+nbImageRes=1;
+if (opNaireSelec)
+	{
+	ImageInfoCV *imOp[3]={op1,op2,op3};
+	try
+		{
+		im =(op1->*opNaireSelec) (3,imOp,this);
+		}
+	catch(cv::Exception& e)
+		{
+		}
+
+	if (im==NULL)
+		{
+/*		opNaireSelec=NULL;
+		op1=NULL;
+		op2=NULL;
+		op3=NULL;*/
+		return imTab;
+		}
+	else
+		{
+		imTab = new ImageInfoCV*[1];
+		imTab[0]=im;
+		}
+	}
+
+if (opBinaireSelec)
+	{
+	
+	try
+		{
+		if (op2==NULL)
+			im =(op1->*opBinaireSelec)(op1,NULL,this);
+		else
+			im =(op1->*opBinaireSelec)(op1,op2,this);
+		}
+	catch(cv::Exception& e)
+		{
+		wxString s(e.msg);
+
+		}
+
+	if (im==NULL)
+		{
+/*		opBinaireSelec=NULL;
+		op1=NULL;
+		op2=NULL;*/
+		return imTab;
+		}
+	else
+		{
+		imTab = new ImageInfoCV*[1];
+		imTab[0]=im;
+		}
+	}
+if (opUnaireSelec)
+	{
+	try
+		{
+
+		im =(op1->*opUnaireSelec)(op1,this);
+		}
+	catch(cv::Exception& e)
+		{
+		wxString s(e.msg);
+
+		}
+
+	if (im==NULL)
+		{
+		return imTab;
+		}
+	else
+		{
+		imTab = new ImageInfoCV*[1];
+		imTab[0]=im;
+		}
+	}
+
+if (opSurjecUnaire)
+	{
+	try
+		{
+
+		imTab =(op1->*opSurjecUnaire)(op1,this);
+		}
+	catch(cv::Exception& e)
+		{
+		wxString s(e.msg);
+
+		}
+
+	if (imTab==NULL)
+		{
+		return imTab;
+		}
+	}
+
+return imTab; // Le pointeur imTab n'est pas libéré
+}

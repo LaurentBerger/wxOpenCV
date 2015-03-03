@@ -369,9 +369,36 @@ if (captureVideo->isOpened())
 		{
 		if (captureVideo->retrieve(frame)) // get a new frame from camera
 			{
+			
 			if (parent)
 				{
+				if (seqOp.size()!=0)
+					{
+					ImageInfoCV *imIni= new ImageInfoCV(frame.rows,frame.cols,frame.flags);
+					frame.copyTo(*imIni);
+					ImageInfoCV **im=NULL;
+					ImageInfoCV *imTmp=NULL;
+					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
+						{
+						ParametreOperation pOCV=*it;
+						if (im)
+							{
+							pOCV.op1=im[0];
+							if (imTmp)
+								delete imTmp;
+							imTmp=im[0];
+							}
+						else
+							pOCV.op1=imIni;
+						pOCV.indOp1Fenetre=-1;
 
+						im=pOCV.ExecuterOperation();
+						}
+					delete imIni;
+					delete imTmp;
+					im[0]->copyTo(frame);
+					delete im[0];
+					}
 
 				if (!modeMoyenne)	// Pas de filtrage Butterworth
 					{
@@ -585,4 +612,14 @@ if (cam)         // does the thread still exist?
  // the possibility to enter its destructor            
  // (which is guarded with m_pThreadCS critical section!)    
  }
+
+void FenetrePrincipale::DefSeqCamera(std::vector <ParametreOperation> *s)
+{  
+if (!cam)
+	return;
+
+wxCriticalSectionLocker enter(travailCam);
+
+cam->seqOp=*s;
+}
 

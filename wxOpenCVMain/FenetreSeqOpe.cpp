@@ -320,6 +320,11 @@ wxOsgApp	*app=(wxOsgApp *)osgApp;
 ImageInfoCV **im=NULL;
 ImageInfoCV *imTmp=NULL;
 int i=0;
+if (fenMere->Cam() && fenMere->Cam()->IsRunning())
+	{
+	fenMere->DefSeqCamera(sq);
+	return;
+	}	
 
 for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();it++)
 	{

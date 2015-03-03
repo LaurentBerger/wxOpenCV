@@ -559,6 +559,9 @@ void OnCloseThread(wxCloseEvent&);
      */
 
 // Gestion du curseur de la souris pour les opérations sur les images
+void DefSeqCamera(std::vector <ParametreOperation> *);
+
+
 void DefPointeurSouris(int type);
 void GestionCurseurSouris(wxMouseEvent &event);
 void GestionCurseurSourisGlisser(wxMouseEvent &event);
