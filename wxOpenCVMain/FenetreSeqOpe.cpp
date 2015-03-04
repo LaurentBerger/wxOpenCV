@@ -40,6 +40,7 @@ choixOp=new wxListBox( panneau,LISTE_OP_SEQ,wxPoint(80,50),wxSize(150,-1),(*t)[n
 choixOp->SetSelection(0);
 InsererCtrlEtape(&((*t)[n][0]));
 Bind(wxEVT_SPINCTRL, &FenetreSequenceOperation::OnSpinEntier,this);
+Bind(wxEVT_SPINCTRLDOUBLE, &FenetreSequenceOperation::OnSpinReel,this);
 Bind(wxEVT_COMMAND_LISTBOX_SELECTED, &FenetreSequenceOperation::OnOpeSelec,this);
 Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::Executer,this,wxID_OK);
 }
@@ -115,6 +116,7 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	else
 		wsd->Move(p);
 
+	wsd->SetName(its->first);
 	wsd->SetRange(0,256); 
 	wsd->SetIncrement((double)its->second.pas.height); 
 	wsd->SetValue(its->second.valeur.height);
@@ -150,6 +152,7 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 	else
 		wsd->Move(p);
 	wsd->SetRange(iti->second.mini,iti->second.maxi); 
+	wsd->SetName(iti->first);
 	wsd->SetValue(iti->second.valeur);
 	wsd->SetIncrement(iti->second.pas); 
 	wsd->Show(true);
@@ -182,6 +185,7 @@ for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
 	else
 		wsd->Move(p);
 	wsd->SetRange(itd->second.mini,itd->second.maxi); 
+	wsd->SetName(itd->first);
 	wsd->SetIncrement(itd->second.pas); 
 	wsd->SetValue(itd->second.valeur);
 	wsd->Show(true);
@@ -265,8 +269,7 @@ std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
 std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
 for (int i=0;i<ws->GetValue();i++,it++);
 
-wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
-nom=st->GetLabel();
+nom=((wxWindow*)w.GetEventObject())->GetName();
 ParametreOperation p=it->second[opSelec];
 if (it->second[opSelec].doubleParam.find(nom)!=it->second[opSelec].doubleParam.end())
 	{

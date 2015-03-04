@@ -1,10 +1,10 @@
 #include "FenetreInfo.h"
 #include "wx/graphics.h"
-
+#include "FenetrePrincipale.h"
 
 
 // frame constructor
-ShapedFrame::ShapedFrame(wxFrame *parent,wxString s1,wxString s2)
+ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
        : wxFrame(parent, wxID_ANY, wxEmptyString,
                   wxDefaultPosition, wxSize(100, 100),
                   0
@@ -17,24 +17,225 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxString s1,wxString s2)
     m_shapeKind = Shape_Star;
     //m_bmp = wxBitmap(_("star.png"), wxBITMAP_TYPE_PNG);
 
-	
+	ImageInfoCV *im=((FenetrePrincipale*)parent)->ImAcq();
 
 	wxMemoryDC memDC;
 
-
+	wxString s1("Region");
+	wxString s2("Region");
 	wxSize	taille1=memDC.GetTextExtent(s1);
 	wxSize	taille2=memDC.GetTextExtent(s2);
 	taille1.SetWidth(std::max(taille1.GetWidth(),taille2.GetWidth()));
 	taille1.SetHeight(taille1.GetHeight()+taille2.GetHeight());
 
-    m_bmp = wxBitmap(taille1.GetWidth()+200, taille1.GetHeight()+200);
+    m_bmp = wxBitmap(im->cols, im->rows);
     memDC.SelectObject(m_bmp);
     memDC.SetBackground(*wxWHITE_BRUSH);
     memDC.Clear();
     memDC.SetPen(*wxRED_PEN);
     memDC.SetBrush(*wxRED_BRUSH);
-    memDC.DrawRectangle(wxRect(00, 00, taille1.GetWidth(), taille1.GetHeight()));
-    memDC.DrawRectangle(wxRect(150, 150, 30, 30));
+
+
+	cv::Vec3b x;
+	cv::Vec3f xx;
+	cv::Vec6f xxx;
+	std::complex<float> zz[3];
+	int val;
+	double dVal;
+	switch(im->type()){
+	case CV_32FC1:
+		{
+		float ref=im->at<float>(pSrc.x,pSrc.y);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				float x=im->at<float>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+	case CV_64FC1:
+		{
+		double ref=im->at<double>(pSrc.x,pSrc.y);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				float x=im->at<double>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+	case CV_32FC3 :
+		{
+		cv::Vec3f ref=im->at<cv::Vec3f>(pSrc.x,pSrc.y);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				cv::Vec3f x=im->at<cv::Vec3f>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+	case CV_32FC(6) :
+		break;
+	case CV_64FC3 :
+		{
+		cv::Vec3d ref=im->at<cv::Vec3d>(pSrc.x,pSrc.y);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				cv::Vec3d x=im->at<cv::Vec3d>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+	case CV_32SC1:
+		{
+		int ref=im->at<int>(pSrc.x,pSrc.y);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				int x=im->at<int>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+	case CV_32SC3:
+		{
+		cv::Vec3i ref=im->at<cv::Vec3i>(pSrc.x,pSrc.y);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				cv::Vec3i x=im->at<cv::Vec3i>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+	case CV_8UC1:
+		{
+		unsigned char ref=im->at<unsigned char>(pSrc.x,pSrc.y);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				unsigned char x=im->at<unsigned char>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+	case CV_8UC3 :
+		{
+		cv::Vec3b ref=im->at<cv::Vec3b>(pSrc.x,pSrc.y);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				cv::Vec3b x=im->at<cv::Vec3b>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+	case CV_16UC1 :
+		{
+		unsigned short ref=im->at<unsigned short>(pSrc.y,pSrc.x);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				unsigned short x=im->at<unsigned short>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+	case CV_16SC1 :
+		{
+		short ref=im->at<short>(pSrc.x,pSrc.y);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				short x=im->at<short>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+	case CV_16SC3 :
+		{
+		cv::Vec3s ref=im->at<cv::Vec3s>(pSrc.x,pSrc.y);
+		for (int i=0;i<im->rows;i++)
+			for (int j=0;j<im->cols;j++)
+				{
+				cv::Vec3s x=im->at<cv::Vec3s>(i,j);
+				if (x==ref)
+					{
+					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+
+					}
+
+
+				}
+		}
+		break;
+		}
+
+
+		
 	memDC.DrawText(s1,0,0);
 	memDC.DrawText(s2,0,taille2.GetHeight());
     memDC.SelectObject(wxNullBitmap);

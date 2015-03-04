@@ -35,10 +35,12 @@ FenetreDistribAngulaire	*ongletDistribAngulaire; /*!< Pointeur pour accès inform
 FenetreCoupe			*ongletCoupe;	/*!< Pointeur pour accès informations sur hsitogramme image */
 wxWindow				*ongletPalette; /*!< Pointeur pour la fenetre avec la paette */
 wxWindow				*ongletCurseur; /*!< tableur des données proche du curseur */
-FenetreRegion			*ongletRegion; /*!< Pour le regroupement des régions avant recherche quadrique */
-wxSlider			**slNivMin;				/*!< Réglage du niveau bas de la palette par canal*/
-wxSlider			**slGain;				/*!< Réglage du niveau haut de la palette par canal*/
-wxSpinCtrl			*spAjustAuto;			/*!< Ajustement auto de la palette avec % de satureation */
+FenetreRegion			*ongletRegionR; /*!< Pour le regroupement des régions avant recherche quadrique */
+FenetreRegion			*ongletRegionV; /*!< Pour le regroupement des régions avant recherche quadrique */
+FenetreRegion			*ongletRegionB; /*!< Pour le regroupement des régions avant recherche quadrique */
+wxSlider				**slNivMin;				/*!< Réglage du niveau bas de la palette par canal*/
+wxSlider				**slGain;				/*!< Réglage du niveau haut de la palette par canal*/
+wxSpinCtrl				*spAjustAuto;			/*!< Ajustement auto de la palette avec % de satureation */
 
 void  *osgApp;
 
@@ -94,6 +96,9 @@ void DrawPalette();
 void OuvertureOngletCouleur(char modeMoyenne,int x);
 // Accès aux membres privés
 wxWindow* OngletStatus(){return ongletStatus;};
+wxWindow* OngletFocus(){return ongletFocus;};
+wxWindow* OngletCouleur(){return ongletCouleur;};
+wxWindow* OngletHistogramme(){return ongletHistogramme;};
 Tableur *TableurHistogramme(){return ongletHistogramme->Grille();};
 
 void MAJValeurPalette();
@@ -107,7 +112,8 @@ void MAJInfo(int art,char *info);
 void MAJInfo(int art,int d);
 void MAJInfo(int art,wxString ss);
 void ListerRegion(); 
-void LireNiveau(int *x){ongletRegion->LireNiveau(x);}; 
+void SelectRegion(int w,int plan); 
+void LireNiveau(int *x){}; 
 
 wxString LireInfo(int art);
 

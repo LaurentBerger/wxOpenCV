@@ -493,8 +493,11 @@ f->DefImgStat(imgStatIm);
 	}
 imgStatIm->OuvertureOngletCouleur();
 imgStatIm->OuvertureOngletPalette();
-imgStatIm->OuvertureOngletRegion();
+if (f->ImAcq() && f->ImAcq()->StatComposante())
+	{
+	imgStatIm->OuvertureOngletRegion();
 	imgStatIm->ListerRegion();
+	}
 imgStatIm->OuvertureOngletCurseur();
 listeFenetre[nbFenetre]=new EnvFenetre(f,fenZoom,imgStatIm);
 indFenetre=nbFenetre;
@@ -747,8 +750,11 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 		}
 	imgStatIm->OuvertureOngletCouleur();
 	imgStatIm->OuvertureOngletPalette();
+if (f->ImAcq() && f->ImAcq()->StatComposante())
+	{
 	imgStatIm->OuvertureOngletRegion();
 	imgStatIm->ListerRegion();
+	}
 	imgStatIm->OuvertureOngletCurseur();
 	f->DefHistorique();
 	f->Show(true);
@@ -1388,7 +1394,7 @@ tpsPreEvt=-1;
 imGain=NULL;
 correctionGain=false;
 tracerContour=false;
-
+indEvtCam=0;
 for (int i=0;i<10;i++)
 	planActif[i]=true;
 osgApp=NULL;
@@ -1666,6 +1672,45 @@ else if (s.Find(".is2")>=0 ||s.Find(".IS2")>=0)
 		for (int j=0;j<320;j++)
 			{
 			imAcq->at< unsigned short >(i,j)=tmp[i*320+j];
+			}
+	
+	delete tmp;
+
+	}
+else if (s.Find(".16b")>=0 ||s.Find(".16B")>=0)
+	{
+/*	imAcq =new ImageInfoCV(480,640,CV_8UC3);
+	ifstream fs;
+	fs.open(nomFichier,ios::binary);
+	unsigned short *tmp=new unsigned short[640*480*2];
+	fs.seekg(169642);
+	fs.read((char*)tmp,640*480*2);
+	fs.close();
+	for (int i=0;i<480;i++)
+		for (int j=0;j<640;j++)
+			{
+			char r,g,b;
+			r=(tmp[i*640+j]&0xF800)>>8;
+			g=(tmp[i*640+j]&0x07D0)>>3;
+			b=(tmp[i*640+j]&0x001F)<<3;
+			cv::Vec3b v(b,g,r);
+			imAcq->at< cv::Vec3b >(i,j)=v;
+			}
+	*/
+	imAcq =new ImageInfoCV(256,256,CV_16SC1);
+	ifstream fs;
+	float t[10];
+	fs.open(nomFichier,ios::binary);
+	short *tmp=new short[256*256];
+	fs.seekg(256);
+	fs.read((char*)tmp,256*256*2);
+
+	fs.close();
+
+	for (int i=0;i<256;i++)
+		for (int j=0;j<256;j++)
+			{
+			imAcq->at< short >(i,j)=tmp[i*256+j];
 			}
 	
 	delete tmp;

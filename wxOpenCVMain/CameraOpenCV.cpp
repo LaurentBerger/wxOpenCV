@@ -19,6 +19,7 @@ EvtPointSuivis::EvtPointSuivis(wxEventType commandType , int id):wxCommandEvent(
         m_Expediteur = 0;
         m_sortie = false;
         m_travailEchoue = false;
+		indEvt=0;
     }
 
 
@@ -351,6 +352,7 @@ char CameraOpenCV::GetFunctionEMCCDGain()
 
 wxThread::ExitCode CameraOpenCV::Acquisition8BitsRGB()
 {
+int indEvt=0;
 #ifdef _FLUXHTTP__
 captureVideo = new cv::VideoCapture("192.168.0.1:8080"); 
 #else
@@ -447,9 +449,27 @@ if (captureVideo->isOpened())
 				x->ptId=repereIni;
 				x->ptApp=repere;
 				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
-				wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
-
-				this->Sleep(tpsInactif);
+				x->indEvt=indEvt++;
+				//wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
+				if (!parent)
+					break;
+				bool attendre=true;
+				int nbBoucle=0;
+				while(attendre && nbBoucle<10)
+					{
+					{
+					if (!parent)
+						break;
+					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+					if (((FenetrePrincipale*)parent)->IndEvtCam()+1==indEvt || nbBoucle==9)
+						{
+						wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
+						attendre=false;
+						}
+					}
+					nbBoucle++;
+					this->Sleep(10);
+					}
 				}
 			else
 				break;
@@ -575,6 +595,7 @@ if (cam->IsRunning() || cam->IsPaused())
 	feuille->BitmapAffichee(NULL);
 	MAJNouvelleImage();
 	}
+	indEvtCam=w.indEvt;
 	if (tpsPreEvt>=-1)
 		{
 		tpsPreEvt++;

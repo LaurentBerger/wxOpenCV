@@ -36,6 +36,7 @@ public:
 	void*					m_Expediteur;
     bool					m_sortie;
     bool					m_travailEchoue;
+	int						indEvt;		/*!< Nombre d'évènement envoyé */
 };
 
 typedef void (wxEvtHandler::*EvtPointSuivisFonction)(EvtPointSuivis&);

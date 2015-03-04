@@ -17,7 +17,7 @@ FenetreRegion( wxFrame * );
 void DefOsgApp(void *w){osgApp=w;};
 void DefParent(void *w){fenParent=w;};
 
-void ListerRegion(); 
+void ListerRegion(int); 
 void DefRegionSelect(int i,int val){regionSelect[i]=val;};;
 void LireNiveau(int *classe);
 
@@ -30,6 +30,7 @@ void FusionNiveau(wxCommandEvent &w);
 void RAZNiveau(wxCommandEvent &w);
 void DefinirNiveau(wxCommandEvent &w);
 
+void SelectRegion(int w);
 
 
 char *RegionSelect(){return regionSelect;};

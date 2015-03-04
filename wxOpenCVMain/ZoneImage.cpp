@@ -327,9 +327,38 @@ if (modeCoupe)
 
 void ZoneImage::OnLeftButtonDown(wxMouseEvent &event)
 {
+wxPoint point = event.GetPosition();
+wxRect	r(GetClientRect());
+if (!r.Contains(point) ||  this->f!=osgApp->Graphique())
+	return;
+point=RepereEcranImage(point);
+if (f->ImAcq() && f->ImAcq()->StatComposante())
+	{
+	if (osgApp->ImgStat())
+		{
+		cv::Vec3b x;
+		cv::Vec3f xx;
+		cv::Vec6f xxx;
+		std::complex<float> zz[3];
+		switch(f->ImAcq()->type())
+			{
+			case CV_32SC1:
+				x[0] = f->ImAcq()->at<int>(point.y,point.x);
+				osgApp->ImgStat()->SelectRegion(x[0],0);
+				break;
+			case CV_32SC3:
+				x=f->ImAcq()->at<cv::Vec3i>(point.y,point.x);
+				osgApp->ImgStat()->SelectRegion(x[0],0);
+				osgApp->ImgStat()->SelectRegion(x[1],1);
+				osgApp->ImgStat()->SelectRegion(x[2],2);
+				break;
+			}
+		}
+	}
+
 if (event.ShiftDown())
 	{
-	ShapedFrame *shapedFrame = new ShapedFrame(f,"ligne 1","ligne 2");
+	ShapedFrame *shapedFrame = new ShapedFrame(f,point);
 	shapedFrame->Show(true);
 	}
 
@@ -340,7 +369,6 @@ if (osgApp->ModeSouris()==SELECTION_EN_COURS)
 	}
 if (!ModeRectangle() && !ModeCoupe())
 	return;
-wxPoint point = event.GetPosition(); // this is in screen coords.  Use ScreenToClient if you need this in coords for your window
 wxPoint point2 = ScreenToClient(event.GetPosition()); // this is in screen coords.  Use ScreenToClient if you need this in coords for your window
 point=RepereEcranImage(point);
 if (ModeRectangle())

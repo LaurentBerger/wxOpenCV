@@ -69,7 +69,9 @@ m_sizerFrame->Show(listeFenetreOnglet);
 ongletHistogramme=NULL;
 ongletCoupe=NULL;
 ongletFocus=NULL;
-ongletRegion=NULL;
+ongletRegionR=NULL;
+ongletRegionV=NULL;
+ongletRegionB=NULL;
 ongletCurseur=NULL;
 ongletCouleur=NULL;
 ongletDistribRadiale=NULL; /*!< Pointeur pour accès informations sur distrib radiale */
@@ -179,8 +181,12 @@ if (ongletDistribAngulaire)
 	ongletDistribAngulaire->Destroy(); /*!< Pointeur pour accès informations sur distrib radiale */
 if (ongletCoupe)
 	ongletCoupe->Destroy();	/*!< Pointeur pour accès informations sur hsitogramme image */
-if (ongletRegion)
-	ongletRegion->Destroy();
+if (ongletRegionR)
+	ongletRegionR->Destroy();
+if (ongletRegionV)
+	ongletRegionV->Destroy();
+if (ongletRegionB)
+	ongletRegionB->Destroy();
 wxFrame::OnCloseWindow(event);
 }
 
@@ -663,12 +669,35 @@ return ss;
 
 void ImageStatistiques::OuvertureOngletRegion() 
 {
-ongletRegion = new FenetreRegion((wxFrame*)listeFenetreOnglet); 
-ongletRegion->DefOsgApp(osgApp);
-ongletRegion->DefParent(fenMere);
+if (!fenMere || !fenMere->ImAcq())
+	return;
+if (fenMere->ImAcq()->channels()>=1)
+	{
+	ongletRegionR = new FenetreRegion((wxFrame*)listeFenetreOnglet); 
+	ongletRegionR->DefOsgApp(osgApp);
+	ongletRegionR->DefParent(fenMere);
 
-listeFenetreOnglet->AddPage(ongletRegion, _T("Region"));
-ongletRegion->Refresh();
+	listeFenetreOnglet->AddPage(ongletRegionR, _("Red Region"));
+	ongletRegionR->Refresh();
+	}
+if (fenMere->ImAcq()->channels()>=2)
+	{
+	ongletRegionV = new FenetreRegion((wxFrame*)listeFenetreOnglet); 
+	ongletRegionV->DefOsgApp(osgApp);
+	ongletRegionV->DefParent(fenMere);
+
+	listeFenetreOnglet->AddPage(ongletRegionV, _("Green Region"));
+	ongletRegionV->Refresh();
+	}
+if (fenMere->ImAcq()->channels()>=3)
+	{
+	ongletRegionB = new FenetreRegion((wxFrame*)listeFenetreOnglet); 
+	ongletRegionB->DefOsgApp(osgApp);
+	ongletRegionB->DefParent(fenMere);
+
+	listeFenetreOnglet->AddPage(ongletRegionB, _("Blue Region "));
+	ongletRegionB->Refresh();
+	}
 }	
 
 void ImageStatistiques::OuvertureOngletCurseur() 

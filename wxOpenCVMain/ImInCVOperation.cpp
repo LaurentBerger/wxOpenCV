@@ -280,9 +280,9 @@ ImageInfoCV	imAbsy;
 
 cv::Scharr( *im1, imx, pOCV->intParam["ddepth"].valeur,1,0,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
 cv::Scharr( *im1, imy, pOCV->intParam["ddepth"].valeur,0,1,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
-cv::convertScaleAbs( imx, imAbsx);
-cv::convertScaleAbs( imy, imAbsy);
-addWeighted( imAbsx, 0.5, imAbsy, 0.5, 0, *im );
+abs( imx);
+abs( imy);
+addWeighted( imx, 0.5, imy, 0.5, 0, *im );
 
 return im;
 }

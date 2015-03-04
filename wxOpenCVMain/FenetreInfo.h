@@ -7,7 +7,7 @@ class ShapedFrame : public wxFrame
 {
 public:
     // ctor(s)
-    ShapedFrame(wxFrame *parent,wxString s1,wxString s2);
+    ShapedFrame(wxFrame *parent,wxPoint &);
     void SetWindowShape();
 
     // event handlers (these functions should _not_ be virtual)

@@ -60,7 +60,7 @@ listeRegion->SetColSize(10, 30);
 
 
 
-void FenetreRegion::ListerRegion() 
+void FenetreRegion::ListerRegion(int indPlan) 
 {
 if (!osgApp)
 	return;
@@ -72,7 +72,7 @@ cv::Mat	**s=((FenetrePrincipale*)fenParent)->ImAcq()->StatComposante();
 cv::Mat	**g=((FenetrePrincipale*)fenParent)->ImAcq()->CentreGComposante();
 if (!s || !g)
 	return;
-int nb=listeRegion->GetNumberRows()-s[0]->rows;
+int nb=listeRegion->GetNumberRows()-s[indPlan]->rows;
 if (nb>0) 
 	{
 	listeRegion->EffaceLigne(nb);
@@ -81,13 +81,13 @@ if (nb>0)
 else if (nb<0)
 	listeRegion->AjouteLigne(-nb);
 
-for (int ii=0;ii<s[0]->rows;ii++)
+for (int ii=0;ii<s[indPlan]->rows;ii++)
 	{
 	
 	listeRegion->DefCellule(ii,0,ii, "%5d");
-	listeRegion->DefCellule(ii,3,(s[0])->at<int>(ii,cv::CC_STAT_AREA), "%7d");
-	listeRegion->DefCellule(ii,5,(g[0])->at<double>(ii,0), "%6.1f");
-	listeRegion->DefCellule(ii,6,(g[0])->at<double>(ii,1), "%6.1f");
+	listeRegion->DefCellule(ii,3,(s[indPlan])->at<int>(ii,cv::CC_STAT_AREA), "%7d");
+	listeRegion->DefCellule(ii,5,(g[indPlan])->at<double>(ii,0), "%6.1f");
+	listeRegion->DefCellule(ii,6,(g[indPlan])->at<double>(ii,1), "%6.1f");
 	}
 	
 /*static wxClipboard	*pressePapier=NULL;
@@ -100,7 +100,19 @@ pressePapier->SetData((wxTextDataObject *)listeRegion->GetTable());*/
 void ImageStatistiques::ListerRegion() 
 {
 
-ongletRegion->ListerRegion();	
+
+if (fenMere->ImAcq()->channels()>=1)
+	{
+	ongletRegionB->ListerRegion(0);	
+	}
+if (fenMere->ImAcq()->channels()>=2)
+	{
+	ongletRegionV->ListerRegion(1);	
+	}
+if (fenMere->ImAcq()->channels()>=3)
+	{
+	ongletRegionR->ListerRegion(2);	
+	}
 }
 
 
@@ -135,8 +147,32 @@ else
 */
 }
 
+
+void ImageStatistiques::SelectRegion(int w,int plan)
+{
+switch(plan){
+case 0:
+	if (ongletRegionB)
+		ongletRegionB->SelectRegion(w);
+	break;	
+case 1:
+	if (ongletRegionV)
+		ongletRegionV->SelectRegion(w);
+	break;	
+case 2:
+	if (ongletRegionR)
+		ongletRegionR->SelectRegion(w);
+	break;	
+	}
+}
+
 void FenetreRegion::OnSelectCell(wxGridEvent &w)
 {
+
+}
+void FenetreRegion::SelectRegion(int w)
+{
+listeRegion->SelectRow(w);
 
 }
 

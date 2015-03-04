@@ -428,6 +428,7 @@ wxTimer				*horlogeSeq;
 BarreInfo			*barreEtat;
 CameraVirtuelle		*cam;
 long				tpsPreEvt;			/*!<Instant de l'événement précédent de l'acquisition de l'image */
+int					indEvtCam;
 public :
 
 wxCriticalSection	travailCam; /*!< Utilisé pour bloquer la mémoire image ou communiquer avec le thread */
@@ -538,6 +539,12 @@ void ModeCamera(wxCommandEvent& event);
      *  \brief ModeCamera
      *  bascule pour activer ou désactiver la caméra
      */
+int IndEvtCam(){return indEvtCam;};
+    /*!
+     *  \brief indEvtCam
+     *  retourne l'indice identifiant venant d'être traité.
+     */
+
 void TracerContour(wxCommandEvent& event);
     /*!
      *  \brief ModeCamera
