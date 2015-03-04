@@ -322,6 +322,8 @@ ImageInfoCV *imTmp=NULL;
 int i=0;
 if (fenMere->Cam() && fenMere->Cam()->IsRunning())
 	{
+	wxCriticalSectionLocker enter(((FenetrePrincipale*)fenMere)->paramCam);
+
 	fenMere->DefSeqCamera(sq);
 	return;
 	}	

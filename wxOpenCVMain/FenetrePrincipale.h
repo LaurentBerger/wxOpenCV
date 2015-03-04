@@ -431,6 +431,7 @@ long				tpsPreEvt;			/*!<Instant de l'événement précédent de l'acquisition d
 public :
 
 wxCriticalSection	travailCam; /*!< Utilisé pour bloquer la mémoire image ou communiquer avec le thread */
+wxCriticalSection	paramCam;  /*!< Utilisé pour bloquer la mémoire des paramètres de la séquence operation */
 protected:
 bool				zoomActif;
 bool				statActif;

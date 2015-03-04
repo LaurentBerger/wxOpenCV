@@ -364,7 +364,7 @@ if (captureVideo->isOpened())
 	std::vector<cv::Point2f> repereIni,repere;
 	while (!captureVideo->retrieve(frame2));
 	while (!captureVideo->retrieve(frame1));
-
+	static bool opActif=false;
 	for(;true;)
 		{
 		if (captureVideo->retrieve(frame)) // get a new frame from camera
@@ -374,10 +374,14 @@ if (captureVideo->isOpened())
 				{
 				if (seqOp.size()!=0)
 					{
+					opActif =true;
 					ImageInfoCV *imIni= new ImageInfoCV(frame.rows,frame.cols,frame.flags);
 					frame.copyTo(*imIni);
 					ImageInfoCV **im=NULL;
 					ImageInfoCV *imTmp=NULL;
+					if (!parent)
+						return (wxThread::ExitCode)0;
+					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->paramCam);
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
 						ParametreOperation pOCV=*it;
@@ -399,9 +403,16 @@ if (captureVideo->isOpened())
 					im[0]->copyTo(frame);
 					delete im[0];
 					}
-
+				else if (opActif)
+					{
+					// ce n'est pas normal;
+					int w=0;
+					w= 2*w;
+					}
 				if (!modeMoyenne)	// Pas de filtrage Butterworth
 					{
+					if (!parent)
+						return (wxThread::ExitCode)0;
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
 					(*((Mat *)imAcq)) =frame; // get a new frame from camera
@@ -409,8 +420,9 @@ if (captureVideo->isOpened())
 				else
 					{
 					{
+					if (!parent)
+						return (wxThread::ExitCode)0;
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
-
 					(*((Mat *)imAcq)) =frame; // get a new frame from camera
 					for (int i=0;i<frame.rows;i++)
 						{
@@ -618,7 +630,7 @@ void FenetrePrincipale::DefSeqCamera(std::vector <ParametreOperation> *s)
 if (!cam)
 	return;
 
-wxCriticalSectionLocker enter(travailCam);
+wxCriticalSectionLocker enter(paramCam);
 
 cam->seqOp=*s;
 }
