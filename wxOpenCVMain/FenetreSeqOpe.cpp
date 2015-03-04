@@ -249,6 +249,56 @@ InsererCtrlEtape(&(it->second)[0]);
 
 }
 
+void FenetreSequenceOperation::OnSpinReel(wxSpinDoubleEvent &w)
+{
+wxOsgApp *app=(wxOsgApp *)osgApp;
+if (!osgApp)
+	return;
+wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
+if (ws==NULL)
+	return;
+string nom;
+int opSelec=choixOp->GetSelection();
+
+
+std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
+std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
+for (int i=0;i<ws->GetValue();i++,it++);
+
+wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
+nom=st->GetLabel();
+ParametreOperation p=it->second[opSelec];
+if (it->second[opSelec].doubleParam.find(nom)!=it->second[opSelec].doubleParam.end())
+	{
+	if (it->second[opSelec].doubleParam[nom].valeur==((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+		return;
+	it->second[opSelec].doubleParam[nom].valeur=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+	}
+if (it->second[opSelec].intParam.find(nom)!=it->second[opSelec].intParam.end())
+	{
+	if (it->second[opSelec].intParam[nom].valeur==((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+		return;
+	it->second[opSelec].intParam[nom].valeur=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+	}
+if (it->second[opSelec].sizeParam.find(nom)!=it->second[opSelec].sizeParam.end())
+	{
+	if ((w.GetId())%4==0)
+		{
+		if (it->second[opSelec].sizeParam[nom].valeur.width==((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
+			return;
+		it->second[opSelec].sizeParam[nom].valeur.width=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		}
+	else
+		{
+		if (it->second[opSelec].sizeParam[nom].valeur.height==((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
+			return;
+		it->second[opSelec].sizeParam[nom].valeur.height=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		}
+	}
+ExecuterSequence(&(it->second));
+}
+
+
 void FenetreSequenceOperation::OnOpeSelec(wxCommandEvent& event)
 {
 int opSelec;
@@ -269,9 +319,6 @@ InsererCtrlEtape(&(it->second[indOpe]));
 }
 
 
-void FenetreSequenceOperation::OnSpinReel(wxSpinDoubleEvent &w)
-{
-}
 
 void  FenetreSequenceOperation::OnSpinPlus(wxSpinEvent& w)
 {
