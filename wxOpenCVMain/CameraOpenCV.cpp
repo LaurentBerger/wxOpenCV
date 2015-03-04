@@ -380,7 +380,7 @@ if (captureVideo->isOpened())
 					ImageInfoCV **im=NULL;
 					ImageInfoCV *imTmp=NULL;
 					if (!parent)
-						return (wxThread::ExitCode)0;
+						break;
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->paramCam);
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
@@ -412,18 +412,18 @@ if (captureVideo->isOpened())
 				if (!modeMoyenne)	// Pas de filtrage Butterworth
 					{
 					if (!parent)
-						return (wxThread::ExitCode)0;
+						break;
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-					(*((Mat *)imAcq)) =frame; // get a new frame from camera
+					frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
 					}
 				else
 					{
 					{
 					if (!parent)
-						return (wxThread::ExitCode)0;
+						break;
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
-					(*((Mat *)imAcq)) =frame; // get a new frame from camera
+					frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
 					for (int i=0;i<frame.rows;i++)
 						{
 						unsigned char *val=frame.ptr(i);
@@ -437,6 +437,7 @@ if (captureVideo->isOpened())
 					}
 					frame1.copyTo(frame2);
 					frame.copyTo(frame1);
+					frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
 					}
 
 				}
