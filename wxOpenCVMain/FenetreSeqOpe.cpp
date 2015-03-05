@@ -7,9 +7,10 @@ using namespace std;
 #define IDSAUVER 500
 #define IND_OPE 100 
 #define LISTE_OP_SEQ 101
-#define IND_HYPER 10
-#define IND_STATIC 200
-#define IND_SPIN 300
+#define IND_HYPER 10 // hyperlien
+#define IND_STATIC 200 // champ static
+#define IND_SPIN 300 // bouton spin
+#define IND_SELECMULTIPLE IND_HYPER-1 // Selection de fichier
 
 FenetreSequenceOperation::FenetreSequenceOperation(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size,wxOsgApp *osg, long style)
@@ -24,8 +25,9 @@ this->osgApp =osg;
 std::map <int,std::vector <ParametreOperation > >  *t=osg->TabSeqOperation();
 
 new wxStaticText( panneau, -1, _("Sequence"),wxPoint(10,20),wxSize(60,20) );
-wxSpinCtrl *spw=new wxSpinCtrl(panneau,IND_OPE,_("Sequence"),wxPoint(80,20),wxSize(60,20));
 new wxButton( panneau,wxID_OK,_("Execute all"),wxPoint(150,20),wxSize(70,20));
+new wxButton( panneau,IND_SELECMULTIPLE,_("Select file to process"),wxPoint(230,20),wxSize(150,20));
+wxSpinCtrl *spw=new wxSpinCtrl(panneau,IND_OPE,_("Sequence"),wxPoint(80,20),wxSize(60,20));
 spw->SetRange(0,t->size()-1);
 spw->SetValue(0);
 nbEtape=100;
@@ -43,6 +45,7 @@ Bind(wxEVT_SPINCTRL, &FenetreSequenceOperation::OnSpinEntier,this);
 Bind(wxEVT_SPINCTRLDOUBLE, &FenetreSequenceOperation::OnSpinReel,this);
 Bind(wxEVT_COMMAND_LISTBOX_SELECTED, &FenetreSequenceOperation::OnOpeSelec,this);
 Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::Executer,this,wxID_OK);
+Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::SelectionFichier,this,IND_SELECMULTIPLE);
 }
 
 void FenetreSequenceOperation::InsererCtrlEtape(ParametreOperation *op)
@@ -236,7 +239,7 @@ if (!osgApp)
 int opSelec=w.GetValue();
 std::map <int,std::vector <ParametreOperation > >  *t=((wxOsgApp*)osgApp)->TabSeqOperation();
 std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
-for (int i=0;i<opSelec;i++,it++);
+for (int i=0;i<opSelec&& it!=(*t).end();i++,it++);
 choixOp->Clear();
 if (nbEtape<it->second.size())
 	{
@@ -314,11 +317,71 @@ wxOsgApp *app=(wxOsgApp *)osgApp;
 std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
 opSelec=ws->GetValue();
 std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
-for (int i=0;i<opSelec;i++,it++);
+for (int i=0;i<opSelec&& it!=(*t).end();i++,it++);
 int indOpe=event.GetInt();
 if (indOpe<0 || indOpe>=it->second.size())
 	return;
 InsererCtrlEtape(&(it->second[indOpe]));
+}
+
+void FenetreSequenceOperation::SelectionFichier(wxCommandEvent& event)
+{
+if (!osgApp)
+	return;
+wxOsgApp *app=(wxOsgApp *)osgApp;
+
+wxFileDialog ouverture(NULL, "Ouvrir ", wxEmptyString, wxEmptyString, "*.tif;*.jpg;*.bmp;*.png;*.yml;*.gz",wxFD_FILE_MUST_EXIST |wxFD_MULTIPLE );
+if (ouverture.ShowModal()!=wxID_OK)
+	return;
+ouverture.GetPaths( fichierSelectionnes);
+std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
+int opSelec;
+wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
+if (ws==NULL)
+	return;
+opSelec=ws->GetValue();
+std::map <int,std::vector <ParametreOperation > >::iterator itRef=(*t).begin();
+for (int i=0;i<opSelec && itRef!=(*t).end();i++,itRef++);
+
+if (itRef!=(*t).end())
+	for (int i=0;i<fichierSelectionnes.size();i++)
+		{
+		std::map <int,std::vector <ParametreOperation > >::iterator it=itRef;
+		wxCharBuffer ww=fichierSelectionnes[i].mb_str ();
+		char *nomFichier=ww.data() ;
+		ImageInfoCV *imIni= new ImageInfoCV(nomFichier);
+		ImageInfoCV **im=NULL;
+		ImageInfoCV *imTmp=NULL;
+		for (std::vector <ParametreOperation > ::iterator it=itRef->second.begin();it!=itRef->second.end();it++)
+			{
+			ParametreOperation pOCV=*it;
+			if (im)
+				{
+				pOCV.op1=im[0];
+				if (imTmp)
+					delete imTmp;
+				imTmp=im[0];
+				}
+			else
+				pOCV.op1=imIni;
+			pOCV.indOp1Fenetre=-1;
+
+			im=pOCV.ExecuterOperation();
+			}
+		delete imIni;
+		delete imTmp;
+		wxString nom(nomFichier);
+		nom=itRef->second.begin()->nomSequence+nom+".yml";
+		ww=nom.mb_str ();
+		nomFichier=ww.data() ;
+		cv::FileStorage fs(nomFichier, cv::FileStorage::WRITE);
+		fs<<"Image"<<*((cv::Mat*)im[0]);
+		fs.release();
+
+		delete im[0];
+		}
+
+
 }
 
 
@@ -358,7 +421,7 @@ wxOsgApp *app=(wxOsgApp *)osgApp;
 std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
 opSelec=ws->GetValue();
 std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
-for (int i=0;i<opSelec;i++,it++);
+for (int i=0;i<opSelec&& it!=(*t).end();i++,it++);
 ExecuterSequence(&(it->second));
 }
 

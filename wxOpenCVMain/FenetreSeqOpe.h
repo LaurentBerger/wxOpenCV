@@ -27,6 +27,7 @@ wxNotebook						*classeur;	/*!< le classeur avec ses différents onglets*/
 wxString						*nomEtape;	/*!< Nom des étapes dans la listeBox */
 int								nbEtape;	/*!< nombre de chaines maximum */
 wxListBox						*choixOp;
+wxArrayString					fichierSelectionnes; 
 
 wxSize							tailleMax;	/*!< taille maximale de la fenêtre */
 public :
@@ -51,6 +52,8 @@ void  OnSpinMoins(wxSpinEvent& event);
 void  OnSpinPlus(wxSpinEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 void  OnOpeSelec(wxCommandEvent& event);
+	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
+void  SelectionFichier(wxCommandEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 
 void OnTextValider(wxCommandEvent &w);

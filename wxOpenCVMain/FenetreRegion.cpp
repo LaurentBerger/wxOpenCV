@@ -101,15 +101,15 @@ void ImageStatistiques::ListerRegion()
 {
 
 
-if (fenMere->ImAcq()->channels()>=1)
+if (ongletRegionB && fenMere->ImAcq()->channels()>=1)
 	{
 	ongletRegionB->ListerRegion(0);	
 	}
-if (fenMere->ImAcq()->channels()>=2)
+if (ongletRegionV && fenMere->ImAcq()->channels()>=2)
 	{
 	ongletRegionV->ListerRegion(1);	
 	}
-if (fenMere->ImAcq()->channels()>=3)
+if (ongletRegionR && fenMere->ImAcq()->channels()>=3)
 	{
 	ongletRegionR->ListerRegion(2);	
 	}

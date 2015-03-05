@@ -445,7 +445,7 @@ void wxOsgApp::Ouvrir(wxCommandEvent &w)
 wxString dossier;
 configApp->Read("/dossier",&dossier,wxEmptyString);
 
-wxFileDialog ouverture(NULL, "Ouvrir ", dossier, wxEmptyString, "*.tif;*.jpg;*.bmp;*.png;*.ymlgz;*.is2");
+wxFileDialog ouverture(NULL, "Ouvrir ", dossier, wxEmptyString, "*.tif;*.jpg;*.bmp;*.png;*.yml;*.gz;*.is2");
 if (ouverture.ShowModal()!=wxID_OK)
 	return;
 configApp->Write("/dossier",ouverture.GetDirectory());
@@ -1601,7 +1601,7 @@ wxFileName p(s);
 
 wxCharBuffer ww=s.mb_str ();
 char *nomFichier=ww.data() ;
-if (s.Find("ymlgz")>=0)
+if (s.Find("yml")>=0)
 	{
 	try 
 		{
