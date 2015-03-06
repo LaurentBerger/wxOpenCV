@@ -689,6 +689,13 @@ void MAJRectangle(wxCommandEvent& event){feuille->ModeCoupe(false);feuille->Mode
 void MAJCoupe(wxCommandEvent& event){feuille->ModeRectangle(false);feuille->ModeCoupe(!feuille->ModeCoupe());};
 void MAJFiltreMax(wxCommandEvent& event){modeFiltre= !modeFiltre;};
 void SelectPalette(wxCommandEvent& event);
+wxColor LitCouleurPixel(wxPoint &p);
+   /*!
+     *  \brief Fonction LitCouleurPixel
+     *
+     *  Couleur du pixel de l'image affichée
+     *  \param p : position du pixel
+
 /* MENU CONTEXTUEL Operation*/
 void PrepOperation(wxCommandEvent& event);
    /*!

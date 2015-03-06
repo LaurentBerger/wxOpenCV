@@ -18,7 +18,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
     //m_bmp = wxBitmap(_("star.png"), wxBITMAP_TYPE_PNG);
 
 	ImageInfoCV *im=((FenetrePrincipale*)parent)->ImAcq();
-
+	wxColor c=((FenetrePrincipale*)parent)->LitCouleurPixel(pSrc);
 	wxMemoryDC memDC;
 
 	wxString s1("Region");
@@ -32,8 +32,8 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
     memDC.SelectObject(m_bmp);
     memDC.SetBackground(*wxWHITE_BRUSH);
     memDC.Clear();
-    memDC.SetPen(*wxRED_PEN);
-    memDC.SetBrush(*wxRED_BRUSH);
+    memDC.SetPen(c);
+    memDC.SetBrush(wxBrush(c));
 
 
 	cv::Vec3b x;
@@ -45,7 +45,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 	switch(im->type()){
 	case CV_32FC1:
 		{
-		float ref=im->at<float>(pSrc.x,pSrc.y);
+		float ref=im->at<float>(pSrc.y,pSrc.x);
 		for (int i=0;i<im->rows;i++)
 			for (int j=0;j<im->cols;j++)
 				{
@@ -62,7 +62,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 		break;
 	case CV_64FC1:
 		{
-		double ref=im->at<double>(pSrc.x,pSrc.y);
+		double ref=im->at<double>(pSrc.y,pSrc.x);
 		for (int i=0;i<im->rows;i++)
 			for (int j=0;j<im->cols;j++)
 				{
@@ -79,7 +79,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 		break;
 	case CV_32FC3 :
 		{
-		cv::Vec3f ref=im->at<cv::Vec3f>(pSrc.x,pSrc.y);
+		cv::Vec3f ref=im->at<cv::Vec3f>(pSrc.y,pSrc.x);
 		for (int i=0;i<im->rows;i++)
 			for (int j=0;j<im->cols;j++)
 				{
@@ -98,7 +98,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 		break;
 	case CV_64FC3 :
 		{
-		cv::Vec3d ref=im->at<cv::Vec3d>(pSrc.x,pSrc.y);
+		cv::Vec3d ref=im->at<cv::Vec3d>(pSrc.y,pSrc.x);
 		for (int i=0;i<im->rows;i++)
 			for (int j=0;j<im->cols;j++)
 				{
@@ -115,7 +115,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 		break;
 	case CV_32SC1:
 		{
-		int ref=im->at<int>(pSrc.x,pSrc.y);
+		int ref=im->at<int>(pSrc.y,pSrc.x);
 		for (int i=0;i<im->rows;i++)
 			for (int j=0;j<im->cols;j++)
 				{
@@ -132,7 +132,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 		break;
 	case CV_32SC3:
 		{
-		cv::Vec3i ref=im->at<cv::Vec3i>(pSrc.x,pSrc.y);
+		cv::Vec3i ref=im->at<cv::Vec3i>(pSrc.y,pSrc.x);
 		for (int i=0;i<im->rows;i++)
 			for (int j=0;j<im->cols;j++)
 				{
@@ -149,7 +149,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 		break;
 	case CV_8UC1:
 		{
-		unsigned char ref=im->at<unsigned char>(pSrc.x,pSrc.y);
+		unsigned char ref=im->at<unsigned char>(pSrc.y,pSrc.x);
 		for (int i=0;i<im->rows;i++)
 			for (int j=0;j<im->cols;j++)
 				{
@@ -166,7 +166,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 		break;
 	case CV_8UC3 :
 		{
-		cv::Vec3b ref=im->at<cv::Vec3b>(pSrc.x,pSrc.y);
+		cv::Vec3b ref=im->at<cv::Vec3b>(pSrc.y,pSrc.x);
 		for (int i=0;i<im->rows;i++)
 			for (int j=0;j<im->cols;j++)
 				{
@@ -200,7 +200,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 		break;
 	case CV_16SC1 :
 		{
-		short ref=im->at<short>(pSrc.x,pSrc.y);
+		short ref=im->at<short>(pSrc.y,pSrc.x);
 		for (int i=0;i<im->rows;i++)
 			for (int j=0;j<im->cols;j++)
 				{
@@ -217,7 +217,7 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 		break;
 	case CV_16SC3 :
 		{
-		cv::Vec3s ref=im->at<cv::Vec3s>(pSrc.x,pSrc.y);
+		cv::Vec3s ref=im->at<cv::Vec3s>(pSrc.y,pSrc.x);
 		for (int i=0;i<im->rows;i++)
 			for (int j=0;j<im->cols;j++)
 				{

@@ -620,6 +620,16 @@ if (imAffichee==NULL)
 return;
 }
 
+
+wxColor FenetrePrincipale::LitCouleurPixel(wxPoint &p)
+{
+if (!imAffichee)
+		return wxColor(0,0,0);
+wxColor r(imAffichee->GetRed(p.x,p.y),imAffichee->GetGreen(p.x,p.y),imAffichee->GetBlue(p.x,p.y));
+return r;
+}
+
+
 void FenetrePrincipale::RAZTransparence()
 {
 if (!tabRGB)

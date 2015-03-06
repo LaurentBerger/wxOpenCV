@@ -332,7 +332,8 @@ wxRect	r(GetClientRect());
 if (!r.Contains(point) ||  this->f!=osgApp->Graphique())
 	return;
 point=RepereEcranImage(point);
-if (f->ImAcq() && f->ImAcq()->StatComposante())
+
+if (f->ImAcq() && point.x>=0 && point.x<f->ImAcq()->cols && point.y>=0 && point.y<f->ImAcq()->rows && f->ImAcq()->StatComposante())
 	{
 	if (osgApp->ImgStat())
 		{
@@ -356,7 +357,7 @@ if (f->ImAcq() && f->ImAcq()->StatComposante())
 		}
 	}
 
-if (event.ShiftDown())
+if (event.ShiftDown()&&f->ImAcq() && point.x>=0 && point.x<f->ImAcq()->cols && point.y>=0 && point.y<f->ImAcq()->rows )
 	{
 	ShapedFrame *shapedFrame = new ShapedFrame(f,point);
 	shapedFrame->Show(true);

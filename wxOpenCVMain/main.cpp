@@ -2172,9 +2172,30 @@ vector<int> compression_params;
 
 if (p.GetExt().Cmp("yml")==0)
 	{
-	nomFichier = nomFichier +"gz";
 	cv::FileStorage fs(nomFichier, cv::FileStorage::WRITE);
 	fs<<"Image"<<*((cv::Mat*)imAcq);
+	if (imAcq->StatComposante())
+	{
+	for (int i=0;i<imAcq->channels();i++)
+		{
+		wxString s;
+		s.Printf("StatComposante%d",i);
+		wxCharBuffer ww=s.mb_str ();
+		char *nomChamp=ww.data() ;
+		fs<<nomChamp<<*((cv::Mat*)(imAcq->StatComposante()[i]));
+		}
+	}
+	if (imAcq->CentreGComposante())
+	{
+	for (int i=0;i<imAcq->channels();i++)
+		{
+		wxString s;
+		s.Printf("CentreGComposante%d",i);
+		wxCharBuffer ww=s.mb_str ();
+		char *nomChamp=ww.data() ;
+		fs<<nomChamp<<*((cv::Mat*)(imAcq->CentreGComposante()[i]));
+		}
+	}
 	fs.release();
 	}
 else
