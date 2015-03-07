@@ -518,9 +518,9 @@ wxMenu *ZoneImage::CreateMenuPalette(wxString *title)
     menu->AppendCheckItem(NOIRETBLANC_+2, _("&Rainbow\t"));
     menu->AppendCheckItem(NOIRETBLANC_+3, _("&Owner\t"));
     menu->AppendCheckItem(NOIRETBLANC_+4, _("&Reverse Owner\t"));
-    menu->AppendCheckItem(NOIRETBLANC_+5, _("&Gray 8 bits\tCtrl-F2"));
+    menu->AppendCheckItem(NOIRETBLANC_+5, _("&Linear 8 bits\tCtrl-F2"));
     menu->AppendCheckItem(NOIRETBLANC_+6, _("&Rainbow 8bits\t"));
-    menu->AppendCheckItem(NOIRETBLANC_+7, _("&Gray loop 8 bis\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+7, _("&Linear loop 8 bis\t"));
     menu->AppendCheckItem(NOIRETBLANC_+8, _("&Rainbow loop 8 bits\t"));
     menu->AppendCheckItem(NOIRETBLANC_+9, _("&Randomize\t"));
 	menu->Check(f->IndPalette()+NOIRETBLANC_,true);
@@ -606,7 +606,7 @@ else
 	if (osgApp->Op1()!=NULL)
 		{
 		wxString s=osgApp->Fenetre(osgApp->IndOp1())->GetTitle();
-		menu.AppendCheckItem(MENU_OP1, _("A = ")+s);
+		menu.AppendCheckItem(MENU_OP1, "A = "+s);
 		}
 	else
 		menu.AppendCheckItem(MENU_OP1, "Image as A");
@@ -615,7 +615,7 @@ else
 		if (osgApp->Op2()!=NULL)
 			{
 			wxString s=osgApp->Fenetre(osgApp->IndOp2())->GetTitle();
-			menu.AppendCheckItem(MENU_OP2, _("B =")+s);
+			menu.AppendCheckItem(MENU_OP2, "B ="+s);
 			}
 		else
 			menu.AppendCheckItem(MENU_OP2, "Image as B");
@@ -625,7 +625,7 @@ else
 		if (osgApp->Op3()!=NULL)
 			{
 			wxString s=osgApp->Fenetre(osgApp->IndOp3())->GetTitle();
-			menu.AppendCheckItem(MENU_OP3, _("C =")+s);
+			menu.AppendCheckItem(MENU_OP3, "C ="+s);
 			}
 		else
 			menu.AppendCheckItem(MENU_OP3, "Image as C");

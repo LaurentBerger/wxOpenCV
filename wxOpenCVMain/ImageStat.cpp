@@ -324,12 +324,12 @@ wxSize(70,30),wxSize(400,30),
 wxSize(70,30),wxSize(400,30),
 wxSize(70,30),wxSize(400,30)};
 
-wxString	legende[]={	"Image","",
-						"Size","",
-						"Pixel size","",
-						"Minimum ","",
-						"Maximum ","",
-						"Background Image ",""};
+wxString	legende[]={	"Image",wxEmptyString,
+						"Size",wxEmptyString,
+						"Pixel size",wxEmptyString,
+						"Minimum ",wxEmptyString,
+						"Maximum ",wxEmptyString,
+						"Background Image ",wxEmptyString};
 wxString texte;
 ongletStatus = new wxWindow(listeFenetreOnglet,-1); 
 

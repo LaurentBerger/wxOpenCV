@@ -449,7 +449,7 @@ wxSize	taille[]={
 wxSize(100,30),wxSize(100,30),wxSize(100,30),wxSize(150,50)};
 long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
 
-wxString	legende[]={_("Mean Mode"),_(""),_("Frequency cut off ([0. 1.0] "),_("")};
+wxString	legende[]={_("Mean Mode"),wxEmptyString,_("Frequency cut off ([0. 1.0] "),wxEmptyString};
 ongletMoyenne = new wxWindow(listeFenetreOnglet,-1); 
 int i=0;
 new wxStaticText(ongletMoyenne,-1,legende[i],position[i], taille[i]);
@@ -626,7 +626,7 @@ wxSize(100,30),wxSize(100,20),
 wxSize(100,30),wxSize(100,20),
 wxSize(100,30),wxSize(100,20),
 wxSize(100,30)};
-wxString	legende[]={_T("Mode"),_T("Triggering"),_T("Read out"),_T(" "),_T(" "),_T(""),
+wxString	legende[]={_T("Mode"),_T("Triggering"),_T("Read out"),wxEmptyString,wxEmptyString,wxEmptyString,
 _T("Exposure Time (s)"),_T("0.1 "),_T("No of Accumulations"),_T("1"),_T("Accumulation Cycle frequency (Hz)"),_T("0.5"),
 _T("No. of images in Kinetic"),_T("1"),_T("Kinetic Duration (s)"),_T("10"),_T("Automatic Exposure"),_T("10")};
 int i=0;

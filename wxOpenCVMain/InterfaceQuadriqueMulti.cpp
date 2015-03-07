@@ -53,10 +53,10 @@ wxSize(200,20),wxSize(60,20)};
 long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
 
 wxString	legende[]={
-_T("Mean parameter α"),_T(""),
-_T("derivative parameter β"),_T(""),
-_T("Threshold high and low"),_T(""),_T(""),
-_T("Minimum Surface"),_T(""),
+_T("Mean parameter α"),wxEmptyString,
+_T("derivative parameter β"),wxEmptyString,
+_T("Threshold high and low"),wxEmptyString,wxEmptyString,
+_T("Minimum Surface"),wxEmptyString),
 _T("Index"),_T("Surface"),_T("E& ecart"),_T("C"),
 _T("9999"),_T("1000000"),_T("16000"),_T("16000"),
 _T("5"),_T("6"),_T("7"),_T("8"),

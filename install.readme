@@ -38,3 +38,8 @@ Creation des fichiers de traduction ( gettext)
 
 dir /b *.cpp >liste.txt
 xgettext --from-code=cp1252 -a --no-location -s --no-wrap --join-existing --escape main.cpp -o fr/main.po
+xgettext --from-code=cp1252 -a --no-location -s --no-wrap --join-existing --escape -f liste.txt 
+Pour la première création 
+gettext --from-code=cp1252 -s -k --keyword=_  --no-location -s --no-wrap  --escape -f liste.txt -p fr
+Après
+gettext --from-code=cp1252 -s -k --keyword=_  --no-location -s --no-wrap --join-existing --escape -f liste.txt -p fr

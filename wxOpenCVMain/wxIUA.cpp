@@ -216,7 +216,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
 	InstallationbarreOutils(7);
 
 
-    wxWindow* wnd10 = CreateTextCtrl(_(""));
+    wxWindow* wnd10 = CreateTextCtrl(wxEmptyString);
 
  	wxLogTextCtrl *logWindow = new wxLogTextCtrl((wxTextCtrl *)wnd10);
 	wxLog::SetVerbose(true);
@@ -229,7 +229,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
     iconSize &= ~1;
 
     m_mgr.AddPane(wnd10, wxAuiPaneInfo().
-                  Name(_("Rapport")).Caption(_("Log window ")).
+                  Name(_("Report")).Caption(_("Log window ")).
                   Bottom().Layer(1).Position(1).
                   Icon(wxArtProvider::GetBitmap(wxART_WARNING,
                                                 wxART_OTHER,
@@ -248,7 +248,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
             all_panes.Item(i).Hide();
     m_mgr.GetPane(_("Parameters Operators")).Show();
     m_mgr.GetPane(_("grid_content")).Show();
-    m_mgr.GetPane(_("Rapport")).Show().Bottom().Layer(0).Row(0).Position(0);
+    m_mgr.GetPane(_("Report")).Show().Bottom().Layer(0).Row(0).Position(0);
 
     wxString perspective_default = m_mgr.SavePerspective();
 
@@ -532,7 +532,7 @@ for (int i=xx.opnn[idFiltre]->cols;i<21;i++)
 	for (int i=0;i<xx.opnn[idFiltre]->rows;i++)
 		for (int j=0;j<xx.opnn[idFiltre]->cols;j++)
 			g->DefCellule(i,j,xx.opnn[idFiltre]->at<float>(i,j));
-if (cb->GetStringSelection().Find(_("Utilisateur"))!=wxNOT_FOUND)
+if (cb->GetStringSelection().Find(_("user"))!=wxNOT_FOUND)
 	g->EnableEditing (true);
 else
 	g->EnableEditing (false);
@@ -564,11 +564,11 @@ if (event.GetString().ToDouble(&val))
 wxPanel* InterfaceAvance::OngletConvolution(wxWindow* parent)
 {
 ImageInfoCV xx;
-wxString  mnxn[]={_("Mean"),_("Mean Pondérée"),_("x Difference"),_("y Difference"),_("Roberts x"),
+wxString  mnxn[]={_("Mean"),_("Mean weighted"),_("x Difference"),_("y Difference"),_("Roberts x"),
 _("Roberts y"),_("Prewitt x"),_("Prewitt y"),_("Sobel x"),_("Sobel y"),_("Frei Chen x"),
-		_("Frei Chen y"),_("Laplacien 4 connexe"),_("Laplacien 8 connexe"),_("User 1"),_("User 2"),
-		_("User 3"),_("User 4"),_("User 5"),_("Moyenne 5x5"),_("Mean Pondérée 5x5"),_("User 1 5x5"),_("User 2 5x5"),
-		_("User 3 5x5"),_("User 45x5 "),_("Mean 7x7"),_("Mean Pondérée 7x7"),_("User 1 7x7"),_("User 2 7x7"),
+		_("Frei Chen y"),_("Laplacian 4 connex"),_("Laplacian 8 connex"),_("User 1"),_("User 2"),
+		_("User 3"),_("User 4"),_("User 5"),_("Mean 5x5"),_("Mean weighted 5x5"),_("User 1 5x5"),_("User 2 5x5"),
+		_("User 3 5x5"),_("User 45x5 "),_("Mean 7x7"),_("Mean weighted 7x7"),_("User 1 7x7"),_("User 2 7x7"),
 		_("User 3 7x7"),_("User 4 7x7")};
 	// add the wxPLplot
 wxPanel* panel = new wxPanel( parent,wxID_ANY ,wxPoint(0,0),wxSize(400,400));
@@ -779,22 +779,22 @@ wxTreeCtrl* InterfaceAvance::CreateTreeCtrl()
 
 
 
-    items.Add(tree->AppendItem(root, _("Item 1"), 0));
-    items.Add(tree->AppendItem(root, _("Item 2"), 0));
-    items.Add(tree->AppendItem(root, _("Item 3"), 0));
-    items.Add(tree->AppendItem(root, _("Item 4"), 0));
-    items.Add(tree->AppendItem(root, _("Item 5"), 0));
+    items.Add(tree->AppendItem(root, "Item 1", 0));
+    items.Add(tree->AppendItem(root, "Item 2", 0));
+    items.Add(tree->AppendItem(root, "Item 3", 0));
+    items.Add(tree->AppendItem(root, "Item 4", 0));
+    items.Add(tree->AppendItem(root, "Item 5", 0));
 
 
     int i, count;
     for (i = 0, count = items.Count(); i < count; ++i)
     {
         wxTreeItemId id = items.Item(i);
-        tree->AppendItem(id, _("Subitem 1"), 1);
-        tree->AppendItem(id, _("Subitem 2"), 1);
-        tree->AppendItem(id, _("Subitem 3"), 1);
-        tree->AppendItem(id, _("Subitem 4"), 1);
-        tree->AppendItem(id, _("Subitem 5"), 1);
+        tree->AppendItem(id, "Subitem 1", 1);
+        tree->AppendItem(id, "Subitem 2", 1);
+        tree->AppendItem(id, "Subitem 3", 1);
+        tree->AppendItem(id, "Subitem 4", 1);
+        tree->AppendItem(id, "Subitem 5", 1);
     }
 
 
@@ -983,13 +983,13 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
                                          wxAUI_TB_HORZ_TEXT);
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
         tb->SetMargins(1,1);
-		tb->AddTool(ID_EROSION, "", toolBarBitmaps[Tool_erosion], _("Erosion"));
-		tb->AddTool(ID_DILATATION, "", toolBarBitmaps[Tool_dilatation], _("Dilatation"));
-		tb->AddTool(ID_OUVERTURE, "", toolBarBitmaps[Tool_ouverture], _("Ouverture"));
-		tb->AddTool(ID_FERMETURE,"", toolBarBitmaps[Tool_fermeture], _("Fermeture"));
-		tb->AddTool(ID_CHAPHAUTBL, "", toolBarBitmaps[Tool_chaphautblanc], _("Chapeau haut"));
-		tb->AddTool(ID_CHAPHAUTNO, "", toolBarBitmaps[Tool_chaphautnoir], _("Chapeau bas"));
-		tb->AddTool(ID_GRADMORPH, "", toolBarBitmaps[Tool_gradmorph], _("gradient morph."));
+		tb->AddTool(ID_EROSION, "", toolBarBitmaps[Tool_erosion], _("Erode"));
+		tb->AddTool(ID_DILATATION, "", toolBarBitmaps[Tool_dilatation], _("Dilate"));
+		tb->AddTool(ID_OUVERTURE, "", toolBarBitmaps[Tool_ouverture], _("Openning"));
+		tb->AddTool(ID_FERMETURE,"", toolBarBitmaps[Tool_fermeture], _("Closing"));
+		tb->AddTool(ID_CHAPHAUTBL, "", toolBarBitmaps[Tool_chaphautblanc], _("Top hat"));
+		tb->AddTool(ID_CHAPHAUTNO, "", toolBarBitmaps[Tool_chaphautnoir], _("Black hat"));
+		tb->AddTool(ID_GRADMORPH, "", toolBarBitmaps[Tool_gradmorph], _("Morph. gradient"));
 //		tb->SetCustomOverflowItems(prepend_items, append_items);
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
@@ -1130,14 +1130,14 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
         tb->SetMargins(1,1);
 		tb->AddTool(ID_CANNY, _("Canny"), toolBarBitmaps[Tool_canny], _("Canny"));
-		tb->AddTool(ID_THRESHOLD, _(""), toolBarBitmaps[Tool_seuillage], _("Thereshold"));
-		tb->AddTool(ID_ADATHRESHOLD, _(""), toolBarBitmaps[Tool_seuillageada], _("Adaptive Thereshold"));
-		tb->AddTool(ID_DISTANCEDISCRETE, _(""), toolBarBitmaps[Tool_distancediscrete], _("Transform distance"));
-		tb->AddTool(ID_SQUELETTE, _(""), toolBarBitmaps[Tool_squelette], _("Skeleton"));
-		tb->AddTool(ID_VORONOI, _(""), toolBarBitmaps[Tool_voronoi], _("Voronoi"));
+		tb->AddTool(ID_THRESHOLD, wxEmptyString, toolBarBitmaps[Tool_seuillage], _("Thereshold"));
+		tb->AddTool(ID_ADATHRESHOLD, wxEmptyString, toolBarBitmaps[Tool_seuillageada], _("Adaptive Thereshold"));
+		tb->AddTool(ID_DISTANCEDISCRETE, wxEmptyString, toolBarBitmaps[Tool_distancediscrete], _("Transform distance"));
+		tb->AddTool(ID_SQUELETTE, wxEmptyString, toolBarBitmaps[Tool_squelette], _("Skeleton"));
+		tb->AddTool(ID_VORONOI, wxEmptyString, toolBarBitmaps[Tool_voronoi], _("Voronoi"));
 		tb->AddTool(ID_CONTOUR, _("Contour"), toolBarBitmaps[Tool_contour], _("Contour"));
-		tb->AddTool(ID_COMPCONNEXE, _(""), toolBarBitmaps[Tool_cmpconnexe], _("Connected component"));
-		tb->AddTool(ID_PARTAGE_EAUX, _(""), toolBarBitmaps[Tool_statconnexe], _("Watershed"));
+		tb->AddTool(ID_COMPCONNEXE, wxEmptyString, toolBarBitmaps[Tool_cmpconnexe], _("Connected component"));
+		tb->AddTool(ID_PARTAGE_EAUX, wxEmptyString, toolBarBitmaps[Tool_statconnexe], _("Watershed"));
 		//tb->SetCustomOverflowItems(prepend_items, append_items);
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
@@ -1172,8 +1172,8 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tbOperation= tb;
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
         tb->SetMargins(1,1);
-		tb->AddTool(ID_FUSIONPLAN, _(""), toolBarBitmaps[Tool_fusionplan], _("Merge color plan"));
-		tb->AddTool(ID_SEPARATIONPLAN, _(""), toolBarBitmaps[Tool_separationplan], _("split color plan"));
+		tb->AddTool(ID_FUSIONPLAN, wxEmptyString, toolBarBitmaps[Tool_fusionplan], _("Merge color plan"));
+		tb->AddTool(ID_SEPARATIONPLAN, wxEmptyString, toolBarBitmaps[Tool_separationplan], _("split color plan"));
 		//tb->SetCustomOverflowItems(prepend_items, append_items);
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().

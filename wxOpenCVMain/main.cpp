@@ -824,16 +824,16 @@ bool b=false;
 
     // Initialize the catalogs we'll be using
     const wxLanguageInfo* pInfo = wxLocale::GetLanguageInfo(langue);
-    if (!locale.AddCatalog("main"))
+    if (!locale.AddCatalog("messages"))
     {
         wxLogError(_("Couldn't find/load the 'main' catalog for locale '%s'."),
                    pInfo ? pInfo->GetLocaleName() : _("unknown"));
     }
-    if (!locale.AddCatalog("wxIUA"))
+ /*   if (!locale.AddCatalog("wxIUA"))
     {
         wxLogError(_("Couldn't find/load the 'main' catalog for locale '%s'."),
                    pInfo ? pInfo->GetLocaleName() : _("unknown"));
-    }
+    }*/
     // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
     // a localized error message:
     locale.AddCatalog("wxstd");
@@ -885,7 +885,7 @@ if (m_isPda)
 
 bool ok = m_isPda
         ? bitmap.IsOk()
-        : bitmap.LoadFile(_("splash.png"), wxBITMAP_TYPE_PNG);
+        : bitmap.LoadFile("splash.png", wxBITMAP_TYPE_PNG);
 
 if (ok)
 {
@@ -1414,7 +1414,7 @@ idFenetre=-1;
 
 detectionUtilisateur =  new wxTimer(this,2);
 repertoireDuDocument=".";
-nomDuDocument="";
+nomDuDocument=wxEmptyString;
 modeImage = 0;
 modeFiltre =0;
 fondDejaDefini=0;
@@ -1912,7 +1912,7 @@ Ouvrir le fichier d'horodatage
 */
 void FenetrePrincipale::OnOuvrirHorodatage(wxCommandEvent& event)
 {
-wxFileDialog ouverture(this, _("Open Sequence"), _("Seq"), _("Seq"), _T("*.csv"));
+wxFileDialog ouverture(this, _("Open Timestamp"), _("Seq"), _("Seq"), _T("*.csv"));
 if (ouverture.ShowModal()!=wxID_OK)
 	return;
 string s(ouverture.GetFilename().char_str());
@@ -2733,12 +2733,12 @@ int reponse = wxMessageBox(message,_T("Bias Info"),wxYES_NO );
 if (reponse==wxYES)
 	{
 	nomImageBiais=_T("Biais")+sd+_T("_")+sh+_T(".tif");
-	wxFileDialog ouverture(this, _("Save As"), rep,nomImageBiais , _("*.tif"),wxFD_SAVE );
+	wxFileDialog ouverture(this, _("Save As"), rep,nomImageBiais , "*.tif",wxFD_SAVE );
 	if (ouverture.ShowModal()!=wxID_OK)
 		return;
 	nomImageBiais = ouverture.GetFilename();
 	rep = ouverture.GetDirectory();
-	nomImageTache=rep+_("\\")+nomImageBiais;
+	nomImageTache=rep+"\\"+nomImageBiais;
 	if (::wxFileExists(nomImageTache))
 		if (!wxMessageBox(_("File already exist"), _("Message"), wxYES_NO))
 			return;
@@ -2752,13 +2752,13 @@ if (reponse==wxYES)
 void FenetrePrincipale::EnregistrerTache()
 {
 wxString	rep=wxEmptyString;
-if (!::wxDirExists(_T("\\Images")))
-	::wxMkdir(_T("\\Images"));
-if (!::wxDirExists(_T("\\Images\\BiasBackground")))
-	::wxMkdir(_T("\\Images\\BiasBackground"));
-if (::wxDirExists(_T("\\Images")))
-	if (::wxDirExists(_T("\\Images\\BiasBackground")))
-		rep=_T("\\Images\\BiasBackground\\");
+if (!::wxDirExists("\\Images"))
+	::wxMkdir("\\Images");
+if (!::wxDirExists("\\Images\\BiasBackground"))
+	::wxMkdir("\\Images\\BiasBackground");
+if (::wxDirExists("\\Images"))
+	if (::wxDirExists("\\Images\\BiasBackground"))
+		rep="\\Images\\BiasBackground\\";
 wxDateTime d;
 d.SetToCurrent();
 wxString	sd=d.FormatISODate();
@@ -2777,7 +2777,7 @@ nomImageTache=rep+nomImageTache;
 t[0]=nomFichier;
 strcpy(t[0],nomImageTache.ToAscii());
 //imTache->DoEnregistrer(t);
-wxString message(_T("Background image saved in "));
+wxString message(_("Background image saved in "));
 message=message+nomImageTache+_T(". Do you want to save it in another folder?");
 int reponse = wxMessageBox(message,_T("Background Info"),wxYES_NO );
 if (reponse==wxYES)

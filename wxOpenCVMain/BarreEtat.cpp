@@ -48,23 +48,23 @@ wxSize		size;
 wxRect		rect;
 GetFieldRect(Champ_Rouge, rect);
 wxPoint p=rect.GetBottomLeft();
-m_planRouge = new wxButton(this, 3792,_("R"),p, wxDefaultSize,wxBU_EXACTFIT);
+m_planRouge = new wxButton(this, 3792,"R",p, wxDefaultSize,wxBU_EXACTFIT);
 size = m_planRouge->GetSize();
 
 m_planRouge->Move(rect.x + (rect.width - size.x) / 2,
 						rect.y + (rect.height - size.y) / 2);
-m_planRouge->SetLabel(_("R"));
+m_planRouge->SetLabel("R");
 
 GetFieldRect(Champ_Vert, rect);
 p=rect.GetBottomLeft();
-m_planVert = new wxButton(this, 3793,_("G"),p, wxDefaultSize,wxBU_EXACTFIT);
+m_planVert = new wxButton(this, 3793,"G",p, wxDefaultSize,wxBU_EXACTFIT);
 size = m_planVert->GetSize();
-m_planVert->SetLabel(_("G"));
+m_planVert->SetLabel("G");
 
 m_planVert->Move(rect.x + (rect.width - size.x) / 2,
 						rect.y + (rect.height - size.y) / 2);
-m_planBleu = new wxButton(this, 3794,_("B"),p, wxDefaultSize,wxBU_EXACTFIT);
-m_planBleu->SetLabel(_("B"));
+m_planBleu = new wxButton(this, 3794,"B",p, wxDefaultSize,wxBU_EXACTFIT);
+m_planBleu->SetLabel("B");
 size = m_planBleu->GetSize();
 GetFieldRect(Champ_Bleu, rect);
 
@@ -230,12 +230,12 @@ if (event.GetId()==3789)
 	{
 	if (fen->ModeCamera())
 		{
-		if (wxMessageBox("Do you want really to stop grabbing?", "Warning", wxYES_NO)==wxYES)
+		if (wxMessageBox(_("Do you want really to stop grabbing?"), _("Warning"), wxYES_NO)==wxYES)
 			fen->ModeCamera(evt);
 		}
 	else
 		{
-		if (wxMessageBox("Do you want really to start grabbing?", "Warning", wxYES_NO)==wxYES)
+		if (wxMessageBox(_("Do you want really to start grabbing?"), _("Warning"), wxYES_NO)==wxYES)
 			fen->ModeCamera(evt);
 		}
 	}

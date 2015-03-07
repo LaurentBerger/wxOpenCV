@@ -16,7 +16,7 @@ static char         *f_name;
 
 
 static PLGraphicsIn gin;
-static const char   *notes[] = { "Make sure you get it right!", "" };
+static const char   *notes[] = { "Make sure you get it right!", " " };
 static PLOptionTable options[] = {
     {
         "locate",               /* Turns on test of API locate function */
@@ -107,13 +107,13 @@ fenMere=NULL;
   wxString m_title=_T("Histogram");
   switch(plotwindow->getBackend()) {
   case wxPLPLOT_BACKEND_DC:
-  	m_title += _(" (basic)");
+  	m_title += " (basic)";
   	break;
   case wxPLPLOT_BACKEND_GC:
-  	m_title += _(" (wxGC)");
+  	m_title += " (wxGC)";
   	break;
   case wxPLPLOT_BACKEND_AGG:
-  	m_title += _(" (AGG)");
+  	m_title += " (AGG)";
   	break;
   default:
   	break;
