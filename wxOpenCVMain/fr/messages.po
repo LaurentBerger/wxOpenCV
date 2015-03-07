@@ -1,0 +1,801 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: wxopencv\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-03-07 20:55+0100\n"
+"PO-Revision-Date: 2015-03-07 22:00+0100\n"
+"Last-Translator: Laurent Berger <laurent.berger@univ-lemans.fr>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.6.10\n"
+
+msgid "         Name "
+msgstr ""
+
+msgid "&File"
+msgstr "&Fichier"
+
+msgid "&Jet\t"
+msgstr "&Jet"
+
+msgid "&Linear\tCtrl-F1"
+msgstr "&Linéairer\tCtrl-F1"
+
+msgid "&Linear 8 bits\tCtrl-F2"
+msgstr "&Linéaire 8 bits\tCtrl-F2"
+
+msgid "&Linear loop 8 bis\t"
+msgstr "&Linéaire 8 bits boucle\tCtrl-F2"
+
+msgid "&Owner\t"
+msgstr "&perso\t"
+
+msgid "&Rainbow\t"
+msgstr "&Arc en ciel\t"
+
+msgid "&Rainbow 8bits\t"
+msgstr "&Arc en ciel 8bits\t"
+
+msgid "&Rainbow loop 8 bits\t"
+msgstr "&Arc en ciel  boucle 8 bits\t"
+
+msgid "&Randomize\t"
+msgstr "&Aléatoire\t"
+
+msgid "&Reverse Owner\t"
+msgstr "&Perso inverse\t"
+
+msgid "&parameters"
+msgstr "&Paramètres"
+
+msgid "10Log z"
+msgstr "10 log z"
+
+msgid "16 bits signed"
+msgstr "16 bits signé"
+
+msgid "16 signed bit"
+msgstr "16 bits signé"
+
+msgid "32 signed bit"
+msgstr "32 bits signé"
+
+msgid "3D"
+msgstr "3D"
+
+msgid "3D view already opened"
+msgstr "Vue 3D déjà ouverte"
+
+msgid "4-connex"
+msgstr "4-connexe"
+
+msgid "8-connex"
+msgstr "8-connexe"
+
+msgid "A(x,y)<thresh maxValue else 0"
+msgstr "A(x,y)<seuil Val max.sinon 0"
+
+msgid "A(x,y)<threshold 0 else A(x,y)"
+msgstr "A(x,y)<seuil 0 sinon A(x,y)"
+
+msgid "A(x,y)>thresh maxValue else 0"
+msgstr "A(x,y)>seuil Val max.sinon 0"
+
+msgid "A(x,y)>thresh thresh else A(x,y)"
+msgstr "A(x,y)>seuil seuil sinon A(x,y)"
+
+msgid "A(x,y)>threshold 0 else A(x,y)"
+msgstr "A(x,y)>seuil 0 sinon A(x,y)"
+
+msgid "About wxOpenCV"
+msgstr "A propos de wxOpenCV"
+
+msgid "Adaptive Thereshold"
+msgstr "Seuillage adaptatif"
+
+msgid "Add 2 images"
+msgstr "Ajoute 2 images"
+
+msgid "An error occured in calculation histogram  :"
+msgstr "Erreur dans le calcul de l'histogramme"
+
+msgid "An error occured while saving file :"
+msgstr "Erreur pendant la sauvegarde"
+
+msgid "Are you sure you want to close/hide page?"
+msgstr "Voulez vous caché cette page?"
+
+msgid "Are you sure you want to close/hide this notebook page?"
+msgstr "Voulez vous caché cette page?"
+
+msgid "Are you sure you want to close/hide this pane?"
+msgstr "Voulez vous caché ce panneau?"
+
+msgid "Background image saved in "
+msgstr "Image de fond sauvée"
+
+msgid "Bias image saved in "
+msgstr "Image de biais sauvée"
+
+msgid "Big Toolbar"
+msgstr "barre d'outils"
+
+msgid "Black hat"
+msgstr "Chapeau haut"
+
+msgid "Blue Region "
+msgstr "Région bleue"
+
+msgid "Blur (gaussian)"
+msgstr "Flou gaussien"
+
+msgid "Blur (mean)"
+msgstr "Flou moyenne"
+
+msgid "Blur (median filter)"
+msgstr "Flou médian"
+
+msgid "Border type"
+msgstr "Type de frontière"
+
+msgid "Camera Control"
+msgstr "Contôle caméra"
+
+msgid "Camera must be paused first!"
+msgstr "Caméra doit être en pause"
+
+msgid "Cannot stop Process!"
+msgstr "Tâche ne peut être arrêtée"
+
+msgid "Canny"
+msgstr "Canny"
+
+msgid "Client Size Reporter"
+msgstr "Surface client"
+
+msgid "Closing"
+msgstr "Fermeture"
+
+msgid "Connected component"
+msgstr "Composante connexe"
+
+msgid "Constant"
+msgstr "Constant"
+
+msgid "Constant border  zz|abcde|zz"
+msgstr "frontière  zz|abcde|zz"
+
+msgid "Contour"
+msgstr "Contour"
+
+msgid "Convolution"
+msgstr "Convolution"
+
+msgid "Convolution filter"
+msgstr "Filtre de convolution"
+
+msgid "Convolution parameters"
+msgstr "Paramètres pour la convolution"
+
+#, c-format
+msgid "Couldn't find/load the 'main' catalog for locale '%s'."
+msgstr "Impossible de trouver le catalogue '%s'."
+
+msgid "Cross"
+msgstr "Croix"
+
+msgid "Customize..."
+msgstr "Personnalisé"
+
+msgid "Depth of destination"
+msgstr "Présicion du résultat"
+
+msgid "Difference between 2 images"
+msgstr "Différence entre 2 images"
+
+msgid "Dilate"
+msgstr "Dilatation"
+
+msgid "Divide"
+msgstr "Division"
+
+msgid "Do you want really to start grabbing?"
+msgstr "Voulez vous débuter l'acquisition?"
+
+msgid "Do you want really to stop grabbing?"
+msgstr "Voulez vous arrêter l'acquisition?"
+
+msgid "Document is empty"
+msgstr "Document vide"
+
+msgid "Ellipse"
+msgstr "Ellipse"
+
+msgid "End"
+msgstr "Fin"
+
+msgid "Erode"
+msgstr "Erosion"
+
+msgid "Error"
+msgstr "Erreur"
+
+msgid "Error Saving File"
+msgstr "Erreur durant la sauvegarde"
+
+msgid "Execute all"
+msgstr "Tout exécuter"
+
+msgid "FFT"
+msgstr "TFR"
+
+#, c-format
+msgid "File %s already exist. This timestamp file seems already used."
+msgstr "Fichier %sexiste déjà. Horodatage déjà utilisé?"
+
+msgid "File already exist"
+msgstr "Fichier existe déjà"
+
+msgid "File already exist. Overwrite it?"
+msgstr "Remplacer le fichier existant?"
+
+msgid "Filter name"
+msgstr "Nom du filtre"
+
+msgid "Frei Chen x"
+msgstr "Frei Chen x"
+
+msgid "Frei Chen y"
+msgstr "Frei Chen y"
+
+msgid "Frequency cut off ([0. 1.0] "
+msgstr "Frequence de coupure [0. 1.0] "
+
+msgid "Gradient X"
+msgstr "Gradient X"
+
+msgid "Gradient Y"
+msgstr "Gradient Y"
+
+msgid "Gradient modulus"
+msgstr "module du gradient"
+
+msgid "Gray Level"
+msgstr "Niveau"
+
+msgid ""
+"Gray Level\n"
+"(wo gradient)"
+msgstr "Niveausans gradient"
+
+msgid "Green Region"
+msgstr "Région vert"
+
+msgid ""
+"Height\n"
+"Difference"
+msgstr "Différencede hauteur"
+
+msgid "Histogram"
+msgstr "histogramme"
+
+msgid "Image Statistic"
+msgstr "Statistiques de l'image"
+
+msgid "Image parameters"
+msgstr "paramètres image"
+
+msgid "Index"
+msgstr "Index"
+
+#, c-format
+msgid "Invalid selection %d, only %d pages left"
+msgstr "Sélection invalide %d, seul %d pages restent"
+
+msgid "Inverse FFT"
+msgstr "TFR Inverse"
+
+msgid "Item 1"
+msgstr "Article 1"
+
+msgid "Item 2"
+msgstr "Article 2"
+
+msgid "Item 3"
+msgstr "Article 4"
+
+msgid "Item 4"
+msgstr "Article 5"
+
+msgid "Item 5"
+msgstr "Article 5"
+
+msgid "Language"
+msgstr "Langage"
+
+msgid "Laplacian"
+msgstr "laplacien"
+
+msgid "Laplacian 4 connex"
+msgstr "Laplacien 4 connexe"
+
+msgid "Laplacian 8 connex"
+msgstr "Laplacien 8 connexe"
+
+msgid ""
+"Level\n"
+"Index"
+msgstr ""
+"niveau\n"
+"index"
+
+msgid ""
+"Level\n"
+"deviation"
+msgstr ""
+"Niveau\n"
+"écart"
+
+msgid ""
+"Level\n"
+"deviation\n"
+"(wo gradient)"
+msgstr ""
+"Niveau\n"
+"écart (sans gradient)"
+
+msgid "Log window "
+msgstr "Fenetre info"
+
+msgid "Mean"
+msgstr "Moyenne"
+
+msgid "Mean 5x5"
+msgstr "Moyenne 5x5"
+
+msgid "Mean 7x7"
+msgstr "Moyenne 7x7"
+
+msgid "Mean Mode"
+msgstr "Mode moyen"
+
+msgid "Mean weighted"
+msgstr "Moyenne pondérée"
+
+msgid "Mean weighted 5x5"
+msgstr "Moyenne pondérée 5x5"
+
+msgid "Mean weighted 7x7"
+msgstr "Moyenne pondérée 7x7"
+
+msgid "Merge color plan"
+msgstr "Fusion des plans"
+
+msgid "Message"
+msgstr "message"
+
+msgid "Morph. gradient"
+msgstr "Gradient morph."
+
+msgid "Morphology filter"
+msgstr "Filtre morph."
+
+msgid "Morphology parameters"
+msgstr "Paramètres morphologie"
+
+msgid "No sequence available"
+msgstr "Pas de séquence"
+
+msgid "Notebook"
+msgstr "Notebook"
+
+msgid "Open"
+msgstr "Ouverture"
+
+msgid "Open Sequence"
+msgstr ""
+
+#, c-format
+msgid "OpenCV compatible camera detected (%dX%d : %d)"
+msgstr "Caméra openCV détectéé (%dX%d : %d)"
+
+msgid "OpenCV compatible camera not detected"
+msgstr "Pas de caméra opencv détectée"
+
+msgid "Openning"
+msgstr "Ouverture"
+
+msgid "Operation with two images not supported?"
+msgstr "Opération avec deux images non prévues? "
+
+msgid "Operator 1"
+msgstr "Opérateur 1"
+
+msgid "Operator 10"
+msgstr "Opérateur 10"
+
+msgid "Operator 2"
+msgstr "Opérateur 2"
+
+msgid "Operator 3"
+msgstr "Opérateur 3"
+
+msgid "Operator 4"
+msgstr "Opérateur 4"
+
+msgid "Operator 5"
+msgstr "Opérateur 5"
+
+msgid "Operator 6"
+msgstr "Opérateur 6"
+
+msgid "Operator 7"
+msgstr "Opérateur 7"
+
+msgid "Operator 8"
+msgstr "Opérateur 8"
+
+msgid "Operator 9"
+msgstr "Opérateur 9"
+
+msgid "Operator parameters"
+msgstr "Paramètres des opérateurs"
+
+msgid "Operator size"
+msgstr "Taille des opérateurs"
+
+msgid "Original"
+msgstr "Originale"
+
+msgid "Parameters Operators"
+msgstr "Paramètres des opérateurs"
+
+msgid "Pattern morphology"
+msgstr "Forme"
+
+msgid "Periodic boundary"
+msgstr "Frontière périodique"
+
+msgid "Please choose language:"
+msgstr "Choisissez votre langue"
+
+msgid "Previous image is closed?"
+msgstr "Image précédente fermée?"
+
+msgid "Prewitt x"
+msgstr "Prewitt x"
+
+msgid "Prewitt y"
+msgstr "Prewitt y"
+
+msgid "Problem"
+msgstr "problème"
+
+msgid "Process is stopped!"
+msgstr "Tâche arrêtée"
+
+msgid "Ready"
+msgstr "prêt"
+
+msgid "Rectangle"
+msgstr "Rectangle"
+
+msgid "Red Region"
+msgstr "région rouge"
+
+msgid "Reflect border   ba|abcde|ed"
+msgstr "Frontière   ba|abcde|ed"
+
+msgid "Reflect border   cb|abcde|dc"
+msgstr "Frontière   cb|abcde|dc"
+
+msgid "Reflect periodic de|abcde|ab"
+msgstr "Frontière de|abcde|ab"
+
+msgid "Replicate border aa|abcde|ee"
+msgstr "Frontière aa|abcde|ee"
+
+msgid "Report"
+msgstr "rapport"
+
+msgid "Reset Windows"
+msgstr "Restaurée fenêtre"
+
+msgid "Right-click to close, double click to cycle shape"
+msgstr "Clic droit pour fermer, double clic arrondir"
+
+msgid "Roberts x"
+msgstr "Roberts x"
+
+msgid "Roberts y"
+msgstr "Roberts y"
+
+msgid "Same as input"
+msgstr "Identique à l'entrée"
+
+msgid "Save"
+msgstr "Enregistrer"
+
+msgid "Save As"
+msgstr "Enregistrer sous"
+
+msgid "Save all step as Macro"
+msgstr "Enregistre la macro"
+
+msgid "Select file to process"
+msgstr "Fichier à traiter"
+
+msgid "Seq"
+msgstr ""
+
+msgid "Sequence"
+msgstr ""
+
+msgid "Sequence on "
+msgstr ""
+
+#, c-format
+msgid "Server %s failed to start"
+msgstr "Server %s en échec"
+
+msgid "Skeleton"
+msgstr "Squelette"
+
+msgid "Sobel x"
+msgstr "Sobel x"
+
+msgid "Sobel y"
+msgstr "Sobel y"
+
+msgid "Start"
+msgstr "Début"
+
+msgid "Step"
+msgstr "pas"
+
+msgid "Stop"
+msgstr "Arrêt"
+
+msgid "Subitem 1"
+msgstr ""
+
+msgid "Subitem 2"
+msgstr ""
+
+msgid "Subitem 3"
+msgstr ""
+
+msgid "Subitem 4"
+msgstr ""
+
+msgid "Subitem 5"
+msgstr ""
+
+msgid "Surface"
+msgstr "Surface"
+
+msgid ""
+"Surface\n"
+"(wo gradient) "
+msgstr ""
+"Surface\n"
+"(ss gradient) "
+
+msgid "Symetric/last pixel"
+msgstr "Symétrique/dernier pixel"
+
+msgid "Symetric/limit"
+msgstr "Symetrique/limite"
+
+msgid "Test"
+msgstr "Test"
+
+msgid "Text Control"
+msgstr ""
+
+msgid "Thereshold"
+msgstr "Seuil"
+
+msgid "This language is not supported by the system."
+msgstr "This language is not supported by the system."
+
+msgid "Time Filtering"
+msgstr "Filtrage temporel"
+
+msgid "Timestamp ended!"
+msgstr "Horodatage terminé"
+
+msgid "Top hat"
+msgstr "Chapeau haut"
+
+msgid "Transform distance"
+msgstr "Dsitanc discrète"
+
+msgid "Tree Control"
+msgstr ""
+
+msgid "Undefined"
+msgstr "Indéfini"
+
+msgid "Undefined operation"
+msgstr "opération indéfinie"
+
+msgid "User 1"
+msgstr "Perso 1"
+
+msgid "User 1 5x5"
+msgstr "Perso 1 5x5"
+
+msgid "User 1 7x7"
+msgstr "Perso 1 7x7"
+
+msgid "User 2"
+msgstr "Perso 2"
+
+msgid "User 2 5x5"
+msgstr "Perso 2 5x5"
+
+msgid "User 2 7x7"
+msgstr "Perso 2 7x7"
+
+msgid "User 3"
+msgstr "Perso 3"
+
+msgid "User 3 5x5"
+msgstr "Perso 3 5x5"
+
+msgid "User 3 7x7"
+msgstr "Perso 3 7x7"
+
+msgid "User 4"
+msgstr "Perso 4"
+
+msgid "User 4 7x7"
+msgstr "Perso 4 7x7"
+
+msgid "User 45x5 "
+msgstr "Perso 4 5x5"
+
+msgid "User 5"
+msgstr "Perso 5"
+
+msgid "Video Toolbar"
+msgstr "Outils Vidéo"
+
+msgid "Voronoi"
+msgstr "Voronoi"
+
+msgid "Warning"
+msgstr "Attention"
+
+msgid "Warning "
+msgstr "Attention"
+
+msgid "Watershed"
+msgstr "partage des eaux"
+
+msgid "You must defined convolution operator first!"
+msgstr "Opérateur de convolution doit être défini!"
+
+msgid "You must defined morphological operator first!"
+msgstr "Opérateur de morphologie doit être défini!"
+
+msgid "double"
+msgstr "réel 8 octets"
+
+msgid "equal last pixel"
+msgstr "Egal au dernier pixel"
+
+msgid "euclidean distance"
+msgstr "Distance euclidienne"
+
+msgid "float"
+msgstr "Réel 4 octets"
+
+msgid "grid_content"
+msgstr "tableur"
+
+msgid "imaginary part"
+msgstr "Partie imaginaire"
+
+msgid "inverse FFT"
+msgstr "TFR inverse"
+
+msgid "modulus"
+msgstr "Module"
+
+msgid "osgviewerWX"
+msgstr "Visualisateur OSG"
+
+msgid "phase (rd)"
+msgstr "phase (rd)"
+
+msgid "product"
+msgstr "Produit"
+
+msgid "real part"
+msgstr "partie réelle"
+
+msgid "same"
+msgstr "Identique"
+
+msgid ""
+"semi\n"
+"major\n"
+"axis"
+msgstr ""
+"Demi\n"
+"grand\n"
+"axe"
+
+msgid ""
+"semi\n"
+"minor\n"
+"axis"
+msgstr ""
+"Demi\n"
+"petit\n"
+"axe"
+
+msgid "settings"
+msgstr "Réglages"
+
+msgid "split color plan"
+msgstr "Séparation des plans"
+
+msgid "tb5"
+msgstr ""
+
+msgid "test10"
+msgstr ""
+
+msgid "theta"
+msgstr "theta"
+
+msgid "threshold  mean of neighbourhood"
+msgstr "Seuillage fonctiondes voisins"
+
+msgid "threshold weighted sum of neighbourhood"
+msgstr "Seuillage fonction des voisins pondérées"
+
+msgid "unable to load plplot"
+msgstr "plplot non trouvé"
+
+msgid "unable to load svg"
+msgstr "svg non trouvé"
+
+msgid "unable to load wxwidgets"
+msgstr "wxwidgets non trouvé"
+
+msgid "unknown"
+msgstr "Inconnu"
+
+msgid "user"
+msgstr "Utilisateur"
+
+msgid "wxAUI"
+msgstr ""
+
+msgid "wxAUI Project"
+msgstr ""
+
+msgid ""
+"wxOpenCV \n"
+"Image processing using libraries wxWidgets, OpenCv and Plplot\n"
+msgstr ""
+"wxOpenCV \n"
+"Traitement d'images utilisant wxWidgets, OpenSceneGraph, OpenCv and Plplot\n"
+
+msgid "x Difference"
+msgstr "Différence x"
+
+msgid "y Difference"
+msgstr "Différence y"
