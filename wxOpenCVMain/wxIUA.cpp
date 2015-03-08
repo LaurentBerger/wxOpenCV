@@ -67,7 +67,7 @@ enum
 	ID_FIN_OP, // Fin des opérateurs sur les images
 	ID_VIDEO_8_UC3,
 	ID_VIDEO_32_FC3,
-
+	ID_VIDEO_FLUX
 };
 
 
@@ -84,6 +84,7 @@ BEGIN_EVENT_TABLE(InterfaceAvance, wxFrame)
 
 	EVT_MENU(ID_VIDEO_8_UC3, InterfaceAvance::Video)
 	EVT_MENU(ID_VIDEO_32_FC3, InterfaceAvance::Video)
+	EVT_MENU(ID_VIDEO_FLUX, InterfaceAvance::Video)
 
 
     EVT_MENU(InterfaceAvance::ID_CreateTree, InterfaceAvance::OnCreateTree)
@@ -236,7 +237,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
                                                 wxSize(iconSize, iconSize))));
     // make some default perspectives
 	pane = CreerChoixOperateur();
-    m_mgr.AddPane(pane, wxAuiPaneInfo().Name("Parameters Operators").
+    m_mgr.AddPane(pane, wxAuiPaneInfo().Name(_("Parameters Operators")).
                   CenterPane().PaneBorder(false));
 
     wxString perspective_all = m_mgr.SavePerspective();
@@ -1086,8 +1087,9 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
 											 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
 		tb->SetToolBitmapSize(wxSize(48,48));
-		tb->AddTool(ID_VIDEO_8_UC3, _("Test"), wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE));
-		tb->AddTool(ID_VIDEO_32_FC3, _("Test"), wxArtProvider::GetBitmap(wxART_HARDDISK));
+		tb->AddTool(ID_VIDEO_8_UC3, "", wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE),_("Video RGB 24bits"));
+		tb->AddTool(ID_VIDEO_32_FC3, "", wxArtProvider::GetBitmap(wxART_HARDDISK),_("Video RGB float"));
+		tb->AddTool(ID_VIDEO_FLUX, "", wxArtProvider::GetBitmap(wxART_NORMAL_FILE),_("Video file"));
 		tb->AddSeparator();
 		tb->Realize();
 		m_mgr.AddPane(tb, wxAuiPaneInfo().
@@ -1255,6 +1257,8 @@ if (event.GetId()==ID_VIDEO_32_FC3)
 	((wxOsgApp*)osgApp)->Video(event,32);
 if (event.GetId()==ID_VIDEO_8_UC3)
 	((wxOsgApp*)osgApp)->Video(event,8);
+if (event.GetId()==ID_VIDEO_FLUX)
+	((wxOsgApp*)osgApp)->Video(event,0);
 
 }
 

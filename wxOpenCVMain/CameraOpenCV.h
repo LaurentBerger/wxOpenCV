@@ -15,7 +15,8 @@ class CameraOpenCV : public CameraVirtuelle {
 protected :
 virtual wxThread::ExitCode Entry();
 static char	indIdVideo[NBCAMERA];
-int			indId; // Indice du périphérique vidéo;
+int			indId; /*<! Indice du périphérique vidéo;*/
+bool		fluxOuvert;/*<!Vrai lorsque la ideo est un flux */
 long		expoMin,expoMax;
 long		gainMin,gainMax;
 
@@ -52,11 +53,11 @@ int	nbCanauxAD;				// p 126 SDK
 
 //////////////////////////////////////////////////////////
 public :
-CameraOpenCV(void);
+CameraOpenCV(wxString s=wxEmptyString);
 ~CameraOpenCV(void);
 cv::VideoCapture *CamVideo(){return captureVideo;};
 int	Acquisition(void); /*<! Acquisition d'une image */
-virtual bool Connectee(){return indId>=0 && indId<NBCAMERA;};
+virtual bool Connectee(){return (indId>=0 && indId<NBCAMERA)|| fluxOuvert;};
 virtual void FermerVideo(){delete captureVideo;captureVideo=NULL;};
 virtual void DefCoinGauche(int x);
 virtual void DefCoinDroit(int x);

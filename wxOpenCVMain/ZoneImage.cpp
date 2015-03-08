@@ -39,6 +39,8 @@ Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SelectPalette,this,NOIRETBLANC_,NOI
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::ModeComplexe,this,M_MODULE_,PHASE_RD);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR2,ZOOM8SUR1);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SequenceOperation,this,SEQ_OPE);
+Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::RazSeqOp,this,STOP_SEQ);
+
 /*Connect(ZOOM1SUR2,ZOOM8SUR1  ,wxCommandEventHandler(ZoneImage::MAJZoom));
 Connect(ZOOM1SUR1,wxEVT_MENU,  wxCommandEventHandler(ZoneImage::MAJZoom));
 Connect(ZOOM2SUR1,wxEVT_MENU,  wxCommandEventHandler(ZoneImage::MAJZoom));
@@ -584,6 +586,10 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	if (osgApp->Fenetre(f->IdFenetreOp1pre()))
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
 	menu.AppendCheckItem(SEQ_OPE, _T("Sequenceoperation"));
+	if(f->Cam() && f->Cam()->IsRunning() && f->SeqOp()->size()!=0)
+		{
+		menu.Append(STOP_SEQ, _T("&Stop Sequence"));
+		}
 	if(imAcq->depth()==CV_32F && imAcq->channels()%2==0)
 		{
 		menu.AppendSeparator();
@@ -758,6 +764,11 @@ if (osgApp->FenetreSeqOpe())
 	((FenetreSequenceOperation *)osgApp->FenetreSeqOpe())->Show(true);
 }
 
+
+void ZoneImage::RazSeqOp(wxCommandEvent& event)
+{
+if (f) f->RazSeqOp();
+}
 
 void FenetrePrincipale::TracerContour(wxCommandEvent& event)
 {

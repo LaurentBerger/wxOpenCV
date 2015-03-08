@@ -379,7 +379,24 @@ wxString s("Video");
 s.Printf("Video %d",nbFenVideo++);
 FenetrePrincipale *f = new FenetrePrincipale(NULL, s,
     wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
-f->OuvrirVideo(type);
+wxString nomFlux=wxEmptyString;
+if (type==0)
+	{
+	wxString dossier;
+	configApp->Read("/dossier",&dossier,wxEmptyString);
+	wxFileDialog ouverture(NULL, _("Open video file"), dossier, wxEmptyString, "*.tif;*.jpg;*.bmp;*.png;*.yml;*.gz;*.is2;*.mp4;*.avi");
+
+	if (ouverture.ShowModal()!=wxID_OK)
+		return;
+#ifdef __WINDOWS__
+	wxString nomFlux(ouverture.GetDirectory()+"\\"+ouverture.GetFilename ());
+#else
+	wxString nomFlux(ouverture.GetDirectory()+"/"+ouverture.GetFilename ());
+#endif
+	f->OuvrirVideo(type,nomFlux);
+	}
+else
+	f->OuvrirVideo(type);
 if (!f->Cam()->Connectee())
 	{
 	wxCloseEvent evt;
@@ -1412,7 +1429,8 @@ idFenetre=-1;
 
 
 
-detectionUtilisateur =  new wxTimer(this,2);
+//detectionUtilisateur =  new wxTimer(this,2);
+detectionUtilisateur=NULL;
 repertoireDuDocument=".";
 nomDuDocument=wxEmptyString;
 modeImage = 0;
@@ -1479,7 +1497,8 @@ wxSize tailleUtile;
 GetClientSize(&tailleUtile.x, &tailleUtile.y);
 GetStatusBar()->Show();
 PositionStatusBar();
-detectionUtilisateur->Start(TPSMISEENVEILLECOURBE,true);
+if (detectionUtilisateur)
+	detectionUtilisateur->Start(TPSMISEENVEILLECOURBE,true);
 }
 
 void FenetrePrincipale::InitImageFenetre()
@@ -1535,9 +1554,17 @@ for (int i=0;i<nbPixels;i++,ds++)
 Ouvrir un flux video
 */
 
-void FenetrePrincipale::OuvrirVideo(int type)
+void FenetrePrincipale::OuvrirVideo(int type,wxString nomFlux)
 {
-cam = new  CameraOpenCV();
+if (type==0)
+	{
+	cam = new  CameraOpenCV(nomFlux);
+
+	imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+	cam->DefTypeAcq(CV_8UC3);
+	}
+else
+	cam = new  CameraOpenCV();
 if (!cam->Connectee())
 	return;
 barreEtat->ActiveVideo();
@@ -1601,6 +1628,8 @@ wxFileName p(s);
 
 wxCharBuffer ww=s.mb_str ();
 char *nomFichier=ww.data() ;
+wxImage im(s);
+im.SaveFile("x.bmp");
 if (s.Find("yml")>=0)
 	{
 	try 
@@ -1998,7 +2027,7 @@ if (modeCamera )
 		cam->image=imAffichee;
 		((CameraOpenCV*)cam)->imAcq=imAcq;
 		cam->parent=(void*)this;
-		((CameraOpenCV*)cam)->FermerVideo();
+//		((CameraOpenCV*)cam)->FermerVideo();
 		cam->Run();
 		}
 	}
@@ -2129,8 +2158,8 @@ if (osgApp && !osgApp->Quitter())
 	osgApp->RetirerListe(this);
 if (cam)
 	OnCloseThread(event);
-
-detectionUtilisateur->Stop();
+if (detectionUtilisateur)
+	detectionUtilisateur->Stop();
 delete detectionUtilisateur;
 
 delete []seuilNivBas;

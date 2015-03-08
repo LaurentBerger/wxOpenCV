@@ -24,8 +24,9 @@ EvtPointSuivis::EvtPointSuivis(wxEventType commandType , int id):wxCommandEvent(
 
 
 
-CameraOpenCV::CameraOpenCV(void)
+CameraOpenCV::CameraOpenCV(wxString nomFlux):CameraVirtuelle()
 {
+//nomFlux="0";
 wxString		repTravail=wxGetCwd();
 strcpy(nomCamera,"OpenCV");
 wxString nomOrdinateur(wxGetHostName());
@@ -42,6 +43,7 @@ tailleCapteur[19]=wxSize(-1,-1);
 modeMoyenne=false;
 indFiltreMoyenne=1;
 tpsInactif =30;
+fluxOuvert=false;
 aaButter[0]=-0.9996859;
 aaButter[1]=-0.9993719;
 aaButter[2]=-0.9968633;
@@ -68,53 +70,47 @@ bbButter[10]=0.5;
 parent=NULL;
 captureVideo=NULL;
 imAcq=NULL;
-/*imAcq2 = NULL;
-imAcqBrutFil = NULL;
-imAcqBrutFilMax = NULL;
-imAcqBrut1 = NULL;
-imAcqBrut2 = NULL;
-imTache = NULL;
-imRefTache = NULL;
-imQuadrique = NULL;*/
-
-/*
-imAcq2 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imAcqBrutFil = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imAcqBrutFilMax = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imAcqBrut1 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imAcqBrut2 = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imTache = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imRefTache = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-imQuadrique = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-nivBiais = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-
-
-
-*/
+long indFlux;
 
 // Appel de VideoCapture pour récupérer la taille de la vidéo
-#ifdef _FLUXHTTP__
-captureVideo = new cv::VideoCapture("192.168.0.1:8080"); 
-indId=0;
-#else
-for (indId=0;indId<NBCAMERA ;indId++)
-	if (indIdVideo[indId]==0)
+
+if (nomFlux!=wxEmptyString)
+	{
+	if (nomFlux.ToLong(&indFlux))
 		{
-		captureVideo = new cv::VideoCapture(indId); 
-		if(captureVideo && captureVideo->isOpened())
-			break;
-		if(captureVideo)
-			{
-			delete captureVideo;
-			captureVideo=NULL;
-			}
+		captureVideo = new cv::VideoCapture(indFlux); 
+		indId=indFlux;
 		}
-if (indId==NBCAMERA)
-	return;
-#endif
+	else
+		{
+
+		captureVideo = new cv::VideoCapture(nomFlux.ToStdString()); 
+		indId=-1;
+		}
+	}
+else
+	{
+	for (indId=0;indId<NBCAMERA ;indId++)
+		if (indIdVideo[indId]==0)
+			{
+			captureVideo = new cv::VideoCapture(indId); 
+			if(captureVideo && captureVideo->isOpened())
+				break;
+			if(captureVideo)
+				{
+				delete captureVideo;
+				captureVideo=NULL;
+				}
+			}
+	if (indId==NBCAMERA)
+		return;
+	}
+
 if(captureVideo->isOpened())  // check if we succeeded
 	{
 	cv::Mat frame;
+	if( indId==-1)
+		fluxOuvert=true;
 /*	for (int i=15;i<NB_TAILLE_VIDEO;i++)
 		{
 		status=captureVideo->set(cv::CAP_PROP_FRAME_WIDTH,tailleCapteur[i].GetX());
@@ -134,7 +130,8 @@ if(captureVideo->isOpened())  // check if we succeeded
 	}
 else
  	return;
-indIdVideo[indId]=1;
+if (indId>=0 && indId<NBCAMERA)
+	indIdVideo[indId]=1;
 
 chaineErreur="";
 char	tmp[1024];
@@ -167,7 +164,7 @@ CameraOpenCV::~CameraOpenCV(void)
 {
 if (parent==NULL)
 	{
-	if (Connectee())
+	if (Connectee() && indId>=0 && indId<NBCAMERA)
 		indIdVideo[indId]=0;
 	if (captureVideo)
 		delete captureVideo;
@@ -176,7 +173,7 @@ else
 	{
 	wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-	if (Connectee())
+	if (Connectee()&& indId>=0 && indId<NBCAMERA)
 		indIdVideo[indId]=0;
 	if (captureVideo)
 		delete captureVideo;
@@ -353,11 +350,9 @@ char CameraOpenCV::GetFunctionEMCCDGain()
 wxThread::ExitCode CameraOpenCV::Acquisition8BitsRGB()
 {
 int indEvt=0;
-#ifdef _FLUXHTTP__
-captureVideo = new cv::VideoCapture("192.168.0.1:8080"); 
-#else
-captureVideo= new VideoCapture(indId); 
-#endif
+if (!captureVideo)
+	captureVideo= new VideoCapture(indId); 
+
 if (captureVideo->isOpened())
 	{
 	Mat frame1;
@@ -369,8 +364,9 @@ if (captureVideo->isOpened())
 	static bool opActif=false;
 	for(;true;)
 		{
-		if (captureVideo->retrieve(frame)) // get a new frame from camera
+		if (captureVideo->grab()) // get a new frame from camera
 			{
+			captureVideo->retrieve(frame);
 			
 			if (parent)
 				{
@@ -505,8 +501,9 @@ if (captureVideo->isOpened())
 
 	for(;true;)
 		{
-		if (captureVideo->retrieve(frame)) // get a new frame from camera
+		if (captureVideo->grab()) // get a new frame from camera
 			{
+			captureVideo->retrieve(frame);
 			if (parent)
 				{
 
@@ -572,9 +569,9 @@ if (captureVideo==NULL)
 	if(!captureVideo || !captureVideo->isOpened())
 		return (wxThread::ExitCode)-1;
 	}
-if (indId<0 || indId>=NBCAMERA)
+if (!fluxOuvert &&(indId<0 || indId>=NBCAMERA))
 	return (wxThread::ExitCode)-1; 	
-if (typeAcq==CV_8UC3)
+if (typeAcq==CV_8UC3 || fluxOuvert)
 	return Acquisition8BitsRGB();	
 else if (typeAcq==CV_32FC3)
 	return Acquisition32BitsFloatRGB();	
@@ -584,7 +581,7 @@ return (wxThread::ExitCode)0;
 void FenetrePrincipale::OnThreadUpdateQueue(EvtPointSuivis &w)
 {
 
-if (cam->IsRunning() || cam->IsPaused())
+if (cam && (cam->IsRunning() || cam->IsPaused()))
 	{
 	long x=wxGetUTCTimeMillis().GetLo();
 //	if (x<10)
@@ -638,8 +635,11 @@ if (cam)         // does the thread still exist?
 	{            
 	cam->parent=NULL;
 	wxMessageOutputDebug().Printf("MYFRAME: deleting thread");            
-	if (cam->Delete() != wxTHREAD_NO_ERROR )                
-		wxLogError("Can't delete the thread!");        
+	if (cam->IsRunning())
+		{
+		if (cam->Delete() != wxTHREAD_NO_ERROR )                
+			wxLogError("Can't delete the thread!");        
+		}
 	cam =NULL;	
 	}    
  // exit from the critical section to give the thread            
@@ -652,8 +652,19 @@ void FenetrePrincipale::DefSeqCamera(std::vector <ParametreOperation> *s)
 if (!cam)
 	return;
 
+seqOp= *s;
 wxCriticalSectionLocker enter(paramCam);
 
 cam->seqOp=*s;
 }
 
+void FenetrePrincipale::RazSeqOp()
+{
+seqOp.clear();
+if (!cam)
+	return;
+
+wxCriticalSectionLocker enter(paramCam);
+
+cam->seqOp.clear();
+};

@@ -292,6 +292,11 @@ void FacteurZoom(int f){facteurZoom=f;};
 	 * Fixe la valeur du facteur de zoom de l'image.
 	 * \param f : log2 du zoom
 	 */
+void RazSeqOp(wxCommandEvent &);
+    /*!
+     *  \brief fonction SeqOp
+     *  annulation de la séquence active.
+     */
 
 private:
     void OnPaint(wxPaintEvent& WXUNUSED(event));
@@ -333,11 +338,9 @@ wxString			nomImageBiais;/*!< Nom de l'image du biais associé à cette image*/
 wxString			nomImageTache;/*!< Nom de l'image des tâches sur l'optique du capteur*/
 wxString			nomImageQuadrique;/*!< Nom de l'image du fond (une fois les tâches enlevées */
 
-ParametreOperation	origineImage;
-//int					idFenetreOp1Pre; /*!< Pour image issue d'une opération : identifiant de operande1*/	
-//int					idFenetreOp2Pre; /*!< Pour image issue d'une opération : identifiant de operande2*/
-//wxString			nomOperationPre;	 /*!< Pour image issue d'une opération : nom de l'opération */
-//Parametre			pOCVPre;		 /*!< Pour image issue d'une opération : parametre de l'opération précédente*/
+ParametreOperation	origineImage;	/*!< Opération appliquée à une fenêtre pour obtenir l'image en cours */
+std::vector <ParametreOperation> seqOp;	/*!<  Séquence d'opération appliquée à une image pour obtenir l'image en cours. Les résulats intermédiaires 
+										ne sont pas dans des fenêtres. La première opération peut être associée à une fenêtre mais ce n'est pas obligatoire */
 
 bool				modeCamera;			/*!< 1 affichage de l'image capturée */
 bool				imageTraitee;		/*!< 1 si traitement de l'image captureée est terminé  */	
@@ -518,7 +521,7 @@ void OnThreadUpdateQueue(EvtPointSuivis &w);
 
 
 void OnOuvrir(wxString &);
-void OuvrirVideo(int);
+void OuvrirVideo(int,wxString =wxEmptyString);
 void InitImageFenetre();
 void OuvrirBiais(wxCommandEvent& event);
 void OuvrirBiais(char	*nomFichier);
@@ -568,6 +571,20 @@ void OnCloseThread(wxCloseEvent&);
 
 // Gestion du curseur de la souris pour les opérations sur les images
 void DefSeqCamera(std::vector <ParametreOperation> *);
+    /*!
+     *  \brief fonction DefSeqCamera
+     *  définit une séquence pour une flux vidéo.
+     */
+std::vector <ParametreOperation> *SeqOp(){return &seqOp;};
+    /*!
+     *  \brief fonction SeqOp
+     *  retourne la séquence d'opération active sur la fenêtre.
+     */
+void RazSeqOp();
+    /*!
+     *  \brief fonction SeqOp
+     *  annulation de la séquence active.
+     */
 
 
 void DefPointeurSouris(int type);
@@ -934,6 +951,7 @@ enum
     ZOOM4SUR1,
     ZOOM8SUR1,
 	SEQ_OPE,
+	STOP_SEQ,
     NEW_LEVEL,
     MERGE_LEVEL,
     RESET_LEVEL,
