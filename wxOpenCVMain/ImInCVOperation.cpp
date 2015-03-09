@@ -619,6 +619,13 @@ if (im1->channels()==1)
 	ImageInfoCV	imCtr ;
 	im->copyTo(imCtr);
 	findContours(imCtr, *(im->contours),*im->arbreContour, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
+	im->moment =new std::vector<cv::Moments> [im1->channels()];
+	im->moment[0].resize(im->contours[0].size()); 
+//	for (int i=0;i<im->contours[0].size();i++)
+		{
+		im->moment[0][0] = cv::moments( *im, false );
+		}
+
 	}
 else
 	{
@@ -644,6 +651,15 @@ else
 		ImageInfoCV	imCtr ;
 		d[i].copyTo(imCtr);
 		findContours(imCtr, im->contours[i],im->arbreContour[i], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
+		}
+	im->moment =new std::vector<cv::Moments> [im1->channels()];
+	for (int i=0;i<im1->channels();i++)
+		{
+		im->moment[i].resize(im->contours[i].size()); 
+		for (int j=0;j<im->contours[i].size();j++)
+			{
+			im->moment[i][j] = cv::moments( im->contours[i][j], false );
+			}
 		}
 	cv::merge((const cv::Mat *)d, im1->channels(), *im);
 	delete []d;

@@ -70,6 +70,7 @@ if (!((FenetrePrincipale*)fenParent)->ImAcq())
 	return;
 cv::Mat	**s=((FenetrePrincipale*)fenParent)->ImAcq()->StatComposante();
 cv::Mat	**g=((FenetrePrincipale*)fenParent)->ImAcq()->CentreGComposante();
+std::vector<cv::Moments> *m=((FenetrePrincipale*)fenParent)->ImAcq()->MomentComposante();
 if (!s || !g)
 	return;
 int nb=listeRegion->GetNumberRows()-s[indPlan]->rows;
@@ -88,6 +89,8 @@ for (int ii=0;ii<s[indPlan]->rows;ii++)
 	listeRegion->DefCellule(ii,3,(s[indPlan])->at<int>(ii,cv::CC_STAT_AREA), "%7d");
 	listeRegion->DefCellule(ii,5,(g[indPlan])->at<double>(ii,0), "%6.1f");
 	listeRegion->DefCellule(ii,6,(g[indPlan])->at<double>(ii,1), "%6.1f");
+	listeRegion->DefCellule(ii,7,m[indPlan][ii].m10, "%6.1f");
+	listeRegion->DefCellule(ii,8,m[indPlan][ii].m01, "%6.1f");
 	}
 	
 /*static wxClipboard	*pressePapier=NULL;

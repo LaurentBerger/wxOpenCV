@@ -111,7 +111,7 @@ cv::Mat		**statComposante; /*< Statistique des composantes de chaque plan http:/
 cv::Mat		**centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
 std::vector<std::vector<cv::Point> > *contours; /*< Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 std::vector<cv::Vec4i> *arbreContour; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
-
+std::vector<cv::Moments> *moment;	 /*<http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
 
 public : 
 //	********* Constructeurs et destructeur
@@ -199,6 +199,8 @@ char  	LitConverCplxEnt(void);
 
 cv::Mat	**StatComposante(){return statComposante;};
 cv::Mat	**CentreGComposante(){return centreGComposante;};
+std::vector<cv::Moments> *MomentComposante(){return moment;};	 
+
 std::vector<std::vector<cv::Point> > *PtContours(){return contours;};
 std::vector<cv::Vec4i> *ArboContour(){return arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 
@@ -320,6 +322,7 @@ void  SelectionMaxLocaux(ImageInfoCV &);
 ImageInfoCV *Binarisation(float *seuilBin,ImageInfoCV* =NULL);
 ImageInfoCV *NonMaximumSuppression(ImageInfoCV* ,ImageInfoCV*,float);
 ImageInfoCV *SeuilHysteresis(float seuil1,float seuil2,ImageInfoCV* =NULL);
+std::vector<cv::Moments> *CalcMoment();
 
 
 // Opérateurs Voronoi

@@ -667,7 +667,7 @@ return imTab; // Le pointeur imTab n'est pas libéré
 
 void wxOsgApp::CreerFenetreOperation()
 {
-if ((pOCV.opBinaireSelec==NULL && pOCV.opUnaireSelec==NULL && pOCV.opSurjecMultiple==NULL && pOCV.opNaireSelec==NULL) || pOCV.op1==NULL)
+if ((pOCV.opBinaireSelec==NULL && pOCV.opUnaireSelec==NULL && pOCV.opSurjecMultiple==NULL && pOCV.opNaireSelec==NULL&& pOCV.opSurjecUnaire==NULL) || pOCV.op1==NULL)
 	return;
 
 ImageInfoCV	**im=ExecuterOperation();

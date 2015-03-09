@@ -671,7 +671,7 @@ void ImageStatistiques::OuvertureOngletRegion()
 {
 if (!fenMere || !fenMere->ImAcq())
 	return;
-if (fenMere->ImAcq()->channels()>=1)
+if (fenMere->ImAcq()->channels()>=3)
 	{
 	ongletRegionR = new FenetreRegion((wxFrame*)listeFenetreOnglet); 
 	ongletRegionR->DefOsgApp(osgApp);
@@ -689,7 +689,7 @@ if (fenMere->ImAcq()->channels()>=2)
 	listeFenetreOnglet->AddPage(ongletRegionV, _("Green Region"));
 	ongletRegionV->Refresh();
 	}
-if (fenMere->ImAcq()->channels()>=3)
+if (fenMere->ImAcq()->channels()>=1)
 	{
 	ongletRegionB = new FenetreRegion((wxFrame*)listeFenetreOnglet); 
 	ongletRegionB->DefOsgApp(osgApp);
