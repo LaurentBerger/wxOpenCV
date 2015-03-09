@@ -52,6 +52,7 @@ locMax = NULL;			/*< Position du miminmu pour chaque plan */
 statComposante = NULL; 
 centreGComposante = NULL; 
 contours=NULL;
+moment=NULL;
 #ifdef _INFOTEXTE__
 nbChampGonfle=0;
 gonfle = NULL;
@@ -163,7 +164,7 @@ for (int i=0;i<channels();i++)
 	}
 delete []statComposante; 
 delete []centreGComposante; 
-
+delete []moment;
 }
 
 ImageInfoCV::ImageInfoCV(void *r):cv::Mat(1,1,3)	

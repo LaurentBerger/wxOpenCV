@@ -112,6 +112,7 @@ cv::Mat		**centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk
 std::vector<std::vector<cv::Point> > *contours; /*< Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 std::vector<cv::Vec4i> *arbreContour; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 std::vector<cv::Moments> *moment;	 /*<http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
+std::vector<double> *huMoment;	 /*<http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
 
 public : 
 //	********* Constructeurs et destructeur

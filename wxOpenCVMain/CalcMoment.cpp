@@ -4,6 +4,7 @@
 std::vector<cv::Moments> *ImageInfoCV::CalcMoment()
 {
 std::vector<cv::Moments>  *m=new std::vector<cv::Moments>[channels()];
+huMoment=new std::vector<double>[channels()];
 int nbCanaux=channels();
 
 if (depth()==CV_32F ||  depth()==CV_64F)
@@ -28,7 +29,12 @@ case CV_32S :
 					{
 					m[indCanal][*d].m00++;
 					m[indCanal][*d].m01+=i;
+					m[indCanal][*d].m02+=i*i;
+					m[indCanal][*d].m03+=i*i*i;
 					m[indCanal][*d].m10+=j;
+					m[indCanal][*d].m20+=j*j;
+					m[indCanal][*d].m30+=j*j*j;
+					m[indCanal][*d].m11+=i*j;
 					}
 
 				}
@@ -43,9 +49,14 @@ case CV_16U :
 			{
 			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
 				{
-				m[indCanal][*d].m00++;
-				m[indCanal][*d].m01+=i;
-				m[indCanal][*d].m10+=j;
+					m[indCanal][*d].m00++;
+					m[indCanal][*d].m01+=i;
+					m[indCanal][*d].m02+=i*i;
+					m[indCanal][*d].m03+=i*i*i;
+					m[indCanal][*d].m10+=j;
+					m[indCanal][*d].m20+=j*j;
+					m[indCanal][*d].m30+=j*j*j;
+					m[indCanal][*d].m11+=i*j;
 				}
 			}
 		}
@@ -62,7 +73,12 @@ case CV_16S :
 					{
 					m[indCanal][*d].m00++;
 					m[indCanal][*d].m01+=i;
+					m[indCanal][*d].m02+=i*i;
+					m[indCanal][*d].m03+=i*i*i;
 					m[indCanal][*d].m10+=j;
+					m[indCanal][*d].m20+=j*j;
+					m[indCanal][*d].m30+=j*j*j;
+					m[indCanal][*d].m11+=i*j;
 					}
 				}
 			}
@@ -77,9 +93,14 @@ case CV_8U :
 			{
 			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
 				{
-				m[indCanal][*d].m00++;
-				m[indCanal][*d].m01+=i;
-				m[indCanal][*d].m10+=j;
+					m[indCanal][*d].m00++;
+					m[indCanal][*d].m01+=i;
+					m[indCanal][*d].m02+=i*i;
+					m[indCanal][*d].m03+=i*i*i;
+					m[indCanal][*d].m10+=j;
+					m[indCanal][*d].m20+=j*j;
+					m[indCanal][*d].m30+=j*j*j;
+					m[indCanal][*d].m11+=i*j;
 				}
 			}
 		}
@@ -92,62 +113,49 @@ for (int indCanal=0;indCanal<nbCanaux;indCanal++)
 	for (int j=0;j<=maxIm[indCanal];j++)
 		if (m[indCanal][j].m00>0)
 		{
-		m[indCanal][*d].m01 /=m[indCanal][j].m00;
-		m[indCanal][*d].m10 /=m[indCanal][j].m00;
+		m[indCanal][j].m01 /=m[indCanal][j].m00;
+		m[indCanal][j].m10 /=m[indCanal][j].m00;
 		}
 	}
 
-
-
-
-
-for ( nb=0;nb<nbPlan;nb++)
-	{
-	long			*dl=(long *)LitPlan(nb);
-	unsigned short	*dd=(unsigned short *)LitPlan(nb);
-	unsigned char	*dc=(unsigned char *)LitPlan(nb);
-	for (i=0;i<nbLigne;i++)
-		for (j=0;j<nbColonne;j++)
-			{
-			switch (LitTaillePixel()){
-			case T_OCTET_IMAGE :
-				k = (unsigned char )dc[i*nbColonne+j];
-				break;
-			case T_SHORT_IMAGE :
-				k = (unsigned short)dd[i*nbColonne+j];
-				break;
-			case T_LONG_IMAGE :
-				k = (long)dl[i*nbColonne+j];
-				break;
-			default :
-				k = 0;
-				break;
-				}
-			if (k<=nbNiv)
-				{
-				par[k*5+3] += (par[k*5+1] - j) * (par[k*5+1] - j);
-				par[k*5+4] += (par[k*5+2] - i) * (par[k*5+2] - i);
-				}
-			}
-	}
 for (int indCanal=0;indCanal<nbCanaux;indCanal++)
-	{
-	for (int j=0;j<=maxIm[indCanal];j++)
-		if (m[indCanal][j].m00>0)
-		{
-		m[indCanal][*d].m01 /=m[indCanal][j].m00;
-		m[indCanal][*d].m10 /=m[indCanal][j].m00;
-		}
-	}
+	for (int k=0;k<=maxIm[indCanal];k++)
+		if (m[indCanal][k].m00>0)
+			{
+			double ybarre=m[indCanal][k].m01/m[indCanal][k].m00,xbarre=m[indCanal][k].m01/m[indCanal][k].m00;
+			m[indCanal][k].mu11=m[indCanal][k].m11-ybarre*m[indCanal][k].m10;
+			m[indCanal][k].mu02=m[indCanal][k].m02-ybarre*m[indCanal][k].m01;
+			m[indCanal][k].mu20=m[indCanal][k].m20-xbarre*m[indCanal][k].m10;
+			m[indCanal][k].mu03=m[indCanal][k].m03-3*ybarre*m[indCanal][k].m02+2*ybarre*ybarre*m[indCanal][k].m01;
+			m[indCanal][k].mu30=m[indCanal][k].m30-3*xbarre*m[indCanal][k].m20+2*xbarre*xbarre*m[indCanal][k].m10;
+			m[indCanal][k].nu02=m[indCanal][k].mu02/pow(m[indCanal][k].m00,2);
+			m[indCanal][k].nu20=m[indCanal][k].mu20/pow(m[indCanal][k].m00,2);
+			m[indCanal][k].nu03=m[indCanal][k].mu03/pow(m[indCanal][k].m00,2.5);
+			m[indCanal][k].nu11=m[indCanal][k].mu11/pow(m[indCanal][k].m00,2);
+			m[indCanal][k].nu12=m[indCanal][k].mu12/pow(m[indCanal][k].m00,2.5);
+			m[indCanal][k].nu21=m[indCanal][k].mu21/pow(m[indCanal][k].m00,2.5);
+			m[indCanal][k].nu30=m[indCanal][k].mu30/pow(m[indCanal][k].m00,2.5);
+			huMoment[indCanal].resize(8);
+			huMoment[indCanal][1]=m[indCanal][k].nu20+m[indCanal][k].nu02;
+			huMoment[indCanal][2]=pow(m[indCanal][k].nu20-m[indCanal][k].nu02,2.0)+4*m[indCanal][k].nu11;
+			huMoment[indCanal][3]=pow(m[indCanal][k].nu30-3*m[indCanal][k].nu12,2.0)+pow(3*m[indCanal][k].nu21-m[indCanal][k].nu03,2.0);
+			huMoment[indCanal][4]=pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)+pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0);
+			huMoment[indCanal][5]=	(m[indCanal][k].nu30-3*m[indCanal][k].nu12)*(m[indCanal][k].nu30+m[indCanal][k].nu12)*
+									(pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)-3*pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0))+
+									(3*m[indCanal][k].nu21-m[indCanal][k].nu03)*(m[indCanal][k].nu21+m[indCanal][k].nu03)*
+									(3*pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)-pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0));
+			huMoment[indCanal][6]=	(m[indCanal][k].nu20-m[indCanal][k].nu02)*
+									(pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)-pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0))+
+									4*m[indCanal][k].nu11*(m[indCanal][k].nu30+m[indCanal][k].nu12)*(m[indCanal][k].nu21+m[indCanal][k].nu03);
+			huMoment[indCanal][7]=	(3*m[indCanal][k].nu21-m[indCanal][k].nu03)*(m[indCanal][k].nu30+m[indCanal][k].nu12)*
+									(pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)-3*pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0))-
+									(m[indCanal][k].nu30-3*m[indCanal][k].nu12)*(m[indCanal][k].nu21+m[indCanal][k].nu03)*
+									(3*pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)-pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0));
 
-for (i=0;i<=nbNiv;i++)
-	if (par[i*5] != 0)
-		{
-		par[i*5+3] /= par[i*5+0];
-		par[i*5+4] /= par[i*5+0];
-		}
-return par;
-return NULL;
+			}
+
+moment=m;
+return m;
 }
 
 
