@@ -119,6 +119,8 @@ if(captureVideo->isOpened())  // check if we succeeded
 	(*captureVideo) >> frame; // get a new frame from camera
 	nbColonnePhys = frame.cols;
 	nbLignePhys = frame.rows;
+	if (frame.cols*frame.rows==0)
+		indId=NBCAMERA;
 	switch(frame.type()){
 	case CV_8UC3:
 
@@ -129,7 +131,10 @@ if(captureVideo->isOpened())  // check if we succeeded
 		}
 	}
 else
+	{
+	indId=NBCAMERA;
  	return;
+	}
 if (indId>=0 && indId<NBCAMERA)
 	indIdVideo[indId]=1;
 

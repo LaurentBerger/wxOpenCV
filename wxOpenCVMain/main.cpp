@@ -396,7 +396,12 @@ if (type==0)
 	f->OuvrirVideo(type,nomFlux);
 	}
 else
-	f->OuvrirVideo(type);
+	{
+	wxTextEntryDialog  adr( NULL,_("Device address or Ip adress"),"0");   
+	adr.ShowModal();
+	nomFlux=adr.GetValue();
+	f->OuvrirVideo(type,nomFlux);
+	}
 if (!f->Cam()->Connectee())
 	{
 	wxCloseEvent evt;
@@ -1564,9 +1569,12 @@ if (type==0)
 	cam->DefTypeAcq(CV_8UC3);
 	}
 else
-	cam = new  CameraOpenCV();
+	cam = new  CameraOpenCV(nomFlux);
 if (!cam->Connectee())
+	{
+	wxMessageBox(_("Error : stream cannot be opened"));
 	return;
+	}
 barreEtat->ActiveVideo();
 correctionGain=false;
 fenetreSauvee=1;
@@ -2224,6 +2232,31 @@ if (p.GetExt().Cmp("yml")==0)
 		char *nomChamp=ww.data() ;
 		fs<<nomChamp<<*((cv::Mat*)(imAcq->CentreGComposante()[i]));
 		}
+	}
+	if (imAcq->MomentComposante())
+	{
+	for (int i=0;i<imAcq->channels();i++)
+		{
+		wxString s;
+		s.Printf("Moment%d",i);
+		wxCharBuffer ww=s.mb_str ();
+		char *nomChamp=ww.data() ;
+		fs<<nomChamp<<(imAcq->MomentComposante()[i]);
+		}
+	}
+	if (imAcq->PtContours())
+	{
+	std::vector<std::vector<cv::Point> > *ptCtr=imAcq->PtContours();
+	for (int i=0;i<imAcq->channels()&& i<3;i++)
+		{
+		wxString s;
+		s.Printf("Contour%d",i);
+		wxCharBuffer ww=s.mb_str ();
+		char *nomChamp=ww.data() ;
+		int nbContour=ptCtr[i].size();
+		fs<<nomChamp<<ptCtr[i];
+		}
+
 	}
 	fs.release();
 	}
