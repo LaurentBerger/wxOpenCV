@@ -117,14 +117,16 @@ std::vector<double> *huMoment;	 /*<http://docs.opencv.org/modules/imgproc/doc/st
 public : 
 //	********* Constructeurs et destructeur
 ImageInfoCV(long nbL,long nbC,int type);
-ImageInfoCV(void);
+explicit ImageInfoCV(void);
 ImageInfoCV(void *);
 ImageInfoCV(char *);
 ~ImageInfoCV(void);
 void DoEnregistrer(char **nomFic,long =0,void * = NULL);
 void SauverProprieteProjet(char *);
 void DefProprieteImage(char *);
-// Lecture des images JPEG
+// Lecture des images au format YML
+void write(cv::FileStorage& fs) const  ;                      //Write serialization for this class
+void read(const cv::FileNode& node);                          //Read serialization for this class
 
 
 private :
@@ -386,5 +388,8 @@ double *MaxIm(){if (!maxIm) ExtremumLoc();return maxIm;};		/*< Maximum de l'imag
 void Threshold( cv::InputArray _src, cv::OutputArray _dst, double thresh, double maxval, int type ); 
 
 };
+
+
+
 
 #endif //__IMAGEINFO__

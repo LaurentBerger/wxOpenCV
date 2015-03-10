@@ -2210,6 +2210,8 @@ vector<int> compression_params;
 if (p.GetExt().Cmp("yml")==0)
 	{
 	cv::FileStorage fs(nomFichier, cv::FileStorage::WRITE);
+	imAcq->write(fs);
+/*
 	fs<<"Image"<<*((cv::Mat*)imAcq);
 	if (imAcq->StatComposante())
 	{
@@ -2223,41 +2225,47 @@ if (p.GetExt().Cmp("yml")==0)
 		}
 	}
 	if (imAcq->CentreGComposante())
-	{
-	for (int i=0;i<imAcq->channels();i++)
 		{
-		wxString s;
-		s.Printf("CentreGComposante%d",i);
-		wxCharBuffer ww=s.mb_str ();
-		char *nomChamp=ww.data() ;
-		fs<<nomChamp<<*((cv::Mat*)(imAcq->CentreGComposante()[i]));
+		for (int i=0;i<imAcq->channels();i++)
+			{
+			wxString s;
+			s.Printf("CentreGComposante%d",i);
+			wxCharBuffer ww=s.mb_str ();
+			char *nomChamp=ww.data() ;
+			fs<<nomChamp<<*((cv::Mat*)(imAcq->CentreGComposante()[i]));
+			}
 		}
-	}
 	if (imAcq->MomentComposante())
-	{
-	for (int i=0;i<imAcq->channels();i++)
 		{
-		wxString s;
-		s.Printf("Moment%d",i);
-		wxCharBuffer ww=s.mb_str ();
-		char *nomChamp=ww.data() ;
-		fs<<nomChamp<<(imAcq->MomentComposante()[i]);
+		vector<cv::Moments> *m=imAcq->MomentComposante();
+		for (int i=0;i<imAcq->channels();i++)
+			{
+			wxString s;
+			s.Printf("Moment%d",i);
+			wxCharBuffer ww=s.mb_str ();
+			char *nomChamp=ww.data() ;
+			fs<<nomChamp<<m[i];
+			}
 		}
-	}
 	if (imAcq->PtContours())
-	{
-	std::vector<std::vector<cv::Point> > *ptCtr=imAcq->PtContours();
-	for (int i=0;i<imAcq->channels()&& i<3;i++)
 		{
-		wxString s;
-		s.Printf("Contour%d",i);
-		wxCharBuffer ww=s.mb_str ();
-		char *nomChamp=ww.data() ;
-		int nbContour=ptCtr[i].size();
-		fs<<nomChamp<<ptCtr[i];
-		}
+		std::vector<std::vector<cv::Point> > *ptCtr=imAcq->PtContours();
+		for (int i=0;i<imAcq->channels()&& i<3;i++)
+			{
+			vector<vector<cv::Point> >::iterator itCtr;
+			int indCtr=0;
+			for (itCtr=ptCtr[i].begin();itCtr!=ptCtr[i].end();itCtr++)
+				{
+				stringstream nombre;
+				nombre<<"Cmp"<<i<<"Ctr"<<indCtr;
+				string s(nombre.str());
 
-	}
+				fs<<s<<*itCtr;
+				indCtr++;
+				}    
+			}
+
+		}*/
 	fs.release();
 	}
 else

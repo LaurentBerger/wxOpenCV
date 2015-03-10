@@ -116,7 +116,7 @@ void ImageInfoCV::DiffusionMPI(void)
 }
 
 
-ImageInfoCV::ImageInfoCV(void)
+ImageInfoCV::ImageInfoCV(void):moment(NULL),statComposante(NULL),centreGComposante(NULL),locMin(NULL),locMax(NULL),contours(NULL)
 {
 eSauver=NULL;
 InitImageInfo();
