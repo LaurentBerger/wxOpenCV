@@ -51,7 +51,6 @@ enum
  	ID_LISMOY,
 	ID_LISGAU,
 	ID_LISMED,
-    ID_CANNY,
 	ID_THRESHOLD,
 	ID_ADATHRESHOLD,
     ID_DISTANCEDISCRETE,
@@ -60,10 +59,18 @@ enum
 	ID_CONTOUR,
 	ID_COMPCONNEXE,
 	ID_PARTAGE_EAUX,
+    ID_CANNY,
+	ID_CORNERHARRIS,
+	ID_GOODFEATURE,
+	ID_HOUGHCIRCLE,
+	ID_HOUGHLINE,
+	ID_HOUGHLINEP,
+
 	ID_FFT,
 	ID_IFFT,
 	ID_FUSIONPLAN,
 	ID_SEPARATIONPLAN,
+	ID_RGBLUMINANCE,
 	ID_FIN_OP, // Fin des opérateurs sur les images
 	ID_VIDEO_8_UC3,
 	ID_VIDEO_32_FC3,
@@ -215,6 +222,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
 	InstallationbarreOutils(5);
 	InstallationbarreOutils(6);
 	InstallationbarreOutils(7);
+	InstallationbarreOutils(8);
 
 
     wxWindow* wnd10 = CreateTextCtrl(wxEmptyString);
@@ -895,6 +903,11 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			Tool_gradient_y,
 			Tool_laplacien,
 			Tool_canny,
+			Tool_cornerharris,
+			Tool_goodfeature,
+			Tool_houghcircle,
+			Tool_houghline,
+			Tool_houghlinep,
 			Tool_fft,
 			Tool_ifft,
 			Tool_contour,
@@ -912,6 +925,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			Tool_convolution,
 			Tool_fusionplan,
 			Tool_separationplan,
+			Tool_rgbluminance,
 			Tool_Max
 		};
 	switch(indBarre)
@@ -995,7 +1009,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Morphologic operation").Caption("Morphologic operation").
-					  ToolbarPane().Top().Row(1));
+					  ToolbarPane().Top().Row(3));
 		}
 		break;
 	case 2: // Opérateur Spectrale et d'échelle
@@ -1031,7 +1045,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Scale/Frequency").Caption("Scale/Frequency").
-					  ToolbarPane().Top().Row(3));
+					  ToolbarPane().Top().Row(5));
 		}
 		break;
 	case 3 :// Opérateur lissage
@@ -1110,7 +1124,6 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
 		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
 
-			INIT_TOOL_BMP(canny);
 			INIT_TOOL_BMP(contour);
 			INIT_TOOL_BMP(seuillage);
 			INIT_TOOL_BMP(seuillageada);
@@ -1120,6 +1133,50 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			INIT_TOOL_BMP(cmpconnexe);
 			INIT_TOOL_BMP(statconnexe);
 			toolBarBitmaps[Tool_fft]= wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(64,64));
+
+        if (toolBarBitmaps[Tool_contour].GetHeight()==0)
+            wxMessageBox("Probleme","pb");
+		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                        wxAUI_TB_DEFAULT_STYLE |
+                                         /*wxAUI_TB_OVERFLOW |*/
+                                         wxAUI_TB_TEXT |
+                                         wxAUI_TB_HORZ_TEXT);
+		tbOperation= tb;
+//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
+        tb->SetMargins(1,1);
+		tb->AddTool(ID_THRESHOLD, wxEmptyString, toolBarBitmaps[Tool_seuillage], _("Thereshold"));
+		tb->AddTool(ID_ADATHRESHOLD, wxEmptyString, toolBarBitmaps[Tool_seuillageada], _("Adaptive Thereshold"));
+		tb->AddTool(ID_PARTAGE_EAUX, wxEmptyString, toolBarBitmaps[Tool_statconnexe], _("Watershed"));
+		tb->AddTool(ID_COMPCONNEXE, wxEmptyString, toolBarBitmaps[Tool_cmpconnexe], _("Connected component"));
+		tb->AddTool(ID_CONTOUR, wxEmptyString, toolBarBitmaps[Tool_contour], _("Contour"));
+		tb->AddTool(ID_SQUELETTE, wxEmptyString, toolBarBitmaps[Tool_squelette], _("Skeleton"));
+		tb->AddTool(ID_DISTANCEDISCRETE, wxEmptyString, toolBarBitmaps[Tool_distancediscrete], _("Transform distance"));
+		tb->AddTool(ID_VORONOI, wxEmptyString, toolBarBitmaps[Tool_voronoi], _("Voronoi"));
+		//tb->SetCustomOverflowItems(prepend_items, append_items);
+		tb->Realize();
+		m_mgr.AddPane(tb,  wxAuiPaneInfo().
+					  Name("binarize").Caption("binarize").
+					  ToolbarPane().Top().Row(4));
+		}
+	break;
+	case 8:
+		{
+		wxBitmap toolBarBitmaps[Tool_Max];
+
+		#if USE_XPM_BITMAPS
+			#define INIT_TOOL_BMP(bmp) \
+				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
+		#else // !USE_XPM_BITMAPS
+			#define INIT_TOOL_BMP(bmp) \
+				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
+		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
+
+			INIT_TOOL_BMP(canny);
+			INIT_TOOL_BMP(cornerharris);
+			INIT_TOOL_BMP(goodfeature);
+			INIT_TOOL_BMP(houghcircle);
+			INIT_TOOL_BMP(houghline);
+			INIT_TOOL_BMP(houghlinep);
 
         if (toolBarBitmaps[Tool_canny].GetHeight()==0)
             wxMessageBox("Probleme","pb");
@@ -1131,22 +1188,19 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tbOperation= tb;
 //			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
         tb->SetMargins(1,1);
-		tb->AddTool(ID_CANNY, _("Canny"), toolBarBitmaps[Tool_canny], _("Canny"));
-		tb->AddTool(ID_THRESHOLD, wxEmptyString, toolBarBitmaps[Tool_seuillage], _("Thereshold"));
-		tb->AddTool(ID_ADATHRESHOLD, wxEmptyString, toolBarBitmaps[Tool_seuillageada], _("Adaptive Thereshold"));
-		tb->AddTool(ID_DISTANCEDISCRETE, wxEmptyString, toolBarBitmaps[Tool_distancediscrete], _("Transform distance"));
-		tb->AddTool(ID_SQUELETTE, wxEmptyString, toolBarBitmaps[Tool_squelette], _("Skeleton"));
-		tb->AddTool(ID_VORONOI, wxEmptyString, toolBarBitmaps[Tool_voronoi], _("Voronoi"));
-		tb->AddTool(ID_CONTOUR, _("Contour"), toolBarBitmaps[Tool_contour], _("Contour"));
-		tb->AddTool(ID_COMPCONNEXE, wxEmptyString, toolBarBitmaps[Tool_cmpconnexe], _("Connected component"));
-		tb->AddTool(ID_PARTAGE_EAUX, wxEmptyString, toolBarBitmaps[Tool_statconnexe], _("Watershed"));
+		tb->AddTool(ID_CANNY, wxEmptyString, toolBarBitmaps[Tool_canny], _("Canny edge detector"));
+		tb->AddTool(ID_CORNERHARRIS, wxEmptyString, toolBarBitmaps[Tool_cornerharris], _("Harris edge detector"));
+		tb->AddTool(ID_GOODFEATURE, wxEmptyString, toolBarBitmaps[Tool_goodfeature], _("Very good features"));
+		tb->AddTool(ID_HOUGHCIRCLE, wxEmptyString, toolBarBitmaps[Tool_houghcircle], _("Hough circle"));
+		tb->AddTool(ID_HOUGHLINE, wxEmptyString, toolBarBitmaps[Tool_houghline], _("Hough line"));
+		tb->AddTool(ID_HOUGHLINEP, wxEmptyString, toolBarBitmaps[Tool_houghlinep], _("hough line proba."));
 		//tb->SetCustomOverflowItems(prepend_items, append_items);
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
-					  Name("binarize").Caption("binarize").
-					  ToolbarPane().Top().Row(3));
+					  Name("feature").Caption("Feature").
+					  ToolbarPane().Top().Row(4));
 		}
-	break;
+		break;
 	case 7 : // Outils couleur, normalisation
 		{
 
@@ -1162,6 +1216,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 
 			INIT_TOOL_BMP(fusionplan);
 			INIT_TOOL_BMP(separationplan);
+			INIT_TOOL_BMP(rgbluminance);
 			toolBarBitmaps[Tool_fft]= wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(64,64));
 
         if (toolBarBitmaps[Tool_fusionplan].GetHeight()==0)
@@ -1176,11 +1231,12 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
         tb->SetMargins(1,1);
 		tb->AddTool(ID_FUSIONPLAN, wxEmptyString, toolBarBitmaps[Tool_fusionplan], _("Merge color plan"));
 		tb->AddTool(ID_SEPARATIONPLAN, wxEmptyString, toolBarBitmaps[Tool_separationplan], _("split color plan"));
+		tb->AddTool(ID_RGBLUMINANCE, wxEmptyString, toolBarBitmaps[Tool_rgbluminance], _("RGB to gray"));
 		//tb->SetCustomOverflowItems(prepend_items, append_items);
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Color").Caption("Color").
-					  ToolbarPane().Top().Row(3));
+					  ToolbarPane().Top().Row(6));
 		}
 	break;
 	case 6 : // Ouverture, fermeture de fichiers
@@ -1273,6 +1329,9 @@ void InterfaceAvance::SelectOperation(wxCommandEvent& evt)
 {
 wxString s;
 switch(evt.GetId()){
+case ID_RGBLUMINANCE:
+    s="RGBLuminance";
+	break;
 case ID_FUSIONPLAN:
     s="FusionPlan";
 	break;

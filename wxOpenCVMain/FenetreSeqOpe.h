@@ -68,6 +68,8 @@ void DefFenMere(FenetrePrincipale *f){fenMere =f;};
 		/*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
 void Executer(wxCommandEvent& event);/*!<Excute la séquence d'opération après modification des paramètres à partir de l'étape indEtape */
 void ExecuterSequence(std::vector <ParametreOperation> *sq);/*!<Excute la séquence d'opération après modification des paramètres à partir de l'étape indEtape */
+bool OperandePresent(std::vector <ParametreOperation> *sq);/*!< Verifie que les opérandes 1 et 2 sont disponibles*/
+
 public:
 };
 

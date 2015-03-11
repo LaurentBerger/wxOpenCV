@@ -33,7 +33,33 @@ ImageInfoCV 	*ImageInfoCV::Add(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperat
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::add( *im1, *im2, *im,cv::noArray(),typeResultat );
+if (pOCV)
+	{
+	if (im1->depth()!=im2->depth())
+		pOCV->intParam["ddepth"].valeur=CV_32F;
+	cv::add( *im1, *im2, *im,cv::noArray(),pOCV->intParam["ddepth"].valeur );
+	}
+else
+	cv::add( *im1, *im2, *im,cv::noArray(),typeResultat );
+
+return im;
+}
+
+/**
+ * @function Add
+ * @brief Addition de deux images
+ */
+ImageInfoCV 	*ImageInfoCV::AddPonderee(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+
+
+if (im1->depth()!=im2->depth() && pOCV)
+	pOCV->intParam["ddepth"].valeur=CV_32F;
+if (pOCV)
+	cv::addWeighted( *im1,pOCV->intParam["alpha"].valeur, *im2,pOCV->intParam["beta"].valeur,pOCV->intParam["gamma"].valeur, *im,pOCV->intParam["ddepth"].valeur );
+else
+	cv::addWeighted( *im1,1, *im2,1,0, *im,-1);
 return im;
 }
 
@@ -45,7 +71,14 @@ ImageInfoCV 	*ImageInfoCV::Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperat
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::subtract( *im1, *im2, *im,cv::noArray(),typeResultat );
+if (pOCV)
+	{
+	if (im1->depth()!=im2->depth())
+		pOCV->intParam["ddepth"].valeur=CV_32F;
+	cv::subtract( *im1, *im2, *im,cv::noArray(),pOCV->intParam["ddepth"].valeur );
+	}
+else
+	cv::subtract( *im1, *im2, *im,cv::noArray(),typeResultat );
 return im;
 }
 
@@ -57,7 +90,14 @@ ImageInfoCV 	*ImageInfoCV::Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperat
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::subtract( *im1, *im2, *im,cv::noArray(), typeResultat);
+if (pOCV)
+	{
+	if (im1->depth()!=im2->depth())
+		pOCV->intParam["ddepth"].valeur=CV_32F;
+	cv::multiply( *im1, *im2, *im,pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
+	}
+else
+	cv::multiply( *im1, *im2, *im,1, typeResultat);
 return im;
 }
 
@@ -69,7 +109,14 @@ ImageInfoCV 	*ImageInfoCV::Div(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperat
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::subtract( *im1, *im2, *im,cv::noArray(),typeResultat );
+if (pOCV)
+	{
+	if (im1->depth()!=im2->depth())
+		pOCV->intParam["ddepth"].valeur=CV_32F;
+	cv::divide( *im1, *im2, *im,pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
+	}
+else
+	cv::divide( *im1, *im2, *im,1, typeResultat);
 return im;
 }
 
@@ -564,6 +611,7 @@ return im;
 }
 
 
+
 ImageInfoCV *ImageInfoCV::FusionPlan(int nbPlan,ImageInfoCV **ve,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*result=new ImageInfoCV;
@@ -578,6 +626,14 @@ if (nbPlan>=3)
         listePlan.push_back(*(ve[2]));
 cv::merge(listePlan,*result);
 return result;
+}
+
+ImageInfoCV *ImageInfoCV::RGB_L(ImageInfoCV *im1,ParametreOperation *paramOCV)
+{
+ImageInfoCV	*result=new ImageInfoCV;
+ 
+cv::cvtColor( *im1, *result,paramOCV->intParam["ColorSpaceCode"].valeur );
+return(result);
 }
 
 ImageInfoCV **ImageInfoCV::SeparationPlan(ImageInfoCV *im1,ParametreOperation *paramOCV)

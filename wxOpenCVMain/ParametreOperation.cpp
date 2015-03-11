@@ -43,6 +43,11 @@ listeParam["ddepth"].insert(std::pair<string,int>(_("32 signed bit").ToStdString
 listeParam["ddepth"].insert(std::pair<string,int>("float",CV_32F));
 listeParam["ddepth"].insert(std::pair<string,int>("double",CV_64F));
 
+listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("BGR to Gray").ToStdString(),cv::COLOR_BGR2GRAY));
+listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("RGB to Gray").ToStdString(),cv::COLOR_RGB2GRAY));
+listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("Gray to RGB").ToStdString(),cv::COLOR_GRAY2BGR));
+listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("BGR to Gray").ToStdString(),cv::COLOR_GRAY2RGB));
+
 
 
 }
@@ -99,13 +104,27 @@ if (s=="Addition")
 	nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Add;
 	nbOperande= 2;
+	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#add";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
+	}
+if (s=="AdditionPonderee")
+	{
+	nomOperation=s;
+	opBinaireSelec = &ImageInfoCV::Add;
+	nbOperande= 2;
+	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(1,0.1,10,0.1);
+	doubleParam["beta"]=DomaineParametreOp<double>(1,0.1,10,0.1);
+	doubleParam["gamma"]=DomaineParametreOp<double>(1,0.1,10,0.1);
+	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#addweighted";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=122&zoom=70,250,100";
 	}
 if (s=="Soustraction")
 	{
 	nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Sub;
+	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	nbOperande= 2;
 	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#subtract";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=172&zoom=70,250,100";
@@ -114,6 +133,8 @@ if (s=="Multiplication")
 	{
 	nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Mul;
+	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
+	doubleParam["scale"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	nbOperande= 2;
 	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#multiply";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=153&zoom=70,250,100";
@@ -123,6 +144,8 @@ if (s=="Division")
 	nomOperation=s;
 	opBinaireSelec = &ImageInfoCV::Div;
 	nbOperande= 2;
+	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
+	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#divide";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=136&zoom=70,250,100";
 	}
@@ -208,7 +231,7 @@ if (s=="Scharr_mod")
 	nomOperation=s;
 	opUnaireSelec = &ImageInfoCV::ScharrModule;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
-	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,1);
+	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
@@ -219,7 +242,7 @@ if (s=="Scharr_x")
 	nomOperation=s;
 	opUnaireSelec = &ImageInfoCV::ScharrX;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
-	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,1);
+	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
@@ -230,7 +253,7 @@ if (s=="Scharr_y")
 	nomOperation=s;
 	opUnaireSelec = &ImageInfoCV::ScharrY;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
-	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,1);
+	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
@@ -239,7 +262,7 @@ if (s=="Scharr_y")
 if (s=="Laplacien")
 	{
 	intParam["ddepth"]=DomaineParametreOp<int>(50.,0.0,255.0,1.0);
-	doubleParam["scale"]=DomaineParametreOp<double>(1,0.0,255.0,1.0);
+	doubleParam["scale"]=DomaineParametreOp<double>(1,0.0,255.0,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,255.0,1.0);
 	intParam["ksize"]=DomaineParametreOp<int>(3,1,7,2);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
@@ -267,6 +290,15 @@ if (s=="Contour")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=308&zoom=70,250,100";
 	nomOperation=s;
 	opUnaireSelec = &ImageInfoCV::Contour;
+	}
+
+if (s=="RGBLuminance")
+	{
+	intParam["ColorSpaceCode"]=DomaineParametreOp<int>(cv::COLOR_BGR2GRAY,cv::COLOR_BGR2GRAY,cv::COLOR_RGB2GRAY,1);
+	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#cvtcolor";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
+	nomOperation=s;
+	opUnaireSelec = &ImageInfoCV::RGB_L;
 	}
 if (s=="FFT")
 	{
@@ -371,6 +403,14 @@ InitOperation(s);
 bool ParametreOperation::InitPtrFonction()
 {
 wxString s(nomOperation);
+if (s=="RGBLuminance")
+	{
+	intParam["ColorSpaceCode"]=DomaineParametreOp<int>(cv::COLOR_BGR2GRAY,cv::COLOR_BGR2GRAY,cv::COLOR_RGB2GRAY,1);
+	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#cvtcolor";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
+	nomOperation=s;
+	opUnaireSelec = &ImageInfoCV::RGB_L;
+	}
 if (s=="PartageEaux")
 	{
 	opBinaireSelec = &ImageInfoCV::PartageEaux;

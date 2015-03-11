@@ -261,6 +261,7 @@ ImageInfoCV	*Variance (long);
 
 // Fonctions membres equivalentes aux opérateurs utilisant OPENCV
 ImageInfoCV 	*Add(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*AddPonderee(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*Div(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
@@ -290,6 +291,7 @@ ImageInfoCV 	*IFFT(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV		*FusionPlan(int nbPlan,ImageInfoCV	**,ParametreOperation *paramOCV);
 ImageInfoCV		*ComposanteConnexe (ImageInfoCV *result,ParametreOperation *paramOCV);
 ImageInfoCV		**SeparationPlan(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV		*RGB_L(ImageInfoCV *im1,ParametreOperation *paramOCV);
 ImageInfoCV		*DistanceDiscrete (ImageInfoCV *result,ParametreOperation *paramOCV);
 ImageInfoCV		*Voronoi (ImageInfoCV *result,ParametreOperation *paramOCV);
 ImageInfoCV		*LigneMediane(ImageInfoCV *result,ParametreOperation *paramOCV);

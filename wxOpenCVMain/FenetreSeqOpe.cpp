@@ -301,7 +301,8 @@ if (it->second[opSelec].sizeParam.find(nom)!=it->second[opSelec].sizeParam.end()
 		it->second[opSelec].sizeParam[nom].valeur.height=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
 		}
 	}
-ExecuterSequence(&(it->second));
+if (OperandePresent(&(it->second)))
+	ExecuterSequence(&(it->second));
 }
 
 
@@ -429,6 +430,7 @@ void FenetreSequenceOperation::ExecuterSequence(std::vector <ParametreOperation>
 {
 if (!osgApp)
 	return;
+OperandePresent(sq);
 wxOsgApp	*app=(wxOsgApp *)osgApp;
 ImageInfoCV **im=NULL;
 ImageInfoCV *imTmp=NULL;
@@ -469,8 +471,8 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 	int indFen2=it->indOp2Fenetre;
 	if (indFen2>=0)
 		{
-		wxMessageBox(_("Operation with two images not supported?"),_("Problem"), wxOK );
-		return ;
+		
+		pOCV.op2=app->Graphique(indFen2)->ImAcq();
 		}
 //	if (pOCV.intParam.find(
 	im=app->ExecuterOperation(&pOCV);
@@ -501,4 +503,44 @@ if (im!=NULL)
 		f->ImgStat()->Plot(true);
 	f->DefHistorique();
 	}
+}
+
+
+
+bool FenetreSequenceOperation::OperandePresent(std::vector <ParametreOperation> *sq)
+{
+if (!osgApp)
+	return false;
+wxOsgApp	*app=(wxOsgApp *)osgApp;
+ImageInfoCV **im=NULL;
+ImageInfoCV *imTmp=NULL;
+int i=0;
+
+for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();it++)
+	{
+	ParametreOperation pOCV=*it;
+	wxString  nomOperation(it->nomOperation);
+	int indFen1=fenMere->IdFenetre();
+	if (indFen1<0 )
+		{
+		wxMessageBox(_("Previous image is closed?"),_("Problem"), wxOK );
+		return false;
+		}
+	if (!fenMere->ImAcq())
+		{
+		wxMessageBox(_("Empty image?"),_("Problem"), wxOK );
+		return false;
+		}
+	long indFen2=it->indOp2Fenetre;
+	while (it->opBinaireSelec && !app->Graphique(indFen2))
+		{
+			wxTextEntryDialog  adr( NULL,_("Empty image. Give window id of image"),"0");   
+			adr.ShowModal();
+			adr.GetValue().ToCLong(&indFen2);
+			it->indOp2Fenetre = indFen2 ;
+		}
+	if (it->opBinaireSelec)
+		it->op2=app->Graphique(indFen2)->ImAcq();
+	}
+return true;
 }

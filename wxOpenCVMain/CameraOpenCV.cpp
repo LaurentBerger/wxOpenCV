@@ -403,8 +403,11 @@ if (captureVideo->isOpened())
 						}
 					delete imIni;
 					delete imTmp;
-					im[0]->copyTo(frame);
-					delete im[0];
+					if (im)
+						{
+						im[0]->copyTo(frame);
+						delete im[0];
+						}
 					}
 				else if (opActif)
 					{
