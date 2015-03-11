@@ -1499,6 +1499,21 @@ case ID_DISTANCEDISCRETE:
 case ID_VORONOI:
 	s="DistanceDiscrete";
 	break;
+case ID_CORNERHARRIS:
+	s="CornerHarris";
+	break;
+case ID_GOODFEATURE:
+	s="GoodFeature";
+	break;
+case ID_HOUGHCIRCLE:
+	s="HoughCercle";
+	break;
+case ID_HOUGHLINE:
+	s="HoughLine";
+	break;
+case ID_HOUGHLINEP:
+	s="HoughLineP";
+	break;
 	}
 ((wxOsgApp*)osgApp)->DefOperateurImage(s);
 ((wxOsgApp*)osgApp)->DefPointeurSouris(1,1);
