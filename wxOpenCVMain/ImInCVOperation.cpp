@@ -786,3 +786,134 @@ else
 	}
 return im;
 }
+
+
+ImageInfoCV 	*ImageInfoCV::HoughLigne(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+{
+if (imSrc!=this)
+	return NULL;
+if (ligne==NULL)
+	ligne = new std::vector<cv::Vec2f>[imSrc->channels()];
+if (imSrc->channels()==1)
+	{
+	cv::HoughLines(*imSrc,ligne[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
+		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["srn"].valeur,pOCV->doubleParam["stn"].valeur);
+	}
+else
+	{
+	std::vector<Mat> planCouleur;
+	Mat *d=new Mat[imSrc->channels()];
+	cv::split( *imSrc, planCouleur );
+	for (int i=0;i<imSrc->channels();i++)
+		{
+		cv::HoughLines( planCouleur[i],ligne[i],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
+		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["srn"].valeur,pOCV->doubleParam["stn"].valeur);
+
+		}
+	delete []d;
+	}
+return this;
+}
+
+
+ImageInfoCV 	*ImageInfoCV::HoughCercle(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+
+if (imSrc->channels()==1)
+	{
+	cv::Canny(	*imSrc, *im, pOCV->doubleParam["threshold1"].valeur,
+				pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
+	}
+else
+	{
+	std::vector<Mat> planCouleur;
+	Mat *d=new Mat[imSrc->channels()];
+	cv::split( *imSrc, planCouleur );
+	for (int i=0;i<imSrc->channels();i++)
+		{
+		cv::Canny( planCouleur[i], d[i], pOCV->doubleParam["threshold1"].valeur,
+					pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
+		}
+	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
+	delete []d;
+	}
+return im;
+}
+
+ImageInfoCV 	*ImageInfoCV::HoughLigneProba(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+
+if (imSrc->channels()==1)
+	{
+	cv::Canny(	*imSrc, *im, pOCV->doubleParam["threshold1"].valeur,
+				pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
+	}
+else
+	{
+	std::vector<Mat> planCouleur;
+	Mat *d=new Mat[imSrc->channels()];
+	cv::split( *imSrc, planCouleur );
+	for (int i=0;i<imSrc->channels();i++)
+		{
+		cv::Canny( planCouleur[i], d[i], pOCV->doubleParam["threshold1"].valeur,
+					pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
+		}
+	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
+	delete []d;
+	}
+return im;
+}
+
+ImageInfoCV 	*ImageInfoCV::BonAttributs(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+
+if (imSrc->channels()==1)
+	{
+	cv::Canny(	*imSrc, *im, pOCV->doubleParam["threshold1"].valeur,
+				pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
+	}
+else
+	{
+	std::vector<Mat> planCouleur;
+	Mat *d=new Mat[imSrc->channels()];
+	cv::split( *imSrc, planCouleur );
+	for (int i=0;i<imSrc->channels();i++)
+		{
+		cv::Canny( planCouleur[i], d[i], pOCV->doubleParam["threshold1"].valeur,
+					pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
+		}
+	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
+	delete []d;
+	}
+return im;
+}
+
+ImageInfoCV 	*ImageInfoCV::DetectCoinHarris(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+
+if (imSrc->channels()==1)
+	{
+	cv::cornerHarris(*imSrc, *im, pOCV->intParam["blockSize"].valeur,pOCV-> intParam["ksize"].valeur,pOCV->doubleParam["k"].valeur, 
+	pOCV->intParam["borderType"].valeur);
+
+	}
+else
+	{
+	std::vector<Mat> planCouleur;
+	Mat *d=new Mat[imSrc->channels()];
+	cv::split( *imSrc, planCouleur );
+	for (int i=0;i<imSrc->channels();i++)
+		{
+		cv::cornerHarris(planCouleur[i], d[i], pOCV->intParam["blockSize"].valeur,pOCV-> intParam["ksize"].valeur,pOCV->doubleParam["k"].valeur, 
+		pOCV->intParam["borderType"].valeur);
+		}
+	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
+	delete []d;
+	}
+return im;
+}
+

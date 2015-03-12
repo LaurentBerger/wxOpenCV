@@ -45,6 +45,9 @@ eSauver=NULL;
 void ImageInfoCV::InitImageInfo(void *eTiff)
 {
 InitOp();
+cercle=NULL;
+ligne=NULL;
+ligneP=NULL;
 minIm = NULL;			/*< Minimimum pour chaque plan de l'image */
 maxIm = NULL;			/*< Maximimum pour chaque plan de l'image */
 locMin = NULL;			/*< Position du miminmu pour chaque plan */
@@ -165,6 +168,9 @@ for (int i=0;i<channels();i++)
 delete []statComposante; 
 delete []centreGComposante; 
 delete []moment;
+delete []ligne;
+delete []cercle;
+delete []ligneP;
 }
 
 ImageInfoCV::ImageInfoCV(void *r):cv::Mat(1,1,3)	

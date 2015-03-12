@@ -113,6 +113,9 @@ std::vector<std::vector<cv::Point> > *contours; /*< Contours dans l'image des co
 std::vector<cv::Vec4i> *arbreContour; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 std::vector<cv::Moments> *moment;	 /*<http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
 std::vector<double> *huMoment;	 /*<http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
+std::vector<cv::Vec3f> *cercle; /*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles*/
+std::vector<cv::Vec4i> *ligneP; /*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles */
+std::vector<cv::Vec2f> *ligne; /*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles */
 
 public : 
 //	********* Constructeurs et destructeur
@@ -278,7 +281,6 @@ ImageInfoCV 	*Laplacien(ImageInfoCV	*,ParametreOperation *pOCV);
 ImageInfoCV 	*ScharrX(ImageInfoCV	*im1,ParametreOperation *pOCV);
 ImageInfoCV 	*ScharrY(ImageInfoCV	*im1,ParametreOperation *pOCV);
 ImageInfoCV 	*ScharrModule(ImageInfoCV	*im1,ParametreOperation *pOCV);
-ImageInfoCV 	*Canny(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV 	*Contour(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV 	*Seuillage(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV 	*SeuillageAdaptatif(ImageInfoCV	*imSrc,ParametreOperation *pOCV);
@@ -295,6 +297,13 @@ ImageInfoCV		*RGB_L(ImageInfoCV *im1,ParametreOperation *paramOCV);
 ImageInfoCV		*DistanceDiscrete (ImageInfoCV *result,ParametreOperation *paramOCV);
 ImageInfoCV		*Voronoi (ImageInfoCV *result,ParametreOperation *paramOCV);
 ImageInfoCV		*LigneMediane(ImageInfoCV *result,ParametreOperation *paramOCV);
+ImageInfoCV 	*Canny(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*HoughLigne(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*HoughCercle(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*HoughLigneProba(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*BonAttributs(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV 	*DetectCoinHarris(ImageInfoCV	*,ParametreOperation *paramOCV);
+
 
 void ExtremumLoc(ImageInfoCV *mask=NULL );
 

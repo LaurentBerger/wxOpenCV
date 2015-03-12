@@ -71,7 +71,5 @@ if (statComposante)
  
  void ImageInfoCV::read(const cv::FileNode& node)                          //Read serialization for this class
     {
-/*        A = (int)node["A"];
-        X = (double)node["X"];
-        id = (string)node["id"];*/
+
     }

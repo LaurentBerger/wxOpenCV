@@ -80,7 +80,8 @@ if(	s=="CornerHarris")
 	nbOperande= 1;
 	intParam["blockSize"]=DomaineParametreOp<int>(2,2,9,1);
 	intParam["ksize"]=DomaineParametreOp<int>(1,1,7,2);
-	doubleParam["k"]=DomaineParametreOp<double>(0.04,0.01,1,0.1);
+	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	doubleParam["k"]=DomaineParametreOp<double>(0.04,0.01,10,0.01);
 	}
 if(	s=="GoodFeature")
 	{
@@ -97,16 +98,34 @@ if(	s=="HoughCercle")
 	{
 	nomOperation=s;
 	nbOperande= 1;
+	intParam["method"]=DomaineParametreOp<int>(cv::HOUGH_GRADIENT,1,100,1);
+	doubleParam["dp"]=DomaineParametreOp<double>(1,1,2,01);
+	doubleParam["minDistance"]=DomaineParametreOp<double>(10,1,2,01);
+	doubleParam["param1"]=DomaineParametreOp<double>(0.04,0.01,1,0.1);
+	doubleParam["param2"]=DomaineParametreOp<double>(0.04,0.01,1,0.1);
+	doubleParam["min_radius"]=DomaineParametreOp<double>(0.0,1,1000,1);
+	doubleParam["max_radius"]=DomaineParametreOp<double>(0.04,1,1000,1);
 	}
 if(	s=="HoughLine")
 	{
 	nomOperation=s;
 	nbOperande= 1;
+	intParam["method"]=DomaineParametreOp<int>(cv::HOUGH_STANDARD,cv::HOUGH_STANDARD,cv::HOUGH_MULTI_SCALE,1);
+	doubleParam["rho"]=DomaineParametreOp<double>(1,1,2,01);
+	doubleParam["theta"]=DomaineParametreOp<double>(10,1,2,01);
+	intParam["threshold"]=DomaineParametreOp<int>(10,3,1000,1);
+	doubleParam["srn"]=DomaineParametreOp<double>(0.04,0.01,1,0.1);
+	doubleParam["stn"]=DomaineParametreOp<double>(0.0,1,1000,1);
 	}
 if(	s=="HoughLineP")
 	{
 	nomOperation=s;
 	nbOperande= 1;
+	doubleParam["rho"]=DomaineParametreOp<double>(1,1,2,01);
+	doubleParam["theta"]=DomaineParametreOp<double>(10,1,2,01);
+	intParam["threshold"]=DomaineParametreOp<int>(10,3,1000,1);
+	doubleParam["minLineLength"]=DomaineParametreOp<double>(0.04,0.01,1,0.1);
+	doubleParam["maxLineGap"]=DomaineParametreOp<double>(0.0,1,1000,1);
 	}
 if (s=="PartageEaux")
 	{
@@ -345,6 +364,7 @@ if(	s=="CornerHarris")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#cornerharris";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=327&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::DetectCoinHarris;
 	}
 if(	s=="GoodFeature")
 	{
@@ -352,6 +372,7 @@ if(	s=="GoodFeature")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=329&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::BonAttributs;
 	}
 if(	s=="HoughCercle")
 	{
@@ -359,6 +380,7 @@ if(	s=="HoughCercle")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=330&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::HoughCercle;
 	}
 if(	s=="HoughLine")
 	{
@@ -366,6 +388,7 @@ if(	s=="HoughLine")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=332&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::HoughLigne;
 	}
 if(	s=="HoughLineP")
 	{
@@ -373,6 +396,7 @@ if(	s=="HoughLineP")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlinesp";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=333&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::HoughLigneP;
 	}
 if (s=="RGBLuminance")
 	{
