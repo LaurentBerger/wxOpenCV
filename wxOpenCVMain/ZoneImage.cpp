@@ -794,7 +794,7 @@ if( tracerLigneHough)
 	{
 	wxClientDC hdc(feuille);
 	feuille->DoPrepareDC(hdc);
-	TracerContour(hdc);
+	TracerLigneHough(hdc);
 	}
 }
 
@@ -805,7 +805,7 @@ if( tracerLigneProbaHough)
 	{
 	wxClientDC hdc(feuille);
 	feuille->DoPrepareDC(hdc);
-	TracerContour(hdc);
+	TracerLigneProbaHough(hdc);
 	}
 }
 
@@ -816,7 +816,7 @@ if( tracerCercleHough)
 	{
 	wxClientDC hdc(feuille);
 	feuille->DoPrepareDC(hdc);
-	TracerContour(hdc);
+	TracerCercleHough(hdc);
 	}
 }
 

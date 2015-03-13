@@ -594,7 +594,9 @@ for (int i=indEtape;i<nbEtape;i++)
 		FenetrePrincipale *f;
 
 		f =app->Fenetre(listeOp[i].second);
-		f->AssosierImage(im[0]);
+		
+		if (f->ImAcq()!=im[0])
+			f->AssosierImage(im[0]);
 		if (i<nbEtape-1)
 			{
 			listeOp[i+1].first->op1 =im[0];
