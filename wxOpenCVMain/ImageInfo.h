@@ -192,23 +192,6 @@ void 	DefNomProjet(char *);
 int	LitNbLigne(){return rows;};
 int	LitNbColonne(){return cols;};
 int	LitNbPlan(){return channels();};
-//	********* Lecture des membres privés
-char    *LitFctImage(void);
-char    *LitTypeSeuillage(void);
-char    *LitTailleOperateur(void);
-char    *LitCentrageResultat(void);
-char	LitValCentrageResultat(void);
-char    *LitTypeOndelette(void);
-long	LitTailleOndelette(void);
-long  	LitNbIterOperateur(void);
-char  	LitConverCplxEnt(void);
-
-cv::Mat	**StatComposante(){return statComposante;};
-cv::Mat	**CentreGComposante(){return centreGComposante;};
-std::vector<cv::Moments> *MomentComposante(){return moment;};	 
-
-std::vector<std::vector<cv::Point> > *PtContours(){return contours;};
-std::vector<cv::Vec4i> *ArboContour(){return arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 
 char* 	LitNomImage(void);
 char* 	LitNatureImage(void);
@@ -391,9 +374,29 @@ ImageInfoCV *SuiviLigneGradient(ImageInfoCV &,ImageInfoCV &,ImageInfoCV * = NULL
 // Spécifique MPI
 virtual void DiffusionMPI(void);
 
-// Accès aux membres privés
+// ********* Accès aux membres privés et 
+//	Lecture des membres privés
 double *MinIm(){if (!minIm) ExtremumLoc(); return minIm;};		/*< Minimum de l'image pour chaque canal */
 double *MaxIm(){if (!maxIm) ExtremumLoc();return maxIm;};		/*< Maximum de l'image pour chaque canal */
+char    *LitFctImage(void);
+char    *LitTypeSeuillage(void);
+char    *LitTailleOperateur(void);
+char    *LitCentrageResultat(void);
+char	LitValCentrageResultat(void);
+char    *LitTypeOndelette(void);
+long	LitTailleOndelette(void);
+long  	LitNbIterOperateur(void);
+char  	LitConverCplxEnt(void);
+
+cv::Mat	**StatComposante(){return statComposante;};
+cv::Mat	**CentreGComposante(){return centreGComposante;};
+std::vector<cv::Moments> *MomentComposante(){return moment;};	 
+std::vector<std::vector<cv::Point> > *PtContours(){return contours;};
+std::vector<cv::Vec4i> *ArboContour(){return arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
+std::vector<double> *HuMoment(){return huMoment;};
+std::vector<cv::Vec3f> *HoughCercle(){return cercle;};
+std::vector<cv::Vec4i> *HoughLigneProba(){return ligneP;};
+std::vector<cv::Vec2f> *HoughLigne(){return ligne;};
 
 // MODIFICATION d'une fonction OPENCV
 void Threshold( cv::InputArray _src, cv::OutputArray _dst, double thresh, double maxval, int type ); 

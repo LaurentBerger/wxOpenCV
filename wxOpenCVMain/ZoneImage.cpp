@@ -583,6 +583,12 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.AppendCheckItem(Menu_Coupe, _T("Section"));
 	if (f->ImAcq()->PtContours())
 		menu.AppendCheckItem(Menu_Contour, _T("Draw Contour "));
+	if (f->ImAcq()->HoughLigne())
+		menu.AppendCheckItem(Menu_Contour, _T("Hough (line) "));
+	if (f->ImAcq()->HoughLigneProba())
+		menu.AppendCheckItem(Menu_Contour, _T("Hough (line proba.) "));
+	if (f->ImAcq()->HoughCercle())
+		menu.AppendCheckItem(Menu_Contour, _T("Hough (circle) "));
 	if (osgApp->Fenetre(f->IdFenetreOp1pre()))
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
 	menu.AppendCheckItem(SEQ_OPE, _T("Sequenceoperation"));
@@ -778,6 +784,91 @@ if( tracerContour)
 	wxClientDC hdc(feuille);
 	feuille->DoPrepareDC(hdc);
 	TracerContour(hdc);
+	}
+}
+
+void FenetrePrincipale::TracerLigneHough(wxCommandEvent& event)
+{
+tracerLigneHough=!tracerLigneHough;
+if( tracerLigneHough)
+	{
+	wxClientDC hdc(feuille);
+	feuille->DoPrepareDC(hdc);
+	TracerContour(hdc);
+	}
+}
+
+void FenetrePrincipale::TracerLigneProbaHough(wxCommandEvent& event)
+{
+tracerLigneProbaHough=!tracerLigneProbaHough;
+if( tracerLigneProbaHough)
+	{
+	wxClientDC hdc(feuille);
+	feuille->DoPrepareDC(hdc);
+	TracerContour(hdc);
+	}
+}
+
+void FenetrePrincipale::TracerCercleHough(wxCommandEvent& event)
+{
+tracerCercleHough=!tracerCercleHough;
+if( tracerCercleHough)
+	{
+	wxClientDC hdc(feuille);
+	feuille->DoPrepareDC(hdc);
+	TracerContour(hdc);
+	}
+}
+
+void FenetrePrincipale::TracerLigneHough(wxDC &hdc)
+{
+if (!tracerLigneHough || !imAcq)
+	return;
+if (!imAcq->HoughLigne())
+	{
+	tracerLigneHough=false;
+	return;
+	}
+}
+
+void FenetrePrincipale::TracerLigneProbaHough(wxDC &hdc)
+{
+if (!tracerLigneProbaHough || !imAcq)
+	return;
+if (!imAcq->HoughLigneProba())
+	{
+	tracerLigneProbaHough=false;
+	return;
+	}
+}
+
+void FenetrePrincipale::TracerCercleHough(wxDC &hdc)
+{
+if (!tracerCercleHough || !imAcq)
+	return;
+if (!imAcq->HoughCercle())
+	{
+	tracerCercleHough=false;
+	return;
+	}
+std::vector<std::vector<cv::Point> > *ptCtr=imAcq->PtContours();
+std::vector<cv::Vec4i> *arbre=imAcq->ArboContour();
+wxPen crayon[3]={*wxBLACK_PEN,*wxBLACK_PEN,*wxBLACK_PEN};
+for (int i=0;i<imAcq->channels()&& i<3;i++)
+	{
+	crayon[i].SetWidth(3);
+	hdc.SetPen(crayon[i]);
+	int nbContour=ptCtr[i].size();
+	for (int j=0;j<nbContour;j++)
+		for (int k=1;k<ptCtr[i][j].size();k++)
+		{
+		wxPoint p_1(ptCtr[i][j][k-1].x,ptCtr[i][j][k-1].y),p_2(ptCtr[i][j][k].x,ptCtr[i][j][k].y);
+
+		wxPoint p1(RepereImageEcran(p_1));
+		wxPoint p2(RepereImageEcran(p_2));
+
+		hdc.DrawLine(p1,p2);
+		}
 	}
 }
 

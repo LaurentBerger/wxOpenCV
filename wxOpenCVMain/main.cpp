@@ -206,6 +206,9 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
 	EVT_MENU(Menu_FilMax,  FenetrePrincipale::MAJFiltreMax)
 	EVT_MENU(Menu_ParAlg,  FenetrePrincipale::ParamAlgo)
 	EVT_MENU(Menu_Contour,  FenetrePrincipale::TracerContour)
+	EVT_MENU(MENU_LIGNEHOUGH,  FenetrePrincipale::TracerLigneHough)
+	EVT_MENU(MENU_LIGNEPROBAHOUGH,  FenetrePrincipale::TracerLigneProbaHough)
+	EVT_MENU(MENU_CERCLEHOUGH,  FenetrePrincipale::TracerCercleHough)
 	EVT_MENU(MENU_OP1,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP2,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP3,  FenetrePrincipale::PrepOperation)
@@ -1416,6 +1419,10 @@ tpsPreEvt=-1;
 imGain=NULL;
 correctionGain=false;
 tracerContour=false;
+tracerLigneHough=false;
+tracerLigneProbaHough=false;
+tracerCercleHough=false;
+
 indEvtCam=0;
 for (int i=0;i<10;i++)
 	planActif[i]=true;

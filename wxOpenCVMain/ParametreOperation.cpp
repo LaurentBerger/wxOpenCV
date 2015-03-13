@@ -396,7 +396,7 @@ if(	s=="HoughLineP")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlinesp";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=333&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::HoughLigneP;
+	opUnaireSelec = &ImageInfoCV::HoughLigneProba;
 	}
 if (s=="RGBLuminance")
 	{
