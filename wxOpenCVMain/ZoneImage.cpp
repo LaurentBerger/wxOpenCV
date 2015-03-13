@@ -584,11 +584,11 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	if (f->ImAcq()->PtContours())
 		menu.AppendCheckItem(Menu_Contour, _T("Draw Contour "));
 	if (f->ImAcq()->HoughLigne())
-		menu.AppendCheckItem(Menu_Contour, _T("Hough (line) "));
+		menu.AppendCheckItem(MENU_LIGNEHOUGH, _T("Hough (line) "));
 	if (f->ImAcq()->HoughLigneProba())
-		menu.AppendCheckItem(Menu_Contour, _T("Hough (line proba.) "));
+		menu.AppendCheckItem(MENU_LIGNEPROBAHOUGH, _T("Hough (line proba.) "));
 	if (f->ImAcq()->HoughCercle())
-		menu.AppendCheckItem(Menu_Contour, _T("Hough (circle) "));
+		menu.AppendCheckItem(MENU_CERCLEHOUGH, _T("Hough (circle) "));
 	if (osgApp->Fenetre(f->IdFenetreOp1pre()))
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
 	menu.AppendCheckItem(SEQ_OPE, _T("Sequenceoperation"));
@@ -828,6 +828,28 @@ if (!imAcq->HoughLigne())
 	{
 	tracerLigneHough=false;
 	return;
+	}
+
+std::vector<cv::Vec2f> *ligne=imAcq->HoughLigne();
+wxPen crayon[3]={*wxBLACK_PEN,*wxBLACK_PEN,*wxBLACK_PEN};
+for (int k=0;k<imAcq->channels()&& k<3;k++)
+	{
+	crayon[k].SetWidth(3);
+	hdc.SetPen(crayon[k]);
+	for( size_t i = 0; i < ligne[k].size(); i++ )
+		{
+		float rho = ligne[k][i][0], theta = ligne[k][i][1];
+		wxPoint pt1, pt2;
+		double a = cos(theta), b = sin(theta);
+		double x0 = a*rho, y0 = b*rho;
+		pt1.x = cvRound(x0 + 1000*(-b));
+		pt1.y = cvRound(y0 + 1000*(a));
+		pt2.x = cvRound(x0 - 1000*(-b));
+		pt2.y = cvRound(y0 - 1000*(a));
+		wxPoint p1(RepereImageEcran(pt1));
+		wxPoint p2(RepereImageEcran(pt2));
+		hdc.DrawLine(p1,p2);
+		}
 	}
 }
 

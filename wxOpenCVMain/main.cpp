@@ -2326,7 +2326,8 @@ void FenetrePrincipale::OnMenuContext(wxContextMenuEvent& event)
 
 void FenetrePrincipale::ShowContextMenu(const wxPoint& pos)
 {
-wxMenu menu;
+
+return;wxMenu menu;
 
 if (osgApp->ModeSouris()==SOURIS_STD)
 	{

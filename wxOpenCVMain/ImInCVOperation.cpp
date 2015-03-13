@@ -796,6 +796,7 @@ if (ligne==NULL)
 	ligne = new std::vector<cv::Vec2f>[imSrc->channels()];
 if (imSrc->channels()==1)
 	{
+	Mat droite;
 	cv::HoughLines(*imSrc,ligne[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
 		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["srn"].valeur,pOCV->doubleParam["stn"].valeur);
 	}

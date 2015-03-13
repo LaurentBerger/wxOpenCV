@@ -112,9 +112,9 @@ if(	s=="HoughLine")
 	nbOperande= 1;
 	intParam["method"]=DomaineParametreOp<int>(cv::HOUGH_STANDARD,cv::HOUGH_STANDARD,cv::HOUGH_MULTI_SCALE,1);
 	doubleParam["rho"]=DomaineParametreOp<double>(1,1,2,01);
-	doubleParam["theta"]=DomaineParametreOp<double>(10,1,2,01);
-	intParam["threshold"]=DomaineParametreOp<int>(10,3,1000,1);
-	doubleParam["srn"]=DomaineParametreOp<double>(0.04,0.01,1,0.1);
+	doubleParam["theta"]=DomaineParametreOp<double>(0.05,0,6.28,01);
+	intParam["threshold"]=DomaineParametreOp<int>(50,3,1000,1);
+	doubleParam["srn"]=DomaineParametreOp<double>(0.0,0.01,1,0.1);
 	doubleParam["stn"]=DomaineParametreOp<double>(0.0,1,1000,1);
 	}
 if(	s=="HoughLineP")
