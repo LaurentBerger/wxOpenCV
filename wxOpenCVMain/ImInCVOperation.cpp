@@ -796,6 +796,8 @@ if (ligne==NULL)
 	ligne = new std::vector<cv::Vec2f>[imSrc->channels()];
 if (imSrc->channels()==1)
 	{
+	if (pOCV->doubleParam["srn"].valeur*pOCV->doubleParam["stn"].valeur==0 && pOCV->doubleParam["srn"].valeur+pOCV->doubleParam["stn"].valeur!=0)
+		return NULL;
 	cv::HoughLines(*imSrc,ligne[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
 		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["srn"].valeur,pOCV->doubleParam["stn"].valeur);
 	}
@@ -812,6 +814,7 @@ else
 		}
 	delete []d;
 	}
+ParamOCVHoughLigne(pOCV);
 return this;
 }
 

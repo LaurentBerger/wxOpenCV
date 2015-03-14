@@ -117,6 +117,10 @@ std::vector<cv::Vec3f> *cercle; /*<! http://docs.opencv.org/modules/imgproc/doc/
 std::vector<cv::Vec4i> *ligneP; /*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles */
 std::vector<cv::Vec2f> *ligne; /*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles */
 
+ParametreOperation *pOCVHoughLigne;
+ParametreOperation *pOCVHoughLigneProba;
+ParametreOperation *pOCVHoughCercle;
+
 public : 
 //	********* Constructeurs et destructeur
 ImageInfoCV(long nbL,long nbC,int type);
@@ -397,6 +401,9 @@ std::vector<double> *HuMoment(){return huMoment;};
 std::vector<cv::Vec3f> *HoughCercle(){return cercle;};
 std::vector<cv::Vec4i> *HoughLigneProba(){return ligneP;};
 std::vector<cv::Vec2f> *HoughLigne(){return ligne;};
+ParametreOperation *ParamOCVHoughLigne(ParametreOperation *p=NULL);
+ParametreOperation *ParamOCVHoughLigneProba(ParametreOperation *p=NULL);
+ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);
 
 // MODIFICATION d'une fonction OPENCV
 void Threshold( cv::InputArray _src, cv::OutputArray _dst, double thresh, double maxval, int type ); 

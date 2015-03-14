@@ -560,7 +560,7 @@ if (pOCVNouveau==NULL)
 	pAct=&pOCV;
 else
 	pAct=pOCVNouveau;
-pAct->nbImageRes=1;
+//pAct->nbImageRes=1;
 if (pAct->opNaireSelec)
 	{
 	ImageInfoCV *imOp[3]={pAct->op1,pAct->op2,pAct->op3};

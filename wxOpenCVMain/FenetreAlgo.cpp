@@ -79,10 +79,46 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
 	else 
 		f=NULL;
 	}
+if (fenMere->ImAcq()->HoughLigne())
+	nbEtape++;
+if (fenMere->ImAcq()->HoughLigneProba())
+	nbEtape++;
+if (fenMere->ImAcq()->HoughCercle())
+	nbEtape++;
 nbParamMax=2*(nbParamMax+2);
 f=fenMere;
 int nb=nbEtape-1;
 listeOp.resize(nbEtape);
+if (fenMere->ImAcq()->HoughLigne())
+	{
+	listeOp[nb]=std::pair< ParametreOperation*,int>(fenMere->ImAcq()->ParamOCVHoughLigne(),fenMere->IdFenetre());
+	wxWindow *w=CreerOngletEtape(classeur,nb);
+	listeOnglet[w]=std::pair<wxString,int>(fenMere->ImAcq()->ParamOCVHoughLigne()->nomOperation,nb);
+	wxString nom(_("Step"));
+	nom.Printf("%s %d : %s",nom,nb,fenMere->ImAcq()->ParamOCVHoughLigne()->nomOperation);
+	classeur->InsertPage(0,w,nom,nbEtape==1);
+	nb--;
+	}
+if (fenMere->ImAcq()->HoughLigneProba())
+	{
+	listeOp[nb]=std::pair< ParametreOperation*,int>(fenMere->ImAcq()->ParamOCVHoughLigneProba(),fenMere->IdFenetre());
+	wxWindow *w=CreerOngletEtape(classeur,nb);
+	listeOnglet[w]=std::pair<wxString,int>(fenMere->ImAcq()->ParamOCVHoughLigneProba()->nomOperation,nb);
+	wxString nom(_("Step"));
+	nom.Printf("%s %d : %s",nom,nb,fenMere->ImAcq()->ParamOCVHoughLigne()->nomOperation);
+	classeur->InsertPage(0,w,nom,nbEtape==1);
+	nb--;
+	}
+if (fenMere->ImAcq()->HoughCercle())
+	{
+	listeOp[nb]=std::pair< ParametreOperation*,int>(fenMere->ImAcq()->ParamOCVHoughCercle(),fenMere->IdFenetre());
+	wxWindow *w=CreerOngletEtape(classeur,nb);
+	listeOnglet[w]=std::pair<wxString,int>(fenMere->ImAcq()->ParamOCVHoughCercle()->nomOperation,nb);
+	wxString nom(_("Step"));
+	nom.Printf("%s %d : %s",nom,nb,fenMere->ImAcq()->ParamOCVHoughLigne()->nomOperation);
+	classeur->InsertPage(0,w,nom,nbEtape==1);
+	nb--;
+	}
 while(f && f->OrigineImage()->indOp1Fenetre>=0)
 	{
 	if (f->OrigineImage())

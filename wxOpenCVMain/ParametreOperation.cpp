@@ -77,6 +77,7 @@ indOp3Fenetre=-1;
 if(	s=="CornerHarris")
 	{
 	nomOperation=s;
+	nbImageRes=1;
 	nbOperande= 1;
 	intParam["blockSize"]=DomaineParametreOp<int>(2,2,9,1);
 	intParam["ksize"]=DomaineParametreOp<int>(1,1,7,2);
@@ -96,6 +97,7 @@ if(	s=="GoodFeature")
 	}
 if(	s=="HoughCercle")
 	{
+	nbImageRes=0;
 	nomOperation=s;
 	nbOperande= 1;
 	intParam["method"]=DomaineParametreOp<int>(cv::HOUGH_GRADIENT,1,100,1);
@@ -110,15 +112,17 @@ if(	s=="HoughLine")
 	{
 	nomOperation=s;
 	nbOperande= 1;
-	intParam["method"]=DomaineParametreOp<int>(cv::HOUGH_STANDARD,cv::HOUGH_STANDARD,cv::HOUGH_MULTI_SCALE,1);
-	doubleParam["rho"]=DomaineParametreOp<double>(1,1,2,01);
-	doubleParam["theta"]=DomaineParametreOp<double>(0.05,0,6.28,01);
+	nbImageRes=0;
+//	intParam["method"]=DomaineParametreOp<int>(cv::HOUGH_STANDARD,cv::HOUGH_STANDARD,cv::HOUGH_MULTI_SCALE,1);
+	doubleParam["rho"]=DomaineParametreOp<double>(1,1,200,01);
+	doubleParam["theta"]=DomaineParametreOp<double>(0.05,0,6.28,0.01);
 	intParam["threshold"]=DomaineParametreOp<int>(50,3,1000,1);
-	doubleParam["srn"]=DomaineParametreOp<double>(0.0,0.01,1,0.1);
-	doubleParam["stn"]=DomaineParametreOp<double>(0.0,1,1000,1);
+	doubleParam["srn"]=DomaineParametreOp<double>(0.0,0.00,1,0.1);
+	doubleParam["stn"]=DomaineParametreOp<double>(0.0,0,1000,0.1);
 	}
 if(	s=="HoughLineP")
 	{
+	nbImageRes=0;
 	nomOperation=s;
 	nbOperande= 1;
 	doubleParam["rho"]=DomaineParametreOp<double>(1,1,2,01);
@@ -131,25 +135,30 @@ if (s=="PartageEaux")
 	{
 	nomOperation=s;
 	nbOperande= 1;
+	nbImageRes=1;
 	}
 if (s=="SeparationPlan")
 	{
 	nomOperation=s;
 	nbOperande= 1;
+	nbImageRes=1;
 	}
 if (s=="FusionPlan")
 	{
 	nomOperation = s;
 	nbOperande= 3;
+	nbImageRes=1;
 	}
 if (s=="Addition")
 	{
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
+	nbImageRes=1;
 	}
 if (s=="AdditionPonderee")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
@@ -159,12 +168,14 @@ if (s=="AdditionPonderee")
 	}
 if (s=="Soustraction")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	nbOperande= 2;
 	}
 if (s=="Multiplication")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.1,10,0.1);
@@ -172,6 +183,7 @@ if (s=="Multiplication")
 	}
 if (s=="Division")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
@@ -179,35 +191,41 @@ if (s=="Division")
 	}
 if (s=="Convolution")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["IndOpConvolution"]=DomaineParametreOp<int>(xx.IndOpConvolution(),0,NB_OP_CONVOLUTION,1);
 	}
 if (s=="Dilatation")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["IndOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	}
 if (s=="Erosion")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["IndOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	}
 if (s=="Ouverture")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	}
 if (s=="Fermeture")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	}
 if (s=="ChapeauHaut")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
@@ -216,6 +234,7 @@ if (s=="ChapeauHaut")
 	}
 if (s=="ChapeauBas")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
@@ -224,6 +243,7 @@ if (s=="ChapeauBas")
 	}
 if (s=="GradMorph")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
@@ -232,6 +252,7 @@ if (s=="GradMorph")
 	}
 if (s=="Scharr_mod")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
@@ -240,6 +261,7 @@ if (s=="Scharr_mod")
 	}
 if (s=="Scharr_x")
 	{
+	nbImageRes=1;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
@@ -248,6 +270,7 @@ if (s=="Scharr_x")
 	}
 if (s=="Scharr_y")
 	{
+	nbImageRes=1;
 	opUnaireSelec = &ImageInfoCV::ScharrY;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
@@ -257,6 +280,7 @@ if (s=="Scharr_y")
 	}
 if (s=="Laplacien")
 	{
+	nbImageRes=1;
 	intParam["ddepth"]=DomaineParametreOp<int>(50.,0.0,255.0,1.0);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.0,255.0,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,255.0,1.0);
@@ -266,6 +290,7 @@ if (s=="Laplacien")
 	}
 if (s=="Canny")
 	{
+	nbImageRes=1;
 	doubleParam["threshold1"]=DomaineParametreOp<double>(50.,0.0,255.0,1.0);
 	doubleParam["threshold2"]=DomaineParametreOp<double>(100,0.0,255.0,1.0);
 	intParam["aperture_size"]=DomaineParametreOp<int>((int)3,(int)1,(int)255,(int)2);
@@ -274,6 +299,7 @@ if (s=="Canny")
 	}
 if (s=="Contour")
 	{
+	nbImageRes=1;
 	intParam["mode"]=DomaineParametreOp<int>(cv::RETR_EXTERNAL,cv::RETR_EXTERNAL,cv::RETR_TREE,1);
 	intParam["method"]=DomaineParametreOp<int>(cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_TC89_L1 ,1);
 	nomOperation=s;
@@ -281,19 +307,23 @@ if (s=="Contour")
 
 if (s=="RGBLuminance")
 	{
+	nbImageRes=1;
 	intParam["ColorSpaceCode"]=DomaineParametreOp<int>(cv::COLOR_BGR2GRAY,cv::COLOR_BGR2GRAY,cv::COLOR_RGB2GRAY,1);
 	nomOperation=s;
 	}
 if (s=="FFT")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	}
 if (s=="IFFT")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	}
 if (s=="Seuillage")
 	{
+	nbImageRes=1;
 	doubleParam["thresh"]=DomaineParametreOp<double>(50.,0.0,255.0,1.0);
 	doubleParam["maxval"]=DomaineParametreOp<double>(255.,0.0,255.0,1.0);
 	intParam["threshold_type"]=DomaineParametreOp<int>(cv::THRESH_BINARY,cv::THRESH_BINARY,cv::THRESH_TOZERO_INV,1);
@@ -301,6 +331,7 @@ if (s=="Seuillage")
 	}
 if (s=="AdaptatifSeuillage")
 	{
+	nbImageRes=1;
 	doubleParam["maxValue"]=DomaineParametreOp<double>(255.,0.0,255.0,1.0);
 	intParam["thresholdType"]=DomaineParametreOp<int>(cv::THRESH_BINARY,cv::THRESH_BINARY,cv::THRESH_TOZERO_INV,1);
 	intParam["adaptiveMethod"]=DomaineParametreOp<int>(cv::ADAPTIVE_THRESH_GAUSSIAN_C,cv::ADAPTIVE_THRESH_GAUSSIAN_C,cv::ADAPTIVE_THRESH_MEAN_C,1);
@@ -310,11 +341,13 @@ if (s=="AdaptatifSeuillage")
 	}
 if (s=="LissageMedian")
 	{
+	nbImageRes=1;
 	intParam["ksize"]=DomaineParametreOp<int>(3,1,255,2);
 	nomOperation=s;
 	}
 if (s=="LissageMoyenneur")
 	{
+	nbImageRes=1;
 	sizeParam["ksize"]=DomaineParametreOp<cv::Size>(cv::Size(3,3),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
@@ -322,6 +355,7 @@ if (s=="LissageMoyenneur")
 	}
 if (s=="LissageGaussien")
 	{
+	nbImageRes=1;
 	sizeParam["ksize"]=DomaineParametreOp<cv::Size>(cv::Size(3,3),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
 	doubleParam["sigmaX"]=DomaineParametreOp<double>(0.1,0,255.0,0.1);
 	doubleParam["sigmaY"]=DomaineParametreOp<double>(0.1,0,255.0,0.1);
@@ -330,16 +364,19 @@ if (s=="LissageGaussien")
 	}
 if (s=="ComposanteConnexe")
 	{
+	nbImageRes=1;
 	intParam["connectivity"]=DomaineParametreOp<int>(4,4,8,4);
 	intParam["ltype"]=DomaineParametreOp<int>(CV_32S,CV_32S,CV_32S,0);
 	nomOperation=s;
 	}
 if (s=="DistanceDiscrete")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	}
 if (s=="LigneMediane")
 	{
+	nbImageRes=1;
 	nomOperation=s;
 	}
 if (nomOperation=="")

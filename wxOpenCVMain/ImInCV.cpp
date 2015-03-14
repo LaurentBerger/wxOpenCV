@@ -56,6 +56,10 @@ statComposante = NULL;
 centreGComposante = NULL; 
 contours=NULL;
 moment=NULL;
+pOCVHoughLigne=NULL;
+pOCVHoughLigneProba=NULL;
+pOCVHoughCercle=NULL;
+
 #ifdef _INFOTEXTE__
 nbChampGonfle=0;
 gonfle = NULL;
@@ -188,6 +192,41 @@ ImageInfoCV::ImageInfoCV(long nbL,long nbC,int nbP):cv::Mat(nbL, nbC, nbP)
 eSauver=NULL;
 InitImageInfo();
 }
+
+ParametreOperation *ImageInfoCV::ParamOCVHoughLigne(ParametreOperation *p)
+{
+if (p)
+	{
+	if (pOCVHoughLigne==NULL)
+		pOCVHoughLigne =  new ParametreOperation;
+	*pOCVHoughLigne=*p;
+	}
+return pOCVHoughLigne;
+}
+	
+ParametreOperation *ImageInfoCV::ParamOCVHoughLigneProba(ParametreOperation *p)
+{
+if (p)
+	{
+	if (pOCVHoughLigneProba==NULL)
+		pOCVHoughLigneProba =  new ParametreOperation;
+	*pOCVHoughLigneProba=*p;
+	}
+return pOCVHoughLigneProba;
+}
+
+ParametreOperation *ImageInfoCV::ParamOCVHoughCercle(ParametreOperation *p)
+{
+if (p)
+	{
+	if (pOCVHoughCercle==NULL)
+		pOCVHoughCercle =  new ParametreOperation;
+	*pOCVHoughCercle=*p;
+	}
+return pOCVHoughCercle;
+}
+
+
 
 
 void ImageInfoCV::DefProprieteImage(char *nomFichier)
