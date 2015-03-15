@@ -11,6 +11,7 @@ using namespace std;
 #define IND_STATIC 200 // champ static
 #define IND_SPIN 300 // bouton spin
 #define IND_SELECMULTIPLE IND_HYPER-1 // Selection de fichier
+#define IND_FENETREUNIQUE IND_HYPER-2 // Selection de fichier
 
 FenetreSequenceOperation::FenetreSequenceOperation(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size,wxOsgApp *osg, long style)
@@ -26,6 +27,7 @@ std::map <int,std::vector <ParametreOperation > >  *t=osg->TabSeqOperation();
 
 new wxStaticText( panneau, -1, _("Sequence"),wxPoint(10,20),wxSize(60,20) );
 new wxButton( panneau,wxID_OK,_("Execute all"),wxPoint(150,20),wxSize(70,20));
+new wxCheckBox( panneau,IND_FENETREUNIQUE,_("No new window"),wxPoint(150,40),wxSize(120,20));
 new wxButton( panneau,IND_SELECMULTIPLE,_("Select file to process"),wxPoint(230,20),wxSize(150,20));
 wxSpinCtrl *spw=new wxSpinCtrl(panneau,IND_OPE,_("Sequence"),wxPoint(80,20),wxSize(60,20));
 spw->SetRange(0,t->size()-1);
@@ -36,9 +38,10 @@ if (nbEtape<(*t)[n].size())
 	nbEtape=(*t)[n].size();
 nomEtape=new wxString[nbEtape];
 int i=0;
+
 for (std::vector <ParametreOperation >::iterator it = (*t)[n].begin() ; it != (*t)[n].end(); ++it,++i)
     nomEtape[i]=(*it).nomOperation;
-choixOp=new wxListBox( panneau,LISTE_OP_SEQ,wxPoint(80,50),wxSize(150,-1),(*t)[n].size(),nomEtape);
+choixOp=new wxListBox( panneau,LISTE_OP_SEQ,wxPoint(80,60),wxSize(150,-1),(*t)[n].size(),nomEtape);
 choixOp->SetSelection(0);
 InsererCtrlEtape(&((*t)[n][0]));
 Bind(wxEVT_SPINCTRL, &FenetreSequenceOperation::OnSpinEntier,this);
@@ -63,12 +66,12 @@ wxSpinCtrlDouble	*wsd;
 if ((whc=(wxHyperlinkCtrl*)wxWindow::FindWindowById(indHyper,panneau))!=NULL)
 	whc->SetURL(pOCV->lienHtml);
 else
-	new wxHyperlinkCtrl (panneau,indHyper," OpenCV Documentation",pOCV->lienHtml,wxPoint(10,ligne-50),wxSize(400,20));
+	new wxHyperlinkCtrl (panneau,indHyper," OpenCV Documentation",pOCV->lienHtml,wxPoint(10,ligne-30),wxSize(150,20));
 indHyper++;
 if ((whc=(wxHyperlinkCtrl*)wxWindow::FindWindowById(indHyper,panneau))!=NULL)
 	whc->SetURL(pOCV->lienHtml);
 else
-	new wxHyperlinkCtrl(panneau,indHyper,"PDF Documentation",pOCV->refPDF,wxPoint(10,ligne-20),wxSize(400,20));
+	new wxHyperlinkCtrl(panneau,indHyper,"PDF Documentation",pOCV->refPDF,wxPoint(160,ligne-30),wxSize(200,20));
 indHyper++;
 std::map<std::string,DomaineParametreOp<cv::Size> >::iterator its;
 if (tailleMax.x<410)
@@ -480,21 +483,32 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 if (im!=NULL)
 	{
 	wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
+	wxCheckBox *wb=(wxCheckBox *)wxWindow::FindWindowById(IND_HYPER-2,panneau);
 	int opSelec;
 	if (ws)
 		opSelec=ws->GetValue();
 	else
 		opSelec=9999;
-	FenetrePrincipale *f = new FenetrePrincipale(NULL, "wxOpenCV",
+	FenetrePrincipale *f;
+	if (wb->GetValue() && idFenetre.find(opSelec)!=idFenetre.end()  )
+		{
+		f=idFenetre[opSelec];
+		f->AssosierImage(im[0]);
+
+		}
+	else
+		{
+		f = new FenetrePrincipale(NULL, "wxOpenCV",
 		wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
-	wxString s;
-	s.Printf("%d : %s( %d) of image %d ",app->NbFenetre(),_("Sequence"),opSelec,fenMere->IdFenetre());	
-	f->SetTitle(s);
-	f->DefOSGApp(app);
-	
-	f->AssosierImage(im[0]);
-	app->InitFenAssociee(f);
-	f->InitIHM();
+		wxString s;
+		s.Printf("%d : %s( %d) of image %d ",app->NbFenetre(),_("Sequence"),opSelec,fenMere->IdFenetre());	
+		f->SetTitle(s);
+		f->DefOSGApp(app);
+		idFenetre[opSelec]=f;
+		f->AssosierImage(im[0]);
+		app->InitFenAssociee(f);
+		f->InitIHM();
+		}
 
 
 	f->NouvelleImage();

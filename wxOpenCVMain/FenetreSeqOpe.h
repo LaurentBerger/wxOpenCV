@@ -21,6 +21,7 @@ FenetrePrincipale				*fenMere;
 void							*osgApp;
 std::map<wxWindow*,std::pair<wxString,int> >	listeOnglet;/*<! Onglet associé à chaque opération */
 std::vector<std::pair<Operation*,int> >			listeOp;	/*<! Onglet associé à chaque opération */
+std::map<int, FenetrePrincipale* >			idFenetre;	/*<! fenetre crée par l'éxécution de la séquence*/
 
 wxPanel							*panneau;	/*!< Pointeur sur le panneau contenant le classeur */
 wxNotebook						*classeur;	/*!< le classeur avec ses différents onglets*/
