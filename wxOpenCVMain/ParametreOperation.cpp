@@ -86,9 +86,10 @@ if(	s=="CornerHarris")
 	}
 if(	s=="GoodFeature")
 	{
+	nbImageRes=0;
 	nomOperation=s;
 	nbOperande= 1;
-	intParam["maxCorner"]=DomaineParametreOp<int>(10,1,100,1);
+	intParam["maxCorners"]=DomaineParametreOp<int>(10,1,100,1);
 	doubleParam["qualityLevel"]=DomaineParametreOp<double>(0.1,0.01,1,0.1);
 	doubleParam["minDistance"]=DomaineParametreOp<double>(10,1,1000,01);
 	intParam["blockSize"]=DomaineParametreOp<int>(2,2,9,1);
@@ -100,13 +101,13 @@ if(	s=="HoughCercle")
 	nbImageRes=0;
 	nomOperation=s;
 	nbOperande= 1;
-	intParam["method"]=DomaineParametreOp<int>(cv::HOUGH_GRADIENT,1,100,1);
-	doubleParam["dp"]=DomaineParametreOp<double>(1,1,2,01);
+	intParam["method"]=DomaineParametreOp<int>(cv::HOUGH_GRADIENT,cv::HOUGH_GRADIENT,cv::HOUGH_GRADIENT,1);
+	doubleParam["dp"]=DomaineParametreOp<double>(1,0.001,20,01);
 	doubleParam["minDistance"]=DomaineParametreOp<double>(10,1,2,01);
-	doubleParam["param1"]=DomaineParametreOp<double>(0.04,0.01,1,0.1);
-	doubleParam["param2"]=DomaineParametreOp<double>(0.04,0.01,1,0.1);
-	doubleParam["min_radius"]=DomaineParametreOp<double>(0.0,1,1000,1);
-	doubleParam["max_radius"]=DomaineParametreOp<double>(0.04,1,1000,1);
+	doubleParam["param1"]=DomaineParametreOp<double>(100,3,200,0.1);
+	doubleParam["param2"]=DomaineParametreOp<double>(30,3,200,0.1);
+	intParam["min_radius"]=DomaineParametreOp<int>(0,0,200,1);
+	intParam["max_radius"]=DomaineParametreOp<int>(0,0,200,1);
 	}
 if(	s=="HoughLine")
 	{

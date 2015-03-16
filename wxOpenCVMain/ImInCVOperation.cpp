@@ -812,6 +812,7 @@ else
 		}
 	delete []d;
 	}
+ParamOCVHoughLigne(pOCV);
 return this;
 }
 
@@ -825,9 +826,13 @@ if (cercle==NULL)
 	cercle = new std::vector<cv::Vec3f>[imSrc->channels()];
 if (imSrc->channels()==1)
 	{
-	cv::HoughCircles(*imSrc,cercle[0],pOCV->doubleParam["method"].valeur,pOCV->doubleParam["dp"].valeur,
-		pOCV->intParam["minDistance"].valeur,pOCV->doubleParam["param1"].valeur,pOCV->doubleParam["param2"].valeur,
-		pOCV->doubleParam["min_radius"].valeur,pOCV->doubleParam["max_radius"].valeur);
+/*   HoughCircles(*imSrc, cercle[0], cv::HOUGH_GRADIENT, 1, 10,
+                 100, 30, 1, 30);
+*/
+	cv::HoughCircles(*imSrc,cercle[0],pOCV->intParam["method"].valeur,pOCV->doubleParam["dp"].valeur,
+		pOCV->doubleParam["minDistance"].valeur,pOCV->doubleParam["param1"].valeur,pOCV->doubleParam["param2"].valeur,
+		pOCV->intParam["min_radius"].valeur,pOCV->intParam["max_radius"].valeur);
+
 	}
 else
 	{
@@ -842,6 +847,7 @@ else
 		}
 	delete []d;
 	}
+ParamOCVHoughCercle(pOCV);
 return this;
 }
 
@@ -869,6 +875,7 @@ else
 		}
 	delete []d;
 	}
+ParamOCVHoughLigneProba(pOCV);
 return this;
 }
 
@@ -898,6 +905,7 @@ else
 		}
 	delete []d;
 	}
+ParamOCVBonCoin(pOCV);
 return this;
 }
 

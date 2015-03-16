@@ -60,6 +60,7 @@ moment=NULL;
 pOCVHoughLigne=NULL;
 pOCVHoughLigneProba=NULL;
 pOCVHoughCercle=NULL;
+pOCVBonCoin=NULL;
 
 #ifdef _INFOTEXTE__
 nbChampGonfle=0;
@@ -228,7 +229,16 @@ if (p)
 return pOCVHoughCercle;
 }
 
-
+ParametreOperation *ImageInfoCV::ParamOCVBonCoin(ParametreOperation *p)
+{
+if (p)
+	{
+	if (pOCVBonCoin==NULL)
+		pOCVBonCoin =  new ParametreOperation;
+	*pOCVBonCoin=*p;
+	}
+return pOCVBonCoin;
+}
 
 
 void ImageInfoCV::DefProprieteImage(char *nomFichier)

@@ -561,7 +561,6 @@ if (pOCVNouveau==NULL)
 	pAct=&pOCV;
 else
 	pAct=pOCVNouveau;
-pAct->nbImageRes=1;
 if (pAct->opNaireSelec)
 	{
 	ImageInfoCV *imOp[3]={pAct->op1,pAct->op2,pAct->op3};
@@ -776,11 +775,11 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 		}
 	imgStatIm->OuvertureOngletCouleur();
 	imgStatIm->OuvertureOngletPalette();
-if (f->ImAcq() && f->ImAcq()->StatComposante())
-	{
-	imgStatIm->OuvertureOngletRegion();
-	imgStatIm->ListerRegion();
-	}
+	if (f->ImAcq() && f->ImAcq()->StatComposante())
+		{
+		imgStatIm->OuvertureOngletRegion();
+		imgStatIm->ListerRegion();
+		}
 	imgStatIm->OuvertureOngletCurseur();
 	f->DefHistorique();
 	f->Show(true);
@@ -793,7 +792,15 @@ if (f->ImAcq() && f->ImAcq()->StatComposante())
 	f->InitIHM();
 	wxCommandEvent evt;
 	f->ParamAlgo(evt);
-
+	}
+if (pOCV.nbImageRes==0)
+	{
+	FenetrePrincipale *f =	Graphique(pOCV.indOp1Fenetre);
+	if (f)
+		{
+		wxCommandEvent evt;
+		f->ParamAlgo(evt);
+		}
 	}
 pOCV.doubleParam.clear();
 pOCV.intParam.clear();

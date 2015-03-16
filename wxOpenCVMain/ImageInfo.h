@@ -124,6 +124,7 @@ std::vector<cv::Point2f> *boncoin;	/*<! http://docs.opencv.org/modules/imgproc/d
 ParametreOperation *pOCVHoughLigne;
 ParametreOperation *pOCVHoughLigneProba;
 ParametreOperation *pOCVHoughCercle;
+ParametreOperation *pOCVBonCoin;
 
 public : 
 //	********* Constructeurs et destructeur
@@ -409,6 +410,7 @@ std::vector<cv::Point2f> *BonCoin(){return boncoin;};
 ParametreOperation *ParamOCVHoughLigne(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughLigneProba(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);
+ParametreOperation *ParamOCVBonCoin(ParametreOperation *p=NULL);
 
 // MODIFICATION d'une fonction OPENCV
 void Threshold( cv::InputArray _src, cv::OutputArray _dst, double thresh, double maxval, int type ); 

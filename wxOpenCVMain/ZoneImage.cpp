@@ -10,7 +10,7 @@ ZoneImage::ZoneImage(wxWindow *parent,wxSize w)
     : wxScrolled<wxWindow>(parent, wxID_ANY)   {
     SetScrollRate( 1, 1 );
     SetVirtualSize( w.x, w.y );
-    SetBackgroundColour( *wxRED );
+    SetBackgroundColour( *wxWHITE );
 
 modeRect=false;
 modeCoupe=false;
@@ -83,6 +83,7 @@ void ZoneImage::OnPaint(wxPaintEvent &evt)
 	f->TracerLigneHough(dc);
 	f->TracerLigneProbaHough(dc);
 	f->TracerCercleHough(dc);
+	f->TracerBonCoin(dc);
 /*        dc.SetPen( *wxRED_PEN );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
     dc.DrawRectangle( 0, 0, 200, 200 );*/
@@ -585,17 +586,40 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.AppendCheckItem(Menu_Rectangle, _T("Stat Rectangle"));
 	menu.AppendCheckItem(Menu_Coupe, _T("Section"));
 	if (f->ImAcq()->PtContours())
+		{
 		menu.AppendCheckItem(Menu_Contour, _T("Draw Contour "));
+		if (f->TracerContour())
+			menu.Check(Menu_Contour, true);
+
+		}
 	if (f->ImAcq()->HoughLigne())
+		{
 		menu.AppendCheckItem(MENU_LIGNEHOUGH, _T("Hough (line) "));
+		if (f->TracerLigneHough())
+			menu.Check(MENU_LIGNEHOUGH, true);
+		}
 	if (f->ImAcq()->HoughLigneProba())
+		{
 		menu.AppendCheckItem(MENU_LIGNEPROBAHOUGH, _T("Hough (line proba.) "));
+		if (f->TracerLigneProbaHough())
+			menu.Check(MENU_LIGNEPROBAHOUGH, true);
+		}
 	if (f->ImAcq()->HoughCercle())
+		{
 		menu.AppendCheckItem(MENU_CERCLEHOUGH, _T("Hough (circle) "));
+		if (f->TracerCercleHough())
+			menu.Check(MENU_CERCLEHOUGH, true);
+		}
 	if (f->ImAcq()->BonCoin())
+		{
 		menu.AppendCheckItem(MENU_BONCOIN, _T("Good features "));
+		if (f->TracerBonCoin())
+			menu.Check(MENU_BONCOIN, true);
+		}
 	if (osgApp->Fenetre(f->IdFenetreOp1pre()))
+		{
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
+		}
 	menu.AppendCheckItem(SEQ_OPE, _T("Sequenceoperation"));
 	if(f->Cam() && f->Cam()->IsRunning() && f->SeqOp()->size()!=0)
 		{
@@ -790,6 +814,8 @@ if( tracerContour)
 	feuille->DoPrepareDC(hdc);
 	TracerContour(hdc);
 	}
+else
+	feuille->Refresh(true);
 }
 
 void FenetrePrincipale::TracerLigneHough(wxCommandEvent& event)
@@ -801,6 +827,8 @@ if( tracerLigneHough)
 	feuille->DoPrepareDC(hdc);
 	TracerLigneHough(hdc);
 	}
+else
+	feuille->Refresh(true);
 }
 
 void FenetrePrincipale::TracerLigneProbaHough(wxCommandEvent& event)
@@ -812,6 +840,8 @@ if( tracerLigneProbaHough)
 	feuille->DoPrepareDC(hdc);
 	TracerLigneProbaHough(hdc);
 	}
+else
+	feuille->Refresh(true);
 }
 
 void FenetrePrincipale::TracerCercleHough(wxCommandEvent& event)
@@ -823,6 +853,8 @@ if( tracerCercleHough)
 	feuille->DoPrepareDC(hdc);
 	TracerCercleHough(hdc);
 	}
+else
+	feuille->Refresh(true);
 }
 
 void FenetrePrincipale::TracerBonCoin(wxCommandEvent& event)
@@ -834,6 +866,8 @@ if( tracerBonCoin)
 	feuille->DoPrepareDC(hdc);
 	TracerBonCoin(hdc);
 	}
+else
+	feuille->Refresh(true);
 }
 
 void FenetrePrincipale::TracerLigneHough(wxDC &hdc)
@@ -847,7 +881,7 @@ if (!imAcq->HoughLigne())
 	}
 
 std::vector<cv::Vec2f> *ligne=imAcq->HoughLigne();
-wxPen crayon[3]={*wxBLACK_PEN,*wxBLACK_PEN,*wxBLACK_PEN};
+wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
 for (int k=0;k<imAcq->channels()&& k<3;k++)
 	{
 	crayon[k].SetWidth(3);
@@ -878,6 +912,20 @@ if (!imAcq->HoughLigneProba())
 	tracerLigneProbaHough=false;
 	return;
 	}
+std::vector<cv::Vec4i> *lignep=imAcq->HoughLigneProba();
+wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
+for (int k=0;k<imAcq->channels()&& k<3;k++)
+	{
+	crayon[k].SetWidth(3);
+	hdc.SetPen(crayon[k]);
+	for( size_t i = 0; i < lignep[k].size(); i++ )
+		{
+		wxPoint pt1(lignep[k][i][0], lignep[k][i][1]),pt2(lignep[k][i][2], lignep[k][i][3]);
+		wxPoint p1(RepereImageEcran(pt1));
+		wxPoint p2(RepereImageEcran(pt2));
+		hdc.DrawLine(p1,p2);
+		}
+	}
 }
 
 void FenetrePrincipale::TracerBonCoin(wxDC &hdc)
@@ -888,6 +936,20 @@ if (!imAcq->BonCoin())
 	{
 	tracerBonCoin=false;
 	return;
+	}
+std::vector<cv::Point2f> *boncoin=imAcq->BonCoin();
+wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
+for (int k=0;k<imAcq->channels()&& k<3;k++)
+	{
+	crayon[k].SetWidth(2);
+	hdc.SetPen(crayon[k]);
+	hdc.SetBrush(*wxTRANSPARENT_BRUSH);
+	for( int i = 0; i < boncoin[k].size(); i++ )
+		{ 
+		wxPoint p_1(boncoin[k][i].x,boncoin[k][i].y);
+		wxPoint p1(RepereImageEcran(p_1));
+		hdc.DrawCircle(p1,5);
+		}
 	}
 }
 
@@ -900,23 +962,18 @@ if (!imAcq->HoughCercle())
 	tracerCercleHough=false;
 	return;
 	}
-std::vector<std::vector<cv::Point> > *ptCtr=imAcq->PtContours();
-std::vector<cv::Vec4i> *arbre=imAcq->ArboContour();
-wxPen crayon[3]={*wxBLACK_PEN,*wxBLACK_PEN,*wxBLACK_PEN};
-for (int i=0;i<imAcq->channels()&& i<3;i++)
+std::vector<cv::Vec3f> *cercle=imAcq->HoughCercle();
+wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
+for (int k=0;k<imAcq->channels()&& k<3;k++)
 	{
-	crayon[i].SetWidth(3);
-	hdc.SetPen(crayon[i]);
-	int nbContour=ptCtr[i].size();
-	for (int j=0;j<nbContour;j++)
-		for (int k=1;k<ptCtr[i][j].size();k++)
-		{
-		wxPoint p_1(ptCtr[i][j][k-1].x,ptCtr[i][j][k-1].y),p_2(ptCtr[i][j][k].x,ptCtr[i][j][k].y);
-
+	crayon[k].SetWidth(2);
+	hdc.SetPen(crayon[k]);
+	hdc.SetBrush(*wxTRANSPARENT_BRUSH);
+	for( int i = 0; i < cercle[k].size(); i++ )
+		{ 
+		wxPoint p_1(cercle[k][i][0],cercle[k][i][1]);
 		wxPoint p1(RepereImageEcran(p_1));
-		wxPoint p2(RepereImageEcran(p_2));
-
-		hdc.DrawLine(p1,p2);
+		hdc.DrawCircle(p1,cercle[k][i][2]);
 		}
 	}
 }

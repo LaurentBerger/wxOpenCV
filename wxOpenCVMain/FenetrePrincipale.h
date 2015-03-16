@@ -536,6 +536,13 @@ void EnregistrerTache();
 void DefImageQuadrique();
 void Enregistrer(wxCommandEvent& event);
 void EnregistrerSous(wxCommandEvent& event);
+
+bool TracerContour(){return	tracerContour;};		/*!< 1 tracer des contours des régions */
+bool TracerLigneHough(){return	tracerLigneHough;};	/*!< 1 tracer des lignes détectées par hough */
+bool TracerLigneProbaHough(){return	tracerLigneProbaHough;};	/*!< 1 tracer des cercle segments par hough */
+bool TracerCercleHough(){return	tracerCercleHough;};	/*!< 1 tracer des cercle détectés par hough */
+bool TracerBonCoin(){return	tracerBonCoin;};		/*!< 1 Tracer des coins fort de l'image */
+
 void CreerRapport(wxCommandEvent& event);
     /*!
      *  \brief CreerRapport
