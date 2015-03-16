@@ -114,8 +114,8 @@ cv::Mat		**statComposante; /*< Statistique des composantes de chaque plan http:/
 cv::Mat		**centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
 std::vector<std::vector<cv::Point> > *contours; /*< Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 std::vector<cv::Vec4i> *arbreContour; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
-std::vector<cv::Moments> *moment;	/*<http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
-std::vector<double> *huMoment;		/*<http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
+std::vector<cv::Moments> *moment;	/*<!http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
+std::vector<double> *huMoment;		/*<!http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
 std::vector<cv::Vec3f> *cercle;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles*/
 std::vector<cv::Vec4i> *ligneP;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlinesp */
 std::vector<cv::Vec2f> *ligne;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines */
@@ -411,6 +411,7 @@ ParametreOperation *ParamOCVHoughLigne(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughLigneProba(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVBonCoin(ParametreOperation *p=NULL);
+void CloneStat(ImageInfoCV *im);
 
 // MODIFICATION d'une fonction OPENCV
 void Threshold( cv::InputArray _src, cv::OutputArray _dst, double thresh, double maxval, int type ); 

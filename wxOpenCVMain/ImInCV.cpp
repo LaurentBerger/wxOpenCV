@@ -178,7 +178,19 @@ delete []ligne;
 delete []cercle;
 delete []ligneP;
 delete []boncoin;
+delete pOCVHoughLigne;
+delete pOCVHoughLigneProba;
+delete pOCVHoughCercle;
+delete pOCVBonCoin;
+
+
 }
+
+void ImageInfoCV::CloneStat(ImageInfoCV *im)
+{
+}
+
+
 
 ImageInfoCV::ImageInfoCV(void *r):cv::Mat(1,1,3)	
 //			((EnTeteTiff*)r)->LitNbLigne(),

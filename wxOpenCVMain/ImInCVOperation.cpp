@@ -855,11 +855,11 @@ ImageInfoCV 	*ImageInfoCV::HoughLigneProba(ImageInfoCV	*imSrc,ParametreOperation
 {
 if (imSrc!=this)
 	return NULL;
-if (ligne==NULL)
-	ligne = new std::vector<cv::Vec2f>[imSrc->channels()];
+if (ligneP==NULL)
+	ligneP = new std::vector<cv::Vec4i>[imSrc->channels()];
 if (imSrc->channels()==1)
 	{
-	cv::HoughLinesP(*imSrc,ligne[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
+	cv::HoughLinesP(*imSrc,ligneP[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
 		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["minLineLength"].valeur,pOCV->doubleParam["maxLineGap"].valeur);
 	}
 else
@@ -869,7 +869,7 @@ else
 	cv::split( *imSrc, planCouleur );
 	for (int i=0;i<imSrc->channels();i++)
 		{
-		cv::HoughLinesP( planCouleur[i],ligne[i],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
+		cv::HoughLinesP( planCouleur[i],ligneP[i],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
 		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["srn"].valeur,pOCV->doubleParam["stn"].valeur);
 
 		}

@@ -964,6 +964,9 @@ if (!imAcq->HoughCercle())
 	}
 std::vector<cv::Vec3f> *cercle=imAcq->HoughCercle();
 wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
+int		fZoomNume,fZoomDeno;
+
+CalculZoom(fZoomNume,fZoomDeno);
 for (int k=0;k<imAcq->channels()&& k<3;k++)
 	{
 	crayon[k].SetWidth(2);
@@ -973,7 +976,7 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 		{ 
 		wxPoint p_1(cercle[k][i][0],cercle[k][i][1]);
 		wxPoint p1(RepereImageEcran(p_1));
-		hdc.DrawCircle(p1,cercle[k][i][2]);
+		hdc.DrawCircle(p1,(fZoomNume*cercle[k][i][2])/fZoomDeno);
 		}
 	}
 }

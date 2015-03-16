@@ -384,16 +384,22 @@ if (captureVideo->isOpened())
 					ImageInfoCV *imTmp=NULL;
 					if (!parent)
 						break;
+					{
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->paramCam);
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
 						ParametreOperation pOCV=*it;
 						if (im)
 							{
-							pOCV.op1=im[0];
-							if (imTmp)
-								delete imTmp;
-							imTmp=im[0];
+							if (im[0]!=pOCV.op1)
+								{
+								pOCV.op1=im[0];
+								if (imTmp)
+									delete imTmp;
+								imTmp=im[0];
+								}
+							else
+								imTmp=NULL;
 							}
 						else
 							pOCV.op1=imIni;
@@ -401,10 +407,15 @@ if (captureVideo->isOpened())
 
 						im=pOCV.ExecuterOperation();
 						}
+					}
 					delete imIni;
-					delete imTmp;
+					if (im[0]!=imTmp)
+						delete imTmp;
 					if (im)
 						{
+						wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+
+						im[0]->CloneStat(imAcq);
 						im[0]->copyTo(frame);
 						delete im[0];
 						}

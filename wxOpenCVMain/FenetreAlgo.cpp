@@ -241,6 +241,53 @@ if (osgApp==NULL || fenMere==NULL)
 	return;
 FenetrePrincipale *f=fenMere;
 int nb=nbEtape-1;
+
+if (fenMere->ImAcq()->HoughLigne())
+	{
+	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
+	listeOp[nb].first->indEtape=nb;
+	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
+	listeOp[nb].first->nomSequence=w->GetValue();
+	ParametreOperation p;
+	p=*(listeOp[nb].first);
+	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	nb--;
+	}
+if (fenMere->ImAcq()->HoughLigneProba())
+	{
+	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
+	listeOp[nb].first->indEtape=nb;
+	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
+	listeOp[nb].first->nomSequence=w->GetValue();
+	ParametreOperation p;
+	p=*(listeOp[nb].first);
+	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	nb--;
+	}
+if (fenMere->ImAcq()->HoughCercle())
+	{
+	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
+	listeOp[nb].first->indEtape=nb;
+	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
+	listeOp[nb].first->nomSequence=w->GetValue();
+	ParametreOperation p;
+	p=*(listeOp[nb].first);
+	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	nb--;
+	}
+if (fenMere->ImAcq()->BonCoin())
+	{
+	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
+	listeOp[nb].first->indEtape=nb;
+	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
+	listeOp[nb].first->nomSequence=w->GetValue();
+	ParametreOperation p;
+	p=*(listeOp[nb].first);
+	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	nb--;
+	}
+
+
 while(f && f->OrigineImage()->indOp1Fenetre>=0)
 	{
 	if (f->OrigineImage())
