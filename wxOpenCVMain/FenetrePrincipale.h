@@ -353,6 +353,7 @@ bool				tracerContour;		/*!< 1 tracer des contours des régions */
 bool				tracerLigneHough;	/*!< 1 tracer des lignes détectées par hough */
 bool				tracerLigneProbaHough;	/*!< 1 tracer des cercle segments par hough */
 bool				tracerCercleHough;	/*!< 1 tracer des cercle détectés par hough */
+bool				tracerBonCoin;		/*!< 1 Tracer des coins fort de l'image */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
 char				modeFiltre;			/*!< 0 image standard, image filtrée avec passe bas le + fort */
 char				typeAcqImage;		/*!< 0 Standard, 1 Acquisition image noire, 2 Image des taches, 3 Image fonction fond */
@@ -558,18 +559,23 @@ void TracerContour(wxCommandEvent& event);
      */
 void TracerLigneHough(wxCommandEvent& event);
     /*!
-     *  \brief ModeCamera
+     *  \brief TracerLigneHough
      *  tracer des contours d'une image
      */
 void TracerLigneProbaHough(wxCommandEvent& event);
     /*!
-     *  \brief ModeCamera
+     *  \brief TracerLigneProbaHough
      *  tracer des contours d'une image
      */
 void TracerCercleHough(wxCommandEvent& event);
     /*!
-     *  \brief ModeCamera
-     *  tracer des contours d'une image
+     *  \brief TracerCercleHough
+     *  tracer des cercles détectés dans l'image
+     */
+void TracerBonCoin(wxCommandEvent& event);
+    /*!
+     *  \brief TracerBonCoin
+     *  tracer des coins forts d'une image
      */
 void TracerContour(wxDC &hdc);
     /*!
@@ -578,17 +584,22 @@ void TracerContour(wxDC &hdc);
      */
 void TracerLigneHough(wxDC &hdc);
     /*!
-     *  \brief ModeCamera
+     *  \brief TracerLigneHough
      *  tracer des droites détectées par la transformée de Hough
      */
 void TracerLigneProbaHough(wxDC &hdc);
     /*!
-     *  \brief ModeCamera
+     *  \brief TracerLigneProbaHough
      *  tracer des segments détectés par la transformée de Hough
      */
 void TracerCercleHough(wxDC &hdc);
     /*!
-     *  \brief ModeCamera
+     *  \brief TracerCercleHough
+     *  tracer des cercles détectés par la transformée de Hough
+     */
+void TracerBonCoin(wxDC &hdc);
+    /*!
+     *  \brief TracerCercleHough
      *  tracer des cercles détectés par la transformée de Hough
      */
 void DoPauseThread();
@@ -960,6 +971,7 @@ enum
 	MENU_LIGNEHOUGH,
 	MENU_LIGNEPROBAHOUGH,
 	MENU_CERCLEHOUGH,
+	MENU_BONCOIN,
     Menu_Popup_Palette,
     Menu_Popup_Zoom,
     ARCENCIEL_ = 2684,

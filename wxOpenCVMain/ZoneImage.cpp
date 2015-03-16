@@ -592,6 +592,8 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 		menu.AppendCheckItem(MENU_LIGNEPROBAHOUGH, _T("Hough (line proba.) "));
 	if (f->ImAcq()->HoughCercle())
 		menu.AppendCheckItem(MENU_CERCLEHOUGH, _T("Hough (circle) "));
+	if (f->ImAcq()->BonCoin())
+		menu.AppendCheckItem(MENU_BONCOIN, _T("Good features "));
 	if (osgApp->Fenetre(f->IdFenetreOp1pre()))
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
 	menu.AppendCheckItem(SEQ_OPE, _T("Sequenceoperation"));
@@ -823,6 +825,17 @@ if( tracerCercleHough)
 	}
 }
 
+void FenetrePrincipale::TracerBonCoin(wxCommandEvent& event)
+{
+tracerBonCoin=!tracerBonCoin;
+if( tracerBonCoin)
+	{
+	wxClientDC hdc(feuille);
+	feuille->DoPrepareDC(hdc);
+	TracerBonCoin(hdc);
+	}
+}
+
 void FenetrePrincipale::TracerLigneHough(wxDC &hdc)
 {
 if (!tracerLigneHough || !imAcq)
@@ -863,6 +876,17 @@ if (!tracerLigneProbaHough || !imAcq)
 if (!imAcq->HoughLigneProba())
 	{
 	tracerLigneProbaHough=false;
+	return;
+	}
+}
+
+void FenetrePrincipale::TracerBonCoin(wxDC &hdc)
+{
+if (!tracerBonCoin || !imAcq)
+	return;
+if (!imAcq->BonCoin())
+	{
+	tracerBonCoin=false;
 	return;
 	}
 }

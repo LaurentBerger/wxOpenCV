@@ -209,6 +209,7 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
 	EVT_MENU(MENU_LIGNEHOUGH,  FenetrePrincipale::TracerLigneHough)
 	EVT_MENU(MENU_LIGNEPROBAHOUGH,  FenetrePrincipale::TracerLigneProbaHough)
 	EVT_MENU(MENU_CERCLEHOUGH,  FenetrePrincipale::TracerCercleHough)
+	EVT_MENU(MENU_BONCOIN,  FenetrePrincipale::TracerBonCoin)
 	EVT_MENU(MENU_OP1,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP2,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP3,  FenetrePrincipale::PrepOperation)
@@ -560,7 +561,7 @@ if (pOCVNouveau==NULL)
 	pAct=&pOCV;
 else
 	pAct=pOCVNouveau;
-//pAct->nbImageRes=1;
+pAct->nbImageRes=1;
 if (pAct->opNaireSelec)
 	{
 	ImageInfoCV *imOp[3]={pAct->op1,pAct->op2,pAct->op3};
@@ -1422,6 +1423,7 @@ tracerContour=false;
 tracerLigneHough=false;
 tracerLigneProbaHough=false;
 tracerCercleHough=false;
+tracerBonCoin=false;
 
 indEvtCam=0;
 for (int i=0;i<10;i++)

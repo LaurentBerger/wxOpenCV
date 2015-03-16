@@ -103,6 +103,9 @@ static int nbIterOperateur;
 static int indOpConvolution; /*< Indice de l'opérateur de convolution sélectionné */
 static int indOpMorphologie; /*< Indice de l'opérateur de morphologie sélectionné */
 static int typeResultat;	 /*< Type du résultat -1, ou constante OpenCV  p256 reference manual */
+/***********************************************
+********** INFO IMAGE **************************
+************************************************/
 double *minIm;			/*< Minimimum pour chaque plan de l'image */
 double *maxIm;			/*< Maximimum pour chaque plan de l'image */
 cv::Point	*locMin;	/*< Position du miminmu pour chaque plan */
@@ -111,11 +114,12 @@ cv::Mat		**statComposante; /*< Statistique des composantes de chaque plan http:/
 cv::Mat		**centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
 std::vector<std::vector<cv::Point> > *contours; /*< Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 std::vector<cv::Vec4i> *arbreContour; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
-std::vector<cv::Moments> *moment;	 /*<http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
-std::vector<double> *huMoment;	 /*<http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
-std::vector<cv::Vec3f> *cercle; /*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles*/
-std::vector<cv::Vec4i> *ligneP; /*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles */
-std::vector<cv::Vec2f> *ligne; /*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles */
+std::vector<cv::Moments> *moment;	/*<http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
+std::vector<double> *huMoment;		/*<http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
+std::vector<cv::Vec3f> *cercle;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles*/
+std::vector<cv::Vec4i> *ligneP;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlinesp */
+std::vector<cv::Vec2f> *ligne;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines */
+std::vector<cv::Point2f> *boncoin;	/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack */
 
 ParametreOperation *pOCVHoughLigne;
 ParametreOperation *pOCVHoughLigneProba;
@@ -401,6 +405,7 @@ std::vector<double> *HuMoment(){return huMoment;};
 std::vector<cv::Vec3f> *HoughCercle(){return cercle;};
 std::vector<cv::Vec4i> *HoughLigneProba(){return ligneP;};
 std::vector<cv::Vec2f> *HoughLigne(){return ligne;};
+std::vector<cv::Point2f> *BonCoin(){return boncoin;};
 ParametreOperation *ParamOCVHoughLigne(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughLigneProba(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);

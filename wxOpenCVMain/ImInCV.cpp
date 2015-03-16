@@ -48,6 +48,7 @@ InitOp();
 cercle=NULL;
 ligne=NULL;
 ligneP=NULL;
+boncoin=NULL;
 minIm = NULL;			/*< Minimimum pour chaque plan de l'image */
 maxIm = NULL;			/*< Maximimum pour chaque plan de l'image */
 locMin = NULL;			/*< Position du miminmu pour chaque plan */
@@ -158,10 +159,10 @@ nomImage =NULL;				// Nom de l'image sur le disque
 uniteZ=NULL;
 #endif
 delete []minIm;			/*< Minimimum pour chaque plan de l'image */
-delete[]maxIm;			/*< Maximimum pour chaque plan de l'image */
-delete[]locMin ;	/*< Position du miminmu pour chaque plan */
-delete[]locMax;	/*< Position du miminmu pour chaque plan */
-delete[]contours;
+delete []maxIm;			/*< Maximimum pour chaque plan de l'image */
+delete []locMin ;	/*< Position du miminmu pour chaque plan */
+delete []locMax;	/*< Position du miminmu pour chaque plan */
+delete []contours;
 for (int i=0;i<channels();i++)
 	{
 	if (statComposante)
@@ -175,6 +176,7 @@ delete []moment;
 delete []ligne;
 delete []cercle;
 delete []ligneP;
+delete []boncoin;
 }
 
 ImageInfoCV::ImageInfoCV(void *r):cv::Mat(1,1,3)	
