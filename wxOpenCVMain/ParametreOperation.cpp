@@ -90,11 +90,11 @@ if(	s=="GoodFeature")
 	nomOperation=s;
 	nbOperande= 1;
 	intParam["maxCorners"]=DomaineParametreOp<int>(10,1,100,1);
-	doubleParam["qualityLevel"]=DomaineParametreOp<double>(0.1,0.01,1,0.1);
+	doubleParam["qualityLevel"]=DomaineParametreOp<double>(0.1,0.01,1,0.01);
 	doubleParam["minDistance"]=DomaineParametreOp<double>(10,1,1000,01);
 	intParam["blockSize"]=DomaineParametreOp<int>(2,2,9,1);
 	intParam["useHarrisDetector"]=DomaineParametreOp<int>(1,0,1,1);
-	doubleParam["k"]=DomaineParametreOp<double>(0.04,0.01,1,0.1);
+	doubleParam["k"]=DomaineParametreOp<double>(0.04,0.01,1,0.01);
 	}
 if(	s=="HoughCercle")
 	{

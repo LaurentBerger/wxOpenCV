@@ -188,6 +188,72 @@ delete pOCVBonCoin;
 
 void ImageInfoCV::CloneStat(ImageInfoCV *im)
 {
+if (im->PtContours())
+	{
+	if (contours==NULL)
+		contours = new std::vector<std::vector<cv::Point> >[channels()]; 
+	for (int i=0;i<channels()&&i<im->channels();i++)
+		{
+		contours[i].clear();
+		contours[i]=im->PtContours()[i];
+		}
+	}
+if (im->StatComposante())
+	{
+	if (statComposante==NULL)
+		{
+		statComposante = new cv::Mat*[channels()]; 
+		centreGComposante = new cv::Mat*[channels()]; 
+		}
+	for (int i=0;i<channels()&&i<im->channels();i++)
+		{
+		statComposante[i]=im->StatComposante()[i];
+		centreGComposante[i]=im->CentreGComposante()[i];
+		}
+	}
+if (im->MomentComposante())
+	{
+	if (moment==NULL)
+		{
+		moment =new std::vector<cv::Moments>[channels()];
+		huMoment=new std::vector<double>[channels()];
+		}
+	for (int i=0;i<channels()&&i<im->channels();i++)
+		{
+		moment[i]=im->MomentComposante()[i];
+		huMoment[i]=im->HuMoment()[i];
+		}
+
+	}
+if (im->HoughCercle())
+	{
+	if (cercle==NULL)
+		cercle = new std::vector<cv::Vec3f>[channels()];
+	for (int i=0;i<channels()&&i<im->channels();i++)
+		cercle[i]=im->HoughCercle()[i];
+
+	}
+if (im->HoughLigne())
+	{
+	if (ligne==NULL)
+		ligne = new std::vector<cv::Vec2f>[channels()];
+	for (int i=0;i<channels()&&i<im->channels();i++)
+		ligne[i]=im->HoughLigne()[i];
+	}
+if (im->HoughLigneProba())
+	{
+	if (ligneP==NULL)
+		ligneP = new std::vector<cv::Vec4i>[channels()];
+	for (int i=0;i<channels()&&i<im->channels();i++)
+		ligneP[i]=im->HoughLigneProba()[i];
+	}
+if (im->BonCoin())
+	{
+	if (boncoin==NULL)
+		boncoin = new std::vector<cv::Point2f>[channels()];
+	for (int i=0;i<channels()&&i<im->channels();i++)
+		boncoin[i]=im->BonCoin()[i];
+	}
 }
 
 

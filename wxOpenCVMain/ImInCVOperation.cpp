@@ -870,7 +870,7 @@ else
 	for (int i=0;i<imSrc->channels();i++)
 		{
 		cv::HoughLinesP( planCouleur[i],ligneP[i],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
-		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["srn"].valeur,pOCV->doubleParam["stn"].valeur);
+		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["minLineLength"].valeur,pOCV->doubleParam["maxLineGap"].valeur);
 
 		}
 	delete []d;
@@ -894,16 +894,14 @@ if (imSrc->channels()==1)
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[imSrc->channels()];
 	cv::split( *imSrc, planCouleur );
 	for (int i=0;i<imSrc->channels();i++)
 		{
-		cv::goodFeaturesToTrack(d[i],boncoin[i],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
+		cv::goodFeaturesToTrack(planCouleur[i],boncoin[i],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
 			pOCV->doubleParam["minDistance"].valeur,cv::noArray(),pOCV->intParam["blockSize"].valeur,
 			pOCV->intParam["useHarrisDetector"].valeur,pOCV->doubleParam["k"].valeur);
 
 		}
-	delete []d;
 	}
 ParamOCVBonCoin(pOCV);
 return this;

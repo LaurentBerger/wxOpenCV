@@ -108,6 +108,11 @@ if (feuille->ModeRectangle())
 	DrawRectangles(hdc);
 if (feuille->ModeCoupe())
 	DrawLignes(hdc);
+TracerContour(hdc);
+TracerLigneHough(hdc);
+TracerLigneProbaHough(hdc);
+TracerCercleHough(hdc);
+TracerBonCoin(hdc);
 }
 
 void FenetrePrincipale::DrawRectangles (wxDC &hdc)
