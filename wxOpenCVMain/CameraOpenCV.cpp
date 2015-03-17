@@ -386,12 +386,13 @@ if (captureVideo->isOpened())
 						break;
 					{
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->paramCam);
+					bool effaceImage=true;
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
 						ParametreOperation pOCV=*it;
 						if (im)
 							{
-							if (im[0]!=pOCV.op1)
+							if (effaceImage)
 								{
 								pOCV.op1=im[0];
 								if (imTmp)
@@ -399,13 +400,22 @@ if (captureVideo->isOpened())
 								imTmp=im[0];
 								}
 							else
+								{
 								imTmp=NULL;
+								pOCV.op1=im[0];
+								}
 							}
 						else
 							pOCV.op1=imIni;
 						pOCV.indOp1Fenetre=-1;
 
 						im=pOCV.ExecuterOperation();
+						if (im)
+							if(im[0]!=pOCV.op1)
+								effaceImage=true;
+							else
+								effaceImage=false;
+							
 						}
 					}
 					delete imIni;

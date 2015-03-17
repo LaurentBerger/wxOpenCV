@@ -241,6 +241,8 @@ if (osgApp==NULL || fenMere==NULL)
 	return;
 FenetrePrincipale *f=fenMere;
 int nb=nbEtape-1;
+std::map <int,std::vector <ParametreOperation > >  *t=((wxOsgApp *)osgApp)->TabSeqOperation();
+(*t)[((wxOsgApp *)osgApp)->NumSeqOpe()].resize(nbEtape);
 
 if (fenMere->ImAcq()->HoughLigne())
 	{
@@ -251,6 +253,8 @@ if (fenMere->ImAcq()->HoughLigne())
 	ParametreOperation p;
 	p=*(listeOp[nb].first);
 	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	(*t)[listeOp[nb].first->idOperation][nb]=p;
+
 	nb--;
 	}
 if (fenMere->ImAcq()->HoughLigneProba())
@@ -262,6 +266,7 @@ if (fenMere->ImAcq()->HoughLigneProba())
 	ParametreOperation p;
 	p=*(listeOp[nb].first);
 	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	(*t)[listeOp[nb].first->idOperation][nb]=p;
 	nb--;
 	}
 if (fenMere->ImAcq()->HoughCercle())
@@ -273,6 +278,7 @@ if (fenMere->ImAcq()->HoughCercle())
 	ParametreOperation p;
 	p=*(listeOp[nb].first);
 	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	(*t)[listeOp[nb].first->idOperation][nb]=p;
 	nb--;
 	}
 if (fenMere->ImAcq()->BonCoin())
@@ -284,6 +290,7 @@ if (fenMere->ImAcq()->BonCoin())
 	ParametreOperation p;
 	p=*(listeOp[nb].first);
 	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	(*t)[listeOp[nb].first->idOperation][nb]=p;
 	nb--;
 	}
 
@@ -305,6 +312,7 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
 			f=((wxOsgApp *)osgApp)->Fenetre(id);
 		else 
 			f=NULL;
+		(*t)[listeOp[nb].first->idOperation][nb]=p;
 		nb--;
 		}
 	else 
