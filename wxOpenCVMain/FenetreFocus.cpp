@@ -35,14 +35,8 @@ for (int j=0;j<NB_MAX_RECTANGLE;j++)
 
 	excel = new Tableur((wxFrame*)panel,11,5); 
     wxSizer *box = new wxGridSizer(2,1,0);
-	plotwindow = new FenetreCourbe( (wxFrame*)panel,(wxFrame*)this,  -1, wxDefaultPosition, wxSize(400,400), wxWANTS_CHARS,
-#if wxUSE_GRAPHICS_CONTEXT  
-                                   wxPLPLOT_BACKEND_GC | wxPLPLOT_DRAW_TEXT );
-#else
-                                   wxPLPLOT_BACKEND_AGG | wxPLPLOT_DRAW_TEXT );
-#endif
-  plotwindow->Connect( wxEVT_CHAR, wxKeyEventHandler(FenetreCourbe::OnChar) );
- 	box->Add( plotwindow, 1, wxALL | wxEXPAND, 10 );
+	courbe =  new wxPLplotwindow<wxPanel>();
+ 	box->Add( courbe, 1, wxALL | wxEXPAND, 10 );
   	box->Add( excel, 0, wxALL | wxEXPAND, 10 );
   panel->SetSizer( box );
     box->Fit(panel);
@@ -52,19 +46,6 @@ for (int j=0;j<NB_MAX_RECTANGLE;j++)
 
 
   wxString m_title=_T("Histogram");
-  switch(plotwindow->getBackend()) {
-  case wxPLPLOT_BACKEND_DC:
-  	m_title += " (basic)";
-  	break;
-  case wxPLPLOT_BACKEND_GC:
-  	m_title += " (wxGC)";
-  	break;
-  case wxPLPLOT_BACKEND_AGG:
-  	m_title += " (AGG)";
-  	break;
-  default:
-  	break;
-  }
   //SetTitle( m_title );  
 excel->Show();
 	Plot(0);
@@ -75,7 +56,9 @@ void FenetreFocus::Plot(int indRect)
 if (!osgApp)
 	return;
 
-wxPLplotstream* pls=plotwindow->GetStream();
+wxPLplotstream* pls=courbe->GetStream();
+if (!pls)
+	return;
 const size_t np=16384;
 static PLFLT *x=new PLFLT[NBELT_FILE],*y=new PLFLT[NBELT_FILE];
 PLFLT xmin=0, xmax=NBELT_FILE-1;
@@ -109,7 +92,7 @@ pls->col0( 3 );
 //pls->wid( 2 );
 pls->line( NBELT_FILE, x, y );
 
-plotwindow->RenewPlot();
+courbe->RenewPlot();
 }
 
 

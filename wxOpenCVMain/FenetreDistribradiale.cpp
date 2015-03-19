@@ -32,14 +32,9 @@ dr=NULL;
 
 	excel = new Tableur((wxFrame*)panel,11,5); 
     wxSizer *box = new wxGridSizer(2,1,0);
-	plotwindow = new FenetreCourbe( (wxFrame*)panel,(wxFrame*)this,  -1, wxDefaultPosition, wxSize(400,400), wxWANTS_CHARS,
-#if wxUSE_GRAPHICS_CONTEXT  
-                                   wxPLPLOT_BACKEND_GC | wxPLPLOT_DRAW_TEXT );
-#else
-                                   wxPLPLOT_BACKEND_AGG | wxPLPLOT_DRAW_TEXT );
-#endif
-  plotwindow->Connect( wxEVT_CHAR, wxKeyEventHandler(FenetreCourbe::OnChar) );
- 	box->Add( plotwindow, 1, wxALL | wxEXPAND, 10 );
+	courbe =  new wxPLplotwindow<wxPanel>();
+
+ 	box->Add( courbe, 1, wxALL | wxEXPAND, 10 );
   	box->Add( excel, 0, wxALL | wxEXPAND, 10 );
   panel->SetSizer( box );
     box->Fit(panel);
@@ -49,19 +44,6 @@ dr=NULL;
 
 
   wxString m_title=_T("I(r)");
-  switch(plotwindow->getBackend()) {
-  case wxPLPLOT_BACKEND_DC:
-  	m_title += " (basic)";
-  	break;
-  case wxPLPLOT_BACKEND_GC:
-  	m_title += " (wxGC)";
-  	break;
-  case wxPLPLOT_BACKEND_AGG:
-  	m_title += " (AGG)";
-  	break;
-  default:
-  	break;
-  }
   //SetTitle( m_title );  
 excel->Show();
 	Plot(true);
@@ -111,7 +93,9 @@ if (((wxOsgApp*)osgApp)->Graphique()->ModeRectangle())
 	}
 //imAcq->DistributionRadiale(colDeb+nbCol/2,ligDeb+nbLig/2,dr,nbVal);
 
-wxPLplotstream* pls=plotwindow->GetStream();
+wxPLplotstream* pls=courbe->GetStream();
+if (!pls)
+	return;
 
 PLFLT xmin=0, xmax=std::min(nbLig,nbCol);
 PLFLT ymin=1e30, ymax=1e-30;
@@ -140,7 +124,7 @@ pls->col0( 3 );
 //pls->wid( 2 );
 pls->line( std::min(nbLig,nbCol), x, y );
 
-plotwindow->RenewPlot();
+courbe->RenewPlot();
 }
 
 FenetreDistribRadiale::~FenetreDistribRadiale()
@@ -186,14 +170,8 @@ dr=NULL;
 
 	excel = new Tableur((wxFrame*)panel,11,5); 
     wxSizer *box = new wxGridSizer(2,1,0);
-	plotwindow = new FenetreCourbe( (wxFrame*)panel,(wxFrame*)this,  -1, wxDefaultPosition, wxSize(400,400), wxWANTS_CHARS,
-#if wxUSE_GRAPHICS_CONTEXT  
-                                   wxPLPLOT_BACKEND_GC | wxPLPLOT_DRAW_TEXT );
-#else
-                                   wxPLPLOT_BACKEND_AGG | wxPLPLOT_DRAW_TEXT );
-#endif
-  plotwindow->Connect( wxEVT_CHAR, wxKeyEventHandler(FenetreCourbe::OnChar) );
- 	box->Add( plotwindow, 1, wxALL | wxEXPAND, 10 );
+	courbe =  new wxPLplotwindow<wxPanel>();
+ 	box->Add( courbe, 1, wxALL | wxEXPAND, 10 );
   	box->Add( excel, 0, wxALL | wxEXPAND, 10 );
   panel->SetSizer( box );
     box->Fit(panel);
@@ -203,19 +181,6 @@ dr=NULL;
 
 
   wxString m_title="I(r)";
-  switch(plotwindow->getBackend()) {
-  case wxPLPLOT_BACKEND_DC:
-  	m_title +=" (basic)";
-  	break;
-  case wxPLPLOT_BACKEND_GC:
-  	m_title += " (wxGC)";
-  	break;
-  case wxPLPLOT_BACKEND_AGG:
-  	m_title += " (AGG)";
-  	break;
-  default:
-  	break;
-  }
   //SetTitle( m_title );  
 excel->Show();
 	Plot(true);
@@ -286,7 +251,9 @@ if (((wxOsgApp*)osgApp)->Graphique()->ModeRectangle())
 	}
 //imAcq->DistributionAngulaire(colDeb+nbCol/2,ligDeb+nbLig/2,dr,nbVal,std::min(nbLig,nbCol));
 
-wxPLplotstream* pls=plotwindow->GetStream();
+wxPLplotstream* pls=courbe->GetStream();
+if (!pls)
+	return;
 PLFLT xmin=0, xmax=10*nbVal;
 PLFLT ymin=1e30, ymax=1e-30;
 
@@ -314,7 +281,7 @@ pls->col0( 3 );
 //pls->wid( 2 );
 pls->line( std::min(nbLig,nbCol), x, y );
 
-plotwindow->RenewPlot();
+courbe->RenewPlot();
 }
 
 

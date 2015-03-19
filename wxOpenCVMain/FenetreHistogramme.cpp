@@ -13,16 +13,10 @@ BEGIN_EVENT_TABLE( FenetreHistogramme, wxWindow )
 	EVT_GRID_CELL_CHANGING(FenetreHistogramme::NouvelHistogramme)
 END_EVENT_TABLE()
 
-
 FenetreCourbe::FenetreCourbe( wxFrame* frame, wxWindow* parent, wxWindowID id, const wxPoint& pos,
                             const wxSize& size, long style, int pl_style ) : 
-          wxPLplotwindow( parent, id, pos, size, style, pl_style )
-
-		  
-		  
-		  
-		  
-		  {
+          wxPLplotwindow<wxFrame>( true )
+ {
   mframe = frame;
 }
 
@@ -74,14 +68,10 @@ fenMere=NULL;
 	x[0]=NULL;
 	excel = new Tableur((wxFrame*)panel,11,4); 
     box = new wxGridSizer(2,1,0);
-	plotwindow = new FenetreCourbe( (wxFrame*)panel,(wxFrame*)this,  -1, wxDefaultPosition, wxSize(400,400), wxWANTS_CHARS,
-#if wxUSE_GRAPHICS_CONTEXT  
-                                   wxPLPLOT_BACKEND_GC | wxPLPLOT_DRAW_TEXT );
-#else
-                                   wxPLPLOT_BACKEND_AGG | wxPLPLOT_DRAW_TEXT );
-#endif
-  plotwindow->Connect( wxEVT_CHAR, wxKeyEventHandler(FenetreCourbe::OnChar) );
- 	box->Add( plotwindow, 1, wxALL | wxEXPAND, 10 );
+//	plotwindow = new FenetreCourbe( (wxFrame*)panel,(wxFrame*)this,  -1, wxDefaultPosition, wxSize(400,400), wxWANTS_CHARS);
+	courbe =  new wxPLplotwindow<wxPanel>(true);
+	courbe->Create(this,wxID_ANY,wxDefaultPosition, wxSize(400,400));
+ 	box->Add( courbe, 1, wxALL | wxEXPAND, 10 );
   	box->Add( excel, 0, wxALL | wxEXPAND, 10 );
     panel->SetSizer( box );
     box->Fit(panel);
@@ -92,22 +82,10 @@ fenMere=NULL;
 
 
   wxString m_title=_T("Histogram");
-  switch(plotwindow->getBackend()) {
-  case wxPLPLOT_BACKEND_DC:
-  	m_title += " (basic)";
-  	break;
-  case wxPLPLOT_BACKEND_GC:
-  	m_title += " (wxGC)";
-  	break;
-  case wxPLPLOT_BACKEND_AGG:
-  	m_title += " (AGG)";
-  	break;
-  default:
-  	break;
-  }
   //SetTitle( m_title );  
 nbGraines[0]=-1;
 excel->Show();
+courbe->Show();
 	Plot();
 }
 
@@ -115,7 +93,7 @@ void FenetreHistogramme::OnClose(wxCloseEvent& event)
 {
 if (!fenMere)
 	return;
- delete plotwindow;
+ delete courbe;
  delete excel;
  delete panel;
  if (x[0])
@@ -424,7 +402,9 @@ if (!fenetreActive)
 	{
 	return;
 	} 
-wxPLplotstream* pls=plotwindow->GetStream();
+wxPLplotstream* pls=courbe->GetStream();
+if (!pls)
+	return;
 wxArrayInt selection=excel->GetSelectedRows();
 int iMin=0,iMax=16383;
 

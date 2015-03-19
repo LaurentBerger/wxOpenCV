@@ -88,14 +88,9 @@ fenMere=NULL;
 
 	excel = new Tableur((wxFrame*)panel,11,5); 
     box = new wxGridSizer(2,1,0);
-	plotwindow = new FenetreCourbe( (wxFrame*)panel,(wxFrame*)this,  -1, wxDefaultPosition, wxSize(400,400), wxWANTS_CHARS,
-#if wxUSE_GRAPHICS_CONTEXT  
-                                   wxPLPLOT_BACKEND_GC | wxPLPLOT_DRAW_TEXT );
-#else
-                                   wxPLPLOT_BACKEND_AGG | wxPLPLOT_DRAW_TEXT );
-#endif
-  plotwindow->Connect( wxEVT_CHAR, wxKeyEventHandler(FenetreCourbe::OnChar) );
- 	box->Add( plotwindow, 1, wxALL | wxEXPAND, 10 );
+	courbe =  new wxPLplotwindow<wxPanel>();
+ 	courbe->Create(this,wxID_ANY,wxDefaultPosition, wxSize(400,400));
+	box->Add( courbe, 1, wxALL | wxEXPAND, 10 );
   	box->Add( excel, 0, wxALL | wxEXPAND, 10 );
   panel->SetSizer( box );
     box->Fit(panel);
@@ -105,32 +100,20 @@ fenMere=NULL;
   x[0]=NULL;
 
   wxString m_title=_T("Histogram");
-  switch(plotwindow->getBackend()) {
-  case wxPLPLOT_BACKEND_DC:
-  	m_title += " (basic)";
-  	break;
-  case wxPLPLOT_BACKEND_GC:
-  	m_title += " (wxGC)";
-  	break;
-  case wxPLPLOT_BACKEND_AGG:
-  	m_title += " (AGG)";
-  	break;
-  default:
-  	break;
-  }
   //SetTitle( m_title );  
 excel->Show();
 //wxPLplotstream* pls=plotwindow->GetStream();
     
 //    int x=pls->MergeOpts( options, "x01c options", notes);
 	Plot(false);
+	courbe->Show(true);
 }
 
 FenetreCoupe::~FenetreCoupe() 
 {
 if (!fenMere)
 	return;
- delete plotwindow;
+ delete courbe;
  delete excel;
  delete panel;
  if (x[0])
@@ -251,7 +234,9 @@ case CV_32F:
 	break;
 }
 
-wxPLplotstream* pls=plotwindow->GetStream();
+wxPLplotstream* pls=courbe->GetStream();
+if (!pls)
+	return;
     
 
 double moyenneH=0,varianceH=0,cumulH=0;
@@ -325,7 +310,7 @@ for (int j=0;j<nbPlan;j++)
 	pls->col0( 4+2*j );
 	pls->line( nbVal, x[0], yFiltre[j] );
 	}
-plotwindow->RenewPlot();
+courbe->RenewPlot();
 if (((wxOsgApp*)osgApp)->Graphique()->ModeCoupe())
 	CoordonneeGraphique();
 }
@@ -337,7 +322,9 @@ void	FenetreCoupe::DefCellule(int l,int c, double val,char *format)
 
 void FenetreCoupe::CoordonneeGraphique()
 {
-wxPLplotstream* pls=plotwindow->GetStream();
+wxPLplotstream* pls=courbe->GetStream();
+if (!pls)
+	return;
 
 
  //while(1)

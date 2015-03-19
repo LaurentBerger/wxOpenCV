@@ -11,7 +11,7 @@
 
 
 
-class FenetreCourbe : public wxPLplotwindow
+class FenetreCourbe : public wxPLplotwindow<wxFrame>
 {
 public:
   FenetreCourbe( wxFrame* frame, wxWindow* parent, wxWindowID id=-1, const wxPoint& pos = wxDefaultPosition,
@@ -45,7 +45,7 @@ FenetreHistogramme( wxFrame * );
 void DefFenetrePrincipale(void *f){fenMere=f;};
 void MajHistogramme(); /*!<Calcul de l'histogramme de l'image en tenant compte de la sélection */
 void Plot(char =0);
-void SauverSVG(wxString &nomFichier){plotwindow->SavePlot(wxString("svg"),nomFichier);};
+void SauverSVG(wxString &nomFichier){courbe->SavePlot(wxString("svg"),nomFichier);};
 
 void DefOsgApp(void *w){osgApp=w;};
 cv::Mat*	Histogramme(int i=0){return &(histoImage[i]);};
@@ -62,7 +62,8 @@ private:
   void OnBackgroundColor( wxCommandEvent& event );
 
 private:
-  FenetreCourbe* plotwindow;
+//  FenetreCourbe* plotwindow;
+  wxPLplotwindow<wxPanel> *courbe;
   bool bgcolor;
   int m_backend;
 
@@ -95,7 +96,7 @@ private:
   void OnAbout( wxCommandEvent& event );
   void OnBackgroundColor( wxCommandEvent& event );
 private:
-  FenetreCourbe* plotwindow;
+  wxPLplotwindow<wxPanel> *courbe;
   bool bgcolor;
   int m_backend;
 
@@ -130,7 +131,7 @@ private:
   void OnBackgroundColor( wxCommandEvent& event );
 
 private:
-  FenetreCourbe* plotwindow;
+  wxPLplotwindow<wxPanel> *courbe;
   bool bgcolor;
   int m_backend;
 
@@ -162,7 +163,7 @@ private:
   void OnBackgroundColor( wxCommandEvent& event );
 
 private:
-  FenetreCourbe* plotwindow;
+  wxPLplotwindow<wxPanel> *courbe;
   bool bgcolor;
   int m_backend;
 
@@ -193,7 +194,7 @@ void	OnAbout( wxCommandEvent& event );
 void	OnBackgroundColor( wxCommandEvent& event );
 
 private:
-  FenetreCourbe* plotwindow;
+  wxPLplotwindow<wxPanel> *courbe;
   bool bgcolor;
   int m_backend;
 

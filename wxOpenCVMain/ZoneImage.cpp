@@ -377,7 +377,7 @@ if (osgApp->ModeSouris()==SELECTION_EN_COURS)
 if (!ModeRectangle() && !ModeCoupe())
 	return;
 wxPoint point2 = ScreenToClient(event.GetPosition()); // this is in screen coords.  Use ScreenToClient if you need this in coords for your window
-point=RepereEcranImage(point);
+//point=RepereEcranImage(point);
 if (ModeRectangle())
 	{
 	wxRect r(*RectangleSelec());
@@ -410,7 +410,7 @@ void ZoneImage::TracerRectangle(int ind,bool croix)
 wxClientDC dc(this);
 wxPoint pTmp=rectSelect[indRect].GetTopLeft();
 wxPoint p1(RepereImageEcran(pTmp));
-//ClientToScreen(&p1.x,&p1.y);
+ClientToScreen(&p1.x,&p1.y);
 wxBrush	tr=*wxTRANSPARENT_BRUSH;
 dc.SetBrush(tr);
 int		fZoomNume,fZoomDeno;

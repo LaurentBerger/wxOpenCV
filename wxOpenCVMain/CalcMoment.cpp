@@ -108,21 +108,12 @@ case CV_8U :
 default :
 	throw ;
 	}
-for (int indCanal=0;indCanal<nbCanaux;indCanal++)
-	{
-	for (int j=0;j<=maxIm[indCanal];j++)
-		if (m[indCanal][j].m00>0)
-		{
-		m[indCanal][j].m01 /=m[indCanal][j].m00;
-		m[indCanal][j].m10 /=m[indCanal][j].m00;
-		}
-	}
 
 for (int indCanal=0;indCanal<nbCanaux;indCanal++)
 	for (int k=0;k<=maxIm[indCanal];k++)
 		if (m[indCanal][k].m00>0)
 			{
-			double ybarre=m[indCanal][k].m01/m[indCanal][k].m00,xbarre=m[indCanal][k].m01/m[indCanal][k].m00;
+			double ybarre=m[indCanal][k].m01/m[indCanal][k].m00,xbarre=m[indCanal][k].m10/m[indCanal][k].m00;
 			m[indCanal][k].mu11=m[indCanal][k].m11-ybarre*m[indCanal][k].m10;
 			m[indCanal][k].mu02=m[indCanal][k].m02-ybarre*m[indCanal][k].m01;
 			m[indCanal][k].mu20=m[indCanal][k].m20-xbarre*m[indCanal][k].m10;
