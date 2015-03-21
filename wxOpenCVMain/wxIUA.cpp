@@ -65,6 +65,14 @@ enum
 	ID_HOUGHCIRCLE,
 	ID_HOUGHLINE,
 	ID_HOUGHLINEP,
+	ID_PYRFLOTOPTIQUE,
+	ID_CALCFLOTOPTIQUE,
+	ID_CALCFLOTOPTIQUEFARNER,
+	ID_ESTIM_TRANS,
+	ID_MAJ_MVT,
+
+
+
 
 	ID_FFT,
 	ID_IFFT,
@@ -175,6 +183,15 @@ END_EVENT_TABLE()
 // Barre outils autre
    #include "bitmaps/separationplan.xpm"
    #include "bitmaps/fusionplan.xpm"
+   #include "bitmaps/rgbluminance.xpm"
+// Barre d'outils flot optique
+   #include "bitmaps/pyrflotoptique.xpm"
+   #include "bitmaps/calcflotoptique.xpm"
+   #include "bitmaps/calcflotoptiquefarner.xpm"
+   #include "bitmaps/majmvt.xpm"
+   #include "bitmaps/estimtrans.xpm"
+
+
 #endif // USE_XPM_BITMAPS
 
 InterfaceAvance::InterfaceAvance(wxWindow* parent,
@@ -223,6 +240,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
 	InstallationbarreOutils(6);
 	InstallationbarreOutils(7);
 	InstallationbarreOutils(8);
+	InstallationbarreOutils(9);
 
 
     wxWindow* wnd10 = CreateTextCtrl(wxEmptyString);
@@ -926,6 +944,11 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			Tool_fusionplan,
 			Tool_separationplan,
 			Tool_rgbluminance,
+			Tool_pyrflotoptique,
+			Tool_calcflotoptique,
+			Tool_calcflotoptiquefarner,
+			Tool_estimtransfo,
+			Tool_majmvt,
 			Tool_Max
 		};
 	switch(indBarre)
@@ -1159,86 +1182,6 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 					  ToolbarPane().Top().Row(4));
 		}
 	break;
-	case 8:
-		{
-		wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(canny);
-			INIT_TOOL_BMP(cornerharris);
-			INIT_TOOL_BMP(goodfeature);
-			INIT_TOOL_BMP(houghcircle);
-			INIT_TOOL_BMP(houghline);
-			INIT_TOOL_BMP(houghlinep);
-
-        if (toolBarBitmaps[Tool_canny].GetHeight()==0)
-            wxMessageBox("Probleme","pb");
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                         /*wxAUI_TB_OVERFLOW |*/
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-		tbOperation= tb;
-//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(1,1);
-		tb->AddTool(ID_CANNY, wxEmptyString, toolBarBitmaps[Tool_canny], _("Canny edge detector"));
-		tb->AddTool(ID_CORNERHARRIS, wxEmptyString, toolBarBitmaps[Tool_cornerharris], _("Harris edge detector"));
-		tb->AddTool(ID_GOODFEATURE, wxEmptyString, toolBarBitmaps[Tool_goodfeature], _("Very good features"));
-		tb->AddTool(ID_HOUGHCIRCLE, wxEmptyString, toolBarBitmaps[Tool_houghcircle], _("Hough circle"));
-		tb->AddTool(ID_HOUGHLINE, wxEmptyString, toolBarBitmaps[Tool_houghline], _("Hough line"));
-		tb->AddTool(ID_HOUGHLINEP, wxEmptyString, toolBarBitmaps[Tool_houghlinep], _("hough line proba."));
-		//tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
-		m_mgr.AddPane(tb,  wxAuiPaneInfo().
-					  Name("feature").Caption("Feature").
-					  ToolbarPane().Top().Row(4));
-		}
-		break;
-	case 7 : // Outils couleur, normalisation
-		{
-
-			wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(fusionplan);
-			INIT_TOOL_BMP(separationplan);
-			INIT_TOOL_BMP(rgbluminance);
-			toolBarBitmaps[Tool_fft]= wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(64,64));
-
-        if (toolBarBitmaps[Tool_fusionplan].GetHeight()==0)
-            wxMessageBox("Probleme","pb");
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                         /*wxAUI_TB_OVERFLOW |*/
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-		tbOperation= tb;
-//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(1,1);
-		tb->AddTool(ID_FUSIONPLAN, wxEmptyString, toolBarBitmaps[Tool_fusionplan], _("Merge color plan"));
-		tb->AddTool(ID_SEPARATIONPLAN, wxEmptyString, toolBarBitmaps[Tool_separationplan], _("split color plan"));
-		tb->AddTool(ID_RGBLUMINANCE, wxEmptyString, toolBarBitmaps[Tool_rgbluminance], _("RGB to gray"));
-		//tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
-		m_mgr.AddPane(tb,  wxAuiPaneInfo().
-					  Name("Color").Caption("Color").
-					  ToolbarPane().Top().Row(6));
-		}
-	break;
 	case 6 : // Ouverture, fermeture de fichiers
 		{
 		enum
@@ -1296,6 +1239,127 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 					  Name(_("tb5")).Caption(_("Big Toolbar")).
 					  ToolbarPane().Top());
 		}
+		break;
+	case 7 : // Outils couleur, normalisation
+		{
+
+			wxBitmap toolBarBitmaps[Tool_Max];
+
+		#if USE_XPM_BITMAPS
+			#define INIT_TOOL_BMP(bmp) \
+				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
+		#else // !USE_XPM_BITMAPS
+			#define INIT_TOOL_BMP(bmp) \
+				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
+		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
+
+			INIT_TOOL_BMP(fusionplan);
+			INIT_TOOL_BMP(separationplan);
+			INIT_TOOL_BMP(rgbluminance);
+			toolBarBitmaps[Tool_fft]= wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(64,64));
+
+        if (toolBarBitmaps[Tool_fusionplan].GetHeight()==0)
+            wxMessageBox("Probleme","pb");
+		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                        wxAUI_TB_DEFAULT_STYLE |
+                                         /*wxAUI_TB_OVERFLOW |*/
+                                         wxAUI_TB_TEXT |
+                                         wxAUI_TB_HORZ_TEXT);
+		tbOperation= tb;
+//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
+        tb->SetMargins(1,1);
+		tb->AddTool(ID_FUSIONPLAN, wxEmptyString, toolBarBitmaps[Tool_fusionplan], _("Merge color plan"));
+		tb->AddTool(ID_SEPARATIONPLAN, wxEmptyString, toolBarBitmaps[Tool_separationplan], _("split color plan"));
+		tb->AddTool(ID_RGBLUMINANCE, wxEmptyString, toolBarBitmaps[Tool_rgbluminance], _("RGB to gray"));
+		//tb->SetCustomOverflowItems(prepend_items, append_items);
+		tb->Realize();
+		m_mgr.AddPane(tb,  wxAuiPaneInfo().
+					  Name("Color").Caption("Color").
+					  ToolbarPane().Top().Row(6));
+		}
+	break;
+	case 8:
+		{
+		wxBitmap toolBarBitmaps[Tool_Max];
+
+		#if USE_XPM_BITMAPS
+			#define INIT_TOOL_BMP(bmp) \
+				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
+		#else // !USE_XPM_BITMAPS
+			#define INIT_TOOL_BMP(bmp) \
+				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
+		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
+
+			INIT_TOOL_BMP(canny);
+			INIT_TOOL_BMP(cornerharris);
+			INIT_TOOL_BMP(goodfeature);
+			INIT_TOOL_BMP(houghcircle);
+			INIT_TOOL_BMP(houghline);
+			INIT_TOOL_BMP(houghlinep);
+
+        if (toolBarBitmaps[Tool_canny].GetHeight()==0)
+            wxMessageBox("Probleme","pb");
+		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                        wxAUI_TB_DEFAULT_STYLE |
+                                         /*wxAUI_TB_OVERFLOW |*/
+                                         wxAUI_TB_TEXT |
+                                         wxAUI_TB_HORZ_TEXT);
+		tbOperation= tb;
+//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
+        tb->SetMargins(1,1);
+		tb->AddTool(ID_CANNY, wxEmptyString, toolBarBitmaps[Tool_canny], _("Canny edge detector"));
+		tb->AddTool(ID_CORNERHARRIS, wxEmptyString, toolBarBitmaps[Tool_cornerharris], _("Harris edge detector"));
+		tb->AddTool(ID_GOODFEATURE, wxEmptyString, toolBarBitmaps[Tool_goodfeature], _("Very good features"));
+		tb->AddTool(ID_HOUGHCIRCLE, wxEmptyString, toolBarBitmaps[Tool_houghcircle], _("Hough circle"));
+		tb->AddTool(ID_HOUGHLINE, wxEmptyString, toolBarBitmaps[Tool_houghline], _("Hough line"));
+		tb->AddTool(ID_HOUGHLINEP, wxEmptyString, toolBarBitmaps[Tool_houghlinep], _("hough line proba."));
+		//tb->SetCustomOverflowItems(prepend_items, append_items);
+		tb->Realize();
+		m_mgr.AddPane(tb,  wxAuiPaneInfo().
+					  Name("feature").Caption("Feature").
+					  ToolbarPane().Top().Row(4));
+		}
+		break;
+	case 9:
+		{
+		wxBitmap toolBarBitmaps[Tool_Max];
+
+		#if USE_XPM_BITMAPS
+			#define INIT_TOOL_BMP(bmp) \
+				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
+		#else // !USE_XPM_BITMAPS
+			#define INIT_TOOL_BMP(bmp) \
+				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
+		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
+
+			INIT_TOOL_BMP(pyrflotoptique);
+			INIT_TOOL_BMP(calcflotoptique);
+			INIT_TOOL_BMP(calcflotoptiquefarner);
+			INIT_TOOL_BMP(estimtransfo);
+			INIT_TOOL_BMP(majmvt);
+
+        if (toolBarBitmaps[Tool_pyrflotoptique].GetHeight()==0)
+            wxMessageBox("Probleme","pb");
+		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+                                        wxAUI_TB_DEFAULT_STYLE |
+                                         /*wxAUI_TB_OVERFLOW |*/
+                                         wxAUI_TB_TEXT |
+                                         wxAUI_TB_HORZ_TEXT);
+		tbOperation= tb;
+//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
+        tb->SetMargins(1,1);
+		tb->AddTool(ID_PYRFLOTOPTIQUE, wxEmptyString, toolBarBitmaps[Tool_pyrflotoptique], _("Build pyramid optical flow"));
+		tb->AddTool(ID_CALCFLOTOPTIQUE, wxEmptyString, toolBarBitmaps[Tool_calcflotoptique], _("Calculate optical flow"));
+		tb->AddTool(ID_CALCFLOTOPTIQUEFARNER, wxEmptyString, toolBarBitmaps[Tool_calcflotoptiquefarner], _("Calculate optical flow(farnerback)"));
+		tb->AddTool(ID_ESTIM_TRANS, wxEmptyString, toolBarBitmaps[Tool_estimtransfo], _("Estimate rigid transform"));
+		tb->AddTool(ID_MAJ_MVT, wxEmptyString, toolBarBitmaps[Tool_majmvt], _("Update motion history"));
+		//tb->SetCustomOverflowItems(prepend_items, append_items);
+		tb->Realize();
+		m_mgr.AddPane(tb,  wxAuiPaneInfo().
+					  Name("Optical Flow").Caption("Optical Flow").
+					  ToolbarPane().Top().Row(5));
+		}
+		break;
 	}
 	    // add the toolbars to the manager
 }
@@ -1513,6 +1577,21 @@ case ID_HOUGHLINE:
 	break;
 case ID_HOUGHLINEP:
 	s="HoughLineP";
+	break;
+case ID_PYRFLOTOPTIQUE:
+	s="PyrFlotOptique";
+	break;
+case ID_CALCFLOTOPTIQUE:
+	s="CalcFlotOptique";
+	break;
+case ID_CALCFLOTOPTIQUEFARNER:
+	s="CalcFlotOptiqueFarner";
+	break;
+case ID_ESTIM_TRANS:
+	s="EstimTransformation";
+	break;
+case ID_MAJ_MVT:
+	s="MajMouvement";
 	break;
 	}
 ((wxOsgApp*)osgApp)->DefOperateurImage(s);

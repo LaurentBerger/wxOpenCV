@@ -380,6 +380,32 @@ if (s=="LigneMediane")
 	nbImageRes=1;
 	nomOperation=s;
 	}
+if (s=="PyrFlotOptique")
+	{
+	nbImageRes=1;
+	nomOperation=s;
+	}
+if (s=="CalcFlotOptique")
+	{
+	nbImageRes=1;
+	nomOperation=s;
+	}
+if (s=="CalcFlotOptiqueFarner")
+	{
+	nbImageRes=1;
+	nomOperation=s;
+	}
+if (s=="EstimTransformation")
+	{
+	nbImageRes=1;
+	nomOperation=s;
+	}
+if (s=="MajMouvement")
+	{
+	nbImageRes=1;
+	nomOperation=s;
+	}
+
 if (nomOperation=="")
 	return false;
 InitPtrFonction();
@@ -670,6 +696,42 @@ if (s=="LigneMediane")
 	opUnaireSelec = &ImageInfoCV::LigneMediane;
 	return true;
 	}
+if (s=="PyrFlotOptique")
+	{
+	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#buildopticalflowpyramid";
+	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=366&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	return true;
+	}
+if (s=="CalcFlotOptique")
+	{
+	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowpyrlk";
+	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=365&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	return true;
+	}
+if (s=="CalcFlotOptiqueFarner")
+	{
+	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	return true;
+	}
+if (s=="EstimTransformation")
+	{
+	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#estimaterigidtransform";
+	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=369&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	return true;
+	}
+if (s=="MajMouvement")
+	{
+	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#updatemotionhistory";
+	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=370&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	return true;
+	}
+
 return false;
 }
 
