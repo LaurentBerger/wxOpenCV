@@ -585,38 +585,43 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.Append(Menu_Popup_Zoom, _T("&Zoom"), CreateMenuZoom(NULL));
 	menu.AppendCheckItem(Menu_Rectangle, _T("Stat Rectangle"));
 	menu.AppendCheckItem(Menu_Coupe, _T("Section"));
+	bool menuParametre=false;
 	if (f->ImAcq()->PtContours())
 		{
 		menu.AppendCheckItem(Menu_Contour, _T("Draw Contour "));
 		if (f->TracerContour())
 			menu.Check(Menu_Contour, true);
-
+		menuParametre=true;
 		}
 	if (f->ImAcq()->HoughLigne())
 		{
 		menu.AppendCheckItem(MENU_LIGNEHOUGH, _T("Hough (line) "));
 		if (f->TracerLigneHough())
 			menu.Check(MENU_LIGNEHOUGH, true);
+		menuParametre=true;
 		}
 	if (f->ImAcq()->HoughLigneProba())
 		{
 		menu.AppendCheckItem(MENU_LIGNEPROBAHOUGH, _T("Hough (line proba.) "));
 		if (f->TracerLigneProbaHough())
 			menu.Check(MENU_LIGNEPROBAHOUGH, true);
+		menuParametre=true;
 		}
 	if (f->ImAcq()->HoughCercle())
 		{
 		menu.AppendCheckItem(MENU_CERCLEHOUGH, _T("Hough (circle) "));
 		if (f->TracerCercleHough())
 			menu.Check(MENU_CERCLEHOUGH, true);
+		menuParametre=true;
 		}
 	if (f->ImAcq()->BonCoin())
 		{
 		menu.AppendCheckItem(MENU_BONCOIN, _T("Good features "));
 		if (f->TracerBonCoin())
 			menu.Check(MENU_BONCOIN, true);
+		menuParametre=true;
 		}
-	if (osgApp->Fenetre(f->IdFenetreOp1pre()))
+	if (osgApp->Fenetre(f->IdFenetreOp1pre())|| 		menuParametre)
 		{
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
 		}
@@ -949,6 +954,23 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 		wxPoint p_1(boncoin[k][i].x,boncoin[k][i].y);
 		wxPoint p1(RepereImageEcran(p_1));
 		hdc.DrawCircle(p1,5);
+		}
+	}
+if (imAcq->CoinRef())
+	{
+	std::vector<cv::Point2f> *boncoin=imAcq->CoinRef();
+	for (int k=0;k<imAcq->channels()&& k<3;k++)
+		{
+		crayon[k].SetWidth(2);
+		hdc.SetPen(crayon[k]);
+		hdc.SetBrush(*wxTRANSPARENT_BRUSH);
+		for( int i = 0; i < boncoin[k].size(); i++ )
+			if (boncoin[k][i].x>=0 && boncoin[k][i].y>=0)
+				{ 
+				wxPoint p_1(boncoin[k][i].x,boncoin[k][i].y);
+				wxPoint p1(RepereImageEcran(p_1));
+				hdc.DrawRoundedRectangle(p1,wxSize(10,10),2);
+				}
 		}
 	}
 }

@@ -387,8 +387,16 @@ if (s=="PyrFlotOptique")
 	}
 if (s=="CalcFlotOptique")
 	{
-	nbImageRes=1;
+	nbImageRes=0;
 	nomOperation=s;
+	intParam["typeCriteria"]=DomaineParametreOp<int>(cv::TermCriteria::COUNT,cv::TermCriteria::COUNT,cv::TermCriteria::COUNT|cv::TermCriteria::EPS,1);
+	intParam["maxCountCriteria"]=DomaineParametreOp<int>(1,1,255,1);
+	doubleParam["epsilonCriteria"]=DomaineParametreOp<double>(0.0001,0.0000001,255.0,0.001);
+	intParam["maxLevel"]=DomaineParametreOp<int>(3,0,8,1);
+	sizeParam["winSize"]=DomaineParametreOp<cv::Size>(cv::Size(21,21),cv::Size(3,3),cv::Size(255,255),cv::Size(2,2));
+	intParam["flag"]=DomaineParametreOp<int>(cv::OPTFLOW_USE_INITIAL_FLOW,cv::OPTFLOW_USE_INITIAL_FLOW,cv::OPTFLOW_LK_GET_MIN_EIGENVALS,1);
+	doubleParam["minEigThreshold"]=DomaineParametreOp<double>(0.001,0.0000001,100.0,0.001);
+
 	}
 if (s=="CalcFlotOptiqueFarner")
 	{
@@ -707,7 +715,7 @@ if (s=="CalcFlotOptique")
 	{
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowpyrlk";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=365&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	opBinaireSelec = &ImageInfoCV::FlotOptiqueLucasKanadePyramide;
 	return true;
 	}
 if (s=="CalcFlotOptiqueFarner")

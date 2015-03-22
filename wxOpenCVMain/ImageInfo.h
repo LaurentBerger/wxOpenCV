@@ -120,11 +120,14 @@ std::vector<cv::Vec3f> *cercle;		/*<! http://docs.opencv.org/modules/imgproc/doc
 std::vector<cv::Vec4i> *ligneP;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlinesp */
 std::vector<cv::Vec2f> *ligne;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines */
 std::vector<cv::Point2f> *boncoin;	/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack */
+std::vector<cv::Point2f> *coinRef;	/*<! Les pixels de références de l'image pour calcul du flot optique */
+cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
 
 ParametreOperation *pOCVHoughLigne;
 ParametreOperation *pOCVHoughLigneProba;
 ParametreOperation *pOCVHoughCercle;
 ParametreOperation *pOCVBonCoin;
+ParametreOperation *pOCVLucasKanade;
 
 public : 
 //	********* Constructeurs et destructeur
@@ -269,6 +272,8 @@ ImageInfoCV 	*ChapeauBas(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *
 ImageInfoCV 	*GradMorph(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*Convolution(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
 ImageInfoCV		*PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*Laplacien(ImageInfoCV	*,ParametreOperation *pOCV);
 ImageInfoCV 	*ScharrX(ImageInfoCV	*im1,ParametreOperation *pOCV);
 ImageInfoCV 	*ScharrY(ImageInfoCV	*im1,ParametreOperation *pOCV);
@@ -407,10 +412,12 @@ std::vector<cv::Vec3f> *HoughCercle(){return cercle;};
 std::vector<cv::Vec4i> *HoughLigneProba(){return ligneP;};
 std::vector<cv::Vec2f> *HoughLigne(){return ligne;};
 std::vector<cv::Point2f> *BonCoin(){return boncoin;};
+std::vector<cv::Point2f> *CoinRef(){return coinRef;};
 ParametreOperation *ParamOCVHoughLigne(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughLigneProba(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVBonCoin(ParametreOperation *p=NULL);
+ParametreOperation *ParamOCVLucasKanade(ParametreOperation *p=NULL);
 void CloneStat(ImageInfoCV *im);
 
 // MODIFICATION d'une fonction OPENCV

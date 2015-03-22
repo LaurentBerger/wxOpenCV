@@ -933,3 +933,45 @@ else
 return im;
 }
 
+
+ImageInfoCV 	*ImageInfoCV::FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
+{
+if (channels()!=imSuiv->channels())
+	return NULL;
+if (boncoin==NULL )
+	return NULL;
+if (coinRef==NULL)
+	{
+	coinRef = new std::vector<cv::Point2f>[imPrec->channels()];
+	for (int i=0;i<imPrec->channels();i++)
+		{
+		coinRef[i].clear();
+		coinRef[i]=boncoin[i];
+		}
+	}
+cv::TermCriteria critere(pOCV->intParam["typeCriteria"].valeur,pOCV->intParam["maxCountCriteria"].valeur,pOCV->doubleParam["epsilonCriteria"].valeur);
+
+std::vector<uchar> status;
+std::vector<float> err;
+for (int i=0;i<imPrec->channels();i++)
+	{
+	calcOpticalFlowPyrLK(*imPrec,*imSuiv,coinRef[i],boncoin[i],status,err,pOCV->sizeParam["winSize"].valeur,
+		pOCV->intParam["maxLevel"].valeur,critere,pOCV->intParam["flag"].valeur,pOCV->doubleParam["minEigThreshold"].valeur);
+	for (int j=0;j<boncoin[i].size();j++)
+		{
+		if (!status[j])
+			{
+			boncoin[i][j].x=-1;
+			boncoin[i][j].y=-1;
+			}
+		}
+	}
+imSuiv->CloneStat(this);
+ParamOCVLucasKanade(pOCV);
+return this;
+}
+
+ImageInfoCV 	*ImageInfoCV::FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
+{
+return NULL;
+}

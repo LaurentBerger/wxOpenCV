@@ -546,7 +546,7 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		return false;
 		}
 	long indFen2=it->indOp2Fenetre;
-	while (it->opBinaireSelec && !app->Graphique(indFen2))
+	while (it->opBinaireSelec && !app->Graphique(indFen2) && it->nomOperation!="CalcFlotOptique")
 		{
 			wxTextEntryDialog  adr( NULL,_("Empty image. Give window id of image"),"0");   
 			adr.ShowModal();

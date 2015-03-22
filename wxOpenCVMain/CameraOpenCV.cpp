@@ -423,6 +423,8 @@ if (captureVideo->isOpened())
 						delete imTmp;
 					if (im)
 						{
+						if (!parent)
+							break;
 						wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
 						imAcq->CloneStat(im[0]);

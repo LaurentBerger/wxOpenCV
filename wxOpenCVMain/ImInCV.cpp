@@ -49,6 +49,7 @@ cercle=NULL;
 ligne=NULL;
 ligneP=NULL;
 boncoin=NULL;
+coinRef=NULL;
 minIm = NULL;			/*< Minimimum pour chaque plan de l'image */
 maxIm = NULL;			/*< Maximimum pour chaque plan de l'image */
 locMin = NULL;			/*< Position du miminmu pour chaque plan */
@@ -61,6 +62,7 @@ pOCVHoughLigne=NULL;
 pOCVHoughLigneProba=NULL;
 pOCVHoughCercle=NULL;
 pOCVBonCoin=NULL;
+pOCVLucasKanade=NULL;
 
 #ifdef _INFOTEXTE__
 nbChampGonfle=0;
@@ -178,10 +180,12 @@ delete []ligne;
 delete []cercle;
 delete []ligneP;
 delete []boncoin;
+delete []coinRef;
 delete pOCVHoughLigne;
 delete pOCVHoughLigneProba;
 delete pOCVHoughCercle;
 delete pOCVBonCoin;
+delete pOCVLucasKanade;
 
 
 }
@@ -316,6 +320,17 @@ if (p)
 	*pOCVBonCoin=*p;
 	}
 return pOCVBonCoin;
+}
+
+ParametreOperation *ImageInfoCV::ParamOCVLucasKanade(ParametreOperation *p)
+{
+if (p)
+	{
+	if (pOCVLucasKanade==NULL)
+		pOCVLucasKanade =  new ParametreOperation;
+	*pOCVLucasKanade=*p;
+	}
+return pOCVLucasKanade;
 }
 
 
