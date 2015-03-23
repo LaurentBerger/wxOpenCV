@@ -2409,6 +2409,7 @@ case MENU_OP3 :
 		osgApp->DefOperande3(imAcq,idFenetre);
 	break;
 case MENU_EXEC_OP:
+    int indEtape=max(origineImage.indEtape,imAcq->EtapeOp());
 	osgApp->CreerFenetreOperation();
 
 	break;

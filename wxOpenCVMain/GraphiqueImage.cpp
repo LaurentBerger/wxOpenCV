@@ -767,8 +767,8 @@ wxPoint FenetrePrincipale::RepereImageEcran(wxPoint &p)
 wxRect	recSrc(0,0,imAcq->cols,imAcq->rows);
 wxPoint pt(0,0);
 long	maxi;
-int		x=feuille->GetScrollPos(wxHORIZONTAL);
-int		y=feuille->GetScrollPos(wxVERTICAL);
+int		x=feuille->GetScrollPos(wxHORIZONTAL)*0;
+int		y=feuille->GetScrollPos(wxVERTICAL)*0;
 int		fZoomNume,fZoomDeno;
 
 CalculZoom(fZoomNume,fZoomDeno);

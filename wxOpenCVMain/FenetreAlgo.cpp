@@ -87,7 +87,7 @@ if (fenMere->ImAcq()->HoughCercle())
 	nbEtape++;
 if (fenMere->ImAcq()->BonCoin())
 	nbEtape++;
-if (fenMere->ImAcq()->CoinRef())
+if (fenMere->ImAcq()->ParamOCVLucasKanade())
 	nbEtape++;
 nbParamMax=2*(nbParamMax+2);
 f=fenMere;
@@ -133,7 +133,7 @@ if (fenMere->ImAcq()->BonCoin() && fenMere->ImAcq()->ParamOCVBonCoin())
 	classeur->InsertPage(0,w,nom,nbEtape==1);
 	nb--;
 	}
-if (fenMere->ImAcq()->CoinRef() && fenMere->ImAcq()->ParamOCVLucasKanade())
+if (fenMere->ImAcq()->ParamOCVLucasKanade())
 	{
 	listeOp[nb]=std::pair< ParametreOperation*,int>(fenMere->ImAcq()->ParamOCVLucasKanade(),fenMere->IdFenetre());
 	wxWindow *w=CreerOngletEtape(classeur,nb);
@@ -305,7 +305,7 @@ if (fenMere->ImAcq()->BonCoin())
 	(*t)[listeOp[nb].first->idOperation][nb]=p;
 	nb--;
 	}
-if (fenMere->ImAcq()->CoinRef())
+if (fenMere->ImAcq()->ParamOCVLucasKanade())
 	{
 	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
 	listeOp[nb].first->indEtape=nb;

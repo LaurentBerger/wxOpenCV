@@ -1027,7 +1027,6 @@ for (int i=0;i<imAcq->channels()&& i<3;i++)
 
 		wxPoint p1(RepereImageEcran(p_1));
 		wxPoint p2(RepereImageEcran(p_2));
-
 		hdc.DrawLine(p1,p2);
 		}
 	}

@@ -258,6 +258,31 @@ if (im->BonCoin())
 	for (int i=0;i<channels()&&i<im->channels();i++)
 		boncoin[i]=im->BonCoin()[i];
 	}
+if (im->CoinRef())
+	{
+	if (coinRef==NULL)
+		coinRef = new std::vector<cv::Point2f>[channels()];
+	for (int i=0;i<channels()&&i<im->channels();i++)
+		coinRef[i]=im->CoinRef()[i];
+	}
+}
+
+int ImageInfoCV::EtapeOp()
+{
+int m=-1;
+if (pOCVHoughLigne)
+	m=pOCVHoughLigne->indEtape;
+if (pOCVHoughLigneProba && m<pOCVHoughLigneProba->indEtape)
+	m=pOCVHoughLigneProba->indEtape;
+if (pOCVHoughCercle && m<pOCVHoughCercle->indEtape)
+	m=pOCVHoughCercle->indEtape;
+if (pOCVBonCoin && m<pOCVBonCoin->indEtape)
+	m=pOCVBonCoin->indEtape;
+if (pOCVLucasKanade && m<pOCVLucasKanade->indEtape)
+	m=pOCVLucasKanade->indEtape;
+return m;
+
+
 }
 
 

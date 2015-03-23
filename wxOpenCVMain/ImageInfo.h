@@ -418,6 +418,7 @@ ParametreOperation *ParamOCVHoughLigneProba(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVBonCoin(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVLucasKanade(ParametreOperation *p=NULL);
+int EtapeOp();  /*<! retourne l'indice de l'étape de l'opérateur le plus grand */
 void CloneStat(ImageInfoCV *im);
 
 // MODIFICATION d'une fonction OPENCV

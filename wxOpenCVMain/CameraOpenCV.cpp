@@ -367,6 +367,8 @@ if (captureVideo->isOpened())
 	while (!captureVideo->retrieve(frame2));
 	while (!captureVideo->retrieve(frame1));
 	static bool opActif=false;
+	ImageInfoCV *imIni=NULL;
+	ImageInfoCV *imPre=NULL;
 	for(;true;)
 		{
 		if (captureVideo->grab()) // get a new frame from camera
@@ -378,7 +380,8 @@ if (captureVideo->isOpened())
 				if (seqOp.size()!=0)
 					{
 					opActif =true;
-					ImageInfoCV *imIni= new ImageInfoCV(frame.rows,frame.cols,frame.flags);
+					if (imIni==NULL)
+						imIni=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
 					frame.copyTo(*imIni);
 					ImageInfoCV **im=NULL;
 					ImageInfoCV *imTmp=NULL;
@@ -407,9 +410,27 @@ if (captureVideo->isOpened())
 							}
 						else
 							pOCV.op1=imIni;
-						pOCV.indOp1Fenetre=-1;
+						if (pOCV.opBinaireSelec!=NULL)
+							{
+							if (imPre!=NULL)
+								{
+								pOCV.op1=imPre;
+								pOCV.op2=pOCV.op1;
+								im=pOCV.ExecuterOperation();
+								delete imPre;
+								imPre=im[0];
+								}
+							else
+								{
+								imPre=pOCV.op1;
+								}
+							}
+						else
+							{
+							pOCV.indOp1Fenetre=-1;
 
-						im=pOCV.ExecuterOperation();
+							im=pOCV.ExecuterOperation();
+							}
 						if (im)
 							if(im[0]!=pOCV.op1)
 								effaceImage=true;

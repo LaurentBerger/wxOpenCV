@@ -19,8 +19,8 @@ FIND_PATH(
 
 FIND_PATH(
   PLplot_DYNLIB
-  NAMES plplotwxwidgetsd.lib libplplotwxwidgets.so 
-  PATHS /usr/local/lib /usr/include  "${plplot}/../../include/plplot" ${plplot}/bin ${plplotdir} ${plplotdir} ${plplotdir}/lib/vc_x64_dll
+  NAMES plplotwxwidgets.lib libplplotwxwidgets.so 
+  PATHS /usr/local/lib /usr/include  "${plplot}/../../include/plplot" ${plplot}/bin ${plplotdir} ${plplotdir} ${plplotdir}/lib/vc_dll_debug ${plplotdir}/lib/vc_x64_dll ${plplotdir}/lib/vc_x64_dll
   PATH_SUFFIXES "${plplot}/../../lib/plplot5.10.0/driversd" 
 )
 FIND_PATH(
