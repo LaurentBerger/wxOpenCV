@@ -2409,9 +2409,11 @@ case MENU_OP3 :
 		osgApp->DefOperande3(imAcq,idFenetre);
 	break;
 case MENU_EXEC_OP:
+	{
     int indEtape=max(origineImage.indEtape,imAcq->EtapeOp());
+	osgApp->DefEtapeOperation(indEtape+1);
 	osgApp->CreerFenetreOperation();
-
+	}
 	break;
 case RESET_OP :
 	wxMessageDialog w(this, "Do you want to cancel operation?" , _T("Cancel"), wxYES_NO|wxCENTRE|wxSTAY_ON_TOP);

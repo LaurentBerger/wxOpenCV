@@ -380,77 +380,52 @@ if (captureVideo->isOpened())
 				if (seqOp.size()!=0)
 					{
 					opActif =true;
-					if (imIni==NULL)
-						imIni=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
+					ImageInfoCV *imIni= new ImageInfoCV(frame.rows,frame.cols,frame.flags);
 					frame.copyTo(*imIni);
-					ImageInfoCV **im=NULL;
+					ImageInfoCV ***im=new ImageInfoCV**[seqOp.size()];
 					ImageInfoCV *imTmp=NULL;
 					if (!parent)
 						break;
+					bool effaceImage[100];
+					int indOp=0;
 					{
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->paramCam);
-					bool effaceImage=true;
+
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
 						ParametreOperation pOCV=*it;
-						if (im)
+						if (indOp>0) // Si une opération a déjà été effectuée
 							{
-							if (effaceImage)
-								{
-								pOCV.op1=im[0];
-								if (imTmp)
-									delete imTmp;
-								imTmp=im[0];
-								}
-							else
-								{
-								imTmp=NULL;
-								pOCV.op1=im[0];
-								}
+							pOCV.op1=im[indOp-1][0];
 							}
 						else
 							pOCV.op1=imIni;
-						if (pOCV.opBinaireSelec!=NULL)
-							{
-							if (imPre!=NULL)
-								{
-								pOCV.op1=imPre;
-								pOCV.op2=pOCV.op1;
-								im=pOCV.ExecuterOperation();
-								delete imPre;
-								imPre=im[0];
-								}
-							else
-								{
-								imPre=pOCV.op1;
-								}
-							}
-						else
-							{
-							pOCV.indOp1Fenetre=-1;
+						pOCV.indOp1Fenetre=-1;
 
-							im=pOCV.ExecuterOperation();
-							}
-						if (im)
-							if(im[0]!=pOCV.op1)
-								effaceImage=true;
+						im[indOp]=pOCV.ExecuterOperation();
+						if (im[indOp])
+							if(im[indOp][0]!=pOCV.op1)
+								effaceImage[indOp]=true;
 							else
-								effaceImage=false;
-							
+								effaceImage[indOp]=false;
+						else
+							effaceImage[indOp]=false;
+						indOp++;							
 						}
 					}
 					delete imIni;
-					if (im[0]!=imTmp)
-						delete imTmp;
-					if (im)
+					if (indOp>0 && im[indOp-1])
 						{
 						if (!parent)
 							break;
 						wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-						imAcq->CloneStat(im[0]);
-						im[0]->copyTo(frame);
-						delete im[0];
+						imAcq->CloneStat(im[indOp-1][0]);
+						im[indOp-1][0]->copyTo(frame);
+						for (int i=0;i<indOp;i++)
+							if (effaceImage[i])
+								delete im[i][0];
+						
 						}
 					}
 				else if (opActif)

@@ -192,6 +192,8 @@ delete pOCVLucasKanade;
 
 void ImageInfoCV::CloneStat(ImageInfoCV *im)
 {
+if(!im)
+	return;
 if (im->PtContours())
 	{
 	if (contours==NULL)

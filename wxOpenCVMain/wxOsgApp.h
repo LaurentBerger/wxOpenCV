@@ -114,6 +114,7 @@ void RetirerListe(FenetrePrincipale *);
 
 // Méthodes liées à des opérations sur les images
 void DefOperateurImage(wxString &);
+void DefEtapeOperation(int x){pOCV.indEtape=x;};
 void DefOperande1(ImageInfoCV* im,int i=-1){pOCV.op1=im;pOCV.indOp1Fenetre=i;};
 void DefOperande2(ImageInfoCV* im,int i=-1){pOCV.op2=im;pOCV.indOp2Fenetre=i;};
 void DefOperande3(ImageInfoCV* im,int i=-1){pOCV.op3=im;pOCV.indOp3Fenetre=i;};

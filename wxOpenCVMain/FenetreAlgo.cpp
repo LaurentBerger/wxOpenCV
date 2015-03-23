@@ -259,7 +259,8 @@ std::map <int,std::vector <ParametreOperation > >  *t=((wxOsgApp *)osgApp)->TabS
 if (fenMere->ImAcq()->HoughLigne())
 	{
 	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
-	listeOp[nb].first->indEtape=nb;
+	if (listeOp[nb].first->indEtape==-1)
+		listeOp[nb].first->indEtape=nb;
 	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
 	listeOp[nb].first->nomSequence=w->GetValue();
 	ParametreOperation p;
@@ -272,7 +273,8 @@ if (fenMere->ImAcq()->HoughLigne())
 if (fenMere->ImAcq()->HoughLigneProba())
 	{
 	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
-	listeOp[nb].first->indEtape=nb;
+	if (listeOp[nb].first->indEtape==-1)
+		listeOp[nb].first->indEtape=nb;
 	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
 	listeOp[nb].first->nomSequence=w->GetValue();
 	ParametreOperation p;
@@ -284,7 +286,8 @@ if (fenMere->ImAcq()->HoughLigneProba())
 if (fenMere->ImAcq()->HoughCercle())
 	{
 	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
-	listeOp[nb].first->indEtape=nb;
+	if (listeOp[nb].first->indEtape==-1)
+		listeOp[nb].first->indEtape=nb;
 	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
 	listeOp[nb].first->nomSequence=w->GetValue();
 	ParametreOperation p;
@@ -296,7 +299,8 @@ if (fenMere->ImAcq()->HoughCercle())
 if (fenMere->ImAcq()->BonCoin())
 	{
 	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
-	listeOp[nb].first->indEtape=nb;
+	if (listeOp[nb].first->indEtape==-1)
+		listeOp[nb].first->indEtape=nb;
 	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
 	listeOp[nb].first->nomSequence=w->GetValue();
 	ParametreOperation p;
@@ -308,7 +312,8 @@ if (fenMere->ImAcq()->BonCoin())
 if (fenMere->ImAcq()->ParamOCVLucasKanade())
 	{
 	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
-	listeOp[nb].first->indEtape=nb;
+	if (listeOp[nb].first->indEtape==-1)
+		listeOp[nb].first->indEtape=nb;
 	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
 	listeOp[nb].first->nomSequence=w->GetValue();
 	ParametreOperation p;
@@ -325,7 +330,8 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
 		{
 		listeOp[nb]=std::pair< ParametreOperation*,int>(f->OrigineImage(),f->IdFenetre()) ;
 		listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
-		listeOp[nb].first->indEtape=nb;
+		if (listeOp[nb].first->indEtape==-1)
+			listeOp[nb].first->indEtape=nb;
 		wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
 		listeOp[nb].first->nomSequence=w->GetValue();
 		ParametreOperation p;
