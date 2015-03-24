@@ -383,7 +383,6 @@ if (captureVideo->isOpened())
 					opActif =true;
 					frame.copyTo(*imIni);
 					ImageInfoCV ***im=new ImageInfoCV**[seqOp.size()];
-					ImageInfoCV *imTmp=NULL;
 					if (!parent)
 						break;
 					int indOp=0;
@@ -398,25 +397,24 @@ if (captureVideo->isOpened())
 						if (pOCV.opUnaireSelec) // L'opératuer 1 est initialisé
                             {
                             if (indOp>0) // Si une opération a déjà été effectuée
-							    {
 							    pOCV.op1=im[indOp-1][0];
-							    }
 						    else
-							    pOCV.op1=imIni;
+							    {
+                                pOCV.op1=imIni;
+                                effaceImage[imIni]=false;
+                                }
                             }
                         else if (pOCV.opBinaireSelec)
                             {
                             if (indOp>0) // Si une opération a déjà été effectuée
-							    {
 							    pOCV.op2=im[indOp-1][0];
-							    }
 						    else
 							    pOCV.op2=imIni;
                             pOCV.op1=imPre;
                             }
                         im[indOp]=pOCV.ExecuterOperation();
 						if (im[indOp])
-							if(im[indOp][0]!=pOCV.op1)
+							if(im[indOp][0]!=pOCV.op1 )
 								{
                                 if (effaceImage.find(im[indOp][0])==effaceImage.end())
                                     effaceImage[im[indOp][0]]=true;
@@ -429,9 +427,10 @@ if (captureVideo->isOpened())
                             {
                             if (imPre)
                                 {
+                                effaceImage[imPre]=true;
                                 swap(imPre,pOCV.op2);
                                 if (im[indOp])
-                                    effaceImage[im[indOp][0]]=false;
+                                    effaceImage[im[indOp][0]]=true;
                                 }
                             else
                                 {
@@ -448,18 +447,34 @@ if (captureVideo->isOpened())
 							break;
 						wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-						imAcq->CloneStat(im[indOp-1][0]);
-						im[indOp-1][0]->copyTo(frame);
+						if (imPre)
+                            {
+                            imAcq->CloneStat(imPre);
+                            imPre->copyTo(frame);
+                            if (frame.channels()==3 || imPre->channels()==3)
+                                cout<<"Ce n'est pas normal!";
+                             }
+                        else
+                            {
+                            imAcq->CloneStat(im[indOp-1][0]);
+						    im[indOp-1][0]->copyTo(frame);
+                            if (frame.channels()==3 || im[indOp-1][0]->channels()==3)
+                                cout<<"Ce n'est pas normal!";
+                            }
                         std::map<ImageInfoCV*,bool>::iterator it;
 						for (it=effaceImage.begin();it!=effaceImage.end();it++)
 							if (it->second)
 								{
                                 delete it->first;
                                 }
-						
+						effaceImage.clear();
 						}
+                    else
+                        cout<<"Ce n'est pas normal!";
                     delete []im;
 					}
+                else
+                    cout<<"erreur";
 				if (!modeMoyenne)	// Pas de filtrage Butterworth
 					{
 					if (!parent)
@@ -467,6 +482,8 @@ if (captureVideo->isOpened())
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
 					frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
+                            if (frame.channels()==3 )
+                                cout<<"Ce n'est pas normal!";
 					}
 				else
 					{
@@ -527,6 +544,8 @@ if (captureVideo->isOpened())
 			}
 		}
 	delete captureVideo;
+    delete imIni;
+    delete imPre;
 	}
 captureVideo=NULL;
 
