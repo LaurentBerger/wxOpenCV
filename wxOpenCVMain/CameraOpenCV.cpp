@@ -367,8 +367,9 @@ if (captureVideo->isOpened())
 	while (!captureVideo->retrieve(frame2));
 	while (!captureVideo->retrieve(frame1));
 	static bool opActif=false;
-	ImageInfoCV *imIni=NULL;
+	ImageInfoCV *imIni=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
 	ImageInfoCV *imPre=NULL;
+    std::map<ImageInfoCV*,bool> effaceImage;
 	for(;true;)
 		{
 		if (captureVideo->grab()) // get a new frame from camera
@@ -380,13 +381,11 @@ if (captureVideo->isOpened())
 				if (seqOp.size()!=0)
 					{
 					opActif =true;
-					ImageInfoCV *imIni= new ImageInfoCV(frame.rows,frame.cols,frame.flags);
 					frame.copyTo(*imIni);
 					ImageInfoCV ***im=new ImageInfoCV**[seqOp.size()];
 					ImageInfoCV *imTmp=NULL;
 					if (!parent)
 						break;
-					bool effaceImage[100];
 					int indOp=0;
 					{
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->paramCam);
@@ -394,26 +393,55 @@ if (captureVideo->isOpened())
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
 						ParametreOperation pOCV=*it;
-						if (indOp>0) // Si une opération a déjà été effectuée
-							{
-							pOCV.op1=im[indOp-1][0];
-							}
-						else
-							pOCV.op1=imIni;
 						pOCV.indOp1Fenetre=-1;
-
-						im[indOp]=pOCV.ExecuterOperation();
+						pOCV.indOp2Fenetre=-1;
+						if (pOCV.opUnaireSelec) // L'opératuer 1 est initialisé
+                            {
+                            if (indOp>0) // Si une opération a déjà été effectuée
+							    {
+							    pOCV.op1=im[indOp-1][0];
+							    }
+						    else
+							    pOCV.op1=imIni;
+                            }
+                        else if (pOCV.opBinaireSelec)
+                            {
+                            if (indOp>0) // Si une opération a déjà été effectuée
+							    {
+							    pOCV.op2=im[indOp-1][0];
+							    }
+						    else
+							    pOCV.op2=imIni;
+                            pOCV.op1=imPre;
+                            }
+                        im[indOp]=pOCV.ExecuterOperation();
 						if (im[indOp])
 							if(im[indOp][0]!=pOCV.op1)
-								effaceImage[indOp]=true;
+								{
+                                if (effaceImage.find(im[indOp][0])==effaceImage.end())
+                                    effaceImage[im[indOp][0]]=true;
+                                }
 							else
-								effaceImage[indOp]=false;
-						else
-							effaceImage[indOp]=false;
-						indOp++;							
+								effaceImage[im[indOp][0]]=false;
+						else if (im[indOp])
+							effaceImage[im[indOp][0]]=false;
+						if (pOCV.opBinaireSelec && pOCV.nomOperation=="CalcFlotOptique")
+                            {
+                            if (imPre)
+                                {
+                                swap(imPre,pOCV.op2);
+                                if (im[indOp])
+                                    effaceImage[im[indOp][0]]=false;
+                                }
+                            else
+                                {
+                                imPre=pOCV.op2;
+                                effaceImage[imPre]=false;
+                                }
+                            }
+                        indOp++;							
 						}
 					}
-					delete imIni;
 					if (indOp>0 && im[indOp-1])
 						{
 						if (!parent)
@@ -422,17 +450,15 @@ if (captureVideo->isOpened())
 
 						imAcq->CloneStat(im[indOp-1][0]);
 						im[indOp-1][0]->copyTo(frame);
-						for (int i=0;i<indOp;i++)
-							if (effaceImage[i])
-								delete im[i][0];
+                        std::map<ImageInfoCV*,bool>::iterator it;
+						for (it=effaceImage.begin();it!=effaceImage.end();it++)
+							if (it->second)
+								{
+                                delete it->first;
+                                }
 						
 						}
-					}
-				else if (opActif)
-					{
-					// ce n'est pas normal;
-					int w=0;
-					w= 2*w;
+                    delete []im;
 					}
 				if (!modeMoyenne)	// Pas de filtrage Butterworth
 					{

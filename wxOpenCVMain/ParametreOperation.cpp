@@ -69,7 +69,7 @@ nomOperation="";
 nomSequence="";
 nbImageRes=0;
 nbOperande=0;
-indEtape=-1;
+indEtape=0;
 idOperation=-1;
 indRes=-1;
 refPDF="";
@@ -783,10 +783,12 @@ if (opBinaireSelec)
 	
 	try
 		{
-		if (op2==NULL)
+		if (op1 && op2==NULL)
 			im =(op1->*opBinaireSelec)(op1,NULL,this);
-		else
+		else if (op1)
 			im =(op1->*opBinaireSelec)(op1,op2,this);
+        else 
+            im=NULL;
 		}
 	catch(cv::Exception& e)
 		{

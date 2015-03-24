@@ -936,6 +936,8 @@ return im;
 
 ImageInfoCV 	*ImageInfoCV::FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
 {
+if (imPrec==NULL || imSuiv==NULL)
+	return NULL;
 if (channels()!=imSuiv->channels())
 	return NULL;
 if (boncoin==NULL )
