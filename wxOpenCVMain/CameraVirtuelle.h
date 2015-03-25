@@ -52,6 +52,7 @@ typedef void (wxEvtHandler::*EvtPointSuivisFonction)(EvtPointSuivis&);
 class CameraVirtuelle : public wxThread{
 public:
 std::vector <ParametreOperation> seqOp;
+bool		seqActualisee;/*<!Vrai lorsque les paramètres de la séquence sont modifiés*/
 
 protected :
 virtual wxThread::ExitCode Entry(){return 0;};

@@ -16,10 +16,9 @@ protected :
 virtual wxThread::ExitCode Entry();
 static char	indIdVideo[NBCAMERA];
 int			indId; /*<! Indice du périphérique vidéo;*/
-bool		fluxOuvert;/*<!Vrai lorsque la ideo est un flux */
+bool		fluxOuvert;/*<!Vrai lorsque la video est un flux */
 long		expoMin,expoMax;
 long		gainMin,gainMax;
-
 
 public : 
 ImageInfoCV			*imAcq;

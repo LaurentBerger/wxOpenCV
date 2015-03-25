@@ -389,6 +389,12 @@ if (captureVideo->isOpened())
 					{
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->paramCam);
 
+					if (seqActualisee)
+						{
+						seqActualisee=false;
+						delete imPre;
+						imPre=false;
+						}
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
 						ParametreOperation pOCV=*it;
@@ -728,6 +734,7 @@ if (!cam)
 	return;
 
 seqOp= *s;
+cam->seqActualisee=true;
 wxCriticalSectionLocker enter(paramCam);
 
 cam->seqOp=*s;
