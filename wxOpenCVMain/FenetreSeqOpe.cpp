@@ -553,7 +553,7 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 			adr.GetValue().ToCLong(&indFen2);
 			it->indOp2Fenetre = indFen2 ;
 		}
-	if (it->opBinaireSelec&& it->nomOperation!="CalcFlotOptique")
+	if (it->opBinaireSelec && it->nomOperation!="CalcFlotOptique")
 		it->op2=app->Graphique(indFen2)->ImAcq();
 	}
 return true;

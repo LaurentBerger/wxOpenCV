@@ -3482,9 +3482,9 @@ for (itd=origineImage.doubleParam.begin();itd!=origineImage.doubleParam.end();it
 	chemin.Printf("/operateur/%d/%d/paramDouble/%d",origineImage.idOperation,origineImage.indEtape,nb);
 	SauverFichierConfig(chemin,"nom",itd->first);
 	SauverFichierConfig(chemin,"valeur",itd->second.valeur);
-	SauverFichierConfig(chemin,"minVal",(long)itd->second.mini);
-	SauverFichierConfig(chemin,"maxVal",(long)itd->second.maxi);
-	SauverFichierConfig(chemin,"pasVal",(long)itd->second.pas);
+	SauverFichierConfig(chemin,"minVal",itd->second.mini);
+	SauverFichierConfig(chemin,"maxVal",itd->second.maxi);
+	SauverFichierConfig(chemin,"pasVal",itd->second.pas);
 	nb++;
 	}
 nb=0;
