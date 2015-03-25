@@ -950,6 +950,7 @@ std::vector<uchar> status;
 std::vector<float> err;
 for (int i=0;i<imPrec->channels();i++)
 	{
+	imSuiv->BonCoin()[i].clear();
 	calcOpticalFlowPyrLK(*imPrec,*imSuiv,boncoin[i],imSuiv->BonCoin()[i],status,err,pOCV->sizeParam["winSize"].valeur,
 		pOCV->intParam["maxLevel"].valeur,critere,pOCV->intParam["flag"].valeur,pOCV->doubleParam["minEigThreshold"].valeur);
 	int k,l;

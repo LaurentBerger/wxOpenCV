@@ -393,11 +393,11 @@ if (s=="CalcFlotOptique")
 	nbImageRes=0;
 	nomOperation=s;
 	intParam["typeCriteria"]=DomaineParametreOp<int>(cv::TermCriteria::COUNT,cv::TermCriteria::COUNT,cv::TermCriteria::COUNT|cv::TermCriteria::EPS,1);
-	intParam["maxCountCriteria"]=DomaineParametreOp<int>(1,1,255,1);
+	intParam["maxCountCriteria"]=DomaineParametreOp<int>(20,1,255,1);
 	doubleParam["epsilonCriteria"]=DomaineParametreOp<double>(0.0001,0.0000001,255.0,0.001);
 	intParam["maxLevel"]=DomaineParametreOp<int>(3,0,8,1);
 	sizeParam["winSize"]=DomaineParametreOp<cv::Size>(cv::Size(21,21),cv::Size(3,3),cv::Size(255,255),cv::Size(2,2));
-	intParam["flag"]=DomaineParametreOp<int>(cv::OPTFLOW_USE_INITIAL_FLOW,cv::OPTFLOW_USE_INITIAL_FLOW,cv::OPTFLOW_LK_GET_MIN_EIGENVALS,1);
+	intParam["flag"]=DomaineParametreOp<int>(0,cv::OPTFLOW_USE_INITIAL_FLOW,cv::OPTFLOW_LK_GET_MIN_EIGENVALS,1);
 	doubleParam["minEigThreshold"]=DomaineParametreOp<double>(0.001,0.0000001,100.0,0.001);
 
 	}

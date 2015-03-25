@@ -404,14 +404,17 @@ if (captureVideo->isOpened())
                                 effaceImage[imIni]=false;
                                 }
                             }
-                        else if (pOCV.opBinaireSelec)
+                        else if (pOCV.opBinaireSelec )
                             {
-                            if (indOp>0) // Si une opération a déjà été effectuée
-							    pOCV.op2=im[indOp-1][0];
+                            if (indOp>0 ) // Si une opération a déjà été effectuée
+							    if (im[indOp-1]==NULL)
+									pOCV.op2=NULL;
+								else
+									pOCV.op2=im[indOp-1][0];
 						    else
 							    pOCV.op2=imIni;
                             pOCV.op1=imPre;
-                            }
+                           }
                         im[indOp]=pOCV.ExecuterOperation();
 						if (im[indOp])
 							if(im[indOp][0]!=pOCV.op1 )
@@ -436,7 +439,7 @@ if (captureVideo->isOpened())
                                 {
                                 imPre=pOCV.op2;
                                 effaceImage[imPre]=false;
-                                }
+                                }				
                             }
                         indOp++;							
 						}
