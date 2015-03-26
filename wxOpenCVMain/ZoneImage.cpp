@@ -962,14 +962,14 @@ if (imAcq->CoinRef())
 	for (int k=0;k<imAcq->channels()&& k<3;k++)
 		{
 		crayon[k].SetWidth(2);
-		hdc.SetPen(crayon[k]);
+		hdc.SetPen(crayon[(k+1)%3]);
 		hdc.SetBrush(*wxTRANSPARENT_BRUSH);
 		for( int i = 0; i < boncoin[k].size(); i++ )
 			if (boncoin[k][i].x>=0 && boncoin[k][i].y>=0)
 				{ 
 				wxPoint p_1(boncoin[k][i].x,boncoin[k][i].y);
 				wxPoint p1(RepereImageEcran(p_1));
-				hdc.DrawRoundedRectangle(p1,wxSize(10,10),2);
+				hdc.DrawRoundedRectangle(p1-wxSize(5,5),wxSize(10,10),2);
 				}
 		}
 	}
