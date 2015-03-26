@@ -944,6 +944,11 @@ if (boncoin==NULL )
 	return NULL;
 if (imSuiv->BonCoin()==NULL)
 	return NULL;
+if (imSuiv->CoinRef(true)==NULL)
+	{
+	return NULL;
+	}
+	
 cv::TermCriteria critere(pOCV->intParam["typeCriteria"].valeur,pOCV->intParam["maxCountCriteria"].valeur,pOCV->doubleParam["epsilonCriteria"].valeur);
 
 std::vector<uchar> status;
@@ -953,14 +958,17 @@ for (int i=0;i<imPrec->channels();i++)
 	calcOpticalFlowPyrLK(*imPrec,*imSuiv,boncoin[i],imSuiv->BonCoin()[i],status,err,pOCV->sizeParam["winSize"].valeur,
 		pOCV->intParam["maxLevel"].valeur,critere,pOCV->intParam["flag"].valeur,pOCV->doubleParam["minEigThreshold"].valeur);
 	int k,l;
+	imSuiv->CoinRef()[i].resize(imSuiv->BonCoin()[i].size());
 	for (k=l=0;k<imSuiv->BonCoin()[i].size();k++)
 		{
 		if (status[k])
 			{
+			imSuiv->CoinRef()[i][l]=boncoin[i][k];
 			imSuiv->BonCoin()[i][l++]=imSuiv->BonCoin()[i][k];
 			}
 		}
 	imSuiv->BonCoin()[i].resize(l);
+	imSuiv->CoinRef()[i].resize(l);
 	}
 //imSuiv->CloneStat(this);
 ParamOCVLucasKanade(pOCV);
