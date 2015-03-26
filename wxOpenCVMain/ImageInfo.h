@@ -404,6 +404,7 @@ char  	LitConverCplxEnt(void);
 
 cv::Mat	**StatComposante(){return statComposante;};
 cv::Mat	**CentreGComposante(){return centreGComposante;};
+cv::Mat	*FlotOptique(bool init=false){if (init && flotOptique==NULL) flotOptique= new cv::Mat[channels()]; return flotOptique;};
 std::vector<cv::Moments> *MomentComposante(){return moment;};	 
 std::vector<std::vector<cv::Point> > *PtContours(){return contours;};
 std::vector<cv::Vec4i> *ArboContour(){return arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */

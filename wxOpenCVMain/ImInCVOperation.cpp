@@ -977,5 +977,27 @@ return this;
 
 ImageInfoCV 	*ImageInfoCV::FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
 {
+if (imPrec==NULL || imSuiv==NULL)
+	return NULL;
+if (imPrec->channels()!=imSuiv->channels())
+	return NULL;
+if (imSuiv->FlotOptique(true)==NULL)
+	return NULL;
+if (imPrec->channels()==1)
+	{
+	calcOpticalFlowFarneback(*imPrec, *imSuiv, imSuiv->FlotOptique()[0], 0.5, 3, 15, 3, 5, 1.2, 0);
+	}
+else
+	{
+	std::vector<Mat> d1,d2;
+	cv::split( *imPrec, d1 );
+	cv::split( *imSuiv, d2 );
+	for (int i=0;i<imPrec->channels();i++)
+		{
+		calcOpticalFlowFarneback(d1[i], d2[i], imSuiv->FlotOptique()[i], 0.5, 3, 15, 3, 5, 1.2, 0);
+		}
+	}
+
+
 return NULL;
 }

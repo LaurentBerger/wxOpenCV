@@ -84,6 +84,7 @@ void ZoneImage::OnPaint(wxPaintEvent &evt)
 	f->TracerLigneProbaHough(dc);
 	f->TracerCercleHough(dc);
 	f->TracerBonCoin(dc);
+	f->TracerFlotOptique(dc);
 /*        dc.SetPen( *wxRED_PEN );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
     dc.DrawRectangle( 0, 0, 200, 200 );*/
@@ -621,6 +622,13 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 			menu.Check(MENU_BONCOIN, true);
 		menuParametre=true;
 		}
+	if (f->ImAcq()->FlotOptique())
+		{
+		menu.AppendCheckItem(MENU_FLOTOPTIQUE, _T("Optical Flow "));
+		if (f->TracerFlotOptique())
+			menu.Check(MENU_FLOTOPTIQUE, true);
+		menuParametre=true;
+		}
 	if (osgApp->Fenetre(f->IdFenetreOp1pre())|| 		menuParametre)
 		{
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
@@ -875,6 +883,19 @@ else
 	feuille->Refresh(true);
 }
 
+void FenetrePrincipale::TracerFlotOptique(wxCommandEvent& event)
+{
+tracerFlotOptique=!tracerFlotOptique;
+if( tracerFlotOptique)
+	{
+	wxClientDC hdc(feuille);
+	feuille->DoPrepareDC(hdc);
+	TracerFlotOptique(hdc);
+	}
+else
+	feuille->Refresh(true);
+}
+
 void FenetrePrincipale::TracerLigneHough(wxDC &hdc)
 {
 if (!tracerLigneHough || !imAcq)
@@ -1032,4 +1053,39 @@ for (int i=0;i<imAcq->channels()&& i<3;i++)
 	}
 
 
+}
+
+
+void FenetrePrincipale::TracerFlotOptique(wxDC &hdc)
+{
+ if (!tracerFlotOptique || !imAcq)
+	return;
+if (!imAcq->FlotOptique())
+	{
+	tracerFlotOptique=false;
+	return;
+	}
+int		fZoomNume,fZoomDeno;
+
+CalculZoom(fZoomNume,fZoomDeno);
+wxPen crayon[3]={*wxBLACK_PEN,*wxBLACK_PEN,*wxBLACK_PEN};
+for (int i=0;i<imAcq->channels();i++)
+	{
+	int nbLigne=imAcq->FlotOptique()[i].rows;
+	int nbColonne=imAcq->FlotOptique()[i].cols;
+	int step=(16*fZoomDeno)/(fZoomNume);
+	if (step==0)
+	step=1;
+	hdc.SetPen(crayon[i]);
+	for(int y = 0; y <nbLigne; y += step)
+		for(int x = 0; x < nbColonne; x += step)
+		{
+			const cv::Point2f& fxy = imAcq->FlotOptique()[i].at<cv::Point2f>(y, x);
+			wxPoint p1(RepereImageEcran(wxPoint(x,y)));
+			wxPoint p2(RepereImageEcran(wxPoint(x+fxy.x, y+fxy.y)));
+
+			hdc.DrawLine(p1,p2);
+			hdc.DrawCircle(p1, 2);
+		}
+	}
 }

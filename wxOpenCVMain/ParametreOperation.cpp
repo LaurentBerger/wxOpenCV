@@ -403,8 +403,16 @@ if (s=="CalcFlotOptique")
 	}
 if (s=="CalcFlotOptiqueFarner")
 	{
-	nbImageRes=1;
+	nbImageRes=0;
 	nomOperation=s;
+	doubleParam["pyr_scale"]=DomaineParametreOp<double>(0.5,0.1,0.80,0.1);
+	intParam["levels"]=DomaineParametreOp<int>(3,1,8,1);
+	sizeParam["winSize"]=DomaineParametreOp<cv::Size>(cv::Size(15,15),cv::Size(3,3),cv::Size(255,255),cv::Size(2,2));
+	intParam["iterations"]=DomaineParametreOp<int>(3,1,20,1);
+	intParam["poly_n"]=DomaineParametreOp<int>(5,1,20,1);
+	doubleParam["poly_sigma"]=DomaineParametreOp<double>(1.2,0.0000001,100.0,0.001);
+	intParam["flag"]=DomaineParametreOp<int>(0,0,cv::OPTFLOW_LK_GET_MIN_EIGENVALS,4);
+
 	}
 if (s=="EstimTransformation")
 	{
@@ -725,7 +733,7 @@ if (s=="CalcFlotOptiqueFarner")
 	{
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	opBinaireSelec = &ImageInfoCV::FlotOptiqueFarnerback;
 	return true;
 	}
 if (s=="EstimTransformation")

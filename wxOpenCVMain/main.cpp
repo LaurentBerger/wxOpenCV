@@ -210,6 +210,8 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
 	EVT_MENU(MENU_LIGNEPROBAHOUGH,  FenetrePrincipale::TracerLigneProbaHough)
 	EVT_MENU(MENU_CERCLEHOUGH,  FenetrePrincipale::TracerCercleHough)
 	EVT_MENU(MENU_BONCOIN,  FenetrePrincipale::TracerBonCoin)
+	EVT_MENU(MENU_FLOTOPTIQUE,  FenetrePrincipale::TracerFlotOptique)
+	
 	EVT_MENU(MENU_OP1,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP2,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP3,  FenetrePrincipale::PrepOperation)
@@ -2336,53 +2338,8 @@ void FenetrePrincipale::OnMenuContext(wxContextMenuEvent& event)
 void FenetrePrincipale::ShowContextMenu(const wxPoint& pos)
 {
 
-return;wxMenu menu;
+return;
 
-if (osgApp->ModeSouris()==SOURIS_STD)
-	{
-	menu.Append(Menu_Help_About, _T("&About"));
-	menu.Append(Menu_Popup_Palette, _T("&Palette"), CreateMenuPalette(NULL));
-	menu.Append(Menu_Popup_Zoom, _T("&Zoom"), CreateMenuZoom(NULL));
-	menu.AppendCheckItem(Menu_Rectangle, _T("Stat Rectangle"));
-	menu.AppendCheckItem(Menu_Coupe, _T("Section"));
-	menu.AppendCheckItem(Menu_FilMax, _T("Filtrage Max"));
-	if (osgApp->Fenetre(origineImage.indOp1Fenetre))
-		menu.AppendCheckItem(Menu_ParAlg, _T("Parametrage Algo."));
-	menu.AppendSeparator();
-	menu.Append(ENREGISTRER_FICHIER, _T("Save"));
-	menu.Append(ENREGISTRERSOUS_FICHIER, _T("Save As"));
-	menu.Append(CREER_RAPPORT, _T("Create a report"));
-	menu.Append(QUITTER_, _T("Close"));
-	if (feuille->ModeRectangle())
-		menu.Check(Menu_Rectangle, true);
-	if (feuille->ModeCoupe())
-		menu.Check(Menu_Coupe, true);
-	if (modeFiltre)
-		menu.Check(Menu_FilMax, true);
-	}
-else
-	{
-	menu.AppendCheckItem(MENU_OP1, "Image as Op1");
-	menu.AppendCheckItem(MENU_OP2, "Image as Op2");
-	menu.AppendSeparator();
-	menu.AppendCheckItem(MENU_EXEC_OP, "Execute "+osgApp->NomOperation());
-	menu.Append(RESET_OP,  "Operation canceled");
-	if (osgApp->Op1()==imAcq)
-		menu.Check(MENU_OP1, true);
-	if (osgApp->Op2()==imAcq)
-		menu.Check(MENU_OP2, true);
-
-	}
-
-
-PopupMenu(&menu, pos.x, pos.y);
-
-    // test for destroying items in popup menus
-#if 0 // doesn't work in wxGTK!
-    menu.Destroy(Menu_Popup_Submenu);
-
-    PopupMenu( &menu, event.GetX(), event.GetY() );
-#endif // 0
 }
 
 void FenetrePrincipale::PrepOperation(wxCommandEvent& event)

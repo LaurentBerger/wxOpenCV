@@ -354,6 +354,7 @@ bool				tracerLigneHough;	/*!< 1 tracer des lignes détectées par hough */
 bool				tracerLigneProbaHough;	/*!< 1 tracer des cercle segments par hough */
 bool				tracerCercleHough;	/*!< 1 tracer des cercle détectés par hough */
 bool				tracerBonCoin;		/*!< 1 Tracer des coins fort de l'image */
+bool				tracerFlotOptique;	/*!< 1 tracer du flot optique de l'image */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
 char				modeFiltre;			/*!< 0 image standard, image filtrée avec passe bas le + fort */
 char				typeAcqImage;		/*!< 0 Standard, 1 Acquisition image noire, 2 Image des taches, 3 Image fonction fond */
@@ -542,6 +543,7 @@ bool TracerLigneHough(){return	tracerLigneHough;};	/*!< 1 tracer des lignes dét
 bool TracerLigneProbaHough(){return	tracerLigneProbaHough;};	/*!< 1 tracer des cercle segments par hough */
 bool TracerCercleHough(){return	tracerCercleHough;};	/*!< 1 tracer des cercle détectés par hough */
 bool TracerBonCoin(){return	tracerBonCoin;};		/*!< 1 Tracer des coins fort de l'image */
+bool TracerFlotOptique(){return	tracerFlotOptique;};		/*!< 1 Tracer des coins fort de l'image */
 
 void CreerRapport(wxCommandEvent& event);
     /*!
@@ -584,6 +586,11 @@ void TracerBonCoin(wxCommandEvent& event);
      *  \brief TracerBonCoin
      *  tracer des coins forts d'une image
      */
+void TracerFlotOptique(wxCommandEvent& event);
+    /*!
+     *  \brief TracerBonCoin
+     *  tracer du flot optique de l'image
+     */
 void TracerContour(wxDC &hdc);
     /*!
      *  \brief ModeCamera
@@ -608,6 +615,11 @@ void TracerBonCoin(wxDC &hdc);
     /*!
      *  \brief TracerCercleHough
      *  tracer des cercles détectés par la transformée de Hough
+     */
+void TracerFlotOptique(wxDC &hdc);
+    /*!
+     *  \brief TracerFlotOptique
+     *  tracer des vecteurs du flot optique
      */
 void DoPauseThread();
     /*!
@@ -979,6 +991,7 @@ enum
 	MENU_LIGNEPROBAHOUGH,
 	MENU_CERCLEHOUGH,
 	MENU_BONCOIN,
+	MENU_FLOTOPTIQUE,
     Menu_Popup_Palette,
     Menu_Popup_Zoom,
     ARCENCIEL_ = 2684,
