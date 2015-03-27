@@ -77,6 +77,7 @@ lienHtml="";
 indOp1Fenetre=-1;
 indOp2Fenetre=-1;
 indOp3Fenetre=-1;
+opVideo=false;
 if(	s=="CornerHarris")
 	{
 	nomOperation=s;
@@ -392,6 +393,7 @@ if (s=="CalcFlotOptique")
 	{
 	nbImageRes=0;
 	nomOperation=s;
+	opVideo=true;
 	intParam["typeCriteria"]=DomaineParametreOp<int>(cv::TermCriteria::COUNT,cv::TermCriteria::COUNT,cv::TermCriteria::COUNT|cv::TermCriteria::EPS,1);
 	intParam["maxCountCriteria"]=DomaineParametreOp<int>(20,1,255,1);
 	doubleParam["epsilonCriteria"]=DomaineParametreOp<double>(0.0001,0.0000001,255.0,0.001);
@@ -404,6 +406,7 @@ if (s=="CalcFlotOptique")
 if (s=="CalcFlotOptiqueFarner")
 	{
 	nbImageRes=0;
+	opVideo=true;
 	nomOperation=s;
 	doubleParam["pyr_scale"]=DomaineParametreOp<double>(0.5,0.1,0.80,0.1);
 	intParam["levels"]=DomaineParametreOp<int>(3,1,8,1);
@@ -727,6 +730,8 @@ if (s=="CalcFlotOptique")
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowpyrlk";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=365&zoom=70,250,100";
 	opBinaireSelec = &ImageInfoCV::FlotOptiqueLucasKanadePyramide;
+	opVideo=true;
+
 	return true;
 	}
 if (s=="CalcFlotOptiqueFarner")
@@ -734,6 +739,8 @@ if (s=="CalcFlotOptiqueFarner")
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
 	opBinaireSelec = &ImageInfoCV::FlotOptiqueFarnerback;
+	opVideo=true;
+
 	return true;
 	}
 if (s=="EstimTransformation")

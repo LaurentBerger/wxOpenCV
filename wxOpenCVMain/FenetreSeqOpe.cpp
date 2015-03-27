@@ -546,14 +546,19 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		return false;
 		}
 	long indFen2=it->indOp2Fenetre;
-	while (it->opBinaireSelec && !app->Graphique(indFen2) && it->nomOperation!="CalcFlotOptique")
+	bool annuler=false;
+	while (it->opBinaireSelec && !app->Graphique(indFen2) && !it->opVideo)
 		{
 			wxTextEntryDialog  adr( NULL,_("Empty image. Give window id of image"),"0");   
-			adr.ShowModal();
-			adr.GetValue().ToCLong(&indFen2);
+			if (adr.ShowModal())
+				adr.GetValue().ToCLong(&indFen2);
+			else
+				annuler=true;
 			it->indOp2Fenetre = indFen2 ;
 		}
-	if (it->opBinaireSelec && it->nomOperation!="CalcFlotOptique")
+	if (annuler)
+		return false;
+	if (it->opBinaireSelec && !it->opVideo)
 		it->op2=app->Graphique(indFen2)->ImAcq();
 	}
 return true;

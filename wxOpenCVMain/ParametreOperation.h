@@ -51,6 +51,7 @@ int nbOperande;
 int idOperation;
 int indEtape;
 int indRes;
+bool opVideo;
 
 ImageInfoCV *op1;	/*!< Opérande 1 pour l'opération demandée */
 ImageInfoCV *op2;	/*!< Opérande 2 pour l'opération demandée */

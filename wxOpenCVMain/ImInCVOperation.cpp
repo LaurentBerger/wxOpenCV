@@ -997,7 +997,8 @@ else
 		calcOpticalFlowFarneback(d1[i], d2[i], imSuiv->FlotOptique()[i], 0.5, 3, 15, 3, 5, 1.2, 0);
 		}
 	}
+ParamOCVGunnarFarneback(pOCV);
 
 
-return NULL;
+return this;
 }

@@ -65,6 +65,7 @@ pOCVHoughLigneProba=NULL;
 pOCVHoughCercle=NULL;
 pOCVBonCoin=NULL;
 pOCVLucasKanade=NULL;
+pOCVGunnarFarneback=NULL;
 
 #ifdef _INFOTEXTE__
 nbChampGonfle=0;
@@ -188,7 +189,7 @@ delete pOCVHoughLigneProba;
 delete pOCVHoughCercle;
 delete pOCVBonCoin;
 delete pOCVLucasKanade;
-
+delete pOCVGunnarFarneback;
 
 }
 
@@ -269,6 +270,23 @@ if (im->CoinRef())
 	}
 }
 
+void ImageInfoCV:: DeplacerFlotOptique(ImageInfoCV *im)/*<! Fonction déplaçant le pointeur flotOptique de im dans this. Celui de im devient nul */ 
+{
+if (!im->FlotOptique())
+	return;
+if (im->channels()!=channels())
+	return;
+if (!flotOptique)
+	{
+	flotOptique=im->FlotOptique();
+	im->RazFlotOptique();
+	return;
+	}
+//delete []flotOptique;
+flotOptique=im->FlotOptique();
+}
+
+
 int ImageInfoCV::EtapeOp()
 {
 int m=-1;
@@ -282,6 +300,8 @@ if (pOCVBonCoin && m<pOCVBonCoin->indEtape)
 	m=pOCVBonCoin->indEtape;
 if (pOCVLucasKanade && m<pOCVLucasKanade->indEtape)
 	m=pOCVLucasKanade->indEtape;
+if (pOCVGunnarFarneback && m<pOCVGunnarFarneback->indEtape)
+	m=pOCVGunnarFarneback->indEtape;
 return m;
 
 
@@ -358,6 +378,16 @@ if (p)
 	*pOCVLucasKanade=*p;
 	}
 return pOCVLucasKanade;
+}
+ParametreOperation *ImageInfoCV::ParamOCVGunnarFarneback(ParametreOperation *p)
+{
+if (p)
+	{
+	if (pOCVGunnarFarneback==NULL)
+		pOCVGunnarFarneback =  new ParametreOperation;
+	*pOCVGunnarFarneback=*p;
+	}
+return pOCVGunnarFarneback;
 }
 
 

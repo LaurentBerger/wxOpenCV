@@ -89,6 +89,8 @@ if (fenMere->ImAcq()->BonCoin())
 	nbEtape++;
 if (fenMere->ImAcq()->ParamOCVLucasKanade())
 	nbEtape++;
+if (fenMere->ImAcq()->ParamOCVGunnarFarneback())
+	nbEtape++;
 nbParamMax=2*(nbParamMax+2);
 f=fenMere;
 int nb=nbEtape-1;
@@ -140,6 +142,16 @@ if (fenMere->ImAcq()->ParamOCVLucasKanade())
 	listeOnglet[w]=std::pair<wxString,int>(fenMere->ImAcq()->ParamOCVLucasKanade()->nomOperation,nb);
 	wxString nom(_("Step"));
 	nom.Printf("%s %d : %s",nom,nb,fenMere->ImAcq()->ParamOCVLucasKanade()->nomOperation);
+	classeur->InsertPage(0,w,nom,nbEtape==1);
+	nb--;
+	}
+if (fenMere->ImAcq()->ParamOCVGunnarFarneback())
+	{
+	listeOp[nb]=std::pair< ParametreOperation*,int>(fenMere->ImAcq()->ParamOCVGunnarFarneback(),fenMere->IdFenetre());
+	wxWindow *w=CreerOngletEtape(classeur,nb);
+	listeOnglet[w]=std::pair<wxString,int>(fenMere->ImAcq()->ParamOCVGunnarFarneback()->nomOperation,nb);
+	wxString nom(_("Step"));
+	nom.Printf("%s %d : %s",nom,nb,fenMere->ImAcq()->ParamOCVGunnarFarneback()->nomOperation);
 	classeur->InsertPage(0,w,nom,nbEtape==1);
 	nb--;
 	}
@@ -310,6 +322,19 @@ if (fenMere->ImAcq()->BonCoin())
 	nb--;
 	}
 if (fenMere->ImAcq()->ParamOCVLucasKanade())
+	{
+	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
+	if (listeOp[nb].first->indEtape==-1)
+		listeOp[nb].first->indEtape=nb;
+	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
+	listeOp[nb].first->nomSequence=w->GetValue();
+	ParametreOperation p;
+	p=*(listeOp[nb].first);
+	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	(*t)[listeOp[nb].first->idOperation][nb]=p;
+	nb--;
+	}
+if (fenMere->ImAcq()->ParamOCVGunnarFarneback())
 	{
 	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
 	if (listeOp[nb].first->indEtape==-1)

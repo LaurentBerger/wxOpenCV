@@ -128,6 +128,7 @@ ParametreOperation *pOCVHoughLigneProba;
 ParametreOperation *pOCVHoughCercle;
 ParametreOperation *pOCVBonCoin;
 ParametreOperation *pOCVLucasKanade;
+ParametreOperation *pOCVGunnarFarneback;
 
 public : 
 //	********* Constructeurs et destructeur
@@ -419,8 +420,11 @@ ParametreOperation *ParamOCVHoughLigneProba(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVBonCoin(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVLucasKanade(ParametreOperation *p=NULL);
+ParametreOperation *ParamOCVGunnarFarneback(ParametreOperation *p=NULL);
 int EtapeOp();  /*<! retourne l'indice de l'étape de l'opérateur le plus grand */
 void CloneStat(ImageInfoCV *im);
+void DeplacerFlotOptique(ImageInfoCV *im);/*<! Fonction déplaçant le pointeur flotOptique de im dans this. Celui de im devient nul */ 
+void RazFlotOptique(){flotOptique=NULL;};/*<! R emise à zéro du pointeur flotOptique */ 
 
 // MODIFICATION d'une fonction OPENCV
 void Threshold( cv::InputArray _src, cv::OutputArray _dst, double thresh, double maxval, int type ); 

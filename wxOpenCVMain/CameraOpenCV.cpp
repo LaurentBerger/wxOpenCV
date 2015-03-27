@@ -430,20 +430,24 @@ if (captureVideo->isOpened())
                                 }
 							else
 								effaceImage[im[indOp][0]]=false;
-						else if (im[indOp])
-							effaceImage[im[indOp][0]]=false;
-						if (pOCV.opBinaireSelec && pOCV.nomOperation=="CalcFlotOptique")
+/*						else if (im[indOp])
+							effaceImage[im[indOp][0]]=false;*/
+						if (pOCV.opBinaireSelec && pOCV.opVideo)
                             {
-                            if (imPre)
+                            if (seqOp.size()>1 )
                                 {
-                                effaceImage[imPre]=true;
-                                swap(imPre,pOCV.op2);
+                                if (imPre)
+									effaceImage[imPre]=true;
+								swap(imPre,pOCV.op2);
                                 if (im[indOp])
                                     effaceImage[im[indOp][0]]=true;
                                 }
-                            else
+                            else // Il n'y qu'une seule opération avec en argument imPre et imIni
                                 {
-                                imPre=pOCV.op2;
+								if (pOCV.op2==imIni && imPre==NULL)
+									imPre=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
+								swap(imPre,imIni);
+
                                 effaceImage[imPre]=false;
                                 }				
                             }
@@ -459,6 +463,7 @@ if (captureVideo->isOpened())
 						if (imPre)
                             {
                             imAcq->CloneStat(imPre);
+							imAcq->DeplacerFlotOptique(imPre);
                             imPre->copyTo(frame);
                             if (frame.channels()==3 || imPre->channels()==3)
                                 cout<<"Ce n'est pas normal!";
@@ -478,8 +483,6 @@ if (captureVideo->isOpened())
                                 }
 						effaceImage.clear();
 						}
-                    else
-                        cout<<"Ce n'est pas normal!";
                     delete []im;
 					}
                 else

@@ -113,6 +113,7 @@ TracerLigneHough(hdc);
 TracerLigneProbaHough(hdc);
 TracerCercleHough(hdc);
 TracerBonCoin(hdc);
+TracerFlotOptique(hdc);
 }
 
 void FenetrePrincipale::DrawRectangles (wxDC &hdc)
