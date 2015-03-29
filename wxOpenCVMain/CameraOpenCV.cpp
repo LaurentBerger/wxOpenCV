@@ -83,8 +83,11 @@ if (nomFlux!=wxEmptyString)
 		}
 	else
 		{
+		captureVideo = new cv::VideoCapture(); 
+		captureVideo->set(CAP_PROP_FOURCC,'MJPG');
+		captureVideo->open(nomFlux.ToStdString());
 
-		captureVideo = new cv::VideoCapture(nomFlux.ToStdString()); 
+		//captureVideo = new cv::VideoCapture(nomFlux.ToStdString()); 
 		indId=-1;
 		}
 	}
@@ -370,6 +373,7 @@ if (captureVideo->isOpened())
 	ImageInfoCV *imIni=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
 	ImageInfoCV *imPre=NULL;
     std::map<ImageInfoCV*,bool> effaceImage;
+	bool	frameDejaCopie=false;
 	for(;true;)
 		{
 		if (captureVideo->grab()) // get a new frame from camera
@@ -380,6 +384,7 @@ if (captureVideo->isOpened())
 				{
 				if (seqOp.size()!=0)
 					{
+					bool memoriseImage=false;
 					opActif =true;
 					frame.copyTo(*imIni);
 					ImageInfoCV ***im=new ImageInfoCV**[seqOp.size()];
@@ -393,24 +398,24 @@ if (captureVideo->isOpened())
 						{
 						seqActualisee=false;
 						delete imPre;
-						imPre=false;
+						imPre=NULL;
 						}
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
 						ParametreOperation pOCV=*it;
 						pOCV.indOp1Fenetre=-1;
 						pOCV.indOp2Fenetre=-1;
-						if (pOCV.opUnaireSelec) // L'opératuer 1 est initialisé
+						if (pOCV.opUnaireSelec) // op1 est initialisé
                             {
-                            if (indOp>0) // Si une opération a déjà été effectuée
+                            if (indOp>0) // Si une opération a déjà été effectuée image précédente
 							    pOCV.op1=im[indOp-1][0];
-						    else
+						    else // sinon image initiale
 							    {
                                 pOCV.op1=imIni;
                                 effaceImage[imIni]=false;
                                 }
                             }
-                        else if (pOCV.opBinaireSelec )
+                        else if (pOCV.opBinaireSelec ) // initailisation op2
                             {
                             if (indOp>0 ) // Si une opération a déjà été effectuée
 							    if (im[indOp-1]==NULL)
@@ -419,62 +424,60 @@ if (captureVideo->isOpened())
 									pOCV.op2=im[indOp-1][0];
 						    else
 							    pOCV.op2=imIni;
-                            pOCV.op1=imPre;
+                            if (imPre)
+								pOCV.op1=imPre;
+							else
+								pOCV.op1=pOCV.op2;
                            }
                         im[indOp]=pOCV.ExecuterOperation();
-						if (im[indOp])
-							if(im[indOp][0]!=pOCV.op1 )
-								{
-                                if (effaceImage.find(im[indOp][0])==effaceImage.end())
-                                    effaceImage[im[indOp][0]]=true;
-                                }
-							else
+						if (im[indOp]) // Si l'opérateur donne un résultat non nul
+							if (pOCV.opAttribut)
 								effaceImage[im[indOp][0]]=false;
-/*						else if (im[indOp])
-							effaceImage[im[indOp][0]]=false;*/
-						if (pOCV.opBinaireSelec && pOCV.opVideo)
-                            {
-                            if (seqOp.size()>1 )
-                                {
-                                if (imPre)
-									effaceImage[imPre]=true;
-								swap(imPre,pOCV.op2);
-                                if (im[indOp])
-                                    effaceImage[im[indOp][0]]=true;
-                                }
-                            else // Il n'y qu'une seule opération avec en argument imPre et imIni
-                                {
-								if (pOCV.op2==imIni && imPre==NULL)
-									imPre=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
-								swap(imPre,imIni);
-
-                                effaceImage[imPre]=false;
-                                }				
-                            }
+                            else if (effaceImage.find(im[indOp][0])==effaceImage.end())
+                                effaceImage[im[indOp][0]]=true;
+						if (pOCV.opBinaireSelec && pOCV.opVideo) // Pour les opérateurs binaires spécifiques à la vidéo
+							memoriseImage=true;
                         indOp++;							
 						}
 					}
-					if (indOp>0 && im[indOp-1])
+					if (indOp>0 )
 						{
 						if (!parent)
 							break;
 						wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-						if (imPre)
-                            {
-                            imAcq->CloneStat(imPre);
-							imAcq->DeplacerFlotOptique(imPre);
-                            imPre->copyTo(frame);
-                            if (frame.channels()==3 || imPre->channels()==3)
-                                cout<<"Ce n'est pas normal!";
-                             }
-                        else
-                            {
-                            imAcq->CloneStat(im[indOp-1][0]);
-						    im[indOp-1][0]->copyTo(frame);
-                            if (frame.channels()==3 || im[indOp-1][0]->channels()==3)
-                                cout<<"Ce n'est pas normal!";
-                            }
+                        if (im[indOp-1])
+							{
+							imAcq->CloneStat(im[indOp-1][0]);
+							imAcq->DeplacerFlotOptique(im[indOp-1][0]);
+							im[indOp-1][0]->copyTo((*((Mat *)imAcq)));
+							frameDejaCopie=true;
+							}
+						if (memoriseImage) // Un résultat doit être stocké dans imPre pour exécuter la prochaine séquence
+							{
+							if (im[indOp-1] && im[indOp-1][0]) 
+								if (im[indOp-1][0]!=imIni)
+									{
+									effaceImage[im[indOp-1][0]]=false;
+									if (imPre!=im[indOp-1][0])
+										{
+										effaceImage[imPre]=true;;
+										imPre=im[indOp-1][0];
+										}
+									}
+								else
+									{
+									imPre = new ImageInfoCV(frame.rows,frame.cols,frame.flags);
+									swap(imPre,imIni);
+									}
+							else // Dupliquer imIni;
+								{
+								imPre = new ImageInfoCV(frame.rows,frame.cols,frame.flags);
+								swap(imPre,imIni);
+								}	
+							}
+						else
+							effaceImage[ im[indOp-1][0]]=true;;
                         std::map<ImageInfoCV*,bool>::iterator it;
 						for (it=effaceImage.begin();it!=effaceImage.end();it++)
 							if (it->second)
@@ -493,9 +496,10 @@ if (captureVideo->isOpened())
 						break;
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-					frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
-                            if (frame.channels()==3 )
-                                cout<<"Ce n'est pas normal!";
+					if (!frameDejaCopie)
+						frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
+                    frameDejaCopie=false;
+
 					}
 				else
 					{
@@ -503,7 +507,9 @@ if (captureVideo->isOpened())
 					if (!parent)
 						break;
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
-					frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
+					if (!frameDejaCopie)
+						frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
+                    frameDejaCopie=false;
 					for (int i=0;i<frame.rows;i++)
 						{
 						unsigned char *val=frame.ptr(i);

@@ -93,7 +93,7 @@ if(	s=="GoodFeature")
 	nbImageRes=0;
 	nomOperation=s;
 	nbOperande= 1;
-	intParam["maxCorners"]=DomaineParametreOp<int>(10,1,100,1);
+	intParam["maxCorners"]=DomaineParametreOp<int>(500,1,1000,1);
 	doubleParam["qualityLevel"]=DomaineParametreOp<double>(0.1,0.01,1,0.01);
 	doubleParam["minDistance"]=DomaineParametreOp<double>(10,1,1000,01);
 	intParam["blockSize"]=DomaineParametreOp<int>(2,2,9,1);
@@ -443,6 +443,7 @@ InitOperation(s);
 
 bool ParametreOperation::InitPtrFonction()
 {
+opAttribut=false;
 wxString s(nomOperation);
 if(	s=="CornerHarris")
 	{
@@ -454,6 +455,7 @@ if(	s=="CornerHarris")
 	}
 if(	s=="GoodFeature")
 	{
+	opAttribut=true;
 	nomOperation=s;
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack";
@@ -462,6 +464,7 @@ if(	s=="GoodFeature")
 	}
 if(	s=="HoughCercle")
 	{
+	opAttribut=true;
 	nomOperation=s;
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles";
@@ -470,6 +473,7 @@ if(	s=="HoughCercle")
 	}
 if(	s=="HoughLine")
 	{
+	opAttribut=true;
 	nomOperation=s;
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines";
@@ -478,6 +482,7 @@ if(	s=="HoughLine")
 	}
 if(	s=="HoughLineP")
 	{
+	opAttribut=true;
 	nomOperation=s;
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlinesp";
@@ -727,6 +732,7 @@ if (s=="PyrFlotOptique")
 	}
 if (s=="CalcFlotOptique")
 	{
+	opAttribut=true;
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowpyrlk";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=365&zoom=70,250,100";
 	opBinaireSelec = &ImageInfoCV::FlotOptiqueLucasKanadePyramide;
@@ -736,6 +742,7 @@ if (s=="CalcFlotOptique")
 	}
 if (s=="CalcFlotOptiqueFarner")
 	{
+	opAttribut=true;
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
 	opBinaireSelec = &ImageInfoCV::FlotOptiqueFarnerback;

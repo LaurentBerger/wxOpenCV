@@ -898,7 +898,7 @@ else
 	for (int i=0;i<imSrc->channels();i++)
 		{
 		cv::goodFeaturesToTrack(planCouleur[i],boncoin[i],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
-			pOCV->doubleParam["minDistance"].valeur,cv::noArray(),pOCV->intParam["blockSize"].valeur,
+			pOCV->doubleParam["minDistance"].valeur,Mat(),pOCV->intParam["blockSize"].valeur,
 			pOCV->intParam["useHarrisDetector"].valeur,pOCV->doubleParam["k"].valeur);
 
 		}
@@ -972,13 +972,13 @@ for (int i=0;i<imPrec->channels();i++)
 	}
 //imSuiv->CloneStat(this);
 ParamOCVLucasKanade(pOCV);
-return this;
+return imSuiv;
 }
 
 ImageInfoCV 	*ImageInfoCV::FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
 {
-if (imPrec==NULL || imSuiv==NULL)
-	return NULL;
+if (imPrec==NULL )
+	return imSuiv;
 if (imPrec->channels()!=imSuiv->channels())
 	return NULL;
 if (imSuiv->FlotOptique(true)==NULL)
@@ -1000,5 +1000,5 @@ else
 ParamOCVGunnarFarneback(pOCV);
 
 
-return this;
+return imSuiv;
 }

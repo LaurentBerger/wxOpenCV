@@ -276,14 +276,9 @@ if (!im->FlotOptique())
 	return;
 if (im->channels()!=channels())
 	return;
-if (!flotOptique)
-	{
-	flotOptique=im->FlotOptique();
-	im->RazFlotOptique();
-	return;
-	}
 //delete []flotOptique;
 flotOptique=im->FlotOptique();
+//im->RazFlotOptique();
 }
 
 
