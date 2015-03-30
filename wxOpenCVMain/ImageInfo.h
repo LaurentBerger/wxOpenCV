@@ -413,7 +413,7 @@ std::vector<double> *HuMoment(){return huMoment;};
 std::vector<cv::Vec3f> *HoughCercle(){return cercle;};
 std::vector<cv::Vec4i> *HoughLigneProba(){return ligneP;};
 std::vector<cv::Vec2f> *HoughLigne(){return ligne;};
-std::vector<cv::Point2f> *BonCoin(){return boncoin;};
+std::vector<cv::Point2f> *BonCoin(bool init=false){if (init && boncoin==NULL) boncoin = new std::vector<cv::Point2f>[channels()];return boncoin;};
 std::vector<cv::Point2f> *CoinRef(bool init=false){if (init && coinRef==NULL) coinRef = new std::vector<cv::Point2f>[channels()];return coinRef;};
 ParametreOperation *ParamOCVHoughLigne(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughLigneProba(ParametreOperation *p=NULL);

@@ -429,7 +429,26 @@ if (captureVideo->isOpened())
 							else
 								pOCV.op1=pOCV.op2;
                            }
-                        im[indOp]=pOCV.ExecuterOperation();
+                        if (imPre && imPre->BonCoin() && pOCV.nomOperation=="GoodFeature" && im[indOp-1] && im[indOp-1][0])
+							{
+							im[indOp] = new ImageInfoCV*[1];
+							im[indOp][0]=im[indOp-1][0];
+							}
+						else
+							im[indOp]=pOCV.ExecuterOperation();
+						if (pOCV.opErreur!=0)
+							{
+							seqOp.clear();
+							effaceImage[imPre]=true;
+							effaceImage.erase(imIni);
+							std::map<ImageInfoCV*,bool>::iterator it;
+							for (it=effaceImage.begin();it!=effaceImage.end();it++)
+                               delete it->first;
+							effaceImage.clear();
+							imPre=NULL;
+							break;
+							}
+
 						if (im[indOp]) // Si l'opérateur donne un résultat non nul
 							if (pOCV.opAttribut)
 								effaceImage[im[indOp][0]]=false;
@@ -440,13 +459,13 @@ if (captureVideo->isOpened())
                         indOp++;							
 						}
 					}
-					if (indOp>0 )
+					if (indOp>0 && seqOp.size()>0)
 						{
 						if (!parent)
 							break;
 						wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-                        if (im[indOp-1])
+                        if (im[indOp-1] )
 							{
 							imAcq->CloneStat(im[indOp-1][0]);
 							imAcq->DeplacerFlotOptique(im[indOp-1][0]);
@@ -488,8 +507,6 @@ if (captureVideo->isOpened())
 						}
                     delete []im;
 					}
-                else
-                    cout<<"erreur";
 				if (!modeMoyenne)	// Pas de filtrage Butterworth
 					{
 					if (!parent)

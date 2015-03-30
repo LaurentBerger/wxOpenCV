@@ -78,6 +78,7 @@ indOp1Fenetre=-1;
 indOp2Fenetre=-1;
 indOp3Fenetre=-1;
 opVideo=false;
+opErreur=0;
 if(	s=="CornerHarris")
 	{
 	nomOperation=s;
@@ -436,6 +437,8 @@ return true;
 
 ParametreOperation::ParametreOperation(string s)
 {
+opErreur=0;
+
 InitOperation(s);
 
 }

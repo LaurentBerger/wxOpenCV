@@ -939,13 +939,27 @@ ImageInfoCV 	*ImageInfoCV::FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,Im
 if (imPrec==NULL || imSuiv==NULL)
 	return NULL;
 if (channels()!=imSuiv->channels())
+	{
+	pOCV->opErreur=3;
+	pOCV->msgErreur="depth images are different";
 	return NULL;
+	}
 if (boncoin==NULL )
+	{
+	pOCV->opErreur=1;
+	pOCV->msgErreur="No feature to track";
 	return NULL;
-if (imSuiv->BonCoin()==NULL)
+	}
+if (imSuiv->BonCoin(true)==NULL)
+	{
+	pOCV->opErreur=2;
+	pOCV->msgErreur="Unitialized op2 BonCoin";
 	return NULL;
+	}
 if (imSuiv->CoinRef(true)==NULL)
 	{
+	pOCV->opErreur=3;
+	pOCV->msgErreur="Unitialized op2 CoinRef";
 	return NULL;
 	}
 	
@@ -967,8 +981,14 @@ for (int i=0;i<imPrec->channels();i++)
 			imSuiv->BonCoin()[i][l++]=imSuiv->BonCoin()[i][k];
 			}
 		}
+	for (k=l=0;k<imSuiv->BonCoin()[i].size();k++)
+		{
+		if (!status[k])
+			{
+			imSuiv->CoinRef()[i][l++]=boncoin[i][k];
+			}
+		}
 	imSuiv->BonCoin()[i].resize(l);
-	imSuiv->CoinRef()[i].resize(l);
 	}
 //imSuiv->CloneStat(this);
 ParamOCVLucasKanade(pOCV);

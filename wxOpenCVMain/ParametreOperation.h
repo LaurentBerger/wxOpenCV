@@ -53,6 +53,8 @@ int indEtape;
 int indRes;
 bool opVideo;	/*<! vrai lorsque l'opérateur binaire prend l'image précédente de  la vidéo */
 bool opAttribut;/*<! vrai lorsque l'opérateur modifie l'une des images sans créer une nouvelle image */
+int	 opErreur; /*<! non nul lorsqu'une erreur s'est produite */
+std::string msgErreur; /*<! message d'erreur */
 
 ImageInfoCV *op1;	/*!< Opérande 1 pour l'opération demandée */
 ImageInfoCV *op2;	/*!< Opérande 2 pour l'opération demandée */
