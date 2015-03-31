@@ -1005,7 +1005,8 @@ if (imSuiv->FlotOptique(true)==NULL)
 	return NULL;
 if (imPrec->channels()==1)
 	{
-	calcOpticalFlowFarneback(*imPrec, *imSuiv, imSuiv->FlotOptique()[0], 0.5, 3, 15, 3, 5, 1.2, 0);
+	calcOpticalFlowFarneback(*imPrec, *imSuiv, imSuiv->FlotOptique()[0], pOCV->doubleParam["pyr_scale"].valeur, pOCV->intParam["levels"].valeur, pOCV->sizeParam["winSize"].valeur.width, 
+		pOCV->intParam["iterations"].valeur, pOCV->doubleParam["poly_sigma"].valeur, pOCV->intParam["flag"].valeur, pOCV->intParam["flag"].valeur);
 	}
 else
 	{
@@ -1014,7 +1015,8 @@ else
 	cv::split( *imSuiv, d2 );
 	for (int i=0;i<imPrec->channels();i++)
 		{
-		calcOpticalFlowFarneback(d1[i], d2[i], imSuiv->FlotOptique()[i], 0.5, 3, 15, 3, 5, 1.2, 0);
+		calcOpticalFlowFarneback(d1[i], d2[i], imSuiv->FlotOptique()[i], pOCV->doubleParam["pyr_scale"].valeur, pOCV->intParam["levels"].valeur, pOCV->sizeParam["winSize"].valeur.width,
+			pOCV->intParam["iterations"].valeur, pOCV->doubleParam["poly_sigma"].valeur, pOCV->intParam["flag"].valeur, pOCV->intParam["flag"].valeur);
 		}
 	}
 ParamOCVGunnarFarneback(pOCV);
