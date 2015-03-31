@@ -83,6 +83,7 @@ if (nomFlux!=wxEmptyString)
 		}
 	else
 		{
+		
 		captureVideo = new cv::VideoCapture(); 
 		captureVideo->set(CAP_PROP_FOURCC,'MJPG');
 		captureVideo->open(nomFlux.ToStdString());
@@ -517,7 +518,10 @@ if (captureVideo->isOpened())
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
 					if (!frameDejaCopie)
-						frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
+						{
+						//frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
+						swap(frame, (*((Mat *)imAcq)));
+						}
                     frameDejaCopie=false;
 
 					}
@@ -779,3 +783,6 @@ wxCriticalSectionLocker enter(paramCam);
 
 cam->seqOp.clear();
 };
+
+
+

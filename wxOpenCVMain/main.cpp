@@ -984,7 +984,7 @@ else
 	}
 
 delete cam;
-
+wxLogWarning(_("OpenCV : Build info %s "), cv::getBuildInformation().c_str());
 #ifdef _DLL_DETECTION__
 if (!dllplplot || !dllplplot->IsLoaded())
 	wxLogWarning(_("unable to load plplot"));
