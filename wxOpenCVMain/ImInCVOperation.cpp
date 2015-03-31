@@ -975,12 +975,13 @@ for (int i=0;i<imPrec->channels();i++)
 	imSuiv->CoinRef()[i].resize(imSuiv->BonCoin()[i].size());
 	for (k=l=0;k<imSuiv->BonCoin()[i].size();k++)
 		{
-		if (status[k])
+		if (status[k] || imSuiv==imPrec)
 			{
 			imSuiv->CoinRef()[i][l]=boncoin[i][k];
 			imSuiv->BonCoin()[i][l++]=imSuiv->BonCoin()[i][k];
 			}
 		}
+	imSuiv->BonCoin()[i].resize(l);
 	for (k=l=0;k<imSuiv->BonCoin()[i].size();k++)
 		{
 		if (!status[k])
@@ -988,7 +989,6 @@ for (int i=0;i<imPrec->channels();i++)
 			imSuiv->CoinRef()[i][l++]=boncoin[i][k];
 			}
 		}
-	imSuiv->BonCoin()[i].resize(l);
 	}
 //imSuiv->CloneStat(this);
 ParamOCVLucasKanade(pOCV);

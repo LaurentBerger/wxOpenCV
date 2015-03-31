@@ -78,13 +78,13 @@ void ZoneImage::OnPaint(wxPaintEvent &evt)
     // scroll offset
     PrepareDC(dc);
 
-	f->DrawWindow (dc);
+/*	f->DrawWindow (dc);
 	f->TracerContour(dc);
 	f->TracerLigneHough(dc);
 	f->TracerLigneProbaHough(dc);
 	f->TracerCercleHough(dc);
 	f->TracerBonCoin(dc);
-	f->TracerFlotOptique(dc);
+	f->TracerFlotOptique(dc);*/
 /*        dc.SetPen( *wxRED_PEN );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
     dc.DrawRectangle( 0, 0, 200, 200 );*/

@@ -113,7 +113,12 @@ TracerLigneHough(hdc);
 TracerLigneProbaHough(hdc);
 TracerCercleHough(hdc);
 TracerBonCoin(hdc);
-TracerFlotOptique(hdc);
+if (cam && cam->IsRunning())
+	{
+	wxCriticalSectionLocker enter(travailCam);
+
+	TracerFlotOptique(hdc);
+	}
 }
 
 void FenetrePrincipale::DrawRectangles (wxDC &hdc)

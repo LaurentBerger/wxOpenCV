@@ -366,7 +366,9 @@ if (captureVideo->isOpened())
 	Mat frame1;
 	Mat frame2;
 	Mat frame;
-	std::vector<cv::Point2f> repereIni,repere;
+	int nbPts[100];
+	int nbTour = 0;
+	std::vector<cv::Point2f> repereIni, repere;
 	while (!captureVideo->retrieve(frame2));
 	while (!captureVideo->retrieve(frame1));
 	static bool opActif=false;
@@ -429,25 +431,26 @@ if (captureVideo->isOpened())
 							else
 								pOCV.op1=pOCV.op2;
                            }
-                        if (imPre && imPre->BonCoin() && pOCV.nomOperation=="GoodFeature" && im[indOp-1] && im[indOp-1][0])
-							{
+						if (imPre && imPre->BonCoin() && pOCV.nomOperation == "GoodFeature" && im[indOp - 1] && im[indOp - 1][0])
+						{
 							im[indOp] = new ImageInfoCV*[1];
-							im[indOp][0]=im[indOp-1][0];
-							}
+							im[indOp][0] = im[indOp - 1][0];
+
+						}
 						else
-							im[indOp]=pOCV.ExecuterOperation();
-						if (pOCV.opErreur!=0)
-							{
+							im[indOp] = pOCV.ExecuterOperation();
+						if (pOCV.opErreur != 0)
+						{
 							seqOp.clear();
-							effaceImage[imPre]=true;
+							effaceImage[imPre] = true;
 							effaceImage.erase(imIni);
-							std::map<ImageInfoCV*,bool>::iterator it;
-							for (it=effaceImage.begin();it!=effaceImage.end();it++)
-                               delete it->first;
+							std::map<ImageInfoCV*, bool>::iterator it;
+							for (it = effaceImage.begin(); it != effaceImage.end(); it++)
+								delete it->first;
 							effaceImage.clear();
-							imPre=NULL;
+							imPre = NULL;
 							break;
-							}
+						}
 
 						if (im[indOp]) // Si l'opérateur donne un résultat non nul
 							if (pOCV.opAttribut)
