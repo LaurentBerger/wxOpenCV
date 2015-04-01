@@ -50,7 +50,7 @@ case 3:
 		ongletCoupe->SetFocus();
 	break;
 case 4:
-	if (ongletHistogramme)
+	if (ongletDistribRadiale)
 		ongletDistribRadiale->SetFocus();
 	break;
 case 5:

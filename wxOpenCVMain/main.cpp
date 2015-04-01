@@ -515,9 +515,9 @@ f->DefImgStat(imgStatIm);
 	{
 	imgStatIm->OuvertureOngletHistogramme();
 	imgStatIm->OuvertureOngletCoupe();
-	imgStatIm->OuvertureOngletDistribRadiale();
+/*	imgStatIm->OuvertureOngletDistribRadiale();
 	imgStatIm->OuvertureOngletDistribAngulaire();
-	imgStatIm->OuvertureOngletFocus();
+	imgStatIm->OuvertureOngletFocus();*/
 	}
 imgStatIm->OuvertureOngletCouleur();
 imgStatIm->OuvertureOngletPalette();
@@ -771,9 +771,9 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 		{
 		imgStatIm->OuvertureOngletHistogramme();
 		imgStatIm->OuvertureOngletCoupe();
-		imgStatIm->OuvertureOngletDistribRadiale();
+/*		imgStatIm->OuvertureOngletDistribRadiale();
 		imgStatIm->OuvertureOngletDistribAngulaire();
-		imgStatIm->OuvertureOngletFocus();
+		imgStatIm->OuvertureOngletFocus();*/
 		}
 	imgStatIm->OuvertureOngletCouleur();
 	imgStatIm->OuvertureOngletPalette();
