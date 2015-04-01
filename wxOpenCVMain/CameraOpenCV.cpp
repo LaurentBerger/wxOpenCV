@@ -154,6 +154,9 @@ if (!captureVideo)
 //PrepareAcquisition();
 indLignePremierpixel=1;
 nbLigneInterPiste=1;
+double x=captureVideo->get(CAP_DSHOW);
+
+x = captureVideo->get(CAP_PROP_SETTINGS);
 colonneDebut=1;
 ligneDebut=1;
 colonneFin=nbColonnePhys;

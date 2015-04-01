@@ -21,7 +21,6 @@ wxNotebook		*listeFenetreOnglet;/*!< Pointeur pour accès aux onglets*/
 wxWindow		*ongletStatus;		/*!< Pointeur pour accès informations sur l'echelle de la séquence */
 wxWindow		*ongletGeometries;	/*!< Pointeur pour réglages de la geométrie de l'acquisition */
 wxWindow		*ongletTemporels;	/*!< Pointeur pour réglages des temps d'acquisitions */
-wxWindow		*ongletEMCCD;		/*!< Pointeur pour réglage de EMCCD */
 wxWindow		*ongletFond;		/*!< Pointeur pour gestion du fond */
 wxWindow		*ongletQuadrique;		/*!< Pointeur pour gestion de l'estimation d'une quadrique définie par zones pour un seul niveau*/
 wxWindow		*ongletQuadriqueMulti;	/*!< Pointeur pour  l'estimation d'une quadrique définie par zones pour plusieurs niveaux*/
@@ -59,7 +58,9 @@ void NouvelleImage(wxCommandEvent& );
 		/*! Evenement déclenché lors de l'arrivée d'une nouvelle image */
 void EstimationGain(wxCommandEvent& );
 		/*! Evenement déclenché pour débuter ou arrêter l'estimation du gain */
-void ExpositionAutomatique(wxCommandEvent& );
+void ControleCamera::EstimationFond(wxCommandEvent& event);
+	/*! Evenement déclenché pour débuter ou arrêter l'estimation du fond */
+void ExpositionAutomatique(wxCommandEvent&);
 		/*! Détermination d'un temps de pose maximisant la fonction contraste xxx */
 void ModeMoyenne(wxCommandEvent &w);
 		/*! Activation du filtre de butterworth */
@@ -79,7 +80,6 @@ void DefOSGApp(void *w){osgApp=w;};
 void DefParent(void *w){parent=w;};
 		/*!< Definition du pointeur sur la fenêtre contenant le flux video. */
 void OuvertureOngletStatus();
-void OuvertureOngletEMCCD();
 void OuvertureOngletFond();
 void OuvertureOngletParametresTemporels();
 void OuvertureOngletParametresGeometries();

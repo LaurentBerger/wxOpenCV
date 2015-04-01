@@ -68,10 +68,6 @@ listeFenetreOnglet->AddPage(infoSequence, "Cloud Image");            */
 
 panneau->SetSizer(m_sizerFrame);
 OuvertureOngletStatus();
-if (cam && !strcmp(cam->NomCamera(),"ANDOR"))
-	{
-	OuvertureOngletEMCCD();
-	}
 //OuvertureOngletParametresGeometries();
 OuvertureOngletParametresTemporels();
 OuvertureOngletFond();
@@ -133,12 +129,43 @@ if (event.GetId()==ID_DEB_ESTIM_GAIN)
 		}
 	else if (pThread!=NULL && pThread->IsRunning())
 		{
-		if (pThread->Delete()!= wxTHREAD_NO_ERROR)
+		if (pThread->Delete()== wxTHREAD_NO_ERROR)
 			{
 			wxMessageBox(_("Process is stopped!"));
 			pThread=NULL;
 			}
 		else;
+			wxMessageBox(_("Cannot stop Process!"));
+		}
+	}
+}
+
+void ControleCamera::EstimationFond(wxCommandEvent& event)
+{
+	if (!cam || !parent)
+		return;
+	if (cam->IsRunning())
+	{
+		wxMessageBox(_("Camera must be paused first!"));
+		return;
+	}
+	if (event.GetId() == ID_DEB_ESTIM_FOND)
+	{
+		if (pThread == NULL)
+		{
+			wxStaticText *s = (wxStaticText*)FindWindowById(ID_DEB_ESTIM_FOND, ongletFond);
+			s->SetLabelText(_("Stop"));
+			pThread = new ProcessGestionCamera(this, cam);
+			pThread->Run();
+		}
+		else if (pThread != NULL && pThread->IsRunning())
+		{
+			if (pThread->Delete() == wxTHREAD_NO_ERROR)
+			{
+				wxMessageBox(_("Process is stopped!"));
+				pThread = NULL;
+			}
+			else;
 			wxMessageBox(_("Cannot stop Process!"));
 		}
 	}
@@ -182,18 +209,6 @@ cam->DefEMCCDGain(int(x));
 }
 
 
-void ControleCamera::DefModeGainEMCCD(int x)
-{
-if (!cam)
-	return;
-cam->DefModeGain(x);
-if (x==cam->ModeGainEMCCD())
-	{
-	wxWindowList&w=ongletEMCCD->GetChildren();
-	((wxChoice*) w[0])->SetSelection(x);
-	}
-
-}	
 
 void ControleCamera::OnSlider(wxScrollEvent &w)
 {
@@ -714,78 +729,6 @@ wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
 return 0;
 }
 
-void ControleCamera::OuvertureOngletEMCCD()
-{
-if (!cam)
-	return;
-/*if (strcmp(cam->NomCamera(),"Luca")!=0)
-	return; 
-*/
-
-ongletEMCCD = new wxWindow(listeFenetreOnglet,-1); 
-int	minGain=0,maxGain=255;
-//GetEMGainRange(&minGain,&maxGain);
-// Texte		Réglette
-wxString	legende[]={_T("Gain Mode"),_T("Gain Value"),_T("CCD size"),_T(" ")};
-wxPoint	position[]={
-wxPoint(10,20),wxPoint(110,10),
-wxPoint(10,60),wxPoint(100,60)};
-wxSize	taille[]={
-// Texte		Réglette
-wxSize(90,40),wxSize(200,40),
-wxSize(90,40),wxSize(200,40)};
-long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
-
-int	i=0;
-wxArrayString modeGainEM;
-int	nbMode=1;
-if (cam)
-	{
-	if (!strcmp(cam->NomCamera(),"ANDOR"))
-		{
-		CameraAndor *c=(CameraAndor*)cam;
-		if (c->EMGain8Bit())
-			{
-			nbMode++;
-			modeGainEM.Add(_T("EM Gain 0-255"));
-			}
-		if (c->EMGain12Bit() )
-			{
-			nbMode++;
-			modeGainEM.Add(_T("EM Gain 0-4095"));
-			}
-		if (c->EMGainLinear12Bit() )
-			{
-			nbMode++;
-			modeGainEM.Add(_T("Linear Mode"));
-			}
-		if (c->EMGainReal12Bit() )
-			{
-			nbMode++;
-			modeGainEM.Add(_T("Real EM gain"));
-			}
-		}
-	}
-wxChoice *t=new wxChoice(ongletEMCCD,300,position[i],taille[i], modeGainEM);
-if (cam)
-	t->SetSelection(cam->ModeGainEMCCD());
-i++;
-int	gain=(minGain+maxGain)/2;
-//GetEMCCDGain(&gain);
-slEMGain=new wxSlider(ongletEMCCD,ID_GAIN_CAM,gain, minGain,maxGain ,position[i], taille[i],style);
-slEMGain->SetLabel(legende[i]);
-i++;
-if (nbMode==0)
-	{
-	t->Disable();
-	slEMGain->Disable();
-	}
-
-
-listeFenetreOnglet->AddPage(ongletEMCCD, _T("EMCCD"));
-DrawOngletStatus();
-ongletStatus->Refresh();
-}	
 
 void ControleCamera::ExpositionAutomatique(wxCommandEvent& c)
 {

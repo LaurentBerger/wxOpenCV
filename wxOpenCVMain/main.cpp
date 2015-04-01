@@ -433,9 +433,9 @@ f->DefImgStat(imgStatIm);
 	{
 	imgStatIm->OuvertureOngletHistogramme();
 	imgStatIm->OuvertureOngletCoupe();
-	imgStatIm->OuvertureOngletDistribRadiale();
+/*	imgStatIm->OuvertureOngletDistribRadiale();
 	imgStatIm->OuvertureOngletDistribAngulaire();
-	imgStatIm->OuvertureOngletFocus();
+	imgStatIm->OuvertureOngletFocus();*/
 	}
 imgStatIm->OuvertureOngletCouleur();
 imgStatIm->OuvertureOngletPalette();
@@ -1265,7 +1265,6 @@ wxLogVerbose(_T("exposure Time %6.3f Mode Gain %d EMCCDGain %6.3f "),tpsExpositi
 if (osgApp->CtrlCamera())
 	{
 	osgApp->CtrlCamera()->DefTempsExposition(tpsExposition);
-	osgApp->CtrlCamera()->DefModeGainEMCCD(modeGainEMCCD);
 	osgApp->CtrlCamera()->DefGainEMCCD(gainEMCCD);
 	}
 /*

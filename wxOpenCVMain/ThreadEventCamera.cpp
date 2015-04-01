@@ -40,7 +40,7 @@ if (captureVideo->isOpened())
 	while (!captureVideo->retrieve(frame));
 	frame.convertTo(frameFlt1,CV_32FC3);
 	int nbAcq=0;
-	for(;nbAcq<100;)
+	for(;;)
 		{
 		if (captureVideo->retrieve(frame)) // get a new frame from camera
 			{
