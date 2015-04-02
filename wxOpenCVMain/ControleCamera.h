@@ -25,7 +25,7 @@ wxWindow		*ongletFond;		/*!< Pointeur pour gestion du fond */
 wxWindow		*ongletQuadrique;		/*!< Pointeur pour gestion de l'estimation d'une quadrique définie par zones pour un seul niveau*/
 wxWindow		*ongletQuadriqueMulti;	/*!< Pointeur pour  l'estimation d'une quadrique définie par zones pour plusieurs niveaux*/
 wxWindow		*ongletMoyenne;			/*!< Pointeur pour gestion du moyennage image */
-
+wxWindow		*ongletEMCCD;			/*! DEASCTIVE */
 CameraVirtuelle *cam;
 void			*parent;
 void			*osgApp;
@@ -58,7 +58,7 @@ void NouvelleImage(wxCommandEvent& );
 		/*! Evenement déclenché lors de l'arrivée d'une nouvelle image */
 void EstimationGain(wxCommandEvent& );
 		/*! Evenement déclenché pour débuter ou arrêter l'estimation du gain */
-void ControleCamera::EstimationFond(wxCommandEvent& event);
+void EstimationFond(wxCommandEvent& event);
 	/*! Evenement déclenché pour débuter ou arrêter l'estimation du fond */
 void ExpositionAutomatique(wxCommandEvent&);
 		/*! Détermination d'un temps de pose maximisant la fonction contraste xxx */
@@ -84,6 +84,7 @@ void OuvertureOngletFond();
 void OuvertureOngletParametresTemporels();
 void OuvertureOngletParametresGeometries();
 void OuvertureOngletMoyenne();
+void OuvertureOngletEMCCD();
 
 void	DrawOngletStatus();
 

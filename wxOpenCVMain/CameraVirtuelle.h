@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+#include <limits.h>
 #include "opencv2/opencv.hpp"
 #include <wx/wx.h>
 #include "ParametreOperation.h"
@@ -76,7 +77,14 @@ int			indFiltreMoyenne;	/*!< Indice des coefficients du filtre Butterworth*/
 bool		modeMoyenne;		/*!< Moyenne temporelle active lors de l'acquisition */
 long		tpsInactif;
 wxSize		tailleCapteur[NB_TAILLE_VIDEO];
-bool		tailleAutorisee[NB_TAILLE_VIDEO];		
+bool		tailleAutorisee[NB_TAILLE_VIDEO];	
+bool		reglageTaille;
+bool		reglageGain;
+bool		reglageContraste;
+bool		reglageLuminosite;
+bool		reglageSaturation;
+bool		reglageTpsExpo;
+	
 
 public :
 void				*parent;		/*!< Pointeur sur la fenêtre principale*/
@@ -86,7 +94,8 @@ wxImage				*image;			/*!< Image contenant la vidéo*/
 
 
 public :
-CameraVirtuelle(void): wxThread(wxTHREAD_DETACHED){testDriver=0;drapeauErreur=0;};
+CameraVirtuelle(void): wxThread(wxTHREAD_DETACHED){testDriver=0;drapeauErreur=0;reglageTaille=false;reglageTpsExpo=false;
+reglageGain=false;reglageContraste=false;reglageLuminosite=false;reglageSaturation=false;modeMoyenne=false;};
 
 void AjouteMsgErreur(char *msg){chaineErreur+=msg;drapeauErreur+=1;};
 void AjouteMsgErreur(char *msg,unsigned int x){chaineErreur+=msg;drapeauErreur+=1;};
@@ -102,15 +111,12 @@ virtual int NbLignePhys(){return nbLignePhys;};
 virtual int NbColonne(){ return 0;};
 virtual int NbLigne(){return 0;};
 virtual int NbCanaux(){return 0;};
-virtual double TempsExposition (){return -1.0;};
 virtual void DefTypeAcq(int x){typeAcq=x;};
 virtual long DefTpsInactif( long  x=-1){if (x!=-1) tpsInactif=x;return tpsInactif;};
 virtual void DefCoinGauche(int){return;};
 virtual void DefCoinDroit(int){return;};
 virtual void DefCoinHaut(int){return;};
 virtual void DefCoinBas(int){return;};
-virtual void DefGain(int){return;};
-virtual double Gain(void){return 0.0;};
 virtual void DefEMCCDGain(int){return;};
 virtual void DefModeGain(int){return;};
 virtual void LireIntervalGain(int *x,int *y){*x=0;*y=0;};
@@ -137,6 +143,20 @@ virtual void DesActiveModeMoyenne(){modeMoyenne=false;};
 virtual bool ModeMoyenne(){return modeMoyenne;};
 virtual int IndFiltreMoyenne(){return indFiltreMoyenne;};
 virtual void DefIndFiltreMoyenne(int x){indFiltreMoyenne=x;};
+
+bool ReglageTaille(){return reglageTaille;};
+bool ReglageGain(){return reglageGain;};
+bool ReglageContraste(){return reglageContraste;};
+bool ReglageLuminosite(){return reglageLuminosite;};
+bool ReglageSaturation(){return reglageSaturation;};
+bool ReglageTpsExpo(){return reglageTpsExpo;};
+virtual double TempsExposition(double =DBL_MAX){return DBL_MAX;} ;
+virtual double Gain(double =DBL_MAX){return DBL_MAX;};
+virtual double Contraste(double =DBL_MAX){return DBL_MAX;};
+virtual double Luminosite(double =DBL_MAX){return DBL_MAX;};
+virtual double Saturation(double =DBL_MAX){return DBL_MAX;};
+virtual bool DefTailleImage(int largeur,int hauteur){return false;};
+
 };
 
 #endif

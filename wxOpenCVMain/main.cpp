@@ -433,9 +433,9 @@ f->DefImgStat(imgStatIm);
 	{
 	imgStatIm->OuvertureOngletHistogramme();
 	imgStatIm->OuvertureOngletCoupe();
-/*	imgStatIm->OuvertureOngletDistribRadiale();
+	imgStatIm->OuvertureOngletDistribRadiale();
 	imgStatIm->OuvertureOngletDistribAngulaire();
-	imgStatIm->OuvertureOngletFocus();*/
+	imgStatIm->OuvertureOngletFocus();
 	}
 imgStatIm->OuvertureOngletCouleur();
 imgStatIm->OuvertureOngletPalette();
@@ -460,6 +460,8 @@ f->InitIHM();
 		CtrlCamera()->DefCamera(f->Cam());
 		CtrlCamera()->Show(true);
 		CtrlCamera()->DefParent(f);
+		CtrlCamera()->OuvertureOngletParametresTemporels();
+
 		}
 
 f->ModeCamera(w);
@@ -1265,6 +1267,7 @@ wxLogVerbose(_T("exposure Time %6.3f Mode Gain %d EMCCDGain %6.3f "),tpsExpositi
 if (osgApp->CtrlCamera())
 	{
 	osgApp->CtrlCamera()->DefTempsExposition(tpsExposition);
+	osgApp->CtrlCamera()->DefModeGainEMCCD(modeGainEMCCD);
 	osgApp->CtrlCamera()->DefGainEMCCD(gainEMCCD);
 	}
 /*
@@ -1633,6 +1636,53 @@ for (int i=0;i<imAcq->channels();i++)
 	}
 wxSize	tailleZoneImage;
 tailleZoneImage=GetClientSize();
+
+}
+
+/**
+Ouvrir un flux video
+*/
+
+void FenetrePrincipale::ChgtTailleVideo(int type)
+{
+if (!cam)
+	return;
+if (type==0)
+	{
+	if (imAcq)
+		delete imAcq;
+
+	imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+	((CameraOpenCV*)cam)->imAcq=imAcq;
+
+	}
+barreEtat->ActiveVideo();
+correctionGain=false;
+fenetreSauvee=1;
+//ImageInfoCV *imtmp=new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+wxString userName=wxGetUserName();
+delete imGain;
+imGain = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),CV_32FC3);
+if (type==8)
+	{
+	imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+	cam->DefTypeAcq(CV_8UC3);
+	}
+if (type==32)
+	{
+	imAcq = new ImageInfoCV(cam->NbLigne(),cam->NbColonne(),CV_32FC3);
+	cam->DefTypeAcq(CV_32FC3);
+	}
+
+if (imAffichee)
+	{
+	delete imAffichee;
+	}
+tabRGB=NULL;
+
+imAffichee=NULL;
+
+wxLogVerbose("Size Video changed");
 
 }
 

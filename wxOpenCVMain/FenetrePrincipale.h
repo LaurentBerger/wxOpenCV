@@ -560,6 +560,12 @@ int IndEvtCam(){return indEvtCam;};
      *  \brief indEvtCam
      *  retourne l'indice identifiant venant d'être traité.
      */
+void ChgtTailleVideo(int type);
+    /*!
+     *  \brief ChgtTailleVideo
+     *  \param type 0 et 8 image CV_UC3,32 8 image CV_SF32
+     */
+
 
 void TracerContour(wxCommandEvent& event);
     /*!

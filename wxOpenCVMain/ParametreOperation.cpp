@@ -108,11 +108,11 @@ if(	s=="HoughCercle")
 	nbOperande= 1;
 	intParam["method"]=DomaineParametreOp<int>(cv::HOUGH_GRADIENT,cv::HOUGH_GRADIENT,cv::HOUGH_GRADIENT,1);
 	doubleParam["dp"]=DomaineParametreOp<double>(1,0.001,20,01);
-	doubleParam["minDistance"]=DomaineParametreOp<double>(10,1,2,01);
+	doubleParam["minDistance"]=DomaineParametreOp<double>(10,1,1000,01);
 	doubleParam["param1"]=DomaineParametreOp<double>(100,3,200,0.1);
 	doubleParam["param2"]=DomaineParametreOp<double>(30,3,200,0.1);
-	intParam["min_radius"]=DomaineParametreOp<int>(0,0,200,1);
-	intParam["max_radius"]=DomaineParametreOp<int>(0,0,200,1);
+	intParam["min_radius"]=DomaineParametreOp<int>(100,0,1000,1);
+	intParam["max_radius"]=DomaineParametreOp<int>(130,0,1000,1);
 	}
 if(	s=="HoughLine")
 	{

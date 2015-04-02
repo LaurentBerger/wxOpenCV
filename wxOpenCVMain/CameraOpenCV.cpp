@@ -40,10 +40,10 @@ tailleCapteur[16]=wxSize(1280,960);tailleCapteur[17]=wxSize(-1,-1);tailleCapteur
 tailleCapteur[19]=wxSize(-1,-1);
 /*for (int i=15;i<NB_TAILLE_VIDEO;i++)
 	tailleAutorisee[false];*/
-modeMoyenne=false;
 indFiltreMoyenne=1;
 tpsInactif =30;
 fluxOuvert=false;
+chgtTaille=false;
 aaButter[0]=-0.9996859;
 aaButter[1]=-0.9993719;
 aaButter[2]=-0.9968633;
@@ -154,9 +154,6 @@ if (!captureVideo)
 //PrepareAcquisition();
 indLignePremierpixel=1;
 nbLigneInterPiste=1;
-double x=captureVideo->get(CAP_DSHOW);
-
-x = captureVideo->get(CAP_PROP_SETTINGS);
 colonneDebut=1;
 ligneDebut=1;
 colonneFin=nbColonnePhys;
@@ -167,6 +164,19 @@ periodeAccumulation=1;	// en seconde
 modeDeclenchement=0;			// Mode de déclenchement de l'acquisition p45 SDK Andor
 
 erreurFct=captureVideo->set(CAP_PROP_EXPOSURE,tempsExposition);
+double x;
+x=captureVideo->get(CAP_PROP_EXPOSURE);
+reglageTpsExpo=captureVideo->set(CAP_PROP_EXPOSURE,x);
+x=captureVideo->get(CAP_PROP_BRIGHTNESS);
+reglageLuminosite=captureVideo->set(CAP_PROP_BRIGHTNESS,x);
+x=captureVideo->get(CAP_PROP_GAIN);
+reglageGain=captureVideo->set(CAP_PROP_GAIN,x);
+x=captureVideo->get(CAP_PROP_SATURATION);
+reglageSaturation=captureVideo->set(CAP_PROP_SATURATION,x);
+x=captureVideo->get(CAP_PROP_FRAME_WIDTH);
+reglageTaille=captureVideo->set(CAP_PROP_FRAME_WIDTH,x);
+x=captureVideo->get(CAP_PROP_CONTRAST);
+reglageContraste=captureVideo->set(CAP_PROP_CONTRAST,x);
 if(!erreurFct)
 	AjouteMsgErreur("SetExposureTime Error\n");
 //captureVideo->getMinMax(CV_CAP_PROP_GAIN,&gainMin,&gainMax);
@@ -192,12 +202,85 @@ else
 	}
 }
 
-void CameraOpenCV::DefTempsExposition(double x)
+double CameraOpenCV::Gain(double x)
 {
-if (!parent)
-	return;
+if (!parent || !reglageGain)
+	return DBL_MAX;
 wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
-captureVideo->set(CAP_PROP_EXPOSURE,x);
+if (x==DBL_MAX)
+	return captureVideo->get( CAP_PROP_GAIN);
+bool b=captureVideo->set(CAP_PROP_GAIN,x);
+if (b)
+	return x;
+return DBL_MAX;
+}
+
+double CameraOpenCV::Contraste(double x)
+{
+if (!parent || !reglageContraste)
+	return DBL_MAX;
+wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+if (x==DBL_MAX)
+	return captureVideo->get( CAP_PROP_CONTRAST);
+bool b=captureVideo->set(CAP_PROP_CONTRAST,x);
+if (b)
+	return x;
+return DBL_MAX;
+}
+
+double CameraOpenCV::Luminosite(double x)
+{
+if (!parent || !reglageLuminosite)
+	return DBL_MAX;
+wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+if (x==DBL_MAX)
+	return captureVideo->get( CAP_PROP_BRIGHTNESS);
+bool b=captureVideo->set(CAP_PROP_BRIGHTNESS,x);
+if (b)
+	return x;
+return DBL_MAX;
+}
+double CameraOpenCV::Saturation(double x)
+{
+if (!parent || !reglageSaturation)
+	return DBL_MAX;
+wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+if (x==DBL_MAX)
+	return captureVideo->get( CAP_PROP_SATURATION);
+bool b=captureVideo->set(CAP_PROP_SATURATION,x);
+if (b)
+	return x;
+return DBL_MAX;
+}
+
+
+bool CameraOpenCV::DefTailleImage(int largeur,int hauteur)
+{
+if (!parent || !reglageTaille)
+	return false;
+wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+bool		status=captureVideo->set(cv::CAP_PROP_FRAME_WIDTH,largeur);
+if (status)
+	status =captureVideo->set(cv::CAP_PROP_FRAME_HEIGHT,hauteur);
+chgtTaille=true;
+colonneFin=largeur;
+ligneFin=hauteur;
+nbColonnePhys=colonneFin;
+nbLignePhys=ligneFin;
+return status;
+}
+
+double CameraOpenCV::TempsExposition(double x)
+{
+if (!parent || !reglageTpsExpo)
+	return DBL_MAX;
+wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+if (x==DBL_MAX)
+	return captureVideo->get( CAP_PROP_EXPOSURE);
+bool b=captureVideo->set(CAP_PROP_EXPOSURE,x);
+if (b)
+	return x;
+return DBL_MAX;
 }
 
 void CameraOpenCV::DefModeGain(int i)
@@ -228,9 +311,6 @@ void CameraOpenCV::DefFrequenceCinetique(double x)
 {
 }
 
-void CameraOpenCV::DefTailleImage(int article)
-{
-}
 
 void CameraOpenCV::DefBinning(int article)
 {
@@ -392,6 +472,12 @@ if (captureVideo->isOpened())
 					{
 					bool memoriseImage=false;
 					opActif =true;
+					if (chgtTaille)
+						{
+						delete imPre;
+						delete imIni;
+						imIni=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
+						}
 					frame.copyTo(*imIni);
 					ImageInfoCV ***im=new ImageInfoCV**[seqOp.size()];
 					if (!parent)
@@ -474,6 +560,11 @@ if (captureVideo->isOpened())
 
                         if (im[indOp-1] )
 							{
+							if (chgtTaille)
+								{
+								((FenetrePrincipale*)parent)->ChgtTailleVideo(0);
+								chgtTaille=false;
+								}
 							imAcq->CloneStat(im[indOp-1][0]);
 							imAcq->DeplacerFlotOptique(im[indOp-1][0]);
 							im[indOp-1][0]->copyTo((*((Mat *)imAcq)));
@@ -522,6 +613,11 @@ if (captureVideo->isOpened())
 
 					if (!frameDejaCopie)
 						{
+						if (chgtTaille)
+							{
+							((FenetrePrincipale*)parent)->ChgtTailleVideo(0);
+							chgtTaille=false;
+							}
 						//frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
 						swap(frame, (*((Mat *)imAcq)));
 						}

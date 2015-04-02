@@ -17,6 +17,7 @@ virtual wxThread::ExitCode Entry();
 static char	indIdVideo[NBCAMERA];
 int			indId; /*<! Indice du périphérique vidéo;*/
 bool		fluxOuvert;/*<!Vrai lorsque la video est un flux */
+bool		chgtTaille;/*<! Vrai lorque la taille de l'acquisition vient d'être modiiée */
 long		expoMin,expoMax;
 long		gainMin,gainMax;
 
@@ -62,12 +63,10 @@ virtual void DefCoinGauche(int x);
 virtual void DefCoinDroit(int x);
 virtual void DefCoinHaut(int x);
 virtual void DefCoinBas(int x);
-virtual void DefTempsExposition(double);
 virtual void DefNombreAccumulation(int);
 virtual void DefFrequenceAccumulation(double);
 virtual void DefNombreCinetique(int);
 virtual void DefFrequenceCinetique(double);
-virtual void DefTailleImage(int);
 virtual void DefBinning(int);
 virtual void DefModeAcquisition(int );
 virtual void DefModeDeclenchement(int);
@@ -96,6 +95,13 @@ virtual double TempsExposition (){return tempsExposition;};
 virtual float TempsPose(){return 0;};
 virtual float GainEMCCD(){return valGain;};
 virtual int ModeGainEMCCD(){return 0;};
+
+virtual double TempsExposition(double =DBL_MAX);
+virtual double Gain(double =DBL_MAX);
+virtual double Contraste(double =DBL_MAX);
+virtual double Luminosite(double =DBL_MAX);
+virtual double Saturation(double =DBL_MAX);
+virtual bool DefTailleImage(int largeur,int hauteur);
 
 
 
