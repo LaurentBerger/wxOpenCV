@@ -202,57 +202,67 @@ wxSlider *cbGain=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTem
 wxSlider *cbLum=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels);
 wxSlider *cbSat=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels);
 wxSlider *cbTpsExpo=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels);
+bool b;
 if (w.GetEventObject()==cbContrast)
 	{
-	cbContrast->SetValue(w.GetInt());
 	if (cam->Contraste(w.GetInt()))
 		{
+		cbContrast->SetValue(w.GetInt());
 		wxString s;
 		s.Printf("%d",w.GetInt());
 		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST,ongletTemporels))->SetLabelText(s);	
 		}	
-
+	else
+		wxMessageBox(_("Value out of range"));
 	}
 else if (w.GetEventObject()==cbGain)
 	{
-	cbGain->SetValue(w.GetInt());
 	if (cam->Gain(w.GetInt()))
 		{
+		cbGain->SetValue(w.GetInt());
 		wxString s;
 		s.Printf("%d",w.GetInt());
 		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+1,ongletTemporels))->SetLabelText(s);	
 		}	
-	}
+	else
+		wxMessageBox(_("Value out of range"));
+}
 else if (w.GetEventObject()==cbLum)
 	{
-	cbLum->SetValue(w.GetInt());
 	if (cam->Luminosite(w.GetInt()))
 		{
+		cbLum->SetValue(w.GetInt());
 		wxString s;
 		s.Printf("%d",w.GetInt());
 		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+2,ongletTemporels))->SetLabelText(s);	
 		}	
-	}
+	else
+		wxMessageBox(_("Value out of range"));
+}
 else if (w.GetEventObject()==cbSat)
 	{
-	cbSat->SetValue(w.GetInt());
 	if (cam->Saturation(w.GetInt()))
 		{
+		cbSat->SetValue(w.GetInt());
 		wxString s;
 		s.Printf("%d",w.GetInt());
 		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+3,ongletTemporels))->SetLabelText(s);	
 		}	
-	}
+	else
+		wxMessageBox(_("Value out of range"));
+}
 else if (w.GetEventObject()==cbTpsExpo)
 	{
-	cbTpsExpo->SetValue(w.GetInt());
 	if (cam->TempsExposition(w.GetInt()))
 		{
+		cbTpsExpo->SetValue(w.GetInt());
 		wxString s;
 		s.Printf("%d",w.GetInt());
 		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+4,ongletTemporels))->SetLabelText(s);	
 		}	
-	}
+	else
+		wxMessageBox(_("Value out of range"));
+}
 
 }
 
@@ -483,13 +493,13 @@ if (cam->ReglageContraste() )
 		if (v>0 && v<256)
 			{
 			max=256;
-			min=1;
+			min=-256;
 			}
 		else  if (v!=DBL_MAX)
 			{
-			min=-10*abs(v);
-			max=10*abs(v)+1;
-			}
+			min = -20;
+			max = 20;
+		}
 		wxString s;
 		if (v!=DBL_MAX)
 			s.Printf("%d",int(v));
@@ -499,8 +509,10 @@ if (cam->ReglageContraste() )
 		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->SetMax(int(max));	
 		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->SetMin(int(min));	
 		if (v!=DBL_MAX)
-			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->SetValue(int(v));	
-		}
+			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST, ongletTemporels))->SetValue(int(v));
+		else
+			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST, ongletTemporels))->Disable();
+	}
 	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST,ongletTemporels))->Enable();	
 
 	}
@@ -513,14 +525,14 @@ if (cam->ReglageGain())
 	{
 	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->Enable();	
 	double v,min=0,max=100;
-	if (cam && cam->ReglageContraste())
+	if (cam && cam->ReglageGain())
 		{
 		v=cam->Gain();
 		if (v>0 && v<256)
 			{
-			max=256;
-			min=1;
-			}
+			max = 256;
+			min = -256;
+		}
 		else  if (v!=DBL_MAX)
 			{
 			min=-10*abs(v);
@@ -536,7 +548,9 @@ if (cam->ReglageGain())
 		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->SetMin(int(min));	
 		if (v!=DBL_MAX)
 			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->SetValue(int(v));	
-		}
+		else
+			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1, ongletTemporels))->Disable();
+	}
 	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+1,ongletTemporels))->Enable();	
 	}
 else
@@ -548,19 +562,19 @@ if (cam->ReglageLuminosite())
 	{
 	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->Enable();	
 	double v,min=0,max=100;
-	if (cam && cam->ReglageContraste())
+	if (cam && cam->ReglageLuminosite())
 		{
 		v=cam->Luminosite();
 		if (v>0 && v<256)
 			{
 			max=256;
-			min=1;
+			min=-256;
 			}
 		else  if (v!=DBL_MAX)
 			{
-			min=-10*abs(v);
-			max=10*abs(v)+1;
-			}
+			min = -20;
+			max = 20;
+		}
 		wxString s;
 		if (v!=DBL_MAX)
 			s.Printf("%d",int(v));
@@ -571,7 +585,9 @@ if (cam->ReglageLuminosite())
 		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->SetMin(int(min));	
 		if (v!=DBL_MAX)
 			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->SetValue(int(v));	
-		}
+		else
+			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2, ongletTemporels))->Disable();
+	}
 	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+2,ongletTemporels))->Enable();	
 	}
 else
@@ -583,13 +599,13 @@ if (cam->ReglageSaturation())
 	{
 	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->Enable();	
 	double v,min=0,max=100;
-	if (cam && cam->ReglageContraste())
+	if (cam && cam->ReglageSaturation())
 		{
 		v=cam->Saturation();
 		if (v>0 && v<256)
 			{
 			max=256;
-			min=1;
+			min=-256;
 			}
 		else  if (v!=DBL_MAX)
 			{
@@ -606,7 +622,9 @@ if (cam->ReglageSaturation())
 		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->SetMin(int(min));	
 		if (v!=DBL_MAX)
 			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->SetValue(int(v));	
-		}
+		else
+			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3, ongletTemporels))->Disable();
+	}
 	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+3,ongletTemporels))->Enable();	
 	}
 else
@@ -624,13 +642,13 @@ if (cam->ReglageTpsExpo())
 		if (v>0 && v<256)
 			{
 			max=256;
-			min=1;
+			min=-256;
 			}
 		else  if (v!=DBL_MAX)
 			{
-			min=-20;
-			max=20;
-			}
+			min = -20;
+			max = 20;
+		}
 		wxString s;
 		if (v!=DBL_MAX)
 			s.Printf("%d",int(v));
@@ -641,7 +659,9 @@ if (cam->ReglageTpsExpo())
 		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->SetMin(int(min));	
 		if (v!=DBL_MAX)
 			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->SetValue(int(v));	
-		}
+		else
+			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4, ongletTemporels))->Disable();
+	}
 	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+4,ongletTemporels))->Enable();	
 	}
 else
@@ -875,7 +895,7 @@ new wxStaticText(ongletTemporels,-1,legende[j],position[j], taille[j]);
 j++;
 wxArrayString mode;
 mode.Add("160X120");mode.Add("176X144");mode.Add("320X176");mode.Add("320X240");mode.Add("352X288");mode.Add("432X240");
-mode.Add("544X288");mode.Add("640X480");mode.Add("752X416");mode.Add("800X448");mode.Add("800X600");mode.Add("864X480");
+mode.Add("544X288"); mode.Add("640X360"); mode.Add("640X480"); mode.Add("752X416"); mode.Add("800X448"); mode.Add("800X600"); mode.Add("864X480");
 mode.Add("960X544");mode.Add("960X720");mode.Add("1024X576");mode.Add("1184X656");mode.Add("1280X720");mode.Add("1280X960");
 
 wxChoice *t=new wxChoice(ongletTemporels,ID_TAILLE_VIDEO,position[j],taille[j], mode);
