@@ -490,9 +490,9 @@ if (im!=NULL)
 	else
 		opSelec=9999;
 	FenetrePrincipale *f;
-	if (wb->GetValue() && idFenetre.find(opSelec)!=idFenetre.end()  )
+	if (wb->GetValue() && idFenetre.find(opSelec)!=idFenetre.end() && app->Graphique(idFenetre[opSelec].second) )
 		{
-		f=idFenetre[opSelec];
+		f=idFenetre[opSelec].first;
 		f->AssosierImage(im[0]);
 
 		}
@@ -504,7 +504,7 @@ if (im!=NULL)
 		s.Printf("%d : %s( %d) of image %d ",app->NbFenetre(),_("Sequence"),opSelec,fenMere->IdFenetre());	
 		f->SetTitle(s);
 		f->DefOSGApp(app);
-		idFenetre[opSelec]=f;
+		idFenetre[opSelec] = make_pair (f, f->IdFenetre());
 		f->AssosierImage(im[0]);
 		app->InitFenAssociee(f);
 		f->InitIHM();
