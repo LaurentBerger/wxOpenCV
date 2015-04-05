@@ -259,8 +259,11 @@ ImageInfoCV 	&operator= (ImageInfoCV	&z);
 ImageInfoCV	*Variance (long);
 
 // Fonctions membres equivalentes aux opérateurs utilisant OPENCV
-ImageInfoCV 	*Add(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*AddPonderee(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*EtLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
+ImageInfoCV 	*OuLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
+ImageInfoCV 	*OuExcluLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
+ImageInfoCV 	*Add(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
+ImageInfoCV 	*AddPonderee(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
 ImageInfoCV 	*Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*Div(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
@@ -275,6 +278,7 @@ ImageInfoCV 	*Convolution(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation 
 ImageInfoCV		*PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
+ImageInfoCV 	*Negation(ImageInfoCV	*im1, ParametreOperation *pOCV);
 ImageInfoCV 	*Laplacien(ImageInfoCV	*,ParametreOperation *pOCV);
 ImageInfoCV 	*ScharrX(ImageInfoCV	*im1,ParametreOperation *pOCV);
 ImageInfoCV 	*ScharrY(ImageInfoCV	*im1,ParametreOperation *pOCV);

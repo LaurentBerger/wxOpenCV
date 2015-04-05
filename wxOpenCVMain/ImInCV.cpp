@@ -60,6 +60,7 @@ centreGComposante = NULL;
 contours=NULL;
 moment=NULL;
 huMoment=NULL;
+arbreContour=NULL;
 pOCVHoughLigne=NULL;
 pOCVHoughLigneProba=NULL;
 pOCVHoughCercle=NULL;
@@ -130,7 +131,7 @@ void ImageInfoCV::DiffusionMPI(void)
 }
 
 
-ImageInfoCV::ImageInfoCV(void):moment(NULL),statComposante(NULL),centreGComposante(NULL),locMin(NULL),locMax(NULL),contours(NULL)
+ImageInfoCV::ImageInfoCV(void):moment(NULL),statComposante(NULL),centreGComposante(NULL),locMin(NULL),locMax(NULL),contours(NULL),arbreContour(NULL)
 {
 eSauver=NULL;
 InitImageInfo();
@@ -168,8 +169,9 @@ delete []minIm;			/*< Minimimum pour chaque plan de l'image */
 delete []maxIm;			/*< Maximimum pour chaque plan de l'image */
 delete []locMin ;	/*< Position du miminmu pour chaque plan */
 delete []locMax;	/*< Position du miminmu pour chaque plan */
-delete []contours;
-for (int i=0;i<channels();i++)
+delete[]contours;
+delete[]arbreContour;
+for (int i = 0; i<channels(); i++)
 	{
 	if (statComposante)
 		delete statComposante[i]; 

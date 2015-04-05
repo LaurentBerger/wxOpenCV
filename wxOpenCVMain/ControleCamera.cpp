@@ -58,7 +58,7 @@ cam =NULL;
 osgApp=NULL;
 parent=NULL;
 
-SetIcon(wxIcon(_T("seec64.bmp"),wxBITMAP_TYPE_ICO ));
+SetIcon(wxIcon("wxocv.bmp",wxBITMAP_TYPE_ICO ));
 panneau = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxTAB_TRAVERSAL | wxCLIP_CHILDREN | wxNO_BORDER | wxNO_FULL_REPAINT_ON_RESIZE);
 m_sizerFrame = new wxBoxSizer(wxVERTICAL);

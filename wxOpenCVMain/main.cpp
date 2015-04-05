@@ -1435,7 +1435,7 @@ tracerLigneHough=false;
 tracerLigneProbaHough=false;
 tracerCercleHough=false;
 tracerBonCoin=false;
-
+imgStatIm=NULL;
 indEvtCam=0;
 for (int i=0;i<10;i++)
 	planActif[i]=true;
@@ -1483,7 +1483,7 @@ nbImageTache=0;
 ((wxFrame*)this)->SetBackgroundColour(*wxBLACK);
 // Association barre des menus avec la trame
 
-SetIcon(wxIcon(_T("seec64.bmp"),wxBITMAP_TYPE_ICO ));
+SetIcon(wxIcon("wxocv.bmp",wxBITMAP_TYPE_ICO ));
 DefCurseur(5);
 
 cam=NULL;
@@ -1922,77 +1922,6 @@ if (imAcq==NULL)
 			}
 		}
 
-#ifdef __IMTMP__
-	int nbLigne=imtmp->rows,nbColonne=imtmp->cols,nbPlan=imtmp->channels();
-int x=imtmp->type();
-int t[]={CV_8UC1,CV_8UC2,CV_8UC3,CV_16UC1,CV_16UC2,CV_16UC3,CV_16SC1,CV_16SC2,CV_16SC3,CV_32FC1,CV_32FC2,CV_32FC3,CV_32FC4,CV_64FC1,CV_64FC2,CV_64FC3};
-	switch(imtmp->type())
-	{
-	case CV_8UC1:
-		seuilNivBas[0]=0;
-		coeffCanal[0]=1;
-		for (int i=0;i<nbLigne;i++)
-			for (int j=0;j<nbColonne;j++)
-				{
-				imAcq->at<unsigned char>(i,j) = imtmp->at<unsigned char>(i,j);
-				}
-		break;
-	case CV_8UC3:
-		for (int i=0;i<imAcq->channels();i++)
-			{
-			seuilNivBas[i]=0;
-			coeffCanal[i]=1;
-			}
-		for (int k=0;k<nbPlan;k++)
-			for (int i=0;i<nbLigne;i++)
-				for (int j=0;j<nbColonne;j++)
-					{
-					imAcq->at<cv::Vec3b>(i,j) = imtmp->at<cv::Vec3b>(i,j);
-					}
-		break;
-	case CV_16UC1:
-		seuilNivBas[0]=0;
-		coeffCanal[0]=0.25;
-		for (int i=0;i<nbLigne;i++)
-			for (int j=0;j<nbColonne;j++)
-				{
-				imAcq->at<unsigned short>(i,j) = imtmp->at<unsigned short>(i,j);
-				}
-		break;
-	case CV_32FC1:
-		for (int i=0;i<nbLigne;i++)
-			for (int j=0;j<nbColonne;j++)
-				{
-				imAcq->at<float>(i,j) = imtmp->at<float>(i,j);
-				}
-		seuilNivBas[0]=0;
-		coeffCanal[0]=1;
-		break;
-	case CV_32FC2:
-		for (int i=0;i<nbLigne;i++)
-			for (int j=0;j<nbColonne;j++)
-				{
-				imAcq->at<cv::Vec2f>(i,j) = imtmp->at<cv::Vec2f>(i,j);
-				}
-		seuilNivBas[0]=0;
-		coeffCanal[0]=1;
-		seuilNivBas[1]=0;
-		coeffCanal[1]=1;
-		break;
-	case CV_32FC3:
-		for (int i=0;i<nbLigne;i++)
-			for (int j=0;j<nbColonne;j++)
-				{
-				imAcq->at<cv::Vec3f>(i,j) = imtmp->at<cv::Vec3f>(i,j);
-				}
-		for (int i=0;i<imAcq->channels();i++)
-			{
-			seuilNivBas[i]=0;
-			coeffCanal[i]=1;
-			}
-		break;
-		}
-#endif
 	}
 else
 	{
@@ -2008,6 +1937,8 @@ if (!feuille)
 delete(feuille->BitmapAffichee());
 feuille->BitmapAffichee(NULL);
 feuille->Update();
+if (imgStatIm && ImAcq() && ImAcq()->StatComposante())
+	imgStatIm->ListerRegion();
 }
 
 

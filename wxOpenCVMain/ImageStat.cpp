@@ -49,7 +49,7 @@ ImageStatistiques::ImageStatistiques(wxFrame *frame, const wxString& title, cons
     const wxSize& size, long style)
     : wxFrame(frame, wxID_ANY, title, pos, size, style)
 {
-SetIcon(wxIcon(_T("seec64.bmp"),wxBITMAP_TYPE_ICO ));
+SetIcon(wxIcon("wxocv.bmp",wxBITMAP_TYPE_ICO ));
 panneau = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxTAB_TRAVERSAL  | wxNO_BORDER | wxNO_FULL_REPAINT_ON_RESIZE);
 
@@ -125,6 +125,9 @@ if (i==1)
 
 void ImageStatistiques::OuvertureOngletCouleur()
 {
+if (ongletCouleur)
+	return;
+
 wxPoint	position[]={
 // Texte		Réglette
 wxPoint(10,10),wxPoint(70,10),wxPoint(170,10),
@@ -307,6 +310,8 @@ if (ongletDistribAngulaire && listeFenetreOnglet->GetCurrentPage()==ongletDistri
 
 void ImageStatistiques::OuvertureOngletStatus()
 {
+if (ongletStatus)
+	return;
 wxPoint	position[]={
 // Texte		
 wxPoint(10,10),wxPoint(80,10),
@@ -669,8 +674,14 @@ return ss;
 
 void ImageStatistiques::OuvertureOngletRegion() 
 {
-if (!fenMere || !fenMere->ImAcq())
+if (ongletRegionR)
 	return;
+if (ongletRegionV)
+	return;
+if (ongletRegionB)
+	return;
+if (!fenMere || !fenMere->ImAcq())
+return;
 if (fenMere->ImAcq()->channels()>=3)
 	{
 	ongletRegionR = new FenetreRegion((wxFrame*)listeFenetreOnglet); 
@@ -702,6 +713,8 @@ if (fenMere->ImAcq()->channels()>=1)
 
 void ImageStatistiques::OuvertureOngletCurseur() 
 {
+if (ongletCurseur)
+	return;
 ongletCurseur = new wxWindow((wxFrame*)listeFenetreOnglet,-1,wxPoint(0,0),wxSize(800,400)); 
 
 curseur = new Tableur((wxFrame*)ongletCurseur,14,14); 
@@ -770,7 +783,9 @@ for (int i=-7;i<=7;i++)
 
 void ImageStatistiques::OuvertureOngletDistribRadiale()
 {
-ongletDistribRadiale = new FenetreDistribRadiale((wxFrame*)listeFenetreOnglet); 
+if (ongletDistribRadiale)
+	return;
+ongletDistribRadiale = new FenetreDistribRadiale((wxFrame*)listeFenetreOnglet);
 ongletDistribRadiale->DefOsgApp(osgApp);
 ongletDistribRadiale->DefFenetrePrincipale((void*)fenMere);
 ongletDistribRadiale->Plot(true);
@@ -780,7 +795,9 @@ ongletDistribRadiale->Refresh();
 
 void ImageStatistiques::OuvertureOngletDistribAngulaire()
 {
-ongletDistribAngulaire = new FenetreDistribAngulaire((wxFrame*)listeFenetreOnglet); 
+if (ongletDistribAngulaire)
+	return;
+ongletDistribAngulaire = new FenetreDistribAngulaire((wxFrame*)listeFenetreOnglet);
 ongletDistribAngulaire->DefOsgApp(osgApp);
 ongletDistribAngulaire->DefFenetrePrincipale((void*)fenMere);
 ongletDistribAngulaire->Plot(true);
@@ -791,7 +808,9 @@ ongletDistribAngulaire->Refresh();
 
 void ImageStatistiques::OuvertureOngletHistogramme()
 {
-ongletHistogramme = new FenetreHistogramme((wxFrame*)listeFenetreOnglet); 
+if (ongletHistogramme)
+	return;
+ongletHistogramme = new FenetreHistogramme((wxFrame*)listeFenetreOnglet);
 ongletHistogramme->DefOsgApp(osgApp);
 ongletHistogramme->DefFenetrePrincipale((void*)fenMere);
 ongletHistogramme->Plot();
@@ -801,6 +820,8 @@ ongletHistogramme->Refresh();
 
 void ImageStatistiques::OuvertureOngletCoupe()
 {
+if (ongletCoupe)
+	return;
 ongletCoupe = new FenetreCoupe((wxFrame*)listeFenetreOnglet); 
 ongletCoupe->DefOsgApp(osgApp);
 ongletCoupe->DefFenetrePrincipale((void*)fenMere);
@@ -812,7 +833,9 @@ ongletCoupe->Refresh();
 
 void ImageStatistiques::OuvertureOngletFocus()
 {
-ongletFocus = new FenetreFocus((wxFrame*)listeFenetreOnglet); 
+if (ongletFocus)
+	return;
+ongletFocus = new FenetreFocus((wxFrame*)listeFenetreOnglet);
 ongletFocus->DefOsgApp(osgApp);
 ongletFocus->DefFenetrePrincipale((void*)fenMere);
 ongletFocus->Plot(true);

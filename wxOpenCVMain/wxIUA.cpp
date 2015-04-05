@@ -35,8 +35,12 @@ enum
     ID_ADDITION =1,
     ID_SOUSTRACTION,
     ID_DIVISION,
-    ID_MULTIPLICATION,
-    ID_EROSION,
+	ID_MULTIPLICATION,
+	ID_OU_LOGIQUE,
+	ID_ET_LOGIQUE,
+	ID_OUEXCLU_LOGIQUE,
+	ID_NEGATION,
+	ID_EROSION,
     ID_DILATATION,
     ID_OUVERTURE,
     ID_FERMETURE,
@@ -147,8 +151,12 @@ END_EVENT_TABLE()
 // Barre outils opérateur
     #include "bitmaps/addition.xpm"
     #include "bitmaps/soustraction.xpm"
-    #include "bitmaps/multiplication.xpm"
-    #include "bitmaps/division.xpm"
+	#include "bitmaps/multiplication.xpm"
+	#include "bitmaps/division.xpm"
+	#include "bitmaps/etlogique.xpm"
+	#include "bitmaps/oulogique.xpm"
+	#include "bitmaps/oueclulogique.xpm"
+	#include "bitmaps/negation.xpm"
 // Barre outils morpholgie
     #include "bitmaps/erosion.xpm"
     #include "bitmaps/dilatation.xpm"
@@ -905,50 +913,15 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
    // create some toolbars
 	enum
 		{
-			Tool_addition,
-			Tool_soustraction,
-			Tool_multiplication,
-			Tool_division,
-			Tool_erosion,
-			Tool_dilatation,
-			Tool_ouverture,
-			Tool_fermeture,
-			Tool_gradmorph,
-			Tool_chaphautblanc,
-			Tool_chaphautnoir,
-			Tool_gradient_mod,
-			Tool_gradient_x,
-			Tool_gradient_y,
-			Tool_laplacien,
-			Tool_canny,
-			Tool_cornerharris,
-			Tool_goodfeature,
-			Tool_houghcircle,
-			Tool_houghline,
-			Tool_houghlinep,
-			Tool_fft,
-			Tool_ifft,
-			Tool_contour,
-			Tool_seuillage,
-			Tool_seuillageada,
-			Tool_distancediscrete,
-			Tool_squelette,
-			Tool_voronoi,
-			Tool_cmpconnexe,
-			Tool_statconnexe,
-			Tool_LisMoy,
-			Tool_LisMed,
-			Tool_LisGau,
-			Tool_flou,
-			Tool_convolution,
-			Tool_fusionplan,
-			Tool_separationplan,
-			Tool_rgbluminance,
-			Tool_pyrflotoptique,
-			Tool_calcflotoptique,
-			Tool_calcflotoptiquefarner,
-			Tool_estimtransfo,
-			Tool_majmvt,
+			Tool_addition,Tool_soustraction,Tool_multiplication,Tool_division,Tool_oulogique,Tool_etlogique,Tool_ouexclulogique,Tool_negationlogique,
+			Tool_erosion,Tool_dilatation,Tool_ouverture,Tool_fermeture,Tool_gradmorph,Tool_chaphautblanc,Tool_chaphautnoir,
+			Tool_gradient_mod,Tool_gradient_x,Tool_gradient_y,Tool_laplacien,
+			Tool_canny,Tool_cornerharris,Tool_goodfeature,Tool_houghcircle,Tool_houghline,Tool_houghlinep,
+			Tool_fft,Tool_ifft,
+			Tool_contour,Tool_seuillage,Tool_seuillageada,Tool_distancediscrete,Tool_squelette,Tool_voronoi,Tool_cmpconnexe,Tool_statconnexe,
+			Tool_LisMoy,Tool_LisMed,Tool_LisGau,Tool_flou,Tool_convolution,
+			Tool_fusionplan,Tool_separationplan,Tool_rgbluminance,
+			Tool_pyrflotoptique,Tool_calcflotoptique,Tool_calcflotoptiquefarner,Tool_estimtransfo,Tool_majmvt,
 			Tool_Max
 		};
 	switch(indBarre)
@@ -969,6 +942,13 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			INIT_TOOL_BMP(soustraction);
 			INIT_TOOL_BMP(multiplication);
 			INIT_TOOL_BMP(division);
+			INIT_TOOL_BMP(etlogique);
+			INIT_TOOL_BMP(oulogique);
+			INIT_TOOL_BMP(ouexclulogique);
+			INIT_TOOL_BMP(negationlogique);
+			INIT_TOOL_BMP(division);
+			INIT_TOOL_BMP(division);
+			INIT_TOOL_BMP(division);
 
         if (toolBarBitmaps[Tool_addition].GetHeight()==0)
             wxMessageBox("Probleme","pb");
@@ -983,7 +963,11 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb->AddTool(ID_SOUSTRACTION, "", toolBarBitmaps[Tool_soustraction], _("Difference between 2 images"));
 		tb->AddTool(ID_MULTIPLICATION, "", toolBarBitmaps[Tool_multiplication], _("product"));
 		tb->AddTool(ID_DIVISION, "", toolBarBitmaps[Tool_division], _("Divide"));
-		wxColour c(255,0,0);;
+		tb->AddTool(ID_ET_LOGIQUE, "", toolBarBitmaps[Tool_division], _("logical and"));
+		tb->AddTool(ID_OU_LOGIQUE, "", toolBarBitmaps[Tool_division], _("logical or"));
+		tb->AddTool(ID_OUEXCLU_LOGIQUE, "", toolBarBitmaps[Tool_division], _("exclusive or"));
+		tb->AddTool(ID_NEGATION, "", toolBarBitmaps[Tool_division], _("Not"));
+		wxColour c(255, 0, 0);;
 		tb->SetBackgroundColour(c);
 		//tb->SetCustomOverflowItems(prepend_items, append_items);
 //		tb->Realize();
@@ -1394,25 +1378,25 @@ void InterfaceAvance::SelectOperation(wxCommandEvent& evt)
 wxString s;
 switch(evt.GetId()){
 case ID_RGBLUMINANCE:
-    s="RGBLuminance";
+    s="cvtcolor";
 	break;
 case ID_FUSIONPLAN:
-    s="FusionPlan";
+    s="merge";
 	break;
 case ID_SEPARATIONPLAN:
-    s="SeparationPlan";
+    s="split";
 	break;
 case ID_ADDITION:
-    s="Addition";
+    s="add";
 	break;
 case ID_SOUSTRACTION:
-	s="Soustraction";
+	s="substract";
 	break;
 case ID_DIVISION:
-	s="Division";
+	s="divide";
 	break;
 case ID_MULTIPLICATION:
-	s="Multiplication";
+	s="multiply";
 	break;
 case ID_CONVOLUTION:
 	{
@@ -1423,7 +1407,7 @@ case ID_CONVOLUTION:
 		wxMessageBox(_("You must defined convolution operator first!"),_("Error"), wxOK,this);
 		return;
 		}
-	s="Convolution";
+	s="filter2d";
 	}
 	break;
 case ID_EROSION:
@@ -1435,7 +1419,7 @@ case ID_EROSION:
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
 		}
-	s="Erosion";
+	s="erode";
 	}
 	break;
 case ID_DILATATION:
@@ -1447,7 +1431,7 @@ case ID_DILATATION:
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
 		}
-	s="Dilatation";
+	s="dilate";
 	}
 	break;
 case ID_OUVERTURE:
@@ -1459,7 +1443,7 @@ case ID_OUVERTURE:
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
 		}
-	s="Ouverture";
+	s="openning";
 	}
 	break;
 case ID_FERMETURE:
@@ -1471,7 +1455,7 @@ case ID_FERMETURE:
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
 		}
-	s="Fermeture";
+	s="closing";
 	}
 	break;
 case ID_CHAPHAUTBL:
@@ -1483,7 +1467,7 @@ case ID_CHAPHAUTBL:
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
 		}
-	s="ChapeauHaut";
+	s="tophat";
 	}
 	break;
 case ID_CHAPHAUTNO:
@@ -1495,7 +1479,7 @@ case ID_CHAPHAUTNO:
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
 		}
-	s="ChapeauBas";
+	s="blackhat";
 	}
 	break;
 case ID_GRADMORPH:
@@ -1507,38 +1491,38 @@ case ID_GRADMORPH:
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
 		}
-	s="GradMorph";
+	s="morph_gradient";
 	}
 	break;
 case ID_GRADIENT_X:
-	s="Scharr_x";
+	s="scharr_x";
 	break;
 case ID_GRADIENT_Y:
-	s="Scharr_y";
+	s="scharr_y";
 	break;
 case ID_GRADIENT_MOD:
-	s="Scharr_mod";
+	s="scharr_mod";
 	break;
 case ID_LAPLACIEN:
-	s="Laplacien";
+	s="laplacian";
 	break;
 case ID_CANNY:
-	s="Canny";
+	s="canny";
 	break;
 case ID_THRESHOLD:
-	s="Seuillage";
+	s="threshold";
 	break;
 case ID_ADATHRESHOLD:
-	s="AdaptatifSeuillage";
+	s="adaptivethreshold";
 	break;
 case ID_CONTOUR:
-	s="Contour";
+	s="contour";
 	break;
 case ID_PARTAGE_EAUX:
-	s="PartageEaux";
+	s="watershed";
 	break;
 case ID_COMPCONNEXE:
-	s="ComposanteConnexe";
+	s="connectedcomponents";
 	break;
 case ID_FFT:
 	s="FFT";
@@ -1547,52 +1531,65 @@ case ID_IFFT:
 	s="IFFT";
 	break;
 case ID_LISMOY:
-	s= "LissageMoyenneur";
+	s= "blur";
 	break;
 case ID_LISGAU:
-	s="LissageGaussien";
+	s="gaussianblur";
 
 	break;
 case ID_LISMED:
-	s="LissageMedian";
+	s="medianblur";
 	break;
 case ID_SQUELETTE:
-	s="Squelette";
+	s="medianaxis";
 	break;
 case ID_DISTANCEDISCRETE:
 case ID_VORONOI:
-	s="DistanceDiscrete";
+	s="distancetransform";
 	break;
 case ID_CORNERHARRIS:
-	s="CornerHarris";
+	s="cornerharris";
 	break;
 case ID_GOODFEATURE:
-	s="GoodFeature";
+	s="goodfeaturestotrack";
 	break;
 case ID_HOUGHCIRCLE:
-	s="HoughCercle";
+	s="houghcircles";
 	break;
 case ID_HOUGHLINE:
-	s="HoughLine";
+	s="houghlines";
 	break;
 case ID_HOUGHLINEP:
-	s="HoughLineP";
+	s="houghlinesp";
 	break;
 case ID_PYRFLOTOPTIQUE:
-	s="PyrFlotOptique";
+	s="buildopticalflowpyramid";
 	break;
 case ID_CALCFLOTOPTIQUE:
-	s="CalcFlotOptique";
+	s="calcopticalflowpyrlk";
 	break;
 case ID_CALCFLOTOPTIQUEFARNER:
-	s="CalcFlotOptiqueFarner";
+	s="calcopticalflowfarneback";
 	break;
 case ID_ESTIM_TRANS:
-	s="EstimTransformation";
+	s="estimaterigidtransform";
 	break;
 case ID_MAJ_MVT:
-	s="MajMouvement";
+	s="updatemotionhistory";
 	break;
+case 	ID_OU_LOGIQUE:
+	s = "bitwise-or";
+	break;
+case 	ID_ET_LOGIQUE:
+	s = "bitwise-and";
+	break;
+case 	ID_OUEXCLU_LOGIQUE:
+	s = "bitwise-xor";
+	break;
+case 	ID_NEGATION:
+	s = "bitwise-not";
+	break;
+
 	}
 ((wxOsgApp*)osgApp)->DefOperateurImage(s);
 ((wxOsgApp*)osgApp)->DefPointeurSouris(1,1);

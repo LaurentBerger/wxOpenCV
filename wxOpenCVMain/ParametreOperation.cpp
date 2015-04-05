@@ -79,7 +79,7 @@ indOp2Fenetre=-1;
 indOp3Fenetre=-1;
 opVideo=false;
 opErreur=0;
-if(	s=="CornerHarris")
+if(	s=="cornerharris")
 	{
 	nomOperation=s;
 	nbImageRes=1;
@@ -89,7 +89,7 @@ if(	s=="CornerHarris")
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	doubleParam["k"]=DomaineParametreOp<double>(0.04,0.01,10,0.01);
 	}
-if(	s=="GoodFeature")
+if(	s=="goodfeaturestotrack")
 	{
 	nbImageRes=0;
 	nomOperation=s;
@@ -101,7 +101,7 @@ if(	s=="GoodFeature")
 	intParam["useHarrisDetector"]=DomaineParametreOp<int>(1,0,1,1);
 	doubleParam["k"]=DomaineParametreOp<double>(0.04,0.01,1,0.01);
 	}
-if(	s=="HoughCercle")
+if(	s=="houghcircles")
 	{
 	nbImageRes=0;
 	nomOperation=s;
@@ -114,7 +114,7 @@ if(	s=="HoughCercle")
 	intParam["min_radius"]=DomaineParametreOp<int>(100,0,1000,1);
 	intParam["max_radius"]=DomaineParametreOp<int>(130,0,1000,1);
 	}
-if(	s=="HoughLine")
+if(	s=="houghlines")
 	{
 	nomOperation=s;
 	nbOperande= 1;
@@ -126,7 +126,7 @@ if(	s=="HoughLine")
 	doubleParam["srn"]=DomaineParametreOp<double>(0.0,0.00,1,0.1);
 	doubleParam["stn"]=DomaineParametreOp<double>(0.0,0,1000,0.1);
 	}
-if(	s=="HoughLineP")
+if(	s=="houghlinesp")
 	{
 	nbImageRes=0;
 	nomOperation=s;
@@ -137,32 +137,56 @@ if(	s=="HoughLineP")
 	doubleParam["minLineLength"]=DomaineParametreOp<double>(10,1,1000,0.1);
 	doubleParam["maxLineGap"]=DomaineParametreOp<double>(0.0,1,1000,1);
 	}
-if (s=="PartageEaux")
+if (s=="watershed")
 	{
 	nomOperation=s;
 	nbOperande= 1;
 	nbImageRes=1;
 	}
-if (s=="SeparationPlan")
+if (s=="split")
 	{
 	nomOperation=s;
 	nbOperande= 1;
 	nbImageRes=1;
 	}
-if (s=="FusionPlan")
+if (s=="merge")
 	{
 	nomOperation = s;
 	nbOperande= 3;
 	nbImageRes=1;
 	}
-if (s=="Addition")
-	{
-	nomOperation=s;
-	nbOperande= 2;
-	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
-	nbImageRes=1;
-	}
-if (s=="AdditionPonderee")
+if (s == "bitwise-and")
+{
+	nomOperation = s;
+	nbOperande = 2;
+	nbImageRes = 1;
+}
+if (s == "bitwise-or")
+{
+	nomOperation = s;
+	nbOperande = 2;
+	nbImageRes = 1;
+}
+if (s == "bitwise-xor")
+{
+	nomOperation = s;
+	nbOperande = 2;
+	nbImageRes = 1;
+}
+if (s == "bitwise-not")
+{
+	nomOperation = s;
+	nbOperande = 1;
+	nbImageRes = 1;
+}
+if (s == "add")
+{
+	nomOperation = s;
+	nbOperande = 2;
+	intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+	nbImageRes = 1;
+}
+if (s == "AdditionPonderee")
 	{
 	nbImageRes=1;
 	nomOperation=s;
@@ -172,14 +196,14 @@ if (s=="AdditionPonderee")
 	doubleParam["beta"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	doubleParam["gamma"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	}
-if (s=="Soustraction")
+if (s=="subtract")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	nbOperande= 2;
 	}
-if (s=="Multiplication")
+if (s=="multiply")
 	{
 	nbImageRes=1;
 	nomOperation=s;
@@ -187,7 +211,7 @@ if (s=="Multiplication")
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	nbOperande= 2;
 	}
-if (s=="Division")
+if (s=="divide")
 	{
 	nbImageRes=1;
 	nomOperation=s;
@@ -195,50 +219,41 @@ if (s=="Division")
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	}
-if (s=="Convolution")
+if (s=="filter2d")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["IndOpConvolution"]=DomaineParametreOp<int>(xx.IndOpConvolution(),0,NB_OP_CONVOLUTION,1);
 	}
-if (s=="Dilatation")
+if (s=="dilate")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["IndOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	}
-if (s=="Erosion")
+if (s=="erode")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["IndOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	}
-if (s=="Ouverture")
+if (s=="openning")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	}
-if (s=="Fermeture")
+if (s=="closing")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	}
-if (s=="ChapeauHaut")
-	{
-	nbImageRes=1;
-	nomOperation=s;
-	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
-	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
-	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	}
-if (s=="ChapeauBas")
+if (s=="tophat")
 	{
 	nbImageRes=1;
 	nomOperation=s;
@@ -247,7 +262,7 @@ if (s=="ChapeauBas")
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	}
-if (s=="GradMorph")
+if (s=="blackhat")
 	{
 	nbImageRes=1;
 	nomOperation=s;
@@ -256,7 +271,16 @@ if (s=="GradMorph")
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	}
-if (s=="Scharr_mod")
+if (s=="morph_gradient")
+	{
+	nbImageRes=1;
+	nomOperation=s;
+	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
+	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
+	}
+if (s=="scharr_mod")
 	{
 	nbImageRes=1;
 	nomOperation=s;
@@ -265,7 +289,7 @@ if (s=="Scharr_mod")
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	}
-if (s=="Scharr_x")
+if (s=="scharr_x")
 	{
 	nbImageRes=1;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
@@ -274,7 +298,7 @@ if (s=="Scharr_x")
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	nomOperation=s;
 	}
-if (s=="Scharr_y")
+if (s=="scharr_y")
 	{
 	nbImageRes=1;
 	opUnaireSelec = &ImageInfoCV::ScharrY;
@@ -284,7 +308,7 @@ if (s=="Scharr_y")
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	nomOperation=s;
 	}
-if (s=="Laplacien")
+if (s=="laplacian")
 	{
 	nbImageRes=1;
 	intParam["ddepth"]=DomaineParametreOp<int>(50.,0.0,255.0,1.0);
@@ -294,7 +318,7 @@ if (s=="Laplacien")
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	nomOperation=s;
 	}
-if (s=="Canny")
+if (s=="canny")
 	{
 	nbImageRes=1;
 	doubleParam["threshold1"]=DomaineParametreOp<double>(50.,0.0,255.0,1.0);
@@ -303,7 +327,7 @@ if (s=="Canny")
 	intParam["kernel_size"]=DomaineParametreOp<int>(3,1,255,2);
 	nomOperation=s;
 	}
-if (s=="Contour")
+if (s=="contour")
 	{
 	nbImageRes=1;
 	intParam["mode"]=DomaineParametreOp<int>(cv::RETR_EXTERNAL,cv::RETR_EXTERNAL,cv::RETR_TREE,1);
@@ -311,7 +335,7 @@ if (s=="Contour")
 	nomOperation=s;
 	}
 
-if (s=="RGBLuminance")
+if (s=="cvtcolor")
 	{
 	nbImageRes=1;
 	intParam["ColorSpaceCode"]=DomaineParametreOp<int>(cv::COLOR_BGR2GRAY,cv::COLOR_BGR2GRAY,cv::COLOR_RGB2GRAY,1);
@@ -327,7 +351,7 @@ if (s=="IFFT")
 	nbImageRes=1;
 	nomOperation=s;
 	}
-if (s=="Seuillage")
+if (s=="threshold")
 	{
 	nbImageRes=1;
 	doubleParam["thresh"]=DomaineParametreOp<double>(50.,0.0,255.0,1.0);
@@ -335,7 +359,7 @@ if (s=="Seuillage")
 	intParam["threshold_type"]=DomaineParametreOp<int>(cv::THRESH_BINARY,cv::THRESH_BINARY,cv::THRESH_TOZERO_INV,1);
 	nomOperation=s;
 	}
-if (s=="AdaptatifSeuillage")
+if (s=="adaptivethreshold")
 	{
 	nbImageRes=1;
 	doubleParam["maxValue"]=DomaineParametreOp<double>(255.,0.0,255.0,1.0);
@@ -345,13 +369,13 @@ if (s=="AdaptatifSeuillage")
 	doubleParam["C"]=DomaineParametreOp<double>(-0,-255,255,1);
 	nomOperation=s;
 	}
-if (s=="LissageMedian")
+if (s=="medianblur")
 	{
 	nbImageRes=1;
 	intParam["ksize"]=DomaineParametreOp<int>(3,1,255,2);
 	nomOperation=s;
 	}
-if (s=="LissageMoyenneur")
+if (s=="blur")
 	{
 	nbImageRes=1;
 	sizeParam["ksize"]=DomaineParametreOp<cv::Size>(cv::Size(3,3),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
@@ -359,7 +383,7 @@ if (s=="LissageMoyenneur")
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	nomOperation=s;
 	}
-if (s=="LissageGaussien")
+if (s=="gaussianblur")
 	{
 	nbImageRes=1;
 	sizeParam["ksize"]=DomaineParametreOp<cv::Size>(cv::Size(3,3),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
@@ -368,29 +392,29 @@ if (s=="LissageGaussien")
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	nomOperation=s;
 	}
-if (s=="ComposanteConnexe")
+if (s=="connectedcomponents")
 	{
 	nbImageRes=1;
 	intParam["connectivity"]=DomaineParametreOp<int>(4,4,8,4);
 	intParam["ltype"]=DomaineParametreOp<int>(CV_32S,CV_32S,CV_32S,0);
 	nomOperation=s;
 	}
-if (s=="DistanceDiscrete")
+if (s=="distancetransform")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	}
-if (s=="LigneMediane")
+if (s=="medianaxis")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	}
-if (s=="PyrFlotOptique")
+if (s=="buildopticalflowpyramid")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	}
-if (s=="CalcFlotOptique")
+if (s=="calcopticalflowpyrlk")
 	{
 	nbImageRes=0;
 	nomOperation=s;
@@ -404,7 +428,7 @@ if (s=="CalcFlotOptique")
 	doubleParam["minEigThreshold"]=DomaineParametreOp<double>(0.001,0.0000001,100.0,0.001);
 
 	}
-if (s=="CalcFlotOptiqueFarner")
+if (s=="calcopticalflowfarneback")
 	{
 	nbImageRes=0;
 	opVideo=true;
@@ -418,12 +442,12 @@ if (s=="CalcFlotOptiqueFarner")
 	intParam["flag"]=DomaineParametreOp<int>(0,0,cv::OPTFLOW_LK_GET_MIN_EIGENVALS,4);
 
 	}
-if (s=="EstimTransformation")
+if (s=="estimaterigidtransform")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	}
-if (s=="MajMouvement")
+if (s=="updatemotionhistory")
 	{
 	nbImageRes=1;
 	nomOperation=s;
@@ -448,7 +472,7 @@ bool ParametreOperation::InitPtrFonction()
 {
 opAttribut=false;
 wxString s(nomOperation);
-if(	s=="CornerHarris")
+if(	s=="cornerharris")
 	{
 	nomOperation=s;
 	nbOperande= 1;
@@ -456,7 +480,7 @@ if(	s=="CornerHarris")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=327&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::DetectCoinHarris;
 	}
-if(	s=="GoodFeature")
+if(	s=="goodfeaturestotrack")
 	{
 	opAttribut=true;
 	nomOperation=s;
@@ -465,7 +489,7 @@ if(	s=="GoodFeature")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=329&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::BonAttributs;
 	}
-if(	s=="HoughCercle")
+if(	s=="houghcircles")
 	{
 	opAttribut=true;
 	nomOperation=s;
@@ -474,7 +498,7 @@ if(	s=="HoughCercle")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=330&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::HoughCercle;
 	}
-if(	s=="HoughLine")
+if(	s=="houghlines")
 	{
 	opAttribut=true;
 	nomOperation=s;
@@ -483,7 +507,7 @@ if(	s=="HoughLine")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=332&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::HoughLigne;
 	}
-if(	s=="HoughLineP")
+if(	s=="houghlinesp")
 	{
 	opAttribut=true;
 	nomOperation=s;
@@ -492,14 +516,14 @@ if(	s=="HoughLineP")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=333&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::HoughLigneProba;
 	}
-if (s=="RGBLuminance")
+if (s=="cvtcolor ")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#cvtcolor";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
 	nomOperation=s;
 	opUnaireSelec = &ImageInfoCV::RGB_L;
 	}
-if (s=="PartageEaux")
+if (s=="watershed")
 	{
 	opBinaireSelec = &ImageInfoCV::PartageEaux;
 	nbOperande= 1;
@@ -507,7 +531,7 @@ if (s=="PartageEaux")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
 	return true;
 	}
-if (s=="SeparationPlan")
+if (s=="split")
 	{
 	opSurjecUnaire = &ImageInfoCV::SeparationPlan;
 	nbOperande= 1;
@@ -515,7 +539,7 @@ if (s=="SeparationPlan")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
 	return true;
 	}
-if (s=="FusionPlan")
+if (s=="merge")
 	{
 	opNaireSelec = &ImageInfoCV::FusionPlan;
 	nbOperande= 3;
@@ -523,7 +547,40 @@ if (s=="FusionPlan")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=149&zoom=70,250,100";
 	return true;
 	}
-if (s=="Addition")
+if (s == "bitwise-and")
+{
+	opBinaireSelec = &ImageInfoCV::EtLogique;
+	lienHtml = "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#bitwise-and";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=124&zoom=70,250,100";
+	nbOperande = 2;
+	nbImageRes = 1;
+}
+if (s == "bitwise-or")
+{
+	lienHtml = "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#bitwise-or";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=125&zoom=70,250,100";
+	opBinaireSelec = &ImageInfoCV::OuLogique;
+	nbOperande = 2;
+	nbImageRes = 1;
+}
+if (s == "bitwise-xor")
+{
+	lienHtml = "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#bitwise-xor";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=126&zoom=70,250,100";
+	opBinaireSelec = &ImageInfoCV::OuExcluLogique;
+	nbOperande = 2;
+	nbImageRes = 1;
+}
+if (s == "bitwise-not")
+{
+	lienHtml = "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#bitwise-not";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=126&zoom=70,250,100";
+
+	opUnaireSelec = &ImageInfoCV::Negation;
+	nbOperande = 1;
+	nbImageRes = 1;
+}
+if (s == "add")
 	{
 	opBinaireSelec = &ImageInfoCV::Add;
 	nbOperande= 2;
@@ -531,7 +588,7 @@ if (s=="Addition")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
 	return true;
 	}
-if (s=="Soustraction")
+if (s=="subtract")
 	{
 	opBinaireSelec = &ImageInfoCV::Sub;
 	nbOperande= 2;
@@ -539,7 +596,7 @@ if (s=="Soustraction")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=172&zoom=70,250,100";
 	return true;
 	}
-if (s=="Multiplication")
+if (s=="multiply")
 	{
 	opBinaireSelec = &ImageInfoCV::Mul;
 	nbOperande= 2;
@@ -547,7 +604,7 @@ if (s=="Multiplication")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=153&zoom=70,250,100";
 	return true;
 	}
-if (s=="Division")
+if (s=="divide")
 	{
 	opBinaireSelec = &ImageInfoCV::Div;
 	nbOperande= 2;
@@ -555,7 +612,7 @@ if (s=="Division")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=136&zoom=70,250,100";
 	return true;
 	}
-if (s=="Convolution")
+if (s=="filter2d")
 	{
 	opBinaireSelec = &ImageInfoCV::Convolution;
 	nbOperande= 2;
@@ -563,7 +620,7 @@ if (s=="Convolution")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100";
 	return true;
 	}
-if (s=="Dilatation")
+if (s=="dilate")
 	{
 	opBinaireSelec = &ImageInfoCV::Dilatation;
 	nbOperande= 2;
@@ -571,84 +628,84 @@ if (s=="Dilatation")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100";
 	return true;
 	}
-if (s=="Erosion")
+if (s=="erode")
 	{
 	opBinaireSelec = &ImageInfoCV::Erosion;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100";
 	return true;
 	}
-if (s=="Ouverture")
+if (s=="openning")
 	{
 	opBinaireSelec = &ImageInfoCV::Ouverture;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=morphologyex#morphologyex";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
-if (s=="Fermeture")
+if (s=="closing")
 	{
 	opBinaireSelec = &ImageInfoCV::Fermeture;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
-if (s=="ChapeauHaut")
+if (s=="tophat")
 	{
 	opBinaireSelec = &ImageInfoCV::ChapeauHaut;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
-if (s=="ChapeauBas")
+if (s=="blackhat")
 	{
 	opBinaireSelec = &ImageInfoCV::ChapeauBas;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
-if (s=="GradMorph")
+if (s=="morph_gradient")
 	{
 	opBinaireSelec = &ImageInfoCV::GradMorph;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
-if (s=="Scharr_mod")
+if (s=="scharr_mod")
 	{
 	opUnaireSelec = &ImageInfoCV::ScharrModule;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
 	return true;
 	}
-if (s=="Scharr_x")
+if (s=="scharr_x")
 	{
 	opUnaireSelec = &ImageInfoCV::ScharrX;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
 	return true;
 	}
-if (s=="Scharr_y")
+if (s=="scharr_y")
 	{
 	opUnaireSelec = &ImageInfoCV::ScharrY;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
 	return true;
 	}
-if (s=="Laplacien")
+if (s=="laplacian")
 	{
 	lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/filtering.html#laplacian";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=261&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::Laplacien;
 	return true;
 	}
-if (s=="Canny")
+if (s=="canny")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=331&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::Canny;
 	return true;
 	}
-if (s=="Contour")
+if (s=="contour")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#findContour";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=308&zoom=70,250,100";
@@ -669,7 +726,7 @@ if (s=="IFFT")
 	opUnaireSelec = &ImageInfoCV::IFFT;
 	return true;
 	}
-if (s=="Seuillage")
+if (s=="threshold")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html?highlight=threshold#threshold";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=291&zoom=70,250,100";
@@ -677,63 +734,63 @@ if (s=="Seuillage")
 	opUnaireSelec = &ImageInfoCV::Seuillage;
 	return true;
 	}
-if (s=="AdaptatifSeuillage")
+if (s=="adaptivethreshold")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html?highlight=threshold#adaptivethreshold";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=280&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::SeuillageAdaptatif;
 	return true;
 	}
-if (s=="LissageMedian")
+if (s=="medianblur")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=medianblur#medianblur";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::LissageMedian;
 	return true;
 	}
-if (s=="LissageMoyenneur")
+if (s=="blur")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=blur#blur";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::LissageMoyenne;
 	return true;
 	}
-if (s=="LissageGaussien")
+if (s=="gaussianblur")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=gaussianblur#gaussianblur";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=263&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::LissageGaussien;
 	return true;
 	}
-if (s=="ComposanteConnexe")
+if (s=="connectedcomponents")
 	{
 	lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#connectedcomponents";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=263&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::ComposanteConnexe;
 	return true;
 	}
-if (s=="DistanceDiscrete")
+if (s=="distancetransform")
 	{
 	lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/miscellaneous_transformations.html#distancetransform";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=287&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::DistanceDiscrete;
 	return true;
 	}
-if (s=="LigneMediane")
+if (s=="medianaxis")
 	{
 	lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/miscellaneous_transformations.html#distancetransform";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=287&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::LigneMediane;
 	return true;
 	}
-if (s=="PyrFlotOptique")
+if (s=="buildopticalflowpyramid")
 	{
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#buildopticalflowpyramid";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=366&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::LigneMediane;
 	return true;
 	}
-if (s=="CalcFlotOptique")
+if (s=="calcopticalflowpyrlk")
 	{
 	opAttribut=true;
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowpyrlk";
@@ -743,7 +800,7 @@ if (s=="CalcFlotOptique")
 
 	return true;
 	}
-if (s=="CalcFlotOptiqueFarner")
+if (s=="calcopticalflowfarneback")
 	{
 	opAttribut=true;
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
@@ -753,14 +810,14 @@ if (s=="CalcFlotOptiqueFarner")
 
 	return true;
 	}
-if (s=="EstimTransformation")
+if (s=="estimaterigidtransform")
 	{
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#estimaterigidtransform";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=369&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::LigneMediane;
 	return true;
 	}
-if (s=="MajMouvement")
+if (s=="updatemotionhistory")
 	{
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#updatemotionhistory";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=370&zoom=70,250,100";

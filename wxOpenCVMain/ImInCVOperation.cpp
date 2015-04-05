@@ -121,6 +121,45 @@ return im;
 }
 
 
+ImageInfoCV 	*ImageInfoCV::EtLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV )
+{
+	ImageInfoCV	*im = new ImageInfoCV;
+
+	cv::bitwise_and(*im1, *im2, *im, cv::noArray());
+	return im;
+}
+
+ImageInfoCV 	*ImageInfoCV::OuLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV )
+{
+	ImageInfoCV	*im = new ImageInfoCV;
+
+	cv::bitwise_or(*im1, *im2, *im, cv::noArray());
+	return im;
+}
+
+ImageInfoCV 	*ImageInfoCV::OuExcluLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV)
+{
+	ImageInfoCV	*im = new ImageInfoCV;
+
+	cv::bitwise_xor(*im1, *im2, *im, cv::noArray());
+	return im;
+}
+
+
+/**
+* @function Negation
+* @brief Negation logique d'une image image
+*/
+ImageInfoCV 	*ImageInfoCV::Negation(ImageInfoCV	*im1,  ParametreOperation *pOCV)
+{
+	ImageInfoCV	*im = new ImageInfoCV;
+
+	cv::bitwise_not(*im1, *im, cv::noArray());
+	return im;
+}
+
+
+
 /**
  * @function Erosion
  * @brief Erosion d'une image im1 par l'opérateur im2 où l'opérateur par défaut
@@ -715,7 +754,7 @@ else
 			mmt[i][j] = cv::moments( im->contours[i][j], false );
 			}
 		}
-
+	delete []mmt;
 	delete []d;
 	}
 return im;
