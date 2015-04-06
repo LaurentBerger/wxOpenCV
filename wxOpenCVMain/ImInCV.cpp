@@ -67,6 +67,8 @@ pOCVHoughCercle=NULL;
 pOCVBonCoin=NULL;
 pOCVLucasKanade=NULL;
 pOCVGunnarFarneback=NULL;
+pOCVPhaseCorrelate=NULL;
+ponderation=NULL;
 
 #ifdef _INFOTEXTE__
 nbChampGonfle=0;
@@ -192,6 +194,7 @@ delete pOCVHoughCercle;
 delete pOCVBonCoin;
 delete pOCVLucasKanade;
 delete pOCVGunnarFarneback;
+delete ponderation;
 
 }
 
@@ -378,14 +381,26 @@ return pOCVLucasKanade;
 }
 ParametreOperation *ImageInfoCV::ParamOCVGunnarFarneback(ParametreOperation *p)
 {
-if (p)
+	if (p)
 	{
-	if (pOCVGunnarFarneback==NULL)
-		pOCVGunnarFarneback =  new ParametreOperation;
-	*pOCVGunnarFarneback=*p;
+		if (pOCVGunnarFarneback == NULL)
+			pOCVGunnarFarneback = new ParametreOperation;
+		*pOCVGunnarFarneback = *p;
 	}
-return pOCVGunnarFarneback;
+	return pOCVGunnarFarneback;
 }
+
+ParametreOperation *ImageInfoCV::ParamOCVPhaseCorrelate(ParametreOperation *p)
+{
+	if (p)
+	{
+		if (pOCVPhaseCorrelate == NULL)
+			pOCVPhaseCorrelate = new ParametreOperation;
+		*pOCVPhaseCorrelate = *p;
+	}
+	return pOCVPhaseCorrelate;
+}
+
 
 
 void ImageInfoCV::DefProprieteImage(char *nomFichier)

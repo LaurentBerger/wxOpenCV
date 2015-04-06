@@ -73,6 +73,7 @@ enum
 	ID_CALCFLOTOPTIQUE,
 	ID_CALCFLOTOPTIQUEFARNER,
 	ID_ESTIM_TRANS,
+	ID_PHASE_CORRELATE,
 	ID_MAJ_MVT,
 
 
@@ -197,7 +198,8 @@ END_EVENT_TABLE()
    #include "bitmaps/calcflotoptique.xpm"
    #include "bitmaps/calcflotoptiquefarner.xpm"
    #include "bitmaps/majmvt.xpm"
-   #include "bitmaps/estimtrans.xpm"
+#include "bitmaps/estimtrans.xpm"
+#include "bitmaps/phasecorrel.xpm"
 
 
 #endif // USE_XPM_BITMAPS
@@ -921,7 +923,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			Tool_contour,Tool_seuillage,Tool_seuillageada,Tool_distancediscrete,Tool_squelette,Tool_voronoi,Tool_cmpconnexe,Tool_statconnexe,
 			Tool_LisMoy,Tool_LisMed,Tool_LisGau,Tool_flou,Tool_convolution,
 			Tool_fusionplan,Tool_separationplan,Tool_rgbluminance,
-			Tool_pyrflotoptique,Tool_calcflotoptique,Tool_calcflotoptiquefarner,Tool_estimtransfo,Tool_majmvt,
+			Tool_pyrflotoptique, Tool_calcflotoptique, Tool_calcflotoptiquefarner, Tool_estimtransfo, Tool_majmvt, Tool_phasecorrel,
 			Tool_Max
 		};
 	switch(indBarre)
@@ -1321,6 +1323,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			INIT_TOOL_BMP(calcflotoptiquefarner);
 			INIT_TOOL_BMP(estimtransfo);
 			INIT_TOOL_BMP(majmvt);
+			INIT_TOOL_BMP(phasecorrel);
 
         if (toolBarBitmaps[Tool_pyrflotoptique].GetHeight()==0)
             wxMessageBox("Probleme","pb");
@@ -1337,6 +1340,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		tb->AddTool(ID_CALCFLOTOPTIQUEFARNER, wxEmptyString, toolBarBitmaps[Tool_calcflotoptiquefarner], _("Calculate optical flow(farnerback)"));
 		tb->AddTool(ID_ESTIM_TRANS, wxEmptyString, toolBarBitmaps[Tool_estimtransfo], _("Estimate rigid transform"));
 		tb->AddTool(ID_MAJ_MVT, wxEmptyString, toolBarBitmaps[Tool_majmvt], _("Update motion history"));
+		tb->AddTool(ID_PHASE_CORRELATE, wxEmptyString, toolBarBitmaps[Tool_majmvt], _("Phase correlation"));
 		//tb->SetCustomOverflowItems(prepend_items, append_items);
 		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
@@ -1572,7 +1576,10 @@ case ID_CALCFLOTOPTIQUEFARNER:
 	s="calcopticalflowfarneback";
 	break;
 case ID_ESTIM_TRANS:
-	s="estimaterigidtransform";
+	s = "estimaterigidtransform";
+	break;
+case ID_PHASE_CORRELATE:
+	s = "phasecorrelate";
 	break;
 case ID_MAJ_MVT:
 	s="updatemotionhistory";

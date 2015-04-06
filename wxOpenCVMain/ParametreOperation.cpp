@@ -414,20 +414,26 @@ if (s=="buildopticalflowpyramid")
 	nbImageRes=1;
 	nomOperation=s;
 	}
-if (s=="calcopticalflowpyrlk")
-	{
-	nbImageRes=0;
-	nomOperation=s;
-	opVideo=true;
-	intParam["typeCriteria"]=DomaineParametreOp<int>(cv::TermCriteria::COUNT,cv::TermCriteria::COUNT,cv::TermCriteria::COUNT|cv::TermCriteria::EPS,1);
-	intParam["maxCountCriteria"]=DomaineParametreOp<int>(20,1,255,1);
-	doubleParam["epsilonCriteria"]=DomaineParametreOp<double>(0.0001,0.0000001,255.0,0.001);
-	intParam["maxLevel"]=DomaineParametreOp<int>(3,0,8,1);
-	sizeParam["winSize"]=DomaineParametreOp<cv::Size>(cv::Size(21,21),cv::Size(3,3),cv::Size(255,255),cv::Size(2,2));
-	intParam["flag"]=DomaineParametreOp<int>(0,cv::OPTFLOW_USE_INITIAL_FLOW,cv::OPTFLOW_LK_GET_MIN_EIGENVALS,1);
-	doubleParam["minEigThreshold"]=DomaineParametreOp<double>(0.001,0.0000001,100.0,0.001);
+if (s == "calcopticalflowpyrlk")
+{
+	nbImageRes = 0;
+	nomOperation = s;
+	opVideo = true;
+	intParam["typeCriteria"] = DomaineParametreOp<int>(cv::TermCriteria::COUNT, cv::TermCriteria::COUNT, cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 1);
+	intParam["maxCountCriteria"] = DomaineParametreOp<int>(20, 1, 255, 1);
+	doubleParam["epsilonCriteria"] = DomaineParametreOp<double>(0.0001, 0.0000001, 255.0, 0.001);
+	intParam["maxLevel"] = DomaineParametreOp<int>(3, 0, 8, 1);
+	sizeParam["winSize"] = DomaineParametreOp<cv::Size>(cv::Size(21, 21), cv::Size(3, 3), cv::Size(255, 255), cv::Size(2, 2));
+	intParam["flag"] = DomaineParametreOp<int>(0, cv::OPTFLOW_USE_INITIAL_FLOW, cv::OPTFLOW_LK_GET_MIN_EIGENVALS, 1);
+	doubleParam["minEigThreshold"] = DomaineParametreOp<double>(0.001, 0.0000001, 100.0, 0.001);
 
-	}
+}
+if (s == "phasecorrelate")
+{
+	nbImageRes = 0;
+	nomOperation = s;
+	opVideo = true;
+}
 if (s=="calcopticalflowfarneback")
 	{
 	nbImageRes=0;
@@ -790,16 +796,27 @@ if (s=="buildopticalflowpyramid")
 	opUnaireSelec = &ImageInfoCV::LigneMediane;
 	return true;
 	}
-if (s=="calcopticalflowpyrlk")
-	{
-	opAttribut=true;
-	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowpyrlk";
-	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=365&zoom=70,250,100";
+if (s == "calcopticalflowpyrlk")
+{
+	opAttribut = true;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#calcopticalflowpyrlk";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=365&zoom=70,250,100";
 	opBinaireSelec = &ImageInfoCV::FlotOptiqueLucasKanadePyramide;
-	opVideo=true;
+	opVideo = true;
 
 	return true;
-	}
+}
+if (s == "phasecorrelate")
+{
+	opAttribut = true;
+	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/motion_analysis_and_object_tracking.html#phasecorrelate";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=365&zoom=70,250,100";
+	opBinaireSelec = &ImageInfoCV::PhaseCorrelate;
+	opVideo = true;
+
+	return true;
+}
+
 if (s=="calcopticalflowfarneback")
 	{
 	opAttribut=true;

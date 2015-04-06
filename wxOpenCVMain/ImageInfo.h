@@ -122,6 +122,7 @@ std::vector<cv::Vec2f> *ligne;		/*<! http://docs.opencv.org/modules/imgproc/doc/
 std::vector<cv::Point2f> *boncoin;	/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack */
 std::vector<cv::Point2f> *coinRef;	/*<! Les pixels de références de l'image pour calcul du flot optique */
 cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
+cv::Mat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
 
 ParametreOperation *pOCVHoughLigne;
 ParametreOperation *pOCVHoughLigneProba;
@@ -129,6 +130,7 @@ ParametreOperation *pOCVHoughCercle;
 ParametreOperation *pOCVBonCoin;
 ParametreOperation *pOCVLucasKanade;
 ParametreOperation *pOCVGunnarFarneback;
+ParametreOperation *pOCVPhaseCorrelate;
 
 public : 
 //	********* Constructeurs et destructeur
@@ -278,6 +280,8 @@ ImageInfoCV 	*Convolution(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation 
 ImageInfoCV		*PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
+ImageInfoCV		*PhaseCorrelate(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV);
+
 ImageInfoCV 	*Negation(ImageInfoCV	*im1, ParametreOperation *pOCV);
 ImageInfoCV 	*Laplacien(ImageInfoCV	*,ParametreOperation *pOCV);
 ImageInfoCV 	*ScharrX(ImageInfoCV	*im1,ParametreOperation *pOCV);
@@ -409,7 +413,8 @@ char  	LitConverCplxEnt(void);
 
 cv::Mat	**StatComposante(){return statComposante;};
 cv::Mat	**CentreGComposante(){return centreGComposante;};
-cv::Mat	*FlotOptique(bool init=false){if (init && flotOptique==NULL) flotOptique= new cv::Mat[channels()]; return flotOptique;};
+cv::Mat	*FlotOptique(bool init=false){if (init ) {delete []flotOptique;flotOptique= new cv::Mat[channels()];} return flotOptique;};
+cv::Mat *Ponderation(bool init = false){ if (init) { delete ponderation;ponderation=new cv::Mat();  cv::createHanningWindow(*ponderation, this->size(), CV_64F); } return ponderation; };
 std::vector<cv::Moments> *MomentComposante(){return moment;};	 
 std::vector<std::vector<cv::Point> > *PtContours(){return contours;};
 std::vector<cv::Vec4i> *ArboContour(){return arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
@@ -425,6 +430,8 @@ ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVBonCoin(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVLucasKanade(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVGunnarFarneback(ParametreOperation *p=NULL);
+ParametreOperation *ParamOCVPhaseCorrelate(ParametreOperation *p=NULL);
+
 int EtapeOp();  /*<! retourne l'indice de l'étape de l'opérateur le plus grand */
 void CloneStat(ImageInfoCV *im);
 void DeplacerFlotOptique(ImageInfoCV *im);/*<! Fonction déplaçant le pointeur flotOptique de im dans this. Celui de im devient nul */ 

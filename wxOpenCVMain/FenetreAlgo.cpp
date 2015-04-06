@@ -91,7 +91,9 @@ if (fenMere->ImAcq()->ParamOCVLucasKanade())
 	nbEtape++;
 if (fenMere->ImAcq()->ParamOCVGunnarFarneback())
 	nbEtape++;
-nbParamMax=2*(nbParamMax+2);
+if (fenMere->ImAcq()->ParamOCVPhaseCorrelate())
+	nbEtape++;
+nbParamMax = 2 * (nbParamMax + 2);
 f=fenMere;
 int nb=nbEtape-1;
 listeOp.resize(nbEtape);
@@ -146,16 +148,26 @@ if (fenMere->ImAcq()->ParamOCVLucasKanade())
 	nb--;
 	}
 if (fenMere->ImAcq()->ParamOCVGunnarFarneback())
-	{
-	listeOp[nb]=std::pair< ParametreOperation*,int>(fenMere->ImAcq()->ParamOCVGunnarFarneback(),fenMere->IdFenetre());
-	wxWindow *w=CreerOngletEtape(classeur,nb);
-	listeOnglet[w]=std::pair<wxString,int>(fenMere->ImAcq()->ParamOCVGunnarFarneback()->nomOperation,nb);
+{
+	listeOp[nb] = std::pair< ParametreOperation*, int>(fenMere->ImAcq()->ParamOCVGunnarFarneback(), fenMere->IdFenetre());
+	wxWindow *w = CreerOngletEtape(classeur, nb);
+	listeOnglet[w] = std::pair<wxString, int>(fenMere->ImAcq()->ParamOCVGunnarFarneback()->nomOperation, nb);
 	wxString nom(_("Step"));
-	nom.Printf("%s %d : %s",nom,nb,fenMere->ImAcq()->ParamOCVGunnarFarneback()->nomOperation);
-	classeur->InsertPage(0,w,nom,nbEtape==1);
+	nom.Printf("%s %d : %s", nom, nb, fenMere->ImAcq()->ParamOCVGunnarFarneback()->nomOperation);
+	classeur->InsertPage(0, w, nom, nbEtape == 1);
 	nb--;
-	}
-while(f && f->OrigineImage()->indOp1Fenetre>=0)
+}
+if (fenMere->ImAcq()->ParamOCVPhaseCorrelate())
+{
+	listeOp[nb] = std::pair< ParametreOperation*, int>(fenMere->ImAcq()->ParamOCVPhaseCorrelate(), fenMere->IdFenetre());
+	wxWindow *w = CreerOngletEtape(classeur, nb);
+	listeOnglet[w] = std::pair<wxString, int>(fenMere->ImAcq()->ParamOCVPhaseCorrelate()->nomOperation, nb);
+	wxString nom(_("Step"));
+	nom.Printf("%s %d : %s", nom, nb, fenMere->ImAcq()->ParamOCVPhaseCorrelate()->nomOperation);
+	classeur->InsertPage(0, w, nom, nbEtape == 1);
+	nb--;
+}
+while (f && f->OrigineImage()->indOp1Fenetre >= 0)
 	{
 	if (f->OrigineImage())
 		{
@@ -402,6 +414,8 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	p += wxPoint(s.GetX(),0);
 //	wxSpinCtrl *spw=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 	wxSpinCtrlDouble *spw=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+	if(!its->second.res)
+		spw->Disable();
 	spw->SetRange(0,256); 
 	spw->SetIncrement((double)its->second.pas.width); 
 	spw->SetRange(0,256); 
@@ -413,7 +427,9 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 //	wxSpinCtrl *sph=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 //	sph->SetRange(0,256); 
 	wxSpinCtrlDouble *sph=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	sph->SetRange(0,256); 
+	if (!its->second.res)
+		sph->Disable();
+	sph->SetRange(0, 256);
 	sph->SetIncrement((double)its->second.pas.height); 
 		
 	nbParam++;
@@ -446,6 +462,8 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 				choixDefaut=iter->first;
 			}
 		wxComboBox *choixOp=new wxComboBox(page,indOriCtrl+2*nbParam+1,choixDefaut,p,wxSize(250,-1),nbChaine,choix);
+		if (!iti->second.res)
+			choixOp->Disable();
 
 		}
 	else
@@ -453,7 +471,9 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 		wxSpinCtrlDouble *sp=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
 		sp->SetRange(iti->second.mini,iti->second.maxi); 
 		sp->SetIncrement(iti->second.pas); 
-		}
+		if (!iti->second.res)
+			sp->Disable();
+	}
 	nbParam++;
 	ligne+=20;
 	if (tailleMax.x<p.x+s.x)
@@ -471,7 +491,9 @@ for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
 	new wxStaticText(page,indOriCtrl+2*nbParam,itd->first,p, s);
 	p += wxPoint(s.GetX(),0);
 	wxSpinCtrlDouble *sp=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	sp->SetRange(itd->second.mini,itd->second.maxi); 
+	if (!itd->second.res)
+		sp->Disable();
+	sp->SetRange(itd->second.mini, itd->second.maxi);
 	sp->SetIncrement(itd->second.pas); 
 	nbParam++;
 	ligne+=20;

@@ -1063,3 +1063,26 @@ ParamOCVGunnarFarneback(pOCV);
 
 return imSuiv;
 }
+
+
+ImageInfoCV *ImageInfoCV::PhaseCorrelate(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV)
+{
+if (imPrec == NULL)
+	return imSuiv;
+if (imPrec->channels() != imSuiv->channels())
+	return NULL;
+if (!imSuiv->Ponderation())
+	{
+	imSuiv->Ponderation(true);
+	}
+Mat im1,im2;
+imPrec->convertTo(im1, CV_64F);
+imSuiv->convertTo(im2, CV_64F);
+pOCV->doubleParam["response"]=0;
+cv::Point2d shift = cv::phaseCorrelate(im1, im2, *imSuiv->Ponderation());
+double rayon = std::sqrt(shift.x*shift.x + shift.y*shift.y);
+pOCV->sizeParam["shift"].valeur=(cv::Size)shift;
+pOCV->sizeParam["shift"].res=false;
+ParamOCVPhaseCorrelate(pOCV);
+
+}
