@@ -1036,6 +1036,7 @@ return imSuiv;
 
 ImageInfoCV 	*ImageInfoCV::FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
 {
+
 if (imPrec==NULL )
 	return imSuiv;
 if (imPrec->channels()!=imSuiv->channels())
@@ -1081,8 +1082,14 @@ imSuiv->convertTo(im2, CV_64F);
 pOCV->doubleParam["response"]=0;
 cv::Point2d shift = cv::phaseCorrelate(im1, im2, *imSuiv->Ponderation());
 double rayon = std::sqrt(shift.x*shift.x + shift.y*shift.y);
-pOCV->sizeParam["shift"].valeur=(cv::Size)shift;
-pOCV->sizeParam["shift"].res=false;
+pOCV->doubleParam["dx"].valeur=shift.x;
+pOCV->doubleParam["dx"].mini=shift.x;
+pOCV->doubleParam["dx"].maxi=shift.x;
+pOCV->doubleParam["dx"].res=false;
+pOCV->doubleParam["dy"].valeur=shift.y;
+pOCV->doubleParam["dy"].mini=shift.y;
+pOCV->doubleParam["dy"].maxi=shift.y;
+pOCV->doubleParam["dy"].res=false;
 ParamOCVPhaseCorrelate(pOCV);
 
 }
