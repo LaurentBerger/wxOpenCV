@@ -414,7 +414,7 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	p += wxPoint(s.GetX(),0);
 //	wxSpinCtrl *spw=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 	wxSpinCtrlDouble *spw=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	if(!its->second.res)
+	if(its->second.res)
 		spw->Disable();
 	spw->SetRange(0,256); 
 	spw->SetIncrement((double)its->second.pas.width); 
@@ -427,7 +427,7 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 //	wxSpinCtrl *sph=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 //	sph->SetRange(0,256); 
 	wxSpinCtrlDouble *sph=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	if (!its->second.res)
+	if (its->second.res)
 		sph->Disable();
 	sph->SetRange(0, 256);
 	sph->SetIncrement((double)its->second.pas.height); 
@@ -462,7 +462,7 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 				choixDefaut=iter->first;
 			}
 		wxComboBox *choixOp=new wxComboBox(page,indOriCtrl+2*nbParam+1,choixDefaut,p,wxSize(250,-1),nbChaine,choix);
-		if (!iti->second.res)
+		if (iti->second.res)
 			choixOp->Disable();
 
 		}
@@ -471,7 +471,7 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 		wxSpinCtrlDouble *sp=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
 		sp->SetRange(iti->second.mini,iti->second.maxi); 
 		sp->SetIncrement(iti->second.pas); 
-		if (!iti->second.res)
+		if (iti->second.res)
 			sp->Disable();
 	}
 	nbParam++;
@@ -491,7 +491,7 @@ for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
 	new wxStaticText(page,indOriCtrl+2*nbParam,itd->first,p, s);
 	p += wxPoint(s.GetX(),0);
 	wxSpinCtrlDouble *sp=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	if (!itd->second.res)
+	if (itd->second.res)
 		sp->Disable();
 	sp->SetRange(itd->second.mini, itd->second.maxi);
 	sp->SetIncrement(itd->second.pas); 
