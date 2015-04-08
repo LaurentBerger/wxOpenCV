@@ -522,7 +522,7 @@ if(	s=="houghlinesp")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=333&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::HoughLigneProba;
 	}
-if (s=="cvtcolor ")
+if (s=="cvtcolor")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#cvtcolor";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";

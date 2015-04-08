@@ -410,7 +410,7 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	nombre.Printf("%d",its->second.valeur.width);
 	wxPoint p(10,ligne);
 	wxSize	s(100,20);
-	new wxStaticText(page,indOriCtrl+2*nbParam,its->first,p, s);
+	new wxStaticText(page,indOriCtrl+2*nbParam,its->first+" X",p, s);
 	p += wxPoint(s.GetX(),0);
 //	wxSpinCtrl *spw=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 	wxSpinCtrlDouble *spw=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
@@ -421,7 +421,7 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	spw->SetRange(0,256); 
 	p += wxPoint(s.GetX(),0);
 	nbParam++;
-	new wxStaticText(page,indOriCtrl+2*nbParam,its->first,p, s);
+	new wxStaticText(page,indOriCtrl+2*nbParam,its->first+" y",p, s);
 	p += wxPoint(s.GetX(),0);
 	nombre.Printf("%d",its->second.valeur.height);
 //	wxSpinCtrl *sph=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
@@ -431,6 +431,8 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 		sph->Disable();
 	sph->SetRange(0, 256);
 	sph->SetIncrement((double)its->second.pas.height); 
+	if (!its->second.res)
+		sph->Disable();
 		
 	nbParam++;
 	ligne+=20;
