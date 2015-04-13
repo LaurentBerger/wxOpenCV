@@ -23,6 +23,7 @@
 
 #include "wx/aui/aui.h"
 
+#include <vector>
 // -- application --
 
 
@@ -30,6 +31,19 @@
 class wxSizeReportCtrl;
 
 // -- frame --
+
+class Commande {
+public :
+int			idEvt;
+wxString	nomFichierIcone;
+wxString	chaineAide;
+wxString	chaineOperation;
+int			numBarreoutils;
+wxBitmap	bitmap;
+
+Commande(void){};
+Commande(int a, wxString b, wxString c, wxString d, int e) ;
+};
 
 class InterfaceAvance : public wxFrame
 {
@@ -73,7 +87,11 @@ public:
     void DoUpdate();
 	void DefOSGApp(void *w){osgApp=w;};
 	void OnClose(wxCloseEvent& event);
-
+	void InitCommande();
+	/*!
+	*  \brief InitCommand
+	*  Fonction initialisant les commandes avec une commande = icone, numéro barre d'outils,identificateur d'opération,chaine d'aide
+	*/
 private:
     wxTextCtrl* CreateTextCtrl(const wxString& text = wxEmptyString);
     wxPanel* OngletConvolution(wxWindow* parent = NULL);
@@ -88,6 +106,7 @@ private:
      */
 
 	void	*osgApp;			// Application principale
+	std::map<int,Commande>	bouton;
 
 
 private:

@@ -203,6 +203,99 @@ END_EVENT_TABLE()
 
 
 #endif // USE_XPM_BITMAPS
+#if USE_XPM_BITMAPS
+#define INIT_TOOL_BMP(bmp) \
+	toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
+#else // !USE_XPM_BITMAPS
+#define INIT_TOOL_BMP(bmp) \
+	toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
+#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
+
+
+Commande::Commande(int a, wxString b, wxString c, wxString d, int e) :idEvt(a), nomFichierIcone(b), chaineAide(c), chaineOperation(d), numBarreoutils(e)
+{
+#if USE_XPM_BITMAPS
+#define INIT_TOOL_BMP(bmp) \
+	toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
+#else // !USE_XPM_BITMAPS
+#define INIT_TOOL_BMP(bmp) \
+	toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
+#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
+	bitmap = wxBitmap(b);
+};
+
+
+
+void InterfaceAvance::InitCommande()
+{
+#define CONSTRUCTEUR_CMD(var,ID,aide,fct,num) var[ID]=Commande(ID,#ID, aide, fct,num)
+	bouton[ID_ADDITION] = Commande(ID_ADDITION, "ID_ADDITION",_("Add 2 images"), "add", 0);
+	CONSTRUCTEUR_CMD(bouton, ID_ADDITION, _("Add 2 images"), "add", 0);
+	CONSTRUCTEUR_CMD(bouton, ID_SOUSTRACTION, _("Difference between 2 images"), "subtract", 0);
+	CONSTRUCTEUR_CMD(bouton, ID_MULTIPLICATION, _("product"), "multiply", 0);
+	CONSTRUCTEUR_CMD(bouton, ID_DIVISION, _("Divide"), "divide", 0);
+	CONSTRUCTEUR_CMD(bouton, ID_ET_LOGIQUE, _("logical and"), "bitwise-and", 0);
+	CONSTRUCTEUR_CMD(bouton, ID_OU_LOGIQUE, _("logical or"), "bitwise-or", 0);
+	CONSTRUCTEUR_CMD(bouton, ID_OUEXCLU_LOGIQUE, _("exclusive or"), "bitwise-or", 0);
+	CONSTRUCTEUR_CMD(bouton, ID_NEGATION, _("Not"), "bitwise-not", 0);
+
+	CONSTRUCTEUR_CMD(bouton, ID_EROSION, _("Erode"), "erode", 1);
+	CONSTRUCTEUR_CMD(bouton, ID_DILATATION, _("Dilate"), "bitwise-not", 1);
+	CONSTRUCTEUR_CMD(bouton, ID_OUVERTURE, _("Openning"), "openning", 1);
+	CONSTRUCTEUR_CMD(bouton, ID_FERMETURE, _("closing"), "closing", 1);
+	CONSTRUCTEUR_CMD(bouton,ID_CHAPHAUTBL, _("Top hat"), "tophat", 1);
+	CONSTRUCTEUR_CMD(bouton,ID_CHAPHAUTNO, _("Black hat"), "blackhat", 1);
+	CONSTRUCTEUR_CMD(bouton,ID_GRADMORPH, _("Morph. gradient"), "morph_gradient", 1);
+
+	CONSTRUCTEUR_CMD(bouton,ID_FFT, _("FFT"), "FFT", 2);
+	CONSTRUCTEUR_CMD(bouton,ID_IFFT, _("inverse FFT"), "IFFT", 2);
+
+	CONSTRUCTEUR_CMD(bouton,ID_CONVOLUTION, _("Convolution"), "filter2d", 3);
+	CONSTRUCTEUR_CMD(bouton,ID_GRADIENT_MOD, _("Gradient modulus"), "scharr_mod", 3);
+	CONSTRUCTEUR_CMD(bouton,ID_GRADIENT_X, _("Gradient X"), "scharr_x", 3);
+	CONSTRUCTEUR_CMD(bouton,ID_GRADIENT_Y, _("Gradient Y"), "scharr_y", 3);
+	CONSTRUCTEUR_CMD(bouton,ID_LAPLACIEN, _("Laplacian"), "laplacian", 3);
+	CONSTRUCTEUR_CMD(bouton,ID_LISMOY, _("Blur (mean)"), "blur", 3);
+	CONSTRUCTEUR_CMD(bouton,ID_LISMED, _("Blur (median filter)"), "medianblur", 3);
+	CONSTRUCTEUR_CMD(bouton,ID_LISGAU, _("Blur (gaussian)"), "gaussianblur", 3);
+
+	CONSTRUCTEUR_CMD(bouton,ID_VIDEO_8_UC3, _("Video RGB 24bits"), " ", 4);
+	CONSTRUCTEUR_CMD(bouton,ID_VIDEO_32_FC3, _("Video RGB float"), " ", 4);
+	CONSTRUCTEUR_CMD(bouton,ID_VIDEO_FLUX, _("Video file"), " ", 4);
+
+	CONSTRUCTEUR_CMD(bouton,ID_THRESHOLD, _("Thereshold"), "threshold", 5);
+	CONSTRUCTEUR_CMD(bouton,ID_ADATHRESHOLD, _("Adaptive Thereshold"), "adaptivethreshold", 5);
+	CONSTRUCTEUR_CMD(bouton,ID_PARTAGE_EAUX, _("Watershed"), "watershed", 5);
+	CONSTRUCTEUR_CMD(bouton,ID_COMPCONNEXE, _("Connected component"), "connectedcomponents", 5);
+	CONSTRUCTEUR_CMD(bouton,ID_CONTOUR, _("Contour"), "contour", 5);
+	CONSTRUCTEUR_CMD(bouton,ID_SQUELETTE, _("Skeleton"), "medianaxis", 5);
+	CONSTRUCTEUR_CMD(bouton,ID_DISTANCEDISCRETE, _("Transform distance"), "distancetransform", 5);
+	CONSTRUCTEUR_CMD(bouton,ID_VORONOI, _("Voronoi"), " ", 5);
+
+	CONSTRUCTEUR_CMD(bouton,wxID_OPEN, _("Open"), " ", 6);
+	CONSTRUCTEUR_CMD(bouton,wxID_SAVE, _("Save"), " ", 6);
+
+	CONSTRUCTEUR_CMD(bouton,ID_FUSIONPLAN, _("Merge color plan"), "merge", 7);
+	CONSTRUCTEUR_CMD(bouton,ID_SEPARATIONPLAN, _("split color plan"), "split", 7);
+	CONSTRUCTEUR_CMD(bouton,ID_RGBLUMINANCE, _("RGB to gray"), "cvtcolor", 7);
+
+
+	CONSTRUCTEUR_CMD(bouton,ID_CANNY, _("Canny edge detector"), "canny", 8);
+	CONSTRUCTEUR_CMD(bouton,ID_CORNERHARRIS, _("Harris edge detector"), "cornerharris", 8);
+	CONSTRUCTEUR_CMD(bouton,ID_GOODFEATURE, _("Very good features"), "goodfeaturestotrack", 8);
+	CONSTRUCTEUR_CMD(bouton,ID_HOUGHCIRCLE, _("Hough circle"), "houghcircles", 8);
+	CONSTRUCTEUR_CMD(bouton,ID_HOUGHLINE, _("Hough line"), "houghlines", 8);
+	CONSTRUCTEUR_CMD(bouton,ID_HOUGHLINEP, _("hough line proba."), "houghlinesp", 8);
+
+	CONSTRUCTEUR_CMD(bouton,ID_PYRFLOTOPTIQUE, _("Build pyramid optical flow"), "buildopticalflowpyramid", 9);
+	CONSTRUCTEUR_CMD(bouton,ID_CALCFLOTOPTIQUE, _("Calculate optical flow"), "calcopticalflowpyrlk", 9);
+	CONSTRUCTEUR_CMD(bouton,ID_CALCFLOTOPTIQUEFARNER, _("Calculate optical flow(farnerback)"), "calcopticalflowfarneback", 9);
+	CONSTRUCTEUR_CMD(bouton,ID_ESTIM_TRANS, _("Estimate rigid transform"), "estimaterigidtransform", 9);
+	CONSTRUCTEUR_CMD(bouton,ID_MAJ_MVT, _("Update motion history"), "updatemotionhistory", 9);
+	CONSTRUCTEUR_CMD(bouton,ID_PHASE_CORRELATE, _("Phase correlation"), "phasecorrelate", 9);
+
+}
+
 
 InterfaceAvance::InterfaceAvance(wxWindow* parent,
                  wxWindowID id,
@@ -218,6 +311,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
 	tbOperation=NULL;
 	tbConv=NULL;
 	tbMorph=NULL;
+	InitCommande();
 	// tell wxAuiManager to manage this frame
     m_mgr.SetManagedWindow(this);
 
@@ -915,7 +1009,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
    // create some toolbars
 	enum
 		{
-			Tool_addition,Tool_soustraction,Tool_multiplication,Tool_division,Tool_oulogique,Tool_etlogique,Tool_ouexclulogique,Tool_negationlogique,
+			Tool_bidon,Tool_addition,Tool_soustraction,Tool_multiplication,Tool_division,Tool_oulogique,Tool_etlogique,Tool_ouexclulogique,Tool_negationlogique,
 			Tool_erosion,Tool_dilatation,Tool_ouverture,Tool_fermeture,Tool_gradmorph,Tool_chaphautblanc,Tool_chaphautnoir,
 			Tool_gradient_mod,Tool_gradient_x,Tool_gradient_y,Tool_laplacien,
 			Tool_canny,Tool_cornerharris,Tool_goodfeature,Tool_houghcircle,Tool_houghline,Tool_houghlinep,
@@ -926,427 +1020,73 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			Tool_pyrflotoptique, Tool_calcflotoptique, Tool_calcflotoptiquefarner, Tool_estimtransfo, Tool_majmvt, Tool_phasecorrel,
 			Tool_Max
 		};
-	switch(indBarre)
+
+	tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+		wxAUI_TB_DEFAULT_STYLE |
+		/*  pour personnaliser wxAUI_TB_OVERFLOW |*/
+		wxAUI_TB_TEXT |
+		wxAUI_TB_HORZ_TEXT);
+	//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
+	tb->SetMargins(1, 1);
+	std::map<int,Commande>::iterator it;
+
+	for (it = bouton.begin(); it != bouton.end(); it++)
+	if (it->second.numBarreoutils == indBarre)
+		tb->AddTool(it->second.idEvt, "", it->second.bitmap, it->second.chaineAide);
+	tb->Realize();
+	switch (indBarre)
 	{
 	case 0: // Opération arithmétique
-		{
-		wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(addition);
-			INIT_TOOL_BMP(soustraction);
-			INIT_TOOL_BMP(multiplication);
-			INIT_TOOL_BMP(division);
-			INIT_TOOL_BMP(etlogique);
-			INIT_TOOL_BMP(oulogique);
-			INIT_TOOL_BMP(ouexclulogique);
-			INIT_TOOL_BMP(negationlogique);
-			INIT_TOOL_BMP(division);
-			INIT_TOOL_BMP(division);
-			INIT_TOOL_BMP(division);
-
-        if (toolBarBitmaps[Tool_addition].GetHeight()==0)
-            wxMessageBox("Probleme","pb");
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                        /*  pour personnaliser wxAUI_TB_OVERFLOW |*/
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(1,1);
-		tb->AddTool(ID_ADDITION, "", toolBarBitmaps[Tool_addition], _("Add 2 images"), wxITEM_CHECK);
-		tb->AddTool(ID_SOUSTRACTION, "", toolBarBitmaps[Tool_soustraction], _("Difference between 2 images"));
-		tb->AddTool(ID_MULTIPLICATION, "", toolBarBitmaps[Tool_multiplication], _("product"));
-		tb->AddTool(ID_DIVISION, "", toolBarBitmaps[Tool_division], _("Divide"));
-		tb->AddTool(ID_ET_LOGIQUE, "", toolBarBitmaps[Tool_division], _("logical and"));
-		tb->AddTool(ID_OU_LOGIQUE, "", toolBarBitmaps[Tool_division], _("logical or"));
-		tb->AddTool(ID_OUEXCLU_LOGIQUE, "", toolBarBitmaps[Tool_division], _("exclusive or"));
-		tb->AddTool(ID_NEGATION, "", toolBarBitmaps[Tool_division], _("Not"));
-		wxColour c(255, 0, 0);;
-		tb->SetBackgroundColour(c);
-		//tb->SetCustomOverflowItems(prepend_items, append_items);
-//		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Arithmetic operation").Caption("Arithmetic operation").
 					  ToolbarPane().Top().Row(1));
-		}
 		break;
 	case 1 : // Opérateur morphologique
-		{
-		wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(erosion);
-			INIT_TOOL_BMP(dilatation);
-			INIT_TOOL_BMP(ouverture);
-			INIT_TOOL_BMP(fermeture);
-			INIT_TOOL_BMP(gradmorph);
-			INIT_TOOL_BMP(chaphautblanc);
-			INIT_TOOL_BMP(chaphautnoir);
-
-        if (toolBarBitmaps[Tool_erosion].GetHeight()==0)
-            wxMessageBox("Probleme","pb");
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                         /*wxAUI_TB_OVERFLOW |*/
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(1,1);
-		tb->AddTool(ID_EROSION, "", toolBarBitmaps[Tool_erosion], _("Erode"));
-		tb->AddTool(ID_DILATATION, "", toolBarBitmaps[Tool_dilatation], _("Dilate"));
-		tb->AddTool(ID_OUVERTURE, "", toolBarBitmaps[Tool_ouverture], _("Openning"));
-		tb->AddTool(ID_FERMETURE,"", toolBarBitmaps[Tool_fermeture], _("Closing"));
-		tb->AddTool(ID_CHAPHAUTBL, "", toolBarBitmaps[Tool_chaphautblanc], _("Top hat"));
-		tb->AddTool(ID_CHAPHAUTNO, "", toolBarBitmaps[Tool_chaphautnoir], _("Black hat"));
-		tb->AddTool(ID_GRADMORPH, "", toolBarBitmaps[Tool_gradmorph], _("Morph. gradient"));
-//		tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Morphologic operation").Caption("Morphologic operation").
 					  ToolbarPane().Top().Row(3));
-		}
 		break;
 	case 2: // Opérateur Spectrale et d'échelle
-		{
-
-			wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(fft);
-			INIT_TOOL_BMP(ifft);
-//			toolBarBitmaps[Tool_fft]= wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(64,64));
-
-        if (toolBarBitmaps[Tool_fft].GetHeight()==0)
-            wxMessageBox("Probleme","pb");
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                         /*wxAUI_TB_OVERFLOW |*/
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-		tbOperation= tb;
-//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(1,1);
-		tb->AddTool(ID_FFT, _("FFT"), toolBarBitmaps[Tool_fft], _("FFT"));
-		tb->AddTool(ID_IFFT, _("inverse FFT"), toolBarBitmaps[Tool_ifft], _("Inverse FFT"));
-//		tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Scale/Frequency").Caption("Scale/Frequency").
 					  ToolbarPane().Top().Row(5));
-		}
 		break;
 	case 3 :// Opérateur lissage
-		{
-
-			wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(gradient_mod);
-			INIT_TOOL_BMP(gradient_x);
-			INIT_TOOL_BMP(gradient_y);
-			INIT_TOOL_BMP(laplacien);
-			INIT_TOOL_BMP(LisMoy);
-			INIT_TOOL_BMP(LisMed);
-			INIT_TOOL_BMP(LisGau);
-			INIT_TOOL_BMP(flou);
-			INIT_TOOL_BMP(convolution);
-//			toolBarBitmaps[Tool_fft]= wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(64,64));
-
-        if (toolBarBitmaps[Tool_LisMoy].GetHeight()==0)
-            wxMessageBox("Probleme","pb");
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                         /*wxAUI_TB_OVERFLOW |*/
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-		tbOperation= tb;
-//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(1,1);
-		tb->AddTool(ID_CONVOLUTION, "", toolBarBitmaps[Tool_convolution], _("Convolution"));
-		tb->AddTool(ID_GRADIENT_MOD, "", toolBarBitmaps[Tool_gradient_mod], _("Gradient modulus"));
-		tb->AddTool(ID_GRADIENT_X, "", toolBarBitmaps[Tool_gradient_x], _("Gradient X"));
-		tb->AddTool(ID_GRADIENT_Y, "", toolBarBitmaps[Tool_gradient_y], _("Gradient Y"));
-		tb->AddTool(ID_LAPLACIEN, "", toolBarBitmaps[Tool_laplacien], _("Laplacian"));
-		tb->AddTool(ID_LISMOY, "", toolBarBitmaps[Tool_LisMoy], _("Blur (mean)"));
-		tb->AddTool(ID_LISMED, "", toolBarBitmaps[Tool_LisMed], _("Blur (median filter)"));
-		tb->AddTool(ID_LISGAU, "", toolBarBitmaps[Tool_LisGau], _("Blur (gaussian)"));
-//		tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Filter").Caption("Filter").
 					  ToolbarPane().Top().Row(2));
-		}
 		break;
 	case 4:// Opérateur Vidéo
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-											 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-		tb->SetToolBitmapSize(wxSize(48,48));
-		tb->AddTool(ID_VIDEO_8_UC3, "", wxArtProvider::GetBitmap(wxART_EXECUTABLE_FILE),_("Video RGB 24bits"));
-		tb->AddTool(ID_VIDEO_32_FC3, "", wxArtProvider::GetBitmap(wxART_HARDDISK),_("Video RGB float"));
-		tb->AddTool(ID_VIDEO_FLUX, "", wxArtProvider::GetBitmap(wxART_NORMAL_FILE),_("Video file"));
-		tb->AddSeparator();
-		tb->Realize();
 		m_mgr.AddPane(tb, wxAuiPaneInfo().
 					  Name("tbVideo").Caption(_("Video Toolbar")).
 					  ToolbarPane().Left().
 					  GripperTop());
 		break;
 	case 5 : // Outils opération, seuillage, contour, canny, composante connexe et stat
-		{
-
-			wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(contour);
-			INIT_TOOL_BMP(seuillage);
-			INIT_TOOL_BMP(seuillageada);
-			INIT_TOOL_BMP(distancediscrete);
-			INIT_TOOL_BMP(squelette);
-			INIT_TOOL_BMP(voronoi);
-			INIT_TOOL_BMP(cmpconnexe);
-			INIT_TOOL_BMP(statconnexe);
-			toolBarBitmaps[Tool_fft]= wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(64,64));
-
-        if (toolBarBitmaps[Tool_contour].GetHeight()==0)
-            wxMessageBox("Probleme","pb");
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                         /*wxAUI_TB_OVERFLOW |*/
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-		tbOperation= tb;
-//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(1,1);
-		tb->AddTool(ID_THRESHOLD, wxEmptyString, toolBarBitmaps[Tool_seuillage], _("Thereshold"));
-		tb->AddTool(ID_ADATHRESHOLD, wxEmptyString, toolBarBitmaps[Tool_seuillageada], _("Adaptive Thereshold"));
-		tb->AddTool(ID_PARTAGE_EAUX, wxEmptyString, toolBarBitmaps[Tool_statconnexe], _("Watershed"));
-		tb->AddTool(ID_COMPCONNEXE, wxEmptyString, toolBarBitmaps[Tool_cmpconnexe], _("Connected component"));
-		tb->AddTool(ID_CONTOUR, wxEmptyString, toolBarBitmaps[Tool_contour], _("Contour"));
-		tb->AddTool(ID_SQUELETTE, wxEmptyString, toolBarBitmaps[Tool_squelette], _("Skeleton"));
-		tb->AddTool(ID_DISTANCEDISCRETE, wxEmptyString, toolBarBitmaps[Tool_distancediscrete], _("Transform distance"));
-		tb->AddTool(ID_VORONOI, wxEmptyString, toolBarBitmaps[Tool_voronoi], _("Voronoi"));
-		//tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("binarize").Caption("binarize").
 					  ToolbarPane().Top().Row(4));
-		}
-	break;
+		break;
 	case 6 : // Ouverture, fermeture de fichiers
-		{
-		enum
-		{
-			Tool_new,
-			Tool_open,
-			Tool_save,
-			Tool_copy,
-			Tool_cut,
-			Tool_paste,
-			Tool_print,
-			Tool_help,
-			Tool_Max
-		};
-
-		wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(new);
-			INIT_TOOL_BMP(open);
-			INIT_TOOL_BMP(save);
-			INIT_TOOL_BMP(copy);
-			INIT_TOOL_BMP(cut);
-			INIT_TOOL_BMP(paste);
-			INIT_TOOL_BMP(print);
-			INIT_TOOL_BMP(help);
-	   int w = toolBarBitmaps[Tool_new].GetWidth(),
-			h = toolBarBitmaps[Tool_new].GetHeight();
-
-		// this call is actually unnecessary as the toolbar will adjust its tools
-		// size to fit the biggest icon used anyhow but it doesn't hurt neither
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                         wxAUI_TB_OVERFLOW |
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-		tbFichier= tb;
-
-		tb->SetToolBitmapSize(wxSize(w, h));
-
-		tb->AddTool(wxID_OPEN, _("Open"),toolBarBitmaps[Tool_open]);
-
-
-		tb->AddTool(wxID_SAVE, _("Save"), toolBarBitmaps[Tool_save]);
-		tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
 		m_mgr.AddPane(tb, wxAuiPaneInfo().
 					  Name(_("tb5")).Caption(_("Big Toolbar")).
 					  ToolbarPane().Top());
-		}
 		break;
 	case 7 : // Outils couleur, normalisation
-		{
 
-			wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(fusionplan);
-			INIT_TOOL_BMP(separationplan);
-			INIT_TOOL_BMP(rgbluminance);
-			toolBarBitmaps[Tool_fft]= wxArtProvider::GetBitmap(wxART_QUESTION, wxART_OTHER, wxSize(64,64));
-
-        if (toolBarBitmaps[Tool_fusionplan].GetHeight()==0)
-            wxMessageBox("Probleme","pb");
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                         /*wxAUI_TB_OVERFLOW |*/
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-		tbOperation= tb;
-//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(1,1);
-		tb->AddTool(ID_FUSIONPLAN, wxEmptyString, toolBarBitmaps[Tool_fusionplan], _("Merge color plan"));
-		tb->AddTool(ID_SEPARATIONPLAN, wxEmptyString, toolBarBitmaps[Tool_separationplan], _("split color plan"));
-		tb->AddTool(ID_RGBLUMINANCE, wxEmptyString, toolBarBitmaps[Tool_rgbluminance], _("RGB to gray"));
-		//tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Color").Caption("Color").
 					  ToolbarPane().Top().Row(6));
-		}
-	break;
+		break;
 	case 8:
-		{
-		wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(canny);
-			INIT_TOOL_BMP(cornerharris);
-			INIT_TOOL_BMP(goodfeature);
-			INIT_TOOL_BMP(houghcircle);
-			INIT_TOOL_BMP(houghline);
-			INIT_TOOL_BMP(houghlinep);
-
-        if (toolBarBitmaps[Tool_canny].GetHeight()==0)
-            wxMessageBox("Probleme","pb");
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                         /*wxAUI_TB_OVERFLOW |*/
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-		tbOperation= tb;
-//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(1,1);
-		tb->AddTool(ID_CANNY, wxEmptyString, toolBarBitmaps[Tool_canny], _("Canny edge detector"));
-		tb->AddTool(ID_CORNERHARRIS, wxEmptyString, toolBarBitmaps[Tool_cornerharris], _("Harris edge detector"));
-		tb->AddTool(ID_GOODFEATURE, wxEmptyString, toolBarBitmaps[Tool_goodfeature], _("Very good features"));
-		tb->AddTool(ID_HOUGHCIRCLE, wxEmptyString, toolBarBitmaps[Tool_houghcircle], _("Hough circle"));
-		tb->AddTool(ID_HOUGHLINE, wxEmptyString, toolBarBitmaps[Tool_houghline], _("Hough line"));
-		tb->AddTool(ID_HOUGHLINEP, wxEmptyString, toolBarBitmaps[Tool_houghlinep], _("hough line proba."));
-		//tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("feature").Caption("Feature").
 					  ToolbarPane().Top().Row(4));
-		}
 		break;
 	case 9:
-		{
-		wxBitmap toolBarBitmaps[Tool_Max];
-
-		#if USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-		#else // !USE_XPM_BITMAPS
-			#define INIT_TOOL_BMP(bmp) \
-				toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-		#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-
-			INIT_TOOL_BMP(pyrflotoptique);
-			INIT_TOOL_BMP(calcflotoptique);
-			INIT_TOOL_BMP(calcflotoptiquefarner);
-			INIT_TOOL_BMP(estimtransfo);
-			INIT_TOOL_BMP(majmvt);
-			INIT_TOOL_BMP(phasecorrel);
-
-        if (toolBarBitmaps[Tool_pyrflotoptique].GetHeight()==0)
-            wxMessageBox("Probleme","pb");
-		tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-                                        wxAUI_TB_DEFAULT_STYLE |
-                                         /*wxAUI_TB_OVERFLOW |*/
-                                         wxAUI_TB_TEXT |
-                                         wxAUI_TB_HORZ_TEXT);
-		tbOperation= tb;
-//			 wxAUI_TB_DEFAULT_STYLE | wxAUI_TB_OVERFLOW | wxAUI_TB_VERTICAL);
-        tb->SetMargins(1,1);
-		tb->AddTool(ID_PYRFLOTOPTIQUE, wxEmptyString, toolBarBitmaps[Tool_pyrflotoptique], _("Build pyramid optical flow"));
-		tb->AddTool(ID_CALCFLOTOPTIQUE, wxEmptyString, toolBarBitmaps[Tool_calcflotoptique], _("Calculate optical flow"));
-		tb->AddTool(ID_CALCFLOTOPTIQUEFARNER, wxEmptyString, toolBarBitmaps[Tool_calcflotoptiquefarner], _("Calculate optical flow(farnerback)"));
-		tb->AddTool(ID_ESTIM_TRANS, wxEmptyString, toolBarBitmaps[Tool_estimtransfo], _("Estimate rigid transform"));
-		tb->AddTool(ID_MAJ_MVT, wxEmptyString, toolBarBitmaps[Tool_majmvt], _("Update motion history"));
-		tb->AddTool(ID_PHASE_CORRELATE, wxEmptyString, toolBarBitmaps[Tool_majmvt], _("Phase correlation"));
-		//tb->SetCustomOverflowItems(prepend_items, append_items);
-		tb->Realize();
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Optical Flow").Caption("Optical Flow").
 					  ToolbarPane().Top().Row(5));
-		}
 		break;
 	}
 	    // add the toolbars to the manager
@@ -1380,28 +1120,8 @@ Close(true);
 void InterfaceAvance::SelectOperation(wxCommandEvent& evt)
 {
 wxString s;
+
 switch(evt.GetId()){
-case ID_RGBLUMINANCE:
-    s="cvtcolor";
-	break;
-case ID_FUSIONPLAN:
-    s="merge";
-	break;
-case ID_SEPARATIONPLAN:
-    s="split";
-	break;
-case ID_ADDITION:
-    s="add";
-	break;
-case ID_SOUSTRACTION:
-	s="substract";
-	break;
-case ID_DIVISION:
-	s="divide";
-	break;
-case ID_MULTIPLICATION:
-	s="multiply";
-	break;
 case ID_CONVOLUTION:
 	{
 	ImageInfoCV x;
@@ -1411,81 +1131,14 @@ case ID_CONVOLUTION:
 		wxMessageBox(_("You must defined convolution operator first!"),_("Error"), wxOK,this);
 		return;
 		}
-	s="filter2d";
 	}
 	break;
 case ID_EROSION:
-	{
-	ImageInfoCV x;
-
-	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
-		{
-		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
-		return;
-		}
-	s="erode";
-	}
-	break;
 case ID_DILATATION:
-	{
-	ImageInfoCV x;
-
-	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
-		{
-		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
-		return;
-		}
-	s="dilate";
-	}
-	break;
 case ID_OUVERTURE:
-	{
-	ImageInfoCV x;
-
-	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
-		{
-		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
-		return;
-		}
-	s="openning";
-	}
-	break;
 case ID_FERMETURE:
-	{
-	ImageInfoCV x;
-
-	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
-		{
-		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
-		return;
-		}
-	s="closing";
-	}
-	break;
 case ID_CHAPHAUTBL:
-	{
-	ImageInfoCV x;
-
-	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
-		{
-		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
-		return;
-		}
-	s="tophat";
-	}
-	break;
 case ID_CHAPHAUTNO:
-	{
-	ImageInfoCV x;
-
-	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
-		{
-		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
-		return;
-		}
-	s="blackhat";
-	}
-	break;
 case ID_GRADMORPH:
 	{
 	ImageInfoCV x;
@@ -1495,110 +1148,10 @@ case ID_GRADMORPH:
 		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
 		return;
 		}
-	s="morph_gradient";
 	}
 	break;
-case ID_GRADIENT_X:
-	s="scharr_x";
-	break;
-case ID_GRADIENT_Y:
-	s="scharr_y";
-	break;
-case ID_GRADIENT_MOD:
-	s="scharr_mod";
-	break;
-case ID_LAPLACIEN:
-	s="laplacian";
-	break;
-case ID_CANNY:
-	s="canny";
-	break;
-case ID_THRESHOLD:
-	s="threshold";
-	break;
-case ID_ADATHRESHOLD:
-	s="adaptivethreshold";
-	break;
-case ID_CONTOUR:
-	s="contour";
-	break;
-case ID_PARTAGE_EAUX:
-	s="watershed";
-	break;
-case ID_COMPCONNEXE:
-	s="connectedcomponents";
-	break;
-case ID_FFT:
-	s="FFT";
-	break;
-case ID_IFFT:
-	s="IFFT";
-	break;
-case ID_LISMOY:
-	s= "blur";
-	break;
-case ID_LISGAU:
-	s="gaussianblur";
-
-	break;
-case ID_LISMED:
-	s="medianblur";
-	break;
-case ID_SQUELETTE:
-	s="medianaxis";
-	break;
-case ID_DISTANCEDISCRETE:
-case ID_VORONOI:
-	s="distancetransform";
-	break;
-case ID_CORNERHARRIS:
-	s="cornerharris";
-	break;
-case ID_GOODFEATURE:
-	s="goodfeaturestotrack";
-	break;
-case ID_HOUGHCIRCLE:
-	s="houghcircles";
-	break;
-case ID_HOUGHLINE:
-	s="houghlines";
-	break;
-case ID_HOUGHLINEP:
-	s="houghlinesp";
-	break;
-case ID_PYRFLOTOPTIQUE:
-	s="buildopticalflowpyramid";
-	break;
-case ID_CALCFLOTOPTIQUE:
-	s="calcopticalflowpyrlk";
-	break;
-case ID_CALCFLOTOPTIQUEFARNER:
-	s="calcopticalflowfarneback";
-	break;
-case ID_ESTIM_TRANS:
-	s = "estimaterigidtransform";
-	break;
-case ID_PHASE_CORRELATE:
-	s = "phasecorrelate";
-	break;
-case ID_MAJ_MVT:
-	s="updatemotionhistory";
-	break;
-case 	ID_OU_LOGIQUE:
-	s = "bitwise-or";
-	break;
-case 	ID_ET_LOGIQUE:
-	s = "bitwise-and";
-	break;
-case 	ID_OUEXCLU_LOGIQUE:
-	s = "bitwise-xor";
-	break;
-case 	ID_NEGATION:
-	s = "bitwise-not";
-	break;
-
 	}
-((wxOsgApp*)osgApp)->DefOperateurImage(s);
+((wxOsgApp*)osgApp)->DefOperateurImage(bouton[evt.GetId()].chaineOperation);
 ((wxOsgApp*)osgApp)->DefPointeurSouris(1,1);
 
 }

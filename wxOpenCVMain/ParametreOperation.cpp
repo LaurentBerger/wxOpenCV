@@ -79,17 +79,46 @@ indOp2Fenetre=-1;
 indOp3Fenetre=-1;
 opVideo=false;
 opErreur=0;
-if(	s=="cornerharris")
-	{
-	nomOperation=s;
-	nbImageRes=1;
-	nbOperande= 1;
-	intParam["blockSize"]=DomaineParametreOp<int>(2,2,9,1);
-	intParam["ksize"]=DomaineParametreOp<int>(1,1,7,2);
-	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	doubleParam["k"]=DomaineParametreOp<double>(0.04,0.01,10,0.01);
-	}
-if(	s=="goodfeaturestotrack")
+if (s == "updatemotionhistory") // inclus la différence de deux images successives
+{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	opVideo=true;
+	doubleParam["timestamp"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
+	doubleParam["duration"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
+	doubleParam["thresh"] = DomaineParametreOp<double>(50., 0.0, 255.0, 1.0);
+	doubleParam["maxval"] = DomaineParametreOp<double>(255., 0.0, 255.0, 1.0);
+	intParam["threshold_type"] = DomaineParametreOp<int>(cv::THRESH_BINARY, cv::THRESH_BINARY, cv::THRESH_TOZERO_INV, 1);
+}
+if (s == "calcmotiongradient") // inclus la différence de deux images successives
+{
+	nomOperation = s;
+	nbImageRes = 2;
+	nbOperande = 1;
+	doubleParam["delta1"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
+	doubleParam["delta2"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
+}
+if (s == "segmentationmotion") // inclus la différence de deux images successives
+{
+	nomOperation = s;
+	nbImageRes = 2;
+	nbOperande = 1;
+	doubleParam["timestamp"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
+	doubleParam["segthresh"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
+	intParam["calcGlobalOrientation"] = DomaineParametreOp<int>(0, 0, 1, 1);
+}
+if (s == "cornerharris")
+{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	intParam["blockSize"] = DomaineParametreOp<int>(2, 2, 9, 1);
+	intParam["ksize"] = DomaineParametreOp<int>(1, 1, 7, 2);
+	intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
+	doubleParam["k"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
+}
+if (s == "goodfeaturestotrack")
 	{
 	nbImageRes=0;
 	nomOperation=s;
@@ -478,7 +507,37 @@ bool ParametreOperation::InitPtrFonction()
 {
 opAttribut=false;
 wxString s(nomOperation);
-if(	s=="cornerharris")
+if (s == "updatemotionhistory") // inclus la différence de deux images successives
+{
+	nomOperation = s;
+	nbOperande = 1;
+	opVideo = true;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#updatemotionhistory";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=370&zoom=70,250,100";
+	opBinaireSelec = &ImageInfoCV::MAJHistoriqueMvt;
+}
+if (s == "calcmotiongradient") // inclus la différence de deux images successives
+{
+	nomOperation = s;
+	nbImageRes = 2;
+	opVideo = true;
+	nbOperande = 1;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#calcmotiongradient";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=371&zoom=70,250,100";
+	opSurjecUnaire = &ImageInfoCV::CalcOrientationMvt;
+}
+if (s == "segmentationmotion") // inclus la différence de deux images successives
+{
+	nomOperation = s;
+	nbImageRes = 1;
+	opVideo = true;
+	nbOperande = 1;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#segmentmotion";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=371&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::SegmenteMvt;
+
+}
+if (s == "cornerharris")
 	{
 	nomOperation=s;
 	nbOperande= 1;
@@ -825,20 +884,6 @@ if (s=="calcopticalflowfarneback")
 	opBinaireSelec = &ImageInfoCV::FlotOptiqueFarnerback;
 	opVideo=true;
 
-	return true;
-	}
-if (s=="estimaterigidtransform")
-	{
-	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#estimaterigidtransform";
-	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=369&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::LigneMediane;
-	return true;
-	}
-if (s=="updatemotionhistory")
-	{
-	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#updatemotionhistory";
-	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=370&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::LigneMediane;
 	return true;
 	}
 

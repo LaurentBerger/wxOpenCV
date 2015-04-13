@@ -1,5 +1,6 @@
 #include "ImageInfo.h"
 #include <vector>
+#include "opencv2/optflow.hpp"
 
 
 /**
@@ -1092,4 +1093,54 @@ pOCV->doubleParam["dy"].maxi=shift.y;
 pOCV->doubleParam["dy"].res=false;
 ParamOCVPhaseCorrelate(pOCV);
 
+}
+
+
+ImageInfoCV *ImageInfoCV::MAJHistoriqueMvt(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV)
+{
+if (imPrec == NULL)
+	{
+	throw std::string("First image is NULL in MAJHistoriqueMvt");
+	return NULL;
+	}
+if (imSuiv == NULL)
+	{
+	throw std::string("Second image is NULL in MAJHistoriqueMvt");
+	return NULL;
+	}
+if (imPrec->channels() != imSuiv->channels() || imPrec->size() != imSuiv->size())
+{
+	throw std::string("Channel and size must be equal");
+	return NULL;
+}
+if (imPrec->channels() != 1)
+{
+	throw std::string("Number of channel must be 1");
+	return NULL;
+}
+Mat silh;
+absdiff(*imSuiv, *imPrec, silh); 
+threshold(silh, silh, pOCV->doubleParam["thresh"].valeur, pOCV->doubleParam["maxval"].valeur, pOCV->intParam["threshold_type"].valeur);
+ImageInfoCV *mhi=NULL;
+if (pOCV->imgParam.find("mhi") == pOCV->imgParam.end())
+	{
+	mhi=new ImageInfoCV(imPrec->rows,imPrec->cols,CV_32FC1);
+	pOCV->imgParam["mhi"]=mhi;
+	}
+else
+	mhi=pOCV->imgParam["mhi"];
+cv::motempl::updateMotionHistory(silh, *mhi, pOCV->doubleParam["timestamp"].valeur, pOCV->doubleParam["duration"].valeur); // update MHI
+
+return mhi;
+
+
+}
+
+ImageInfoCV		**ImageInfoCV::CalcOrientationMvt(ImageInfoCV	*, ParametreOperation *paramOCV)
+{
+return NULL;
+}
+ImageInfoCV 	*ImageInfoCV::SegmenteMvt(ImageInfoCV	*, ParametreOperation *paramOCV)
+{
+return NULL;
 }

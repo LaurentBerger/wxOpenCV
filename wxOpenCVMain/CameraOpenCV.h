@@ -23,6 +23,8 @@ long		gainMin,gainMax;
 
 public : 
 ImageInfoCV			*imAcq;
+std::map<std::string, ImageInfoCV* > imgParam;
+std::vector<cv::Point2f> coinRef;
 
 private :
 // PROPRIETES DE LA CAMERA

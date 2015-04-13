@@ -281,6 +281,7 @@ ImageInfoCV		*PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation 
 ImageInfoCV 	*FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
 ImageInfoCV 	*FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
 ImageInfoCV		*PhaseCorrelate(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV);
+ImageInfoCV		*MAJHistoriqueMvt(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV);
 
 ImageInfoCV 	*Negation(ImageInfoCV	*im1, ParametreOperation *pOCV);
 ImageInfoCV 	*Laplacien(ImageInfoCV	*,ParametreOperation *pOCV);
@@ -298,7 +299,6 @@ ImageInfoCV 	*FFT(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV 	*IFFT(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV		*FusionPlan(int nbPlan,ImageInfoCV	**,ParametreOperation *paramOCV);
 ImageInfoCV		*ComposanteConnexe (ImageInfoCV *result,ParametreOperation *paramOCV);
-ImageInfoCV		**SeparationPlan(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV		*RGB_L(ImageInfoCV *im1,ParametreOperation *paramOCV);
 ImageInfoCV		*DistanceDiscrete (ImageInfoCV *result,ParametreOperation *paramOCV);
 ImageInfoCV		*Voronoi (ImageInfoCV *result,ParametreOperation *paramOCV);
@@ -309,6 +309,9 @@ ImageInfoCV 	*HoughCercle(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV 	*HoughLigneProba(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV 	*BonAttributs(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV 	*DetectCoinHarris(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV		**SeparationPlan(ImageInfoCV	*,ParametreOperation *paramOCV);
+ImageInfoCV		**CalcOrientationMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
+ImageInfoCV 	*SegmenteMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
 
 
 void ExtremumLoc(ImageInfoCV *mask=NULL );
