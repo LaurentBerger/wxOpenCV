@@ -54,6 +54,9 @@ class CameraVirtuelle : public wxThread{
 public:
 std::vector <ParametreOperation> seqOp;
 bool		seqActualisee;/*<!Vrai lorsque les paramètres de la séquence sont modifiés*/
+std::map<std::string, ImageInfoCV* > imgParam;	/*<! Rôle des images dans la séquence : chaine=operation+role 'ex updatemotionhistorymhi */
+std::map<ImageInfoCV*, bool> effaceImage;			/*<! toutes les images marquées true doivent être effacées et les autres non */
+std::vector<cv::Point2f> coinRef;
 
 protected :
 virtual wxThread::ExitCode Entry(){return 0;};

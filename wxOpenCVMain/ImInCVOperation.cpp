@@ -1100,11 +1100,17 @@ ImageInfoCV *ImageInfoCV::MAJHistoriqueMvt(ImageInfoCV	*imPrec, ImageInfoCV	*imS
 {
 if (imPrec == NULL)
 	{
-	throw std::string("First image is NULL in MAJHistoriqueMvt");
-	return NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "prec") == pOCV->imgParam.end())
+		
+		{
+		throw std::string("First image is NULL in MAJHistoriqueMvt");
+		return NULL;
+		}
+	imPrec = pOCV->imgParam[pOCV->nomOperation + "prec"];
 	}
 if (imSuiv == NULL)
 	{
+
 	throw std::string("Second image is NULL in MAJHistoriqueMvt");
 	return NULL;
 	}
@@ -1122,15 +1128,16 @@ Mat silh;
 absdiff(*imSuiv, *imPrec, silh); 
 threshold(silh, silh, pOCV->doubleParam["thresh"].valeur, pOCV->doubleParam["maxval"].valeur, pOCV->intParam["threshold_type"].valeur);
 ImageInfoCV *mhi=NULL;
-if (pOCV->imgParam.find("mhi") == pOCV->imgParam.end())
+if (pOCV->imgParam.find(pOCV->nomOperation + "mhi") == pOCV->imgParam.end())
 	{
 	mhi=new ImageInfoCV(imPrec->rows,imPrec->cols,CV_32FC1);
-	pOCV->imgParam["mhi"]=mhi;
+	pOCV->imgParam[pOCV->nomOperation + "mhi"] = mhi;
 	}
 else
-	mhi=pOCV->imgParam["mhi"];
+	mhi = pOCV->imgParam[pOCV->nomOperation + "mhi"];
+pOCV->doubleParam["timestamp"].valeur = (double)clock() / CLOCKS_PER_SEC;
 cv::motempl::updateMotionHistory(silh, *mhi, pOCV->doubleParam["timestamp"].valeur, pOCV->doubleParam["duration"].valeur); // update MHI
-
+pOCV->imgParam[pOCV->nomOperation+"prec"] = imSuiv;
 return mhi;
 
 

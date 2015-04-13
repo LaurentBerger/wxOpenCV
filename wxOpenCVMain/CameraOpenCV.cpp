@@ -458,7 +458,6 @@ if (captureVideo->isOpened())
 	static bool opActif=false;
 	ImageInfoCV *imIni=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
 	ImageInfoCV *imPre=NULL;
-    std::map<ImageInfoCV*,bool> effaceImage;
 	bool	frameDejaCopie=false;
 	for(;true;)
 		{
@@ -499,7 +498,7 @@ if (captureVideo->isOpened())
 						pOCV.indOp2Fenetre=-1;
 						if (pOCV.opUnaireSelec) // op1 est initialisé
                             {
-                            if (indOp>0) // Si une opération a déjà été effectuée image précédente
+                            if (indOp>0) // Si une opération a déjà été effectuée l'image précédente est retenue comme paramètre
 							    pOCV.op1=im[indOp-1][0];
 						    else // sinon image initiale
 							    {
@@ -507,20 +506,29 @@ if (captureVideo->isOpened())
                                 effaceImage[imIni]=false;
                                 }
                             }
-                        else if (pOCV.opBinaireSelec ) // initailisation op2
+                        else if (pOCV.opBinaireSelec ) // initialisation op2
                             {
-                            if (indOp>0 ) // Si une opération a déjà été effectuée
-							    if (im[indOp-1]==NULL)
-									pOCV.op2=NULL;
+							if (pOCV.opVideo)
+								{
+								if (indOp>0 ) // Si une opération a déjà été effectuée
+									if (im[indOp-1]==NULL)
+										pOCV.op2=NULL;
+									else
+										pOCV.op2=im[indOp-1][0];
 								else
-									pOCV.op2=im[indOp-1][0];
-						    else
-							    pOCV.op2=imIni;
-                            if (imPre)
-								pOCV.op1=imPre;
-							else
-								pOCV.op1=pOCV.op2;
-                           }
+									pOCV.op2=imIni;
+								
+								if (imgParam.find(pOCV.nomOperation+"prec")!=imgParam.end())
+									{
+									pOCV.op1 = imgParam[pOCV.nomOperation + "prec"];
+									effaceImage[imgParam[pOCV.nomOperation + "prec"]]=false;
+									}
+								else
+									pOCV.op1=pOCV.op2;
+								}
+							else if (indOp>0)
+								pOCV.op1 = im[indOp - 1][0];
+							}
 						if (imPre && imPre->BonCoin() && pOCV.nomOperation == "GoodFeature" && im[indOp - 1] && im[indOp - 1][0])
 						{
 							im[indOp] = new ImageInfoCV*[1];
@@ -528,8 +536,14 @@ if (captureVideo->isOpened())
 
 						}
 						else
+							{
+							if (imgParam.size()!=0)
+								pOCV.imgParam=imgParam;
 							im[indOp] = pOCV.ExecuterOperation();
-						if (pOCV.opErreur != 0)
+							if (pOCV.imgParam.size()!=0)
+								imgParam = pOCV.imgParam;
+							}
+						if (pOCV.opErreur != 0) // Arret de la séquence d'opération retour à acquistion vidéo simple
 						{
 							seqOp.clear();
 							effaceImage[imPre] = true;
@@ -543,10 +557,7 @@ if (captureVideo->isOpened())
 						}
 
 						if (im[indOp]) // Si l'opérateur donne un résultat non nul
-							if (pOCV.opAttribut)
-								effaceImage[im[indOp][0]]=false;
-                            else if (effaceImage.find(im[indOp][0])==effaceImage.end())
-                                effaceImage[im[indOp][0]]=true;
+							effaceImage[im[indOp][0]]=false;
 						if (pOCV.opBinaireSelec && pOCV.opVideo) // Pour les opérateurs binaires spécifiques à la vidéo
 							memoriseImage=true;
                         indOp++;							
@@ -570,39 +581,20 @@ if (captureVideo->isOpened())
 							im[indOp-1][0]->copyTo((*((Mat *)imAcq)));
 							frameDejaCopie=true;
 							}
-						if (memoriseImage) // Un résultat doit être stocké dans imPre pour exécuter la prochaine séquence
-							{
-							if (im[indOp-1] && im[indOp-1][0]) 
-								if (im[indOp-1][0]!=imIni)
-									{
-									effaceImage[im[indOp-1][0]]=false;
-									if (imPre!=im[indOp-1][0])
-										{
-										effaceImage[imPre]=true;;
-										imPre=im[indOp-1][0];
-										}
-									}
-								else
-									{
-									imPre = new ImageInfoCV(frame.rows,frame.cols,frame.flags);
-									swap(imPre,imIni);
-									}
-							else // Dupliquer imIni;
-								{
-								imPre = new ImageInfoCV(frame.rows,frame.cols,frame.flags);
-								swap(imPre,imIni);
-								}	
-							}
-						else
-							effaceImage[ im[indOp-1][0]]=true;;
                         std::map<ImageInfoCV*,bool>::iterator it;
-						for (it=effaceImage.begin();it!=effaceImage.end();it++)
+						vector<ImageInfoCV*> elt;
+						for (it = effaceImage.begin(); it != effaceImage.end(); it++)
 							if (it->second)
 								{
-                                delete it->first;
-                                }
-						effaceImage.clear();
-						}
+								delete it->first;
+								elt.push_back(it->first);
+								}
+							else
+								it->second=true;
+
+						for (int ii=0;ii<elt.size();ii++)
+							effaceImage.erase(elt[ii]);
+					}
                     delete []im;
 					}
 				if (!modeMoyenne)	// Pas de filtrage Butterworth

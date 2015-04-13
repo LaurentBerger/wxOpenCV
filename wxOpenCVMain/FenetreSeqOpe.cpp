@@ -558,8 +558,10 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		}
 	if (annuler)
 		return false;
-	if (it->opBinaireSelec && !it->opVideo)
+	if (it->opBinaireSelec && !it->opVideo && app->Fenetre(indFen2))
 		it->op2=app->Graphique(indFen2)->ImAcq();
+	else
+		it->op2 =NULL;
 	}
 return true;
 }
