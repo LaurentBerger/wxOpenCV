@@ -79,6 +79,8 @@ indOp2Fenetre=-1;
 indOp3Fenetre=-1;
 opVideo=false;
 opErreur=0;
+intParam["Save result"] = DomaineParametreOp<int>(0, 0, 0, 1);
+intParam["Send packet"] = DomaineParametreOp<int>(0, 0, 0, 1);
 if (s == "updatemotionhistory") // inclus la différence de deux images successives
 {
 	nomOperation = s;
@@ -94,13 +96,16 @@ if (s == "updatemotionhistory") // inclus la différence de deux images successiv
 if (s == "calcmotiongradient") // inclus la différence de deux images successives
 {
 	nomOperation = s;
-	nbImageRes = 2;
+	opAttribut=true;
+	nbImageRes = 1;
 	nbOperande = 1;
 	doubleParam["delta1"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
 	doubleParam["delta2"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
+	intParam["aperture_size"] = DomaineParametreOp<int>((int)3, (int)3, (int)7, (int)2);
 }
-if (s == "segmentationmotion") // inclus la différence de deux images successives
+if (s == "segmentmotion") // inclus la différence de deux images successives
 {
+	opAttribut = true;
 	nomOperation = s;
 	nbImageRes = 2;
 	nbOperande = 1;
@@ -519,17 +524,19 @@ if (s == "updatemotionhistory") // inclus la différence de deux images successiv
 if (s == "calcmotiongradient") // inclus la différence de deux images successives
 {
 	nomOperation = s;
-	nbImageRes = 2;
+	nbImageRes = 0;
 	opVideo = true;
+	opAttribut = true;
 	nbOperande = 1;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#calcmotiongradient";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=371&zoom=70,250,100";
-	opSurjecUnaire = &ImageInfoCV::CalcOrientationMvt;
+	opUnaireSelec = &ImageInfoCV::CalcOrientationMvt;
 }
-if (s == "segmentationmotion") // inclus la différence de deux images successives
+if (s == "segmentmotion") // inclus la différence de deux images successives
 {
 	nomOperation = s;
-	nbImageRes = 1;
+	nbImageRes = 0;
+	opAttribut = true;
 	opVideo = true;
 	nbOperande = 1;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#segmentmotion";

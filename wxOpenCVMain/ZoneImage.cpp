@@ -629,13 +629,20 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 		menuParametre=true;
 		}
 	if (f->ImAcq()->FlotOptique())
-		{
+	{
 		menu.AppendCheckItem(MENU_FLOTOPTIQUE, _T("Optical Flow "));
 		if (f->TracerFlotOptique())
 			menu.Check(MENU_FLOTOPTIQUE, true);
-		menuParametre=true;
-		}
-	if (osgApp->Fenetre(f->IdFenetreOp1pre())|| 		menuParametre)
+		menuParametre = true;
+	}
+	if (f->ImAcq()->FlotOptique())
+	{
+		menu.AppendCheckItem(MENU_FLOTOPTIQUE, _T("Optical Flow "));
+		if (f->TracerFlotOptique())
+			menu.Check(MENU_FLOTOPTIQUE, true);
+		menuParametre = true;
+	}
+	if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre)
 		{
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
 		}

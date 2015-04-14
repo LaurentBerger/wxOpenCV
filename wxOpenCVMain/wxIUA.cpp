@@ -72,9 +72,10 @@ enum
 	ID_PYRFLOTOPTIQUE,
 	ID_CALCFLOTOPTIQUE,
 	ID_CALCFLOTOPTIQUEFARNER,
-	ID_ESTIM_TRANS,
 	ID_PHASE_CORRELATE,
 	ID_MAJ_MVT,
+	ID_GRAD_MVT,
+	ID_SEG_MVT,
 
 
 
@@ -290,9 +291,10 @@ void InterfaceAvance::InitCommande()
 	CONSTRUCTEUR_CMD(bouton,ID_PYRFLOTOPTIQUE, _("Build pyramid optical flow"), "buildopticalflowpyramid", 9);
 	CONSTRUCTEUR_CMD(bouton,ID_CALCFLOTOPTIQUE, _("Calculate optical flow"), "calcopticalflowpyrlk", 9);
 	CONSTRUCTEUR_CMD(bouton,ID_CALCFLOTOPTIQUEFARNER, _("Calculate optical flow(farnerback)"), "calcopticalflowfarneback", 9);
-	CONSTRUCTEUR_CMD(bouton,ID_ESTIM_TRANS, _("Estimate rigid transform"), "estimaterigidtransform", 9);
 	CONSTRUCTEUR_CMD(bouton,ID_MAJ_MVT, _("Update motion history"), "updatemotionhistory", 9);
-	CONSTRUCTEUR_CMD(bouton,ID_PHASE_CORRELATE, _("Phase correlation"), "phasecorrelate", 9);
+	CONSTRUCTEUR_CMD(bouton, ID_GRAD_MVT, _("motion Gradient"), "calcmotiongradient", 9);
+	CONSTRUCTEUR_CMD(bouton, ID_SEG_MVT, _("Independant motions"), "segmentmotion", 9);
+	CONSTRUCTEUR_CMD(bouton, ID_PHASE_CORRELATE, _("Phase correlation"), "phasecorrelate", 9);
 
 }
 

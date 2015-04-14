@@ -123,6 +123,12 @@ std::vector<cv::Point2f> *boncoin;	/*<! http://docs.opencv.org/modules/imgproc/d
 std::vector<cv::Point2f> *coinRef;	/*<! Les pixels de références de l'image pour calcul du flot optique */
 cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
 cv::Mat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
+Mat silh;							/*<! Seuillage de la différence entre deux images pour updateMotion History */
+
+cv::Mat	*masque;					/*<! Masque pour calcMotionGradient */
+cv::Mat *orient;					/*<! orientation pour calcMotionGradient*/
+cv::Mat *segmvt;					/*<! segmentation issue de l'analyse du mouvement (segmentMotion)*/
+std::vector<cv::Rect> regionsMvt;	/*<! Regions issues de l'analyse du mouvement (segmentMotion)*/
 
 ParametreOperation *pOCVHoughLigne;
 ParametreOperation *pOCVHoughLigneProba;
@@ -131,6 +137,7 @@ ParametreOperation *pOCVBonCoin;
 ParametreOperation *pOCVLucasKanade;
 ParametreOperation *pOCVGunnarFarneback;
 ParametreOperation *pOCVPhaseCorrelate;
+ParametreOperation *pOCVUpdateMotionHistory;
 
 public : 
 //	********* Constructeurs et destructeur
@@ -310,7 +317,7 @@ ImageInfoCV 	*HoughLigneProba(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV 	*BonAttributs(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV 	*DetectCoinHarris(ImageInfoCV	*,ParametreOperation *paramOCV);
 ImageInfoCV		**SeparationPlan(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV		**CalcOrientationMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
+ImageInfoCV		*CalcOrientationMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
 ImageInfoCV 	*SegmenteMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
 
 
@@ -433,7 +440,8 @@ ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVBonCoin(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVLucasKanade(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVGunnarFarneback(ParametreOperation *p=NULL);
-ParametreOperation *ParamOCVPhaseCorrelate(ParametreOperation *p=NULL);
+ParametreOperation *ParamOCVPhaseCorrelate(ParametreOperation *p = NULL);
+ParametreOperation *ParamOCVUpdateMotionHistory(ParametreOperation *p = NULL);
 
 int EtapeOp();  /*<! retourne l'indice de l'étape de l'opérateur le plus grand */
 void CloneStat(ImageInfoCV *im);

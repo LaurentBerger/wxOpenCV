@@ -51,6 +51,9 @@ ligneP=NULL;
 boncoin=NULL;
 coinRef=NULL;
 flotOptique=NULL;
+masque=NULL;
+orient=NULL;
+segmvt=NULL;
 minIm = NULL;			/*< Minimimum pour chaque plan de l'image */
 maxIm = NULL;			/*< Maximimum pour chaque plan de l'image */
 locMin = NULL;			/*< Position du miminmu pour chaque plan */
@@ -68,6 +71,7 @@ pOCVBonCoin=NULL;
 pOCVLucasKanade=NULL;
 pOCVGunnarFarneback=NULL;
 pOCVPhaseCorrelate=NULL;
+pOCVUpdateMotionHistory=NULL;
 ponderation=NULL;
 
 #ifdef _INFOTEXTE__
@@ -194,7 +198,12 @@ delete pOCVHoughCercle;
 delete pOCVBonCoin;
 delete pOCVLucasKanade;
 delete pOCVGunnarFarneback;
+delete pOCVUpdateMotionHistory;
 delete ponderation;
+delete masque;
+delete orient;
+delete segmvt;
+
 
 }
 
@@ -399,6 +408,18 @@ ParametreOperation *ImageInfoCV::ParamOCVPhaseCorrelate(ParametreOperation *p)
 		*pOCVPhaseCorrelate = *p;
 	}
 	return pOCVPhaseCorrelate;
+}
+
+
+ParametreOperation *ImageInfoCV::ParamOCVUpdateMotionHistory(ParametreOperation *p)
+{
+	if (p)
+	{
+		if (pOCVUpdateMotionHistory == NULL)
+			pOCVUpdateMotionHistory = new ParametreOperation;
+		*pOCVUpdateMotionHistory = *p;
+	}
+	return pOCVUpdateMotionHistory;
 }
 
 

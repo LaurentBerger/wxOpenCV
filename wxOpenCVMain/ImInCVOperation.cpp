@@ -1124,7 +1124,6 @@ if (imPrec->channels() != 1)
 	throw std::string("Number of channel must be 1");
 	return NULL;
 }
-Mat silh;
 absdiff(*imSuiv, *imPrec, silh); 
 threshold(silh, silh, pOCV->doubleParam["thresh"].valeur, pOCV->doubleParam["maxval"].valeur, pOCV->intParam["threshold_type"].valeur);
 ImageInfoCV *mhi=NULL;
@@ -1138,16 +1137,50 @@ else
 pOCV->doubleParam["timestamp"].valeur = (double)clock() / CLOCKS_PER_SEC;
 cv::motempl::updateMotionHistory(silh, *mhi, pOCV->doubleParam["timestamp"].valeur, pOCV->doubleParam["duration"].valeur); // update MHI
 pOCV->imgParam[pOCV->nomOperation+"prec"] = imSuiv;
+mhi->ParamOCVUpdateMotionHistory(pOCV);
 return mhi;
 
 
 }
 
-ImageInfoCV		**ImageInfoCV::CalcOrientationMvt(ImageInfoCV	*, ParametreOperation *paramOCV)
+ImageInfoCV		*ImageInfoCV::CalcOrientationMvt(ImageInfoCV	*mhi, ParametreOperation *pOCV)
 {
-return NULL;
+if (mhi->depth()!=CV_32FC1)
+	throw std::string("CalcOrientationMvt :image must be single channel floating-point");
+if (masque)
+	delete masque;
+if (orient)
+	delete orient;
+masque = new Mat();
+orient = new Mat();	// calculate motion gradient orientation and valid orientation mask
+cv::motempl::calcMotionGradient(*mhi, *masque, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
+return this;
 }
-ImageInfoCV 	*ImageInfoCV::SegmenteMvt(ImageInfoCV	*, ParametreOperation *paramOCV)
+ImageInfoCV 	*ImageInfoCV::SegmenteMvt(ImageInfoCV	*mhi, ParametreOperation *pOCV)
 {
+if (mhi->depth() != CV_32FC1)
+	throw std::string("CalcOrientationMvt :image must be single channel floating-point");
+if (!masque)
+	throw std::string("SegmenteMvt : masque is NULL");
+if (!orient) 
+	throw std::string("SegmenteMvt : orient is NULL");
+regionsMvt.clear();
+if (segmvt==NULL)
+	segmvt  = new cv::Mat();
+cv::motempl::segmentMotion(*mhi, *segmvt, regionsMvt, pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur, pOCV->doubleParam["segThresh"].valeur);
+if (pOCV->intParam["calcGlobalOrientation"].valeur==1)
+	{
+	Mat mask;
+	mhi->convertTo(mask, CV_8U, 255. / pOCVUpdateMotionHistory->doubleParam["duration"].valeur, (pOCVUpdateMotionHistory->doubleParam["duration"].valeur - pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur)*255. / pOCVUpdateMotionHistory->doubleParam["duration"].valeur);
+	for (int i = 0; i < (int)regionsMvt.size(); i++) 
+		{
+		Mat silh_roi = silh(regionsMvt[i]);
+		Mat mhi_roi = (*mhi)(regionsMvt[i]);
+		Mat orient_roi = (*orient)(regionsMvt[i]);
+		Mat mask_roi = mask(regionsMvt[i]);
+		double angle = cv::motempl::calcGlobalOrientation(orient_roi, mask_roi, mhi_roi, pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur, pOCVUpdateMotionHistory->doubleParam["duration"].valeur);
+
+	}
+	}
 return NULL;
 }
