@@ -218,6 +218,10 @@ delete segmvt;
 
 void ImageInfoCV::CloneStat(ImageInfoCV *im)
 {
+if (im->RegionMvt()->size() != 0)
+	regionsMvt = *(im->RegionMvt());
+if (im->Angle()->size() != 0)
+	angle = *(im->Angle());
 if (im->PtContours())
 	{
 	if (contours==NULL)

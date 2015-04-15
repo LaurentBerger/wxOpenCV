@@ -1187,5 +1187,5 @@ if (pOCV->intParam["calcGlobalOrientation"].valeur==1)
 		}
 	}
 mhi->AjoutOpAttribut(pOCV);
-return NULL;
+return mhi;
 }
