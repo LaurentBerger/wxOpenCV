@@ -490,7 +490,13 @@ if (captureVideo->isOpened())
 						seqActualisee=false;
 						delete imPre;
 						imPre=NULL;
-						}
+						std::map<ImageInfoCV*, bool>::iterator it;
+						for (it = effaceImage.begin(); it != effaceImage.end(); it++)
+							if (imIni!=it->first)
+								delete it->first;
+						effaceImage.clear();
+						imgParam.clear();
+					}
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
 						ParametreOperation pOCV=*it;
@@ -530,11 +536,11 @@ if (captureVideo->isOpened())
 								pOCV.op1 = im[indOp - 1][0];
 							}
 						if (imPre && imPre->BonCoin() && pOCV.nomOperation == "GoodFeature" && im[indOp - 1] && im[indOp - 1][0])
-						{
+							{
 							im[indOp] = new ImageInfoCV*[1];
 							im[indOp][0] = im[indOp - 1][0];
 
-						}
+							}
 						else
 							{
 							if (imgParam.size()!=0)
