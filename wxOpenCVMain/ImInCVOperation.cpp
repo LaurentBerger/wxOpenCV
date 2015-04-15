@@ -852,7 +852,7 @@ else
 		}
 	delete []d;
 	}
-ParamOCVHoughLigne(pOCV);
+AjoutOpAttribut(pOCV);
 return this;
 }
 
@@ -887,7 +887,7 @@ else
 		}
 	delete []d;
 	}
-ParamOCVHoughCercle(pOCV);
+AjoutOpAttribut(pOCV);
 return this;
 }
 
@@ -915,7 +915,7 @@ else
 		}
 	delete []d;
 	}
-ParamOCVHoughLigneProba(pOCV);
+AjoutOpAttribut(pOCV);
 return this;
 }
 
@@ -943,7 +943,7 @@ else
 
 		}
 	}
-ParamOCVBonCoin(pOCV);
+AjoutOpAttribut(pOCV);
 return this;
 }
 
@@ -1031,7 +1031,7 @@ for (int i=0;i<imPrec->channels();i++)
 		}
 	}
 //imSuiv->CloneStat(this);
-ParamOCVLucasKanade(pOCV);
+AjoutOpAttribut(pOCV);
 return imSuiv;
 }
 
@@ -1060,7 +1060,7 @@ else
 			pOCV->intParam["iterations"].valeur, pOCV->doubleParam["poly_sigma"].valeur, pOCV->intParam["flag"].valeur, pOCV->intParam["flag"].valeur);
 		}
 	}
-ParamOCVGunnarFarneback(pOCV);
+AjoutOpAttribut(pOCV);
 
 
 return imSuiv;
@@ -1091,7 +1091,7 @@ pOCV->doubleParam["dy"].valeur=shift.y;
 pOCV->doubleParam["dy"].mini=shift.y;
 pOCV->doubleParam["dy"].maxi=shift.y;
 pOCV->doubleParam["dy"].res=false;
-ParamOCVPhaseCorrelate(pOCV);
+AjoutOpAttribut(pOCV);
 
 }
 
@@ -1124,8 +1124,6 @@ if (imPrec->channels() != 1)
 	throw std::string("Number of channel must be 1");
 	return NULL;
 }
-absdiff(*imSuiv, *imPrec, silh); 
-threshold(silh, silh, pOCV->doubleParam["thresh"].valeur, pOCV->doubleParam["maxval"].valeur, pOCV->intParam["threshold_type"].valeur);
 ImageInfoCV *mhi=NULL;
 if (pOCV->imgParam.find(pOCV->nomOperation + "mhi") == pOCV->imgParam.end())
 	{
@@ -1134,8 +1132,11 @@ if (pOCV->imgParam.find(pOCV->nomOperation + "mhi") == pOCV->imgParam.end())
 	}
 else
 	mhi = pOCV->imgParam[pOCV->nomOperation + "mhi"];
+Mat *silh1=mhi->Silh(true);
+absdiff(*imSuiv, *imPrec, *silh1); 
+threshold(*silh1, *silh1, pOCV->doubleParam["thresh"].valeur, pOCV->doubleParam["maxval"].valeur, pOCV->intParam["threshold_type"].valeur);
 pOCV->doubleParam["timestamp"].valeur = (double)clock() / CLOCKS_PER_SEC;
-cv::motempl::updateMotionHistory(silh, *mhi, pOCV->doubleParam["timestamp"].valeur, pOCV->doubleParam["duration"].valeur); // update MHI
+cv::motempl::updateMotionHistory(*silh1, *mhi, pOCV->doubleParam["timestamp"].valeur, pOCV->doubleParam["duration"].valeur); // update MHI
 pOCV->imgParam[pOCV->nomOperation+"prec"] = imSuiv;
 mhi->ParamOCVUpdateMotionHistory(pOCV);
 return mhi;
@@ -1154,6 +1155,7 @@ if (orient)
 masque = new Mat();
 orient = new Mat();	// calculate motion gradient orientation and valid orientation mask
 cv::motempl::calcMotionGradient(*mhi, *masque, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
+mhi->AjoutOpAttribut(pOCV);
 return this;
 }
 ImageInfoCV 	*ImageInfoCV::SegmenteMvt(ImageInfoCV	*mhi, ParametreOperation *pOCV)
@@ -1172,15 +1174,17 @@ if (pOCV->intParam["calcGlobalOrientation"].valeur==1)
 	{
 	Mat mask;
 	mhi->convertTo(mask, CV_8U, 255. / pOCVUpdateMotionHistory->doubleParam["duration"].valeur, (pOCVUpdateMotionHistory->doubleParam["duration"].valeur - pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur)*255. / pOCVUpdateMotionHistory->doubleParam["duration"].valeur);
+	angle.resize(regionsMvt.size());
 	for (int i = 0; i < (int)regionsMvt.size(); i++) 
 		{
-		Mat silh_roi = silh(regionsMvt[i]);
+		Mat silh_roi = (*silh)(regionsMvt[i]);
 		Mat mhi_roi = (*mhi)(regionsMvt[i]);
 		Mat orient_roi = (*orient)(regionsMvt[i]);
 		Mat mask_roi = mask(regionsMvt[i]);
-		double angle = cv::motempl::calcGlobalOrientation(orient_roi, mask_roi, mhi_roi, pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur, pOCVUpdateMotionHistory->doubleParam["duration"].valeur);
+		angle[i] = cv::motempl::calcGlobalOrientation(orient_roi, mask_roi, mhi_roi, pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur, pOCVUpdateMotionHistory->doubleParam["duration"].valeur);
 
+		}
 	}
-	}
+mhi->AjoutOpAttribut(pOCV);
 return NULL;
 }

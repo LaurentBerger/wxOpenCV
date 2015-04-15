@@ -210,8 +210,9 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
 	EVT_MENU(MENU_LIGNEPROBAHOUGH,  FenetrePrincipale::TracerLigneProbaHough)
 	EVT_MENU(MENU_CERCLEHOUGH,  FenetrePrincipale::TracerCercleHough)
 	EVT_MENU(MENU_BONCOIN,  FenetrePrincipale::TracerBonCoin)
-	EVT_MENU(MENU_FLOTOPTIQUE,  FenetrePrincipale::TracerFlotOptique)
-	
+	EVT_MENU(MENU_FLOTOPTIQUE, FenetrePrincipale::TracerFlotOptique)
+	EVT_MENU(MENU_REGIONMVT, FenetrePrincipale::TracerRegionMvt)
+
 	EVT_MENU(MENU_OP1,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP2,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP3,  FenetrePrincipale::PrepOperation)

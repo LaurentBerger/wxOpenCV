@@ -64,15 +64,19 @@ contours=NULL;
 moment=NULL;
 huMoment=NULL;
 arbreContour=NULL;
-pOCVHoughLigne=NULL;
+/*pOCVHoughLigne=NULL;
 pOCVHoughLigneProba=NULL;
 pOCVHoughCercle=NULL;
 pOCVBonCoin=NULL;
 pOCVLucasKanade=NULL;
 pOCVGunnarFarneback=NULL;
-pOCVPhaseCorrelate=NULL;
+pOCVPhaseCorrelate=NULL;pOCVCalcMotionGradient = NULL;
+pOCVSegmentMotion = NULL;
+*/
 pOCVUpdateMotionHistory=NULL;
+
 ponderation=NULL;
+silh=NULL;
 
 #ifdef _INFOTEXTE__
 nbChampGonfle=0;
@@ -192,14 +196,19 @@ delete []cercle;
 delete []ligneP;
 delete []boncoin;
 delete []coinRef;
+/*
 delete pOCVHoughLigne;
 delete pOCVHoughLigneProba;
 delete pOCVHoughCercle;
 delete pOCVBonCoin;
 delete pOCVLucasKanade;
 delete pOCVGunnarFarneback;
+delete pOCVCalcMotionGradient;
+delete pOCVSegmentMotion;*/
 delete pOCVUpdateMotionHistory;
+
 delete ponderation;
+delete silh;
 delete masque;
 delete orient;
 delete segmvt;
@@ -299,18 +308,10 @@ flotOptique=im->FlotOptique();
 int ImageInfoCV::EtapeOp()
 {
 int m=-1;
-if (pOCVHoughLigne)
-	m=pOCVHoughLigne->indEtape;
-if (pOCVHoughLigneProba && m<pOCVHoughLigneProba->indEtape)
-	m=pOCVHoughLigneProba->indEtape;
-if (pOCVHoughCercle && m<pOCVHoughCercle->indEtape)
-	m=pOCVHoughCercle->indEtape;
-if (pOCVBonCoin && m<pOCVBonCoin->indEtape)
-	m=pOCVBonCoin->indEtape;
-if (pOCVLucasKanade && m<pOCVLucasKanade->indEtape)
-	m=pOCVLucasKanade->indEtape;
-if (pOCVGunnarFarneback && m<pOCVGunnarFarneback->indEtape)
-	m=pOCVGunnarFarneback->indEtape;
+map<string,ParametreOperation>::iterator it;
+for (it=listeOpAttribut.begin();it!=listeOpAttribut.end();it++)
+	if (it->second.indEtape>m)
+		m = it->second.indEtape;
 return m;
 
 
@@ -334,6 +335,13 @@ eSauver=NULL;
 InitImageInfo();
 }
 
+ParametreOperation *ImageInfoCV::AjoutOpAttribut(ParametreOperation *p)
+{
+listeOpAttribut[p->nomOperation]=*p;
+return p;
+}
+
+/*
 ParametreOperation *ImageInfoCV::ParamOCVHoughLigne(ParametreOperation *p)
 {
 if (p)
@@ -411,6 +419,27 @@ ParametreOperation *ImageInfoCV::ParamOCVPhaseCorrelate(ParametreOperation *p)
 }
 
 
+ParametreOperation *ImageInfoCV::ParamOCVCalcMotionGradient(ParametreOperation *p)
+{
+	if (p)
+	{
+		if (pOCVCalcMotionGradient == NULL)
+			pOCVCalcMotionGradient = new ParametreOperation;
+		*pOCVCalcMotionGradient = *p;
+	}
+	return pOCVCalcMotionGradient;
+}
+ParametreOperation *ImageInfoCV::ParamOCVSegmentMotion(ParametreOperation *p)
+{
+	if (p)
+	{
+		if (pOCVSegmentMotion == NULL)
+			pOCVSegmentMotion = new ParametreOperation;
+		*pOCVSegmentMotion = *p;
+	}
+	return pOCVSegmentMotion;
+}*/
+
 ParametreOperation *ImageInfoCV::ParamOCVUpdateMotionHistory(ParametreOperation *p)
 {
 	if (p)
@@ -421,7 +450,6 @@ ParametreOperation *ImageInfoCV::ParamOCVUpdateMotionHistory(ParametreOperation 
 	}
 	return pOCVUpdateMotionHistory;
 }
-
 
 
 void ImageInfoCV::DefProprieteImage(char *nomFichier)

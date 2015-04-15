@@ -123,21 +123,25 @@ std::vector<cv::Point2f> *boncoin;	/*<! http://docs.opencv.org/modules/imgproc/d
 std::vector<cv::Point2f> *coinRef;	/*<! Les pixels de références de l'image pour calcul du flot optique */
 cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
 cv::Mat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
-Mat silh;							/*<! Seuillage de la différence entre deux images pour updateMotion History */
+cv::Mat *silh;						/*<! Seuillage de la différence entre deux images pour updateMotion History */
 
 cv::Mat	*masque;					/*<! Masque pour calcMotionGradient */
 cv::Mat *orient;					/*<! orientation pour calcMotionGradient*/
 cv::Mat *segmvt;					/*<! segmentation issue de l'analyse du mouvement (segmentMotion)*/
 std::vector<cv::Rect> regionsMvt;	/*<! Regions issues de l'analyse du mouvement (segmentMotion)*/
+std::vector<double> angle;			/*<! Angle issus de l'analyse du mouvement (calcGlobalOrientation)*/
 
-ParametreOperation *pOCVHoughLigne;
+std::map<std::string, ParametreOperation> listeOpAttribut;
+ParametreOperation *pOCVUpdateMotionHistory;
+/*ParametreOperation *pOCVHoughLigne;
 ParametreOperation *pOCVHoughLigneProba;
 ParametreOperation *pOCVHoughCercle;
 ParametreOperation *pOCVBonCoin;
 ParametreOperation *pOCVLucasKanade;
 ParametreOperation *pOCVGunnarFarneback;
 ParametreOperation *pOCVPhaseCorrelate;
-ParametreOperation *pOCVUpdateMotionHistory;
+ParametreOperation *pOCVCalcMotionGradient;
+ParametreOperation *pOCVSegmentMotion;*/
 
 public : 
 //	********* Constructeurs et destructeur
@@ -424,8 +428,9 @@ char  	LitConverCplxEnt(void);
 cv::Mat	**StatComposante(){return statComposante;};
 cv::Mat	**CentreGComposante(){return centreGComposante;};
 cv::Mat	*FlotOptique(bool init=false){if (init ) {delete []flotOptique;flotOptique= new cv::Mat[channels()];} return flotOptique;};
-cv::Mat *Ponderation(bool init = false){ if (init) { delete ponderation;ponderation=new cv::Mat();  cv::createHanningWindow(*ponderation, this->size(), CV_64F); } return ponderation; };
-std::vector<cv::Moments> *MomentComposante(){return moment;};	 
+cv::Mat *Ponderation(bool init = false){ if (init) { delete ponderation; ponderation = new cv::Mat();  cv::createHanningWindow(*ponderation, this->size(), CV_64F); } return ponderation; };
+cv::Mat *Silh(bool init = false){ if (init) { delete silh; silh = new cv::Mat(); } return silh; };
+std::vector<cv::Moments> *MomentComposante(){ return moment; };
 std::vector<std::vector<cv::Point> > *PtContours(){return contours;};
 std::vector<cv::Vec4i> *ArboContour(){return arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 std::vector<double> *HuMoment(){return huMoment;};
@@ -433,15 +438,23 @@ std::vector<cv::Vec3f> *HoughCercle(){return cercle;};
 std::vector<cv::Vec4i> *HoughLigneProba(){return ligneP;};
 std::vector<cv::Vec2f> *HoughLigne(){return ligne;};
 std::vector<cv::Point2f> *BonCoin(bool init=false){if (init && boncoin==NULL) boncoin = new std::vector<cv::Point2f>[channels()];return boncoin;};
-std::vector<cv::Point2f> *CoinRef(bool init=false){if (init && coinRef==NULL) coinRef = new std::vector<cv::Point2f>[channels()];return coinRef;};
-ParametreOperation *ParamOCVHoughLigne(ParametreOperation *p=NULL);
+std::vector<cv::Point2f> *CoinRef(bool init = false){ if (init && coinRef == NULL) coinRef = new std::vector<cv::Point2f>[channels()]; return coinRef; };
+std::vector<double> *Angle(){ return &angle; };
+std::vector<cv::Rect> *RegionMvt(){ return &regionsMvt; };
+/*ParametreOperation *ParamOCVHoughLigne(ParametreOperation *p = NULL);
 ParametreOperation *ParamOCVHoughLigneProba(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVBonCoin(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVLucasKanade(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVGunnarFarneback(ParametreOperation *p=NULL);
 ParametreOperation *ParamOCVPhaseCorrelate(ParametreOperation *p = NULL);
+ParametreOperation *ParamOCVCalcMotionGradient(ParametreOperation *p = NULL);
+ParametreOperation *ParamOCVSegmentMotion(ParametreOperation *p = NULL);*/
 ParametreOperation *ParamOCVUpdateMotionHistory(ParametreOperation *p = NULL);
+ParametreOperation *AjoutOpAttribut(ParametreOperation *p);
+std::map<std::string,ParametreOperation> *ListeOpAttribut(){return &listeOpAttribut;};
+ParametreOperation *OpAttribut(std::string s){if (listeOpAttribut.find(s) != listeOpAttribut.end()) return &listeOpAttribut[s];return NULL;};
+
 
 int EtapeOp();  /*<! retourne l'indice de l'étape de l'opérateur le plus grand */
 void CloneStat(ImageInfoCV *im);

@@ -90,6 +90,7 @@ else
 	f->TracerCercleHough(dc);
 	f->TracerBonCoin(dc);
 	f->TracerFlotOptique(dc);
+	f->TracerRegionMvt(dc);
 	}
 /*        dc.SetPen( *wxRED_PEN );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -635,11 +636,11 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 			menu.Check(MENU_FLOTOPTIQUE, true);
 		menuParametre = true;
 	}
-	if (f->ImAcq()->FlotOptique())
+	if (f->ImAcq()->Angle()->size()!=0)
 	{
-		menu.AppendCheckItem(MENU_FLOTOPTIQUE, _T("Optical Flow "));
-		if (f->TracerFlotOptique())
-			menu.Check(MENU_FLOTOPTIQUE, true);
+		menu.AppendCheckItem(MENU_REGIONMVT, _T("Regions Motion"));
+		if (f->TracerRegionMvt())
+			menu.Check(MENU_REGIONMVT, true);
 		menuParametre = true;
 	}
 	if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre)
@@ -846,15 +847,28 @@ else
 
 void FenetrePrincipale::TracerLigneHough(wxCommandEvent& event)
 {
-tracerLigneHough=!tracerLigneHough;
-if( tracerLigneHough)
+	tracerLigneHough = !tracerLigneHough;
+	if (tracerLigneHough)
 	{
-	wxClientDC hdc(feuille);
-	feuille->DoPrepareDC(hdc);
-	TracerLigneHough(hdc);
+		wxClientDC hdc(feuille);
+		feuille->DoPrepareDC(hdc);
+		TracerLigneHough(hdc);
 	}
-else
-	feuille->Refresh(true);
+	else
+		feuille->Refresh(true);
+}
+
+void FenetrePrincipale::TracerRegionMvt(wxCommandEvent& event)
+{
+	tracerRegionMvt = !tracerRegionMvt;
+	if (tracerRegionMvt)
+	{
+		wxClientDC hdc(feuille);
+		feuille->DoPrepareDC(hdc);
+		TracerRegionMvt(hdc);
+	}
+	else
+		feuille->Refresh(true);
 }
 
 void FenetrePrincipale::TracerLigneProbaHough(wxCommandEvent& event)
@@ -907,6 +921,26 @@ if( tracerFlotOptique)
 	}
 else
 	feuille->Refresh(true);
+}
+
+void FenetrePrincipale::TracerRegionMvt(wxDC &hdc)
+{
+if (!tracerRegionMvt || !imAcq)
+	return;
+if (imAcq->RegionMvt()->size()==0)
+	{
+	tracerRegionMvt = false;
+	return;
+	}
+
+for (int i = 0; i<imAcq->RegionMvt()->size();i++)
+	{
+	wxPoint p_1((*(imAcq->RegionMvt()))[i].x, (*(imAcq->RegionMvt()))[i].y);
+	wxPoint p_2((*(imAcq->RegionMvt()))[i].width, (*(imAcq->RegionMvt()))[i].height);
+	wxPoint p1(RepereImageEcran(p_1));
+	wxPoint p2(RepereImageEcran(p_1+p_2));
+	hdc.DrawLine(p1, p2);
+}
 }
 
 void FenetrePrincipale::TracerLigneHough(wxDC &hdc)

@@ -529,7 +529,9 @@ wxOsgApp	*app=(wxOsgApp *)osgApp;
 ImageInfoCV **im=NULL;
 ImageInfoCV *imTmp=NULL;
 int i=0;
-
+bool videoActive=false;
+if (fenMere->Cam() && fenMere->Cam()->IsRunning())
+	videoActive=true;
 for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();it++)
 	{
 	ParametreOperation pOCV=*it;
@@ -547,7 +549,7 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		}
 	long indFen2=it->indOp2Fenetre;
 	bool annuler=false;
-	while (it->opBinaireSelec && !app->Graphique(indFen2) && !it->opVideo)
+	while (it->opBinaireSelec && !app->Graphique(indFen2) && !videoActive)
 		{
 			wxTextEntryDialog  adr( NULL,_("Empty image. Give window id of image"),"0");   
 			if (adr.ShowModal())
@@ -558,7 +560,7 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		}
 	if (annuler)
 		return false;
-	if (it->opBinaireSelec && !it->opVideo && app->Fenetre(indFen2))
+	if (it->opBinaireSelec && !videoActive && app->Fenetre(indFen2))
 		it->op2=app->Graphique(indFen2)->ImAcq();
 	else
 		it->op2 =NULL;
