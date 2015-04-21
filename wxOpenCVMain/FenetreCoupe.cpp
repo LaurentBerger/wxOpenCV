@@ -109,19 +109,44 @@ excel->Show();
 	courbe->Show(true);
 }
 
-FenetreCoupe::~FenetreCoupe() 
+void FenetreCoupe::OnClose(wxCloseEvent& event)
 {
 if (!fenMere)
 	return;
- delete courbe;
- delete excel;
- delete panel;
- if (x[0])
- for (int i=0;i<NB_MAX_CANAUX;i++)
+delete courbe;
+delete excel;
+delete panel;
+courbe=NULL;
+excel=NULL;
+panel=NULL;
+if (x[0])
 	{
-	delete []x[i];
-	delete []y[i];
-	delete []yFiltre[i];  /*!< courbe des histogrammes pour les trois plans */
+	for (int i = 0; i<NB_MAX_CANAUX; i++)
+		{
+		delete[]x[i];
+		delete[]y[i];
+		delete[]yFiltre[i];  /*!< courbe des histogrammes pour les trois plans */
+		}
+	}
+wxWindow::Close(true);
+}
+
+FenetreCoupe::~FenetreCoupe() 
+{
+delete courbe;
+delete excel;
+delete panel;
+courbe = NULL;
+excel = NULL;
+panel = NULL;
+if (x[0])
+	{
+	for (int i = 0; i<NB_MAX_CANAUX; i++)
+		{
+		delete[]x[i];
+		delete[]y[i];
+		delete[]yFiltre[i];  /*!< courbe des histogrammes pour les trois plans */
+		}
 	}
 }
 
@@ -138,7 +163,7 @@ if (!fenMere)
 	return;
 ImageInfoCV			*imAcq=((FenetrePrincipale *)fenMere)->ImAcq();
 long nbLig=imAcq->LitNbLigne(),nbCol=imAcq->LitNbColonne();
-static long*h=new long[nbLig+nbCol];
+//static long*h=new long[nbLig+nbCol];
 long ligDeb=0,colDeb=0;
 
 cv::Point pt1((float)rCoupe.GetLeft(),(float)rCoupe.GetTop());

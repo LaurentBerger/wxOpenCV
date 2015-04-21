@@ -79,8 +79,34 @@ indOp2Fenetre=-1;
 indOp3Fenetre=-1;
 opVideo=false;
 opErreur=0;
-intParam["Save result"] = DomaineParametreOp<int>(0, 0, 0, 1);
-intParam["Send packet"] = DomaineParametreOp<int>(0, 0, 0, 1);
+//intParam["Save result"] = DomaineParametreOp<int>(0, 0, 0, 1);
+//intParam["Send packet"] = DomaineParametreOp<int>(0, 0, 0, 1);
+if (s == "wrapAffine") // inclus la différence de deux images successives
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	pointParam["src1"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
+	pointParam["src2"] = DomaineParametreOp<cv::Point>(cv::Point(1000, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
+	pointParam["src3"] = DomaineParametreOp<cv::Point>(cv::Point(0, 1000), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
+	pointParam["dst1"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
+	pointParam["dst2"] = DomaineParametreOp<cv::Point>(cv::Point(1000, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
+	pointParam["dst3"] = DomaineParametreOp<cv::Point>(cv::Point(0, 1000), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
+	pointParam["centre"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
+	doubleParam["angle"] = DomaineParametreOp<double>(0, -180, 180, 1);
+	doubleParam["scale"] = DomaineParametreOp<double>(1, 0.0000, 180, 0.1);
+	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
+	intParam["flags"] = DomaineParametreOp<int>(CV_INTER_LINEAR  , CV_INTER_LINEAR, CV_INTER_LANCZOS4, 1);
+	intParam["borderMode"] = DomaineParametreOp<int>(IPL_BORDER_CONSTANT, IPL_BORDER_CONSTANT, IPL_BORDER_WRAP, 1);
+	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
+	}
+if (s == "wrapPerspective") // inclus la différence de deux images successives
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	}
+
 if (s == "updatemotionhistory") // inclus la différence de deux images successives
 {
 	nomOperation = s;
@@ -855,7 +881,14 @@ if (s=="medianaxis")
 	opUnaireSelec = &ImageInfoCV::LigneMediane;
 	return true;
 	}
-if (s=="buildopticalflowpyramid")
+if (s == "wrapAffine") // inclus la différence de deux images successives
+{
+	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#warpaffine";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::TransAffine;
+	return true;
+}
+if (s == "buildopticalflowpyramid")
 	{
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#buildopticalflowpyramid";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=366&zoom=70,250,100";
@@ -898,35 +931,21 @@ return false;
 }
 
 
-ImageInfoCV	**ParametreOperation::ExecuterOperation()
+std::vector<ImageInfoCV*> ParametreOperation::ExecuterOperation()
 {
-ImageInfoCV	*im=NULL;
-ImageInfoCV	**imTab=NULL;
+std::vector <ImageInfoCV*> r;
 nbImageRes=1;
 if (opNaireSelec)
 	{
 	ImageInfoCV *imOp[3]={op1,op2,op3};
 	try
 		{
-		im =(op1->*opNaireSelec) (3,imOp,this);
+		r =(op1->*opNaireSelec) (3,imOp,this);
 		}
 	catch(cv::Exception& e)
 		{
 		}
 
-	if (im==NULL)
-		{
-/*		opNaireSelec=NULL;
-		op1=NULL;
-		op2=NULL;
-		op3=NULL;*/
-		return imTab;
-		}
-	else
-		{
-		imTab = new ImageInfoCV*[1];
-		imTab[0]=im;
-		}
 	}
 
 if (opBinaireSelec)
@@ -935,11 +954,9 @@ if (opBinaireSelec)
 	try
 		{
 		if (op1 && op2==NULL)
-			im =(op1->*opBinaireSelec)(op1,NULL,this);
+			r =(op1->*opBinaireSelec)(op1,NULL,this);
 		else if (op1)
-			im =(op1->*opBinaireSelec)(op1,op2,this);
-        else 
-            im=NULL;
+			r =(op1->*opBinaireSelec)(op1,op2,this);
 		}
 	catch(cv::Exception& e)
 		{
@@ -947,25 +964,13 @@ if (opBinaireSelec)
 
 		}
 
-	if (im==NULL)
-		{
-/*		opBinaireSelec=NULL;
-		op1=NULL;
-		op2=NULL;*/
-		return imTab;
-		}
-	else
-		{
-		imTab = new ImageInfoCV*[1];
-		imTab[0]=im;
-		}
 	}
 if (opUnaireSelec)
 	{
 	try
 		{
 
-		im =(op1->*opUnaireSelec)(op1,this);
+		r =(op1->*opUnaireSelec)(op1,this);
 		}
 	catch(cv::Exception& e)
 		{
@@ -973,15 +978,6 @@ if (opUnaireSelec)
 
 		}
 
-	if (im==NULL)
-		{
-		return imTab;
-		}
-	else
-		{
-		imTab = new ImageInfoCV*[1];
-		imTab[0]=im;
-		}
 	}
 
 if (opSurjecUnaire)
@@ -989,7 +985,7 @@ if (opSurjecUnaire)
 	try
 		{
 
-		imTab =(op1->*opSurjecUnaire)(op1,this);
+		r =(op1->*opSurjecUnaire)(op1,this);
 		}
 	catch(cv::Exception& e)
 		{
@@ -997,11 +993,7 @@ if (opSurjecUnaire)
 
 		}
 
-	if (imTab==NULL)
-		{
-		return imTab;
-		}
 	}
 
-return imTab; // Le pointeur imTab n'est pas libéré
+return r; // Le pointeur imTab n'est pas libéré
 }

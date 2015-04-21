@@ -74,6 +74,7 @@ ongletRegionV=NULL;
 ongletRegionB=NULL;
 ongletCurseur=NULL;
 ongletCouleur=NULL;
+ongletStatus=NULL;
 ongletDistribRadiale=NULL; /*!< Pointeur pour accès informations sur distrib radiale */
 ongletDistribAngulaire=NULL; /*!< Pointeur pour accès informations sur distrib radiale */
 
@@ -121,6 +122,8 @@ if (i==1)
 	{
 	ongletHistogramme->Plot(true);
 	}
+if (i==0)
+	OuvertureOngletStatus();
 }
 
 void ImageStatistiques::OuvertureOngletCouleur()
@@ -310,98 +313,151 @@ if (ongletDistribAngulaire && listeFenetreOnglet->GetCurrentPage()==ongletDistri
 
 void ImageStatistiques::OuvertureOngletStatus()
 {
-if (ongletStatus)
-	return;
-wxPoint	position[]={
-// Texte		
-wxPoint(10,10),wxPoint(80,10),
-wxPoint(10,40),wxPoint(80,40),
-wxPoint(10,70),wxPoint(80,70),
-wxPoint(10,100),wxPoint(80,100),
-wxPoint(10,130),wxPoint(80,130),
-wxPoint(10,160),wxPoint(80,170)};
-wxSize	taille[]={
-// Texte		Réglette
-wxSize(70,30),wxSize(400,30),
-wxSize(70,30),wxSize(400,30),
-wxSize(70,30),wxSize(400,30),
-wxSize(70,30),wxSize(400,30),
-wxSize(70,30),wxSize(400,30),
-wxSize(70,30),wxSize(400,30)};
-
-wxString	legende[]={	"Image",wxEmptyString,
-						"Size",wxEmptyString,
-						"Pixel size",wxEmptyString,
-						"Minimum ",wxEmptyString,
-						"Maximum ",wxEmptyString,
-						"Background Image ",wxEmptyString};
-wxString texte;
-ongletStatus = new wxWindow(listeFenetreOnglet,-1); 
-
-int i=0;
-new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
-new wxStaticText(ongletStatus,300+i+1,fenMere->GetTitle(),position[i+1], taille[i+1]);
-i+=2;
-new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
-texte.Printf("%d rows X %d cols X %d channels",fenMere->ImAcq()->rows,fenMere->ImAcq()->cols,fenMere->ImAcq()->channels());
-new wxStaticText(ongletStatus,300+i+1,texte,position[i+1], taille[i+1]);
-i+=2;
-new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
-switch(fenMere->ImAcq()->depth())
+if (!ongletStatus)
 	{
-	break;
-case CV_16U:
-	texte="unsigned short (16 bits)";
-	break;
-case CV_16S:
-	texte=" short (16 bits)";
-	break;
-case CV_8U:
-	texte="Unsigned char (8 bits)";
-	break;
-case CV_8S:
-	texte="Signed char (8 bits)";
-	break;
-case CV_32F:
-	texte="Single precision floating point (32 bits) by channel";
-	break;
-case CV_64F:
-	texte="Single precision floating point (32 bits) by channel";
-	break;
-default :
-	texte ="Unknown size!";
-	}
+	wxPoint	position[]={
+	// Texte		
+	wxPoint(10,10),wxPoint(80,10),
+	wxPoint(10,40),wxPoint(80,40),
+	wxPoint(10,70),wxPoint(80,70),
+	wxPoint(10,100),wxPoint(80,100),
+	wxPoint(10,130),wxPoint(80,130),
+	wxPoint(10,160),wxPoint(80,170)};
+	wxSize	taille[]={
+	// Texte		Réglette
+	wxSize(70,30),wxSize(400,30),
+	wxSize(70,30),wxSize(400,30),
+	wxSize(70,30),wxSize(400,30),
+	wxSize(70,30),wxSize(400,30),
+	wxSize(70,30),wxSize(400,30),
+	wxSize(70,30),wxSize(400,30)};
 
-new wxStaticText(ongletStatus,300+i+1,texte,position[i+1], taille[i+1]);
-i+=2;
-new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
-wxString v;
-texte="(";
-for (int i=0;i<fenMere->ImAcq()->channels()-1;i++)
-	{
-	v.Printf("%f,",fenMere->ImAcq()->MinIm()[i]);
+	wxString	legende[]={	"Image",wxEmptyString,
+							"Size",wxEmptyString,
+							"Pixel size",wxEmptyString,
+							"Minimum ",wxEmptyString,
+							"Maximum ",wxEmptyString,
+							"Background Image ",wxEmptyString};
+	wxString texte;
+	ongletStatus = new wxWindow(listeFenetreOnglet,-1); 
+
+	int i=0;
+	new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
+	new wxStaticText(ongletStatus,300+i+1,fenMere->GetTitle(),position[i+1], taille[i+1]);
+	i+=2;
+	new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
+	texte.Printf("%d rows X %d cols X %d channels",fenMere->ImAcq()->rows,fenMere->ImAcq()->cols,fenMere->ImAcq()->channels());
+	new wxStaticText(ongletStatus,300+i+1,texte,position[i+1], taille[i+1]);
+	i+=2;
+	new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
+	switch(fenMere->ImAcq()->depth())
+		{
+		break;
+	case CV_16U:
+		texte="unsigned short (16 bits)";
+		break;
+	case CV_16S:
+		texte=" short (16 bits)";
+		break;
+	case CV_8U:
+		texte="Unsigned char (8 bits)";
+		break;
+	case CV_8S:
+		texte="Signed char (8 bits)";
+		break;
+	case CV_32F:
+		texte="Single precision floating point (32 bits) by channel";
+		break;
+	case CV_64F:
+		texte="Single precision floating point (32 bits) by channel";
+		break;
+	default :
+		texte ="Unknown size!";
+		}
+
+	new wxStaticText(ongletStatus,300+i+1,texte,position[i+1], taille[i+1]);
+	i+=2;
+	new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
+	wxString v;
+	texte="(";
+	for (int i=0;i<fenMere->ImAcq()->channels()-1;i++)
+		{
+		v.Printf("%f,",fenMere->ImAcq()->MinIm()[i]);
+		texte += v;
+		}
+	v.Printf("%f)",fenMere->ImAcq()->MinIm()[fenMere->ImAcq()->channels()-1]);
 	texte += v;
-	}
-v.Printf("%f)",fenMere->ImAcq()->MinIm()[fenMere->ImAcq()->channels()-1]);
-texte += v;
-new wxStaticText(ongletStatus,300+i+1,texte,position[i+1], taille[i+1]);
-i+=2;
-new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
-texte="(";
-for (int i=0;i<fenMere->ImAcq()->channels()-1;i++)
-	{
-	v.Printf("%f,",fenMere->ImAcq()->MaxIm()[i]);
+	new wxStaticText(ongletStatus,300+i+1,texte,position[i+1], taille[i+1]);
+	i+=2;
+	new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
+	texte="(";
+	for (int i=0;i<fenMere->ImAcq()->channels()-1;i++)
+		{
+		v.Printf("%f,",fenMere->ImAcq()->MaxIm()[i]);
+		texte += v;
+		}
+	v.Printf("%f)",fenMere->ImAcq()->MaxIm()[fenMere->ImAcq()->channels()-1]);
 	texte += v;
+	new wxStaticText(ongletStatus,300+i+1,texte,position[i+1], taille[i+1]);
+	i+=2;
+	new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
+	i++;
+	new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
+	i++;
+	listeFenetreOnglet->AddPage(ongletStatus, _T("Informations"));
 	}
-v.Printf("%f)",fenMere->ImAcq()->MaxIm()[fenMere->ImAcq()->channels()-1]);
-texte += v;
-new wxStaticText(ongletStatus,300+i+1,texte,position[i+1], taille[i+1]);
-i+=2;
-new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
-i++;
-new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
-i++;
-listeFenetreOnglet->AddPage(ongletStatus, _T("Informations"));
+else
+	{
+	((wxStaticText*)wxWindow::FindWindowById(301, ongletStatus))->SetLabelText(fenMere->GetTitle());
+	wxString texte;
+	texte.Printf("%d rows X %d cols X %d channels", fenMere->ImAcq()->rows, fenMere->ImAcq()->cols, fenMere->ImAcq()->channels());
+	((wxStaticText*)wxWindow::FindWindowById(303, ongletStatus))->SetLabelText(texte);
+	switch (fenMere->ImAcq()->depth())
+	{
+		break;
+	case CV_16U:
+		texte = "unsigned short (16 bits)";
+		break;
+	case CV_16S:
+		texte = " short (16 bits)";
+		break;
+	case CV_8U:
+		texte = "Unsigned char (8 bits)";
+		break;
+	case CV_8S:
+		texte = "Signed char (8 bits)";
+		break;
+	case CV_32F:
+		texte = "Single precision floating point (32 bits) by channel";
+		break;
+	case CV_64F:
+		texte = "Single precision floating point (32 bits) by channel";
+		break;
+	default:
+		texte = "Unknown size!";
+	}
+	((wxStaticText*)wxWindow::FindWindowById(305, ongletStatus))->SetLabelText(texte);
+	((wxStaticText*)wxWindow::FindWindowById(305, ongletStatus))->Refresh();
+	wxString v;
+	texte = "(";
+	for (int i = 0; i<fenMere->ImAcq()->channels() - 1; i++)
+	{
+		v.Printf("%f,", fenMere->ImAcq()->MinIm()[i]);
+		texte += v;
+	}
+	v.Printf("%f)", fenMere->ImAcq()->MinIm()[fenMere->ImAcq()->channels() - 1]);
+	texte += v;
+	((wxStaticText*)wxWindow::FindWindowById(307, ongletStatus))->SetLabelText(texte);
+	texte = "(";
+	for (int i = 0; i<fenMere->ImAcq()->channels() - 1; i++)
+	{
+		v.Printf("%f,", fenMere->ImAcq()->MaxIm()[i]);
+		texte += v;
+	}
+	v.Printf("%f)", fenMere->ImAcq()->MaxIm()[fenMere->ImAcq()->channels() - 1]);
+	texte += v;
+	((wxStaticText*)wxWindow::FindWindowById(309, ongletStatus))->SetLabelText(texte);
+	}
 ongletStatus->Refresh();
 
 }	

@@ -90,6 +90,7 @@ void DefOsgApp(void *w){osgApp=w;};
 void	DefCellule(int l,int c, double val,char *format=NULL);
 void CoordonneeGraphique();
 void OnKeyDown(wxKeyEvent &event);
+void OnClose(wxCloseEvent& event);
 
 private:
   void OnQuit( wxCommandEvent& event );
@@ -179,15 +180,17 @@ float	histoStat[NB_MAX_RECTANGLE][NBELT_FILE];
 int		posFile[NB_MAX_RECTANGLE];
 Tableur *excel;
 void	*osgApp;
-void *fenMere;
+void	*fenMere;
 char	razHisto;
 public:
-  FenetreFocus( wxFrame * );
-  void Plot(int);
+	FenetreFocus(wxFrame *);
+	~FenetreFocus();
+	void Plot(int);
 void	DefOsgApp(void *w){osgApp=w;};
 void DefFenetrePrincipale(void *f){fenMere=f;};
 void	DefCellule(int l,int c, double val,char *format=NULL);
 void	RAZHistoStat(){razHisto=1;};
+void	OnClose(wxCloseEvent& event);
 private:
 void	OnQuit( wxCommandEvent& event );
 void	OnAbout( wxCommandEvent& event );

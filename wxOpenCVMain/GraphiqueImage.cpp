@@ -17,7 +17,7 @@ wxColor		*FenetrePrincipale::pRainbow256=NULL;
 wxColor		*FenetrePrincipale::pThermique=NULL;
 wxColor		*FenetrePrincipale::pThermique256=NULL;
 wxColor		*FenetrePrincipale::pThermique256Boucle=NULL;
-
+int			FenetrePrincipale::nbObjetFenetrePrincipale=0;
 
 void FenetrePrincipale::DefSeuilNivBas(double x,int plan)
 {
@@ -321,6 +321,21 @@ if (!pCouleur)
 
 // zone mémoire pour le DIB 
 long taille = im->cols*im->rows*3;
+if (imAffichee && imAffichee->GetHeight()*imAffichee->GetWidth() != im->cols*im->rows)
+	{
+	delete tabRGBTransparence;
+	tabRGBTransparence=NULL;
+	tabRGB=NULL;
+	delete imAffichee;
+	imAffichee=NULL;
+	if (imGain)
+		{
+		correctionGain=false;
+		delete imGain;
+		imGain=NULL;
+		}
+	}
+
 if (tabRGB==NULL)
 	{
 	tabRGB = new unsigned char[taille];

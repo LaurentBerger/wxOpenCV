@@ -396,6 +396,7 @@ double				diffHauteur;		/*!< Différence de hauteur pour fusion des régions */
 wxImage				*imAffichee;		/*!< wxImage affichée résultant de l'image opencv et de la palette*/
 
 wxColor				*pCouleur;
+static int			nbObjetFenetrePrincipale;
 public :
 static wxColor		*pLineaire;
 static wxColor		*pAleatoire;

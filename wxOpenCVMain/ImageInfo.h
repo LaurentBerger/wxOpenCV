@@ -11,6 +11,7 @@
 #ifndef __IMAGEINFO__
 #define __IMAGEINFO__
 
+
 #include <ctime>
 #include <map>
 #include <string>
@@ -272,57 +273,60 @@ ImageInfoCV 	&operator= (ImageInfoCV	&z);
 ImageInfoCV	*Variance (long);
 
 // Fonctions membres equivalentes aux opérateurs utilisant OPENCV
-ImageInfoCV 	*EtLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
-ImageInfoCV 	*OuLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
-ImageInfoCV 	*OuExcluLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
-ImageInfoCV 	*Add(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
-ImageInfoCV 	*AddPonderee(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
-ImageInfoCV 	*Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*Div(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*Erosion(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*Dilatation(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*Ouverture(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*Fermeture(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*ChapeauHaut(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*ChapeauBas(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*GradMorph(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*Convolution(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
-ImageInfoCV		*PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
-ImageInfoCV 	*FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
-ImageInfoCV		*PhaseCorrelate(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV);
-ImageInfoCV		*MAJHistoriqueMvt(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>EtLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV *>OuLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV *>OuExcluLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV *>Add(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV *>AddPonderee(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV *>Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>Div(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>Erosion(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>Dilatation(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>Ouverture(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>Fermeture(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>ChapeauHaut(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>ChapeauBas(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>GradMorph(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>Convolution(ImageInfoCV	*,ImageInfoCV	* = NULL,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV	*>PartageEaux(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV *>FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV *>FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV=NULL);
+std::vector<ImageInfoCV	*>PhaseCorrelate(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>MAJHistoriqueMvt(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV);
 
-ImageInfoCV 	*Negation(ImageInfoCV	*im1, ParametreOperation *pOCV);
-ImageInfoCV 	*Laplacien(ImageInfoCV	*,ParametreOperation *pOCV);
-ImageInfoCV 	*ScharrX(ImageInfoCV	*im1,ParametreOperation *pOCV);
-ImageInfoCV 	*ScharrY(ImageInfoCV	*im1,ParametreOperation *pOCV);
-ImageInfoCV 	*ScharrModule(ImageInfoCV	*im1,ParametreOperation *pOCV);
-ImageInfoCV 	*Contour(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*Seuillage(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*SeuillageAdaptatif(ImageInfoCV	*imSrc,ParametreOperation *pOCV);
-ImageInfoCV 	*LissageMedian(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*LissageMoyenne(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*LissageGaussien(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*LissageBilateral(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*FFT(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*IFFT(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV		*FusionPlan(int nbPlan,ImageInfoCV	**,ParametreOperation *paramOCV);
-ImageInfoCV		*ComposanteConnexe (ImageInfoCV *result,ParametreOperation *paramOCV);
-ImageInfoCV		*RGB_L(ImageInfoCV *im1,ParametreOperation *paramOCV);
-ImageInfoCV		*DistanceDiscrete (ImageInfoCV *result,ParametreOperation *paramOCV);
-ImageInfoCV		*Voronoi (ImageInfoCV *result,ParametreOperation *paramOCV);
-ImageInfoCV		*LigneMediane(ImageInfoCV *result,ParametreOperation *paramOCV);
-ImageInfoCV 	*Canny(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*HoughLigne(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*HoughCercle(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*HoughLigneProba(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*BonAttributs(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV 	*DetectCoinHarris(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV		**SeparationPlan(ImageInfoCV	*,ParametreOperation *paramOCV);
-ImageInfoCV		*CalcOrientationMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
-ImageInfoCV 	*SegmenteMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>Negation(ImageInfoCV	*im1, ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>Laplacien(ImageInfoCV	*,ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>ScharrX(ImageInfoCV	*im1,ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>ScharrY(ImageInfoCV	*im1,ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>ScharrModule(ImageInfoCV	*im1,ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>Contour(ImageInfoCV	*,ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>Seuillage(ImageInfoCV	*,ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>SeuillageAdaptatif(ImageInfoCV	*imSrc,ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>LissageMedian(ImageInfoCV	*,ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>LissageMoyenne(ImageInfoCV	*,ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>LissageGaussien(ImageInfoCV	*,ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>LissageBilateral(ImageInfoCV	*,ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>FFT(ImageInfoCV	*,ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>IFFT(ImageInfoCV	*,ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>FusionPlan(int nbPlan, ImageInfoCV	**, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>ComposanteConnexe(ImageInfoCV *result, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>RGB_L(ImageInfoCV *im1, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DistanceDiscrete(ImageInfoCV *result, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>Voronoi(ImageInfoCV *result, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>LigneMediane(ImageInfoCV *result, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>Canny(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>HoughLigne(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>HoughCercle(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>HoughLigneProba(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>BonAttributs(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectCoinHarris(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>SeparationPlan(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>CalcOrientationMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>SegmenteMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>TransAffine(ImageInfoCV	*imSrc, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>TransPerspective(ImageInfoCV	*imSrc, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> Dimension(ImageInfoCV	*imSrc, ParametreOperation *pOCV);
 
 
 void ExtremumLoc(ImageInfoCV *mask=NULL );

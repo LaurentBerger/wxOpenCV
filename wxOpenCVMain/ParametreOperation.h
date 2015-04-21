@@ -72,15 +72,15 @@ int indOp3Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
 
 
 // surjection nombre d'images, les images dans un tableau et les paramètres
-ImageInfoCV**  (ImageInfoCV::*opSurjecMultiple)(int,ImageInfoCV **,ParametreOperation *) ;
+std::vector<ImageInfoCV*>  (ImageInfoCV::*opSurjecMultiple)(int,ImageInfoCV **,ParametreOperation *) ;
 // Opération programmée ternaire : Fusion plan
-ImageInfoCV*  (ImageInfoCV::*opNaireSelec)(int ,ImageInfoCV **,ParametreOperation *) ;
+std::vector<ImageInfoCV*> (ImageInfoCV::*opNaireSelec)(int, ImageInfoCV **, ParametreOperation *);
 // Opération programmée binaire
-ImageInfoCV*  (ImageInfoCV::*opBinaireSelec)(ImageInfoCV *,ImageInfoCV *,ParametreOperation *) ;
+std::vector<ImageInfoCV*> (ImageInfoCV::*opBinaireSelec)(ImageInfoCV *, ImageInfoCV *, ParametreOperation *);
 // Opération programmée unaire avec parametre
-ImageInfoCV*  (ImageInfoCV::*opUnaireSelec)(ImageInfoCV *,ParametreOperation *) ;
+std::vector<ImageInfoCV*> (ImageInfoCV::*opUnaireSelec)(ImageInfoCV *, ParametreOperation *);
 // Surjection (plusieurs résultats   avec parametre
-ImageInfoCV**  (ImageInfoCV::*opSurjecUnaire)(ImageInfoCV *,ParametreOperation *) ;
+std::vector<ImageInfoCV*> (ImageInfoCV::*opSurjecUnaire)(ImageInfoCV *, ParametreOperation *);
 
 static std::map<std::string,std::map<std::string,int> > listeParam;
 
@@ -89,7 +89,7 @@ ParametreOperation(std::string s);
 ParametreOperation(){InitOperation("");};	
 bool InitOperation(std::string s);
 bool InitPtrFonction();
-ImageInfoCV	**ExecuterOperation();
+std::vector<ImageInfoCV*> ExecuterOperation();
 
 };
 

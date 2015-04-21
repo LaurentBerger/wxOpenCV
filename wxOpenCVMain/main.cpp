@@ -6,6 +6,7 @@
 #include "wx/splash.h"
 #include "mobile.xpm"
 
+#include <vld.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop
@@ -54,23 +55,7 @@ static const wxLanguage langIds[] =
 {
     wxLANGUAGE_DEFAULT,
     wxLANGUAGE_FRENCH,
-    wxLANGUAGE_ITALIAN,
-    wxLANGUAGE_GERMAN,
-    wxLANGUAGE_RUSSIAN,
-    wxLANGUAGE_BULGARIAN,
-    wxLANGUAGE_CZECH,
-    wxLANGUAGE_POLISH,
-    wxLANGUAGE_SWEDISH,
-#if wxUSE_UNICODE || defined(__WXMOTIF__)
-    wxLANGUAGE_JAPANESE,
-#endif
-#if wxUSE_UNICODE
-    wxLANGUAGE_GEORGIAN,
-    wxLANGUAGE_ENGLISH,
-    wxLANGUAGE_ENGLISH_US,
-    wxLANGUAGE_ARABIC,
-    wxLANGUAGE_ARABIC_EGYPT
-#endif
+    wxLANGUAGE_ENGLISH
 };
 
 // note that it makes no sense to translate these strings, they are
@@ -79,23 +64,7 @@ const wxString langNames[] =
 {
     "System default",
     "French",
-    "Italian",
-    "German",
-    "Russian",
-    "Bulgarian",
-    "Czech",
-    "Polish",
-    "Swedish",
-#if wxUSE_UNICODE || defined(__WXMOTIF__)
-    "Japanese",
-#endif
-#if wxUSE_UNICODE
-    "Georgian",
     "English",
-    "English (U.S.)",
-    "Arabic",
-    "Arabic (Egypt)"
-#endif
 };
 
 // the arrays must be in sync
@@ -434,9 +403,9 @@ f->DefImgStat(imgStatIm);
 	{
 	imgStatIm->OuvertureOngletHistogramme();
 	imgStatIm->OuvertureOngletCoupe();
-	imgStatIm->OuvertureOngletDistribRadiale();
+/*	imgStatIm->OuvertureOngletDistribRadiale();
 	imgStatIm->OuvertureOngletDistribAngulaire();
-	imgStatIm->OuvertureOngletFocus();
+	imgStatIm->OuvertureOngletFocus();*/
 	}
 imgStatIm->OuvertureOngletCouleur();
 imgStatIm->OuvertureOngletPalette();
@@ -555,13 +524,11 @@ if (!pOCV.InitOperation((string)s))
 }
 
 
-ImageInfoCV	**wxOsgApp::ExecuterOperation(ParametreOperation *pOCVNouveau)
+vector<ImageInfoCV*> wxOsgApp::ExecuterOperation(ParametreOperation *pOCVNouveau)
 {
 ParametreOperation *pAct;
+vector<ImageInfoCV*>	r;
 
-
-ImageInfoCV	*im=NULL;
-ImageInfoCV	**imTab=NULL;
 if (pOCVNouveau==NULL)
 	pAct=&pOCV;
 else
@@ -571,7 +538,7 @@ if (pAct->opNaireSelec)
 	ImageInfoCV *imOp[3]={pAct->op1,pAct->op2,pAct->op3};
 	try
 		{
-		im =((*pAct->op1).*pAct->opNaireSelec)(3,imOp,pAct);
+		r =((*pAct->op1).*pAct->opNaireSelec)(3,imOp,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -581,19 +548,6 @@ if (pAct->opNaireSelec)
 		}
 	DefPointeurSouris(0,0);
 
-	if (im==NULL)
-		{
-/*		opNaireSelec=NULL;
-		op1=NULL;
-		op2=NULL;
-		op3=NULL;*/
-		return imTab;
-		}
-	else
-		{
-		imTab = new ImageInfoCV*[1];
-		imTab[0]=im;
-		}
 	}
 
 if (pAct->opBinaireSelec)
@@ -602,9 +556,9 @@ if (pAct->opBinaireSelec)
 	try
 		{
 		if (pAct->op2==NULL)
-			im =((*pAct->op1).*pAct->opBinaireSelec)(pAct->op1,NULL,pAct);
+			r =((*pAct->op1).*pAct->opBinaireSelec)(pAct->op1,NULL,pAct);
 		else
-			im =((*pAct->op1).*pAct->opBinaireSelec)(pAct->op1,pAct->op2,pAct);
+			r =((*pAct->op1).*pAct->opBinaireSelec)(pAct->op1,pAct->op2,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -612,27 +566,13 @@ if (pAct->opBinaireSelec)
 
 		wxMessageBox("An error occured in binary operator :"+s);
 		}
-	DefPointeurSouris(0,0);
-
-	if (im==NULL)
-		{
-/*		opBinaireSelec=NULL;
-		op1=NULL;
-		op2=NULL;*/
-		return imTab;
-		}
-	else
-		{
-		imTab = new ImageInfoCV*[1];
-		imTab[0]=im;
-		}
 	}
 if (pAct->opUnaireSelec)
 	{
 	try
 		{
 
-		im =((*pAct->op1).*pAct->opUnaireSelec)(pAct->op1,pAct);
+		r =((*pAct->op1).*pAct->opUnaireSelec)(pAct->op1,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -642,15 +582,6 @@ if (pAct->opUnaireSelec)
 		}
 	DefPointeurSouris(0,0);
 
-	if (im==NULL)
-		{
-		return imTab;
-		}
-	else
-		{
-		imTab = new ImageInfoCV*[1];
-		imTab[0]=im;
-		}
 	}
 
 if (pAct->opSurjecUnaire)
@@ -658,7 +589,7 @@ if (pAct->opSurjecUnaire)
 	try
 		{
 
-		imTab =((*pAct->op1).*pAct->opSurjecUnaire)(pAct->op1,pAct);
+		r =((*pAct->op1).*pAct->opSurjecUnaire)(pAct->op1,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -668,13 +599,9 @@ if (pAct->opSurjecUnaire)
 		}
 	DefPointeurSouris(0,0);
 
-	if (imTab==NULL)
-		{
-		return imTab;
-		}
 	}
 
-return imTab; // Le pointeur imTab n'est pas libéré
+return r; // Le pointeur imTab n'est pas libéré
 }
 
 
@@ -683,8 +610,8 @@ void wxOsgApp::CreerFenetreOperation()
 if ((pOCV.opBinaireSelec==NULL && pOCV.opUnaireSelec==NULL && pOCV.opSurjecMultiple==NULL && pOCV.opNaireSelec==NULL&& pOCV.opSurjecUnaire==NULL) || pOCV.op1==NULL)
 	return;
 
-ImageInfoCV	**im=ExecuterOperation();
-if (im==NULL)
+vector<ImageInfoCV*> r=ExecuterOperation();
+if (r.size()==NULL)
 	{
 	wxLogWarning("Resultat de l'opération vide");
 	wxMessageBox("Resultat de l'opération vide");
@@ -700,15 +627,15 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	int ind=-1;
 	if (pOCV.nomOperation=="Convolution")
 		{
-		ind = im[nbres]->IndOpConvolution();
+		ind = r[nbres]->IndOpConvolution();
 		}
 	if (pOCV.nomOperation=="Erosion")
 		{
-		ind = im[nbres]->IndOpMorphologie();
+		ind = r[nbres]->IndOpMorphologie();
 		}
 	if (pOCV.nomOperation=="Dilatation")
 		{
-		ind = im[nbres]->IndOpMorphologie();
+		ind = r[nbres]->IndOpMorphologie();
 		}
 	int idOperation=-1;
 	int numEtape=-1;
@@ -753,7 +680,7 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	f->SetLabel(s);
 
 
-	f->AssosierImage(im[nbres]);
+	f->AssosierImage(r[nbres]);
 	f->Bind(wxEVT_LEAVE_WINDOW, &FenetrePrincipale::SourisQuitterFen, f);
 
 	ImageStatistiques *imgStatIm = new ImageStatistiques(NULL, _("Image Statistic"),
@@ -810,8 +737,6 @@ if (pOCV.nbImageRes==0)
 pOCV.doubleParam.clear();
 pOCV.intParam.clear();
 }
-
-
 
 
 
@@ -1429,6 +1354,7 @@ FenetrePrincipale::FenetrePrincipale(wxFrame *frame, const wxString& title, cons
     : wxFrame(frame, wxID_ANY, title , pos, size, style/*|wxVSCROLL |wxHSCROLL*/)
 {
 tpsPreEvt=-1;
+FenetrePrincipale::nbObjetFenetrePrincipale++;
 imGain=NULL;
 correctionGain=false;
 tracerContour=false;
@@ -2105,6 +2031,7 @@ Close(true);
 
 FenetrePrincipale::~FenetrePrincipale()
 {
+
 }
 
 
@@ -2184,14 +2111,38 @@ coeffCanal=NULL;
 imAcq=NULL;
 imGain=NULL;
 imAffichee=NULL;
-pLineaire=NULL;
-pAleatoire=NULL;
-pJet=NULL;
-pRainbow=NULL;
-pPerso=NULL;
-pPersoInv=NULL;
 tabRGBTransparence=NULL;
+nbObjetFenetrePrincipale--;
+if (FenetrePrincipale::nbObjetFenetrePrincipale== 0)
+	{
+	delete[]pLineaire;
+	delete[]pJet;
+	delete[]pRainbow;
+	delete[]pPerso;
+	delete[]pPersoInv;
+	delete[]pRainbow256;
+	delete[]pRainbow256Boucle;
+	delete[]pLin256;
+	delete[]pLin256Boucle;
+	delete[]pThermique;
+	delete[]pThermique256;
+	delete[]pThermique256Boucle;
+	delete[]pAleatoire;
+	pLineaire = NULL;
+	pAleatoire = NULL;
+	pJet = NULL;
+	pRainbow = NULL;
+	pPerso = NULL;
+	pPersoInv = NULL;
+	pLin256Boucle = NULL;
+	pRainbow256Boucle = NULL;
+	pLin256 = NULL;
+	pRainbow256 = NULL;
+	pThermique = NULL;
+	pThermique256 = NULL;
+	pThermique256Boucle = NULL;
 
+	}
 wxFrame::OnCloseWindow(event);
 }
 
@@ -3313,6 +3264,52 @@ while ( bCont )
 			
 			}
 		if (opValide)
+		{
+			wxString cheminParam(chemin + "/" + cleIndEtape + "/paramPoint");
+			configApp->SetPath(cheminParam);
+			bCont = configApp->GetFirstGroup(str, dummy);
+			while (bCont && opValide)
+			{
+				wxString cle(cheminParam + "/" + str + "/nom");
+				wxString nom;
+				if (opValide && !configApp->Read(cle, &nom))
+					opValide = false;
+				cle = cheminParam + "/" + str + "/largeur";
+				int largeur, larMin, larMax, larPas;
+				if (opValide && !configApp->Read(cle, &largeur))
+					opValide = false;
+				int hauteur, hauMin, hauMax, hauPas;
+				cle = cheminParam + "/" + str + "/hauteur";
+				if (opValide && !configApp->Read(cle, &hauteur))
+					opValide = false;
+				cle = cheminParam + "/" + str + "/larMin";
+				if (opValide && !configApp->Read(cle, &larMin))
+					opValide = false;
+				cle = cheminParam + "/" + str + "/hauMin";
+				if (opValide && !configApp->Read(cle, &hauMin))
+					opValide = false;
+				cle = cheminParam + "/" + str + "/larMax";
+				if (opValide && !configApp->Read(cle, &larMax))
+					opValide = false;
+				cle = cheminParam + "/" + str + "/hauMax";
+				if (opValide && !configApp->Read(cle, &hauMax))
+					opValide = false;
+				cle = cheminParam + "/" + str + "/larPas";
+				if (opValide && !configApp->Read(cle, &larPas))
+					opValide = false;
+				cle = cheminParam + "/" + str + "/hauPas";
+				if (opValide && !configApp->Read(cle, &hauPas))
+					opValide = false;
+				if (opValide)
+				{
+					std::string s(nom.ToAscii());
+					listeOperation[nbOperation].pointParam[s] = DomaineParametreOp<cv::Point>(cv::Point(largeur, hauteur), cv::Point(larMin, hauMin), cv::Point(larMax, hauMax), cv::Point(larPas, larPas));
+				}
+				bCont = configApp->GetNextGroup(str, dummy);
+			}
+
+		}
+		if (opValide)
 			{
 			GenerationGraphDot(&listeOperation[nbOperation]);
 			nbOperation++;
@@ -3426,19 +3423,34 @@ for (itd=origineImage.doubleParam.begin();itd!=origineImage.doubleParam.end();it
 	nb++;
 	}
 nb=0;
-std::map<std::string,DomaineParametreOp<cv::Size> >::iterator its;
-for (its=origineImage.sizeParam.begin();its!=origineImage.sizeParam.end();its++)
-	{
-	chemin.Printf("/operateur/%d/%d/paramSize/%d",origineImage.idOperation,origineImage.indEtape,nb);
-	SauverFichierConfig(chemin,"nom",its->first);
-	SauverFichierConfig(chemin,"largeur",(long)its->second.valeur.width);
-	SauverFichierConfig(chemin,"hauteur",(long)its->second.valeur.height);
-	SauverFichierConfig(chemin,"larMin",(long)its->second.mini.width);
-	SauverFichierConfig(chemin,"hauMin",(long)its->second.mini.height);
-	SauverFichierConfig(chemin,"larMax",(long)its->second.maxi.width);
-	SauverFichierConfig(chemin,"hauMax",(long)its->second.maxi.height);
-	SauverFichierConfig(chemin,"larPas",(long)its->second.pas.width);
-	SauverFichierConfig(chemin,"hauPas",(long)its->second.pas.height);
+std::map<std::string, DomaineParametreOp<cv::Size> >::iterator its;
+for (its = origineImage.sizeParam.begin(); its != origineImage.sizeParam.end(); its++)
+{
+	chemin.Printf("/operateur/%d/%d/paramSize/%d", origineImage.idOperation, origineImage.indEtape, nb);
+	SauverFichierConfig(chemin, "nom", its->first);
+	SauverFichierConfig(chemin, "largeur", (long)its->second.valeur.width);
+	SauverFichierConfig(chemin, "hauteur", (long)its->second.valeur.height);
+	SauverFichierConfig(chemin, "larMin", (long)its->second.mini.width);
+	SauverFichierConfig(chemin, "hauMin", (long)its->second.mini.height);
+	SauverFichierConfig(chemin, "larMax", (long)its->second.maxi.width);
+	SauverFichierConfig(chemin, "hauMax", (long)its->second.maxi.height);
+	SauverFichierConfig(chemin, "larPas", (long)its->second.pas.width);
+	SauverFichierConfig(chemin, "hauPas", (long)its->second.pas.height);
 	nb++;
-	}
+}
+std::map<std::string, DomaineParametreOp<cv::Point> >::iterator itp;
+for (itp = origineImage.pointParam.begin(); itp != origineImage.pointParam.end(); itp++)
+{
+	chemin.Printf("/operateur/%d/%d/paramPoint/%d", origineImage.idOperation, origineImage.indEtape, nb);
+	SauverFichierConfig(chemin, "nom", itp->first);
+	SauverFichierConfig(chemin, "largeur", (long)itp->second.valeur.x);
+	SauverFichierConfig(chemin, "hauteur", (long)itp->second.valeur.y);
+	SauverFichierConfig(chemin, "larMin", (long)itp->second.mini.x);
+	SauverFichierConfig(chemin, "hauMin", (long)itp->second.mini.y);
+	SauverFichierConfig(chemin, "larMax", (long)itp->second.maxi.x);
+	SauverFichierConfig(chemin, "hauMax", (long)itp->second.maxi.y);
+	SauverFichierConfig(chemin, "larPas", (long)itp->second.pas.x);
+	SauverFichierConfig(chemin, "hauPas", (long)itp->second.pas.y);
+	nb++;
+}
 }

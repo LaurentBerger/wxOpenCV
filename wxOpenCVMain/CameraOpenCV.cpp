@@ -478,7 +478,8 @@ if (captureVideo->isOpened())
 						imIni=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
 						}
 					frame.copyTo(*imIni);
-					ImageInfoCV ***im=new ImageInfoCV**[seqOp.size()];
+					vector< vector<ImageInfoCV*> > im;
+					im.resize(seqOp.size());
 					if (!parent)
 						break;
 					int indOp=0;
@@ -517,7 +518,7 @@ if (captureVideo->isOpened())
 							if (pOCV.opVideo)
 								{
 								if (indOp>0 ) // Si une opération a déjà été effectuée
-									if (im[indOp-1]==NULL)
+									if (im[indOp-1].size()==0)
 										pOCV.op2=NULL;
 									else
 										pOCV.op2=im[indOp-1][0];
@@ -535,10 +536,9 @@ if (captureVideo->isOpened())
 							else if (indOp>0)
 								pOCV.op1 = im[indOp - 1][0];
 							}
-						if (imPre && imPre->BonCoin() && pOCV.nomOperation == "GoodFeature" && im[indOp - 1] && im[indOp - 1][0])
+						if (imPre && imPre->BonCoin() && pOCV.nomOperation == "GoodFeature" && im[indOp - 1].size() && im[indOp - 1][0])
 							{
-							im[indOp] = new ImageInfoCV*[1];
-							im[indOp][0] = im[indOp - 1][0];
+							im[indOp].push_back( im[indOp - 1][0]);
 
 							}
 						else
@@ -562,7 +562,7 @@ if (captureVideo->isOpened())
 							break;
 						}
 
-						if (im[indOp]) // Si l'opérateur donne un résultat non nul
+						if (im[indOp].size()!=0) // Si l'opérateur donne un résultat non nul
 							effaceImage[im[indOp][0]]=false;
 						if (pOCV.opBinaireSelec && pOCV.opVideo) // Pour les opérateurs binaires spécifiques à la vidéo
 							memoriseImage=true;
@@ -575,7 +575,7 @@ if (captureVideo->isOpened())
 							break;
 						wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-                        if (im[indOp-1] )
+                        if (im[indOp-1].size() )
 							{
 							if (chgtTaille)
 								{
@@ -601,7 +601,6 @@ if (captureVideo->isOpened())
 						for (int ii=0;ii<elt.size();ii++)
 							effaceImage.erase(elt[ii]);
 					}
-                    delete []im;
 					}
 				if (!modeMoyenne)	// Pas de filtrage Butterworth
 					{

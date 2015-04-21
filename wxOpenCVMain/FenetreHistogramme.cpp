@@ -93,10 +93,13 @@ void FenetreHistogramme::OnClose(wxCloseEvent& event)
 {
 if (!fenMere)
 	return;
- delete courbe;
- delete excel;
- delete panel;
- if (x[0])
+delete courbe;
+delete excel;
+delete panel;
+courbe = NULL;
+excel = NULL;
+panel = NULL;
+if (x[0])
 	{
 	for (int i=0;i<NB_MAX_CANAUX;i++)
 		{
@@ -113,6 +116,25 @@ wxWindow::Close(true);
  */
 FenetreHistogramme::~FenetreHistogramme() 
 {
+if (!fenMere)
+	return;
+if (!courbe)
+	return;
+delete courbe;
+delete excel;
+delete panel;
+courbe = NULL;
+excel = NULL;
+panel = NULL;
+if (x[0])
+	{
+		for (int i = 0; i<NB_MAX_CANAUX; i++)
+		{
+			delete[]x[i];
+			delete[]y[i];
+			delete[]yFiltre[i];  /*!< courbe des histogrammes pour les trois plans */
+		}
+	}
 }
 
 void FenetreHistogramme::NouvelHistogramme(wxGridEvent& event)

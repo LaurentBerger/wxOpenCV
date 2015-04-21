@@ -51,6 +51,20 @@ excel->Show();
 	Plot(0);
 }
 
+FenetreFocus::~FenetreFocus()
+{
+if (!fenMere)
+	return;
+delete excel;
+delete courbe;
+
+
+}
+
+void	FenetreFocus::OnClose(wxCloseEvent& event)
+{
+}
+
 void FenetreFocus::Plot(int indRect)
 {
 if (!osgApp)

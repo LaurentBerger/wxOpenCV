@@ -1,12 +1,12 @@
 #include "ImageInfo.h"
 
-ImageInfoCV		*ImageInfoCV::LigneMediane (ImageInfoCV *im1,ParametreOperation *paramOCV)
+std::vector<ImageInfoCV		*>ImageInfoCV::LigneMediane (ImageInfoCV *im1,ParametreOperation *paramOCV)
 {
+std::vector<ImageInfoCV	*> r;
 
 if (depth()!=CV_32F && depth()!=CV_8U)
 	{
-	ImageInfoCV	*imRes = new ImageInfoCV();
-	return imRes;
+	return r;
 	}
 
 ImageInfoCV	*imRes=new ImageInfoCV(rows,cols,CV_MAKETYPE(CV_32F,channels()));
@@ -205,7 +205,8 @@ for (int c=0;c<channels();c++)
 				}
 			
 		}
-return imRes;
+r.push_back(imRes);
+return r;
 }
 
 
