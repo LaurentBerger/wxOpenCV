@@ -244,31 +244,15 @@ if (f->ModeRectangle())
 	if ( event.LeftIsDown()  ) // detect if the mouse is down and dragging a lasso
 		{
 		wxRect	rTmp=rectSelect[indRect];
+		rTmp = RepereImageEcran(rTmp);
+		rTmp.Inflate(8, 8);
+		RefreshRect(rTmp, false);
 		rectSelect[indRect].SetRight(point.x);
 		rectSelect[indRect].SetBottom(point.y);
 		    dc.SetBrush( *wxTRANSPARENT_BRUSH );
-
-		// invalidate the lasso rect so that it's drawn while dragging the mouse.
 			RefreshRect(RepereImageEcran(rectSelect[indRect]),false);
 		Update();
-			RefreshRect(RepereImageEcran(rTmp),false);
-		// you may or may not need to do an update to draw now.
-		Update();
-		// TODO2: draw the lasso rect in your OnPaint code.  i.e. draw it if (!rectSelect[indRect].IsEmpty())
 		TracerRectangle(indRect,1);
-/*		wxClientDC dc(this);
-		wxPoint p1(RepereImageEcran(rectSelect[indRect].GetTopLeft()));
-		//ClientToScreen(&p1.x,&p1.y);
-		wxBrush	tr=*wxTRANSPARENT_BRUSH;
-		dc.SetBrush(tr);
-		int		fZoomNume,fZoomDeno;
-
-		CalculZoom(fZoomNume,fZoomDeno);
-		wxRect rTrace(p1.x,p1.y,rectSelect[indRect].width*fZoomNume/fZoomDeno,rectSelect[indRect].height*fZoomNume/fZoomDeno);
-		dc.DrawRectangle(p1.x,p1.y,rectSelect[indRect].width*fZoomNume/fZoomDeno,rectSelect[indRect].height*fZoomNume/fZoomDeno);
-		dc.DrawLine(rTrace.GetBottomLeft(),rTrace.GetTopRight());
-		dc.DrawLine(rTrace.GetTopLeft(),rTrace.GetBottomRight());
-		DrawRectangles(dc);*/
 		}
 	}
 if (modeCoupe)
@@ -277,28 +261,19 @@ if (modeCoupe)
 		{
 		wxRect	rTmp=rectCoupe[indCoupe],rTmp2=RepereImageEcran(rTmp);
 		f->RedresseRectangle(rTmp2);
-	//	rTmp.Inflate(2,2);
-		RefreshRect(rTmp2,false);
+		rTmp2.Inflate(8,8);
+		RefreshRect(rTmp2, false);
 		rectCoupe[indCoupe].SetRight(point.x);
 		rectCoupe[indCoupe].SetBottom(point.y);
 
 		rTmp=rectCoupe[indCoupe];
 		rTmp2=RepereImageEcran(rTmp);
-		f->RedresseRectangle(rTmp2);
-		//rTmp.Inflate(2,2);
 
 		rTmp2=RepereImageEcran(rTmp);
 		RefreshRect(rTmp2,false);
-		// you may or may not need to do an update to draw now.
 		Update();
-		// TODO2: draw the lasso rect in your OnPaint code.  i.e. draw it if (!rectSelect[indRect].IsEmpty())
 		wxClientDC dc(this);
-		//ClientToScreen(&p1.x,&p1.y);
-		wxBrush	tr=*wxTRANSPARENT_BRUSH;
-		dc.SetBrush(tr);
-		wxPoint pTmp1= rectCoupe[indCoupe].GetTopLeft();
-		wxPoint pTmp2=rectCoupe[indCoupe].GetBottomRight();
-		dc.DrawLine(RepereImageEcran(pTmp1),RepereImageEcran(pTmp2));
+		PrepareDC(dc);
 		TracerLesCoupes(dc);
 		}
 	}
@@ -830,6 +805,21 @@ if (osgApp->FenetreSeqOpe())
 void ZoneImage::RazSeqOp(wxCommandEvent& event)
 {
 if (f) f->RazSeqOp();
+}
+
+
+void FenetrePrincipale::MAJRectangle(wxCommandEvent& event)
+{ 
+feuille->ModeCoupe(false); 
+feuille->ModeRectangle(!feuille->ModeRectangle()); 
+feuille->Refresh(true);
+}
+
+void FenetrePrincipale::MAJCoupe(wxCommandEvent& event)
+{ 
+feuille->ModeRectangle(false); 
+feuille->ModeCoupe(!feuille->ModeCoupe()); 
+feuille->Refresh(true);
 }
 
 void FenetrePrincipale::TracerContour(wxCommandEvent& event)

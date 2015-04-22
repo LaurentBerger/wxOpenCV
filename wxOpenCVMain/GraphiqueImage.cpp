@@ -148,13 +148,19 @@ void FenetrePrincipale::DrawLignes (wxDC &hdc)
 {
 wxBrush wt=*wxTRANSPARENT_BRUSH;
 hdc.SetBrush(wt);
+wxPen pActif(*wxBLACK, 3);
+wxPen pInactif(*wxBLACK, 1);
 for (int i=0;i<10;i++)
 	if (feuille->Coupe(i)->GetWidth()!=0 || feuille->Coupe(i)->GetHeight()!=0)
 		{
 		wxPoint pTmp1(feuille->Coupe(i)->GetTopLeft());
 		wxPoint pTmp2(feuille->Coupe(i)->GetBottomRight());
-		hdc.DrawLine(RepereImageEcran(pTmp1),RepereImageEcran(pTmp2));
-		}
+		if (i==feuille->IndiceCoupeSelec())
+			hdc.SetPen(pActif);
+		else
+			hdc.SetPen(pInactif);
+		hdc.DrawLine(RepereImageEcran(pTmp1), RepereImageEcran(pTmp2));
+	}
 }
 
 void FenetrePrincipale::TracerCercle(char *rSelect)

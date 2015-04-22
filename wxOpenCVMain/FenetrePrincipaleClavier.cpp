@@ -95,15 +95,26 @@ if (key==WXK_F10)
 	ind=9;
 if (feuille->ModeCoupe() && ind>=0)
 	{
+	int indPre=feuille->IndiceCoupeSelec();
 	feuille->IndiceCoupeSelec(ind);
 	wxRect r(*feuille->CoupeSelec());
 	osgApp->ImgStat()->MAJCoupe(r);	
-	}
+	wxRect	rTmp = *feuille->CoupeSelec();
+	wxRect rTmp2 = feuille->RepereImageEcran(rTmp);
+	RedresseRectangle(rTmp2);
+	feuille->RefreshRect(rTmp2, false);
+	rTmp = *feuille->Coupe(indPre);
+	rTmp2 = feuille->RepereImageEcran(rTmp);
+	RedresseRectangle(rTmp2);
+	feuille->RefreshRect(rTmp2, false);
+	//feuille->Refresh();
+}
 if (feuille->ModeRectangle() && ind>=0)
 	{
 	feuille->IndiceRectangleSelec(ind);
 	osgApp->ImgStat()->Plot(true);
-    // propagate event
+	feuille->Refresh(true);
+	// propagate event
     }
 }
 

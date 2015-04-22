@@ -785,8 +785,8 @@ void DebutAcquisition(wxCommandEvent& event);
 void FinAcquisition(wxCommandEvent& event);
 /* MENU CONTEXTUEL SOURIS STD*/
 void MAJZoom(wxCommandEvent& event);
-void MAJRectangle(wxCommandEvent& event){feuille->ModeCoupe(false);feuille->ModeRectangle(!feuille->ModeRectangle());};
-void MAJCoupe(wxCommandEvent& event){feuille->ModeRectangle(false);feuille->ModeCoupe(!feuille->ModeCoupe());};
+void MAJRectangle(wxCommandEvent& event);
+void MAJCoupe(wxCommandEvent& event);
 void MAJFiltreMax(wxCommandEvent& event){modeFiltre= !modeFiltre;};
 void SelectPalette(wxCommandEvent& event);
 wxColor LitCouleurPixel(wxPoint &p);
