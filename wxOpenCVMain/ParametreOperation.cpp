@@ -49,6 +49,13 @@ listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("Gray to RGB").ToStd
 listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("BGR to Gray").ToStdString(),cv::COLOR_GRAY2RGB));
 
 
+listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("nearest neighbor interpolation").ToStdString(), cv::INTER_NEAREST));
+listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("bilinear interpolation").ToStdString(), cv::INTER_LINEAR));
+listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("bicubic interpolation").ToStdString(), cv::INTER_CUBIC));
+listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("resampling using pixel area relation").ToStdString(), cv::INTER_AREA));
+listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("Lanczos interpolation over 8x8 neighborhood").ToStdString(), CV_INTER_LANCZOS4));
+
+
 
 }
 
@@ -81,6 +88,34 @@ opVideo=false;
 opErreur=0;
 //intParam["Save result"] = DomaineParametreOp<int>(0, 0, 0, 1);
 //intParam["Send packet"] = DomaineParametreOp<int>(0, 0, 0, 1);
+if (s == "logPolar")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	pointParam["center"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
+	doubleParam["M"] = DomaineParametreOp<double>(1, 0, 10000, 1);
+	intParam["interpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, CV_INTER_LANCZOS4, 1);
+	}
+if (s == "undistort")
+	{
+	doubleParam["fx"] = DomaineParametreOp<double>(1000, 00, 10000, 1);
+	doubleParam["fy"] = DomaineParametreOp<double>(1000, 00, 10000, 1);
+	doubleParam["cx"] = DomaineParametreOp<double>(1, -1000, 1000, 1);
+	doubleParam["cy"] = DomaineParametreOp<double>(1, -1000, 1000, 1);
+	doubleParam["k1"] = DomaineParametreOp<double>(0, -1800, 1800, 1);
+	doubleParam["k2"] = DomaineParametreOp<double>(0, -1800, 1800, 1);
+	doubleParam["p1"] = DomaineParametreOp<double>(0, -1800, 1800, 1);
+	doubleParam["p2"] = DomaineParametreOp<double>(0, -1800, 1800, 1);
+	doubleParam["k3"] = DomaineParametreOp<double>(0, -1800, 1800, 1);
+	doubleParam["k4"] = DomaineParametreOp<double>(0, -1800, 1800, 1);
+	doubleParam["k5"] = DomaineParametreOp<double>(0, -1800, 1800, 1);
+	doubleParam["k6"] = DomaineParametreOp<double>(0, -1800, 1800, 1);
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	opUnaireSelec = &ImageInfoCV::CorrigeAberation;
+	}
 if (s == "wrapAffine") // inclus la différence de deux images successives
 	{
 	nomOperation = s;
@@ -96,9 +131,19 @@ if (s == "wrapAffine") // inclus la différence de deux images successives
 	doubleParam["angle"] = DomaineParametreOp<double>(0, -180, 180, 1);
 	doubleParam["scale"] = DomaineParametreOp<double>(1, 0.0000, 180, 0.1);
 	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
-	intParam["flags"] = DomaineParametreOp<int>(CV_INTER_LINEAR  , CV_INTER_LINEAR, CV_INTER_LANCZOS4, 1);
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_LINEAR, CV_INTER_LANCZOS4, 1);
 	intParam["borderMode"] = DomaineParametreOp<int>(IPL_BORDER_CONSTANT, IPL_BORDER_CONSTANT, IPL_BORDER_WRAP, 1);
 	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
+	}
+if (s == "resize") // inclus la différence de deux images successives
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	doubleParam["fx"] = DomaineParametreOp<double>(0, 0, 10000, 1);
+	doubleParam["fy"] = DomaineParametreOp<double>(0, 0.0000, 10000,1);
+	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_NN, CV_INTER_LANCZOS4, 1);
 	}
 if (s == "wrapPerspective") // inclus la différence de deux images successives
 	{
@@ -881,13 +926,34 @@ if (s=="medianaxis")
 	opUnaireSelec = &ImageInfoCV::LigneMediane;
 	return true;
 	}
-if (s == "wrapAffine") // inclus la différence de deux images successives
-{
+if (s == "wrapAffine") 
+	{
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#warpaffine";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::TransAffine;
 	return true;
-}
+	}
+if (s == "resize")
+	{
+	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#resize";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::Dimension;
+	return true;
+	}
+if (s == "logPolar")
+	{
+	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#resize";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::LogPolar;
+	return true;
+	}
+if (s == "undistort")
+	{
+	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#undistort";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=278&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::CorrigeAberation;
+	return true;
+	}
 if (s == "buildopticalflowpyramid")
 	{
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#buildopticalflowpyramid";

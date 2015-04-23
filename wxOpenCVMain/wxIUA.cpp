@@ -86,6 +86,10 @@ enum
 	ID_SEPARATIONPLAN,
 	ID_RGBLUMINANCE,
 	ID_ROTATION_AFFINE,
+	ID_NOUVELLE_DIMENSION,
+	ID_LOGPOLAR,
+	ID_UNDISTORT, 
+
 	ID_FIN_OP, // Fin des opérateurs sur les images
 	ID_VIDEO_8_UC3,
 	ID_VIDEO_32_FC3,
@@ -281,6 +285,9 @@ void InterfaceAvance::InitCommande()
 	CONSTRUCTEUR_CMD(bouton,ID_SEPARATIONPLAN, _("split color plan"), "split", 7);
 	CONSTRUCTEUR_CMD(bouton, ID_RGBLUMINANCE, _("RGB to gray"), "cvtcolor", 7);
 	CONSTRUCTEUR_CMD(bouton, ID_ROTATION_AFFINE, _("Transform affine-rotation"), "wrapAffine", 7);
+	CONSTRUCTEUR_CMD(bouton, ID_NOUVELLE_DIMENSION, _("Resize"), "resize", 7);
+	CONSTRUCTEUR_CMD(bouton, ID_LOGPOLAR, _("Log polar"), "logPolar", 7);
+	CONSTRUCTEUR_CMD(bouton, ID_UNDISTORT, _("Compensate for lens distortion"), "undistort", 7);
 
 
 	CONSTRUCTEUR_CMD(bouton,ID_CANNY, _("Canny edge detector"), "canny", 8);

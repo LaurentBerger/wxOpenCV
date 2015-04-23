@@ -1376,35 +1376,49 @@ return r;
 
 std::vector<ImageInfoCV		*>ImageInfoCV::Dimension(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
 {
-ImageInfoCV *imDst = new ImageInfoCV();
-Mat			inter;
-cv::Point2f srcTri[3];
-cv::Point2f dstTri[3];
+	ImageInfoCV *imDst = new ImageInfoCV();
+	cv::resize(*imSrc, *imDst, pOCV->sizeParam["dsize"].valeur, pOCV->doubleParam["fx"].valeur, pOCV->doubleParam["fy"].valeur, pOCV->intParam["interpolationFlags"].valeur);
 
-Mat rotation(2, 3, CV_32FC1);
-Mat affinite(2, 3, CV_32FC1);
+	std::vector<ImageInfoCV	*> r;
+	r.push_back(imDst);
+	return r;
+}
 
-srcTri[0] = pOCV->pointParam["src1"].valeur;
-srcTri[1] = pOCV->pointParam["src2"].valeur;
-srcTri[2] = pOCV->pointParam["src3"].valeur;
+std::vector<ImageInfoCV		*>ImageInfoCV::CorrigeAberation(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+{
+	ImageInfoCV *imDst = new ImageInfoCV();
+	cv::Mat matriceCamera(3,3,CV_64FC1);
+	std::vector<double> coeffDistor;
 
-dstTri[0] = pOCV->pointParam["dst1"].valeur;
-dstTri[1] = pOCV->pointParam["dst2"].valeur;
-dstTri[2] = pOCV->pointParam["dst3"].valeur;
+	matriceCamera=0;
+	matriceCamera.at<double>(0,0)=pOCV->doubleParam["fx"].valeur;
+	matriceCamera.at<double>(1, 1) = pOCV->doubleParam["fy"].valeur;
+	matriceCamera.at<double>(0, 2) = pOCV->doubleParam["cx"].valeur;
+	matriceCamera.at<double>(1, 2) = pOCV->doubleParam["cy"].valeur;
+	matriceCamera.at<double>(2, 2) = 1;
+	coeffDistor.push_back(pOCV->doubleParam["k1"].valeur);
+	coeffDistor.push_back(pOCV->doubleParam["k2"].valeur);
+	coeffDistor.push_back(pOCV->doubleParam["p1"].valeur);
+	coeffDistor.push_back(pOCV->doubleParam["p2"].valeur);
+	coeffDistor.push_back(pOCV->doubleParam["k3"].valeur);
+	coeffDistor.push_back(pOCV->doubleParam["k4"].valeur);
+	coeffDistor.push_back(pOCV->doubleParam["k5"].valeur);
+	coeffDistor.push_back(pOCV->doubleParam["k6"].valeur);
 
-affinite = getAffineTransform(srcTri, dstTri);
-cv::warpAffine(*imSrc, inter, affinite, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
+	cv::undistort(*imSrc, *imDst, matriceCamera, coeffDistor, cv::noArray());
 
-/** Rotating the image after Warp */
+	std::vector<ImageInfoCV	*> r;
+	r.push_back(imDst);
+	return r;
+}
 
-/// Compute a rotation matrix with respect to the center of the image
+std::vector<ImageInfoCV		*>ImageInfoCV::LogPolar(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+{
+	ImageInfoCV *imDst = new ImageInfoCV();
+	cv::logPolar(*imSrc, *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur ,pOCV->intParam["interpolationFlags"].valeur);
 
-/// Get the rotation matrix with the specifications above
-rotation = getRotationMatrix2D(pOCV->pointParam["centre"].valeur, pOCV->doubleParam["angle"].valeur, pOCV->doubleParam["scale"].valeur);
-warpAffine(inter, *imDst, rotation, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
-
-std::vector<ImageInfoCV	*> r;
-r.push_back(imDst);
-return r;
+	std::vector<ImageInfoCV	*> r;
+	r.push_back(imDst);
+	return r;
 }
 

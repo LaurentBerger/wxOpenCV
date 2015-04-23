@@ -327,6 +327,8 @@ std::vector<ImageInfoCV	*>SegmenteMvt(ImageInfoCV	*, ParametreOperation *paramOC
 std::vector<ImageInfoCV	*>TransAffine(ImageInfoCV	*imSrc, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>TransPerspective(ImageInfoCV	*imSrc, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*> Dimension(ImageInfoCV	*imSrc, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>CorrigeAberation(ImageInfoCV	*imSrc, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>LogPolar(ImageInfoCV	*imSrc, ParametreOperation *pOCV);
 
 
 void ExtremumLoc(ImageInfoCV *mask=NULL );
