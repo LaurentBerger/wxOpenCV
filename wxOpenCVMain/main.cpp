@@ -6,7 +6,7 @@
 #include "wx/splash.h"
 #include "mobile.xpm"
 
-#include <vld.h>
+//#include <vld.h>
 
 #ifdef __BORLANDC__
 #pragma hdrstop

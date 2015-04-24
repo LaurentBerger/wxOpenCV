@@ -1214,7 +1214,8 @@ pOCV->doubleParam["dy"].mini=shift.y;
 pOCV->doubleParam["dy"].maxi=shift.y;
 pOCV->doubleParam["dy"].res=false;
 AjoutOpAttribut(pOCV);
-
+r.push_back(imSuiv); 
+return r;
 }
 
 
