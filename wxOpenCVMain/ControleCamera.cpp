@@ -201,7 +201,8 @@ wxSlider *cbContrast=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletT
 wxSlider *cbGain=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels);
 wxSlider *cbLum=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels);
 wxSlider *cbSat=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels);
-wxSlider *cbTpsExpo=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels);
+wxSlider *cbTpsExpo = (wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST + 4, ongletTemporels);
+wxSlider *cbButter = (wxSlider*)wxWindow::FindWindowById(ID_GLI_BUTTER , ongletMoyenne);
 bool b;
 if (w.GetEventObject()==cbContrast)
 	{
@@ -251,18 +252,26 @@ else if (w.GetEventObject()==cbSat)
 	else
 		wxMessageBox(_("Value out of range"));
 }
-else if (w.GetEventObject()==cbTpsExpo)
+else if (w.GetEventObject() == cbTpsExpo)
 	{
 	if (cam->TempsExposition(w.GetInt()))
 		{
 		cbTpsExpo->SetValue(w.GetInt());
 		wxString s;
-		s.Printf("%d",w.GetInt());
-		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+4,ongletTemporels))->SetLabelText(s);	
-		}	
+		s.Printf("%d", w.GetInt());
+		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST + 4, ongletTemporels))->SetLabelText(s);
+		}
 	else
 		wxMessageBox(_("Value out of range"));
-}
+	}
+else if (w.GetEventObject() == cbButter)
+	{
+	cam->DefIndFiltreMoyenne(w.GetInt());
+		{
+		cbButter->SetValue(w.GetInt());
+		wxString s;
+		}
+	}
 
 }
 
@@ -478,7 +487,7 @@ if (cam->ModeMoyenne())
 	cb->SetValue(true);
 else
 	cb->SetValue(false);
-wxSlider *cs=(wxSlider*)wxWindow::FindWindowById(ID_GLI_BUTTER,ongletMoyenne);	
+wxSlider *cs = (wxSlider*)wxWindow::FindWindowById(ID_GLI_BUTTER, ongletMoyenne);
 cs->SetValue(cam->IndFiltreMoyenne());
 if (!ongletTemporels || !wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))
 	return;

@@ -155,8 +155,9 @@ void FenetrePrincipale::MAJNouvelleImage()
 {
 if (interdireAffichage)
 	return;
-if (osgApp->ImgStat())
-	osgApp->ImgStat()->Plot(modeCamera);
+if (statActif)
+	imgStatIm->Plot(modeCamera);
+
 switch(modeImage){
 case 0:
 //	if (modeFiltre==0)
@@ -180,7 +181,9 @@ case 4:
 	}
 wxClientDC dc(feuille);
 if (cam && cam->IsRunning())
+	{
 	DrawWindow(dc);
+	}
 else
 	{
 	wxRect r=feuille->GetClientRect();

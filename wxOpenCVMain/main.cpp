@@ -1354,6 +1354,7 @@ FenetrePrincipale::FenetrePrincipale(wxFrame *frame, const wxString& title, cons
     : wxFrame(frame, wxID_ANY, title , pos, size, style/*|wxVSCROLL |wxHSCROLL*/)
 {
 tpsPreEvt=-1;
+nbImageCam=0;
 FenetrePrincipale::nbObjetFenetrePrincipale++;
 imGain=NULL;
 correctionGain=false;

@@ -464,6 +464,24 @@ if (captureVideo->isOpened())
 		if (captureVideo->grab()) // get a new frame from camera
 			{
 			captureVideo->retrieve(frame);
+
+			if (modeMoyenne)	// Filtrage Butterworth
+				{
+				for (int i = 0; i<frame.rows; i++)
+					{
+					unsigned char *val = frame.ptr(i);
+					unsigned char *valB1 = frame1.ptr(i);
+					unsigned char *valB2 = frame2.ptr(i);
+					for (int j = 0; j<frame.cols; j++)
+						for (int k = 0; k<frame.channels(); k++, valB1++, valB2++, val++)
+							*val = bbButter[indFiltreMoyenne] * (*valB1 + *valB2) - aaButter[indFiltreMoyenne] * *val;
+
+					}
+				frame1.copyTo(frame2);
+				frame.copyTo(frame1);
+				}
+
+
 			
 			if (parent)
 				{
@@ -602,49 +620,24 @@ if (captureVideo->isOpened())
 							effaceImage.erase(elt[ii]);
 					}
 					}
-				if (!modeMoyenne)	// Pas de filtrage Butterworth
-					{
-					if (!parent)
-						break;
-					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+				{
+				if (!parent)
+					break;
+				wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-					if (!frameDejaCopie)
+				if (!frameDejaCopie)
+					{
+					if (chgtTaille)
 						{
-						if (chgtTaille)
-							{
-							((FenetrePrincipale*)parent)->ChgtTailleVideo(0);
-							chgtTaille=false;
-							}
-						//frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
-						swap(frame, (*((Mat *)imAcq)));
+						((FenetrePrincipale*)parent)->ChgtTailleVideo(0);
+						chgtTaille=false;
 						}
-                    frameDejaCopie=false;
+					//frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
+					swap(frame, (*((Mat *)imAcq)));
+					}
+                frameDejaCopie=false;
 
-					}
-				else
-					{
-					{
-					if (!parent)
-						break;
-					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
-					if (!frameDejaCopie)
-						frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
-                    frameDejaCopie=false;
-					for (int i=0;i<frame.rows;i++)
-						{
-						unsigned char *val=frame.ptr(i);
-						unsigned char *valB1=frame1.ptr(i);
-						unsigned char *valB2=frame2.ptr(i);
-						for (int j=0;j<frame.cols;j++)
-							for (int k=0;k<frame.channels();k++,valB1++,valB2++,val++)
-								*val = bbButter[indFiltreMoyenne]*(*valB1 + *valB2)-aaButter[indFiltreMoyenne]* *val;
-						
-						}
-					}
-					frame1.copyTo(frame2);
-					frame.copyTo(frame1);
-					frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
-					}
+				}
 
 				}
 			if (parent)
@@ -672,7 +665,7 @@ if (captureVideo->isOpened())
 						}
 					}
 					nbBoucle++;
-					this->Sleep(10);
+					this->Sleep(1);
 					}
 				}
 			else
@@ -755,7 +748,7 @@ if (captureVideo->isOpened())
 				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
 				wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
 
-				this->Sleep(tpsInactif);
+				this->Sleep(1);
 				}
 			else
 				break;
@@ -803,18 +796,14 @@ if (cam && (cam->IsRunning() || cam->IsPaused()))
 	MAJNouvelleImage();
 	}
 	indEvtCam=w.indEvt;
-	if (tpsPreEvt>=-1)
+	nbImageCam++;
+	if (nbImageCam==25)
 		{
-		tpsPreEvt++;
-		if (tpsPreEvt==10)
-			{
-			x=wxGetUTCTimeMillis().GetLo()-x;
-			long t=cam->DefTpsInactif();
-			t= max(x,t);
-			wxCriticalSectionLocker enter(travailCam);
-			cam->DefTpsInactif(x+10);
-			tpsPreEvt=-2;
-		}
+		cam->DefTpsInactif((x - tpsPreEvt) / 25);
+		nbImageCam=0;
+		tpsPreEvt=x;
+		
+		osgApp->CtrlCamera()->DrawOngletStatus();
 		}
 	}
 return;
