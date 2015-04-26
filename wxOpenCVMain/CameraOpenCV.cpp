@@ -515,6 +515,7 @@ if (captureVideo->isOpened())
 								delete it->first;
 						effaceImage.clear();
 						imgParam.clear();
+						fond.clear();
 					}
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
@@ -561,12 +562,16 @@ if (captureVideo->isOpened())
 							}
 						else
 							{
-							if (imgParam.size()!=0)
-								pOCV.imgParam=imgParam;
+							if (imgParam.size() != 0)
+								pOCV.imgParam = imgParam;
+							if (fond.size() != 0)
+								pOCV.ecartFond = fond;
 							im[indOp] = pOCV.ExecuterOperation();
-							if (pOCV.imgParam.size()!=0)
+							if (pOCV.imgParam.size() != 0)
 								imgParam = pOCV.imgParam;
-							}
+							if (pOCV.ecartFond.size() != 0)
+								fond = pOCV.ecartFond;
+						}
 						if (pOCV.opErreur != 0) // Arret de la séquence d'opération retour à acquistion vidéo simple
 						{
 							seqOp.clear();

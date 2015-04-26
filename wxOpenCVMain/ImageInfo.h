@@ -295,6 +295,12 @@ std::vector<ImageInfoCV *>FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	
 std::vector<ImageInfoCV	*>PhaseCorrelate(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>MAJHistoriqueMvt(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV);
 
+std::vector<ImageInfoCV	*>Fond_MOG(ImageInfoCV	*, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>Fond_MOG2(ImageInfoCV	*, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>Fond_KNN(ImageInfoCV	*, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>Fond_GMG(ImageInfoCV	*, ParametreOperation *pOCV);
+
+
 std::vector<ImageInfoCV *>Negation(ImageInfoCV	*im1, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>Laplacien(ImageInfoCV	*,ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>ScharrX(ImageInfoCV	*im1,ParametreOperation *pOCV);

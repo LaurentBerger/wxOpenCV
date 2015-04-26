@@ -507,6 +507,11 @@ f->Show(true);
 f->NouvelleImage();
 f->MAJNouvelleImage();
 f->RecupDerniereConfig();
+wxIcon icon;
+wxBitmap b(f->ImageAffichee()->Scale(64,64));
+icon.CopyFromBitmap(b);
+f->SetIcon(icon);
+
 }
 
 

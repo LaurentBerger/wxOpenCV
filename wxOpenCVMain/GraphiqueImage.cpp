@@ -316,8 +316,9 @@ else
 Conversion d'une image Mat en DIB wxwidgets pour l'affichage
 **************************************************************/
 
-void FenetrePrincipale::DIBImage(ImageInfoCV *im,int	indPlanTransparent)
+void FenetrePrincipale::DIBImage(ImageInfoCV *imSrc,int	indPlanTransparent)
 {
+cv::Mat *im=(cv::Mat*)imSrc;
 /* Les images sont du type CV_8UC1, CV_8UC3, CV_16US */
 // Les images 3D ne sont pas gérées
 if (im->dims>2)

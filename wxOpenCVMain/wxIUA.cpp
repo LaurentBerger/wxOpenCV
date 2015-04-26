@@ -90,6 +90,12 @@ enum
 	ID_LOGPOLAR,
 	ID_UNDISTORT, 
 
+	ID_FOND_MOG,
+	ID_FOND_MOG2,
+	ID_FOND_KNN,
+	ID_FOND_MGM,
+
+
 	ID_FIN_OP, // Fin des opérateurs sur les images
 	ID_VIDEO_8_UC3,
 	ID_VIDEO_32_FC3,
@@ -305,6 +311,10 @@ void InterfaceAvance::InitCommande()
 	CONSTRUCTEUR_CMD(bouton, ID_SEG_MVT, _("Independant motions"), "segmentmotion", 9);
 	CONSTRUCTEUR_CMD(bouton, ID_PHASE_CORRELATE, _("Phase correlation"), "phasecorrelate", 9);
 
+	CONSTRUCTEUR_CMD(bouton, ID_FOND_MOG, _("Gaussian mixture"), "fond_gaussianmixture", 10);
+	CONSTRUCTEUR_CMD(bouton, ID_FOND_MOG2, _("Gaussian mixture 2"), "fond_gaussianmixture2", 10);
+	CONSTRUCTEUR_CMD(bouton, ID_FOND_KNN, _("knn method"), "fond_knn", 10);
+	CONSTRUCTEUR_CMD(bouton, ID_FOND_MGM, _("GMG method"), "fond_gmg", 10);
 }
 
 
@@ -356,6 +366,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
 	InstallationbarreOutils(7);
 	InstallationbarreOutils(8);
 	InstallationbarreOutils(9);
+	InstallationbarreOutils(10);
 
 
     wxWindow* wnd10 = CreateTextCtrl(wxEmptyString);
@@ -1095,9 +1106,14 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 					  ToolbarPane().Top().Row(4));
 		break;
 	case 9:
-		m_mgr.AddPane(tb,  wxAuiPaneInfo().
-					  Name("Optical Flow").Caption("Optical Flow").
-					  ToolbarPane().Top().Row(5));
+		m_mgr.AddPane(tb, wxAuiPaneInfo().
+			Name("Optical Flow").Caption("Optical Flow").
+			ToolbarPane().Top().Row(5));
+		break;
+	case 10:
+		m_mgr.AddPane(tb, wxAuiPaneInfo().
+			Name("Background Subtractor").Caption("Background Subtractor").
+			ToolbarPane().Top().Row(5));
 		break;
 	}
 	    // add the toolbars to the manager

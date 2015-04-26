@@ -5,6 +5,8 @@
 #include <string>
 #include "opencv2/opencv.hpp" 
 
+#include "opencv2/bgsegm.hpp"
+
 class ImageInfoCV;
 
 
@@ -46,6 +48,7 @@ std::map<std::string,DomaineParametreOp<int> > intParam;
 std::map<std::string,DomaineParametreOp<cv::Size> > sizeParam;
 std::map<std::string, DomaineParametreOp<cv::Point> > pointParam;
 std::map<std::string, ImageInfoCV* > imgParam;
+std::map<std::string, cv::Ptr<cv::BackgroundSubtractor> > ecartFond;
 std::vector<cv::Vec3f> cercle;		
 std::vector<cv::Vec4i> ligneP;		
 std::vector<cv::Vec2f> ligne;		

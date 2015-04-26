@@ -88,6 +88,64 @@ opVideo=false;
 opErreur=0;
 //intParam["Save result"] = DomaineParametreOp<int>(0, 0, 0, 1);
 //intParam["Send packet"] = DomaineParametreOp<int>(0, 0, 0, 1);
+if (s == "fond_gaussianmixture")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	intParam["history"] = DomaineParametreOp<int>(200, 2, 10000, 1);
+	intParam["mixtures"] = DomaineParametreOp<int>(5, 1, 255, 1);
+	doubleParam["BackgroundRatio"] = DomaineParametreOp<double>(0.7, 0.01, 100, 0.01);
+	doubleParam["NoiseSigma"] = DomaineParametreOp<double>(30 * .5, 0, 100, 0.01);
+	doubleParam["learningRate"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
+	}
+
+if (s == "fond_gaussianmixture2")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	intParam["History2"] = DomaineParametreOp<int>(500, 2, 10000, 1);
+	intParam["mixtures2"] = DomaineParametreOp<int>(5, 1, 255, 1);
+	doubleParam["VarThreshold2"] = DomaineParametreOp<double>(16, 0.01, 100, 0.01);
+	doubleParam["BackgroundRatio2"] = DomaineParametreOp<double>(0.9, 0.01, 100, 0.01);
+	doubleParam["VarThresholdGen2"] = DomaineParametreOp<double>(9, 0, 100, 0.01);
+	doubleParam["VarInit2"] = DomaineParametreOp<double>(15, 0, 100, 0.01);
+	doubleParam["VarMax2"] = DomaineParametreOp<double>(5*15, 0, 100, 0.01);
+	doubleParam["defaultfCT2"] = DomaineParametreOp<double>(0.05, 0, 100, 0.01);
+	intParam["ShadowDetection2"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	doubleParam["defaultfTau"] = DomaineParametreOp<double>(0.5, 0, 100, 0.01);
+}
+
+if (s == "fond_knn")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	intParam["defaultHistory2"] = DomaineParametreOp<int>(500, 1, 10000, 1);
+	intParam["defaultNsamples"] = DomaineParametreOp<int>(7, 1, 1000, 1);
+	intParam["defaultnShadowDetection2"] = DomaineParametreOp<int>(127, 1, 255, 1);
+	doubleParam["defaultDist2Threshold"] = DomaineParametreOp<double>(400, 0, 10000, 1);
+	doubleParam["defaultfTau"] = DomaineParametreOp<double>(0.5, 0, 100, 0.01);
+}
+
+if (s == "fond_gmg")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	intParam["numInitializationFrames"] = DomaineParametreOp<int>(120, 2, 10000, 1);
+	intParam["maxfeatures"] = DomaineParametreOp<int>(64, 2, 10000, 1);
+	intParam["QuantizationLevels"] = DomaineParametreOp<int>(5, 1, 255, 1);
+	intParam["SmoothingRadius"] = DomaineParametreOp<int>(5, 1, 255, 1);
+	doubleParam["learningRate"] = DomaineParametreOp<double>(0.025, 0.01, 100, 0.001);
+	doubleParam["BackgroundPrior"] = DomaineParametreOp<double>(0.7, 0.01, 100, 0.01);
+	doubleParam["DecisionThreshold"] = DomaineParametreOp<double>(0.8, 0, 100, 0.01);
+	doubleParam["MinVal"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
+	doubleParam["MaxVal"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
+}
+
+
 if (s == "logPolar")
 	{
 	nomOperation = s;
@@ -583,17 +641,29 @@ bool ParametreOperation::InitPtrFonction()
 {
 opAttribut=false;
 wxString s(nomOperation);
+
+if (s == "fond_gaussianmixture")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	opVideo = true;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractormog";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=373&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::Fond_MOG;
+	}
+
 if (s == "updatemotionhistory") // inclus la différence de deux images successives
-{
+	{
 	nomOperation = s;
 	nbOperande = 1;
 	opVideo = true;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#updatemotionhistory";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=370&zoom=70,250,100";
 	opBinaireSelec = &ImageInfoCV::MAJHistoriqueMvt;
-}
+	}
 if (s == "calcmotiongradient") // inclus la différence de deux images successives
-{
+	{
 	nomOperation = s;
 	nbImageRes = 0;
 	opVideo = true;
@@ -602,7 +672,7 @@ if (s == "calcmotiongradient") // inclus la différence de deux images successive
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#calcmotiongradient";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=371&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::CalcOrientationMvt;
-}
+	}
 if (s == "segmentmotion") // inclus la différence de deux images successives
 {
 	nomOperation = s;
@@ -1010,6 +1080,7 @@ if (opNaireSelec)
 		}
 	catch(cv::Exception& e)
 		{
+		wxString s(e.msg);
 		}
 
 	}

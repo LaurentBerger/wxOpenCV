@@ -1423,3 +1423,64 @@ std::vector<ImageInfoCV		*>ImageInfoCV::LogPolar(ImageInfoCV	*imSrc, ParametreOp
 	return r;
 }
 
+std::vector<ImageInfoCV	*> ImageInfoCV::Fond_MOG(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+{
+ImageInfoCV *imDst = NULL;
+
+if (pOCV->imgParam.find(pOCV->nomOperation + "fgmask") == pOCV->imgParam.end())
+	{
+	imDst = new ImageInfoCV();
+	pOCV->imgParam[pOCV->nomOperation + "fgmask"] = imDst;
+	}
+else
+	imDst = pOCV->imgParam[pOCV->nomOperation + "fgmask"];
+if (pOCV->ecartFond.size() == 0)
+	{
+	cv::Ptr<cv::BackgroundSubtractor> b;
+	b = cv::bgsegm::createBackgroundSubtractorMOG(); 
+	pOCV->ecartFond["MOG"]=b;
+	}
+pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setHistory(pOCV->intParam["history"].valeur);
+pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setBackgroundRatio(pOCV->doubleParam["BackgroundRatio"].valeur);
+pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setNMixtures(pOCV->intParam["mixtures"].valeur);
+pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setNoiseSigma(pOCV->doubleParam["NoiseSigma"].valeur);
+pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->apply(*imSrc, *imDst, pOCV->doubleParam["learningRate"].valeur);
+std::vector<ImageInfoCV	*> r;
+r.push_back(imDst);
+return r;
+}
+
+
+std::vector<ImageInfoCV	*> ImageInfoCV::Fond_MOG2(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+{
+	ImageInfoCV *imDst = new ImageInfoCV();
+	cv::logPolar(*imSrc, *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur, pOCV->intParam["interpolationFlags"].valeur);
+
+	std::vector<ImageInfoCV	*> r;
+	r.push_back(imDst);
+	return r;
+}
+
+
+std::vector<ImageInfoCV	*> ImageInfoCV::Fond_KNN(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+{
+	ImageInfoCV *imDst = new ImageInfoCV();
+	cv::logPolar(*imSrc, *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur, pOCV->intParam["interpolationFlags"].valeur);
+
+	std::vector<ImageInfoCV	*> r;
+	r.push_back(imDst);
+	return r;
+}
+
+
+std::vector<ImageInfoCV	*> ImageInfoCV::Fond_GMG(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+{
+	ImageInfoCV *imDst = new ImageInfoCV();
+	cv::logPolar(*imSrc, *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur, pOCV->intParam["interpolationFlags"].valeur);
+
+	std::vector<ImageInfoCV	*> r;
+	r.push_back(imDst);
+	return r;
+}
+
+

@@ -127,13 +127,15 @@ if (!r.Contains(point) ||  this->f!=osgApp->Graphique())
 point=RepereEcranImage(point);
 wxClientDC dc(this);
 //f->TracerDIB(f->ImageAffichee(), dc,&point);
-
+if (f->ZoomActif() && point.x >= 0 && point.x<imAcq->cols && point.y >= 0 && point.y<imAcq->rows)
+	f->FZoom()->TracerZoom(point);
 
 if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq->cols && point.y>=0 && point.y<imAcq->rows)
 	{
 	BarreInfo *barreEtat=f->BarreEtat();
 	cv::Vec3b x;
 	cv::Vec3f xx;
+	cv::Vec4f xxxx;
 	cv::Vec6f xxx;
 	std::complex<float> zz[3];
 	int val;
@@ -147,11 +149,15 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 		dVal = imAcq->at<double>(point.y,point.x);
 		barreEtat->UpdateCurseur(point.x,point.y,dVal);
 		break;
-	case CV_32FC3 :
-		xx=imAcq->at<cv::Vec3f>(point.y,point.x);;
-		barreEtat->UpdateCurseur(point.x,point.y,xx[2],xx[1],xx[0]);
+	case CV_32FC3:
+		xx = imAcq->at<cv::Vec3f>(point.y, point.x);;
+		barreEtat->UpdateCurseur(point.x, point.y, xx[2], xx[1], xx[0]);
 		break;
-	case CV_32FC(6) :
+	case CV_32FC4:
+		xxxx = imAcq->at<cv::Vec4f>(point.y, point.x);;
+		barreEtat->UpdateCurseur(point.x, point.y, xxx[2], xxx[1], xxx[0]);
+		break;
+	case CV_32FC(6):
 		xxx=imAcq->at<cv::Vec6f>(point.y,point.x);
 		zz[0]=std::complex<float>(xxx[0],xxx[1]);
 		zz[1]=std::complex<float>(xxx[2],xxx[3]);

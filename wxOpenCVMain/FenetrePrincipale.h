@@ -665,10 +665,20 @@ std::vector <ParametreOperation> *SeqOp(){return &seqOp;};
      *  retourne la séquence d'opération active sur la fenêtre.
      */
 void RazSeqOp();
-    /*!
-     *  \brief fonction SeqOp
-     *  annulation de la séquence active.
-     */
+/*!
+*  \brief fonction SeqOp
+*  annulation de la séquence active.
+*/
+bool ZoomActif(){return zoomActif;};
+/*!
+*  \brief fonction ZoomActif
+*  vrai si la fenêtre zoom est active.
+*/
+FenetreZoom *FZoom(){ return fenZoom; };
+/*!
+*  \brief fonction ZoomActif
+*  Fenêtre zoom de la fenêtre.
+*/
 
 
 void DefPointeurSouris(int type);
