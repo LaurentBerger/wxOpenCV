@@ -93,6 +93,7 @@ if (s == "fond_gaussianmixture")
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
+	opVideo = true;
 	intParam["history"] = DomaineParametreOp<int>(200, 2, 10000, 1);
 	intParam["mixtures"] = DomaineParametreOp<int>(5, 1, 255, 1);
 	doubleParam["BackgroundRatio"] = DomaineParametreOp<double>(0.7, 0.01, 100, 0.01);
@@ -107,6 +108,7 @@ if (s == "fond_gaussianmixture2")
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
+	opVideo = true;
 	intParam["History"] = DomaineParametreOp<int>(500, 2, 10000, 1);
 	intParam["mixtures"] = DomaineParametreOp<int>(5, 1, 255, 1);
 	doubleParam["VarThreshold"] = DomaineParametreOp<double>(16, 0.01, 100, 0.01);
@@ -128,12 +130,16 @@ if (s == "fond_knn")
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
-	intParam["defaultHistory2"] = DomaineParametreOp<int>(500, 1, 10000, 1);
-	intParam["defaultNsamples"] = DomaineParametreOp<int>(7, 1, 1000, 1);
-	intParam["defaultnShadowDetection2"] = DomaineParametreOp<int>(127, 1, 255, 1);
-	doubleParam["defaultDist2Threshold"] = DomaineParametreOp<double>(400, 0, 10000, 1);
-	doubleParam["defaultfTau"] = DomaineParametreOp<double>(0.5, 0, 100, 0.01);
-}
+	opVideo = true;
+	intParam["History"] = DomaineParametreOp<int>(500, 1, 10000, 1);
+	intParam["Nsamples"] = DomaineParametreOp<int>(7, 1, 1000, 1);
+	intParam["KNNSamples"] = DomaineParametreOp<int>(7, 1, 1000, 1);
+	intParam["ShadowValue"] = DomaineParametreOp<int>(127, 1, 255, 1);
+	doubleParam["Dist2Threshold"] = DomaineParametreOp<double>(400, 0, 10000, 1);
+	doubleParam["ShadowThreshold"] = DomaineParametreOp<double>(0.5, 0, 100, 0.01);
+	intParam["DetectShadows"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	intParam["ResultImage"] = DomaineParametreOp<int>(0, 0, 2, 1);
+	}
 
 if (s == "fond_gmg")
 	{
@@ -667,6 +673,16 @@ if (s == "fond_gaussianmixture")
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractormog";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=373&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::Fond_MOG;
+	}
+if (s == "fond_knn")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	opVideo = true;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractorknn";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=373&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::Fond_KNN;
 	}
 
 if (s == "updatemotionhistory") // inclus la différence de deux images successives

@@ -1574,12 +1574,75 @@ return r;
 
 std::vector<ImageInfoCV	*> ImageInfoCV::Fond_KNN(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
 {
-	ImageInfoCV *imDst = new ImageInfoCV();
-	cv::logPolar(*imSrc, *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur, pOCV->intParam["interpolationFlags"].valeur);
+ImageInfoCV *imDst = NULL;
 
-	std::vector<ImageInfoCV	*> r;
+if (pOCV->imgParam.find(pOCV->nomOperation + "fgmask") == pOCV->imgParam.end())
+	{
+	imDst = new ImageInfoCV();
+	pOCV->imgParam[pOCV->nomOperation + "fgmask"] = imDst;
+	}
+else
+	imDst = pOCV->imgParam[pOCV->nomOperation + "fgmask"];
+if (pOCV->ecartFond.size() == 0)
+	{
+	cv::Ptr<cv::BackgroundSubtractor> b;
+	b = cv::createBackgroundSubtractorKNN();
+	pOCV->ecartFond["KNN"] = b;
+	}
+
+if (pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->getHistory() != pOCV->intParam["History"].valeur)
+	pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->setHistory(pOCV->intParam["History"].valeur);
+if (pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->getNSamples() != pOCV->intParam["Nsamples"].valeur)
+	pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->setNSamples(pOCV->intParam["Nsamples"].valeur);
+if (pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->getkNNSamples() != pOCV->intParam["KNNSamples"].valeur)
+	pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->setkNNSamples(pOCV->intParam["KNNSamples"].valeur);
+if (pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->getDist2Threshold() != pOCV->doubleParam["Dist2Threshold"].valeur)
+	pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->setDist2Threshold(pOCV->doubleParam["Dist2Threshold"].valeur);
+if (pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->getDetectShadows() != pOCV->intParam["DetectShadows"].valeur)
+	pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->setDetectShadows(pOCV->intParam["DetectShadows"].valeur);
+if (pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->getShadowValue() != pOCV->intParam["ShadowValue"].valeur)
+	pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->setShadowValue(pOCV->intParam["ShadowValue"].valeur);
+if (pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->getShadowThreshold() != pOCV->doubleParam["ShadowThreshold"].valeur)
+	pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->setShadowThreshold(pOCV->doubleParam["ShadowThreshold"].valeur);
+pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->apply(*imSrc, *imDst, pOCV->doubleParam["learningRate"].valeur);
+std::vector<ImageInfoCV	*> r;
+switch (pOCV->intParam["ResultImage"].valeur){
+case 0:
 	r.push_back(imDst);
-	return r;
+	break;
+case 1:
+	{
+	ImageInfoCV *arrierePlan = NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "arrierePlan") == pOCV->imgParam.end())
+		{
+		arrierePlan = new ImageInfoCV();
+		pOCV->imgParam[pOCV->nomOperation + "arrierePlan"] = arrierePlan;
+		}
+	else
+		arrierePlan = pOCV->imgParam[pOCV->nomOperation + "arrierePlan"];
+	pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->getBackgroundImage(*arrierePlan);
+	r.push_back(arrierePlan);
+	}
+break;
+case 2:
+	{
+	ImageInfoCV *premierPlan = NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "premierPlan") == pOCV->imgParam.end())
+		{
+		premierPlan = new ImageInfoCV();
+		pOCV->imgParam[pOCV->nomOperation + "premierPlan"] = premierPlan;
+		}
+	else
+		{
+		premierPlan = pOCV->imgParam[pOCV->nomOperation + "premierPlan"];
+		premierPlan->setTo(cv::Scalar(0, 0, 0));
+		}
+	imSrc->copyTo(*premierPlan, *imDst);
+	r.push_back(premierPlan);
+	}
+	break;
+	}
+return r;
 }
 
 
