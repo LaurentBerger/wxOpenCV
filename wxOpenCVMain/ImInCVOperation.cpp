@@ -1450,21 +1450,40 @@ if (pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->g
 	pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setNoiseSigma(pOCV->doubleParam["NoiseSigma"].valeur);
 pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->apply(*imSrc, *imDst, pOCV->doubleParam["learningRate"].valeur);
 std::vector<ImageInfoCV	*> r;
-if (pOCV->intParam["backGroundImage"].valeur==1)
+switch (pOCV->intParam["ResultImage"].valeur){
+case 0:
+	r.push_back(imDst);
+	break;
+case 1:
 	{
-	ImageInfoCV *imFond=NULL;
-	if (pOCV->imgParam.find(pOCV->nomOperation + "imFond") == pOCV->imgParam.end())
+	ImageInfoCV *arrierePlan = NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "arrierePlan") == pOCV->imgParam.end())
 		{
-		imFond = new ImageInfoCV();
-		pOCV->imgParam[pOCV->nomOperation + "imFond"] = imFond;
+		arrierePlan = new ImageInfoCV();
+		pOCV->imgParam[pOCV->nomOperation + "arrierePlan"] = arrierePlan;
 		}
 	else
-		imFond = pOCV->imgParam[pOCV->nomOperation + "imFond"];
-	pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->getBackgroundImage(*imFond);
-	r.push_back(imFond);
+		arrierePlan = pOCV->imgParam[pOCV->nomOperation + "arrierePlan"];
+	pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->getBackgroundImage(*arrierePlan);
+	r.push_back(arrierePlan);
 	}
-else
-	r.push_back(imDst);
+	break;
+case 2:
+	{
+	ImageInfoCV *premierPlan = NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "premierPlan") == pOCV->imgParam.end())
+		{
+		premierPlan = new ImageInfoCV();
+		pOCV->imgParam[pOCV->nomOperation + "premierPlan"] = premierPlan;
+		}
+	else
+		premierPlan = pOCV->imgParam[pOCV->nomOperation + "premierPlan"];
+	imSrc->copyTo(*premierPlan,*imDst);
+	r.push_back(premierPlan);
+	}
+	break;
+	}
+	
 return r;
 }
 
@@ -1486,7 +1505,8 @@ if (pOCV->ecartFond.size() == 0)
 	b = cv::createBackgroundSubtractorMOG2(); 
 	pOCV->ecartFond["MOG2"]=b;
 	}
-if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getHistory()!=pOCV->intParam["History"].valeur)
+
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getHistory() != pOCV->intParam["History"].valeur)
 	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setHistory(pOCV->intParam["History"].valeur);
 if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getNMixtures()!=pOCV->intParam["mixtures"].valeur)
 	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setNMixtures(pOCV->intParam["mixtures"].valeur);
@@ -1512,21 +1532,42 @@ if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getShad
 	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setVarThreshold(pOCV->doubleParam["ShadowThreshold"].valeur);
 pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->apply(*imSrc, *imDst, pOCV->doubleParam["learningRate"].valeur);
 std::vector<ImageInfoCV	*> r;
-if (pOCV->intParam["backGroundImage"].valeur==1)
+switch (pOCV->intParam["ResultImage"].valeur){
+case 0:
+	r.push_back(imDst);
+	break;
+case 1:
 	{
-	ImageInfoCV *imFond=NULL;
-	if (pOCV->imgParam.find(pOCV->nomOperation + "imFond") == pOCV->imgParam.end())
+	ImageInfoCV *arrierePlan = NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "arrierePlan") == pOCV->imgParam.end())
 		{
-		imFond = new ImageInfoCV();
-		pOCV->imgParam[pOCV->nomOperation + "imFond"] = imFond;
+		arrierePlan = new ImageInfoCV();
+		pOCV->imgParam[pOCV->nomOperation + "arrierePlan"] = arrierePlan;
 		}
 	else
-		imFond = pOCV->imgParam[pOCV->nomOperation + "imFond"];
-	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getBackgroundImage(*imFond);
-	r.push_back(imFond);
+		arrierePlan = pOCV->imgParam[pOCV->nomOperation + "arrierePlan"];
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getBackgroundImage(*arrierePlan);
+	r.push_back(arrierePlan);
 	}
-else
-	r.push_back(imDst);
+	break;
+case 2:
+	{
+	ImageInfoCV *premierPlan = NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "premierPlan") == pOCV->imgParam.end())
+		{
+		premierPlan = new ImageInfoCV();
+		pOCV->imgParam[pOCV->nomOperation + "premierPlan"] = premierPlan;
+		}
+	else
+		{
+		premierPlan = pOCV->imgParam[pOCV->nomOperation + "premierPlan"];
+		premierPlan->setTo(cv::Scalar(0,0,0));
+		}
+	imSrc->copyTo(*premierPlan, *imDst);
+	r.push_back(premierPlan);
+	}
+	break;
+	}
 return r;
 }
 

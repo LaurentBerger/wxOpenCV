@@ -98,7 +98,7 @@ if (s == "fond_gaussianmixture")
 	doubleParam["BackgroundRatio"] = DomaineParametreOp<double>(0.7, 0.01, 100, 0.01);
 	doubleParam["NoiseSigma"] = DomaineParametreOp<double>(30 * .5, 0, 100, 0.01);
 	doubleParam["learningRate"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
-	intParam["backGroundImage"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	intParam["ResultImage"] = DomaineParametreOp<int>(0, 0, 2, 1);
 	
 	}
 
@@ -115,13 +115,12 @@ if (s == "fond_gaussianmixture2")
 	doubleParam["VarInit"] = DomaineParametreOp<double>(15, 0, 100, 1);
 	doubleParam["VarMax"] = DomaineParametreOp<double>(5*15, 0, 100, 1);
 	doubleParam["VarMin"] = DomaineParametreOp<double>(4, 0, 100, 1);
-	doubleParam["defaultfCT2"] = DomaineParametreOp<double>(0.05, 0, 100, 0.01);
-	intParam["ShadowThreshold"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	doubleParam["ComplexityReductionThreshold"] = DomaineParametreOp<double>(0.05, 0, 100, 0.01);
+	doubleParam["ShadowThreshold"] = DomaineParametreOp<double>(0.5, 0, 1, .1);
 	intParam["DetectShadows"] = DomaineParametreOp<int>(0, 0, 1, 1);
 	intParam["ShadowValue"] = DomaineParametreOp<int>(127, 0, 255, 1);
-	doubleParam["defaultfTau"] = DomaineParametreOp<double>(0.5, 0, 100, 0.01);
 	doubleParam["learningRate"] = DomaineParametreOp<double>(-1, -1, 100, 0.01);
-	intParam["backGroundImage"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	intParam["ResultImage"] = DomaineParametreOp<int>(0, 0, 2, 1);
 	}
 
 if (s == "fond_knn")
