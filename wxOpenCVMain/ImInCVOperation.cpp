@@ -1440,25 +1440,94 @@ if (pOCV->ecartFond.size() == 0)
 	b = cv::bgsegm::createBackgroundSubtractorMOG(); 
 	pOCV->ecartFond["MOG"]=b;
 	}
-pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setHistory(pOCV->intParam["history"].valeur);
-pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setBackgroundRatio(pOCV->doubleParam["BackgroundRatio"].valeur);
-pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setNMixtures(pOCV->intParam["mixtures"].valeur);
-pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setNoiseSigma(pOCV->doubleParam["NoiseSigma"].valeur);
+if (pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->getHistory()!=pOCV->intParam["history"].valeur)
+	pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setHistory(pOCV->intParam["history"].valeur);
+if (pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->getBackgroundRatio()!=pOCV->doubleParam["BackgroundRatio"].valeur)
+	pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setBackgroundRatio(pOCV->doubleParam["BackgroundRatio"].valeur);
+if (pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->getNMixtures()!=pOCV->intParam["mixtures"].valeur)
+	pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setNMixtures(pOCV->intParam["mixtures"].valeur);
+if (pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->getNoiseSigma()!=pOCV->doubleParam["NoiseSigma"].valeur)
+	pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setNoiseSigma(pOCV->doubleParam["NoiseSigma"].valeur);
 pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->apply(*imSrc, *imDst, pOCV->doubleParam["learningRate"].valeur);
 std::vector<ImageInfoCV	*> r;
-r.push_back(imDst);
+if (pOCV->intParam["backGroundImage"].valeur==1)
+	{
+	ImageInfoCV *imFond=NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "imFond") == pOCV->imgParam.end())
+		{
+		imFond = new ImageInfoCV();
+		pOCV->imgParam[pOCV->nomOperation + "imFond"] = imFond;
+		}
+	else
+		imFond = pOCV->imgParam[pOCV->nomOperation + "imFond"];
+	pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->getBackgroundImage(*imFond);
+	r.push_back(imFond);
+	}
+else
+	r.push_back(imDst);
 return r;
 }
 
 
 std::vector<ImageInfoCV	*> ImageInfoCV::Fond_MOG2(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
 {
-	ImageInfoCV *imDst = new ImageInfoCV();
-	cv::logPolar(*imSrc, *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur, pOCV->intParam["interpolationFlags"].valeur);
+ImageInfoCV *imDst = NULL;
 
-	std::vector<ImageInfoCV	*> r;
+if (pOCV->imgParam.find(pOCV->nomOperation + "fgmask") == pOCV->imgParam.end())
+	{
+	imDst = new ImageInfoCV();
+	pOCV->imgParam[pOCV->nomOperation + "fgmask"] = imDst;
+	}
+else
+	imDst = pOCV->imgParam[pOCV->nomOperation + "fgmask"];
+if (pOCV->ecartFond.size() == 0)
+	{
+	cv::Ptr<cv::BackgroundSubtractor> b;
+	b = cv::createBackgroundSubtractorMOG2(); 
+	pOCV->ecartFond["MOG2"]=b;
+	}
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getHistory()!=pOCV->intParam["History"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setHistory(pOCV->intParam["History"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getNMixtures()!=pOCV->intParam["mixtures"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setNMixtures(pOCV->intParam["mixtures"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getBackgroundRatio()!=pOCV->doubleParam["BackgroundRatio"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setBackgroundRatio(pOCV->doubleParam["BackgroundRatio"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getVarThreshold()!=pOCV->doubleParam["VarThreshold"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setVarThreshold(pOCV->doubleParam["VarThreshold"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getVarThresholdGen()!=pOCV->doubleParam["VarThresholdGen"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setVarThresholdGen(pOCV->doubleParam["VarThresholdGen"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getVarInit()!=pOCV->doubleParam["VarInit"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setVarInit(pOCV->doubleParam["VarInit"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getVarMin()!=pOCV->doubleParam["VarMin"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setVarMin(pOCV->doubleParam["VarMin"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getVarMax()!=pOCV->doubleParam["VarMax"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setVarMax(pOCV->doubleParam["VarMax"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getComplexityReductionThreshold()!=pOCV->doubleParam["ComplexityReductionThreshold"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setComplexityReductionThreshold(pOCV->doubleParam["ComplexityReductionThreshold"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getDetectShadows()!=pOCV->intParam["DetectShadows"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setDetectShadows(pOCV->intParam["DetectShadows"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getShadowValue()!=pOCV->intParam["ShadowValue"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setShadowValue(pOCV->intParam["ShadowValue"].valeur);
+if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getShadowThreshold()!=pOCV->doubleParam["ShadowThreshold"].valeur)
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setVarThreshold(pOCV->doubleParam["ShadowThreshold"].valeur);
+pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->apply(*imSrc, *imDst, pOCV->doubleParam["learningRate"].valeur);
+std::vector<ImageInfoCV	*> r;
+if (pOCV->intParam["backGroundImage"].valeur==1)
+	{
+	ImageInfoCV *imFond=NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "imFond") == pOCV->imgParam.end())
+		{
+		imFond = new ImageInfoCV();
+		pOCV->imgParam[pOCV->nomOperation + "imFond"] = imFond;
+		}
+	else
+		imFond = pOCV->imgParam[pOCV->nomOperation + "imFond"];
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->getBackgroundImage(*imFond);
+	r.push_back(imFond);
+	}
+else
 	r.push_back(imDst);
-	return r;
+return r;
 }
 
 

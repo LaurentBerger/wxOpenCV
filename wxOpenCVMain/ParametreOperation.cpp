@@ -98,6 +98,8 @@ if (s == "fond_gaussianmixture")
 	doubleParam["BackgroundRatio"] = DomaineParametreOp<double>(0.7, 0.01, 100, 0.01);
 	doubleParam["NoiseSigma"] = DomaineParametreOp<double>(30 * .5, 0, 100, 0.01);
 	doubleParam["learningRate"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
+	intParam["backGroundImage"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	
 	}
 
 if (s == "fond_gaussianmixture2")
@@ -105,17 +107,22 @@ if (s == "fond_gaussianmixture2")
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
-	intParam["History2"] = DomaineParametreOp<int>(500, 2, 10000, 1);
-	intParam["mixtures2"] = DomaineParametreOp<int>(5, 1, 255, 1);
-	doubleParam["VarThreshold2"] = DomaineParametreOp<double>(16, 0.01, 100, 0.01);
-	doubleParam["BackgroundRatio2"] = DomaineParametreOp<double>(0.9, 0.01, 100, 0.01);
-	doubleParam["VarThresholdGen2"] = DomaineParametreOp<double>(9, 0, 100, 0.01);
-	doubleParam["VarInit2"] = DomaineParametreOp<double>(15, 0, 100, 0.01);
-	doubleParam["VarMax2"] = DomaineParametreOp<double>(5*15, 0, 100, 0.01);
+	intParam["History"] = DomaineParametreOp<int>(500, 2, 10000, 1);
+	intParam["mixtures"] = DomaineParametreOp<int>(5, 1, 255, 1);
+	doubleParam["VarThreshold"] = DomaineParametreOp<double>(16, 0.01, 100, 0.01);
+	doubleParam["BackgroundRatio"] = DomaineParametreOp<double>(0.9, 0.01, 100, 0.01);
+	doubleParam["VarThresholdGen"] = DomaineParametreOp<double>(9, 0, 100, 1);
+	doubleParam["VarInit"] = DomaineParametreOp<double>(15, 0, 100, 1);
+	doubleParam["VarMax"] = DomaineParametreOp<double>(5*15, 0, 100, 1);
+	doubleParam["VarMin"] = DomaineParametreOp<double>(4, 0, 100, 1);
 	doubleParam["defaultfCT2"] = DomaineParametreOp<double>(0.05, 0, 100, 0.01);
-	intParam["ShadowDetection2"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	intParam["ShadowThreshold"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	intParam["DetectShadows"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	intParam["ShadowValue"] = DomaineParametreOp<int>(127, 0, 255, 1);
 	doubleParam["defaultfTau"] = DomaineParametreOp<double>(0.5, 0, 100, 0.01);
-}
+	doubleParam["learningRate"] = DomaineParametreOp<double>(-1, -1, 100, 0.01);
+	intParam["backGroundImage"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	}
 
 if (s == "fond_knn")
 	{
@@ -642,6 +649,16 @@ bool ParametreOperation::InitPtrFonction()
 opAttribut=false;
 wxString s(nomOperation);
 
+if (s == "fond_gaussianmixture2")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	opVideo = true;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractormog2";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=375&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::Fond_MOG2;
+	}
 if (s == "fond_gaussianmixture")
 	{
 	nomOperation = s;
