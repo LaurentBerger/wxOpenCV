@@ -1522,7 +1522,7 @@ if (pOCV->intParam["backGroundImage"].valeur==1)
 		}
 	else
 		imFond = pOCV->imgParam[pOCV->nomOperation + "imFond"];
-	pOCV->ecartFond["MOG2"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->getBackgroundImage(*imFond);
+	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getBackgroundImage(*imFond);
 	r.push_back(imFond);
 	}
 else
