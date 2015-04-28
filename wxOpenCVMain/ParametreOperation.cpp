@@ -55,6 +55,9 @@ listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("bicubic interp
 listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("resampling using pixel area relation").ToStdString(), cv::INTER_AREA));
 listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("Lanczos interpolation over 8x8 neighborhood").ToStdString(), CV_INTER_LANCZOS4));
 
+listeParam["ResultImage"].insert(std::pair<string, int>(_("Mask").ToStdString(), 0));
+listeParam["ResultImage"].insert(std::pair<string, int>(_("Background").ToStdString(), 1));
+listeParam["ResultImage"].insert(std::pair<string, int>(_("Foreground").ToStdString(), 2));
 
 
 }
@@ -138,6 +141,7 @@ if (s == "fond_knn")
 	doubleParam["Dist2Threshold"] = DomaineParametreOp<double>(400, 0, 10000, 1);
 	doubleParam["ShadowThreshold"] = DomaineParametreOp<double>(0.5, 0, 100, 0.01);
 	intParam["DetectShadows"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	doubleParam["learningRate"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
 	intParam["ResultImage"] = DomaineParametreOp<int>(0, 0, 2, 1);
 	}
 
@@ -146,16 +150,19 @@ if (s == "fond_gmg")
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
-	intParam["numInitializationFrames"] = DomaineParametreOp<int>(120, 2, 10000, 1);
-	intParam["maxfeatures"] = DomaineParametreOp<int>(64, 2, 10000, 1);
-	intParam["QuantizationLevels"] = DomaineParametreOp<int>(5, 1, 255, 1);
-	intParam["SmoothingRadius"] = DomaineParametreOp<int>(5, 1, 255, 1);
-	doubleParam["learningRate"] = DomaineParametreOp<double>(0.025, 0.01, 100, 0.001);
-	doubleParam["BackgroundPrior"] = DomaineParametreOp<double>(0.7, 0.01, 100, 0.01);
-	doubleParam["DecisionThreshold"] = DomaineParametreOp<double>(0.8, 0, 100, 0.01);
+	opVideo = true;
+	intParam["updateBackgroundModel"] = DomaineParametreOp<int>(1, 0, 1, 1);
+	intParam["NumFrames"] = DomaineParametreOp<int>(20, 2, 10000, 1);
+	intParam["Maxfeatures"] = DomaineParametreOp<int>(64, 2, 10000, 1);
+	intParam["QuantizationLevels"] = DomaineParametreOp<int>(16, 1, 255, 1);
+	intParam["SmoothingRadius"] = DomaineParametreOp<int>(7, 1, 255, 1);
+	doubleParam["BackgroundPrior"] = DomaineParametreOp<double>(0.8, 0.01, 100, 0.01);
+	doubleParam["DecisionThreshold"] = DomaineParametreOp<double>(0.7, 0, 100, 0.01);
 	doubleParam["MinVal"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
 	doubleParam["MaxVal"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
-}
+	doubleParam["learningRate"] = DomaineParametreOp<double>(0.025, -1, 100, 0.01);
+	intParam["ResultImage"] = DomaineParametreOp<int>(0, 0, 2, 1);
+	}
 
 
 if (s == "logPolar")
@@ -683,6 +690,17 @@ if (s == "fond_knn")
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractorknn";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=373&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::Fond_KNN;
+	}
+
+if (s == "fond_gmg")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	opVideo = true;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractorgmg";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=373&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::Fond_GMG;
 	}
 
 if (s == "updatemotionhistory") // inclus la différence de deux images successives

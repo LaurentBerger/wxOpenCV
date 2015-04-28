@@ -1648,12 +1648,83 @@ return r;
 
 std::vector<ImageInfoCV	*> ImageInfoCV::Fond_GMG(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
 {
-	ImageInfoCV *imDst = new ImageInfoCV();
-	cv::logPolar(*imSrc, *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur, pOCV->intParam["interpolationFlags"].valeur);
+ImageInfoCV *imDst = NULL;
 
-	std::vector<ImageInfoCV	*> r;
+if (pOCV->imgParam.find(pOCV->nomOperation + "fgmask") == pOCV->imgParam.end())
+	{
+	imDst = new ImageInfoCV();
+	pOCV->imgParam[pOCV->nomOperation + "fgmask"] = imDst;
+	}
+else
+	imDst = pOCV->imgParam[pOCV->nomOperation + "fgmask"];
+if (pOCV->ecartFond.size() == 0)
+	{
+	cv::Ptr<cv::BackgroundSubtractor> b;
+	b = cv::bgsegm::createBackgroundSubtractorGMG(20,0.7);
+	pOCV->ecartFond["GMG"] = b;
+	}
+
+if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getMaxFeatures() != pOCV->intParam["Maxfeatures"].valeur)
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setMaxFeatures(pOCV->intParam["Maxfeatures"].valeur);
+if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getDefaultLearningRate() != pOCV->doubleParam["learningRate"].valeur)
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setDefaultLearningRate(pOCV->doubleParam["learningRate"].valeur);
+if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getNumFrames() != pOCV->intParam["NumFrames"].valeur)
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setNumFrames(pOCV->intParam["NumFrames"].valeur);
+if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getQuantizationLevels() != pOCV->intParam["QuantizationLevels"].valeur)
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setQuantizationLevels(pOCV->intParam["QuantizationLevels"].valeur);
+if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getBackgroundPrior() != pOCV->doubleParam["BackgroundPrior"].valeur)
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setBackgroundPrior(pOCV->doubleParam["BackgroundPrior"].valeur);
+if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getSmoothingRadius() != pOCV->intParam["SmoothingRadius"].valeur)
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setSmoothingRadius(pOCV->intParam["SmoothingRadius"].valeur);
+if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getDecisionThreshold() != pOCV->doubleParam["DecisionThreshold"].valeur)
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setDecisionThreshold(pOCV->doubleParam["DecisionThreshold"].valeur);
+if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getUpdateBackgroundModel() != pOCV->intParam["updateBackgroundModel"].valeur)
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setUpdateBackgroundModel(pOCV->intParam["updateBackgroundModel"].valeur);
+/*
+if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getMinVal() != pOCV->doubleParam["MinVal"].valeur)
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setMinVal(pOCV->doubleParam["MinVal"].valeur);
+if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getMaxVal() != pOCV->doubleParam["MaxVal"].valeur)
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setMaxVal(pOCV->doubleParam["MaxVal"].valeur);
+*/
+pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->apply(*imSrc, *imDst);
+std::vector<ImageInfoCV	*> r;
+switch (pOCV->intParam["ResultImage"].valeur){
+case 0:
 	r.push_back(imDst);
-	return r;
+	break;
+case 1:
+	{
+	ImageInfoCV *arrierePlan = NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "arrierePlan") == pOCV->imgParam.end())
+		{
+		arrierePlan = new ImageInfoCV();
+		pOCV->imgParam[pOCV->nomOperation + "arrierePlan"] = arrierePlan;
+		}
+	else
+		arrierePlan = pOCV->imgParam[pOCV->nomOperation + "arrierePlan"];
+	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getBackgroundImage(*arrierePlan);
+	r.push_back(arrierePlan);
+	}
+break;
+case 2:
+	{
+	ImageInfoCV *premierPlan = NULL;
+	if (pOCV->imgParam.find(pOCV->nomOperation + "premierPlan") == pOCV->imgParam.end())
+		{
+		premierPlan = new ImageInfoCV();
+		pOCV->imgParam[pOCV->nomOperation + "premierPlan"] = premierPlan;
+		}
+	else
+		{
+		premierPlan = pOCV->imgParam[pOCV->nomOperation + "premierPlan"];
+		premierPlan->setTo(cv::Scalar(0, 0, 0));
+		}
+	imSrc->copyTo(*premierPlan, *imDst);
+	r.push_back(premierPlan);
+	}
+	break;
+	}
+return r;
 }
 
 

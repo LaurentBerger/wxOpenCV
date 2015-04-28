@@ -515,7 +515,7 @@ if (captureVideo->isOpened())
 								delete it->first;
 						effaceImage.clear();
 						imgParam.clear();
-						fond.clear();
+						//fond.clear();
 					}
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
