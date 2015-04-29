@@ -271,6 +271,16 @@ if (s == "cornerharris")
 	intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
 	doubleParam["k"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
 	}
+if (s == "matchdescriptormatcher")
+	{
+	opAttribut = true;
+	opVideo = true;
+	nomOperation = s;
+	nbImageRes = 0;
+	nbOperande = 2;
+	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#match";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
+	}
 if (s == "orbfeatures2d")
 	{
 	nomOperation = s;
@@ -768,6 +778,16 @@ if (s == "orbfeatures2d")
 	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#orb";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::DetectOrb;
+	}
+if (s == "matchdescriptormatcher")
+	{
+	opAttribut = true;
+	opVideo = true;
+	nomOperation = s;
+	nbOperande = 1;
+	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#match";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
+	opBinaireSelec = &ImageInfoCV::AppariePoint;
 	}
 if (s == "goodfeaturestotrack")
 	{

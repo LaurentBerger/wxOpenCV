@@ -1115,7 +1115,7 @@ if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getScoreType() != pOCV->intPa
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getWTA_K() != pOCV->intParam["WTA_K"].valeur)
 	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setWTA_K(pOCV->intParam["WTA_K"].valeur);
 
-pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->detect(*im,*(im->PointCle()) );
+pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->detectAndCompute(*im,Mat(),*(im->PointCle()),*(im->Descripteur()) );
 
 
 AjoutOpAttribut(pOCV);
@@ -1138,10 +1138,13 @@ r.push_back(im);
 return r;
 }
 
-std::vector<ImageInfoCV	*>ImageInfoCV::AppariePoint(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *paramOCV)
+std::vector<ImageInfoCV	*>ImageInfoCV::AppariePoint(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV)
 {
 ImageInfoCV	*im = new ImageInfoCV;
+cv::Ptr<cv::DescriptorMatcher> descriptorMatcher = cv::DescriptorMatcher::create("BruteForce");
+std::vector<cv::DMatch> matches;
 
+descriptorMatcher.dynamicCast<cv::DescriptorMatcher>()->match(*im1->Descripteur(), *im2->Descripteur(), matches, Mat());
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
 return r;

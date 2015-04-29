@@ -132,6 +132,7 @@ std::vector<cv::KeyPoint> kBrief;	/*<! Point clef de BREF */
 std::vector<cv::KeyPoint> kFreak;	/*<! Point clef de FREAK */
 std::vector<cv::KeyPoint> kKaze;	/*<! Point clef de KAZE */
 std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de KAZE */
+cv::Mat	descripteur;				/*<! Descripteur associé à l'un des points clé */
 cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
 cv::Mat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
 cv::Mat *silh;						/*<! Seuillage de la différence entre deux images pour updateMotion History */
@@ -457,6 +458,7 @@ cv::Mat	**CentreGComposante(){return centreGComposante;};
 cv::Mat	*FlotOptique(bool init=false){if (init ) {delete []flotOptique;flotOptique= new cv::Mat[channels()];} return flotOptique;};
 cv::Mat *Ponderation(bool init = false){ if (init) { delete ponderation; ponderation = new cv::Mat();  cv::createHanningWindow(*ponderation, this->size(), CV_64F); } return ponderation; };
 cv::Mat *Silh(bool init = false){ if (init) { delete silh; silh = new cv::Mat(); } return silh; };
+cv::Mat *Descripteur(){return &descripteur;};
 std::vector<cv::Moments> *MomentComposante(){ return moment; };
 std::vector<std::vector<cv::Point> > *PtContours(){return contours;};
 std::vector<cv::Vec4i> *ArboContour(){return arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
