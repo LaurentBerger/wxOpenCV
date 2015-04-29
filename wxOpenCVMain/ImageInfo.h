@@ -122,6 +122,10 @@ std::vector<cv::Vec4i> *ligneP;		/*<! http://docs.opencv.org/modules/imgproc/doc
 std::vector<cv::Vec2f> *ligne;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines */
 std::vector<cv::Point2f> *boncoin;	/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack */
 std::vector<cv::Point2f> *coinRef;	/*<! Les pixels de références de l'image pour calcul du flot optique */
+std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
+std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
+std::vector<cv::KeyPoint> kBrief;	/*<! Point clef de BREF */
+std::vector<cv::KeyPoint> kFreak;	/*<! Point clef de FREAK */
 cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
 cv::Mat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
 cv::Mat *silh;						/*<! Seuillage de la différence entre deux images pour updateMotion History */
@@ -327,6 +331,11 @@ std::vector<ImageInfoCV	*>HoughCercle(ImageInfoCV	*, ParametreOperation *paramOC
 std::vector<ImageInfoCV	*>HoughLigneProba(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>BonAttributs(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectCoinHarris(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectOrb(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectBrief(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectBrisk(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectFreak(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>AppariePoint(ImageInfoCV	*, ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>SeparationPlan(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>CalcOrientationMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>SegmenteMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
@@ -453,15 +462,8 @@ std::vector<cv::Point2f> *BonCoin(bool init=false){if (init && boncoin==NULL) bo
 std::vector<cv::Point2f> *CoinRef(bool init = false){ if (init && coinRef == NULL) coinRef = new std::vector<cv::Point2f>[channels()]; return coinRef; };
 std::vector<double> *Angle(){ return &angle; };
 std::vector<cv::Rect> *RegionMvt(){ return &regionsMvt; };
-/*ParametreOperation *ParamOCVHoughLigne(ParametreOperation *p = NULL);
-ParametreOperation *ParamOCVHoughLigneProba(ParametreOperation *p=NULL);
-ParametreOperation *ParamOCVHoughCercle(ParametreOperation *p=NULL);
-ParametreOperation *ParamOCVBonCoin(ParametreOperation *p=NULL);
-ParametreOperation *ParamOCVLucasKanade(ParametreOperation *p=NULL);
-ParametreOperation *ParamOCVGunnarFarneback(ParametreOperation *p=NULL);
-ParametreOperation *ParamOCVPhaseCorrelate(ParametreOperation *p = NULL);
-ParametreOperation *ParamOCVCalcMotionGradient(ParametreOperation *p = NULL);
-ParametreOperation *ParamOCVSegmentMotion(ParametreOperation *p = NULL);*/
+std::vector<cv::KeyPoint> *PointCle(char type=0);
+
 ParametreOperation *ParamOCVUpdateMotionHistory(ParametreOperation *p = NULL);
 ParametreOperation *AjoutOpAttribut(ParametreOperation *p);
 std::map<std::string,ParametreOperation> *ListeOpAttribut(){return &listeOpAttribut;};

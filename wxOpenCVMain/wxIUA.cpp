@@ -94,6 +94,12 @@ enum
 	ID_FOND_MOG2,
 	ID_FOND_KNN,
 	ID_FOND_MGM,
+	ID_DES_ORB,
+	ID_DES_BRISK,
+	ID_DES_FREAK,
+	ID_DES_MATCH,
+	ID_DES_KNNMATCH,
+
 
 
 	ID_FIN_OP, // Fin des opérateurs sur les images
@@ -298,10 +304,11 @@ void InterfaceAvance::InitCommande()
 
 	CONSTRUCTEUR_CMD(bouton,ID_CANNY, _("Canny edge detector"), "canny", 8);
 	CONSTRUCTEUR_CMD(bouton,ID_CORNERHARRIS, _("Harris edge detector"), "cornerharris", 8);
-	CONSTRUCTEUR_CMD(bouton,ID_GOODFEATURE, _("Very good features"), "goodfeaturestotrack", 8);
-	CONSTRUCTEUR_CMD(bouton,ID_HOUGHCIRCLE, _("Hough circle"), "houghcircles", 8);
-	CONSTRUCTEUR_CMD(bouton,ID_HOUGHLINE, _("Hough line"), "houghlines", 8);
-	CONSTRUCTEUR_CMD(bouton,ID_HOUGHLINEP, _("hough line proba."), "houghlinesp", 8);
+	CONSTRUCTEUR_CMD(bouton, ID_GOODFEATURE, _("Very good features"), "goodfeaturestotrack", 8);
+	CONSTRUCTEUR_CMD(bouton, ID_HOUGHCIRCLE, _("Hough circle"), "houghcircles", 8);
+	CONSTRUCTEUR_CMD(bouton, ID_HOUGHLINE, _("Hough line"), "houghlines", 8);
+	CONSTRUCTEUR_CMD(bouton, ID_HOUGHLINEP, _("hough line proba."), "houghlinesp", 8);
+
 
 	CONSTRUCTEUR_CMD(bouton,ID_PYRFLOTOPTIQUE, _("Build pyramid optical flow"), "buildopticalflowpyramid", 9);
 	CONSTRUCTEUR_CMD(bouton,ID_CALCFLOTOPTIQUE, _("Calculate optical flow"), "calcopticalflowpyrlk", 9);
@@ -315,6 +322,14 @@ void InterfaceAvance::InitCommande()
 	CONSTRUCTEUR_CMD(bouton, ID_FOND_MOG2, _("Gaussian mixture 2"), "fond_gaussianmixture2", 10);
 	CONSTRUCTEUR_CMD(bouton, ID_FOND_KNN, _("knn method"), "fond_knn", 10);
 	CONSTRUCTEUR_CMD(bouton, ID_FOND_MGM, _("GMG method"), "fond_gmg", 10);
+
+	CONSTRUCTEUR_CMD(bouton, ID_DES_ORB, _("ORB keypoint"), "orbfeatures2d", 11);
+	CONSTRUCTEUR_CMD(bouton, ID_DES_BRISK, _("BRISK keypoint"), "briskfeatures2d", 11);
+	CONSTRUCTEUR_CMD(bouton, ID_DES_FREAK, _("FREAK keypoint"), "freakdescriptorextractor", 11);
+	CONSTRUCTEUR_CMD(bouton, ID_DES_MATCH, _("Match"), "matchdescriptormatcher", 11);
+	CONSTRUCTEUR_CMD(bouton, ID_DES_KNNMATCH, _("knn Match"), "kbbmatchdescriptormatcher", 11);
+
+
 }
 
 
@@ -367,6 +382,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
 	InstallationbarreOutils(8);
 	InstallationbarreOutils(9);
 	InstallationbarreOutils(10);
+	InstallationbarreOutils(11);
 
 
     wxWindow* wnd10 = CreateTextCtrl(wxEmptyString);
@@ -1112,10 +1128,15 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		break;
 	case 10:
 		m_mgr.AddPane(tb, wxAuiPaneInfo().
-			Name("Background Subtractor").Caption("Background Subtractor").
-			ToolbarPane().Top().Row(5));
+					  Name("Background Subtractor").Caption("Background Subtractor").
+					  ToolbarPane().Top().Row(5));
 		break;
-	}
+	case 11:
+		m_mgr.AddPane(tb, wxAuiPaneInfo().
+					  Name("Feature 2D").Caption("Feature 2D").
+					  ToolbarPane().Top().Row(5));
+		break;
+		}
 	    // add the toolbars to the manager
 }
 

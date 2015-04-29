@@ -1081,6 +1081,74 @@ return r;
 }
 
 
+
+std::vector<ImageInfoCV	*> ImageInfoCV::DetectOrb(ImageInfoCV	*im, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+if (im != this)
+	return r;
+
+
+if (pOCV->detecteur.size() == 0)
+	{
+	cv::Ptr<cv::Feature2D> b;
+	b = cv::ORB::create();
+	pOCV->detecteur["ORB"] = b;
+	}
+
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getEdgeThreshold() != pOCV->intParam["EdgeThreshold"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setEdgeThreshold(pOCV->intParam["EdgeThreshold"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getFastThreshold() != pOCV->doubleParam["FastThreshold"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setFastThreshold(pOCV->doubleParam["FastThreshold"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getFirstLevel() != pOCV->intParam["FirstLevel"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setFirstLevel(pOCV->intParam["FirstLevel"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getMaxFeatures() != pOCV->intParam["MaxFeatures"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setMaxFeatures(pOCV->intParam["MaxFeatures"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getNLevels() != pOCV->intParam["NLevels"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setNLevels(pOCV->intParam["NLevels"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getPatchSize() != pOCV->intParam["PatchSize"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setPatchSize(pOCV->intParam["PatchSize"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getScaleFactor() != pOCV->doubleParam["ScaleFactor"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setScaleFactor(pOCV->doubleParam["ScaleFactor"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getScoreType() != pOCV->intParam["ScoreType"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setScoreType(pOCV->intParam["ScoreType"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getWTA_K() != pOCV->intParam["WTA_K"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setWTA_K(pOCV->intParam["WTA_K"].valeur);
+
+pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->detect(*im,*(im->PointCle()) );
+
+
+AjoutOpAttribut(pOCV);
+
+r.push_back(this);
+return r;
+}
+
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(ImageInfoCV	*im, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+r.push_back(im);
+return r;
+}
+
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectFreak(ImageInfoCV	*im, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+r.push_back(im);
+return r;
+}
+
+std::vector<ImageInfoCV	*>ImageInfoCV::AppariePoint(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *paramOCV)
+{
+ImageInfoCV	*im = new ImageInfoCV;
+
+std::vector<ImageInfoCV	*> r;
+r.push_back(im);
+return r;
+}
+
+
+
 std::vector<ImageInfoCV *>ImageInfoCV::FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
 {
 

@@ -345,6 +345,11 @@ listeOpAttribut[p->nomOperation]=*p;
 return p;
 }
 
+std::vector<cv::KeyPoint> *ImageInfoCV::PointCle(char type)
+{
+return &kOrb;
+}
+
 /*
 ParametreOperation *ImageInfoCV::ParamOCVHoughLigne(ParametreOperation *p)
 {

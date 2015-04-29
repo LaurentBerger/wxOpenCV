@@ -250,9 +250,9 @@ if (s == "calcmotiongradient") // inclus la différence de deux images successive
 	doubleParam["delta1"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
 	doubleParam["delta2"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
 	intParam["aperture_size"] = DomaineParametreOp<int>((int)3, (int)3, (int)7, (int)2);
-}
+	}
 if (s == "segmentmotion") // inclus la différence de deux images successives
-{
+	{
 	opAttribut = true;
 	nomOperation = s;
 	nbImageRes = 2;
@@ -260,9 +260,9 @@ if (s == "segmentmotion") // inclus la différence de deux images successives
 	doubleParam["timestamp"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
 	doubleParam["segthresh"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
 	intParam["calcGlobalOrientation"] = DomaineParametreOp<int>(0, 0, 1, 1);
-}
+	}
 if (s == "cornerharris")
-{
+	{
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
@@ -270,7 +270,23 @@ if (s == "cornerharris")
 	intParam["ksize"] = DomaineParametreOp<int>(1, 1, 7, 2);
 	intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
 	doubleParam["k"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
-}
+	}
+if (s == "orbfeatures2d")
+	{
+	nomOperation = s;
+	nbImageRes = 0;
+	nbOperande = 1;
+	opAttribut=true;
+	intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
+	doubleParam["FastThreshold"] = DomaineParametreOp<double>(20, 1, 100, 1);;
+	intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128,1);
+	intParam["MaxFeatures"] = DomaineParametreOp<int>(500, 1, 10000 ,1);
+	intParam["NLevels"] = DomaineParametreOp<int>(8, 1, 128, 1);
+	intParam["PatchSize"] = DomaineParametreOp<int>(31, 1, 200, 2);
+	doubleParam["ScaleFactor"] = DomaineParametreOp<double>(1.2, 1, 10, 0.1);
+	intParam["ScoreType"] = DomaineParametreOp<int>(cv::ORB::HARRIS_SCORE, cv::ORB::HARRIS_SCORE, cv::ORB::FAST_SCORE, 1);
+	intParam["WTA_K"] = DomaineParametreOp<int>(2, 2, 4, 1);
+	}
 if (s == "goodfeaturestotrack")
 	{
 	nbImageRes=0;
@@ -743,7 +759,17 @@ if (s == "cornerharris")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=327&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::DetectCoinHarris;
 	}
-if(	s=="goodfeaturestotrack")
+
+if (s == "orbfeatures2d")
+	{
+	opAttribut = true;
+	nomOperation = s;
+	nbOperande = 1;
+	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#orb";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
+	opUnaireSelec = &ImageInfoCV::DetectOrb;
+	}
+if (s == "goodfeaturestotrack")
 	{
 	opAttribut=true;
 	nomOperation=s;
