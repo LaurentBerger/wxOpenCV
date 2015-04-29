@@ -34,8 +34,8 @@ Bind(wxEVT_ACTIVATE, &ZoneImage::OnActivate,this);
 Bind(wxEVT_LEFT_UP, &ZoneImage::OnLeftButtonUp,this);
 Bind(wxEVT_LEFT_DOWN, &ZoneImage::OnLeftButtonDown,this);
 Bind(wxEVT_CONTEXT_MENU, &ZoneImage::OnMenuContext,this);
-Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::Vue3D,this,Menu_3D);
-Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SelectPalette,this,NOIRETBLANC_,NOIRETBLANC_+9);
+Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::Vue3D, this, Menu_3D);
+Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::SelectPalette, this, NOIRETBLANC_, NOIRETBLANC_ + 9);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::ModeComplexe,this,M_MODULE_,PHASE_RD);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR2,ZOOM8SUR1);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SequenceOperation,this,SEQ_OPE);
@@ -91,6 +91,12 @@ else
 	f->TracerBonCoin(dc);
 	f->TracerFlotOptique(dc);
 	f->TracerRegionMvt(dc);
+	f->TracerPointORB(dc);
+	f->TracerPointFREAK(dc);
+	f->TracerPointBRISK(dc);
+	f->TracerPointKAZE(dc);
+	f->TracerPointBLOB(dc);
+	f->TracerPointMSER(dc);
 	}
 /*        dc.SetPen( *wxRED_PEN );
     dc.SetBrush( *wxTRANSPARENT_BRUSH );
@@ -617,13 +623,48 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 			menu.Check(MENU_FLOTOPTIQUE, true);
 		menuParametre = true;
 	}
-	if (f->ImAcq()->Angle()->size()!=0)
-	{
+	if (f->ImAcq()->Angle()->size() != 0)
+		{
 		menu.AppendCheckItem(MENU_REGIONMVT, _T("Regions Motion"));
 		if (f->TracerRegionMvt())
 			menu.Check(MENU_REGIONMVT, true);
 		menuParametre = true;
-	}
+		}
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
+		{
+		menu.AppendCheckItem(MENU_POINTORB, _T("ORB"));
+		if (f->TracerPointORB())
+			menu.Check(MENU_POINTORB, true);
+		menuParametre = true;
+		}
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
+		{
+		menu.AppendCheckItem(MENU_POINTORB, _T("BRISK"));
+		if (f->TracerPointBRISK())
+			menu.Check(MENU_POINTBRISK, true);
+		menuParametre = true;
+		}
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES)->size() != 0)
+		{
+		menu.AppendCheckItem(MENU_POINTBLOB, _T("BLOB"));
+		if (f->TracerPointBLOB())
+			menu.Check(MENU_POINTBLOB, true);
+		menuParametre = true;
+		}
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES)->size() != 0)
+		{
+		menu.AppendCheckItem(MENU_POINTKAZE, _T("KAZE"));
+		if (f->TracerPointKAZE())
+			menu.Check(MENU_POINTKAZE, true);
+		menuParametre = true;
+		}
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_FREAK_DES)->size()!=0)
+		{
+		menu.AppendCheckItem(MENU_POINTORB, _T("FREAK"));
+		if (f->TracerPointFREAK())
+			menu.Check(MENU_POINTFREAK, true);
+		menuParametre = true;
+		}
 	if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre)
 		{
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
@@ -826,6 +867,23 @@ void FenetrePrincipale::MAJCoupe(wxCommandEvent& event)
 feuille->ModeRectangle(false); 
 feuille->ModeCoupe(!feuille->ModeCoupe()); 
 feuille->Refresh(true);
+}
+
+
+void FenetrePrincipale::TracerDescripteur(wxCommandEvent& evt)
+{
+switch (evt.GetId()){
+case MENU_POINTORB:
+	tracerORBPoint = !tracerORBPoint;
+	break;
+case MENU_POINTFREAK:
+case MENU_POINTBRISK:
+case MENU_POINTBLOB:
+case MENU_POINTKAZE:
+	break;
+	}
+feuille->Refresh(true);
+
 }
 
 void FenetrePrincipale::TracerContour(wxCommandEvent& event)
@@ -1130,5 +1188,82 @@ for (int i=0;i<imAcq->channels();i++)
 			hdc.DrawLine(p1,p2);
 			hdc.DrawCircle(p1, 2);
 		}
+	}
+}
+
+void FenetrePrincipale::TracerPointMSER(wxDC &hdc)
+{
+if (!tracerMSERPoint || !imAcq)
+	return;
+if (!imAcq->PointCle())
+	{
+	tracerMSERPoint = false;
+	return;
+	}
+}
+
+void FenetrePrincipale::TracerPointBRISK(wxDC &hdc)
+{
+if (!tracerBRISKPoint || !imAcq)
+	return;
+if (!imAcq->PointCle())
+	{
+	tracerBRISKPoint = false;
+	return;
+	}
+}
+void FenetrePrincipale::TracerPointFREAK(wxDC &hdc)
+{
+if (!tracerBRISKPoint || !imAcq)
+	return;
+if (!imAcq->PointCle())
+	{
+	tracerBRISKPoint = false;
+	return;
+	}
+}
+
+void FenetrePrincipale::TracerPointBLOB(wxDC &hdc)
+{
+if (!tracerBLOBPoint || !imAcq)
+	return;
+if (!imAcq->PointCle())
+	{
+	tracerBLOBPoint = false;
+	return;
+	}
+}
+
+void FenetrePrincipale::TracerPointKAZE(wxDC &hdc)
+{
+if (!tracerKAZEPoint || !imAcq)
+	return;
+if (!imAcq->PointCle())
+	{
+	tracerKAZEPoint = false;
+	return;
+	}
+}
+
+
+void FenetrePrincipale::TracerPointORB(wxDC &hdc)
+{
+if (!tracerORBPoint || !imAcq)
+	return;
+if (!imAcq->PointCle())
+	{
+	tracerORBPoint = false;
+	return;
+	}
+std::vector<cv::KeyPoint> *pts = imAcq->PointCle();
+int fZoomNume, fZoomDeno;
+
+CalculZoom(fZoomNume, fZoomDeno);
+wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
+for (int i = 0; i < pts->size(); i++)
+	{
+	wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+	wxPoint p1(RepereImageEcran(p_1));
+	hdc.DrawCircle(p1, 5);
 	}
 }

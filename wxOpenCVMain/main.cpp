@@ -181,6 +181,7 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
 	EVT_MENU(MENU_BONCOIN,  FenetrePrincipale::TracerBonCoin)
 	EVT_MENU(MENU_FLOTOPTIQUE, FenetrePrincipale::TracerFlotOptique)
 	EVT_MENU(MENU_REGIONMVT, FenetrePrincipale::TracerRegionMvt)
+	EVT_MENU_RANGE(MENU_POINTORB, MENU_POINTKAZE, FenetrePrincipale::TracerDescripteur)
 
 	EVT_MENU(MENU_OP1,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP2,  FenetrePrincipale::PrepOperation)
@@ -1368,7 +1369,12 @@ tracerLigneHough=false;
 tracerLigneProbaHough=false;
 tracerCercleHough=false;
 tracerBonCoin=false;
-imgStatIm=NULL;
+tracerORBPoint = false;
+tracerBRISKPoint = false;
+tracerBLOBPoint = false;
+tracerKAZEPoint = false;
+tracerFREAKPoint = false;
+imgStatIm = NULL;
 indEvtCam=0;
 for (int i=0;i<10;i++)
 	planActif[i]=true;

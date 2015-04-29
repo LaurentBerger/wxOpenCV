@@ -308,6 +308,7 @@ private:
 	void GestionCurseurSouris(wxMouseEvent &event);
 	void OnMenuContext(wxContextMenuEvent& event);
 	void ShowContextMenu(const wxPoint& pos);
+	void TracerPointCle(wxCommandEvent& event);
 	void Vue3D(wxCommandEvent& event);
 	void SelectPalette(wxCommandEvent& event);
 	void ModeComplexe(wxCommandEvent& event);
@@ -356,6 +357,12 @@ bool				tracerCercleHough;	/*!< 1 tracer des cercle détectés par hough */
 bool				tracerBonCoin;		/*!< 1 Tracer des coins fort de l'image */
 bool				tracerFlotOptique;	/*!< 1 tracer du flot optique de l'image */
 bool				tracerRegionMvt;	/*!< 1 Tracer des regions identifiées par le mouvement */
+bool				tracerBLOBPoint;	/*!< 1 Tracer des descripteurs BRISK */
+bool				tracerBRISKPoint;	/*!< 1 Tracer des descripteurs BRISK */
+bool				tracerFREAKPoint;	/*!< 1 Tracer des descripteurs FREAK */
+bool				tracerKAZEPoint;	/*!< 1 Tracer des descripteurs FREAK */
+bool				tracerMSERPoint;	/*!< 1 Tracer des descripteurs BRIEF */
+bool				tracerORBPoint;		/*!< 1 Tracer des descripteurs ORB */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
 char				modeFiltre;			/*!< 0 image standard, image filtrée avec passe bas le + fort */
 char				typeAcqImage;		/*!< 0 Standard, 1 Acquisition image noire, 2 Image des taches, 3 Image fonction fond */
@@ -541,8 +548,13 @@ void DefImageQuadrique();
 void Enregistrer(wxCommandEvent& event);
 void EnregistrerSous(wxCommandEvent& event);
 
-bool TracerContour(){return	tracerContour;};		/*!< 1 tracer des contours des régions */
-bool TracerLigneHough(){return	tracerLigneHough;};	/*!< 1 tracer des lignes détectées par hough */
+bool TracerPointORB(){ return	tracerORBPoint; };		/*!< 1 tracer des contours des régions */
+bool TracerPointBRISK(){ return	tracerBRISKPoint; };		/*!< 1 tracer des contours des régions */
+bool TracerPointBLOB(){ return	tracerBLOBPoint; };		/*!< 1 tracer des contours des régions */
+bool TracerPointKAZE(){ return	tracerKAZEPoint; };		/*!< 1 tracer des contours des régions */
+bool TracerPointFREAK(){ return	tracerFREAKPoint; };		/*!< 1 tracer des contours des régions */
+bool TracerContour(){ return	tracerContour; };		/*!< 1 tracer des contours des régions */
+bool TracerLigneHough(){ return	tracerLigneHough; };	/*!< 1 tracer des lignes détectées par hough */
 bool TracerLigneProbaHough(){return	tracerLigneProbaHough;};	/*!< 1 tracer des cercle segments par hough */
 bool TracerCercleHough(){return	tracerCercleHough;};	/*!< 1 tracer des cercle détectés par hough */
 bool TracerBonCoin(){return	tracerBonCoin;};		/*!< 1 Tracer des coins fort de l'image */
@@ -570,21 +582,26 @@ void ChgtTailleVideo(int type);
      *  \param type 0 et 8 image CV_UC3,32 8 image CV_SF32
      */
 
+void TracerDescripteur(wxCommandEvent& event);
+/*!
+*  \brief TracerDescripteur
+*  tracer des descripteurs de l'image
+*/
 
 void TracerContour(wxCommandEvent& event);
     /*!
-     *  \brief ModeCamera
+     *  \brief TracerContour
      *  tracer des contours d'une image
      */
 void TracerLigneHough(wxCommandEvent& event);
     /*!
      *  \brief TracerLigneHough
-     *  tracer des contours d'une image
+     *  tracer des lignes d'une image
      */
 void TracerLigneProbaHough(wxCommandEvent& event);
     /*!
      *  \brief TracerLigneProbaHough
-     *  tracer des contours d'une image
+     *  tracer des segments d'une image
      */
 void TracerCercleHough(wxCommandEvent& event);
     /*!
@@ -606,9 +623,41 @@ void TracerRegionMvt(wxCommandEvent& event);
 *  \brief TracerBonCoin
 *  tracer du flot optique de l'image
 */
+void TracerPointORB(wxDC &hdc);
+	/*!
+	*  \brief TracerPointOrb
+	*  tracer des points ORB d'une image
+	*/
+void TracerPointMSER(wxDC &hdc);
+	/*!
+	*  \brief TracerPointMSER
+	*  tracer des points ORB d'une image
+	*/
+void TracerPointBRISK(wxDC &hdc);
+/*!
+*  \brief TracerPointBRISK
+*  tracer des points BRISK d'une image
+*/
+void TracerPointFREAK(wxDC &hdc);
+/*!
+*  \brief TracerPointFREAK
+*  tracer des points FREAK d'une image
+*/
+void TracerPointBLOB(wxDC &hdc);
+/*!
+*  \brief TracerPointFREAK
+*  tracer des points BLOB d'une image
+*/
+
+void TracerPointKAZE(wxDC &hdc);
+/*!
+*  \brief TracerPointKAZE
+*  tracer des points KAZE d'une image
+*/
+
 void TracerContour(wxDC &hdc);
     /*!
-     *  \brief ModeCamera
+     *  \brief TracerContour
      *  tracer des contours d'une image
      */
 void TracerLigneHough(wxDC &hdc);
@@ -1024,6 +1073,11 @@ enum
 	MENU_BONCOIN,
 	MENU_FLOTOPTIQUE,
 	MENU_REGIONMVT,
+	MENU_POINTORB,
+	MENU_POINTFREAK,
+	MENU_POINTBRISK,
+	MENU_POINTBLOB,
+	MENU_POINTKAZE,
     Menu_Popup_Palette,
     Menu_Popup_Zoom,
     ARCENCIEL_ = 2684,

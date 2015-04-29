@@ -347,7 +347,24 @@ return p;
 
 std::vector<cv::KeyPoint> *ImageInfoCV::PointCle(char type)
 {
-return &kOrb;
+switch(type){
+case IMAGEINFOCV_ORB_DES :
+	return &kOrb;
+	break;
+case IMAGEINFOCV_BRISK_DES :
+	return &kBrisk;
+	break;
+case IMAGEINFOCV_FREAK_DES:
+	return &kFreak;
+	break;
+case IMAGEINFOCV_BLOB_DES:
+	return &kBlob;
+	break;
+case IMAGEINFOCV_KAZE_DES:
+	return &kKaze;
+	break;
+	}
+return NULL;
 }
 
 /*

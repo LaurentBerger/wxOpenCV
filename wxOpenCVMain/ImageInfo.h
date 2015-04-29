@@ -26,7 +26,11 @@ typedef short CodeErreur;
 #define NB_OP_CONVOLUTION 40
 
 
-
+#define IMAGEINFOCV_ORB_DES 0
+#define IMAGEINFOCV_BRISK_DES 1
+#define IMAGEINFOCV_FREAK_DES 2
+#define IMAGEINFOCV_BLOB_DES 3
+#define IMAGEINFOCV_KAZE_DES 4
 
 
 class ImageInfoCV : public cv::Mat {
@@ -126,6 +130,8 @@ std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
 std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
 std::vector<cv::KeyPoint> kBrief;	/*<! Point clef de BREF */
 std::vector<cv::KeyPoint> kFreak;	/*<! Point clef de FREAK */
+std::vector<cv::KeyPoint> kKaze;	/*<! Point clef de KAZE */
+std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de KAZE */
 cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
 cv::Mat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
 cv::Mat *silh;						/*<! Seuillage de la différence entre deux images pour updateMotion History */
