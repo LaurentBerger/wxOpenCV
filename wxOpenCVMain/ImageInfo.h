@@ -133,6 +133,8 @@ std::vector<cv::KeyPoint> kFreak;	/*<! Point clef de FREAK */
 std::vector<cv::KeyPoint> kKaze;	/*<! Point clef de KAZE */
 std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de KAZE */
 cv::Mat	descripteur;				/*<! Descripteur associé à l'un des points clé */
+std::vector<cv::DMatch> matches;	/*<! Descripteur appariés */
+
 cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
 cv::Mat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
 cv::Mat *silh;						/*<! Seuillage de la différence entre deux images pour updateMotion History */
@@ -471,7 +473,7 @@ std::vector<cv::Point2f> *CoinRef(bool init = false){ if (init && coinRef == NUL
 std::vector<double> *Angle(){ return &angle; };
 std::vector<cv::Rect> *RegionMvt(){ return &regionsMvt; };
 std::vector<cv::KeyPoint> *PointCle(char type=0);
-
+std::vector<cv::DMatch> *Appariement(){return &matches;};
 ParametreOperation *ParamOCVUpdateMotionHistory(ParametreOperation *p = NULL);
 ParametreOperation *AjoutOpAttribut(ParametreOperation *p);
 std::map<std::string,ParametreOperation> *ListeOpAttribut(){return &listeOpAttribut;};

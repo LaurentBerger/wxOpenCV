@@ -1142,7 +1142,6 @@ std::vector<ImageInfoCV	*>ImageInfoCV::AppariePoint(ImageInfoCV	*im1, ImageInfoC
 {
 ImageInfoCV	*im = new ImageInfoCV;
 cv::Ptr<cv::DescriptorMatcher> descriptorMatcher = cv::DescriptorMatcher::create("BruteForce");
-std::vector<cv::DMatch> matches;
 
 descriptorMatcher.dynamicCast<cv::DescriptorMatcher>()->match(*im1->Descripteur(), *im2->Descripteur(), matches, Mat());
 AjoutOpAttribut(pOCV);
