@@ -1266,4 +1266,44 @@ for (int i = 0; i < pts->size(); i++)
 	wxPoint p1(RepereImageEcran(p_1));
 	hdc.DrawCircle(p1, 5);
 	}
+
+wxScreenDC ecran;
+for (int i = 0; i < pts->size(); i++)
+	{
+	wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+	wxPoint p1(RepereImageEcran(p_1));
+	ecran.DrawCircle(p1, 5);
+	}
+
+}
+
+void FenetrePrincipale::TracerAppariementPoint(wxDC &hdc)
+{
+if (!tracerORBPoint || !imAcq)
+	return;
+if (!imAcq->PointCle())
+	{
+	tracerORBPoint = false;
+	return;
+	}
+std::vector<cv::KeyPoint> *pts = imAcq->PointCle();
+int fZoomNume, fZoomDeno;
+
+CalculZoom(fZoomNume, fZoomDeno);
+wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
+for (int i = 0; i < pts->size(); i++)
+	{
+	wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+	wxPoint p1(RepereImageEcran(p_1));
+	hdc.DrawCircle(p1, 5);
+	}
+
+wxScreenDC ecran;
+for (int i = 0; i < pts->size(); i++)
+	{
+	wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+	wxPoint p1(RepereImageEcran(p_1));
+	ecran.DrawCircle(p1, 5);
+	}
+
 }

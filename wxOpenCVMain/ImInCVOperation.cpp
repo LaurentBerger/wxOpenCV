@@ -1145,6 +1145,7 @@ cv::Ptr<cv::DescriptorMatcher> descriptorMatcher = cv::DescriptorMatcher::create
 std::vector<cv::DMatch> matches;
 
 descriptorMatcher.dynamicCast<cv::DescriptorMatcher>()->match(*im1->Descripteur(), *im2->Descripteur(), matches, Mat());
+AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
 return r;

@@ -363,6 +363,7 @@ bool				tracerFREAKPoint;	/*!< 1 Tracer des descripteurs FREAK */
 bool				tracerKAZEPoint;	/*!< 1 Tracer des descripteurs FREAK */
 bool				tracerMSERPoint;	/*!< 1 Tracer des descripteurs BRIEF */
 bool				tracerORBPoint;		/*!< 1 Tracer des descripteurs ORB */
+bool				tracerAppariementPoint; /*!< 1 Tracerdes relations des points clés de deux images */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
 char				modeFiltre;			/*!< 0 image standard, image filtrée avec passe bas le + fort */
 char				typeAcqImage;		/*!< 0 Standard, 1 Acquisition image noire, 2 Image des taches, 3 Image fonction fond */
@@ -560,7 +561,7 @@ bool TracerCercleHough(){return	tracerCercleHough;};	/*!< 1 tracer des cercle d�
 bool TracerBonCoin(){return	tracerBonCoin;};		/*!< 1 Tracer des coins fort de l'image */
 bool TracerFlotOptique(){ return	tracerFlotOptique; };		/*!< 1 Tracer des coins fort de l'image */
 bool TracerRegionMvt(){ return	tracerRegionMvt; };		/*!< 1 Tracer des coins fort de l'image */
-
+bool TracerAppaiementPoint(){return tracerAppariementPoint;};
 void CreerRapport(wxCommandEvent& event);
     /*!
      *  \brief CreerRapport
@@ -622,6 +623,11 @@ void TracerRegionMvt(wxCommandEvent& event);
 /*!
 *  \brief TracerBonCoin
 *  tracer du flot optique de l'image
+*/
+void TracerAppariementPoint(wxDC &hdc);
+/*!
+*  \brief TracerAppariementPoint
+*  tracer des relations enttre les points clés de deux images
 */
 void TracerPointORB(wxDC &hdc);
 	/*!

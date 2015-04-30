@@ -572,6 +572,7 @@ if (pAct->opBinaireSelec)
 
 		wxMessageBox("An error occured in binary operator :"+s);
 		}
+	DefPointeurSouris(0, 0);
 	}
 if (pAct->opUnaireSelec)
 	{
