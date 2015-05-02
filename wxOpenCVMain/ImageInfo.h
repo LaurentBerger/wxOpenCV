@@ -28,9 +28,8 @@ typedef short CodeErreur;
 
 #define IMAGEINFOCV_ORB_DES 0
 #define IMAGEINFOCV_BRISK_DES 1
-#define IMAGEINFOCV_FREAK_DES 2
+#define IMAGEINFOCV_AKAZE_DES 2
 #define IMAGEINFOCV_BLOB_DES 3
-#define IMAGEINFOCV_KAZE_DES 4
 
 
 class ImageInfoCV : public cv::Mat {
@@ -128,9 +127,7 @@ std::vector<cv::Point2f> *boncoin;	/*<! http://docs.opencv.org/modules/imgproc/d
 std::vector<cv::Point2f> *coinRef;	/*<! Les pixels de références de l'image pour calcul du flot optique */
 std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
 std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
-std::vector<cv::KeyPoint> kBrief;	/*<! Point clef de BREF */
-std::vector<cv::KeyPoint> kFreak;	/*<! Point clef de FREAK */
-std::vector<cv::KeyPoint> kKaze;	/*<! Point clef de KAZE */
+std::vector<cv::KeyPoint> kAkaze;	/*<! Point clef de Akaze */
 std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de KAZE */
 cv::Mat	descripteur;				/*<! Descripteur associé à l'un des points clé */
 std::vector<cv::DMatch> matches;	/*<! Descripteur appariés */
@@ -147,15 +144,6 @@ std::vector<double> angle;			/*<! Angle issus de l'analyse du mouvement (calcGlo
 
 std::map<std::string, ParametreOperation> listeOpAttribut;
 ParametreOperation *pOCVUpdateMotionHistory;
-/*ParametreOperation *pOCVHoughLigne;
-ParametreOperation *pOCVHoughLigneProba;
-ParametreOperation *pOCVHoughCercle;
-ParametreOperation *pOCVBonCoin;
-ParametreOperation *pOCVLucasKanade;
-ParametreOperation *pOCVGunnarFarneback;
-ParametreOperation *pOCVPhaseCorrelate;
-ParametreOperation *pOCVCalcMotionGradient;
-ParametreOperation *pOCVSegmentMotion;*/
 
 public : 
 //	********* Constructeurs et destructeur
@@ -341,9 +329,8 @@ std::vector<ImageInfoCV	*>HoughLigneProba(ImageInfoCV	*, ParametreOperation *par
 std::vector<ImageInfoCV	*>BonAttributs(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectCoinHarris(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectOrb(ImageInfoCV	*, ParametreOperation *paramOCV);
-std::vector<ImageInfoCV	*>DetectBrief(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectBrisk(ImageInfoCV	*, ParametreOperation *paramOCV);
-std::vector<ImageInfoCV	*>DetectFreak(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectAkaze(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>AppariePoint(ImageInfoCV	*, ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>SeparationPlan(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>CalcOrientationMvt(ImageInfoCV	*, ParametreOperation *paramOCV);

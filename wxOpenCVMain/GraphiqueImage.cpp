@@ -114,6 +114,7 @@ TracerLigneProbaHough(hdc);
 TracerCercleHough(hdc);
 TracerBonCoin(hdc);
 TracerRegionMvt(hdc);
+TracerPointORB(hdc);
 if (cam && cam->IsRunning())
 	{
 	wxCriticalSectionLocker enter(travailCam);

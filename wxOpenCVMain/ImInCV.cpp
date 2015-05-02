@@ -295,6 +295,8 @@ if (im->CoinRef())
 	for (int i=0;i<channels()&&i<im->channels();i++)
 		coinRef[i]=im->CoinRef()[i];
 	}
+if (im->PointCle()->size()!=0)
+	kOrb = *im->PointCle();
 }
 
 void ImageInfoCV:: DeplacerFlotOptique(ImageInfoCV *im)/*<! Fonction déplaçant le pointeur flotOptique de im dans this. Celui de im devient nul */ 
@@ -354,14 +356,11 @@ case IMAGEINFOCV_ORB_DES :
 case IMAGEINFOCV_BRISK_DES :
 	return &kBrisk;
 	break;
-case IMAGEINFOCV_FREAK_DES:
-	return &kFreak;
-	break;
 case IMAGEINFOCV_BLOB_DES:
 	return &kBlob;
 	break;
-case IMAGEINFOCV_KAZE_DES:
-	return &kKaze;
+case IMAGEINFOCV_AKAZE_DES:
+	return &kAkaze;
 	break;
 	}
 return NULL;

@@ -282,21 +282,51 @@ if (s == "matchdescriptormatcher")
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
 	}
 if (s == "orbfeatures2d")
-	{
-	nomOperation = s;
-	nbImageRes = 0;
-	nbOperande = 1;
-	opAttribut=true;
-	intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
-	doubleParam["FastThreshold"] = DomaineParametreOp<double>(20, 1, 100, 1);;
-	intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128,1);
-	intParam["MaxFeatures"] = DomaineParametreOp<int>(500, 1, 10000 ,1);
-	intParam["NLevels"] = DomaineParametreOp<int>(8, 1, 128, 1);
-	intParam["PatchSize"] = DomaineParametreOp<int>(31, 1, 200, 2);
-	doubleParam["ScaleFactor"] = DomaineParametreOp<double>(1.2, 1, 10, 0.1);
-	intParam["ScoreType"] = DomaineParametreOp<int>(cv::ORB::HARRIS_SCORE, cv::ORB::HARRIS_SCORE, cv::ORB::FAST_SCORE, 1);
-	intParam["WTA_K"] = DomaineParametreOp<int>(2, 2, 4, 1);
-	}
+    {
+    nomOperation = s;
+    nbImageRes = 0;
+    nbOperande = 1;
+    opAttribut = true;
+    intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
+    doubleParam["FastThreshold"] = DomaineParametreOp<double>(20, 1, 100, 1);;
+    intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128, 1);
+    intParam["MaxFeatures"] = DomaineParametreOp<int>(500, 1, 10000, 1);
+    intParam["NLevels"] = DomaineParametreOp<int>(8, 1, 128, 1);
+    intParam["PatchSize"] = DomaineParametreOp<int>(31, 1, 200, 2);
+    doubleParam["ScaleFactor"] = DomaineParametreOp<double>(1.2, 1, 10, 0.1);
+    intParam["ScoreType"] = DomaineParametreOp<int>(cv::ORB::HARRIS_SCORE, cv::ORB::HARRIS_SCORE, cv::ORB::FAST_SCORE, 1);
+    intParam["WTA_K"] = DomaineParametreOp<int>(2, 2, 4, 1);
+    }
+if (s == "akazefeatures2d")
+    {
+    nomOperation = s;
+    nbImageRes = 0;
+    nbOperande = 1;
+    opAttribut = true;
+    intParam["DescriptorChannels"] = DomaineParametreOp<int>(3, 1, 255, 1);
+    intParam["DescriptorSize"] = DomaineParametreOp<int>(0, 0, 100, 1);;
+    intParam["DescriptorType"] = DomaineParametreOp<int>(cv::AKAZE::DESCRIPTOR_MLDB, cv::AKAZE::DESCRIPTOR_KAZE_UPRIGHT, cv::AKAZE::DESCRIPTOR_MLDB, 1);
+    intParam["Diffusivity"] = DomaineParametreOp<int>(cv::KAZE::DIFF_PM_G2, cv::KAZE::DIFF_PM_G1, cv::KAZE::DIFF_CHARBONNIER, 1);
+    intParam["NOctaveLayers"] = DomaineParametreOp<int>(4, 1, 128, 1);
+    intParam["NOctaves"] = DomaineParametreOp<int>(4, 1, 200, 2);
+    doubleParam["Threshold"] = DomaineParametreOp<double>(0.001, 0.0001, 10, 0.001);
+    }
+if (s == "briskfeatures2d")
+    {
+    nomOperation = s;
+    nbImageRes = 0;
+    nbOperande = 1;
+    opAttribut = true;
+    intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
+    doubleParam["FastThreshold"] = DomaineParametreOp<double>(20, 1, 100, 1);;
+    intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128, 1);
+    intParam["MaxFeatures"] = DomaineParametreOp<int>(500, 1, 10000, 1);
+    intParam["NLevels"] = DomaineParametreOp<int>(8, 1, 128, 1);
+    intParam["PatchSize"] = DomaineParametreOp<int>(31, 1, 200, 2);
+    doubleParam["ScaleFactor"] = DomaineParametreOp<double>(1.2, 1, 10, 0.1);
+    intParam["ScoreType"] = DomaineParametreOp<int>(cv::ORB::HARRIS_SCORE, cv::ORB::HARRIS_SCORE, cv::ORB::FAST_SCORE, 1);
+    intParam["WTA_K"] = DomaineParametreOp<int>(2, 2, 4, 1);
+    }
 if (s == "goodfeaturestotrack")
 	{
 	nbImageRes=0;
@@ -771,14 +801,23 @@ if (s == "cornerharris")
 	}
 
 if (s == "orbfeatures2d")
-	{
-	opAttribut = true;
-	nomOperation = s;
-	nbOperande = 1;
-	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#orb";
-	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::DetectOrb;
-	}
+    {
+    opAttribut = true;
+    nomOperation = s;
+    nbOperande = 1;
+    lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#orb";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
+    opUnaireSelec = &ImageInfoCV::DetectOrb;
+    }
+if (s == "akazefeatures2d")
+    {
+    opAttribut = true;
+    nomOperation = s;
+    nbOperande = 1;
+    lienHtml = "http://docs.opencv.org/trunk/d8/d30/classcv_1_1AKAZE.html";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
+    opUnaireSelec = &ImageInfoCV::DetectAkaze;
+    }
 if (s == "matchdescriptormatcher")
 	{
 	opAttribut = true;
