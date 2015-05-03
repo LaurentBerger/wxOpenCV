@@ -5,6 +5,8 @@
 #include "ControleCamera.h"
 #include "Fenetre3D.h"
 #include "FenetreSeqOpe.h"
+#include <wx/graphics.h>
+
 
 ZoneImage::ZoneImage(wxWindow *parent,wxSize w)
     : wxScrolled<wxWindow>(parent, wxID_ANY)   {
@@ -1211,19 +1213,46 @@ if (!imAcq->PointCle(IMAGEINFOCV_BRISK_DES))
 std::vector<cv::KeyPoint> *pts = imAcq->PointCle(IMAGEINFOCV_BRISK_DES);
 int fZoomNume, fZoomDeno;
 
+
 CalculZoom(fZoomNume, fZoomDeno);
 wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
-wxBrush brosse(wxColour(0,0,128,128));
+wxBrush brosse(wxColour(0, 0, 128, 128));
+if (0 == 1)
+    {
+    brosse.SetStyle(wxBRUSHSTYLE_TRANSPARENT);
 hdc.SetBrush(brosse);
 hdc.SetPen(crayon[0]);
 for (int i = 0; i < pts->size(); i++)
     {
     wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
     wxPoint p1(RepereImageEcran(p_1));
-    wxPoint p[3] = { p1 + wxPoint(-2, -2), p1 + wxPoint(2, -2), p1 + wxPoint(0, 4)};
-    hdc.DrawPolygon(3,p);
+    wxPoint p[3] = { p1 + wxPoint(-2, -2), p1 + wxPoint(2, -2), p1 + wxPoint(0, 4) };
+    hdc.DrawCircle(p1.x, p1.y,4);
     }
+}
+//gc->StrokePath(path);
+if (1==1)
+    {
+wxPaintDC dc(feuille);
+feuille->PrepareDC(dc);
+wxGraphicsContext *gc = wxGraphicsContext::Create(dc);
 
+CalculZoom(fZoomNume, fZoomDeno);
+wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
+wxBrush brosse(wxColour(0,0,128,128));
+gc->SetBrush(brosse);
+gc->SetPen(crayon[0]);
+//wxGraphicsPath path=gc->CreatePath();
+for (int i = 0; i < pts->size(); i++)
+    {
+    wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+    wxPoint p1(RepereImageEcran(p_1));
+    wxPoint2DDouble p[3] = { p1 + wxPoint(-2, -2), p1 + wxPoint(2, -2), p1 + wxPoint(0, 4)};
+    gc->DrawLines(3, p, wxODDEVEN_RULE);
+    }
+//gc->StrokePath(path);
+delete gc;
+    }
 TracerAppariementPoint(hdc);
 }
 

@@ -1193,6 +1193,7 @@ cv::Ptr<cv::DescriptorMatcher> descriptorMatcher = cv::DescriptorMatcher::create
 matches.clear();
 descriptorMatcher->match(*im1->Descripteur(), *im2->Descripteur(), matches, Mat());
 AjoutOpAttribut(pOCV);
+pOCV->imgParam[pOCV->nomOperation + "prec"] = im2;
 std::vector<ImageInfoCV	*> r;
 r.push_back(im1);
 return r;
