@@ -1115,7 +1115,7 @@ if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getScoreType() != pOCV->intPa
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getWTA_K() != pOCV->intParam["WTA_K"].valeur)
 	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setWTA_K(pOCV->intParam["WTA_K"].valeur);
 
-pOCV->detecteur["ORB"]->detectAndCompute(*im,Mat(),*(im->PointCle()),*(im->Descripteur()) );
+pOCV->detecteur["ORB"]->detectAndCompute(*im, Mat(), *(im->PointCle()), *(im->Descripteur(IMAGEINFOCV_ORB_DES)));
 
 
 AjoutOpAttribut(pOCV);
@@ -1134,30 +1134,12 @@ return r;
 if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("BRISK") == pOCV->detecteur.end())
     {
     cv::Ptr<cv::Feature2D> b;
-    b = cv::BRISK::create();
+    b = cv::BRISK::create(pOCV->intParam["thresh"].valeur, pOCV->intParam["octaves"].valeur, pOCV->doubleParam["patternScale"].valeur);
     pOCV->detecteur["BRISK"] = b;
     }
 
-if (pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->getEdgeThreshold() != pOCV->intParam["EdgeThreshold"].valeur)
-pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->setEdgeThreshold(pOCV->intParam["EdgeThreshold"].valeur);
-if (pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->getFastThreshold() != pOCV->doubleParam["FastThreshold"].valeur)
-pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->setFastThreshold(pOCV->doubleParam["FastThreshold"].valeur);
-if (pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->getFirstLevel() != pOCV->intParam["FirstLevel"].valeur)
-pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->setFirstLevel(pOCV->intParam["FirstLevel"].valeur);
-if (pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->getMaxFeatures() != pOCV->intParam["MaxFeatures"].valeur)
-pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->setMaxFeatures(pOCV->intParam["MaxFeatures"].valeur);
-if (pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->getNLevels() != pOCV->intParam["NLevels"].valeur)
-pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->setNLevels(pOCV->intParam["NLevels"].valeur);
-if (pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->getPatchSize() != pOCV->intParam["PatchSize"].valeur)
-pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->setPatchSize(pOCV->intParam["PatchSize"].valeur);
-if (pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->getScaleFactor() != pOCV->doubleParam["ScaleFactor"].valeur)
-pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->setScaleFactor(pOCV->doubleParam["ScaleFactor"].valeur);
-if (pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->getScoreType() != pOCV->intParam["ScoreType"].valeur)
-pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->setScoreType(pOCV->intParam["ScoreType"].valeur);
-if (pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->getWTA_K() != pOCV->intParam["WTA_K"].valeur)
-pOCV->detecteur["BRISK"].dynamicCast<cv::ORB>()->setWTA_K(pOCV->intParam["WTA_K"].valeur);
 
-pOCV->detecteur["BRISK"]->detectAndCompute(*im, Mat(), *(im->PointCle()), *(im->Descripteur()));
+pOCV->detecteur["BRISK"]->detectAndCompute(*im, Mat(), *(im->PointCle(IMAGEINFOCV_BRISK_DES)), *(im->Descripteur(IMAGEINFOCV_BRISK_DES)));
 
 
 AjoutOpAttribut(pOCV);
@@ -1195,7 +1177,7 @@ pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setNOctaves(pOCV->intParam["N
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getThreshold() != pOCV->doubleParam["Threshold"].valeur)
 pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setThreshold(pOCV->doubleParam["Threshold"].valeur);
 
-pOCV->detecteur["AKAZE"]->detectAndCompute(*im, Mat(), *(im->PointCle(IMAGEINFOCV_AKAZE_DES)), *(im->Descripteur()));
+pOCV->detecteur["AKAZE"]->detectAndCompute(*im, Mat(), *(im->PointCle(IMAGEINFOCV_AKAZE_DES)), *(im->Descripteur(IMAGEINFOCV_AKAZE_DES)));
 
 
 AjoutOpAttribut(pOCV);
@@ -1209,7 +1191,7 @@ std::vector<ImageInfoCV	*>ImageInfoCV::AppariePoint(ImageInfoCV	*im1, ImageInfoC
 
 cv::Ptr<cv::DescriptorMatcher> descriptorMatcher = cv::DescriptorMatcher::create("BruteForce");
 matches.clear();
-descriptorMatcher.dynamicCast<cv::DescriptorMatcher>()->match(*im1->Descripteur(), *im2->Descripteur(), matches, Mat());
+descriptorMatcher->match(*im1->Descripteur(), *im2->Descripteur(), matches, Mat());
 AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
 r.push_back(im1);

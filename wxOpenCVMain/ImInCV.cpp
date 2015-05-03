@@ -347,6 +347,29 @@ listeOpAttribut[p->nomOperation]=*p;
 return p;
 }
 
+cv::Mat *ImageInfoCV::Descripteur(char type)
+{ 
+switch (type){
+case IMAGEINFOCV_ORB_DES:
+    return &descORB;
+    break;
+case IMAGEINFOCV_BRISK_DES:
+    return &descBRISK;
+    break;
+case IMAGEINFOCV_AKAZE_DES:
+    return &descAKAZE;
+    break;
+case -1 :
+    if (descORB.size>0)
+        return &descORB;
+    if (descBRISK.size>0)
+        return &descBRISK;
+    if (descAKAZE.size>0)
+        return &descAKAZE;
+    }
+return NULL;
+};
+
 std::vector<cv::KeyPoint> *ImageInfoCV::PointCle(char type)
 {
 switch(type){

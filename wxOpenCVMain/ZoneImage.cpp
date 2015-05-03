@@ -639,7 +639,7 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 		}
 	if (f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
 		{
-		menu.AppendCheckItem(MENU_POINTORB, _T("BRISK"));
+		menu.AppendCheckItem(MENU_POINTBRISK, _T("BRISK"));
 		if (f->TracerPointBRISK())
 			menu.Check(MENU_POINTBRISK, true);
 		menuParametre = true;
@@ -1213,14 +1213,15 @@ int fZoomNume, fZoomDeno;
 
 CalculZoom(fZoomNume, fZoomDeno);
 wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
-wxBrush brosse(wxColour(128,0,0,128));
+wxBrush brosse(wxColour(0,0,128,128));
 hdc.SetBrush(brosse);
 hdc.SetPen(crayon[0]);
 for (int i = 0; i < pts->size(); i++)
     {
     wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
     wxPoint p1(RepereImageEcran(p_1));
-    hdc.DrawCircle(p1, 2);
+    wxPoint p[3] = { p1 + wxPoint(-2, -2), p1 + wxPoint(2, -2), p1 + wxPoint(0, 4)};
+    hdc.DrawPolygon(3,p);
     }
 
 TracerAppariementPoint(hdc);

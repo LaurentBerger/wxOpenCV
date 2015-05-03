@@ -316,16 +316,10 @@ if (s == "briskfeatures2d")
     nomOperation = s;
     nbImageRes = 0;
     nbOperande = 1;
-    opAttribut = true;
-    intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
-    doubleParam["FastThreshold"] = DomaineParametreOp<double>(20, 1, 100, 1);;
-    intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128, 1);
-    intParam["MaxFeatures"] = DomaineParametreOp<int>(500, 1, 10000, 1);
-    intParam["NLevels"] = DomaineParametreOp<int>(8, 1, 128, 1);
-    intParam["PatchSize"] = DomaineParametreOp<int>(31, 1, 200, 2);
-    doubleParam["ScaleFactor"] = DomaineParametreOp<double>(1.2, 1, 10, 0.1);
-    intParam["ScoreType"] = DomaineParametreOp<int>(cv::ORB::HARRIS_SCORE, cv::ORB::HARRIS_SCORE, cv::ORB::FAST_SCORE, 1);
-    intParam["WTA_K"] = DomaineParametreOp<int>(2, 2, 4, 1);
+    opAttribut = true; 
+    intParam["thresh"] = DomaineParametreOp<int>(30, 1, 255, 1);
+    intParam["octaves"] = DomaineParametreOp<int>(3, 1, 255, 1);
+    doubleParam["patternScale"] = DomaineParametreOp<double>(1.0, 0.1, 100, 0.1);;
     }
 if (s == "goodfeaturestotrack")
 	{
@@ -814,10 +808,20 @@ if (s == "akazefeatures2d")
     opAttribut = true;
     nomOperation = s;
     nbOperande = 1;
-    lienHtml = "http://docs.opencv.org/trunk/d8/d30/classcv_1_1AKAZE.html";
-    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
+    lienHtml = "http://docs.opencv.org/trunk/de/dbf/classcv_1_1BRISK.html#details";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=4418&zoom=70,250,100";
     opUnaireSelec = &ImageInfoCV::DetectAkaze;
     }
+if (s == "briskfeatures2d")
+    {
+    opAttribut = true;
+    nomOperation = s;
+    nbOperande = 1;
+    lienHtml = "http://docs.opencv.org/trunk/d8/d30/classcv_1_1AKAZE.html";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
+    opUnaireSelec = &ImageInfoCV::DetectBrisk;
+    }
+
 if (s == "matchdescriptormatcher")
 	{
 	opAttribut = true;

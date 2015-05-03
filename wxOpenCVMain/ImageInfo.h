@@ -129,7 +129,9 @@ std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
 std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
 std::vector<cv::KeyPoint> kAkaze;	/*<! Point clef de Akaze */
 std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de KAZE */
-cv::Mat	descripteur;				/*<! Descripteur associé à l'un des points clé */
+cv::Mat	descORB;				    /*<! Descripteur associé à l'un des points clé ORB*/
+cv::Mat	descAKAZE;				    /*<! Descripteur associé à l'un des points clé AKAZE*/
+cv::Mat	descBRISK;				    /*<! Descripteur associé à l'un des points clé BRISK*/
 std::vector<cv::DMatch> matches;	/*<! Descripteur appariés */
 
 cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
@@ -447,7 +449,7 @@ cv::Mat	**CentreGComposante(){return centreGComposante;};
 cv::Mat	*FlotOptique(bool init=false){if (init ) {delete []flotOptique;flotOptique= new cv::Mat[channels()];} return flotOptique;};
 cv::Mat *Ponderation(bool init = false){ if (init) { delete ponderation; ponderation = new cv::Mat();  cv::createHanningWindow(*ponderation, this->size(), CV_64F); } return ponderation; };
 cv::Mat *Silh(bool init = false){ if (init) { delete silh; silh = new cv::Mat(); } return silh; };
-cv::Mat *Descripteur(){return &descripteur;};
+cv::Mat *Descripteur(char =-1);
 std::vector<cv::Moments> *MomentComposante(){ return moment; };
 std::vector<std::vector<cv::Point> > *PtContours(){return contours;};
 std::vector<cv::Vec4i> *ArboContour(){return arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
