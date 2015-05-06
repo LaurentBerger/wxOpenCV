@@ -39,7 +39,7 @@ else
 }
 
 
-void FenetrePrincipale::TracerDIB(wxImage *d,wxDC &hdc,wxPoint *curseur)
+void FenetrePrincipale::TracerDIB(wxImage *d, wxBufferedPaintDC &hdc, wxPoint *curseur)
 {
 int x=feuille->GetScrollPos(wxHORIZONTAL);
 int y=feuille->GetScrollPos(wxVERTICAL);
@@ -92,7 +92,7 @@ wxPaintDC	hdc(this);
 //DrawWindow(hdc);
 }
 
-void FenetrePrincipale::DrawWindow (wxDC &hdc)
+void FenetrePrincipale::DrawWindow(wxBufferedPaintDC &hdc)
 {
 if (!imAcq)
 	return;
@@ -108,6 +108,8 @@ if (feuille->ModeRectangle())
 	DrawRectangles(hdc);
 if (feuille->ModeCoupe())
 	DrawLignes(hdc);
+
+
 TracerContour(hdc);
 TracerLigneHough(hdc);
 TracerLigneProbaHough(hdc);
@@ -115,15 +117,23 @@ TracerCercleHough(hdc);
 TracerBonCoin(hdc);
 TracerRegionMvt(hdc);
 TracerPointORB(hdc);
+TracerPointORB(hdc);
+TracerPointFREAK(hdc);
+TracerPointBRISK(hdc);
+TracerPointKAZE(hdc);
+TracerPointBLOB(hdc);
+TracerPointMSER(hdc);
 if (cam && cam->IsRunning())
 	{
 	wxCriticalSectionLocker enter(travailCam);
 
 	TracerFlotOptique(hdc);
 	}
+else
+    TracerFlotOptique(hdc);
 }
 
-void FenetrePrincipale::DrawRectangles (wxDC &hdc)
+void FenetrePrincipale::DrawRectangles(wxBufferedPaintDC &hdc)
 {
 wxBrush wt=*wxTRANSPARENT_BRUSH;
 hdc.SetBrush(wt);
@@ -145,7 +155,7 @@ for (int i=0;i<10;i++)
 		}
 }
 
-void FenetrePrincipale::DrawLignes (wxDC &hdc)
+void FenetrePrincipale::DrawLignes(wxBufferedPaintDC &hdc)
 {
 wxBrush wt=*wxTRANSPARENT_BRUSH;
 hdc.SetBrush(wt);

@@ -568,7 +568,15 @@ if (captureVideo->isOpened())
 								pOCV.ecartFond = fond;
 							im[indOp] = pOCV.ExecuterOperation();
 							if (pOCV.imgParam.size() != 0)
-								imgParam = pOCV.imgParam;
+								{
+                                imgParam = pOCV.imgParam;
+                                if (imgParam.find(pOCV.nomOperation + "prec")!=imgParam.end())
+                                    if (imgParam[pOCV.nomOperation + "prec"]==imIni)
+                                        {
+                                        imIni = new ImageInfoCV(frame.rows, frame.cols, frame.flags);
+                                        effaceImage[imIni]=false;
+                                        }
+                                }
 							if (pOCV.ecartFond.size() != 0)
 								fond = pOCV.ecartFond;
 						}
@@ -798,7 +806,10 @@ if (cam && (cam->IsRunning() || cam->IsPaused()))
 
 	delete feuille->BitmapAffichee();
 	feuille->BitmapAffichee(NULL);
-	MAJNouvelleImage();
+    DIB(imAcq);
+
+    imageTraitee = false;
+	feuille->Refresh(false);
 	}
 	indEvtCam=w.indEvt;
 	nbImageCam++;

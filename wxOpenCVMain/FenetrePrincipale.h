@@ -9,6 +9,7 @@
 #include <wx/dynlib.h>
 #include <wx/fileconf.h>
 #include <wx/graphics.h>
+#include <wx/dcbuffer.h>
 
 //#include <wx/dde.h>
 #include <string>
@@ -71,6 +72,7 @@ class ZoneImage : public  wxScrolled<wxWindow>
 {
 FenetrePrincipale	*f;				/*!< Cadre où est affichée la fenêtre avec ascenseur */
 wxOsgApp			*osgApp;		/*!< lien sur l'application */
+wxBitmap            mBuffer;       /*!< Double buffering */
 void				*f3D;			/*!< lien sur la fenetre 3D représentant l'image */
 int					facteurZoom;	/*!< zoom=2^facteurZoom*/
 wxRect				rectSelect[NB_MAX_RECTANGLE]; /*!< zone rectangulaire sélectionnée*/
@@ -624,74 +626,74 @@ void TracerRegionMvt(wxCommandEvent& event);
 *  \brief TracerBonCoin
 *  tracer du flot optique de l'image
 */
-void TracerAppariementPoint(wxDC &hdc);
+void TracerAppariementPoint(wxBufferedPaintDC &hdc);
 /*!
 *  \brief TracerAppariementPoint
 *  tracer des relations enttre les points clés de deux images
 */
-void TracerPointORB(wxDC &hdc);
+void TracerPointORB(wxBufferedPaintDC &hdc);
 	/*!
 	*  \brief TracerPointOrb
 	*  tracer des points ORB d'une image
 	*/
-void TracerPointMSER(wxDC &hdc);
+void TracerPointMSER(wxBufferedPaintDC &hdc);
 	/*!
 	*  \brief TracerPointMSER
 	*  tracer des points ORB d'une image
 	*/
-void TracerPointBRISK(wxDC &hdc);
+void TracerPointBRISK(wxBufferedPaintDC &hdc);
 /*!
 *  \brief TracerPointBRISK
 *  tracer des points BRISK d'une image
 */
-void TracerPointFREAK(wxDC &hdc);
+void TracerPointFREAK(wxBufferedPaintDC &hdc);
 /*!
 *  \brief TracerPointFREAK
 *  tracer des points FREAK d'une image
 */
-void TracerPointBLOB(wxDC &hdc);
+void TracerPointBLOB(wxBufferedPaintDC &hdc);
 /*!
 *  \brief TracerPointFREAK
 *  tracer des points BLOB d'une image
 */
 
-void TracerPointKAZE(wxDC &hdc);
+void TracerPointKAZE(wxBufferedPaintDC &hdc);
 /*!
 *  \brief TracerPointKAZE
 *  tracer des points KAZE d'une image
 */
 
-void TracerContour(wxDC &hdc);
+void TracerContour(wxBufferedPaintDC &hdc);
     /*!
      *  \brief TracerContour
      *  tracer des contours d'une image
      */
-void TracerLigneHough(wxDC &hdc);
+void TracerLigneHough(wxBufferedPaintDC &hdc);
     /*!
      *  \brief TracerLigneHough
      *  tracer des droites détectées par la transformée de Hough
      */
-void TracerLigneProbaHough(wxDC &hdc);
+void TracerLigneProbaHough(wxBufferedPaintDC &hdc);
     /*!
      *  \brief TracerLigneProbaHough
      *  tracer des segments détectés par la transformée de Hough
      */
-void TracerCercleHough(wxDC &hdc);
+void TracerCercleHough(wxBufferedPaintDC &hdc);
     /*!
      *  \brief TracerCercleHough
      *  tracer des cercles détectés par la transformée de Hough
      */
-void TracerBonCoin(wxDC &hdc);
+void TracerBonCoin(wxBufferedPaintDC &hdc);
     /*!
      *  \brief TracerCercleHough
      *  tracer des cercles détectés par la transformée de Hough
      */
-void TracerFlotOptique(wxDC &hdc);
+void TracerFlotOptique(wxBufferedPaintDC &hdc);
     /*!
      *  \brief TracerFlotOptique
      *  tracer des vecteurs du flot optique
      */
-void TracerRegionMvt(wxDC &hdc);
+void TracerRegionMvt(wxBufferedPaintDC &hdc);
 /*!
 *  \brief TracerRegionMvt
 *  tracer des regions et de la B direction du mouvement
@@ -879,12 +881,12 @@ double SeuilNivBas(int plan=-1){if (plan==-1) return seuilNivBas[0];return seuil
 double CoeffCanal(int plan=-1){if (plan==-1) return coeffCanal[0];return coeffCanal[plan];};
 int  NbCouleurPalette(){return nbCouleurPalette;};
 void InitPalette(int nbCouleur);
-void TracerDIB(wxImage *d,wxDC &hdc,wxPoint *curseur=NULL);
-void DrawWindow (wxDC &hdc);
-void DrawRectangles (wxDC &hdc);
+void TracerDIB(wxImage *d, wxBufferedPaintDC &hdc, wxPoint *curseur = NULL);
+void DrawWindow(wxBufferedPaintDC &hdc);
+void DrawRectangles(wxBufferedPaintDC &hdc);
 void TracerRectangle(int ind,int croix);
 
-void DrawLignes (wxDC &hdc);
+void DrawLignes(wxBufferedPaintDC &hdc);
 void TracerCercle(char *rSelect);
 void DIB(ImageInfoCV *im);
 void DIBImage(ImageInfoCV *im,int	indPlanTransparent=0);

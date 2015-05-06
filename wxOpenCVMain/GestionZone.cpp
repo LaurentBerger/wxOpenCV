@@ -36,7 +36,7 @@ DragShape* FenetrePrincipale::FindShape(const wxPoint& pt) const
     return (DragShape*) NULL;
 }
 
-void FenetrePrincipale::DrawShapes(wxDC& dc)
+void FenetrePrincipale::DrawShapes(wxDC &dc)
 {
     return;
 	wxList::compatibility_iterator node = m_displayList.GetFirst();
@@ -240,14 +240,13 @@ void FenetrePrincipale::OnEraseBackground(wxEraseEvent& event)
         wxRect rect(0, 0, sz.x, sz.y);
 
 		wxBitmap	b(*imAffichee);
-
+            wxPaintDC dc(this);
         if (event.GetDC())
         {
-            TileBitmap(rect, *(event.GetDC()), b);
+            TileBitmap(rect, dc, b);
         }
         else
         {
-            wxClientDC dc(this);
             TileBitmap(rect, dc, b);
         }
     }
@@ -274,8 +273,7 @@ if (croix)
 	dc.DrawLine(rTrace.GetBottomLeft(),rTrace.GetTopRight());
 	dc.DrawLine(rTrace.GetTopLeft(),rTrace.GetBottomRight());
 	}
-DrawRectangles(dc);
-
+feuille->Refresh(false);
 }
 
 void FenetrePrincipale::ArreterDragging(FenetrePrincipale *f)

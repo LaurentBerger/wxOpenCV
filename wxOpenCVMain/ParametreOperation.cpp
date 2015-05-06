@@ -46,7 +46,9 @@ listeParam["ddepth"].insert(std::pair<string,int>("double",CV_64F));
 listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("BGR to Gray").ToStdString(),cv::COLOR_BGR2GRAY));
 listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("RGB to Gray").ToStdString(),cv::COLOR_RGB2GRAY));
 listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("Gray to RGB").ToStdString(),cv::COLOR_GRAY2BGR));
-listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("BGR to Gray").ToStdString(),cv::COLOR_GRAY2RGB));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to Gray").ToStdString(), cv::COLOR_GRAY2RGB));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("RGB to HSV").ToStdString(), cv::COLOR_RGB2HSV));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to HSV").ToStdString(), cv::COLOR_BGR2HSV));
 
 
 listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("nearest neighbor interpolation").ToStdString(), cv::INTER_NEAREST));

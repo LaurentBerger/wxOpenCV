@@ -14,13 +14,13 @@ ZoneImage::ZoneImage(wxWindow *parent,wxSize w)
     SetVirtualSize( w.x, w.y );
     SetBackgroundColour( *wxWHITE );
 
+SetBackgroundStyle(wxBG_STYLE_PAINT);
 modeRect=false;
 modeCoupe=false;
 facteurZoom=-1;
 osgApp=NULL;
 bitmapAffiche=NULL;
 f3D=NULL;
-//SetBackgroundStyle(wxBG_STYLE_PAINT);
 for (int i=0;i<10;i++)
 	{
 	rectSelect[i].SetSize(wxSize(0,0));
@@ -74,35 +74,16 @@ if (f3D)
 
 void ZoneImage::OnPaint(wxPaintEvent &evt)
 {
-    wxPaintDC dc(this);
-
-    // this call is vital: it adjusts the dc to account for the current
-    // scroll offset
+    wxSize size = GetClientSize();
+    if (mBuffer.IsOk() == false || mBuffer.GetWidth() != size.x || mBuffer.GetHeight() != size.y)
+    {
+        mBuffer.Create(size);
+    }
+    wxBufferedPaintDC  dc(this, mBuffer);
+    dc.SetBackground(*wxWHITE_BRUSH);
+    dc.Clear();
     PrepareDC(dc);
-
-if (f->Cam() && f->Cam()->IsRunning())
-	{
-	}
-else
-	{
 	f->DrawWindow (dc);
-	f->TracerContour(dc);
-	f->TracerLigneHough(dc);
-	f->TracerLigneProbaHough(dc);
-	f->TracerCercleHough(dc);
-	f->TracerBonCoin(dc);
-	f->TracerFlotOptique(dc);
-	f->TracerRegionMvt(dc);
-	f->TracerPointORB(dc);
-	f->TracerPointFREAK(dc);
-	f->TracerPointBRISK(dc);
-	f->TracerPointKAZE(dc);
-	f->TracerPointBLOB(dc);
-	f->TracerPointMSER(dc);
-	}
-/*        dc.SetPen( *wxRED_PEN );
-    dc.SetBrush( *wxTRANSPARENT_BRUSH );
-    dc.DrawRectangle( 0, 0, 200, 200 );*/
 }
 
 
@@ -854,14 +835,14 @@ void FenetrePrincipale::MAJRectangle(wxCommandEvent& event)
 { 
 feuille->ModeCoupe(false); 
 feuille->ModeRectangle(!feuille->ModeRectangle()); 
-feuille->Refresh(true);
+feuille->Refresh(false);
 }
 
 void FenetrePrincipale::MAJCoupe(wxCommandEvent& event)
 { 
 feuille->ModeRectangle(false); 
 feuille->ModeCoupe(!feuille->ModeCoupe()); 
-feuille->Refresh(true);
+feuille->Refresh(false);
 }
 
 
@@ -881,102 +862,53 @@ case MENU_POINTFREAK:
 case MENU_POINTBLOB:
     break;
 	}
-feuille->Refresh(true);
+feuille->Refresh(false);
 
 }
 
 void FenetrePrincipale::TracerContour(wxCommandEvent& event)
 {
 tracerContour=!tracerContour;
-if( tracerContour)
-	{
-	wxClientDC hdc(feuille);
-	feuille->DoPrepareDC(hdc);
-	TracerContour(hdc);
-	}
-else
-	feuille->Refresh(true);
+feuille->Refresh(false);
 }
 
 void FenetrePrincipale::TracerLigneHough(wxCommandEvent& event)
 {
 	tracerLigneHough = !tracerLigneHough;
-	if (tracerLigneHough)
-	{
-		wxClientDC hdc(feuille);
-		feuille->DoPrepareDC(hdc);
-		TracerLigneHough(hdc);
-	}
-	else
-		feuille->Refresh(true);
+    feuille->Refresh(false);
 }
 
 void FenetrePrincipale::TracerRegionMvt(wxCommandEvent& event)
 {
 	tracerRegionMvt = !tracerRegionMvt;
-	if (tracerRegionMvt)
-	{
-		wxClientDC hdc(feuille);
-		feuille->DoPrepareDC(hdc);
-		TracerRegionMvt(hdc);
-	}
-	else
-		feuille->Refresh(true);
+    feuille->Refresh(false);
 }
 
 void FenetrePrincipale::TracerLigneProbaHough(wxCommandEvent& event)
 {
-tracerLigneProbaHough=!tracerLigneProbaHough;
-if( tracerLigneProbaHough)
-	{
-	wxClientDC hdc(feuille);
-	feuille->DoPrepareDC(hdc);
-	TracerLigneProbaHough(hdc);
-	}
-else
-	feuille->Refresh(true);
+    tracerLigneProbaHough=!tracerLigneProbaHough;
+    feuille->Refresh(false);
 }
 
 void FenetrePrincipale::TracerCercleHough(wxCommandEvent& event)
 {
-tracerCercleHough=!tracerCercleHough;
-if( tracerCercleHough)
-	{
-	wxClientDC hdc(feuille);
-	feuille->DoPrepareDC(hdc);
-	TracerCercleHough(hdc);
-	}
-else
-	feuille->Refresh(true);
+    tracerCercleHough=!tracerCercleHough;
+    feuille->Refresh(false);
 }
 
 void FenetrePrincipale::TracerBonCoin(wxCommandEvent& event)
 {
-tracerBonCoin=!tracerBonCoin;
-if( tracerBonCoin)
-	{
-	wxClientDC hdc(feuille);
-	feuille->DoPrepareDC(hdc);
-	TracerBonCoin(hdc);
-	}
-else
-	feuille->Refresh(true);
+    tracerBonCoin=!tracerBonCoin;
+    feuille->Refresh(false);
 }
 
 void FenetrePrincipale::TracerFlotOptique(wxCommandEvent& event)
 {
-tracerFlotOptique=!tracerFlotOptique;
-if( tracerFlotOptique)
-	{
-	wxClientDC hdc(feuille);
-	feuille->DoPrepareDC(hdc);
-	TracerFlotOptique(hdc);
-	}
-else
-	feuille->Refresh(true);
+    tracerFlotOptique=!tracerFlotOptique;
+    feuille->Refresh(false);
 }
 
-void FenetrePrincipale::TracerRegionMvt(wxDC &hdc)
+void FenetrePrincipale::TracerRegionMvt(wxBufferedPaintDC &hdc)
 {
 if (!tracerRegionMvt || !imAcq)
 	return;
@@ -996,7 +928,7 @@ for (int i = 0; i<imAcq->RegionMvt()->size();i++)
 }
 }
 
-void FenetrePrincipale::TracerLigneHough(wxDC &hdc)
+void FenetrePrincipale::TracerLigneHough(wxBufferedPaintDC &hdc)
 {
 if (!tracerLigneHough || !imAcq)
 	return;
@@ -1029,7 +961,7 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 	}
 }
 
-void FenetrePrincipale::TracerLigneProbaHough(wxDC &hdc)
+void FenetrePrincipale::TracerLigneProbaHough(wxBufferedPaintDC &hdc)
 {
 if (!tracerLigneProbaHough || !imAcq)
 	return;
@@ -1054,7 +986,7 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 	}
 }
 
-void FenetrePrincipale::TracerBonCoin(wxDC &hdc)
+void FenetrePrincipale::TracerBonCoin(wxBufferedPaintDC &hdc)
 {
 if (!tracerBonCoin || !imAcq)
 	return;
@@ -1096,7 +1028,7 @@ if (imAcq->CoinRef())
 	}
 }
 
-void FenetrePrincipale::TracerCercleHough(wxDC &hdc)
+void FenetrePrincipale::TracerCercleHough(wxBufferedPaintDC &hdc)
 {
 if (!tracerCercleHough || !imAcq)
 	return;
@@ -1124,7 +1056,7 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 	}
 }
 
-void FenetrePrincipale::TracerContour(wxDC &hdc)
+void FenetrePrincipale::TracerContour(wxBufferedPaintDC &hdc)
 {
 if (!tracerContour || !imAcq)
 	return;
@@ -1156,7 +1088,7 @@ for (int i=0;i<imAcq->channels()&& i<3;i++)
 }
 
 
-void FenetrePrincipale::TracerFlotOptique(wxDC &hdc)
+void FenetrePrincipale::TracerFlotOptique(wxBufferedPaintDC &hdc)
 {
  if (!tracerFlotOptique || !imAcq)
 	return;
@@ -1190,7 +1122,7 @@ for (int i=0;i<imAcq->channels();i++)
 	}
 }
 
-void FenetrePrincipale::TracerPointMSER(wxDC &hdc)
+void FenetrePrincipale::TracerPointMSER(wxBufferedPaintDC &hdc)
 {
 if (!tracerMSERPoint || !imAcq)
 	return;
@@ -1201,7 +1133,7 @@ if (!imAcq->PointCle())
 	}
 }
 
-void FenetrePrincipale::TracerPointBRISK(wxDC &hdc)
+void FenetrePrincipale::TracerPointBRISK(wxBufferedPaintDC &hdc)
 {
 if (!tracerBRISKPoint || !imAcq)
 	return;
@@ -1233,9 +1165,7 @@ for (int i = 0; i < pts->size(); i++)
 //gc->StrokePath(path);
 if (1==1)
     {
-wxPaintDC dc(feuille);
-feuille->PrepareDC(dc);
-wxGraphicsContext *gc = wxGraphicsContext::Create(dc);
+wxGraphicsContext *gc = wxGraphicsContext::Create(hdc);
 
 CalculZoom(fZoomNume, fZoomDeno);
 wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
@@ -1256,11 +1186,11 @@ delete gc;
 TracerAppariementPoint(hdc);
 }
 
-void FenetrePrincipale::TracerPointFREAK(wxDC &hdc)
+void FenetrePrincipale::TracerPointFREAK(wxBufferedPaintDC &hdc)
 {
 }
 
-void FenetrePrincipale::TracerPointBLOB(wxDC &hdc)
+void FenetrePrincipale::TracerPointBLOB(wxBufferedPaintDC &hdc)
 {
 if (!tracerBLOBPoint || !imAcq)
 	return;
@@ -1271,7 +1201,7 @@ if (!imAcq->PointCle())
 	}
 }
 
-void FenetrePrincipale::TracerPointKAZE(wxDC &hdc)
+void FenetrePrincipale::TracerPointKAZE(wxBufferedPaintDC &hdc)
 {
 if (!tracerKAZEPoint || !imAcq)
 	return;
@@ -1301,7 +1231,7 @@ TracerAppariementPoint(hdc);
    }
 
 
-void FenetrePrincipale::TracerPointORB(wxDC &hdc)
+void FenetrePrincipale::TracerPointORB(wxBufferedPaintDC &hdc)
 {
 if (!tracerORBPoint || !imAcq)
 	return;
@@ -1328,7 +1258,7 @@ for (int i = 0; i < pts->size(); i++)
 TracerAppariementPoint(hdc);
 }
 
-void FenetrePrincipale::TracerAppariementPoint(wxDC &hdc)
+void FenetrePrincipale::TracerAppariementPoint(wxBufferedPaintDC &hdc)
 {
 if (!tracerORBPoint || !imAcq)
 	return;

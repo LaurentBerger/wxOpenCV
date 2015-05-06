@@ -179,10 +179,9 @@ case 3:
 case 4:
 	break;
 	}
-wxClientDC dc(feuille);
 if (cam && cam->IsRunning())
 	{
-	DrawWindow(dc);
+    feuille->Refresh();
 	}
 else
 	{

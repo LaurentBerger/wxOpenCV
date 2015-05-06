@@ -45,31 +45,27 @@ if (key=='F'&& !event.ControlDown())
 if (key=='R'&& !event.ShiftDown())
 	{
 	feuille->ModeRectangle(false);
-	wxClientDC hdc(feuille);
-	DrawWindow(hdc);
+	feuille->Refresh(false);
 	}
 if (key=='R' && event.ShiftDown() )
 	{
 	feuille->ModeRectangle(true);
 	feuille->ModeCoupe(false);
-	wxClientDC hdc(feuille);
-	DrawWindow(hdc);
-	}
+    feuille->Refresh(false);
+    }
 if (feuille->ModeRectangle() && key==WXK_DELETE)
 	feuille->Rectangle(feuille->IndiceRectangleSelec())->SetSize(wxSize(0,0));
 if (key=='C'&& !event.ShiftDown())
 	{
 	feuille->ModeCoupe(false);
-	wxClientDC hdc(feuille);
-	DrawWindow(hdc);
-	}
+    feuille->Refresh(false);
+    }
 if (key=='C' && event.ShiftDown() )
 	{
 	feuille->ModeRectangle(false);
 	feuille->ModeCoupe(true);
-	wxClientDC hdc(feuille);
-	DrawWindow(hdc);
-	}
+    feuille->Refresh(false);
+    }
 if (feuille->ModeCoupe() && key==WXK_DELETE)
 	feuille->Coupe(feuille->IndiceCoupeSelec())->SetSize(wxSize(0,0));
 int ind=-1;

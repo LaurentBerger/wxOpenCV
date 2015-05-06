@@ -271,7 +271,11 @@ FenetrePrincipale	*wxOsgApp::Graphique(int id)
 {
 if (id==-1)
 	if (nbFenetre>0 && indFenetre>=0)
-		return listeFenetre[indFenetre]->fPrin;
+		{
+        if (listeFenetre[indFenetre])
+            return listeFenetre[indFenetre]->fPrin;
+        return NULL;
+        }
 	else
 		return NULL;
 if (listeFenetre[id])
@@ -1420,7 +1424,7 @@ correctionFonction=0;
 correctionTache=0;
 correctionBiais=0;
 nbImageTache=0;
-((wxFrame*)this)->SetBackgroundColour(*wxBLACK);
+SetBackgroundColour(*wxWHITE);
 // Association barre des menus avec la trame
 
 SetIcon(wxIcon("wxocv.bmp",wxBITMAP_TYPE_ICO ));
@@ -1997,8 +2001,7 @@ int deno;
 CalculZoom(nume,deno);
 feuille->SetVirtualSize( imAcq->cols*nume/deno, imAcq->rows*nume/deno );
 
-wxClientDC dc(feuille);
-DrawWindow(dc);
+feuille->Refresh();
 }
 
 void FenetrePrincipale::DebutAcquisition(wxCommandEvent& event)
@@ -2947,7 +2950,7 @@ bool GlisserImage::UpdateBackingFromWindow(wxDC& WXUNUSED(windowDC), wxMemoryDC&
 bool FenetrePrincipale::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
 {
 	wxPoint p(0,50);
-	TracerDIB(imAffichee,dc);
+//	TracerDIB(imAffichee,dc);
 	return true;
     int			w = bitmap.GetWidth();
     int			h = bitmap.GetHeight();

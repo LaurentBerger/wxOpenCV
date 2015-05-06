@@ -565,7 +565,7 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 //	if (pOCV.intParam.find(
 	r=app->ExecuterOperation(&pOCV);
 	}
-if (im!=NULL)
+if (r.size()!=0)
 	{
 	wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
 	wxCheckBox *wb=(wxCheckBox *)wxWindow::FindWindowById(IND_HYPER-2,panneau);

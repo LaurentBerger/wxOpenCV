@@ -295,9 +295,21 @@ if (im->CoinRef())
 	for (int i=0;i<channels()&&i<im->channels();i++)
 		coinRef[i]=im->CoinRef()[i];
 	}
-if (im->PointCle()->size()!=0)
-	kOrb = *im->PointCle();
-}
+if (im->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
+    kOrb = *im->PointCle(IMAGEINFOCV_ORB_DES);
+if (im->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
+    kAkaze = *im->PointCle(IMAGEINFOCV_AKAZE_DES);
+if (im->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
+    kBrisk = *im->Descripteur(IMAGEINFOCV_BRISK_DES);
+if (im->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
+    descORB = *im->Descripteur(IMAGEINFOCV_ORB_DES);
+if (im->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
+    descAKAZE = *im->Descripteur(IMAGEINFOCV_AKAZE_DES);
+if (im->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
+    descBRISK = *im->Descripteur(IMAGEINFOCV_BRISK_DES);
+if (im->Appariement()->size()!=0)
+    matches = *im->Appariement();
+ }
 
 void ImageInfoCV:: DeplacerFlotOptique(ImageInfoCV *im)/*<! Fonction déplaçant le pointeur flotOptique de im dans this. Celui de im devient nul */ 
 {
