@@ -858,8 +858,11 @@ case MENU_POINTKAZE:
 case MENU_POINTBRISK:
     tracerBRISKPoint = !tracerBRISKPoint;
     break;
-case MENU_POINTFREAK:
+case MENU_POINTMSER:
+    tracerMSERPoint = !tracerMSERPoint;
+    break;
 case MENU_POINTBLOB:
+    tracerBLOBPoint = !tracerBLOBPoint;
     break;
 	}
 feuille->Refresh(false);
@@ -1194,11 +1197,36 @@ void FenetrePrincipale::TracerPointBLOB(wxBufferedPaintDC &hdc)
 {
 if (!tracerBLOBPoint || !imAcq)
 	return;
-if (!imAcq->PointCle())
+if (!imAcq->PointCle(IMAGEINFOCV_BLOB_DES))
 	{
 	tracerBLOBPoint = false;
 	return;
 	}
+std::vector<cv::KeyPoint> *pts = imAcq->PointCle(IMAGEINFOCV_BLOB_DES);
+int fZoomNume, fZoomDeno;
+
+CalculZoom(fZoomNume, fZoomDeno);
+wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
+wxBrush brosse(wxColour(128, 0, 0, 128));
+hdc.SetBrush(brosse);
+hdc.SetPen(crayon[0]);
+for (int i = 0; i < pts->size(); i++)
+    {
+    wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+    wxPoint p1(RepereImageEcran(p_1));
+    hdc.DrawCircle(p1, 2);
+    }
+hdc.SetBrush(*wxTRANSPARENT_BRUSH);
+crayon[0].SetWidth(3);
+hdc.SetPen(crayon[0]);
+for (int i = 0; i < pts->size(); i++)
+    {
+    wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+    wxPoint p1(RepereImageEcran(p_1));
+    hdc.DrawCircle(p1, (*pts)[i].size);
+    }
+
+TracerAppariementPoint(hdc);
 }
 
 void FenetrePrincipale::TracerPointKAZE(wxBufferedPaintDC &hdc)

@@ -283,6 +283,48 @@ if (s == "matchdescriptormatcher")
 	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#match";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
 	}
+if (s == "mserfeatures2d")
+    {
+    nomOperation = s;
+    nbImageRes = 0;
+    nbOperande = 1;
+    opAttribut = true;
+    intParam["delta"] = DomaineParametreOp<int>(5, 1, 255, 1);
+    intParam["minArea"] = DomaineParametreOp<int>(60, 1, 1000000, 1);
+    intParam["maxArea"] = DomaineParametreOp<int>(14400, 1, 1000000, 1);
+    doubleParam["maxVariation"] = DomaineParametreOp<double>(8, 1, 128, 1);
+    doubleParam["minDiversity"] = DomaineParametreOp<double>(0.2, 0, 200, .1);
+    doubleParam["maxEvolution"] = DomaineParametreOp<double>(200, 1, 10000, 1);;
+    doubleParam["areaThreshold"] = DomaineParametreOp<double>(1.01, 0, 100, 0.01);
+    doubleParam["minMargin"] = DomaineParametreOp<double>(0.2, 0, 100, .1);
+    intParam["pass2Only"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    }
+if (s == "blobfeatures2d")
+    {
+    nomOperation = s;
+    nbImageRes = 0;
+    nbOperande = 1;
+    opAttribut = true;
+    doubleParam["thresholdStep"] = DomaineParametreOp<double>(10, 1, 255, 1);
+    doubleParam["minThreshold"] = DomaineParametreOp<double>(50, 1, 255, 1);;
+    doubleParam["maxThreshold"] = DomaineParametreOp<double>(220, 0, 255, 1);
+    intParam["minRepeatability"] = DomaineParametreOp<int>(2, 1, 10000, 1);
+    doubleParam["minDistBetweenBlobs"] = DomaineParametreOp<double>(10, 1, 10000, 1);
+    intParam["filterByColor"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["blobColor"] = DomaineParametreOp<int>(0, 0, 255, 1);
+    intParam["filterByArea"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    doubleParam["minArea"] = DomaineParametreOp<double>(25, 0, 1000000, 1);
+    doubleParam["maxArea"] = DomaineParametreOp<double>(5000,1,1000000,1);
+    intParam["filterByCircularity"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    doubleParam["minCircularity"] = DomaineParametreOp<double>(0.8,0,10000,0.1);
+    doubleParam["maxCircularity"] = DomaineParametreOp<double>(10000, 0, 10000, 0.1);
+    intParam["filterByInertia"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    doubleParam["minInertiaRatio"] = DomaineParametreOp<double>(0.1,0,10000,0.1);
+    doubleParam["maxInertiaRatio"] = DomaineParametreOp<double>(10000, 0, 10000, 0.1);
+    intParam["filterByConvexity"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    doubleParam["minConvexity"] = DomaineParametreOp<double>(0.95, 0, 10000, 0.1);
+    doubleParam["maxConvexity"] = DomaineParametreOp<double>(10000,0,10000,0.1);
+    }
 if (s == "orbfeatures2d")
     {
     nomOperation = s;
@@ -796,6 +838,24 @@ if (s == "cornerharris")
 	opUnaireSelec = &ImageInfoCV::DetectCoinHarris;
 	}
 
+if (s == "mserfeatures2d")
+    {
+    opAttribut = true;
+    nomOperation = s;
+    nbOperande = 1;
+    lienHtml = "http://docs.opencv.org/trunk/d3/d28/classcv_1_1MSER.html";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
+    opUnaireSelec = &ImageInfoCV::DetectMser;
+    }
+if (s == "blobfeatures2d")
+    {
+    opAttribut = true;
+    nomOperation = s;
+    nbOperande = 1;
+    lienHtml = "http://docs.opencv.org/trunk/d0/d7a/classcv_1_1SimpleBlobDetector.html";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
+    opUnaireSelec = &ImageInfoCV::DetectBlob;
+    }
 if (s == "orbfeatures2d")
     {
     opAttribut = true;

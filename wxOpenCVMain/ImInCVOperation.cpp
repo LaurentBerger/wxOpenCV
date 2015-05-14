@@ -1124,29 +1124,97 @@ r.push_back(this);
 return r;
 }
 
-std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(ImageInfoCV	*im, ParametreOperation *pOCV)
-{
-std::vector<ImageInfoCV	*> r;
-if (im != this)
-return r;
-
-
-if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("BRISK") == pOCV->detecteur.end())
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectMser(ImageInfoCV	*im, ParametreOperation *pOCV)
     {
-    cv::Ptr<cv::Feature2D> b;
-    b = cv::BRISK::create(pOCV->intParam["thresh"].valeur, pOCV->intParam["octaves"].valeur, pOCV->doubleParam["patternScale"].valeur);
-    pOCV->detecteur["BRISK"] = b;
+    std::vector<ImageInfoCV	*> r;
+    if (im != this)
+        return r;
+
+
+    if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("BRISK") == pOCV->detecteur.end())
+        {
+        cv::Ptr<cv::Feature2D> b;
+        b = cv::BRISK::create(pOCV->intParam["thresh"].valeur, pOCV->intParam["octaves"].valeur, pOCV->doubleParam["patternScale"].valeur);
+        pOCV->detecteur["BRISK"] = b;
+        }
+
+
+    pOCV->detecteur["BRISK"]->detectAndCompute(*im, Mat(), *(im->PointCle(IMAGEINFOCV_BRISK_DES)), *(im->Descripteur(IMAGEINFOCV_BRISK_DES)));
+
+
+    AjoutOpAttribut(pOCV);
+
+    r.push_back(this);
+    return r;
     }
 
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectBlob(ImageInfoCV	*im, ParametreOperation *pOCV)
+    {
+    std::vector<ImageInfoCV	*> r;
+    if (im != this)
+        return r;
 
-pOCV->detecteur["BRISK"]->detectAndCompute(*im, Mat(), *(im->PointCle(IMAGEINFOCV_BRISK_DES)), *(im->Descripteur(IMAGEINFOCV_BRISK_DES)));
+
+        {
+        cv::SimpleBlobDetector::Params pDefaultBLOB;
+        // This is default parameters for SimpleBlobDetector
+        pDefaultBLOB.thresholdStep = pOCV->doubleParam["thresholdStep"].valeur;
+        pDefaultBLOB.minThreshold = pOCV->doubleParam["minThreshold"].valeur;
+        pDefaultBLOB.maxThreshold = pOCV->doubleParam["maxThreshold"].valeur;
+        pDefaultBLOB.minRepeatability = pOCV->intParam["minRepeatability"].valeur;
+        pDefaultBLOB.minDistBetweenBlobs = pOCV->doubleParam["minDistBetweenBlobs"].valeur;
+        pDefaultBLOB.filterByColor = pOCV->intParam["filterByColor"].valeur;
+        pDefaultBLOB.blobColor = pOCV->intParam["blobColor"].valeur;
+        pDefaultBLOB.filterByArea = pOCV->intParam["filterByArea"].valeur;
+        pDefaultBLOB.minArea = pOCV->doubleParam["minArea"].valeur;
+        pDefaultBLOB.maxArea = pOCV->doubleParam["maxArea"].valeur;
+        pDefaultBLOB.filterByCircularity = pOCV->intParam["filterByCircularity"].valeur;
+        pDefaultBLOB.minCircularity = pOCV->doubleParam["minCircularity"].valeur;
+        pDefaultBLOB.maxCircularity = pOCV->doubleParam["maxCircularity"].valeur;
+        pDefaultBLOB.filterByInertia = pOCV->intParam["filterByInertia"].valeur;
+        pDefaultBLOB.minInertiaRatio = pOCV->doubleParam["minInertiaRatio"].valeur;
+        pDefaultBLOB.maxInertiaRatio = pOCV->doubleParam["maxInertiaRatio"].valeur;
+        pDefaultBLOB.filterByConvexity = pOCV->intParam["filterByConvexity"].valeur;
+        pDefaultBLOB.minConvexity = pOCV->doubleParam["minConvexity"].valeur;
+        pDefaultBLOB.maxConvexity = pOCV->doubleParam["maxConvexity"].valeur;
+        cv::Ptr<cv::Feature2D> b;
+        b = cv::SimpleBlobDetector::create(pDefaultBLOB);
+        pOCV->detecteur["BLOB"] = b;
+        }
+
+    pOCV->detecteur["BLOB"]->detect(*im, kBlob, Mat());
 
 
-AjoutOpAttribut(pOCV);
+    AjoutOpAttribut(pOCV);
 
-r.push_back(this);
-return r;
-}
+    r.push_back(this);
+    return r;
+    }
+
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(ImageInfoCV	*im, ParametreOperation *pOCV)
+    {
+    std::vector<ImageInfoCV	*> r;
+    if (im != this)
+        return r;
+
+
+    if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("BRISK") == pOCV->detecteur.end())
+        {
+        cv::Ptr<cv::Feature2D> b;
+        b = cv::BRISK::create(pOCV->intParam["thresh"].valeur, pOCV->intParam["octaves"].valeur, pOCV->doubleParam["patternScale"].valeur);
+        pOCV->detecteur["BRISK"] = b;
+        }
+
+
+    pOCV->detecteur["BRISK"]->detectAndCompute(*im, Mat(), *(im->PointCle(IMAGEINFOCV_BRISK_DES)), *(im->Descripteur(IMAGEINFOCV_BRISK_DES)));
+
+
+    AjoutOpAttribut(pOCV);
+
+    r.push_back(this);
+    return r;
+    }
+
 
 std::vector<ImageInfoCV	*>ImageInfoCV::DetectAkaze(ImageInfoCV	*im, ParametreOperation *pOCV)
 {
@@ -1163,19 +1231,19 @@ if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("AKAZE") == pOCV->detect
     }
 
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getDescriptorChannels() != pOCV->intParam["DescriptorChannels"].valeur)
-pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDescriptorChannels(pOCV->intParam["DescriptorChannels"].valeur);
+    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDescriptorChannels(pOCV->intParam["DescriptorChannels"].valeur);
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getDescriptorSize() != pOCV->doubleParam["DescriptorSize"].valeur)
-pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDescriptorSize(pOCV->doubleParam["DescriptorSize"].valeur);
+    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDescriptorSize(pOCV->doubleParam["DescriptorSize"].valeur);
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getDescriptorType() != pOCV->intParam["DescriptorType"].valeur)
-pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDescriptorType(pOCV->intParam["DescriptorType"].valeur);
+    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDescriptorType(pOCV->intParam["DescriptorType"].valeur);
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getDiffusivity() != pOCV->intParam["Diffusivity"].valeur)
-pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDiffusivity(pOCV->intParam["Diffusivity"].valeur);
+    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDiffusivity(pOCV->intParam["Diffusivity"].valeur);
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getNOctaveLayers() != pOCV->intParam["NOctaveLayers"].valeur)
-pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setNOctaveLayers(pOCV->intParam["NOctaveLayers"].valeur);
+    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setNOctaveLayers(pOCV->intParam["NOctaveLayers"].valeur);
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getNOctaves() != pOCV->intParam["NOctaves"].valeur)
-pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setNOctaves(pOCV->intParam["NOctaves"].valeur);
+    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setNOctaves(pOCV->intParam["NOctaves"].valeur);
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getThreshold() != pOCV->doubleParam["Threshold"].valeur)
-pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setThreshold(pOCV->doubleParam["Threshold"].valeur);
+    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setThreshold(pOCV->doubleParam["Threshold"].valeur);
 
 pOCV->detecteur["AKAZE"]->detectAndCompute(*im, Mat(), *(im->PointCle(IMAGEINFOCV_AKAZE_DES)), *(im->Descripteur(IMAGEINFOCV_AKAZE_DES)));
 

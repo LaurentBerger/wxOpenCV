@@ -97,6 +97,8 @@ enum
 	ID_DES_ORB,
 	ID_DES_BRISK,
     ID_DES_AKAZE,
+    ID_DES_MSER,
+    ID_DES_BLOB,
 	ID_DES_MATCH,
 	ID_DES_KNNMATCH,
 
@@ -325,8 +327,10 @@ void InterfaceAvance::InitCommande()
 
 	CONSTRUCTEUR_CMD(bouton, ID_DES_ORB, _("ORB keypoint"), "orbfeatures2d", 11);
 	CONSTRUCTEUR_CMD(bouton, ID_DES_BRISK, _("BRISK keypoint"), "briskfeatures2d", 11);
-	CONSTRUCTEUR_CMD(bouton, ID_DES_AKAZE, _("FREAK keypoint"), "akazefeatures2d", 11);
-	CONSTRUCTEUR_CMD(bouton, ID_DES_MATCH, _("Match"), "matchdescriptormatcher", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_AKAZE, _("Akaze keypoint"), "akazefeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_BLOB, _("BLOB keypoint"), "blobfeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_MSER, _("MSER region"), "mserfeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_MATCH, _("Match"), "matchdescriptormatcher", 11);
 	CONSTRUCTEUR_CMD(bouton, ID_DES_KNNMATCH, _("knn Match"), "kbbmatchdescriptormatcher", 11);
 
 

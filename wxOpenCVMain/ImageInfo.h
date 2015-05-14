@@ -128,7 +128,8 @@ std::vector<cv::Point2f> *coinRef;	/*<! Les pixels de références de l'image pour
 std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
 std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
 std::vector<cv::KeyPoint> kAkaze;	/*<! Point clef de Akaze */
-std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de KAZE */
+std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de blob */
+std::vector<std::vector <cv::KeyPoint >> kMser;	/*<! region et point détectés par mser */
 cv::Mat	descORB;				    /*<! Descripteur associé à l'un des points clé ORB*/
 cv::Mat	descAKAZE;				    /*<! Descripteur associé à l'un des points clé AKAZE*/
 cv::Mat	descBRISK;				    /*<! Descripteur associé à l'un des points clé BRISK*/
@@ -333,6 +334,8 @@ std::vector<ImageInfoCV	*>DetectCoinHarris(ImageInfoCV	*, ParametreOperation *pa
 std::vector<ImageInfoCV	*>DetectOrb(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectBrisk(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectAkaze(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectBlob(ImageInfoCV	*, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectMser(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>AppariePoint(ImageInfoCV	*, ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>SeparationPlan(ImageInfoCV	*, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>CalcOrientationMvt(ImageInfoCV	*, ParametreOperation *paramOCV);
