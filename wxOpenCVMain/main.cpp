@@ -1379,6 +1379,7 @@ tracerBRISKPoint = false;
 tracerBLOBPoint = false;
 tracerKAZEPoint = false;
 tracerFREAKPoint = false;
+tracerMSERPoint=false;
 imgStatIm = NULL;
 indEvtCam=0;
 for (int i=0;i<10;i++)

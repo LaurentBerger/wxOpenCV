@@ -294,10 +294,11 @@ if (s == "mserfeatures2d")
     intParam["maxArea"] = DomaineParametreOp<int>(14400, 1, 1000000, 1);
     doubleParam["maxVariation"] = DomaineParametreOp<double>(8, 1, 128, 1);
     doubleParam["minDiversity"] = DomaineParametreOp<double>(0.2, 0, 200, .1);
-    doubleParam["maxEvolution"] = DomaineParametreOp<double>(200, 1, 10000, 1);;
+    intParam["maxEvolution"] = DomaineParametreOp<int>(200, 1, 10000, 1);;
     doubleParam["areaThreshold"] = DomaineParametreOp<double>(1.01, 0, 100, 0.01);
-    doubleParam["minMargin"] = DomaineParametreOp<double>(0.2, 0, 100, .1);
+    doubleParam["minMargin"] = DomaineParametreOp<double>(0.003, 0, 100, .1);
     intParam["pass2Only"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["edgeBlurSize"] = DomaineParametreOp<int>(5, 1, 13, 2);
     }
 if (s == "blobfeatures2d")
     {
@@ -1213,7 +1214,7 @@ if (s == "resize")
 	}
 if (s == "logPolar")
 	{
-	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#resize";
+	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#logpolar";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
 	opUnaireSelec = &ImageInfoCV::LogPolar;
 	return true;

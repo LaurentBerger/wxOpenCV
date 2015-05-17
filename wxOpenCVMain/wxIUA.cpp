@@ -394,8 +394,10 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
  	wxLogTextCtrl *logWindow = new wxLogTextCtrl((wxTextCtrl *)wnd10);
 	wxLog::SetVerbose(true);
 	delete wxLog::SetActiveTarget(logWindow);
-
-   // Give this pane an icon, too, just for testing.
+ /*   (wxTextCtrl *)wnd10->Disable();
+     wnd10->SetForegroundColour(*wxBLACK);
+     wnd10->SetBackgroundColour(*wxWHITE);*/
+    // Give this pane an icon, too, just for testing.
     int iconSize = m_mgr.GetArtProvider()->GetMetric(wxAUI_DOCKART_CAPTION_SIZE);
 
     // Make it even to use 16 pixel icons with default 17 caption height.

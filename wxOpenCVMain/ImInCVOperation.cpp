@@ -1129,18 +1129,25 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectMser(ImageInfoCV	*im, ParametreOper
     std::vector<ImageInfoCV	*> r;
     if (im != this)
         return r;
+    if (im != this)
+        return r;
 
 
-    if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("BRISK") == pOCV->detecteur.end())
         {
         cv::Ptr<cv::Feature2D> b;
-        b = cv::BRISK::create(pOCV->intParam["thresh"].valeur, pOCV->intParam["octaves"].valeur, pOCV->doubleParam["patternScale"].valeur);
-        pOCV->detecteur["BRISK"] = b;
+        b = cv::MSER::create(pOCV->intParam["delta"].valeur, pOCV->intParam["minArea"].valeur, pOCV->intParam["maxArea"].valeur,
+                             pOCV->doubleParam["maxVariation"].valeur, pOCV->doubleParam["minDiversity"].valeur, pOCV->intParam["maxEvolution"].valeur,
+                             pOCV->doubleParam["areaThreshold"].valeur, pOCV->doubleParam["minMargin"].valeur, pOCV->intParam["edgeBlurSize"].valeur);
+        pOCV->detecteur["MSER"] = b;
         }
 
-
-    pOCV->detecteur["BRISK"]->detectAndCompute(*im, Mat(), *(im->PointCle(IMAGEINFOCV_BRISK_DES)), *(im->Descripteur(IMAGEINFOCV_BRISK_DES)));
-
+    pOCV->detecteur["MSER"].dynamicCast<cv::MSER>()->setPass2Only(pOCV->intParam["pass2Only"].valeur);
+    kMser.clear();
+    if (pOCV->detecteur["MSER"].dynamicCast<cv::MSER>())
+    {
+        std::vector<cv::Rect>  zone;
+        pOCV->detecteur["MSER"].dynamicCast<cv::MSER>()->detectRegions(*im, kMser, zone);
+    }
 
     AjoutOpAttribut(pOCV);
 

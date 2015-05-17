@@ -556,6 +556,7 @@ bool TracerPointBRISK(){ return	tracerBRISKPoint; };		/*!< 1 tracer des contours
 bool TracerPointBLOB(){ return	tracerBLOBPoint; };		/*!< 1 tracer des contours des régions */
 bool TracerPointKAZE(){ return	tracerKAZEPoint; };		/*!< 1 tracer des contours des régions */
 bool TracerPointFREAK(){ return	tracerFREAKPoint; };		/*!< 1 tracer des contours des régions */
+bool TracerPointMSER(){ return	tracerMSERPoint; };		/*!< 1 tracer des contours des régions */
 bool TracerContour(){ return	tracerContour; };		/*!< 1 tracer des contours des régions */
 bool TracerLigneHough(){ return	tracerLigneHough; };	/*!< 1 tracer des lignes détectées par hough */
 bool TracerLigneProbaHough(){return	tracerLigneProbaHough;};	/*!< 1 tracer des cercle segments par hough */

@@ -129,7 +129,7 @@ std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
 std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
 std::vector<cv::KeyPoint> kAkaze;	/*<! Point clef de Akaze */
 std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de blob */
-std::vector<std::vector <cv::KeyPoint >> kMser;	/*<! region et point détectés par mser */
+std::vector<std::vector <cv::Point >> kMser;	/*<! region et point détectés par mser */
 cv::Mat	descORB;				    /*<! Descripteur associé à l'un des points clé ORB*/
 cv::Mat	descAKAZE;				    /*<! Descripteur associé à l'un des points clé AKAZE*/
 cv::Mat	descBRISK;				    /*<! Descripteur associé à l'un des points clé BRISK*/
@@ -464,8 +464,9 @@ std::vector<cv::Point2f> *BonCoin(bool init=false){if (init && boncoin==NULL) bo
 std::vector<cv::Point2f> *CoinRef(bool init = false){ if (init && coinRef == NULL) coinRef = new std::vector<cv::Point2f>[channels()]; return coinRef; };
 std::vector<double> *Angle(){ return &angle; };
 std::vector<cv::Rect> *RegionMvt(){ return &regionsMvt; };
-std::vector<cv::KeyPoint> *PointCle(char type=0);
-std::vector<cv::DMatch> *Appariement(){return &matches;};
+std::vector<cv::KeyPoint> *PointCle(char type = 0);
+std::vector<std::vector<cv::Point> > *PointCleMSER(){return &kMser;};
+std::vector<cv::DMatch> *Appariement(){ return &matches; };
 ParametreOperation *ParamOCVUpdateMotionHistory(ParametreOperation *p = NULL);
 ParametreOperation *AjoutOpAttribut(ParametreOperation *p);
 std::map<std::string,ParametreOperation> *ListeOpAttribut(){return &listeOpAttribut;};

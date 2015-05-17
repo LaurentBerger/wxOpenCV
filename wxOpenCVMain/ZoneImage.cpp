@@ -613,14 +613,21 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 			menu.Check(MENU_REGIONMVT, true);
 		menuParametre = true;
 		}
-	if (f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
-		{
-		menu.AppendCheckItem(MENU_POINTORB, _T("ORB"));
-		if (f->TracerPointORB())
-			menu.Check(MENU_POINTORB, true);
-		menuParametre = true;
-		}
-	if (f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
+    if (f->ImAcq()->PointCleMSER()->size() != 0)
+        {
+        menu.AppendCheckItem(MENU_POINTMSER, _T("MSER"));
+        if (f->TracerPointMSER())
+            menu.Check(MENU_POINTMSER, true);
+        menuParametre = true;
+        }
+    if (f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
+        {
+        menu.AppendCheckItem(MENU_POINTORB, _T("ORB"));
+        if (f->TracerPointORB())
+            menu.Check(MENU_POINTORB, true);
+        menuParametre = true;
+        }
+    if (f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
 		{
 		menu.AppendCheckItem(MENU_POINTBRISK, _T("BRISK"));
 		if (f->TracerPointBRISK())
@@ -1134,6 +1141,32 @@ if (!imAcq->PointCle())
 	tracerMSERPoint = false;
 	return;
 	}
+int fZoomNume, fZoomDeno;
+CalculZoom(fZoomNume, fZoomDeno);
+wxGraphicsContext *gc = wxGraphicsContext::Create(hdc);
+
+wxBrush fond(wxColor(0, 0, 0, wxALPHA_TRANSPARENT), wxBRUSHSTYLE_TRANSPARENT);
+wxImage imgTrans(imAcq->cols, imAcq->rows);
+imgTrans.InitAlpha();
+unsigned char *alpha = imgTrans.GetAlpha();
+memset(alpha, wxIMAGE_ALPHA_TRANSPARENT, imgTrans.GetWidth()*imgTrans.GetHeight());
+std::vector<std::vector <cv::Point>>  *region = imAcq->PointCleMSER();
+for (std::vector<std::vector <cv::Point>>::iterator itr = region->begin(); itr != region->end(); itr++)
+    {
+    for (std::vector<cv::Point>::iterator itp=itr->begin();itp!=itr->end();itp++)
+    {
+        
+        wxPoint p_1(itp->x, itp->y);
+        imgTrans.SetRGB(itp->x, itp->y, 255, 0, 0);
+        imgTrans.SetAlpha(itp->x, itp->y,128);
+        }
+    }
+wxPoint p(imAcq->cols , imAcq->rows );
+wxPoint p1(RepereImageEcran(p));
+wxBitmap bmp(imgTrans);
+gc->DrawBitmap(bmp, 0, 0, p1.x, p1.y);
+delete gc;
+
 }
 
 void FenetrePrincipale::TracerPointBRISK(wxBufferedPaintDC &hdc)

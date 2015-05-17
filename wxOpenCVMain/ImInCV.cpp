@@ -307,7 +307,9 @@ if (im->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
     descAKAZE = *im->Descripteur(IMAGEINFOCV_AKAZE_DES);
 if (im->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
     descBRISK = *im->Descripteur(IMAGEINFOCV_BRISK_DES);
-if (im->Appariement()->size()!=0)
+if (im->PointCleMSER()->size() != 0)
+    kMser = *im->PointCleMSER();
+if (im->Appariement()->size() != 0)
     matches = *im->Appariement();
  }
 

@@ -10,6 +10,7 @@ using namespace std;
 #define IND_HYPER 10 // hyperlien
 #define IND_STATIC 200 // champ static
 #define IND_SPIN 300 // bouton spin
+#define IND_COMBO 350 // combobox pour choix
 #define IND_SELECMULTIPLE IND_HYPER-1 // Selection de fichier
 #define IND_FENETREUNIQUE IND_HYPER-2 // Selection de fichier
 
@@ -49,7 +50,8 @@ Bind(wxEVT_SPINCTRLDOUBLE, &FenetreSequenceOperation::OnSpinReel,this);
 Bind(wxEVT_COMMAND_LISTBOX_SELECTED, &FenetreSequenceOperation::OnOpeSelec,this);
 Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::Executer,this,wxID_OK);
 Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::SelectionFichier,this,IND_SELECMULTIPLE);
-}
+Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreSequenceOperation::ComboBox, this);
+    }
 
 void FenetreSequenceOperation::InsererCtrlEtape(ParametreOperation *op)
 {
@@ -58,6 +60,7 @@ int ligne=150;
 int	indStatic=IND_STATIC;
 int indSpin=IND_SPIN;
 int indHyper=IND_HYPER;
+int indCombo=IND_COMBO;
 
 wxStaticText		*wst;
 wxHyperlinkCtrl		*whc;
@@ -149,16 +152,56 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 	wst->Show(true);
 	indStatic++;
 	p += wxPoint(s.GetX(),0);
-	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
-		wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-	else
-		wsd->Move(p);
-	wsd->SetRange(iti->second.mini,iti->second.maxi); 
-	wsd->SetName(iti->first);
-	wsd->SetValue(iti->second.valeur);
-	wsd->SetIncrement(iti->second.pas); 
-	wsd->Show(true);
-	indSpin++;
+
+
+    if (ParametreOperation::listeParam.find(iti->first) != ParametreOperation::listeParam.end())
+        {
+        int nbChaine = pOCV->listeParam[iti->first].size();
+        wxString *choix = new wxString[nbChaine], choixDefaut;
+        int i = 0;
+        for (std::map <string, int >::iterator iter = pOCV->listeParam[iti->first].begin(); iter != pOCV->listeParam[iti->first].end(); ++iter, ++i)
+            {
+            choix[i] = iter->first;
+            if (iter->second == iti->second.valeur)
+                choixDefaut = iter->first;
+            }
+        wxComboBox *cb;
+        if ((cb = (wxComboBox*)panneau->FindWindowById(indCombo, panneau)) == NULL)
+            cb = new wxComboBox(panneau, indCombo, choixDefaut, p, wxSize(250, -1), nbChaine, choix);
+        else
+            {
+            cb->Clear();
+            cb->Insert(nbChaine, choix, 0);
+            cb->SetSelection(0);
+            cb->Move(p);
+            cb->Show(true);
+            }
+        if (iti->second.res)
+            cb->Disable();
+        indCombo++;
+        }
+    else
+        {
+        if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
+		    wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+	    else
+		    wsd->Move(p);
+	    wsd->SetRange(iti->second.mini,iti->second.maxi); 
+	    wsd->SetName(iti->first);
+	    wsd->SetValue(iti->second.valeur);
+	    wsd->SetIncrement(iti->second.pas); 
+	    wsd->Show(true);
+	    indSpin++;
+        /*wxSpinCtrlDouble *sp = new wxSpinCtrlDouble(page, indOriCtrl + 2 * nbParam + 1, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
+        sp->SetRange(iti->second.mini, iti->second.maxi);
+        sp->SetIncrement(iti->second.pas);
+        if (iti->second.res)
+            sp->Disable();*/
+        }
+
+
+
+
 	if (tailleMax.x<p.x+s.x)
 		tailleMax.x= p.x+s.x;
 	if (tailleMax.y<p.y+s.y)
@@ -263,13 +306,19 @@ while (panneau->FindWindowById(i,panneau)&& i<IND_SPIN)
 	panneau->FindWindowById(i,panneau)->Show(false);
 	i++;
 	}
-i=indSpin;
-while (panneau->FindWindowById(i,panneau))
-	{
-	panneau->FindWindowById(i,panneau)->Show(false);
-	i++;
-	}
-SetClientSize(tailleMax+wxSize(10,10));
+i = indSpin;
+while (panneau->FindWindowById(i, panneau))
+    {
+    panneau->FindWindowById(i, panneau)->Show(false);
+    i++;
+    }
+i = indCombo;
+while (panneau->FindWindowById(i, panneau))
+    {
+    panneau->FindWindowById(i, panneau)->Show(false);
+    i++;
+    }
+SetClientSize(tailleMax + wxSize(10, 10));
 panneau->Update();
 }
 
@@ -315,6 +364,54 @@ choixOp->SetSelection(0);
 InsererCtrlEtape(&(it->second)[0]);
 
 }
+
+void FenetreSequenceOperation::ComboBox(wxCommandEvent &w)
+{
+    wxOsgApp *app = (wxOsgApp *)osgApp;
+    if (!osgApp)
+        return;
+    wxSpinCtrl *ws = (wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE, panneau);
+    if (ws == NULL)
+        return;
+    string nom;
+    int opSelec = choixOp->GetSelection();
+
+
+    std::map <int, std::vector <ParametreOperation > >  *t = app->TabSeqOperation();
+    std::map <int, std::vector <ParametreOperation > >::iterator it = (*t).begin();
+    for (int i = 0; i<ws->GetValue(); i++, it++);
+    nom = ((wxWindow*)w.GetEventObject())->GetName();
+    ParametreOperation p = it->second[opSelec];
+    wxStaticText *st = (wxStaticText*)wxWindow::FindWindowById(w.GetId() - 150, this);
+    if (!st)
+        throw("wxStaticText undefined");
+    nom = st->GetLabel();
+
+    nom = st->GetLabel();
+    if (it->second[opSelec].intParam.find(nom) != it->second[opSelec].intParam.end())
+        {
+
+        if (ParametreOperation::listeParam.find(nom) != ParametreOperation::listeParam.end())
+            {
+            int nb = ((wxComboBox*)(w.GetEventObject()))->GetCurrentSelection();
+            int i = 0;
+            std::map <string, int  >::iterator iter = it->second[opSelec].listeParam[nom].begin();
+            for (; iter != it->second[opSelec].listeParam[nom].end() && i != nb; ++iter, ++i);
+            if (i == nb)
+                it->second[opSelec].intParam[nom].valeur = iter->second;
+            }
+        else
+            {
+            if (it->second[opSelec].intParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+                return;
+            it->second[opSelec].intParam[nom].valeur = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+            }
+        }
+    if (OperandePresent(&(it->second)))
+        ExecuterSequence(&(it->second));
+
+}
+
 
 void FenetreSequenceOperation::OnSpinReel(wxSpinDoubleEvent &w)
 {

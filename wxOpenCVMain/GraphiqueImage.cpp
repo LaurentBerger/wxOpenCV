@@ -1,5 +1,7 @@
 #include "FenetrePrincipale.h"
 #include "wx/image.h"
+#include "imagestat.h"
+
 #include <fstream>
 using namespace std;
 
@@ -122,15 +124,23 @@ TracerPointFREAK(hdc);
 TracerPointBRISK(hdc);
 TracerPointKAZE(hdc);
 TracerPointBLOB(hdc);
-TracerPointMSER(hdc);
 if (cam && cam->IsRunning())
 	{
 	wxCriticalSectionLocker enter(travailCam);
 
+    TracerPointMSER(hdc);
 	TracerFlotOptique(hdc);
-	}
+    if (statActif)
+        imgStatIm->Plot(modeCamera);
+    }
 else
+    {
+
+    if (statActif)
+        imgStatIm->Plot(modeCamera);
+    TracerPointMSER(hdc);
     TracerFlotOptique(hdc);
+    }
 }
 
 void FenetrePrincipale::DrawRectangles(wxBufferedPaintDC &hdc)

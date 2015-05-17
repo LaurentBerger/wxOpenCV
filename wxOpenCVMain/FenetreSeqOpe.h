@@ -52,6 +52,8 @@ void  OnSpinMoins(wxSpinEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 void  OnSpinPlus(wxSpinEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
+void ComboBox(wxCommandEvent &evt);
+/*!<Sélection d'un parametre à l'aide de sa description */
 void  OnOpeSelec(wxCommandEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 void  SelectionFichier(wxCommandEvent& event);
