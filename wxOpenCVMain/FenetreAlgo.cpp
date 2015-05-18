@@ -211,6 +211,7 @@ std::map <int,std::vector <ParametreOperation > >  *t=((wxOsgApp *)osgApp)->TabS
 (*t)[((wxOsgApp *)osgApp)->NumSeqOpe()].resize(nbEtape);
 
 map<string, ParametreOperation>::iterator it;
+cv::FileStorage fs("test.scv", cv::FileStorage::WRITE);
 
 for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
 	{
@@ -222,11 +223,11 @@ for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->
 	ParametreOperation p;
 	p=*(listeOp[nb].first);
 	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
-	(*t)[listeOp[nb].first->idOperation][nb]=p;
+    fs<<"Operation"<<p;
+    (*t)[listeOp[nb].first->idOperation][nb] = p;
 
 	nb--;
 	}
-
 
 while(f && f->OrigineImage()->indOp1Fenetre>=0)
 	{
@@ -241,7 +242,8 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
 		ParametreOperation p;
 		p=*(listeOp[nb].first);
 		((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
-		int id=f->OrigineImage()->indOp1Fenetre;
+        p.write(fs);
+        int id = f->OrigineImage()->indOp1Fenetre;
 		if (id>=0)
 			f=((wxOsgApp *)osgApp)->Fenetre(id);
 		else 

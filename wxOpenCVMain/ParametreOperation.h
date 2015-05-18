@@ -3,6 +3,7 @@
 #include <wx/string.h>
 #include <map>
 #include <string>
+#include <iostream>
 #include "opencv2/opencv.hpp" 
 
 #include "opencv2/bgsegm.hpp"
@@ -94,16 +95,9 @@ ParametreOperation(){InitOperation("");};
 bool InitOperation(std::string s);
 bool InitPtrFonction();
 std::vector<ImageInfoCV*> ExecuterOperation();
-
+void write(cv::FileStorage& fs) const;                      //Write serialization for this class
+void read(const cv::FileNode& node);                          //Read serialization for this class
 };
 
-/*
-string nomOperation[]={
-	"PartageEaux","SeparationPlan","FusionPlan","Addition","Soustraction",
-	"Multiplication","Division","Convolution","Dilatation","Erosion","Ouverture",
-	"Fermeture","ChapeauHaut","ChapeauBas","GradMorph","Scharr_mod","Scharr_x",
-	"Scharr_y","Laplacien","Canny","Contour","FFT","IFFT","Seuillage",
-	"AdaptatifSeuillage","LissageMedian","LissageMoyenneur","LissageGaussien",
-	"ComposanteConnexe","DistanceDiscrete","LigneMediane"};						
-*/
+
 #endif
