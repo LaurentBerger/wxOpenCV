@@ -8,92 +8,99 @@ using namespace std;
 
 map<string,map<string,int> > ParametreOperation::listeParam;
 
-static void write(cv::FileStorage& fs, const std::string&objname, const ParametreOperation& x)
-    {
-    fs << objname<<"[";
-    x.write(fs);
-    fs << "]";
-    }
 
 
 void ParametreOperation::write(cv::FileStorage& fs) const {
-    ParametreOperation op=*this;
+    string s("Operation");
+    s+= to_string(indEtape);
+    fs<<s<<"{:";
     fs<< "op"<< this->nomOperation;
-    fs << "op1" << (long)op.indOp1Fenetre;
-    fs << "op2" << (long)op.indOp2Fenetre;
-    fs << "res" << (long)op.indRes;
-    fs << "indEtape" << (long)op.indEtape;
-    fs << "idOperation" << (long)op.idOperation;
-    fs << "nomSequence" << op.nomSequence;
-    map<string, DomaineParametreOp<int> >::iterator iti;
+    fs << "op1" << indOp1Fenetre;
+    fs << "op2" << indOp2Fenetre;
+    fs << "res" << indRes;
+    fs << "indEtape" << indEtape;
+    fs << "idOperation" << idOperation;
+    fs << "nomSequence" << nomSequence;
     int nb = 0;
-    for (iti = op.intParam.begin(); iti != op.intParam.end(); iti++)
+    fs << "intParam" << "[";
+    for (auto iti = intParam.begin(); iti != intParam.end(); iti++)
         {
-        fs << "operateur"<<op.idOperation;
-        fs << "etape"<< op.indEtape;
-        fs << "paramEntier"<< nb;
-        fs << "nom"<<iti->first;
-        fs << "valeur" << (long)iti->second.valeur;
-        fs << "minVal" << (long)iti->second.mini;
-        fs << "maxVal" << (long)iti->second.maxi;
-        fs << "pasVal" << (long)iti->second.pas;
-        nb++;
+        fs << "{:" << "nom"<<iti->first;
+        fs << "valeur" << iti->second.valeur;
+        fs << "minVal" << iti->second.mini;
+        fs << "maxVal" << iti->second.maxi;
+        fs << "pasVal" << iti->second.pas<<"}";
         }
+    fs << "]" << "doubleParam" << "[";
     nb = 0;
     map<string, DomaineParametreOp<double> >::iterator itd;
-    for (itd = op.doubleParam.begin(); itd != op.doubleParam.end(); itd++)
+    for (auto iti = doubleParam.begin(); iti != doubleParam.end(); iti++)
         {
-        fs << "operateur" << op.idOperation;
-        fs << "etape" << op.indEtape;
-        fs << "paramEntier" << nb;
-        fs << "nom" << itd->first;
-        fs << "valeur" << itd->second.valeur;
-        fs << "minVal" << itd->second.mini;
-        fs << "maxVal" << itd->second.maxi;
-        fs << "pasVal" << itd->second.pas;
+        fs << "{:" << "nom" << iti->first;
+        fs << "valeur" << iti->second.valeur;
+        fs << "minVal" << iti->second.mini;
+        fs << "maxVal" << iti->second.maxi;
+        fs << "pasVal" << iti->second.pas << "}";
         nb++;
         }
+    fs << "]" << "sizeParam" << "[";
     nb = 0;
-    std::map<std::string, DomaineParametreOp<cv::Size> >::iterator its;
-    for (its = op.sizeParam.begin(); its != op.sizeParam.end(); its++)
+    for (auto iti = sizeParam.begin(); iti != sizeParam.end(); iti++)
         {
-        fs << "operateur" << op.idOperation;
-        fs << "etape" << op.indEtape;
-        fs << "paramEntier" << nb;
-        fs << "nom", its->first;
-        fs << "largeur" << (long)its->second.valeur.width;
-        fs << "hauteur" << (long)its->second.valeur.height;
-        fs << "larMin" << (long)its->second.mini.width;
-        fs << "hauMin" << (long)its->second.mini.height;
-        fs << "larMax" << (long)its->second.maxi.width;
-        fs << "hauMax" << (long)its->second.maxi.height;
-        fs << "larPas" << (long)its->second.pas.width;
-        fs << "hauPas" << (long)its->second.pas.height;
+        fs << "{:" << "nom" << iti->first;
+        fs << "valeur" << iti->second.valeur;
+        fs << "minVal" << iti->second.mini;
+        fs << "maxVal" << iti->second.maxi;
+        fs << "pasVal" << iti->second.pas << "}";
         nb++;
         }
     std::map<std::string, DomaineParametreOp<cv::Point> >::iterator itp;
-    for (itp = op.pointParam.begin(); itp != op.pointParam.end(); itp++)
+    fs << "]" << "pointParam" << "[";
+    for (auto itp = pointParam.begin(); itp != pointParam.end(); itp++)
         {
-        fs << "operateur" << op.idOperation;
-        fs << "etape" << op.indEtape;
-        fs << "paramEntier" << nb;
-        fs << "nom", itp->first;
-        fs << "largeur" << (long)itp->second.valeur.x;
-        fs << "hauteur" << (long)itp->second.valeur.y;
-        fs << "larMin" << (long)itp->second.mini.x;
-        fs << "hauMin" << (long)itp->second.mini.y;
-        fs << "larMax" << (long)itp->second.maxi.x;
-        fs << "hauMax" << (long)itp->second.maxi.y;
-        fs << "larPas" << (long)itp->second.pas.x;
-        fs << "hauPas" << (long)itp->second.pas.y;
-        nb++;
+        fs << "{:" << "nom" << itp->first;
+        fs << "largeur" << itp->second.valeur.x;
+        fs << "hauteur" << itp->second.valeur.y;
+        fs << "larMin" << itp->second.mini.x;
+        fs << "hauMin" << itp->second.mini.y;
+        fs << "larMax" << itp->second.maxi.x;
+        fs << "hauMax" << itp->second.maxi.y;
+        fs << "larPas" << itp->second.pas.x;
+        fs << "hauPas" << itp->second.pas.y << "}";;
         }
-    }
+    fs << "]" ;
+    fs << "}";
 
-void read(cv::FileStorage& fs, const cv::String& objname, ParametreOperation& matches) {
-    cv::FileNode pnodes = fs[objname];
-    }
+}
 
+void ParametreOperation::read(const cv::FileNode& node)                          //Read serialization for this class
+{
+    int nbEtape=0;
+    string s;
+    while (!node[s].empty())
+    {
+        cv::FileNode op = node[s];
+        nomOperation=(string)op["op"];
+        indOp1Fenetre = (int)op["op1"];
+        indOp2Fenetre = (int)op["op2"];
+        indRes = (int)op["res"];
+        indEtape = (int)op["indEtape"];
+        idOperation = (int)op["idOperation"];
+        nomSequence = (string)op["nomSequence"];
+        cv::FileNode opl = op["intParam"];
+        cv::FileNodeIterator it = opl.begin(), it_end = opl.end();
+        for (; it != it_end; ++it)
+            {
+            intParam[(string)(*it)["nom"]] = DomaineParametreOp<int>((*it)["val"], (*it)["min"], (*it)["max"], (*it)["pas"]);;
+            }
+        opl = op["doubleParam"];
+        it = opl.begin(), it_end = opl.end();
+        for (; it != it_end; ++it)
+            {
+            doubleParam[(string)(*it)["nom"]] = DomaineParametreOp<double>((double)(*it)["val"], (double)(*it)["min"], (double)(*it)["max"], (double)(*it)["pas"]);;
+            }
+    }
+}
 
 
 

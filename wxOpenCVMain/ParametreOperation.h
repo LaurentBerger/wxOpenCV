@@ -90,14 +90,17 @@ std::vector<ImageInfoCV*> (ImageInfoCV::*opSurjecUnaire)(ImageInfoCV *, Parametr
 static std::map<std::string,std::map<std::string,int> > listeParam;
 
 
-ParametreOperation(std::string s);	
-ParametreOperation(){InitOperation("");};	
+explicit ParametreOperation(std::string s);
+explicit ParametreOperation(){ InitOperation(""); };
 bool InitOperation(std::string s);
 bool InitPtrFonction();
 std::vector<ImageInfoCV*> ExecuterOperation();
 void write(cv::FileStorage& fs) const;                      //Write serialization for this class
 void read(const cv::FileNode& node);                          //Read serialization for this class
+friend std::ostream& operator << (std::ostream &out, const ParametreOperation&);
+
 };
 
+//std::ostream& operator << (std::ostream &out, const ParametreOperation& );
 
 #endif

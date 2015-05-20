@@ -1,3 +1,4 @@
+#include "ParametreOperation.h"
 #include "FenetreAlgo.h"
 #include "imagestat.h"
 #include <wx/hyperlink.h>
@@ -203,7 +204,10 @@ ExecuterOperation(ind);
 
 void FenetreAlgo::SauverSequence(wxCommandEvent &evt)
 {
-if (osgApp==NULL || fenMere==NULL)
+cv::FileStorage fs("F:/Laurent/wxopencv/build64dyn/wxOpenCVMain/test.yml", cv::FileStorage::READ);
+ParametreOperation p1;
+p1.read(fs["Operation1"]);
+if (osgApp == NULL || fenMere == NULL)
 	return;
 FenetrePrincipale *f=fenMere;
 int nb=nbEtape-1;
@@ -211,8 +215,8 @@ std::map <int,std::vector <ParametreOperation > >  *t=((wxOsgApp *)osgApp)->TabS
 (*t)[((wxOsgApp *)osgApp)->NumSeqOpe()].resize(nbEtape);
 
 map<string, ParametreOperation>::iterator it;
-cv::FileStorage fs("test.scv", cv::FileStorage::WRITE);
-
+{
+cv::FileStorage fs("test.yml", cv::FileStorage::WRITE);
 for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
 	{
 	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
@@ -223,7 +227,9 @@ for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->
 	ParametreOperation p;
 	p=*(listeOp[nb].first);
 	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
-    fs<<"Operation"<<p;
+    string nomEtape("Operation");
+    nomEtape+=to_string(nbEtape);
+    p.write(fs);
     (*t)[listeOp[nb].first->idOperation][nb] = p;
 
 	nb--;
@@ -242,6 +248,8 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
 		ParametreOperation p;
 		p=*(listeOp[nb].first);
 		((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+        string nomEtape("Operation");
+        nomEtape += to_string(nbEtape);
         p.write(fs);
         int id = f->OrigineImage()->indOp1Fenetre;
 		if (id>=0)
@@ -254,6 +262,7 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
 	else 
 		f=NULL;
 	}
+}
 
 }
 
