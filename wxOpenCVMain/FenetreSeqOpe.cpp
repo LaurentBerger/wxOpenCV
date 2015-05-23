@@ -13,6 +13,8 @@ using namespace std;
 #define IND_COMBO 350 // combobox pour choix
 #define IND_SELECMULTIPLE IND_HYPER-1 // Selection de fichier
 #define IND_FENETREUNIQUE IND_HYPER-2 // Selection de fichier
+#define IND_FICHIERS IND_HYPER-3 // Selection de fichier
+#define IND_CONFIG IND_HYPER-4 // Selection de fichier
 
 FenetreSequenceOperation::FenetreSequenceOperation(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size,wxOsgApp *osg, long style)
@@ -27,10 +29,14 @@ this->osgApp =osg;
 std::map <int,std::vector <ParametreOperation > >  *t=osg->TabSeqOperation();
 
 new wxStaticText( panneau, -1, _("Sequence"),wxPoint(10,20),wxSize(60,20) );
-new wxButton( panneau,wxID_OK,_("Execute all"),wxPoint(150,20),wxSize(70,20));
-new wxCheckBox( panneau,IND_FENETREUNIQUE,_("No new window"),wxPoint(150,40),wxSize(120,20));
-new wxButton( panneau,IND_SELECMULTIPLE,_("Select file to process"),wxPoint(230,20),wxSize(150,20));
+new wxButton( panneau,wxID_OK,_("Execute all"),wxPoint(160,20),wxSize(70,20));
+new wxButton(panneau, IND_SELECMULTIPLE, _("Select file to process"), wxPoint(230, 20), wxSize(150, 20));
 wxSpinCtrl *spw=new wxSpinCtrl(panneau,IND_OPE,_("Sequence"),wxPoint(80,20),wxSize(60,20));
+new wxCheckBox(panneau, IND_FENETREUNIQUE, _("No new window"), wxPoint(260, 40), wxSize(120, 20));
+wxButton *b=new wxButton(panneau, IND_FICHIERS , _("Load"), wxPoint(10, 40), wxSize(60, 20));
+wxCheckBox *c=new wxCheckBox(panneau, IND_CONFIG, _("Use File Config"), wxPoint(80, 40), wxSize(160, 20));
+c->SetValue(true);
+b->Disable();
 spw->SetRange(0,t->size()-1);
 spw->SetValue(0);
 nbEtape=100;
@@ -49,8 +55,10 @@ Bind(wxEVT_SPINCTRL, &FenetreSequenceOperation::OnSpinEntier,this);
 Bind(wxEVT_SPINCTRLDOUBLE, &FenetreSequenceOperation::OnSpinReel,this);
 Bind(wxEVT_COMMAND_LISTBOX_SELECTED, &FenetreSequenceOperation::OnOpeSelec,this);
 Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::Executer,this,wxID_OK);
-Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::SelectionFichier,this,IND_SELECMULTIPLE);
+Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::SelectionFichier, this, IND_SELECMULTIPLE);
+Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::OuvrirSequence, this, IND_FICHIERS);
 Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreSequenceOperation::ComboBox, this);
+Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &FenetreSequenceOperation::BasculeConfig, this, IND_CONFIG);
     }
 
 void FenetreSequenceOperation::InsererCtrlEtape(ParametreOperation *op)
@@ -346,8 +354,14 @@ wxOsgApp *app=(wxOsgApp *)osgApp;
 if (!osgApp)
 	return;
 int opSelec=w.GetValue();
-std::map <int,std::vector <ParametreOperation > >  *t=((wxOsgApp*)osgApp)->TabSeqOperation();
-std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
+std::map <int, std::vector <ParametreOperation > >  *t;
+if (((wxCheckBox*)wxWindow::FindWindowById(IND_CONFIG, panneau))->GetValue())
+    t = app->TabSeqOperation();
+else
+    {
+    t = &seqActive;
+    }
+std::map <int, std::vector <ParametreOperation > >::iterator it = (*t).begin();
 for (int i=0;i<opSelec&& it!=(*t).end();i++,it++);
 choixOp->Clear();
 if (nbEtape<it->second.size())
@@ -425,8 +439,14 @@ string nom;
 int opSelec=choixOp->GetSelection();
 
 
-std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
-std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
+std::map <int, std::vector <ParametreOperation > >  *t;
+if (((wxCheckBox*)wxWindow::FindWindowById(IND_CONFIG, panneau))->GetValue())
+    t = app->TabSeqOperation();
+else
+    {
+    t = &seqActive;
+    }
+std::map <int, std::vector <ParametreOperation > >::iterator it = (*t).begin();
 for (int i=0;i<ws->GetValue();i++,it++);
 
 nom=((wxWindow*)w.GetEventObject())->GetName();
@@ -434,7 +454,7 @@ ParametreOperation p=it->second[opSelec];
 wxStaticText *st = (wxStaticText*)wxWindow::FindWindowById(w.GetId() - 100, this);
 if (!st)
 	throw("wxStaticText undefined");
-nom = st->GetLabel();
+//nom = st->GetLabel();
 if (it->second[opSelec].doubleParam.find(nom) != it->second[opSelec].doubleParam.end())
 {
 	if (it->second[opSelec].doubleParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
@@ -443,7 +463,7 @@ if (it->second[opSelec].doubleParam.find(nom) != it->second[opSelec].doubleParam
 }
 if (it->second[opSelec].intParam.find(nom) != it->second[opSelec].intParam.end())
 {
-	if (it->second[opSelec].intParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+if (it->second[opSelec].intParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
 		return;
 	it->second[opSelec].intParam[nom].valeur = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
 }
@@ -496,7 +516,13 @@ if (ws==NULL)
 if (!osgApp)
 	return;
 wxOsgApp *app=(wxOsgApp *)osgApp;
-std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
+std::map <int,std::vector <ParametreOperation > >  *t;
+if (((wxCheckBox*)wxWindow::FindWindowById(IND_CONFIG, panneau))->GetValue())
+    t= app->TabSeqOperation();
+else
+    {
+    t=&seqActive;
+    }
 opSelec=ws->GetValue();
 std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
 for (int i=0;i<opSelec&& it!=(*t).end();i++,it++);
@@ -504,6 +530,8 @@ int indOpe=event.GetInt();
 if (indOpe<0 || indOpe>=it->second.size())
 	return;
 InsererCtrlEtape(&(it->second[indOpe]));
+
+
 }
 
 void FenetreSequenceOperation::SelectionFichier(wxCommandEvent& event)
@@ -607,7 +635,11 @@ std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
 opSelec=ws->GetValue();
 std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
 for (int i=0;i<opSelec&& it!=(*t).end();i++,it++);
-ExecuterSequence(&(it->second));
+if (((wxCheckBox*)wxWindow::FindWindowById(IND_CONFIG, panneau))->GetValue())
+    ExecuterSequence(&(it->second));
+else
+    ExecuterSequence(&seqActive[0]);
+
 }
 
 void FenetreSequenceOperation::ExecuterSequence(std::vector <ParametreOperation> *sq)
@@ -749,3 +781,80 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 	}
 return true;
 }
+
+
+void  FenetreSequenceOperation::OuvrirSequence(wxCommandEvent& event)
+{
+if (!osgApp)
+return;
+wxOsgApp *app = (wxOsgApp *)osgApp;
+
+wxFileDialog ouverture(NULL, _("Open Sequence"), wxEmptyString, wxEmptyString, "*.xml", wxFD_FILE_MUST_EXIST );
+if (ouverture.ShowModal() != wxID_OK)
+    return;
+#ifdef __WINDOWS__
+wxString nom(ouverture.GetDirectory() + "\\" + ouverture.GetFilename());
+#else
+wxString nom(ouverture.GetDirectory() + "/" + ouverture.GetFilename());
+#endif
+
+cv::FileStorage fs((string)nom, cv::FileStorage::READ);
+if (!fs.isOpened())
+{
+    wxMessageBox(_("File cannot be opened"),_("Error"));
+    return;
+}
+int indEtape=0;
+seqActive.clear();
+string s("Operation");
+do
+{
+    s="Operation";
+    s += to_string(indEtape);
+    ParametreOperation p;
+    if (!fs[s].empty())
+    {
+        p.read(fs[s]);
+        p.InitPtrFonction();
+        seqActive[0].push_back(p);
+    }
+    indEtape++;
+}
+while (!fs[s].empty());
+InsererCtrlEtape(&(seqActive[0][0]));
+wxSpinCtrl *spw = (wxSpinCtrl*) wxWindow::FindWindowById(IND_OPE, panneau);
+wxWindow::FindWindowById(IND_OPE, panneau);
+wxSpinEvent evt;
+evt.SetEventObject(spw);
+spw->SetRange(0, 0);
+spw->SetValue(0);
+OnSpinEntier(evt);
+
+}
+
+void  FenetreSequenceOperation::BasculeConfig(wxCommandEvent& event)
+{
+wxCheckBox *c = (wxCheckBox *)event.GetEventObject();
+wxButton *b = (wxButton *)wxWindow::FindWindowById(IND_FICHIERS, panneau);
+if (!c->GetValue())
+{
+   b->Enable();
+   OuvrirSequence(event);
+}
+else
+{
+    b->Disable();
+    wxOsgApp *app = (wxOsgApp *)osgApp;
+
+    std::map <int, std::vector <ParametreOperation > >  *t = app->TabSeqOperation();
+    InsererCtrlEtape(&((*t)[0][0]));
+    wxSpinCtrl *spw = (wxSpinCtrl*)wxWindow::FindWindowById(IND_OPE, panneau);
+    wxWindow::FindWindowById(IND_OPE, panneau);
+    wxSpinEvent evt;
+    evt.SetEventObject(spw);
+    spw->SetRange(0, 0);
+    spw->SetValue(0);
+    OnSpinEntier(evt);
+    }
+}
+

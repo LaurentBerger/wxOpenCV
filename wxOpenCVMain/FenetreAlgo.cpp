@@ -7,6 +7,8 @@ using namespace std;
 
 void FenetrePrincipale::ParamAlgo(wxCommandEvent& event)
 {
+
+
 if (!fenAlgo==NULL)
 	return;
 fenAlgo=new FenetreAlgo(this,origineImage.nomOperation,wxPoint(530,0), wxSize(430,570),this->osgApp);
@@ -20,9 +22,10 @@ fenAlgo->Refresh(true);
 
 
 
-#define ID_SAUVER_SEQ 1000
+#define ID_SAUVER_SEQ_CONFIG 1000
 #define ID_NOM_SEQUENCE 1001
- 
+#define ID_SAUVER_SEQ_XML 1002
+
 FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size,wxOsgApp *osg, long style)
      : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX  | wxCAPTION )
@@ -127,17 +130,20 @@ fond.Set(fond.Red(),255,fond.Blue());
 panneau->SetBackgroundColour(fond);
 topsizer->Add( panneau, 1, wxGROW|wxEXPAND,10  );
 
-wxButton *button = new wxButton( panneau, ID_SAUVER_SEQ, _("Save all step as Macro")  );
-wxStaticText *st = new wxStaticText( panneau, -1, _("         Name ")  );
+wxButton *button1 = new wxButton(panneau, ID_SAUVER_SEQ_CONFIG, _("Save all step as Macro in cfg "));
+wxButton *button2 = new wxButton(panneau, ID_SAUVER_SEQ_XML, _("Save all step as Macro in xml"));
+wxStaticText *st = new wxStaticText(panneau, -1, _("         Name "));
 wxString nomMacro;
 nomMacro.Printf("Macro %d",osg->NumSeqOpe());
 wxTextCtrl *caseNomMacro = new wxTextCtrl( panneau, ID_NOM_SEQUENCE, nomMacro);
-partieBasse->Add(button,0, wxALIGN_CENTER_VERTICAL|wxALL);
-partieBasse->Add(st,0,wxALIGN_CENTER_VERTICAL| wxALL);
+partieBasse->Add(button1, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+partieBasse->Add(button2, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+partieBasse->Add(st, 0, wxALIGN_CENTER_VERTICAL | wxALL);
 partieBasse->Add(caseNomMacro,0, wxALIGN_CENTER_VERTICAL|wxALL);
 panneau->SetSizer(partieBasse);
-Bind(wxEVT_COMMAND_BUTTON_CLICKED,&FenetreAlgo::SauverSequence,this,ID_SAUVER_SEQ);
-Bind(wxEVT_SPINCTRLDOUBLE,&FenetreAlgo::OnSpinReel,this);
+Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_CONFIG);
+Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_XML);
+Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
 Bind(wxEVT_COMMAND_COMBOBOX_SELECTED,&FenetreAlgo::ComboBox,this);
 SetSizerAndFit( topsizer );
 Show(true);
@@ -204,32 +210,37 @@ ExecuterOperation(ind);
 
 void FenetreAlgo::SauverSequence(wxCommandEvent &evt)
 {
-cv::FileStorage fs("F:/Laurent/wxopencv/build64dyn/wxOpenCVMain/test.yml", cv::FileStorage::READ);
-ParametreOperation p1;
-p1.read(fs["Operation1"]);
 if (osgApp == NULL || fenMere == NULL)
 	return;
 FenetrePrincipale *f=fenMere;
 int nb=nbEtape-1;
 std::map <int,std::vector <ParametreOperation > >  *t=((wxOsgApp *)osgApp)->TabSeqOperation();
 (*t)[((wxOsgApp *)osgApp)->NumSeqOpe()].resize(nbEtape);
+wxTextCtrl *w = (wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE, panneau);
 
 map<string, ParametreOperation>::iterator it;
 {
-cv::FileStorage fs("test.yml", cv::FileStorage::WRITE);
+cv::FileStorage fsx;
+wxString nomFic(w->GetValue());
+nomFic.Replace(" ","_");
+nomFic+=".xml";
+cv::FileStorage fsy;
+if (evt.GetId() == ID_SAUVER_SEQ_XML)
+    fsx.open((string)nomFic, cv::FileStorage::WRITE);
 for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
 	{
 	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
 	if (listeOp[nb].first->indEtape==-1)
 		listeOp[nb].first->indEtape=nb;
-	wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
 	listeOp[nb].first->nomSequence=w->GetValue();
 	ParametreOperation p;
 	p=*(listeOp[nb].first);
-	((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+    if (evt.GetId() == ID_SAUVER_SEQ_CONFIG)
+	    ((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
     string nomEtape("Operation");
     nomEtape+=to_string(nbEtape);
-    p.write(fs);
+    if (fsx.isOpened())
+        p.write(fsx);
     (*t)[listeOp[nb].first->idOperation][nb] = p;
 
 	nb--;
@@ -247,10 +258,10 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
 		listeOp[nb].first->nomSequence=w->GetValue();
 		ParametreOperation p;
 		p=*(listeOp[nb].first);
-		((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
-        string nomEtape("Operation");
-        nomEtape += to_string(nbEtape);
-        p.write(fs);
+        if (evt.GetId() == ID_SAUVER_SEQ_CONFIG)
+            ((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+        if (fsx.isOpened())
+            p.write(fsx);
         int id = f->OrigineImage()->indOp1Fenetre;
 		if (id>=0)
 			f=((wxOsgApp *)osgApp)->Fenetre(id);

@@ -45,13 +45,17 @@ void ParametreOperation::write(cv::FileStorage& fs) const {
         }
     fs << "]" << "sizeParam" << "[";
     nb = 0;
-    for (auto iti = sizeParam.begin(); iti != sizeParam.end(); iti++)
+    for (auto itp = sizeParam.begin(); itp != sizeParam.end(); itp++)
         {
-        fs << "{:" << "nom" << iti->first;
-        fs << "valeur" << iti->second.valeur;
-        fs << "minVal" << iti->second.mini;
-        fs << "maxVal" << iti->second.maxi;
-        fs << "pasVal" << iti->second.pas << "}";
+        fs << "{:" << "nom" << itp->first;
+        fs << "largeur" << itp->second.valeur.width;
+        fs << "hauteur" << itp->second.valeur.height;
+        fs << "larMin" << itp->second.mini.width;
+        fs << "hauMin" << itp->second.mini.height;
+        fs << "larMax" << itp->second.maxi.width;
+        fs << "hauMax" << itp->second.maxi.height;
+        fs << "larPas" << itp->second.pas.width;
+        fs << "hauPas" << itp->second.pas.height << "}";;
         nb++;
         }
     std::map<std::string, DomaineParametreOp<cv::Point> >::iterator itp;
@@ -77,9 +81,9 @@ void ParametreOperation::read(const cv::FileNode& node)                         
 {
     int nbEtape=0;
     string s;
-    while (!node[s].empty())
+    if (!node.empty())
     {
-        cv::FileNode op = node[s];
+        cv::FileNode op = node;
         nomOperation=(string)op["op"];
         indOp1Fenetre = (int)op["op1"];
         indOp2Fenetre = (int)op["op2"];
@@ -91,15 +95,35 @@ void ParametreOperation::read(const cv::FileNode& node)                         
         cv::FileNodeIterator it = opl.begin(), it_end = opl.end();
         for (; it != it_end; ++it)
             {
-            intParam[(string)(*it)["nom"]] = DomaineParametreOp<int>((*it)["val"], (*it)["min"], (*it)["max"], (*it)["pas"]);;
+            intParam[(string)(*it)["nom"]] = DomaineParametreOp<int>((*it)["valeur"], (*it)["minVal"], (*it)["maxVal"], (*it)["pasVal"]);;
             }
         opl = op["doubleParam"];
         it = opl.begin(), it_end = opl.end();
         for (; it != it_end; ++it)
             {
-            doubleParam[(string)(*it)["nom"]] = DomaineParametreOp<double>((double)(*it)["val"], (double)(*it)["min"], (double)(*it)["max"], (double)(*it)["pas"]);;
+            doubleParam[(string)(*it)["nom"]] = DomaineParametreOp<double>((double)(*it)["valeur"], (double)(*it)["minVal"], (double)(*it)["maxVal"], (double)(*it)["pasVal"]);
             }
-    }
+        opl = op["sizeParam"];
+        it = opl.begin(), it_end = opl.end();
+        for (; it != it_end; ++it)
+            {
+            int w11 = (*it)["largeur"], w12 = (*it)["hauteur"];
+            int w21 = (*it)["larMin"], w22 = (*it)["hauMin"];
+            int w31 = (*it)["larMax"], w32 = (*it)["hauMax"];
+            int w41 = (*it)["larPas"], w42 = (*it)["hauPas"];
+            sizeParam[(string)(*it)["nom"]] = DomaineParametreOp<cv::Size>(cv::Size(w11, w12), cv::Size(w21, w22), cv::Size(w31, w32), cv::Size(w41, w42));
+            }
+        opl = op["pointParam"];
+        it = opl.begin(), it_end = opl.end();
+        for (; it != it_end; ++it)
+            {
+            int w11 = (*it)["largeur"], w12 = (*it)["hauteur"];
+            int w21 = (*it)["larMin"], w22 = (*it)["hauMin"];
+            int w31 = (*it)["larMax"], w32 = (*it)["hauMax"];
+            int w41 = (*it)["larPas"], w42 = (*it)["hauPas"];
+            pointParam[(string)(*it)["nom"]] = DomaineParametreOp<cv::Point>(cv::Point(w11, w12), cv::Point(w21, w22), cv::Point(w31, w32), cv::Point(w41, w42));
+            }
+        }
 }
 
 

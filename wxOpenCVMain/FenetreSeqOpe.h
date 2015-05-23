@@ -19,9 +19,10 @@ class FenetreSequenceOperation : public  wxFrame
 private :
 FenetrePrincipale				*fenMere;
 void							*osgApp;
-std::map<wxWindow*,std::pair<wxString,int> >	listeOnglet;/*<! Onglet associé à chaque opération */
-std::vector<std::pair<Operation*,int> >			listeOp;	/*<! Onglet associé à chaque opération */
-std::map<int, std::pair< FenetrePrincipale* ,int> >			idFenetre;	/*<! fenetre crée par l'éxécution de la séquence*/
+std::map<wxWindow*,std::pair<wxString,int> >	    listeOnglet;/*<! Onglet associé à chaque opération */
+std::vector<std::pair<Operation*,int> >			    listeOp;	/*<! Onglet associé à chaque opération */
+std::map<int, std::pair< FenetrePrincipale* ,int> >	idFenetre;	/*<! fenetre crée par l'éxécution de la séquence*/
+std::map <int, std::vector <ParametreOperation > >  seqActive;
 
 wxPanel							*panneau;	/*!< Pointeur sur le panneau contenant le classeur */
 wxNotebook						*classeur;	/*!< le classeur avec ses différents onglets*/
@@ -57,7 +58,11 @@ void ComboBox(wxCommandEvent &evt);
 void  OnOpeSelec(wxCommandEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 void  SelectionFichier(wxCommandEvent& event);
-	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
+/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
+void  OuvrirSequence(wxCommandEvent& event);
+/*!< Ouverture d'une sequence à partir du fichier XML*/
+void  BasculeConfig(wxCommandEvent& event);
+/*!< Bascule entre fichier de config et fichier xml d'une séquence*/
 
 void OnTextValider(wxCommandEvent &w);
 void OnKeyDown(wxKeyEvent &);
