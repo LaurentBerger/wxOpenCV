@@ -18,11 +18,11 @@ END_EVENT_TABLE()
 
 FenetreGraphiqueWX::FenetreGraphiqueWX(wxWindow *parent, wxWindowID id,
     const wxPoint& pos, const wxSize& size, long style, const wxString& name, int *attributes)
-    : wxGLCanvas(parent, id,  pos, size, style|wxFULL_REPAINT_ON_RESIZE, name,attributes)
+    : wxGLCanvas(parent, id,attributes,  pos, size, style|wxFULL_REPAINT_ON_RESIZE, name)
 {
 
     // Make the new context current (activate it for use) with this canvas.
-
+glContexte = new wxGLContext(this);
     // default cursor to standard
     _oldCursor = *wxSTANDARD_CURSOR;
 	basculeCopyAvance=0;
@@ -136,7 +136,7 @@ void FenetreGraphiqueWX::OnPaint( wxPaintEvent& WXUNUSED(event) )
 void FenetreGraphiqueWX::OnSize(wxSizeEvent& event)
 {
     // this is also necessary to update the context on some platforms
-    wxGLCanvas::OnSize(event);
+//    wxGLCanvas::OnSize(event);
 
     // set GL viewport (not called by wxGLCanvas::OnSize on all platforms...)
     int width, height;
@@ -566,7 +566,7 @@ void GraphicsOSGWX::useCursor(bool cursorOn)
 
 bool GraphicsOSGWX::makeCurrentImplementation()
 {
-   _canvas->SetCurrent();
+_canvas->SetCurrent(*_canvas->glContexte);
     return true;
 }
 

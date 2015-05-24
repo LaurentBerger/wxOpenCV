@@ -75,15 +75,18 @@ if (f3D)
 void ZoneImage::OnPaint(wxPaintEvent &evt)
 {
     wxSize size = GetClientSize();
-    if (mBuffer.IsOk() == false || mBuffer.GetWidth() != size.x || mBuffer.GetHeight() != size.y)
-    {
-        mBuffer.Create(size);
-    }
-    wxBufferedPaintDC  dc(this, mBuffer);
-    dc.SetBackground(*wxWHITE_BRUSH);
-    dc.Clear();
-    PrepareDC(dc);
-	f->DrawWindow (dc);
+    if (size.GetHeight()*size.GetHeight()!=0)
+        {
+        if (mBuffer.IsOk() == false || mBuffer.GetWidth() != size.x || mBuffer.GetHeight() != size.y)
+        {
+            mBuffer.Create(size);
+        }
+        wxBufferedPaintDC  dc(this, mBuffer);
+        dc.SetBackground(*wxWHITE_BRUSH);
+        dc.Clear();
+        PrepareDC(dc);
+	    f->DrawWindow (dc);
+        }
 }
 
 

@@ -121,14 +121,14 @@ if (!t)
 	return;
 wxXmlNode *table=new wxXmlNode(wxXML_ELEMENT_NODE,"table");
 wxXmlNode *tgroup=new wxXmlNode(wxXML_ELEMENT_NODE,"tgroup");
-texte.Printf("%d",t->GetCols()+1);
+texte.Printf("%d", t->GetNumberCols() + 1);
 tgroup->AddAttribute("cols",texte);
 tgroup->AddAttribute("align","right");
 wxXmlNode *titreCol=new wxXmlNode(wxXML_ELEMENT_NODE,"thead");
 wxXmlNode *ligne=new wxXmlNode(wxXML_ELEMENT_NODE,"row");
 wxXmlNode *entree=new wxXmlNode(wxXML_ELEMENT_NODE,"entry");
 ligne->AddChild(entree);
-for (int c=0;c<t->GetCols();c++)
+for (int c = 0; c<t->GetNumberCols(); c++)
 	{
 	wxXmlNode *entree=new wxXmlNode(wxXML_ELEMENT_NODE,"entry");
 	nt=new wxXmlNode(wxXML_TEXT_NODE,"");
@@ -146,11 +146,11 @@ char col[3];
 int lig=1;
 col[0]='A';col[1]=0;;col[2]=0;
 
-for (int l=1;l<=t->GetRows();l++)
+for (int l = 1; l <= t->GetNumberRows(); l++)
 	{
 	ligne=new wxXmlNode(wxXML_ELEMENT_NODE,"row");
 	
-	for (int c=0;c<t->GetCols();c++)
+    for (int c = 0; c<t->GetNumberCols(); c++)
 		{
 		wxXmlNode *entree=new wxXmlNode(wxXML_ELEMENT_NODE,"entry");
 		if (c==0)

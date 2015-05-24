@@ -1649,7 +1649,6 @@ wxFileName p(s);
 wxCharBuffer ww=s.mb_str ();
 char *nomFichier=ww.data() ;
 wxImage im(s);
-im.SaveFile("x.bmp");
 if (s.Find("yml")>=0)
 	{
 	try 

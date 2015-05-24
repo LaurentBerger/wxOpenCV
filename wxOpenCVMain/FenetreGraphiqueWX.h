@@ -32,13 +32,14 @@ PlanReference	*surfaceReference;
 void			*osgApp;
 void			*fenParent;
 
-wxGLContext		*glContexte;
 
 wxTimer				*horlogeSeq;
 wxTimer				*horlogeCopy;
 int					basculeCopyAvance;
 
     osg::ref_ptr<osgViewer::GraphicsWindow> _graphics_window;
+public :
+wxGLContext		*glContexte;
 
 public:
     FenetreGraphiqueWX(wxWindow *parent, wxWindowID id = wxID_ANY,

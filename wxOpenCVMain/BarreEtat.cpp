@@ -47,8 +47,8 @@ m_checkbox->SetValue(true);
 wxSize		size;
 wxRect		rect;
 GetFieldRect(Champ_Rouge, rect);
-wxPoint p=rect.GetBottomLeft();
-m_planRouge = new wxButton(this, 3792,"R",p, wxDefaultSize,wxBU_EXACTFIT);
+wxPoint p=rect.GetTopLeft();
+m_planRouge = new wxButton(this, 3792,"R",wxDefaultPosition, wxDefaultSize,wxBU_EXACTFIT);
 size = m_planRouge->GetSize();
 
 m_planRouge->Move(rect.x + (rect.width - size.x) / 2,
@@ -56,14 +56,14 @@ m_planRouge->Move(rect.x + (rect.width - size.x) / 2,
 m_planRouge->SetLabel("R");
 
 GetFieldRect(Champ_Vert, rect);
-p=rect.GetBottomLeft();
-m_planVert = new wxButton(this, 3793,"G",p, wxDefaultSize,wxBU_EXACTFIT);
+p = rect.GetTopLeft();
+m_planVert = new wxButton(this, 3793, "G", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
 size = m_planVert->GetSize();
 m_planVert->SetLabel("G");
 
 m_planVert->Move(rect.x + (rect.width - size.x) / 2,
 						rect.y + (rect.height - size.y) / 2);
-m_planBleu = new wxButton(this, 3794,"B",p, wxDefaultSize,wxBU_EXACTFIT);
+m_planBleu = new wxButton(this, 3794, "B", wxDefaultPosition, wxDefaultSize, wxBU_EXACTFIT);
 m_planBleu->SetLabel("B");
 size = m_planBleu->GetSize();
 GetFieldRect(Champ_Bleu, rect);
