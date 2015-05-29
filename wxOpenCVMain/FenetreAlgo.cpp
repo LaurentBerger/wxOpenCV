@@ -5,6 +5,7 @@
 
 using namespace std;
 
+
 void FenetrePrincipale::ParamAlgo(wxCommandEvent& event)
 {
 
@@ -80,7 +81,7 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
 		nbEtape++;
 		f=((wxOsgApp *)osgApp)->Fenetre(id);
 		}
-	else 
+	else
 		f=NULL;
 	}
 map<string,ParametreOperation>::iterator it;
@@ -114,11 +115,11 @@ while (f && f->OrigineImage()->indOp1Fenetre >= 0)
 		int id=f->OrigineImage()->indOp1Fenetre;
 		if (id>=0)
 			f=((wxOsgApp *)osgApp)->Fenetre(id);
-		else 
+		else
 			f=NULL;
 		nb--;
 		}
-	else 
+	else
 		f=NULL;
 	}
 wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
@@ -174,12 +175,12 @@ if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
 		{
 		int nb=	((wxComboBox*)(w.GetEventObject()))->GetCurrentSelection ();
 		int i=0;
-		std::map <string,int  >::iterator iter = pOCV->listeParam[nom].begin(); 
+		std::map <string,int  >::iterator iter = pOCV->listeParam[nom].begin();
 		for (; iter !=pOCV->listeParam[nom].end() && i!=nb; ++iter,++i);
 		if (i==nb)
 			pOCV->intParam[nom].valeur=iter->second;
 		}
-	else 
+	else
 		{
 		if (pOCV->intParam[nom].valeur==((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
 			return;
@@ -265,12 +266,12 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
         int id = f->OrigineImage()->indOp1Fenetre;
 		if (id>=0)
 			f=((wxOsgApp *)osgApp)->Fenetre(id);
-		else 
+		else
 			f=NULL;
 		(*t)[listeOp[nb].first->idOperation][nb]=p;
 		nb--;
 		}
-	else 
+	else
 		f=NULL;
 	}
 }
@@ -302,24 +303,24 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	new wxStaticText(page,indOriCtrl+2*nbParam,its->first+" x",p, s);
 	p += wxPoint(s.GetX(),0);
 //	wxSpinCtrl *spw=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-	wxSpinCtrlDouble *spw=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+	wxSpinCtrlDouble *spw=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 	if(its->second.res)
 		spw->Disable();
 	spw->SetRange(its->second.mini.width, its->second.maxi.width);
-	spw->SetIncrement((double)its->second.pas.width); 
+	spw->SetIncrement((double)its->second.pas.width);
 	p += wxPoint(s.GetX(),0);
 	nbParam++;
 	new wxStaticText(page,indOriCtrl+2*nbParam,its->first+" y",p, s);
 	p += wxPoint(s.GetX(),0);
 	nombre.Printf("%d",its->second.valeur.height);
 //	wxSpinCtrl *sph=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-//	sph->SetRange(0,256); 
-	wxSpinCtrlDouble *sph=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+//	sph->SetRange(0,256);
+	wxSpinCtrlDouble *sph=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 	if (its->second.res)
 		sph->Disable();
 	sph->SetRange(its->second.mini.height, its->second.maxi.height);
-	sph->SetIncrement((double)its->second.pas.height); 
-		
+	sph->SetIncrement((double)its->second.pas.height);
+
 	nbParam++;
 	ligne+=20;
 	if (tailleMax.x<p.x+s.x)
@@ -337,7 +338,7 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 	new wxStaticText(page,indOriCtrl+2*nbParam,iti->first,p, s);
 	p += wxPoint(s.GetX(),0);
 //	wxSpinCtrl *sp=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-//	sp->SetRange(iti->second.mini,iti->second.maxi); 
+//	sp->SetRange(iti->second.mini,iti->second.maxi);
 	if (ParametreOperation::listeParam.find(iti->first)!=ParametreOperation::listeParam.end())
 		{
 		int nbChaine=pOCV->listeParam[iti->first].size();
@@ -356,9 +357,9 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 		}
 	else
 		{
-		wxSpinCtrlDouble *sp=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
-		sp->SetRange(iti->second.mini,iti->second.maxi); 
-		sp->SetIncrement(iti->second.pas); 
+		wxSpinCtrlDouble *sp=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
+		sp->SetRange(iti->second.mini,iti->second.maxi);
+		sp->SetIncrement(iti->second.pas);
 		if (iti->second.res)
 			sp->Disable();
 	}
@@ -411,7 +412,7 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
 	p += wxPoint(s.GetX(), 0);
 	nombre.Printf("%d", itp->second.valeur.y);
 	//	wxSpinCtrl *sph=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-	//	sph->SetRange(0,256); 
+	//	sph->SetRange(0,256);
 	wxSpinCtrlDouble *sph = new wxSpinCtrlDouble(page, indOriCtrl + 2 * nbParam + 1, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
 	if (itp->second.res)
 		sph->Disable();
@@ -465,7 +466,7 @@ if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
 		valeur = pOCV->intParam[nom].valeur + pOCV->intParam[nom].pas;
 	if(ds>0 )
 		valeur = pOCV->intParam[nom].valeur - pOCV->intParam[nom].pas;
-	if (	valeur >=pOCV->intParam[nom].mini && valeur <pOCV->intParam[nom].maxi && 
+	if (	valeur >=pOCV->intParam[nom].mini && valeur <pOCV->intParam[nom].maxi &&
 		(valeur%pOCV->intParam[nom].pas)==(pOCV->intParam[nom].mini%pOCV->intParam[nom].pas))
 		{
 		pOCV->intParam[nom].valeur=valeur;
@@ -489,7 +490,7 @@ if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 			valeur = pOCV->sizeParam[nom].valeur.width + pOCV->sizeParam[nom].pas.width;
 		if(ds>0 )
 			valeur = pOCV->sizeParam[nom].valeur.width - pOCV->sizeParam[nom].pas.width;
-		if (	valeur >=pOCV->sizeParam[nom].mini.width && valeur <pOCV->sizeParam[nom].maxi.width && 
+		if (	valeur >=pOCV->sizeParam[nom].mini.width && valeur <pOCV->sizeParam[nom].maxi.width &&
 			(valeur%pOCV->sizeParam[nom].pas.width)==(pOCV->sizeParam[nom].mini.width%pOCV->sizeParam[nom].pas.width))
 			{
 			pOCV->sizeParam[nom].valeur.width=valeur;
@@ -509,7 +510,7 @@ if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 			valeur = pOCV->sizeParam[nom].valeur.height + pOCV->sizeParam[nom].pas.height;
 		if(ds>0 )
 			valeur = pOCV->sizeParam[nom].valeur.height - pOCV->sizeParam[nom].pas.height;
-		if (	valeur >=pOCV->sizeParam[nom].mini.height && valeur <pOCV->sizeParam[nom].maxi.height && 
+		if (	valeur >=pOCV->sizeParam[nom].mini.height && valeur <pOCV->sizeParam[nom].maxi.height &&
 			(valeur%pOCV->sizeParam[nom].pas.height)==(pOCV->sizeParam[nom].mini.height%pOCV->sizeParam[nom].pas.height))
 			{
 			pOCV->sizeParam[nom].valeur.height=valeur;
@@ -604,7 +605,7 @@ if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
 		valeur = pOCV->intParam[nom].valeur + pOCV->intParam[nom].pas;
 	if(ds>0 )
 		valeur = pOCV->intParam[nom].valeur - pOCV->intParam[nom].pas;
-	if (	valeur >=pOCV->intParam[nom].mini && valeur <pOCV->intParam[nom].maxi && 
+	if (	valeur >=pOCV->intParam[nom].mini && valeur <pOCV->intParam[nom].maxi &&
 		(valeur%pOCV->intParam[nom].pas)==(pOCV->intParam[nom].mini%pOCV->intParam[nom].pas))
 		{
 		pOCV->intParam[nom].valeur=valeur;
@@ -628,7 +629,7 @@ if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 			valeur = pOCV->sizeParam[nom].valeur.width + pOCV->sizeParam[nom].pas.width;
 		if(ds>0 )
 			valeur = pOCV->sizeParam[nom].valeur.width - pOCV->sizeParam[nom].pas.width;
-		if (	valeur >=pOCV->sizeParam[nom].mini.width && valeur <pOCV->sizeParam[nom].maxi.width && 
+		if (	valeur >=pOCV->sizeParam[nom].mini.width && valeur <pOCV->sizeParam[nom].maxi.width &&
 			(valeur%pOCV->sizeParam[nom].pas.width)==(pOCV->sizeParam[nom].mini.width%pOCV->sizeParam[nom].pas.width))
 			{
 			pOCV->sizeParam[nom].valeur.width=valeur;
@@ -648,7 +649,7 @@ if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 			valeur = pOCV->sizeParam[nom].valeur.height + pOCV->sizeParam[nom].pas.height;
 		if(ds>0 )
 			valeur = pOCV->sizeParam[nom].valeur.height - pOCV->sizeParam[nom].pas.height;
-		if (	valeur >=pOCV->sizeParam[nom].mini.height && valeur <pOCV->sizeParam[nom].maxi.height && 
+		if (	valeur >=pOCV->sizeParam[nom].mini.height && valeur <pOCV->sizeParam[nom].maxi.height &&
 			(valeur%pOCV->sizeParam[nom].pas.height)==(pOCV->sizeParam[nom].mini.height%pOCV->sizeParam[nom].pas.height))
 			{
 			pOCV->sizeParam[nom].valeur.height=valeur;
@@ -713,7 +714,7 @@ for (int i=indEtape;i<nbEtape;i++)
 		FenetrePrincipale *f;
 
 		f =app->Fenetre(listeOp[i].second);
-		
+
 		if (f->ImAcq()!=r[0])
 			f->AssosierImage(r[0]);
 		if (i<nbEtape-1)

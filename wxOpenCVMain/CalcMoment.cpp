@@ -1,4 +1,5 @@
-#include "imageInfo.h"
+#include "ImageInfo.h"
+#include <stdexcept>
 
 
 std::vector<cv::Moments> *ImageInfoCV::CalcMoment()
@@ -8,7 +9,7 @@ huMoment=new std::vector<double>[channels()];
 int nbCanaux=channels();
 
 if (depth()==CV_32F ||  depth()==CV_64F)
-	throw std::logic_error( "Incoheret type" ); 
+	throw std::logic_error( "Incoherent type" );
 
 if (minIm==NULL)
 	ExtremumLoc();
@@ -18,7 +19,7 @@ for (int i=0;i<nbCanaux;i++)
 	}
 switch(depth()){
 case CV_32S :
-	for (int i=0;i<rows;i++)		
+	for (int i=0;i<rows;i++)
 		{
 		long *d=(long*)ptr(i);
 		for (int j=0;j<cols;j++)
@@ -42,7 +43,7 @@ case CV_32S :
 		}
 	break;
 case CV_16U :
-	for (int i=0;i<rows;i++)		
+	for (int i=0;i<rows;i++)
 		{
 		unsigned short *d=(unsigned short*)ptr(i);
 		for (int j=0;j<cols;j++)
@@ -62,7 +63,7 @@ case CV_16U :
 		}
 	break;
 case CV_16S :
-	for (int i=0;i<rows;i++)		
+	for (int i=0;i<rows;i++)
 		{
 		short *d=(short*)ptr(i);
 		for (int j=0;j<cols;j++)
@@ -85,7 +86,7 @@ case CV_16S :
 		}
 	break;
 case CV_8U :
-	for (int i=0;i<rows;i++)		
+	for (int i=0;i<rows;i++)
 		{
 		unsigned char *d=data+i*step[0];
 		float *g=NULL;

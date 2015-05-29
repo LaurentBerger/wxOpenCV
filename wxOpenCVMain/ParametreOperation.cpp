@@ -8,6 +8,17 @@ using namespace std;
 
 map<string,map<string,int> > ParametreOperation::listeParam;
 
+#ifndef __WIN32__ // en rélaité C++11
+std::string to_string(double x)
+{
+std::ostringstream convert;   // stream used for the conversion
+
+convert << x;      // insert the textual representation of 'Number' in the characters in the stream
+
+return convert.str(); // set 'Result' to the contents of the stream
+}
+
+#endif
 
 
 void ParametreOperation::write(cv::FileStorage& fs) const {
@@ -23,6 +34,7 @@ void ParametreOperation::write(cv::FileStorage& fs) const {
     fs << "nomSequence" << nomSequence;
     int nb = 0;
     fs << "intParam" << "[";
+#ifdef __WIN32__ // en realité C++11
     for (auto iti = intParam.begin(); iti != intParam.end(); iti++)
         {
         fs << "{:" << "nom"<<iti->first;
@@ -72,6 +84,62 @@ void ParametreOperation::write(cv::FileStorage& fs) const {
         fs << "larPas" << itp->second.pas.x;
         fs << "hauPas" << itp->second.pas.y << "}";;
         }
+#else
+{
+std::map<std::string,DomaineParametreOp<int> >::const_iterator iti;
+    for ( iti = intParam.begin(); iti != intParam.end(); iti++)
+        {
+        fs << "{:" << "nom"<<iti->first;
+        fs << "valeur" << iti->second.valeur;
+        fs << "minVal" << iti->second.mini;
+        fs << "maxVal" << iti->second.maxi;
+        fs << "pasVal" << iti->second.pas<<"}";
+        }
+ }
+    fs << "]" << "doubleParam" << "[";
+    nb = 0;
+ {
+ std::map<std::string, DomaineParametreOp<double> >::const_iterator iti;
+    for (iti = doubleParam.begin(); iti != doubleParam.end(); iti++)
+        {
+        fs << "{:" << "nom" << iti->first;
+        fs << "valeur" << iti->second.valeur;
+        fs << "minVal" << iti->second.mini;
+        fs << "maxVal" << iti->second.maxi;
+        fs << "pasVal" << iti->second.pas << "}";
+        nb++;
+        }
+ }
+    fs << "]" << "sizeParam" << "[";
+    nb = 0;
+    for (map<string, DomaineParametreOp<cv::Size> >::const_iterator itp = sizeParam.begin(); itp != sizeParam.end(); itp++)
+        {
+        fs << "{:" << "nom" << itp->first;
+        fs << "largeur" << itp->second.valeur.width;
+        fs << "hauteur" << itp->second.valeur.height;
+        fs << "larMin" << itp->second.mini.width;
+        fs << "hauMin" << itp->second.mini.height;
+        fs << "larMax" << itp->second.maxi.width;
+        fs << "hauMax" << itp->second.maxi.height;
+        fs << "larPas" << itp->second.pas.width;
+        fs << "hauPas" << itp->second.pas.height << "}";;
+        nb++;
+        }
+    fs << "]" << "pointParam" << "[";
+    for (map<string, DomaineParametreOp<cv::Point> >::const_iterator itp = pointParam.begin(); itp != pointParam.end(); itp++)
+        {
+        fs << "{:" << "nom" << itp->first;
+        fs << "largeur" << itp->second.valeur.x;
+        fs << "hauteur" << itp->second.valeur.y;
+        fs << "larMin" << itp->second.mini.x;
+        fs << "hauMin" << itp->second.mini.y;
+        fs << "larMax" << itp->second.maxi.x;
+        fs << "hauMax" << itp->second.maxi.y;
+        fs << "larPas" << itp->second.pas.x;
+        fs << "hauPas" << itp->second.pas.y << "}";;
+        }
+
+#endif
     fs << "]" ;
     fs << "}";
 
@@ -225,7 +293,7 @@ if (s == "fond_gaussianmixture")
 	doubleParam["NoiseSigma"] = DomaineParametreOp<double>(30 * .5, 0, 100, 0.01);
 	doubleParam["learningRate"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
 	intParam["ResultImage"] = DomaineParametreOp<int>(0, 0, 2, 1);
-	
+
 	}
 
 if (s == "fond_gaussianmixture2")
@@ -481,7 +549,7 @@ if (s == "briskfeatures2d")
     nomOperation = s;
     nbImageRes = 0;
     nbOperande = 1;
-    opAttribut = true; 
+    opAttribut = true;
     intParam["thresh"] = DomaineParametreOp<int>(30, 1, 255, 1);
     intParam["octaves"] = DomaineParametreOp<int>(3, 1, 255, 1);
     doubleParam["patternScale"] = DomaineParametreOp<double>(1.0, 0.1, 100, 0.1);;
@@ -1318,7 +1386,7 @@ if (s=="medianaxis")
 	opUnaireSelec = &ImageInfoCV::LigneMediane;
 	return true;
 	}
-if (s == "wrapAffine") 
+if (s == "wrapAffine")
 	{
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#warpaffine";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
@@ -1409,7 +1477,7 @@ if (opNaireSelec)
 
 if (opBinaireSelec)
 	{
-	
+
 	try
 		{
 		if (op1 && op2==NULL)

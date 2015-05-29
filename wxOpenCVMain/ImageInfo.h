@@ -1,7 +1,7 @@
-/*#ifdef _DEBUG   
-#ifndef DBG_NEW      
-#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )      
-#define new DBG_NEW   
+/*#ifdef _DEBUG
+#ifndef DBG_NEW
+#define DBG_NEW new ( _NORMAL_BLOCK , __FILE__ , __LINE__ )
+#define new DBG_NEW
 #endif
 #endif  // _DEBUG
 #define _CRTDBG_MAP_ALLOC
@@ -16,7 +16,7 @@
 #include <map>
 #include <string>
 
-#include "opencv2/opencv.hpp" 
+#include "opencv2/opencv.hpp"
 #include "ImageConstante.h"
 #include "ParametreOperation.h"
 typedef short CodeErreur;
@@ -39,7 +39,7 @@ class ImageInfoCV : public cv::Mat {
 // 000 non signé 8 bits, 011 8 bits signé, 010 non signé 16 bits, 011 16 bits signé
 // 101 32 bits , 110 64 bits
 // xxx bit de poids fort pour le nombre de canaux
-// 000 1 canal, 001 2 canaux, 010 3 canaux 
+// 000 1 canal, 001 2 canaux, 010 3 canaux
 public :
 static ImageInfoCV **op33;
 static ImageInfoCV **op55;
@@ -48,7 +48,7 @@ static ImageInfoCV **opnn;
 static ImageInfoCV **opMorph;
 
 protected :
-// 
+//
 
 static char *tpFct[9];
 
@@ -62,18 +62,18 @@ char	*natureImage;		// Méthode de saisie de l'image
 char	dateCreation[30];
 char	*createur;			// utilisateur
 double	resolX;				// Pixel par cm
-double	resolY;				// Pixel par cm 
+double	resolY;				// Pixel par cm
 double	resolZ;
 char	*uniteZ;
 char	*typeMateriel;		// Nom de la chaine d'acquisition
 char	*marqueMateriel;	// marque de la chaine d'acquisition
 char	*copyright;
 char	*nomProjet;			// Nom du projet associée à l'image
-char	*nomPgm;			// Nom et version du pgm 
+char	*nomPgm;			// Nom et version du pgm
 char	*ordinateur;
 char	*description;
 char	*champUtil[20];
-							//membres utilisés en fonction du contexte 
+							//membres utilisés en fonction du contexte
 long	nbChampCopolymere;
 char	**copolymere;
 
@@ -129,7 +129,7 @@ std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
 std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
 std::vector<cv::KeyPoint> kAkaze;	/*<! Point clef de Akaze */
 std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de blob */
-std::vector<std::vector <cv::Point >> kMser;	/*<! region et point détectés par mser */
+std::vector<std::vector <cv::Point > > kMser;	/*<! region et point détectés par mser */
 cv::Mat	descORB;				    /*<! Descripteur associé à l'un des points clé ORB*/
 cv::Mat	descAKAZE;				    /*<! Descripteur associé à l'un des points clé AKAZE*/
 cv::Mat	descBRISK;				    /*<! Descripteur associé à l'un des points clé BRISK*/
@@ -148,7 +148,7 @@ std::vector<double> angle;			/*<! Angle issus de l'analyse du mouvement (calcGlo
 std::map<std::string, ParametreOperation> listeOpAttribut;
 ParametreOperation *pOCVUpdateMotionHistory;
 
-public : 
+public :
 //	********* Constructeurs et destructeur
 ImageInfoCV(long nbL,long nbC,int type);
 explicit ImageInfoCV(void);
@@ -259,20 +259,20 @@ char*	LitNomProjet(void);
 char*	InfoImage(void);
 
 //Utilitaire pour info sur l'image
-char *InfoPixel(long x,long y,long =-1,long =-1); 
+char *InfoPixel(long x,long y,long =-1,long =-1);
 
 // Surcharge des opérateurs
-ImageInfoCV 	*operator* (ImageInfoCV	&z);		// Convolution		
+ImageInfoCV 	*operator* (ImageInfoCV	&z);		// Convolution
 ImageInfoCV 	*operator& (ImageInfoCV	&z);		// Erosion
 ImageInfoCV 	*operator| (ImageInfoCV	&z);		// Dilatation
 ImageInfoCV 	*operator+ (ImageInfoCV	&z);		// Addition
-ImageInfoCV 	*operator+ (double	z);		
+ImageInfoCV 	*operator+ (double	z);
 ImageInfoCV 	*operator- (ImageInfoCV	&z);		 // Soustraction
-ImageInfoCV 	*operator- (double	z);		
+ImageInfoCV 	*operator- (double	z);
 ImageInfoCV 	*operator^ (ImageInfoCV	&z);		 // Produit
-ImageInfoCV 	*operator^ (double	z);		
+ImageInfoCV 	*operator^ (double	z);
 ImageInfoCV 	*operator/ (ImageInfoCV	&z);		 // Division
-ImageInfoCV 	*operator/ (double	z);		
+ImageInfoCV 	*operator/ (double	z);
 ImageInfoCV 	&operator= (ImageInfoCV	&z);
 ImageInfoCV	*Variance (long);
 
@@ -372,7 +372,7 @@ ImageInfoCV 	*IOndelette(void);
 ImageInfoCV	*Sqr (void);
 ImageInfoCV	*Abs (void);
 
-// Seuilage et composantes connexes 
+// Seuilage et composantes connexes
 long  SeuilImage(float *seuil,int ligDeb=0, int colDeb=0, int hauteur=-1, int largeur=-1);
 void  SelectionMaxLocaux(ImageInfoCV &);
 ImageInfoCV *Binarisation(float *seuilBin,ImageInfoCV* =NULL);
@@ -433,7 +433,7 @@ ImageInfoCV *SuiviLigneGradient(ImageInfoCV &,ImageInfoCV &,ImageInfoCV * = NULL
 // Spécifique MPI
 virtual void DiffusionMPI(void);
 
-// ********* Accès aux membres privés et 
+// ********* Accès aux membres privés et
 //	Lecture des membres privés
 double *MinIm(){if (!minIm) ExtremumLoc(); return minIm;};		/*< Minimum de l'image pour chaque canal */
 double *MaxIm(){if (!maxIm) ExtremumLoc();return maxIm;};		/*< Maximum de l'image pour chaque canal */
@@ -475,11 +475,11 @@ ParametreOperation *OpAttribut(std::string s){if (listeOpAttribut.find(s) != lis
 
 int EtapeOp();  /*<! retourne l'indice de l'étape de l'opérateur le plus grand */
 void CloneStat(ImageInfoCV *im);
-void DeplacerFlotOptique(ImageInfoCV *im);/*<! Fonction déplaçant le pointeur flotOptique de im dans this. Celui de im devient nul */ 
-void RazFlotOptique(){flotOptique=NULL;};/*<! R emise à zéro du pointeur flotOptique */ 
+void DeplacerFlotOptique(ImageInfoCV *im);/*<! Fonction déplaçant le pointeur flotOptique de im dans this. Celui de im devient nul */
+void RazFlotOptique(){flotOptique=NULL;};/*<! R emise à zéro du pointeur flotOptique */
 
 // MODIFICATION d'une fonction OPENCV
-void Threshold( cv::InputArray _src, cv::OutputArray _dst, double thresh, double maxval, int type ); 
+void Threshold( cv::InputArray _src, cv::OutputArray _dst, double thresh, double maxval, int type );
 
 };
 

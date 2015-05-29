@@ -842,16 +842,16 @@ if (f) f->RazSeqOp();
 
 
 void FenetrePrincipale::MAJRectangle(wxCommandEvent& event)
-{ 
-feuille->ModeCoupe(false); 
-feuille->ModeRectangle(!feuille->ModeRectangle()); 
+{
+feuille->ModeCoupe(false);
+feuille->ModeRectangle(!feuille->ModeRectangle());
 feuille->Refresh(false);
 }
 
 void FenetrePrincipale::MAJCoupe(wxCommandEvent& event)
-{ 
-feuille->ModeRectangle(false); 
-feuille->ModeCoupe(!feuille->ModeCoupe()); 
+{
+feuille->ModeRectangle(false);
+feuille->ModeCoupe(!feuille->ModeCoupe());
 feuille->Refresh(false);
 }
 
@@ -936,7 +936,8 @@ for (int i = 0; i<imAcq->RegionMvt()->size();i++)
 	wxPoint p_1((*(imAcq->RegionMvt()))[i].x, (*(imAcq->RegionMvt()))[i].y);
 	wxPoint p_2((*(imAcq->RegionMvt()))[i].width, (*(imAcq->RegionMvt()))[i].height);
 	wxPoint p1(RepereImageEcran(p_1));
-	wxPoint p2(RepereImageEcran(p_1+p_2));
+	wxPoint p_3=p_1+p_2;
+	wxPoint p2(RepereImageEcran(p_3));
 	hdc.DrawLine(p1, p2);
 }
 }
@@ -1016,7 +1017,7 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 	hdc.SetPen(crayon[k]);
 	hdc.SetBrush(*wxTRANSPARENT_BRUSH);
 	for( int i = 0; i < boncoin[k].size(); i++ )
-		{ 
+		{
 		wxPoint p_1(boncoin[k][i].x,boncoin[k][i].y);
 		wxPoint p1(RepereImageEcran(p_1));
 		hdc.DrawCircle(p1,5);
@@ -1032,7 +1033,7 @@ if (imAcq->CoinRef())
 		hdc.SetBrush(*wxTRANSPARENT_BRUSH);
 		for( int i = 0; i < boncoin[k].size(); i++ )
 			if (boncoin[k][i].x>=0 && boncoin[k][i].y>=0)
-				{ 
+				{
 				wxPoint p_1(boncoin[k][i].x,boncoin[k][i].y);
 				wxPoint p1(RepereImageEcran(p_1));
 				hdc.DrawRoundedRectangle(p1-wxSize(5,5),wxSize(10,10),2);
@@ -1061,7 +1062,7 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 	hdc.SetPen(crayon[k]);
 	hdc.SetBrush(*wxTRANSPARENT_BRUSH);
 	for( int i = 0; i < cercle[k].size(); i++ )
-		{ 
+		{
 		wxPoint p_1(cercle[k][i][0],cercle[k][i][1]);
 		wxPoint p1(RepereImageEcran(p_1));
 		hdc.DrawCircle(p1,(fZoomNume*cercle[k][i][2])/fZoomDeno);
@@ -1126,8 +1127,10 @@ for (int i=0;i<imAcq->channels();i++)
 		for(int x = 0; x < nbColonne; x += step)
 		{
 			const cv::Point2f& fxy = imAcq->FlotOptique()[i].at<cv::Point2f>(y, x);
-			wxPoint p1(RepereImageEcran(wxPoint(x,y)));
-			wxPoint p2(RepereImageEcran(wxPoint(x+fxy.x, y+fxy.y)));
+			wxPoint p(x,y);
+			wxPoint p1(RepereImageEcran(p));
+			p +=wxPoint(fxy.x,fxy.y);
+			wxPoint p2(RepereImageEcran(p));
 
 			hdc.DrawLine(p1,p2);
 			hdc.DrawCircle(p1, 2);
@@ -1153,12 +1156,12 @@ wxImage imgTrans(imAcq->cols, imAcq->rows);
 imgTrans.InitAlpha();
 unsigned char *alpha = imgTrans.GetAlpha();
 memset(alpha, wxIMAGE_ALPHA_TRANSPARENT, imgTrans.GetWidth()*imgTrans.GetHeight());
-std::vector<std::vector <cv::Point>>  *region = imAcq->PointCleMSER();
-for (std::vector<std::vector <cv::Point>>::iterator itr = region->begin(); itr != region->end(); itr++)
+std::vector<std::vector <cv::Point> >  *region = imAcq->PointCleMSER();
+for (std::vector<std::vector <cv::Point> >::iterator itr = region->begin(); itr != region->end(); itr++)
     {
     for (std::vector<cv::Point>::iterator itp=itr->begin();itp!=itr->end();itp++)
     {
-        
+
         wxPoint p_1(itp->x, itp->y);
         imgTrans.SetRGB(itp->x, itp->y, 255, 0, 0);
         imgTrans.SetAlpha(itp->x, itp->y,128);

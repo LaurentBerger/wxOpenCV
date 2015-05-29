@@ -88,7 +88,7 @@ enum
 	ID_ROTATION_AFFINE,
 	ID_NOUVELLE_DIMENSION,
 	ID_LOGPOLAR,
-	ID_UNDISTORT, 
+	ID_UNDISTORT,
 
 	ID_FOND_MOG,
 	ID_FOND_MOG2,
@@ -158,8 +158,9 @@ BEGIN_EVENT_TABLE(wxSizeReportCtrl, wxControl)
     EVT_ERASE_BACKGROUND(wxSizeReportCtrl::OnEraseBackground)
 END_EVENT_TABLE()
 
+
 #if USE_XPM_BITMAPS
-// Barre outils Fichier et edition
+/*// Barre outils Fichier et edition
     #include "bitmaps/new.xpm"
     #include "bitmaps/open.xpm"
     #include "bitmaps/save.xpm"
@@ -220,7 +221,7 @@ END_EVENT_TABLE()
    #include "bitmaps/majmvt.xpm"
 #include "bitmaps/estimtrans.xpm"
 #include "bitmaps/phasecorrel.xpm"
-
+*/
 
 #endif // USE_XPM_BITMAPS
 #if USE_XPM_BITMAPS
@@ -241,6 +242,7 @@ Commande::Commande(int a, wxString b, wxString c, wxString d, int e) :idEvt(a), 
 #define INIT_TOOL_BMP(bmp) \
 	toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
 #endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
+wxMessageBox(b,"",wxOK,NULL);
 	bitmap = wxBitmap(b);
 };
 

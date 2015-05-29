@@ -5,7 +5,7 @@
 using namespace std;
 
 #define IDSAUVER 500
-#define IND_OPE 100 
+#define IND_OPE 100
 #define LISTE_OP_SEQ 101
 #define IND_HYPER 10 // hyperlien
 #define IND_STATIC 200 // champ static
@@ -15,6 +15,9 @@ using namespace std;
 #define IND_FENETREUNIQUE IND_HYPER-2 // Selection de fichier
 #define IND_FICHIERS IND_HYPER-3 // Selection de fichier
 #define IND_CONFIG IND_HYPER-4 // Selection de fichier
+
+
+
 
 FenetreSequenceOperation::FenetreSequenceOperation(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size,wxOsgApp *osg, long style)
@@ -106,10 +109,10 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	indStatic++;
 	p += wxPoint(s.GetX(),0);
 	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
-		wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+		wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 	else
 		wsd->Move(p);
-	wsd->SetIncrement((double)its->second.pas.width); 
+	wsd->SetIncrement((double)its->second.pas.width);
 	wsd->SetRange(its->second.mini.width, its->second.maxi.width);
 	wsd->SetValue(its->second.valeur.width);
 	wsd->Show(true);
@@ -127,16 +130,16 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	p += wxPoint(s.GetX(),0);
 	nombre.Printf("%d",its->second.valeur.height);
 	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
-		wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+		wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 	else
 		wsd->Move(p);
 
 	wsd->SetName(its->first);
 	wsd->SetRange(its->second.mini.height, its->second.maxi.height);
-	wsd->SetIncrement((double)its->second.pas.height); 
+	wsd->SetIncrement((double)its->second.pas.height);
 	wsd->SetValue(its->second.valeur.height);
 	wsd->Show(true);
-	indSpin++;	
+	indSpin++;
 	if (tailleMax.x<p.x+s.x)
 		tailleMax.x= p.x+s.x;
 	if (tailleMax.y<p.y+s.y)
@@ -191,13 +194,13 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
     else
         {
         if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
-		    wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+		    wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 	    else
 		    wsd->Move(p);
-	    wsd->SetRange(iti->second.mini,iti->second.maxi); 
+	    wsd->SetRange(iti->second.mini,iti->second.maxi);
 	    wsd->SetName(iti->first);
 	    wsd->SetValue(iti->second.valeur);
-	    wsd->SetIncrement(iti->second.pas); 
+	    wsd->SetIncrement(iti->second.pas);
 	    wsd->Show(true);
 	    indSpin++;
         /*wxSpinCtrlDouble *sp = new wxSpinCtrlDouble(page, indOriCtrl + 2 * nbParam + 1, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
@@ -234,12 +237,12 @@ for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
 	indStatic++;
 	p += wxPoint(s.GetX(),0);
 	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
-		wsd=new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+		wsd=new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 	else
 		wsd->Move(p);
-	wsd->SetRange(itd->second.mini,itd->second.maxi); 
+	wsd->SetRange(itd->second.mini,itd->second.maxi);
 	wsd->SetName(itd->first);
-	wsd->SetIncrement(itd->second.pas); 
+	wsd->SetIncrement(itd->second.pas);
 	wsd->SetValue(itd->second.valeur);
 	wsd->Show(true);
 	indSpin++;
@@ -290,7 +293,7 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
 	p += wxPoint(s.GetX(), 0);
 	nombre.Printf("%d", itp->second.valeur.y);
 	//	wxSpinCtrl *sph=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-	//	sph->SetRange(0,256); 
+	//	sph->SetRange(0,256);
 	if ((wsd = (wxSpinCtrlDouble*)panneau->FindWindowById(indSpin, panneau)) == NULL)
 		wsd = new wxSpinCtrlDouble(panneau, indSpin, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
 	else
@@ -334,7 +337,7 @@ panneau->Update();
 FenetreSequenceOperation::~FenetreSequenceOperation()
 {
 delete []nomEtape;
-nomEtape=NULL;	
+nomEtape=NULL;
 if (osgApp)
 	((wxOsgApp*)osgApp)->FenetreSeqOpe(NULL);
 
@@ -657,7 +660,7 @@ if (fenMere->Cam() && fenMere->Cam()->IsRunning())
 
 	fenMere->DefSeqCamera(sq);
 	return;
-	}	
+	}
 
 vector<ImageInfoCV*> r;
 for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();it++)
@@ -688,7 +691,7 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 	int indFen2=it->indOp2Fenetre;
 	if (indFen2>=0)
 		{
-		
+
 		pOCV.op2=app->Graphique(indFen2)->ImAcq();
 		}
 //	if (pOCV.intParam.find(
@@ -715,7 +718,7 @@ if (r.size()!=0)
 		f = new FenetrePrincipale(NULL, "wxOpenCV",
 		wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
 		wxString s;
-		s.Printf("%d : %s( %d) of image %d ",app->NbFenetre(),_("Sequence"),opSelec,fenMere->IdFenetre());	
+		s.Printf("%d : %s( %d) of image %d ",app->NbFenetre(),_("Sequence"),opSelec,fenMere->IdFenetre());
 		f->SetTitle(s);
 		f->DefOSGApp(app);
 		idFenetre[opSelec] = make_pair (f, f->IdFenetre());
@@ -765,7 +768,7 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 	bool annuler=false;
 	while (it->opBinaireSelec && !app->Graphique(indFen2) && !videoActive)
 		{
-			wxTextEntryDialog  adr( NULL,_("Empty image. Give window id of image"),"0");   
+			wxTextEntryDialog  adr( NULL,_("Empty image. Give window id of image"),"0");
 			if (adr.ShowModal())
 				adr.GetValue().ToCLong(&indFen2);
 			else
