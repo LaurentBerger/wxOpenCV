@@ -1,5 +1,5 @@
 /* XPM */
-static const char *const cut_xpm[] = {
+static const char *cut_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "16 15 25 1",
 "6 c #D8BDC0",
@@ -13,10 +13,10 @@ static const char *const cut_xpm[] = {
 "& c #C3C5C8",
 "; c #C6CCD3",
 "% c #B7B7B8",
-"  c None",
 "* c #DFE0E2",
 "5 c #B69596",
 "3 c #9C2A35",
+"  c #C0C0C0",
 "1 c #CFCFD0",
 ", c #AB5C64",
 "+ c #D2D3D4",

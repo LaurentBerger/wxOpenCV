@@ -42,7 +42,7 @@ int			numBarreoutils;
 wxBitmap	bitmap;
 
 Commande(void){};
-Commande(int a, wxString b, wxString c, wxString d, int e) ;
+Commande(int a,const char *b[], wxString c, wxString d, int e) ;
 };
 
 class InterfaceAvance : public wxFrame

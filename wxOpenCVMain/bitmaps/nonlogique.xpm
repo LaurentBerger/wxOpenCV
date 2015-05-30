@@ -1,0 +1,30 @@
+/* XPM */
+static const char *nonlogique_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"60 20 4 1",
+"o c Black",
+"  c #FFFFFF",
+"X c #808080",
+". c #C0C0C0",
+/* pixels */
+"                                                            ",
+"                                                            ",
+"                                                            ",
+"                                    .X                      ",
+"                                    oX                      ",
+"                                   Xoo                      ",
+"                                  .XXo                      ",
+"                                  X Xo                      ",
+"              oo      o          X. Xo                      ",
+"             o  o    o           X  .o.                     ",
+"            o    o  o           X...Xo.                     ",
+"           o      oo           .X....oX                     ",
+"                               X     oX                     ",
+"                              X.     oX                     ",
+"                            .XoX   .Xoo..                   ",
+"                            oooo   Xooooo                   ",
+"                                                            ",
+"                                                            ",
+"                                                            ",
+"                                                            "
+};

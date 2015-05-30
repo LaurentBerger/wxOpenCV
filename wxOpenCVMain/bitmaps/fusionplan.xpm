@@ -1,5 +1,5 @@
 /* XPM */
-static char * fusionplan_xpm[] = {
+static const char * fusionplan_xpm[] = {
 "16 16 16 1",
 " 	c #000000",
 ".	c #800000",

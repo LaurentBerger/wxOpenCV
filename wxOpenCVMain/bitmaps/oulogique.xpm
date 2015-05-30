@@ -1,0 +1,30 @@
+/* XPM */
+static const char *oulogique_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"60 20 4 1",
+"o c Black",
+"  c #FFFFFF",
+"X c #808080",
+". c #C0C0C0",
+/* pixels */
+"                                                            ",
+"                                                            ",
+"                                                            ",
+"                    .X               XXoXXXXXX.             ",
+"                    oX                .o     XoX            ",
+"                   Xoo                Xo     Xoo            ",
+"                  .XXo                oX     ooX            ",
+"                  X Xo    o     o    .o.    Xo.             ",
+"                 X. Xo    oo   oo    .oXXXXXX               ",
+"                 X  .o.    o   o     Xo    .o.              ",
+"                X...Xo.    o   o     oX     Xo              ",
+"               .X....oX    o   o    .o.     Xo.             ",
+"               X     oX    oo oo    Xo      oo              ",
+"              X.     oX     o o     Xo     Xo.              ",
+"            .XoX   .Xoo..   o o    XoX...XoX.               ",
+"            oooo   Xooooo    o     oooooooo                 ",
+"                                                            ",
+"                                                            ",
+"                                                            ",
+"                                                            "
+};

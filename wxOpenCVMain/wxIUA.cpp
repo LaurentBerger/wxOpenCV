@@ -24,7 +24,7 @@
 
 
 #ifdef __WINDOWS__
-    #define USE_XPM_BITMAPS 0
+    #define USE_XPM_BITMAPS 1
 #else
     #define USE_XPM_BITMAPS 1
 #endif
@@ -160,89 +160,21 @@ END_EVENT_TABLE()
 
 
 #if USE_XPM_BITMAPS
-/*// Barre outils Fichier et edition
-    #include "bitmaps/new.xpm"
-    #include "bitmaps/open.xpm"
-    #include "bitmaps/save.xpm"
-    #include "bitmaps/copy.xpm"
-    #include "bitmaps/cut.xpm"
-    #include "bitmaps/paste.xpm"  // paste XPM
-    #include "bitmaps/print.xpm"
-    #include "bitmaps/help.xpm"
-    #include "bitmaps/preview.xpm"  // paste XPM
-// Barre outils opérateur
-    #include "bitmaps/addition.xpm"
-    #include "bitmaps/soustraction.xpm"
-	#include "bitmaps/multiplication.xpm"
-	#include "bitmaps/division.xpm"
-	#include "bitmaps/etlogique.xpm"
-	#include "bitmaps/oulogique.xpm"
-	#include "bitmaps/oueclulogique.xpm"
-	#include "bitmaps/negation.xpm"
-// Barre outils morpholgie
-    #include "bitmaps/erosion.xpm"
-    #include "bitmaps/dilatation.xpm"
-    #include "bitmaps/ouverture.xpm"
-    #include "bitmaps/fermeture.xpm"
-    #include "bitmaps/chaphautblanc.xpm"
-    #include "bitmaps/chaphautnoir.xpm"
-    #include "bitmaps/gradmorph.xpm"
-// Barre outils convolution
-    #include "bitmaps/convolution.xpm"
-    #include "bitmaps/gradient_mod.xpm"
-    #include "bitmaps/gradient_x.xpm"
-    #include "bitmaps/gradient_y.xpm"
-    #include "bitmaps/laplacien.xpm"
-    #include "bitmaps/flou.xpm"
-    #include "bitmaps/LisMoy.xpm"
-    #include "bitmaps/LisMed.xpm"
-    #include "bitmaps/LisGau.xpm"
-// Barre outils binarization
-    #include "bitmaps/seuillage.xpm"
-    #include "bitmaps/seuillageada.xpm"
-    #include "bitmaps/distancediscrete.xpm"
-    #include "bitmaps/squelette.xpm"
-    #include "bitmaps/voronoi.xpm"
-    #include "bitmaps/canny.xpm"
-    #include "bitmaps/contour.xpm"
-   #include "bitmaps/statconnexe.xpm"
-   #include "bitmaps/cmpconnexe.xpm"
-// Barre outils Frequence échelle
-   #include "bitmaps/fft.xpm"
-   #include "bitmaps/ifft.xpm"
-// Barre outils autre
-   #include "bitmaps/separationplan.xpm"
-   #include "bitmaps/fusionplan.xpm"
-   #include "bitmaps/rgbluminance.xpm"
-// Barre d'outils flot optique
-   #include "bitmaps/pyrflotoptique.xpm"
-   #include "bitmaps/calcflotoptique.xpm"
-   #include "bitmaps/calcflotoptiquefarner.xpm"
-   #include "bitmaps/majmvt.xpm"
-#include "bitmaps/estimtrans.xpm"
-#include "bitmaps/phasecorrel.xpm"
-*/
+#include "FichierIcon.h"
 
 #endif // USE_XPM_BITMAPS
-#if USE_XPM_BITMAPS
-#define INIT_TOOL_BMP(bmp) \
-	toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
-#else // !USE_XPM_BITMAPS
-#define INIT_TOOL_BMP(bmp) \
-	toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
-#endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
 
 
-Commande::Commande(int a, wxString b, wxString c, wxString d, int e) :idEvt(a), nomFichierIcone(b), chaineAide(c), chaineOperation(d), numBarreoutils(e)
+Commande::Commande(int a,const char *b[], wxString c, wxString d, int e) :idEvt(a), chaineAide(c), chaineOperation(d), numBarreoutils(e)
 {
 #if USE_XPM_BITMAPS
 #define INIT_TOOL_BMP(bmp) \
-	toolBarBitmaps[Tool_##bmp] = wxBitmap(bmp##_xpm)
+	toolBarBitmaps[Tool_##bmp] = wxBitmap(b)
 #else // !USE_XPM_BITMAPS
 #define INIT_TOOL_BMP(bmp) \
 	toolBarBitmaps[Tool_##bmp] = wxBITMAP(bmp)
 #endif // USE_XPM_BITMAPS/!USE_XPM_BITMAPS
-wxMessageBox(b,"",wxOK,NULL);
+//wxMessageBox(b,"",wxOK,NULL);
 	bitmap = wxBitmap(b);
 };
 
@@ -250,90 +182,91 @@ wxMessageBox(b,"",wxOK,NULL);
 
 void InterfaceAvance::InitCommande()
 {
-#define CONSTRUCTEUR_CMD(var,ID,aide,fct,num) var[ID]=Commande(ID,#ID, aide, fct,num)
-	bouton[ID_ADDITION] = Commande(ID_ADDITION, "ID_ADDITION",_("Add 2 images"), "add", 0);
-	CONSTRUCTEUR_CMD(bouton, ID_ADDITION, _("Add 2 images"), "add", 0);
-	CONSTRUCTEUR_CMD(bouton, ID_SOUSTRACTION, _("Difference between 2 images"), "subtract", 0);
-	CONSTRUCTEUR_CMD(bouton, ID_MULTIPLICATION, _("product"), "multiply", 0);
-	CONSTRUCTEUR_CMD(bouton, ID_DIVISION, _("Divide"), "divide", 0);
-	CONSTRUCTEUR_CMD(bouton, ID_ET_LOGIQUE, _("logical and"), "bitwise-and", 0);
-	CONSTRUCTEUR_CMD(bouton, ID_OU_LOGIQUE, _("logical or"), "bitwise-or", 0);
-	CONSTRUCTEUR_CMD(bouton, ID_OUEXCLU_LOGIQUE, _("exclusive or"), "bitwise-or", 0);
-	CONSTRUCTEUR_CMD(bouton, ID_NEGATION, _("Not"), "bitwise-not", 0);
+#define CONSTRUCTEUR_CMD(var,ID,var_icon,aide,fct,num) var[ID]=Commande(ID,var_icon, aide, fct,num)
+bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "add", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_ADDITION,addition_xpm, _("Add 2 images"), "add", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_SOUSTRACTION, soustraction_xpm, _("Difference between 2 images"), "subtract", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_MULTIPLICATION, multiplication_xpm,_("product"), "multiply", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_DIVISION, division_xpm,_("Divide"), "divide", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_ET_LOGIQUE, etlogique_xpm,_("logical and"), "bitwise-and", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_OU_LOGIQUE, oulogique_xpm,_("logical or"), "bitwise-or", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_OUEXCLU_LOGIQUE, division_xpm, _("exclusive or"), "bitwise-or", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_NEGATION, nonlogique_xpm, _("Not"), "bitwise-not", 0);
 
-	CONSTRUCTEUR_CMD(bouton, ID_EROSION, _("Erode"), "erode", 1);
-	CONSTRUCTEUR_CMD(bouton, ID_DILATATION, _("Dilate"), "bitwise-not", 1);
-	CONSTRUCTEUR_CMD(bouton, ID_OUVERTURE, _("Openning"), "openning", 1);
-	CONSTRUCTEUR_CMD(bouton, ID_FERMETURE, _("closing"), "closing", 1);
-	CONSTRUCTEUR_CMD(bouton,ID_CHAPHAUTBL, _("Top hat"), "tophat", 1);
-	CONSTRUCTEUR_CMD(bouton,ID_CHAPHAUTNO, _("Black hat"), "blackhat", 1);
-	CONSTRUCTEUR_CMD(bouton,ID_GRADMORPH, _("Morph. gradient"), "morph_gradient", 1);
+    CONSTRUCTEUR_CMD(bouton, ID_EROSION, erosion_xpm, _("Erode"), "erode", 1);
+    CONSTRUCTEUR_CMD(bouton, ID_DILATATION, dilatation_xpm, _("Dilate"), "bitwise-not", 1);
+    CONSTRUCTEUR_CMD(bouton, ID_OUVERTURE, ouverture_xpm, _("Openning"), "openning", 1);
+    CONSTRUCTEUR_CMD(bouton, ID_FERMETURE, fermeture_xpm, _("closing"), "closing", 1);
+    CONSTRUCTEUR_CMD(bouton, ID_CHAPHAUTBL, chaphautblanc_xpm, _("Top hat"), "tophat", 1);
+    CONSTRUCTEUR_CMD(bouton, ID_CHAPHAUTNO, chaphautnoir_xpm,_("Black hat"), "blackhat", 1);
+    CONSTRUCTEUR_CMD(bouton, ID_GRADMORPH, gradmorph_xpm,_("Morph. gradient"), "morph_gradient", 1);
 
-	CONSTRUCTEUR_CMD(bouton,ID_FFT, _("FFT"), "FFT", 2);
-	CONSTRUCTEUR_CMD(bouton,ID_IFFT, _("inverse FFT"), "IFFT", 2);
+    CONSTRUCTEUR_CMD(bouton, ID_FFT, fft_xpm, _("FFT"), "FFT", 2);
+    CONSTRUCTEUR_CMD(bouton, ID_IFFT, ifft_xpm, _("inverse FFT"), "IFFT", 2);
 
-	CONSTRUCTEUR_CMD(bouton,ID_CONVOLUTION, _("Convolution"), "filter2d", 3);
-	CONSTRUCTEUR_CMD(bouton,ID_GRADIENT_MOD, _("Gradient modulus"), "scharr_mod", 3);
-	CONSTRUCTEUR_CMD(bouton,ID_GRADIENT_X, _("Gradient X"), "scharr_x", 3);
-	CONSTRUCTEUR_CMD(bouton,ID_GRADIENT_Y, _("Gradient Y"), "scharr_y", 3);
-	CONSTRUCTEUR_CMD(bouton,ID_LAPLACIEN, _("Laplacian"), "laplacian", 3);
-	CONSTRUCTEUR_CMD(bouton,ID_LISMOY, _("Blur (mean)"), "blur", 3);
-	CONSTRUCTEUR_CMD(bouton,ID_LISMED, _("Blur (median filter)"), "medianblur", 3);
-	CONSTRUCTEUR_CMD(bouton,ID_LISGAU, _("Blur (gaussian)"), "gaussianblur", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_CONVOLUTION, convolution_xpm, _("Convolution"), "filter2d", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_MOD, gradient_mod_xpm,_("Gradient modulus"), "scharr_mod", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_X, gradient_x_xpm, _("Gradient X"), "scharr_x", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_Y, gradient_y_xpm, _("Gradient Y"), "scharr_y", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_LAPLACIEN, laplacien_xpm, _("Laplacian"), "laplacian", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_LISMOY, LisMoy_xpm, _("Blur (mean)"), "blur", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_LISMED, LisMed_xpm, _("Blur (median filter)"), "medianblur", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_LISGAU, LisGau_xpm,_("Blur (gaussian)"), "gaussianblur", 3);
 
-	CONSTRUCTEUR_CMD(bouton,ID_VIDEO_8_UC3, _("Video RGB 24bits"), " ", 4);
-	CONSTRUCTEUR_CMD(bouton,ID_VIDEO_32_FC3, _("Video RGB float"), " ", 4);
-	CONSTRUCTEUR_CMD(bouton,ID_VIDEO_FLUX, _("Video file"), " ", 4);
+    CONSTRUCTEUR_CMD(bouton, ID_VIDEO_8_UC3, camera_xpm, _("Video RGB 24bits"), " ", 4);
+    CONSTRUCTEUR_CMD(bouton, ID_VIDEO_32_FC3, camerafloat_xpm, _("Video RGB float"), " ", 4);
+    CONSTRUCTEUR_CMD(bouton, ID_VIDEO_FLUX, camera_xpm, _("Video file"), " ", 4);
 
-	CONSTRUCTEUR_CMD(bouton,ID_THRESHOLD, _("Thereshold"), "threshold", 5);
-	CONSTRUCTEUR_CMD(bouton,ID_ADATHRESHOLD, _("Adaptive Thereshold"), "adaptivethreshold", 5);
-	CONSTRUCTEUR_CMD(bouton,ID_PARTAGE_EAUX, _("Watershed"), "watershed", 5);
-	CONSTRUCTEUR_CMD(bouton,ID_COMPCONNEXE, _("Connected component"), "connectedcomponents", 5);
-	CONSTRUCTEUR_CMD(bouton,ID_CONTOUR, _("Contour"), "contour", 5);
-	CONSTRUCTEUR_CMD(bouton,ID_SQUELETTE, _("Skeleton"), "medianaxis", 5);
-	CONSTRUCTEUR_CMD(bouton,ID_DISTANCEDISCRETE, _("Transform distance"), "distancetransform", 5);
-	CONSTRUCTEUR_CMD(bouton,ID_VORONOI, _("Voronoi"), " ", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_THRESHOLD, seuillage_xpm, _("Thereshold"), "threshold", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_ADATHRESHOLD, seuillageada_xpm, _("Adaptive Thereshold"), "adaptivethreshold", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_PARTAGE_EAUX, statconnexe_xpm, _("Watershed"), "watershed", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_COMPCONNEXE, cmpconnexe_xpm,_("Connected component"), "connectedcomponents", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_CONTOUR, contour_xpm,_("Contour"), "contour", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_SQUELETTE, squelette_xpm,_("Skeleton"), "medianaxis", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_DISTANCEDISCRETE, distancediscrete_xpm, _("Transform distance"), "distancetransform", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_VORONOI, voronoi_xpm,_("Voronoi"), " ", 5);
 
-	CONSTRUCTEUR_CMD(bouton,wxID_OPEN, _("Open"), " ", 6);
-	CONSTRUCTEUR_CMD(bouton,wxID_SAVE, _("Save"), " ", 6);
-
-	CONSTRUCTEUR_CMD(bouton,ID_FUSIONPLAN, _("Merge color plan"), "merge", 7);
-	CONSTRUCTEUR_CMD(bouton,ID_SEPARATIONPLAN, _("split color plan"), "split", 7);
-	CONSTRUCTEUR_CMD(bouton, ID_RGBLUMINANCE, _("RGB to gray"), "cvtcolor", 7);
-	CONSTRUCTEUR_CMD(bouton, ID_ROTATION_AFFINE, _("Transform affine-rotation"), "wrapAffine", 7);
-	CONSTRUCTEUR_CMD(bouton, ID_NOUVELLE_DIMENSION, _("Resize"), "resize", 7);
-	CONSTRUCTEUR_CMD(bouton, ID_LOGPOLAR, _("Log polar"), "logPolar", 7);
-	CONSTRUCTEUR_CMD(bouton, ID_UNDISTORT, _("Compensate for lens distortion"), "undistort", 7);
-
-
-	CONSTRUCTEUR_CMD(bouton,ID_CANNY, _("Canny edge detector"), "canny", 8);
-	CONSTRUCTEUR_CMD(bouton,ID_CORNERHARRIS, _("Harris edge detector"), "cornerharris", 8);
-	CONSTRUCTEUR_CMD(bouton, ID_GOODFEATURE, _("Very good features"), "goodfeaturestotrack", 8);
-	CONSTRUCTEUR_CMD(bouton, ID_HOUGHCIRCLE, _("Hough circle"), "houghcircles", 8);
-	CONSTRUCTEUR_CMD(bouton, ID_HOUGHLINE, _("Hough line"), "houghlines", 8);
-	CONSTRUCTEUR_CMD(bouton, ID_HOUGHLINEP, _("hough line proba."), "houghlinesp", 8);
+    CONSTRUCTEUR_CMD(bouton, wxID_OPEN, open_xpm,_("Open"), " ", 6);
+    CONSTRUCTEUR_CMD(bouton, wxID_SAVE, save_xpm,_("Save"), " ", 6);
+    /**/
+ //   CONSTRUCTEUR_CMD(bouton, ID_FUSIONPLAN, fusionplan_xpm, _("Merge color plan"), "merge", 7);
+    CONSTRUCTEUR_CMD(bouton, ID_FUSIONPLAN, fusionplan_xpm, _("Merge color plan"), "merge", 7);
+    CONSTRUCTEUR_CMD(bouton, ID_SEPARATIONPLAN, separationplan_xpm, _("split color plan"), "split", 7);
+    CONSTRUCTEUR_CMD(bouton, ID_RGBLUMINANCE, rgbluminance_xpm,_("RGB to gray"), "cvtcolor", 7);
+	CONSTRUCTEUR_CMD(bouton, ID_ROTATION_AFFINE,wrapaffine_xpm, _("Transform affine-rotation"), "wrapAffine", 7);
+	CONSTRUCTEUR_CMD(bouton, ID_NOUVELLE_DIMENSION, resize_xpm,_("Resize"), "resize", 7);
+	CONSTRUCTEUR_CMD(bouton, ID_LOGPOLAR, logpolar_xpm,_("Log polar"), "logPolar", 7);
+	CONSTRUCTEUR_CMD(bouton, ID_UNDISTORT, undistort_xpm,_("Compensate for lens distortion"), "undistort", 7);
 
 
-	CONSTRUCTEUR_CMD(bouton,ID_PYRFLOTOPTIQUE, _("Build pyramid optical flow"), "buildopticalflowpyramid", 9);
-	CONSTRUCTEUR_CMD(bouton,ID_CALCFLOTOPTIQUE, _("Calculate optical flow"), "calcopticalflowpyrlk", 9);
-	CONSTRUCTEUR_CMD(bouton,ID_CALCFLOTOPTIQUEFARNER, _("Calculate optical flow(farnerback)"), "calcopticalflowfarneback", 9);
-	CONSTRUCTEUR_CMD(bouton,ID_MAJ_MVT, _("Update motion history"), "updatemotionhistory", 9);
-	CONSTRUCTEUR_CMD(bouton, ID_GRAD_MVT, _("motion Gradient"), "calcmotiongradient", 9);
-	CONSTRUCTEUR_CMD(bouton, ID_SEG_MVT, _("Independant motions"), "segmentmotion", 9);
-	CONSTRUCTEUR_CMD(bouton, ID_PHASE_CORRELATE, _("Phase correlation"), "phasecorrelate", 9);
+    CONSTRUCTEUR_CMD(bouton, ID_CANNY, canny_xpm,_("Canny edge detector"), "canny", 8);
+    CONSTRUCTEUR_CMD(bouton, ID_CORNERHARRIS, cornerharris_xpm, _("Harris edge detector"), "cornerharris", 8);
+    CONSTRUCTEUR_CMD(bouton, ID_GOODFEATURE, goodfeature_xpm,_("Very good features"), "goodfeaturestotrack", 8);
+    CONSTRUCTEUR_CMD(bouton, ID_HOUGHCIRCLE, houghcircle_xpm,_("Hough circle"), "houghcircles", 8);
+    CONSTRUCTEUR_CMD(bouton, ID_HOUGHLINE, houghline_xpm,_("Hough line"), "houghlines", 8);
+    CONSTRUCTEUR_CMD(bouton, ID_HOUGHLINEP, houghlinep_xpm,_("hough line proba."), "houghlinesp", 8);
 
-	CONSTRUCTEUR_CMD(bouton, ID_FOND_MOG, _("Gaussian mixture"), "fond_gaussianmixture", 10);
-	CONSTRUCTEUR_CMD(bouton, ID_FOND_MOG2, _("Gaussian mixture 2"), "fond_gaussianmixture2", 10);
-	CONSTRUCTEUR_CMD(bouton, ID_FOND_KNN, _("knn method"), "fond_knn", 10);
-	CONSTRUCTEUR_CMD(bouton, ID_FOND_MGM, _("GMG method"), "fond_gmg", 10);
 
-	CONSTRUCTEUR_CMD(bouton, ID_DES_ORB, _("ORB keypoint"), "orbfeatures2d", 11);
-	CONSTRUCTEUR_CMD(bouton, ID_DES_BRISK, _("BRISK keypoint"), "briskfeatures2d", 11);
-    CONSTRUCTEUR_CMD(bouton, ID_DES_AKAZE, _("Akaze keypoint"), "akazefeatures2d", 11);
-    CONSTRUCTEUR_CMD(bouton, ID_DES_BLOB, _("BLOB keypoint"), "blobfeatures2d", 11);
-    CONSTRUCTEUR_CMD(bouton, ID_DES_MSER, _("MSER region"), "mserfeatures2d", 11);
-    CONSTRUCTEUR_CMD(bouton, ID_DES_MATCH, _("Match"), "matchdescriptormatcher", 11);
-	CONSTRUCTEUR_CMD(bouton, ID_DES_KNNMATCH, _("knn Match"), "kbbmatchdescriptormatcher", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_PYRFLOTOPTIQUE, pyrflotoptique_xpm, _("Build pyramid optical flow"), "buildopticalflowpyramid", 9);
+    CONSTRUCTEUR_CMD(bouton, ID_CALCFLOTOPTIQUE, calcflotoptique_xpm ,_("Calculate optical flow"), "calcopticalflowpyrlk", 9);
+    CONSTRUCTEUR_CMD(bouton, ID_CALCFLOTOPTIQUEFARNER, calcflotoptiquefarner_xpm,_("Calculate optical flow(farnerback)"), "calcopticalflowfarneback", 9);
+    CONSTRUCTEUR_CMD(bouton, ID_MAJ_MVT, majmvt_xpm,_("Update motion history"), "updatemotionhistory", 9);
+    CONSTRUCTEUR_CMD(bouton, ID_GRAD_MVT, motiongradient_xpm,_("motion Gradient"), "calcmotiongradient", 9);
+    CONSTRUCTEUR_CMD(bouton, ID_SEG_MVT, segmentationmotion_xpm ,_("Independant motions"), "segmentmotion", 9);
+    CONSTRUCTEUR_CMD(bouton, ID_PHASE_CORRELATE, phasecorrelate_xpm, _("Phase correlation"), "phasecorrelate", 9);
+
+    CONSTRUCTEUR_CMD(bouton, ID_FOND_MOG, MOG_xpm,_("Gaussian mixture"), "fond_gaussianmixture", 10);
+    CONSTRUCTEUR_CMD(bouton, ID_FOND_MOG2, MOG2_xpm, _("Gaussian mixture 2"), "fond_gaussianmixture2", 10);
+    CONSTRUCTEUR_CMD(bouton, ID_FOND_KNN, KNN_xpm,_("knn method"), "fond_knn", 10);
+    CONSTRUCTEUR_CMD(bouton, ID_FOND_MGM, GMG_xpm,_("GMG method"), "fond_gmg", 10);
+
+    CONSTRUCTEUR_CMD(bouton, ID_DES_ORB, ORB_xpm,_("ORB keypoint"), "orbfeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_BRISK, BRISK_xpm, _("BRISK keypoint"), "briskfeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_AKAZE, AKAZE_xpm,_("Akaze keypoint"), "akazefeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_BLOB, blob_xpm,_("BLOB keypoint"), "blobfeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_MSER, mser_xpm,_("MSER region"), "mserfeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_MATCH, Match_xpm, _("Match"), "matchdescriptormatcher", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_KNNMATCH, knnMatch_xpm,_("knn Match"), "kbbmatchdescriptormatcher", 11); 
 
 
 }
