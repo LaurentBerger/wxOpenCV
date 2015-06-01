@@ -520,15 +520,15 @@ if (captureVideo->isOpened())
 					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
 						{
 						ParametreOperation pOCV=*it;
-						pOCV.indOp1Fenetre=-1;
-						pOCV.indOp2Fenetre=-1;
+						pOCV.indOpFenetre[0]=-1;
+                        pOCV.indOpFenetre[1] = -1;
 						if (pOCV.opUnaireSelec) // op1 est initialisé
                             {
                             if (indOp>0) // Si une opération a déjà été effectuée l'image précédente est retenue comme paramètre
-							    pOCV.op1=im[indOp-1][0];
+							    pOCV.op[0]=im[indOp-1][0];
 						    else // sinon image initiale
 							    {
-                                pOCV.op1=imIni;
+                                pOCV.op[0] = imIni;
                                 effaceImage[imIni]=false;
                                 }
                             }
@@ -538,22 +538,22 @@ if (captureVideo->isOpened())
 								{
 								if (indOp>0 ) // Si une opération a déjà été effectuée
 									if (im[indOp-1].size()==0)
-										pOCV.op2=NULL;
+                                        pOCV.op[1] = NULL;
 									else
-										pOCV.op2=im[indOp-1][0];
+                                        pOCV.op[1] = im[indOp - 1][0];
 								else
-									pOCV.op2=imIni;
+                                    pOCV.op[1] = imIni;
 								
 								if (imgParam.find(pOCV.nomOperation+"prec")!=imgParam.end())
 									{
-									pOCV.op1 = imgParam[pOCV.nomOperation + "prec"];
+                                    pOCV.op[0] = imgParam[pOCV.nomOperation + "prec"];
 									effaceImage[imgParam[pOCV.nomOperation + "prec"]]=false;
 									}
 								else
-									pOCV.op1=pOCV.op2;
+                                    pOCV.op[0] = pOCV.op[1];
 								}
 							else if (indOp>0)
-								pOCV.op1 = im[indOp - 1][0];
+                                pOCV.op[0] = im[indOp - 1][0];
 							}
 						if (imPre && imPre->BonCoin() && pOCV.nomOperation == "GoodFeature" && im[indOp - 1].size() && im[indOp - 1][0])
 							{

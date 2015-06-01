@@ -545,10 +545,9 @@ else
 	pAct=pOCVNouveau;
 if (pAct->opNaireSelec)
 	{
-	ImageInfoCV *imOp[3]={pAct->op1,pAct->op2,pAct->op3};
 	try
 		{
-		r =((*pAct->op1).*pAct->opNaireSelec)(3,imOp,pAct);
+        r = ((*pAct->op[0]).*pAct->opNaireSelec)(pAct->op, pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -565,10 +564,7 @@ if (pAct->opBinaireSelec)
 	
 	try
 		{
-		if (pAct->op2==NULL)
-			r =((*pAct->op1).*pAct->opBinaireSelec)(pAct->op1,NULL,pAct);
-		else
-			r =((*pAct->op1).*pAct->opBinaireSelec)(pAct->op1,pAct->op2,pAct);
+		r =((*pAct->op[0]).*pAct->opBinaireSelec)(pAct->op,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -583,7 +579,7 @@ if (pAct->opUnaireSelec)
 	try
 		{
 
-		r =((*pAct->op1).*pAct->opUnaireSelec)(pAct->op1,pAct);
+		r =((*pAct->op[0]).*pAct->opUnaireSelec)(pAct->op,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -600,7 +596,7 @@ if (pAct->opSurjecUnaire)
 	try
 		{
 
-		r =((*pAct->op1).*pAct->opSurjecUnaire)(pAct->op1,pAct);
+		r =((*pAct->op[0]).*pAct->opSurjecUnaire)(pAct->op,pAct);
 		}
 	catch(cv::Exception& e)
 		{
@@ -618,7 +614,7 @@ return r; // Le pointeur imTab n'est pas libéré
 
 void wxOsgApp::CreerFenetreOperation()
 {
-if ((pOCV.opBinaireSelec==NULL && pOCV.opUnaireSelec==NULL && pOCV.opSurjecMultiple==NULL && pOCV.opNaireSelec==NULL&& pOCV.opSurjecUnaire==NULL) || pOCV.op1==NULL)
+if ((pOCV.opBinaireSelec==NULL && pOCV.opUnaireSelec==NULL && pOCV.opSurjecMultiple==NULL && pOCV.opNaireSelec==NULL&& pOCV.opSurjecUnaire==NULL) || pOCV.op.size()==0)
 	return;
 
 vector<ImageInfoCV*> r=ExecuterOperation();
@@ -650,9 +646,9 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 		}
 	int idOperation=-1;
 	int numEtape=-1;
-	if (pOCV.indOp1Fenetre!=-1)
+    if (pOCV.indOpFenetre[0] != -1)
 		{
-		FenetrePrincipale *f=Fenetre(pOCV.indOp1Fenetre);
+        FenetrePrincipale *f = Fenetre(pOCV.indOpFenetre[0]);
 		
 		if (f!=NULL)
 			{
@@ -663,9 +659,9 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 					numEtape=f->OrigineImage()->indEtape+1;
 				}
 			}
-		if (idOperation==-1 && pOCV.indOp2Fenetre>=0)
+        if (idOperation == -1 && pOCV.indOpFenetre.size()>=2 &&pOCV.indOpFenetre[1] >= 0)
 			{
-			f=Fenetre(pOCV.indOp2Fenetre);
+            f = Fenetre(pOCV.indOpFenetre[1]);
 			if(f->OrigineImage()!=NULL)
 				{
 				idOperation=f->OrigineImage()->idOperation;
@@ -679,15 +675,15 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	if (idOperation==-1)
 		idOperation=numOpFaite++;
 	if (pOCV.opUnaireSelec)
-		f->DefHistorique(pOCV.indOp1Fenetre,-1,-1,idOperation,numEtape,pOCV.nomOperation,&pOCV);
-	if (pOCV.opBinaireSelec)
-		f->DefHistorique(pOCV.indOp1Fenetre,pOCV.indOp2Fenetre,-1,idOperation,numEtape,pOCV.nomOperation,&pOCV);
-	if (pOCV.opNaireSelec)
-		f->DefHistorique(pOCV.indOp1Fenetre,pOCV.indOp2Fenetre,pOCV.indOp3Fenetre,idOperation,numEtape,pOCV.nomOperation,&pOCV);
+        f->DefHistorique(pOCV.indOpFenetre[0], -1, -1, idOperation, numEtape, pOCV.nomOperation, &pOCV);
+	if (pOCV.indOpFenetre.size()>=2)
+        f->DefHistorique(pOCV.indOpFenetre[0], pOCV.indOpFenetre[1], -1, idOperation, numEtape, pOCV.nomOperation, &pOCV);
+    if (pOCV.indOpFenetre.size() >= 3)
+        f->DefHistorique(pOCV.indOpFenetre[0], pOCV.indOpFenetre[1], pOCV.indOpFenetre[2], idOperation, numEtape, pOCV.nomOperation, &pOCV);
 	if (ind!=-1)
-		s.Printf("%d : %s(operator %d) of image %d ",nbFenetre,pOCV.nomOperation,ind,pOCV.indOp1Fenetre );
+        s.Printf("%d : %s(operator %d) of image %d ", nbFenetre, pOCV.nomOperation, ind, pOCV.indOpFenetre[0]);
 	else
-		s.Printf("%d : %s of image %d ",nbFenetre,pOCV.nomOperation,pOCV.indOp1Fenetre );
+        s.Printf("%d : %s of image %d ", nbFenetre, pOCV.nomOperation, pOCV.indOpFenetre[0]);
 	f->SetLabel(s);
 
 
@@ -738,7 +734,7 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	}
 if (pOCV.nbImageRes==0)
 	{
-	FenetrePrincipale *f =	Graphique(pOCV.indOp1Fenetre);
+    FenetrePrincipale *f = Graphique(pOCV.indOpFenetre[0]);
 	if (f)
 		{
 		wxCommandEvent evt;
@@ -2338,17 +2334,17 @@ if (ind1!=-1)
 	{
 	if (pOCV)
 		origineImage=*pOCV;
-	origineImage.indOp1Fenetre=ind1;
-	origineImage.indOp2Fenetre=ind2;
-	origineImage.indOp3Fenetre=ind3;
+    origineImage.indOpFenetre.push_back(ind1);
+    origineImage.indOpFenetre.push_back(ind2);
+    origineImage.indOpFenetre.push_back(ind3);
 	origineImage.indRes=idFenetre;
 	origineImage.idOperation=idOpe;
 	origineImage.indEtape=numE;
-	origineImage.op1 = osgApp->Fenetre(ind1)->ImAcq();
+	origineImage.op[0] = osgApp->Fenetre(ind1)->ImAcq();
 	if (ind2>=0)
-		origineImage.op2 = osgApp->Fenetre(ind2)->ImAcq();
+		origineImage.op[1] = osgApp->Fenetre(ind2)->ImAcq();
 	if (ind3>=0)
-		origineImage.op3 = osgApp->Fenetre(ind3)->ImAcq();
+		origineImage.op[2] = osgApp->Fenetre(ind3)->ImAcq();
 	origineImage.nomOperation=nomF;
 	}
 }
@@ -2973,7 +2969,7 @@ void wxOsgApp::OnUseScreen(wxCommandEvent& WXUNUSED(event))
 
 ImageInfoCV *FenetrePrincipale::ImageOp1pre()
 {
-FenetrePrincipale *f=osgApp->Fenetre(origineImage.indOp1Fenetre);
+FenetrePrincipale *f = osgApp->Fenetre(origineImage.indOpFenetre[0]);
 if (f)
 	return f->ImAcq();
 return NULL;
@@ -2982,7 +2978,7 @@ return NULL;
 
 ImageInfoCV *FenetrePrincipale::ImageOp2pre()
 {
-FenetrePrincipale *f=osgApp->Fenetre(origineImage.indOp1Fenetre);
+FenetrePrincipale *f = osgApp->Fenetre(origineImage.indOpFenetre[0]);
 if (f)
 	return f->ImAcq();
 return NULL;
@@ -3153,9 +3149,10 @@ while ( bCont )
 			opValide=false;
 		else
 			listeOperation[nbOperation].nomOperation=valCleChaine;
-		if (opValide && !configApp->Read("op1",&listeOperation[nbOperation].indOp1Fenetre))
+        listeOperation[nbOperation].indOpFenetre.resize(2);
+        if (opValide && !configApp->Read("op1", &listeOperation[nbOperation].indOpFenetre[0]))
 			opValide=false;
-		if (opValide && !configApp->Read("op2",&listeOperation[nbOperation].indOp2Fenetre))
+        if (opValide && !configApp->Read("op2", &listeOperation[nbOperation].indOpFenetre[1]))
 			opValide=false;
 		if (opValide && !configApp->Read("res",&listeOperation[nbOperation].indRes))
 			opValide=false;
@@ -3165,8 +3162,9 @@ while ( bCont )
 			opValide=false;
 		if (opValide)
 			{
-			listeOperation[nbOperation].op1=NULL;
-			listeOperation[nbOperation].op2=NULL;
+            listeOperation[nbOperation].op.resize(2);
+			listeOperation[nbOperation].op[0]=NULL;
+			listeOperation[nbOperation].op[1]=NULL;
 			if (listeOperation[nbOperation].idOperation>numOpFaite)
 				numOpFaite =listeOperation[nbOperation].idOperation;
 			wxString cheminParam(chemin+"/"+cleIndEtape+"/paramEntier");
@@ -3409,8 +3407,8 @@ chemin.Printf("/operateur/%d/",origineImage.idOperation);
 SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
 chemin.Printf("/operateur/%d/%d/",origineImage.idOperation,origineImage.indEtape);
 SauverFichierConfig(chemin,"op",origineImage.nomOperation);
-SauverFichierConfig(chemin,"op1",(long)origineImage.indOp1Fenetre);
-SauverFichierConfig(chemin,"op2",(long)origineImage.indOp2Fenetre);
+SauverFichierConfig(chemin, "op1", (long)origineImage.indOpFenetre[0]);
+SauverFichierConfig(chemin, "op2", (long)origineImage.indOpFenetre[1]);
 SauverFichierConfig(chemin,"res",(long)origineImage.indRes);
 SauverFichierConfig(chemin,"indEtape",(long)origineImage.indEtape);
 SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
@@ -3472,13 +3470,85 @@ for (itp = origineImage.pointParam.begin(); itp != origineImage.pointParam.end()
 }
 }
 
-void  wxOsgApp::DefOperande1(ImageInfoCV* im,int i=-1){pOCV.op1=im;pOCV.indOp1Fenetre=i;};
-void  wxOsgApp::DefOperande2(ImageInfoCV* im,int i=-1){pOCV.op2=im;pOCV.indOp2Fenetre=i;};
-void  wxOsgApp::DefOperande3(ImageInfoCV* im,int i=-1){pOCV.op3=im;pOCV.indOp3Fenetre=i;};
-ImageInfoCV *wxOsgApp::Op1(){return pOCV.op1;};
-ImageInfoCV *wxOsgApp::Op2(){return pOCV.op2;};
-ImageInfoCV *wxOsgApp::Op3(){return pOCV.op3;};
-int wxOsgApp::IndOp1(){return pOCV.indOp1Fenetre;};
-int wxOsgApp::IndOp2(){return pOCV.indOp2Fenetre;};
-int wxOsgApp::IndOp3(){return pOCV.indOp3Fenetre;};
-int wxOsgApp::IdFenetreOp1pre(){return origineImage.indOp1Fenetre;};
+void  wxOsgApp::DefOperande1(ImageInfoCV* im,int i)
+{
+    if (pOCV.indOpFenetre.size()<=0)
+    {
+       pOCV.op.push_back(im); 
+       pOCV.indOpFenetre.push_back(i); 
+    }
+    else
+    {
+        pOCV.op[0]=im;
+        pOCV.indOpFenetre[0]=i;
+    }
+}
+
+void  wxOsgApp::DefOperande2(ImageInfoCV* im, int i)
+{ 
+    if (pOCV.indOpFenetre.size()<=1)
+    {
+       pOCV.op.push_back(im); 
+       pOCV.indOpFenetre.push_back(i); 
+    }
+    else
+    {
+        pOCV.op[1]=im;
+        pOCV.indOpFenetre[1]=i;
+    }
+}
+void  wxOsgApp::DefOperande3(ImageInfoCV* im, int i)
+{ 
+    if (pOCV.indOpFenetre.size()<=2)
+    {
+       pOCV.op.push_back(im); 
+       pOCV.indOpFenetre.push_back(i); 
+    }
+    else
+    {
+        pOCV.op[2]=im;
+        pOCV.indOpFenetre[2]=i;
+    }
+}
+ImageInfoCV *wxOsgApp::Op1()
+{
+if (pOCV.op.size()>=1)
+    return pOCV.op[0];
+return NULL;
+};
+ImageInfoCV *wxOsgApp::Op2()
+{
+if (pOCV.op.size()>=2)
+    return pOCV.op[1];
+return NULL;
+};
+ImageInfoCV *wxOsgApp::Op3()
+{
+if (pOCV.op.size()>=3)
+    return pOCV.op[2];
+return NULL;
+};
+int wxOsgApp::IndOp1()
+{ 
+if (pOCV.op.size()>=1)
+    return pOCV.indOpFenetre[0];
+return -1;
+};
+int wxOsgApp::IndOp2()
+{ 
+if (pOCV.op.size()>=2)
+    return pOCV.indOpFenetre[1];
+return -1;
+};
+int wxOsgApp::IndOp3()
+{ 
+if (pOCV.op.size()>=3)
+    return pOCV.indOpFenetre[2];
+return -1;
+};
+int FenetrePrincipale::IdFenetreOp1pre()
+{ 
+if (origineImage.op.size()>=1)
+    return origineImage.indOpFenetre[0];
+return -1;
+};

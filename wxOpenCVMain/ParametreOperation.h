@@ -77,15 +77,15 @@ std:: vector<int>	indOpFenetre;	/*!< Indice de la fenêtre contenant l'image de o
 // Operation cas général nombre d'images, les images dans un tableau et les paramètres
 std::vector<ImageInfoCV*>  (ImageInfoCV::*Operation)( std::vector<ImageInfoCV *> ,ParametreOperation *) ;
 // surjection nombre d'images, les images dans un tableau et les paramètres
-std::vector<ImageInfoCV*>  (ImageInfoCV::*opSurjecMultiple)(int,ImageInfoCV **,ParametreOperation *) ;
+std::vector<ImageInfoCV*>(ImageInfoCV::*opSurjecMultiple)(std::vector<ImageInfoCV *>, ParametreOperation *);
 // Opération programmée ternaire : Fusion plan
-std::vector<ImageInfoCV*> (ImageInfoCV::*opNaireSelec)(int, ImageInfoCV **, ParametreOperation *);
+std::vector<ImageInfoCV*>(ImageInfoCV::*opNaireSelec)(std::vector<ImageInfoCV *>, ParametreOperation *);
 // Opération programmée binaire
-std::vector<ImageInfoCV*> (ImageInfoCV::*opBinaireSelec)(ImageInfoCV *, ImageInfoCV *, ParametreOperation *);
+std::vector<ImageInfoCV*>(ImageInfoCV::*opBinaireSelec)(std::vector<ImageInfoCV *>, ParametreOperation *);
 // Opération programmée unaire avec parametre
-std::vector<ImageInfoCV*> (ImageInfoCV::*opUnaireSelec)(ImageInfoCV *, ParametreOperation *);
+std::vector<ImageInfoCV*>(ImageInfoCV::*opUnaireSelec)(std::vector<ImageInfoCV *>, ParametreOperation *);
 // Surjection (plusieurs résultats   avec parametre
-std::vector<ImageInfoCV*> (ImageInfoCV::*opSurjecUnaire)(ImageInfoCV *, ParametreOperation *);
+std::vector<ImageInfoCV*>(ImageInfoCV::*opSurjecUnaire)(std::vector<ImageInfoCV *>, ParametreOperation *);
 
 static std::map<std::string,std::map<std::string,int> > listeParam;
 

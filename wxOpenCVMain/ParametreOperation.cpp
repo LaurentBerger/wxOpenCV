@@ -26,8 +26,8 @@ void ParametreOperation::write(cv::FileStorage& fs) const {
     s+= to_string(indEtape);
     fs<<s<<"{:";
     fs<< "op"<< this->nomOperation;
-    fs << "op1" << indOp1Fenetre;
-    fs << "op2" << indOp2Fenetre;
+    fs << "op1" << indOpFenetre[0];
+    fs << "op2" << indOpFenetre[1];
     fs << "res" << indRes;
     fs << "indEtape" << indEtape;
     fs << "idOperation" << idOperation;
@@ -153,8 +153,8 @@ void ParametreOperation::read(const cv::FileNode& node)                         
     {
         cv::FileNode op = node;
         nomOperation=(string)op["op"];
-        indOp1Fenetre = (int)op["op1"];
-        indOp2Fenetre = (int)op["op2"];
+        indOpFenetre[0] = (int)op["op1"];
+        indOpFenetre[1] = (int)op["op2"];
         indRes = (int)op["res"];
         indEtape = (int)op["indEtape"];
         idOperation = (int)op["idOperation"];
@@ -257,9 +257,6 @@ bool ParametreOperation::InitOperation(string s)
 if (listeParam.size()==0)
 	InitParamType();
 ImageInfoCV xx;
-op1=NULL;
-op2=NULL;
-op3=NULL;
 opSurjecMultiple=NULL;
 opNaireSelec=NULL;
 opBinaireSelec=NULL;
@@ -274,9 +271,6 @@ idOperation=-1;
 indRes=-1;
 refPDF="";
 lienHtml="";
-indOp1Fenetre=-1;
-indOp2Fenetre=-1;
-indOp3Fenetre=-1;
 opVideo=false;
 opErreur=0;
 //intParam["Save result"] = DomaineParametreOp<int>(0, 0, 0, 1);
@@ -933,6 +927,8 @@ return true;
 ParametreOperation::ParametreOperation(string s)
 {
 opErreur=0;
+op.resize(3);
+indOpFenetre.resize(3);
 
 InitOperation(s);
 
@@ -1463,10 +1459,9 @@ std::vector <ImageInfoCV*> r;
 nbImageRes=1;
 if (opNaireSelec)
 	{
-	ImageInfoCV *imOp[3]={op1,op2,op3};
 	try
 		{
-		r =(op1->*opNaireSelec) (3,imOp,this);
+		r =(op[0]->*opNaireSelec) (op,this);
 		}
 	catch(cv::Exception& e)
 		{
@@ -1480,10 +1475,7 @@ if (opBinaireSelec)
 
 	try
 		{
-		if (op1 && op2==NULL)
-			r =(op1->*opBinaireSelec)(op1,NULL,this);
-		else if (op1)
-			r =(op1->*opBinaireSelec)(op1,op2,this);
+			r =(op[0]->*opBinaireSelec)(op,this);
 		}
 	catch(cv::Exception& e)
 		{
@@ -1497,7 +1489,7 @@ if (opUnaireSelec)
 	try
 		{
 
-		r =(op1->*opUnaireSelec)(op1,this);
+		r =(op[0]->*opUnaireSelec)(op,this);
 		}
 	catch(cv::Exception& e)
 		{
@@ -1512,7 +1504,7 @@ if (opSurjecUnaire)
 	try
 		{
 
-		r =(op1->*opSurjecUnaire)(op1,this);
+		r =(op[0]->*opSurjecUnaire)(op,this);
 		}
 	catch(cv::Exception& e)
 		{

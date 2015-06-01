@@ -66,9 +66,9 @@ classeur = new wxNotebook(this, wxID_ANY);
 FenetrePrincipale *f=fenMere;
 nbEtape=0;
 nbParamMax=0;
-while(f && f->OrigineImage()->indOp1Fenetre>=0)
+while(f && f->OrigineImage()->indOpFenetre.size()>0)
 	{
-	int id=f->OrigineImage()->indOp1Fenetre;
+    int id = f->OrigineImage()->indOpFenetre[0];
 	if (id>=0)
 		{
 		int nbParam=f->OrigineImage()->intParam.size();
@@ -101,9 +101,9 @@ for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->
 		classeur->InsertPage(0,w,nom,nbEtape==1);
 		nb--;
 		}
-while (f && f->OrigineImage()->indOp1Fenetre >= 0)
+while (f && f->OrigineImage()->indOpFenetre.size() > 0)
 	{
-	if (f->OrigineImage())
+	if (f->OrigineImage()->indOpFenetre.size() > 0)
 		{
 		listeOp[nb]=std::pair< ParametreOperation*,int>(f->OrigineImage(),f->IdFenetre()) ;
 		wxWindow *w=CreerOngletEtape(classeur,nb);
@@ -111,7 +111,7 @@ while (f && f->OrigineImage()->indOp1Fenetre >= 0)
 		wxString nom(_("Step"));
 		nom.Printf("%s %d : %s",nom,nb,f->OrigineImage()->nomOperation);
 		classeur->InsertPage(0,w,nom,nbEtape==1);
-		int id=f->OrigineImage()->indOp1Fenetre;
+        int id = f->OrigineImage()->indOpFenetre[0];
 		if (id>=0)
 			f=((wxOsgApp *)osgApp)->Fenetre(id);
 		else 
@@ -250,7 +250,7 @@ for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->
 	nb--;
 	}
 
-while(f && f->OrigineImage()->indOp1Fenetre>=0)
+while(f && f->OrigineImage()->indOpFenetre.size()>0)
 	{
 	if (f->OrigineImage())
 		{
@@ -268,7 +268,7 @@ while(f && f->OrigineImage()->indOp1Fenetre>=0)
             p.write(fsx);
         if (fsy.isOpened())
             p.write(fsy);
-        int id = f->OrigineImage()->indOp1Fenetre;
+        int id = f->OrigineImage()->indOpFenetre[0];
 		if (id>=0)
 			f=((wxOsgApp *)osgApp)->Fenetre(id);
 		else 
@@ -688,7 +688,7 @@ wxOsgApp	*app=(wxOsgApp *)osgApp;
 ImageInfoCV **im=NULL;
 for (int i=indEtape;i<nbEtape;i++)
 	{
-	int indFen1=app->RechercheFenetre(listeOp[i].first->op1);
+	int indFen1=app->RechercheFenetre(listeOp[i].first->op[0]);
 	if (indFen1<0 )
 		{
 		wxMessageBox(_("Previous image is closed?"),_("Problem"), wxOK );
@@ -701,18 +701,18 @@ for (int i=indEtape;i<nbEtape;i++)
 	ParametreOperation *pOCV=listeOp[i].first;
 	wxString  nomOperation(listeOp[i].first->nomOperation);
 	app->DefOperateurImage(nomOperation);
-	int indFen1=app->RechercheFenetre(listeOp[i].first->op1);
+	int indFen1=app->RechercheFenetre(listeOp[i].first->op[0]);
 	if (indFen1<0 )
 		{
 		wxMessageBox(_("Previous image is closed?"),_("Problem"), wxOK );
 		return ;
 		}
 //	if (im==NULL)
-		app->DefOperande1(listeOp[i].first->op1,indFen1);
+		app->DefOperande1(listeOp[i].first->op[0],indFen1);
 	//else
 //		app->DefOperande1(im[0]);
-	int indFen2=app->RechercheFenetre(listeOp[i].first->op2);
-	app->DefOperande2(listeOp[i].first->op2,indFen2);
+	int indFen2=app->RechercheFenetre(listeOp[i].first->op[1]);
+	app->DefOperande2(listeOp[i].first->op[1],indFen2);
 	r=app->ExecuterOperation(pOCV);
 	if (r.size()!=0)
 		{
@@ -724,7 +724,7 @@ for (int i=indEtape;i<nbEtape;i++)
 			f->AssosierImage(r[0]);
 		if (i<nbEtape-1)
 			{
-			listeOp[i+1].first->op1 =r[0];
+			listeOp[i+1].first->op[0] =r[0];
 			}
 
 		f->NouvelleImage();

@@ -1341,7 +1341,10 @@ ParametreOperation *pOCV;
 if (imAcq->ListeOpAttribut()->find("matchdescriptormatcher") == imAcq->ListeOpAttribut()->end())
 	return;
 pOCV = &imAcq->ListeOpAttribut()->find("matchdescriptormatcher")->second;
-f = osgApp->Fenetre(pOCV->indOp2Fenetre);
+if (pOCV->indOpFenetre.size()>=2)
+    f = osgApp->Fenetre(pOCV->indOpFenetre[1]);
+else
+    f= NULL; 
 if (!f) return;
 std::vector<cv::KeyPoint> *pts2 = f->imAcq->PointCle();
 if (pts2->size()==0)

@@ -571,14 +571,14 @@ if (itRef!=(*t).end())
 			ParametreOperation pOCV=*it;
 			if (im)
 				{
-				pOCV.op1=im[0];
+				pOCV.op[0]=im[0];
 				if (imTmp)
 					delete imTmp;
 				imTmp=im[0];
 				}
 			else
-				pOCV.op1=imIni;
-			pOCV.indOp1Fenetre=-1;
+				pOCV.op[0]=imIni;
+			pOCV.indOpFenetre[0]=-1;
 
 			r=pOCV.ExecuterOperation();
 			}
@@ -676,23 +676,25 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		}
 	if (r.size()==0)
 		{
-		pOCV.op1=fenMere->ImAcq();
-		pOCV.indOp1Fenetre=indFen1;
+		pOCV.op[0]=fenMere->ImAcq();
+		pOCV.indOpFenetre[0]=indFen1;
 		}
 	else
 		{
 		if (imTmp)
 			delete imTmp;
 		imTmp=r[0];
-		pOCV.op1=r[0];
-		pOCV.indOp1Fenetre=-1;
+		pOCV.op[0]=r[0];
+        pOCV.indOpFenetre[0] = -1;
 		}
 
-	int indFen2=it->indOp2Fenetre;
+	int indFen2=-1;
+    if (it->indOpFenetre.size()>=2)
+        indFen2=it->indOpFenetre[1];
 	if (indFen2>=0)
 		{
 
-		pOCV.op2=app->Graphique(indFen2)->ImAcq();
+		pOCV.op[1]=app->Graphique(indFen2)->ImAcq();
 		}
 //	if (pOCV.intParam.find(
 	r=app->ExecuterOperation(&pOCV);
@@ -764,7 +766,9 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		wxMessageBox(_("Empty image?"),_("Problem"), wxOK );
 		return false;
 		}
-	long indFen2=it->indOp2Fenetre;
+	long indFen2=-1;
+    if(it->indOpFenetre.size()>=2)
+        indFen2=it->indOpFenetre[1];
 	bool annuler=false;
 	while (it->opBinaireSelec && !app->Graphique(indFen2) && !videoActive)
 		{
@@ -773,14 +777,14 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 				adr.GetValue().ToCLong(&indFen2);
 			else
 				annuler=true;
-			it->indOp2Fenetre = indFen2 ;
+            it->indOpFenetre[1] = indFen2;
 		}
 	if (annuler)
 		return false;
 	if (it->opBinaireSelec && !videoActive && app->Fenetre(indFen2))
-		it->op2=app->Graphique(indFen2)->ImAcq();
+		it->op[1]=app->Graphique(indFen2)->ImAcq();
 	else
-		it->op2 =NULL;
+		it->op[1] =NULL;
 	}
 return true;
 }

@@ -1,6 +1,6 @@
 #include "ImageInfo.h"
 
-std::vector<ImageInfoCV		*>ImageInfoCV::LigneMediane (ImageInfoCV *im1,ParametreOperation *paramOCV)
+std::vector<ImageInfoCV		*>ImageInfoCV::LigneMediane (std::vector<ImageInfoCV *> op,ParametreOperation *paramOCV)
 {
 std::vector<ImageInfoCV	*> r;
 

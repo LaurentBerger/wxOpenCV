@@ -129,7 +129,8 @@ ImageInfoCV *Op3();
 int IndOp1();
 int IndOp2();
 int IndOp3();
-int NbOperande(){return pOCV.nbOperande;};
+int IdFenetreOp1pre();
+int NbOperande(){ return pOCV.nbOperande; };
 int NumSeqOpe(int *x=NULL){if (x!=NULL) numSeqOpe=*x;return numSeqOpe;};
 void AnnuleOp();
 std::map <int,std::vector <ParametreOperation > >  *TabSeqOperation(){return &tabOperation;}

@@ -30,19 +30,21 @@ return indOpMorphologie;
  * @function Add
  * @brief Addition de deux images
  */
-std::vector<ImageInfoCV *>ImageInfoCV::Add(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Add(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
+std::vector<ImageInfoCV	*> r;
+if (op.size()<2)
+    return r;
 ImageInfoCV	*im =new ImageInfoCV;
 
 if (pOCV)
 	{
-	if (im1->depth()!=im2->depth())
+    if (op[0]->depth() != op[1]->depth())
 		pOCV->intParam["ddepth"].valeur=CV_32F;
-	cv::add( *im1, *im2, *im,cv::noArray(),pOCV->intParam["ddepth"].valeur );
+    cv::add(*op[0], *op[1], *im, cv::noArray(), pOCV->intParam["ddepth"].valeur);
 	}
 else
-	cv::add( *im1, *im2, *im,cv::noArray(),typeResultat );
-std::vector<ImageInfoCV	*> r;
+    cv::add(*op[0], *op[1], *im, cv::noArray(), typeResultat);
 r.push_back(im);
 return r;
 }
@@ -51,18 +53,20 @@ return r;
  * @function Add
  * @brief Addition de deux images
  */
-std::vector<ImageInfoCV *>ImageInfoCV::AddPonderee(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::AddPonderee(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
-ImageInfoCV	*im =new ImageInfoCV;
-
-
-if (im1->depth()!=im2->depth() && pOCV)
-	pOCV->intParam["ddepth"].valeur=CV_32F;
-if (pOCV)
-	cv::addWeighted( *im1,pOCV->intParam["alpha"].valeur, *im2,pOCV->intParam["beta"].valeur,pOCV->intParam["gamma"].valeur, *im,pOCV->intParam["ddepth"].valeur );
-else
-	cv::addWeighted( *im1,1, *im2,1,0, *im,-1);
 std::vector<ImageInfoCV	*> r;
+if (op.size()<2)
+    return r;
+ImageInfoCV	*im = new ImageInfoCV;
+
+
+if (op[0]->depth() != op[1]->depth())
+    pOCV->intParam["ddepth"].valeur = CV_32F;
+if (pOCV)
+    cv::addWeighted(*op[0], pOCV->intParam["alpha"].valeur, *op[1], pOCV->intParam["beta"].valeur, pOCV->intParam["gamma"].valeur, *im, pOCV->intParam["ddepth"].valeur);
+else
+	cv::addWeighted( *op[0],1, *op[1],1,0, *im,-1);
 r.push_back(im);
 return r;
 }
@@ -71,19 +75,21 @@ return r;
  * @function Add
  * @brief Différence de deux images
  */
-std::vector<ImageInfoCV *>ImageInfoCV::Sub(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Sub(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
-ImageInfoCV	*im =new ImageInfoCV;
+std::vector<ImageInfoCV	*> r;
+if (op.size()<2)
+    return r;
+ImageInfoCV	*im = new ImageInfoCV;
 
 if (pOCV)
 	{
-	if (im1->depth()!=im2->depth())
+	if (op[0]->depth()!=op[1]->depth())
 		pOCV->intParam["ddepth"].valeur=CV_32F;
-	cv::subtract( *im1, *im2, *im,cv::noArray(),pOCV->intParam["ddepth"].valeur );
+	cv::subtract( *op[0], *op[1], *im,cv::noArray(),pOCV->intParam["ddepth"].valeur );
 	}
 else
-	cv::subtract( *im1, *im2, *im,cv::noArray(),typeResultat );
-std::vector<ImageInfoCV	*> r;
+	cv::subtract( *op[0], *op[1], *im,cv::noArray(),typeResultat );
 r.push_back(im);
 return r;
 }
@@ -92,19 +98,21 @@ return r;
  * @function Prod
  * @brief Produit de deux images
  */
-std::vector<ImageInfoCV *>ImageInfoCV::Mul(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Mul(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
-ImageInfoCV	*im =new ImageInfoCV;
+std::vector<ImageInfoCV	*> r;
+if (op.size()<2)
+    return r;
+ImageInfoCV	*im = new ImageInfoCV;
 
 if (pOCV)
 	{
-	if (im1->depth()!=im2->depth())
-		pOCV->intParam["ddepth"].valeur=CV_32F;
-	cv::multiply( *im1, *im2, *im,pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
+    if (op[0]->depth() != op[1]->depth())
+        pOCV->intParam["ddepth"].valeur = CV_32F;
+    cv::multiply(*op[0], *op[1], *im, pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
 	}
 else
-	cv::multiply( *im1, *im2, *im,1, typeResultat);
-std::vector<ImageInfoCV	*> r;
+    cv::multiply(*op[0], *op[1], *im, 1, typeResultat);
 r.push_back(im);
 return r;
 }
@@ -113,50 +121,58 @@ return r;
  * @function Prod
  * @brief Division de deux images
  */
-std::vector<ImageInfoCV *>ImageInfoCV::Div(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Div(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
-ImageInfoCV	*im =new ImageInfoCV;
+std::vector<ImageInfoCV	*> r;
+if (op.size()<2)
+    return r;
+ImageInfoCV	*im = new ImageInfoCV;
 
 if (pOCV)
 	{
-	if (im1->depth()!=im2->depth())
-		pOCV->intParam["ddepth"].valeur=CV_32F;
-	cv::divide( *im1, *im2, *im,pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
+    if (op[0]->depth() != op[1]->depth())
+        pOCV->intParam["ddepth"].valeur = CV_32F;
+    cv::divide(*op[0], *op[1], *im, pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
 	}
 else
-	cv::divide( *im1, *im2, *im,1, typeResultat);
-std::vector<ImageInfoCV	*> r;
+    cv::divide(*op[0], *op[1], *im, 1, typeResultat);
 r.push_back(im);
 return r;
 }
 
 
-std::vector<ImageInfoCV *>ImageInfoCV::EtLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV )
+std::vector<ImageInfoCV *>ImageInfoCV::EtLogique(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV )
 {
-	ImageInfoCV	*im = new ImageInfoCV;
+std::vector<ImageInfoCV	*> r;
+if (op.size()<2)
+    return r;
+ImageInfoCV	*im = new ImageInfoCV;
 
-	cv::bitwise_and(*im1, *im2, *im, cv::noArray());
-	std::vector<ImageInfoCV	*> r;
+cv::bitwise_and(*op[0], *op[1], *im, cv::noArray());
 	r.push_back(im);
 	return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::OuLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV )
+std::vector<ImageInfoCV *>ImageInfoCV::OuLogique(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV )
 {
-	ImageInfoCV	*im = new ImageInfoCV;
+std::vector<ImageInfoCV	*> r;
+if (op.size()<2)
+    return r;
+ImageInfoCV	*im = new ImageInfoCV;
 
-	cv::bitwise_or(*im1, *im2, *im, cv::noArray());
-	std::vector<ImageInfoCV	*> r;
+cv::bitwise_or(*op[0], *op[1], *im, cv::noArray());
 	r.push_back(im);
 	return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::OuExcluLogique(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::OuExcluLogique(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
-	ImageInfoCV	*im = new ImageInfoCV;
+std::vector<ImageInfoCV	*> r;
+if (op.size()<2)
+    return r;
+ImageInfoCV	*im = new ImageInfoCV;
 
-	cv::bitwise_xor(*im1, *im2, *im, cv::noArray());
-	std::vector<ImageInfoCV	*> r;
+cv::bitwise_xor(*op[0], *op[1], *im, cv::noArray());
 	r.push_back(im);
 	return r;
 }
@@ -166,11 +182,11 @@ std::vector<ImageInfoCV *>ImageInfoCV::OuExcluLogique(ImageInfoCV	*im1, ImageInf
 * @function Negation
 * @brief Negation logique d'une image image
 */
-std::vector<ImageInfoCV *>ImageInfoCV::Negation(ImageInfoCV	*im1,  ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Negation(std::vector< ImageInfoCV*> op,  ParametreOperation *pOCV)
 {
 	ImageInfoCV	*im = new ImageInfoCV;
 
-	cv::bitwise_not(*im1, *im, cv::noArray());
+	cv::bitwise_not(*op[0], *im, cv::noArray());
 	std::vector<ImageInfoCV	*> r;
 	r.push_back(im);
 	return r;
@@ -182,14 +198,14 @@ std::vector<ImageInfoCV *>ImageInfoCV::Negation(ImageInfoCV	*im1,  ParametreOper
  * @function Erosion
  * @brief Erosion d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-std::vector<ImageInfoCV *>ImageInfoCV::Erosion(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Erosion(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-if (im2==NULL)
-	cv::erode( *im1, *im, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+if (op.size()==1)
+    cv::erode(*op[0], *im, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur]);
 else
-	cv::erode( *im1, *im, *im2 );
+    cv::erode(*op[0], *im, *op[1]);
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
 return r;
@@ -199,20 +215,20 @@ return r;
  * @function Dilatation
  * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-std::vector<ImageInfoCV *>ImageInfoCV::Dilatation(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Dilatation(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-if (im2==NULL)
-	cv::dilate( *im1, *im, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+if (op.size() == 1)
+    cv::dilate(*op[0], *im, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur]);
 else
-	cv::dilate( *im1, *im, *im2 );
+    cv::dilate(*op[0], *im, *op[1]);
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::Ouverture(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Ouverture(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -226,22 +242,22 @@ if (pOCV)
 	nbIter=pOCV->intParam["nbIter"].valeur;
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
-	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_OPEN, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
+	if (op.size()==1)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_OPEN, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
-		cv::morphologyEx( *im1, *im,cv::MORPH_OPEN, *im2,ancrage,nbIter,borderType,borderValue);
+		cv::morphologyEx( *op[0], *im,cv::MORPH_OPEN, *op[1],ancrage,nbIter,borderType,borderValue);
 	}
 else
-	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_OPEN, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+    if (op.size() == 1)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_OPEN, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 	else
-		cv::morphologyEx( *im1, *im,cv::MORPH_OPEN, *im2);
+		cv::morphologyEx( *op[0], *im,cv::MORPH_OPEN, *op[1]);
 	std::vector<ImageInfoCV	*> r;
 	r.push_back(im);
 	return r;
 }
  
-std::vector<ImageInfoCV *>ImageInfoCV::Fermeture(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Fermeture(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -254,22 +270,22 @@ if (pOCV)
 	nbIter=pOCV->intParam["nbIter"].valeur;
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
-	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_CLOSE, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
+	if (op.size()==1)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_CLOSE, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
-		cv::morphologyEx( *im1, *im,cv::MORPH_CLOSE, *im2,ancrage,nbIter,borderType,borderValue);
+		cv::morphologyEx( *op[0], *im,cv::MORPH_CLOSE, *op[1],ancrage,nbIter,borderType,borderValue);
 	}
 else
-	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_CLOSE, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+	if (op.size()==1)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_CLOSE, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 	else
-		cv::morphologyEx( *im1, *im,cv::MORPH_CLOSE, *im2);
+		cv::morphologyEx( *op[0], *im,cv::MORPH_CLOSE, *op[1]);
 	std::vector<ImageInfoCV	*> r;
 	r.push_back(im);
 	return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::ChapeauHaut(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::ChapeauHaut(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -282,22 +298,22 @@ if (pOCV)
 	nbIter=pOCV->intParam["nbIter"].valeur;
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
-	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_TOPHAT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
+	if (op.size()==1)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_TOPHAT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
-		cv::morphologyEx( *im1, *im,cv::MORPH_TOPHAT, *im2,ancrage,nbIter,borderType,borderValue);
+		cv::morphologyEx( *op[0], *im,cv::MORPH_TOPHAT, *op[1],ancrage,nbIter,borderType,borderValue);
 	}
 else
-	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_TOPHAT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+	if (op.size()==1)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_TOPHAT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 	else
-		cv::morphologyEx( *im1, *im,cv::MORPH_TOPHAT, *im2);
+		cv::morphologyEx( *op[0], *im,cv::MORPH_TOPHAT, *op[1]);
 	std::vector<ImageInfoCV	*> r;
 	r.push_back(im);
 	return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::ChapeauBas(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::ChapeauBas(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -310,22 +326,22 @@ if (pOCV)
 	nbIter=pOCV->intParam["nbIter"].valeur;
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
-	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_BLACKHAT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
+	if (op.size()==1)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_BLACKHAT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
-		cv::morphologyEx( *im1, *im,cv::MORPH_BLACKHAT, *im2,ancrage,nbIter,borderType,borderValue);
+		cv::morphologyEx( *op[0], *im,cv::MORPH_BLACKHAT, *op[1],ancrage,nbIter,borderType,borderValue);
 	}
 else
-	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_BLACKHAT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+	if (op.size()==1)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_BLACKHAT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 	else
-		cv::morphologyEx( *im1, *im,cv::MORPH_BLACKHAT, *im2);
+		cv::morphologyEx( *op[0], *im,cv::MORPH_BLACKHAT, *op[1]);
 	std::vector<ImageInfoCV	*> r;
 	r.push_back(im);
 	return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::GradMorph(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::GradMorph(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
@@ -338,16 +354,16 @@ if (pOCV)
 	nbIter=pOCV->intParam["nbIter"].valeur;
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
-	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_GRADIENT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
+	if (op.size()==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_GRADIENT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
-		cv::morphologyEx( *im1, *im,cv::MORPH_GRADIENT, *im2,ancrage,nbIter,borderType,borderValue);
+		cv::morphologyEx( *op[0], *im,cv::MORPH_GRADIENT, *op[1],ancrage,nbIter,borderType,borderValue);
 	}
 else
-	if (im2==NULL)
-		cv::morphologyEx( *im1, *im,cv::MORPH_GRADIENT, *im1->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+	if (op.size()==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_GRADIENT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
 	else
-		cv::morphologyEx( *im1, *im,cv::MORPH_GRADIENT, *im2);
+		cv::morphologyEx( *op[0], *im,cv::MORPH_GRADIENT, *op[1]);
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
 return r;
@@ -359,14 +375,14 @@ return r;
  * @function Convolution
  * @brief Convolution d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-std::vector<ImageInfoCV *>ImageInfoCV::Convolution(ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Convolution(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-if (im2==NULL)
-	cv::filter2D( *im1, *im,typeResultat, *im1->opnn[pOCV->intParam["IndOpConvolution"].valeur] );
+if (op.size()==NULL)
+	cv::filter2D( *op[0], *im,typeResultat, *op[0]->opnn[pOCV->intParam["IndOpConvolution"].valeur] );
 else
-	cv::filter2D( *im1, *im,typeResultat, *im2);
+	cv::filter2D( *op[0], *im,typeResultat, *op[1]);
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
@@ -377,11 +393,11 @@ return r;
  * @function Dilatation
  * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-std::vector<ImageInfoCV *>ImageInfoCV::Laplacien(ImageInfoCV	*im1,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Laplacien(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::Laplacian( *im1, *im, typeResultat,pOCV->intParam["ksize"].valeur,
+cv::Laplacian( *op[0], *im, typeResultat,pOCV->intParam["ksize"].valeur,
 	pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
 
 std::vector<ImageInfoCV	*> r;
@@ -393,7 +409,7 @@ return r;
  * @function ScharrModule
  * @brief Module du gradient Scharr d'une image im1 
  */
-std::vector<ImageInfoCV *>ImageInfoCV::ScharrModule(ImageInfoCV	*im1,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::ScharrModule(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 ImageInfoCV	imx ;
@@ -401,8 +417,8 @@ ImageInfoCV	imy;
 ImageInfoCV	imAbsx;
 ImageInfoCV	imAbsy;
 
-cv::Scharr( *im1, imx, pOCV->intParam["ddepth"].valeur,1,0,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
-cv::Scharr( *im1, imy, pOCV->intParam["ddepth"].valeur,0,1,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
+cv::Scharr( *op[0], imx, pOCV->intParam["ddepth"].valeur,1,0,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
+cv::Scharr( *op[0], imy, pOCV->intParam["ddepth"].valeur,0,1,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
 abs( imx);
 abs( imy);
 addWeighted( imx, 0.5, imy, 0.5, 0, *im );
@@ -416,11 +432,11 @@ return r;
  * @function ScharrX
  * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-std::vector<ImageInfoCV *>ImageInfoCV::ScharrX(ImageInfoCV	*im1,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::ScharrX(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::Scharr( *im1, *im, pOCV->intParam["ddepth"].valeur,1,0,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
+cv::Scharr( *op[0], *im, pOCV->intParam["ddepth"].valeur,1,0,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
@@ -432,11 +448,11 @@ return r;
  * @function ScharrY
  * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-std::vector<ImageInfoCV *>ImageInfoCV::ScharrY(ImageInfoCV	*im1,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::ScharrY(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::Scharr( *im1, *im, pOCV->intParam["ddepth"].valeur,0,1,
+cv::Scharr( *op[0], *im, pOCV->intParam["ddepth"].valeur,0,1,
 	pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
 
 std::vector<ImageInfoCV	*> r;
@@ -450,26 +466,26 @@ return r;
  * @function Canny
  * @brief filtrage de canny d'une image im1 par l'opérateur im2 où l'opérateur par défaut
  */
-std::vector<ImageInfoCV *>ImageInfoCV::Canny(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Canny(std::vector<ImageInfoCV *> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-if (imSrc->channels()==1)
+if (op[0]->channels()==1)
 	{
-	cv::Canny(	*imSrc, *im, pOCV->doubleParam["threshold1"].valeur,
+	cv::Canny(	*op[0], *im, pOCV->doubleParam["threshold1"].valeur,
 				pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
 	}
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[imSrc->channels()];
-	cv::split( *imSrc, planCouleur );
-	for (int i=0;i<imSrc->channels();i++)
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		cv::Canny( planCouleur[i], d[i], pOCV->doubleParam["threshold1"].valeur,
 					pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
 		}
-	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
+	cv::merge((const cv::Mat *)d, op[0]->channels(), *im);
 	delete []d;
 	}
 
@@ -482,25 +498,25 @@ return r;
  * @function Seuillage
  * @brief Seuillage d'une image imSrc 
  */
-std::vector<ImageInfoCV *>ImageInfoCV::SeuillageAdaptatif(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::SeuillageAdaptatif(std::vector<ImageInfoCV	*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-if (imSrc->channels()==1)
+if (op[0]->channels()==1)
 	{
-	cv::adaptiveThreshold( *imSrc, *im, pOCV->doubleParam["maxValue"].valeur,pOCV->intParam["adaptiveMethod"].valeur,
+	cv::adaptiveThreshold( *op[0], *im, pOCV->doubleParam["maxValue"].valeur,pOCV->intParam["adaptiveMethod"].valeur,
 		pOCV->intParam["thresholdType"].valeur,pOCV->intParam["blockSize"].valeur,pOCV->doubleParam["C"].valeur);
 	}
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[imSrc->channels()];
-	cv::split( *imSrc, planCouleur );
-	for (int i=0;i<imSrc->channels();i++)
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 	cv::adaptiveThreshold( planCouleur[i], d[i], pOCV->doubleParam["maxValue"].valeur,pOCV->intParam["adaptiveMethod"].valeur,
 		pOCV->intParam["thresholdType"].valeur,pOCV->intParam["blockSize"].valeur,pOCV->doubleParam["C"].valeur);
 		}
-	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
+	cv::merge((const cv::Mat *)d, op[0]->channels(), *im);
 	delete []d;
 	}
 
@@ -509,24 +525,24 @@ r.push_back(im);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::Contour(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Contour(std::vector<ImageInfoCV	*>op,ParametreOperation *pOCV)
 {
 ImageInfoCV *im1=new ImageInfoCV;
-*(cv::Mat*)im1= imSrc->clone();
+*(cv::Mat*)im1= op[0]->clone();
 std::vector<std::vector<cv::Point> > f;
-if (imSrc->channels()==1)
+if (op[0]->channels()==1)
 	{
 	cv::findContours( *im1,  f,pOCV->intParam["mode"].valeur,pOCV->intParam["method"].valeur);	
 	}
  else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[imSrc->channels()];
-	cv::split( *imSrc, planCouleur );
-	for (int i=0;i<imSrc->channels();i++)
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		}
-	cv::merge((const cv::Mat *)d, imSrc->channels(),*im1);
+	cv::merge((const cv::Mat *)d, op[0]->channels(),*im1);
 	}
 
 std::vector<ImageInfoCV	*> r;
@@ -538,30 +554,30 @@ void ImageInfoCV::Threshold( cv::InputArray _src, cv::OutputArray _dst, double t
 {
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::Seuillage(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::Seuillage(std::vector<ImageInfoCV	*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-if (imSrc->depth()==CV_16S)
+if (op[0]->depth()==CV_16S)
 	{
 	pOCV->doubleParam["thresh"].maxi=32767; 
 	}
-if (imSrc->channels()==1)
+if (op[0]->channels()==1)
 	{
 	
-	threshold( *imSrc, *im, pOCV->doubleParam["thresh"].valeur,pOCV->doubleParam["maxval"].valeur,
+	threshold( *op[0], *im, pOCV->doubleParam["thresh"].valeur,pOCV->doubleParam["maxval"].valeur,
 		pOCV->intParam["threshold_type"].valeur);
 	}
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[imSrc->channels()];
-	cv::split( *imSrc, planCouleur );
-	for (int i=0;i<imSrc->channels();i++)
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		cv::threshold(	planCouleur[i], d[i], pOCV->doubleParam["thresh"].valeur,
 						pOCV->doubleParam["maxval"].valeur,pOCV->intParam["threshold_type"].valeur);
 		}
-	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
+	cv::merge((const cv::Mat *)d, op[0]->channels(), *im);
 	delete []d;
 	}
 
@@ -570,20 +586,20 @@ r.push_back(im);
 return r;
 
 }
-std::vector<ImageInfoCV *>ImageInfoCV::LissageMoyenne(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::LissageMoyenne(std::vector<ImageInfoCV	*>op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-cv::blur( *imSrc, *im, pOCV->sizeParam["ksize"].valeur,pOCV->pointParam["anchor"].valeur,pOCV->intParam["borderType"].valeur);
+cv::blur( *op[0], *im, pOCV->sizeParam["ksize"].valeur,pOCV->pointParam["anchor"].valeur,pOCV->intParam["borderType"].valeur);
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::LissageGaussien(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::LissageGaussien(std::vector<ImageInfoCV	*>op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-cv::GaussianBlur( *imSrc, *im, pOCV->sizeParam["ksize"].valeur,
+cv::GaussianBlur( *op[0], *im, pOCV->sizeParam["ksize"].valeur,
 	pOCV->doubleParam["sigmaX"].valeur,pOCV->doubleParam["sigmaY"].valeur,
 	pOCV->intParam["borderType"].valeur);
 
@@ -592,10 +608,10 @@ r.push_back(im);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::LissageMedian(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::LissageMedian(std::vector<ImageInfoCV	*>op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-cv::medianBlur( *imSrc, *im, pOCV->intParam["ksize"].valeur);
+cv::medianBlur( *op[0], *im, pOCV->intParam["ksize"].valeur);
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
@@ -603,19 +619,19 @@ return r;
 }
 
 
-std::vector<ImageInfoCV *>ImageInfoCV::FFT(ImageInfoCV	*im1,ParametreOperation *paramOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::FFT(std::vector< ImageInfoCV*> op,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-int m = cv::getOptimalDFTSize( im1->rows );
-int n = cv::getOptimalDFTSize( im1->cols ); // on the border add zero values
+int m = cv::getOptimalDFTSize( op[0]->rows );
+int n = cv::getOptimalDFTSize( op[0]->cols ); // on the border add zero values
 
-if (im1->channels()==1)
+if (op[0]->channels()==1)
 	{
-	if (im1->type()!=CV_32FC1 && im->type()!=CV_64FC1)
+	if (op[0]->type()!=CV_32FC1 && im->type()!=CV_64FC1)
 		{
 		ImageInfoCV	*imSrc =new ImageInfoCV;
-		im1->convertTo(*imSrc, CV_32F);
-		if (im1->rows!=m ||im1->cols!=n)
+		op[0]->convertTo(*imSrc, CV_32F);
+		if (op[0]->rows!=m ||op[0]->cols!=n)
 			{
 			Mat insert;  
 			cv::copyMakeBorder(*imSrc, insert, 0, m - imSrc->rows, 0, n - imSrc->cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
@@ -626,22 +642,22 @@ if (im1->channels()==1)
 		delete imSrc;
 		}
 	else
-		cv::dft(*im1,*im,cv::DFT_COMPLEX_OUTPUT);
+		cv::dft(*op[0],*im,cv::DFT_COMPLEX_OUTPUT);
 		
 	}
 else
 	{
 	std::vector<Mat> planCouleurSrc;
-	Mat *planCouleurDst=new Mat[im1->channels()];
-	Mat *d=new Mat[im1->channels()];
-	cv::split( *im1, planCouleurSrc );
-	for (int i=0;i<im1->channels();i++)
+	Mat *planCouleurDst=new Mat[op[0]->channels()];
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleurSrc );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		planCouleurSrc[i].convertTo(planCouleurDst[i], CV_32F);
-		if (im1->rows!=m ||im1->cols!=n)
+		if (op[0]->rows!=m ||op[0]->cols!=n)
 			{
 			Mat insert;  
-			cv::copyMakeBorder(planCouleurDst[i], insert, 0, m - im1->rows, 0, n - im1->cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
+			cv::copyMakeBorder(planCouleurDst[i], insert, 0, m - op[0]->rows, 0, n - op[0]->cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
 			cv::dft(insert,d[i],cv::DFT_COMPLEX_OUTPUT);
 			}
 		else
@@ -649,7 +665,7 @@ else
 			cv::dft(planCouleurDst[i],d[i],cv::DFT_COMPLEX_OUTPUT);
 			}
 		}
-	cv::merge((const cv::Mat *)d, im1->channels(), *im);
+	cv::merge((const cv::Mat *)d, op[0]->channels(), *im);
 	int nb=im->channels();
 	delete []d;
 	delete []planCouleurDst;
@@ -661,19 +677,19 @@ r.push_back(im);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::IFFT(ImageInfoCV	*im1,ParametreOperation *paramOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::IFFT(std::vector< ImageInfoCV*> op,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-int m = cv::getOptimalDFTSize( im1->rows );
-int n = cv::getOptimalDFTSize( im1->cols ); // on the border add zero values
+int m = cv::getOptimalDFTSize( op[0]->rows );
+int n = cv::getOptimalDFTSize( op[0]->cols ); // on the border add zero values
 
-if (im1->channels()==2)
+if (op[0]->channels()==2)
 	{
-	if (im1->type()!=CV_32FC2 && im->type()!=CV_64FC2)
+	if (op[0]->type()!=CV_32FC2 && im->type()!=CV_64FC2)
 		{
 		ImageInfoCV	*imSrc =new ImageInfoCV;
-		im1->convertTo(*imSrc, CV_32FC2);
-		if (im1->rows!=m ||im1->cols!=n)
+		op[0]->convertTo(*imSrc, CV_32FC2);
+		if (op[0]->rows!=m ||op[0]->cols!=n)
 			{
 			Mat insert;  
 			cv::copyMakeBorder(*imSrc, insert, 0, m - imSrc->rows, 0, n - imSrc->cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
@@ -684,22 +700,22 @@ if (im1->channels()==2)
 		delete imSrc;
 		}
 	else
-		cv::idft(*im1,*im,cv::DFT_SCALE|cv::DFT_COMPLEX_OUTPUT);
+		cv::idft(*op[0],*im,cv::DFT_SCALE|cv::DFT_COMPLEX_OUTPUT);
 		
 	}
 else
 	{
 	std::vector<Mat> planCouleurSrc;
-	Mat *planCouleurDst=new Mat[im1->channels()];
-	Mat *d=new Mat[im1->channels()];
-	cv::split( *im1, planCouleurSrc );
-	for (int i=0;i<im1->channels();i++)
+	Mat *planCouleurDst=new Mat[op[0]->channels()];
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleurSrc );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		planCouleurSrc[i].convertTo(planCouleurDst[i], CV_32FC2);
-		if (im1->rows!=m ||im1->cols!=n)
+		if (op[0]->rows!=m ||op[0]->cols!=n)
 			{
 			Mat insert;  
-			cv::copyMakeBorder(planCouleurDst[i], insert, 0, m - im1->rows, 0, n - im1->cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
+			cv::copyMakeBorder(planCouleurDst[i], insert, 0, m - op[0]->rows, 0, n - op[0]->cols, cv::BORDER_CONSTANT, cv::Scalar::all(0));
 			cv::idft(insert,d[i],cv::DFT_SCALE|cv::DFT_COMPLEX_OUTPUT);
 			}
 		else
@@ -707,7 +723,7 @@ else
 			cv::idft(planCouleurDst[i],d[i],cv::DFT_SCALE|cv::DFT_COMPLEX_OUTPUT);
 			}
 		}
-	cv::merge((const cv::Mat *)d, im1->channels(), *im);
+	cv::merge((const cv::Mat *)d, op[0]->channels(), *im);
 	int nb=im->channels();
 	delete []d;
 	delete []planCouleurDst;
@@ -721,76 +737,76 @@ return r;
 
 
 
-std::vector<ImageInfoCV*> ImageInfoCV::FusionPlan(int nbPlan,ImageInfoCV **ve,ParametreOperation *paramOCV)
+std::vector<ImageInfoCV*> ImageInfoCV::FusionPlan(std::vector<ImageInfoCV	*>op,ParametreOperation *paramOCV)
 {
 std::vector<ImageInfoCV	*> r;
 ImageInfoCV	*result = new ImageInfoCV;
 std::vector<cv::Mat> listePlan;
-if (nbPlan>=1)
-	listePlan.push_back(*(ve[0]));
+if (op.size()>=1)
+	listePlan.push_back(*(op[0]));
 else 
 	return r;
-if (nbPlan>=2)
-        listePlan.push_back(*(ve[1]));
-if (nbPlan>=3)
-        listePlan.push_back(*(ve[2]));
+if (op.size()>=2)
+        listePlan.push_back(*(op[1]));
+if (op.size()>=3)
+        listePlan.push_back(*(op[2]));
 cv::merge(listePlan,*result);
 
 r.push_back(result);
 return r;
 }
 
-std::vector<ImageInfoCV *> ImageInfoCV::RGB_L(ImageInfoCV *im1,ParametreOperation *paramOCV)
+std::vector<ImageInfoCV *> ImageInfoCV::RGB_L(std::vector<ImageInfoCV	*>op,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*result=new ImageInfoCV;
  
-cv::cvtColor( *im1, *result,paramOCV->intParam["ColorSpaceCode"].valeur );
+cv::cvtColor( *op[0], *result,paramOCV->intParam["ColorSpaceCode"].valeur );
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(result);
 return r;
 }
 
-std::vector<ImageInfoCV *> ImageInfoCV::SeparationPlan(ImageInfoCV *im1,ParametreOperation *paramOCV)
+std::vector<ImageInfoCV *> ImageInfoCV::SeparationPlan(std::vector<ImageInfoCV	*>op,ParametreOperation *paramOCV)
 {
-ImageInfoCV	**result=new ImageInfoCV*[im1->channels()];
+ImageInfoCV	**result=new ImageInfoCV*[op[0]->channels()];
 std::vector<Mat> *planCouleurSrc=new std::vector<Mat>;
 std::vector<ImageInfoCV	*> r;
  
-cv::split( *im1, *planCouleurSrc );
-for (int i=0;i<im1->channels();i++)
+cv::split( *op[0], *planCouleurSrc );
+for (int i=0;i<op[0]->channels();i++)
 	{
 	result[i]=new ImageInfoCV;
 	cv::merge((const cv::Mat *)&(*planCouleurSrc)[i], 1, *result[i]);
 	r.push_back(result[i]);
 	}
-paramOCV->nbImageRes=im1->channels();
+paramOCV->nbImageRes=op[0]->channels();
 
 return r;
 
 }
 
 
-std::vector<ImageInfoCV *> ImageInfoCV::ComposanteConnexe(ImageInfoCV *im1,ParametreOperation *paramOCV)
+std::vector<ImageInfoCV *> ImageInfoCV::ComposanteConnexe(std::vector<ImageInfoCV	*>op,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-if (im1->channels()==1)
+if (op[0]->channels()==1)
 	{
 	if (im->statComposante==NULL)
 		{
-		im->statComposante = new cv::Mat*[im1->channels()]; 
-		im->centreGComposante = new cv::Mat*[im1->channels()]; 
-		im->contours = new std::vector<std::vector<cv::Point> >[im1->channels()]; 
-		im->arbreContour = new std::vector<cv::Vec4i> [im1->channels()]; 
+		im->statComposante = new cv::Mat*[op[0]->channels()]; 
+		im->centreGComposante = new cv::Mat*[op[0]->channels()]; 
+		im->contours = new std::vector<std::vector<cv::Point> >[op[0]->channels()]; 
+		im->arbreContour = new std::vector<cv::Vec4i> [op[0]->channels()]; 
 
-		for (int i=0;i<im1->channels();i++)
+		for (int i=0;i<op[0]->channels();i++)
 			{
 			im->statComposante[i] = new cv::Mat; 
 			im->centreGComposante[i] = new cv::Mat; 
 			}
 		}
 
-	connectedComponentsWithStats(*im1, *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV->intParam["connectivity"].valeur, CV_32S);
+	connectedComponentsWithStats(*op[0], *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV->intParam["connectivity"].valeur, CV_32S);
 	ImageInfoCV	imCtr ;
 	im->copyTo(imCtr);
 	findContours(imCtr, *(im->contours),*im->arbreContour, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
@@ -800,33 +816,33 @@ if (im1->channels()==1)
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[im1->channels()];
+	Mat *d=new Mat[op[0]->channels()];
 	if (im->statComposante==NULL)
 		{
-		im->statComposante = new cv::Mat*[im1->channels()]; 
-		im->centreGComposante = new cv::Mat*[im1->channels()]; 
-		im->contours = new std::vector<std::vector<cv::Point> >[im1->channels()]; 
-		im->arbreContour = new std::vector<cv::Vec4i> [im1->channels()]; 
-		for (int i=0;i<im1->channels();i++)
+		im->statComposante = new cv::Mat*[op[0]->channels()]; 
+		im->centreGComposante = new cv::Mat*[op[0]->channels()]; 
+		im->contours = new std::vector<std::vector<cv::Point> >[op[0]->channels()]; 
+		im->arbreContour = new std::vector<cv::Vec4i> [op[0]->channels()]; 
+		for (int i=0;i<op[0]->channels();i++)
 			{
 			im->statComposante[i] = new cv::Mat; 
 			im->centreGComposante[i] = new cv::Mat; 
 			}
 		}
 		
-	cv::split( *im1, planCouleur );
-	for (int i=0;i<im1->channels();i++)
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV->intParam["connectivity"].valeur, CV_32S);
 		ImageInfoCV	imCtr ;
 		d[i].copyTo(imCtr);
 		findContours(imCtr, im->contours[i],im->arbreContour[i], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
 		}
-	cv::merge((const cv::Mat *)d, im1->channels(), *im);
+	cv::merge((const cv::Mat *)d, op[0]->channels(), *im);
 	im->CalcMoment();
 
-	std::vector<cv::Moments> *mmt =new std::vector<cv::Moments> [im1->channels()];
-	for (int i=0;i<im1->channels();i++)
+	std::vector<cv::Moments> *mmt =new std::vector<cv::Moments> [op[0]->channels()];
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		mmt[i].resize(im->contours[i].size()); 
 		for (int j=0;j<im->contours[i].size();j++)
@@ -844,38 +860,38 @@ return r;
 }
 
 
-std::vector<ImageInfoCV *> ImageInfoCV::PartageEaux (ImageInfoCV	*im1,ImageInfoCV	*im2,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *> ImageInfoCV::PartageEaux (std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 
 {
 std::vector<ImageInfoCV	*> r;
 ImageInfoCV	*im =new ImageInfoCV;
-if (!im2)
+if (op.size()!=2)
 	return r;
-im2->convertTo(*im, CV_32S);
-watershed(*im1, *im);
+op[1]->convertTo(*op[0], CV_32S);
+watershed(*op[0], *im);
 
 r.push_back(im);
 return r;
 }
 
-std::vector<ImageInfoCV		*> ImageInfoCV::DistanceDiscrete (ImageInfoCV *im1,ParametreOperation *paramOCV)
+std::vector<ImageInfoCV		*> ImageInfoCV::DistanceDiscrete (std::vector<ImageInfoCV *>op,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-if (im1->channels()==1)
+if (op[0]->channels()==1)
 	{
-	cv::distanceTransform(*im1, *im, cv::DIST_L1, 3);
+	cv::distanceTransform(*op[0], *im, cv::DIST_L1, 3);
 	}
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[im1->channels()];
+	Mat *d=new Mat[op[0]->channels()];
 		
-	cv::split( *im1, planCouleur );
-	for (int i=0;i<im1->channels();i++)
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		cv::distanceTransform(planCouleur[i], d[i], cv::DIST_L1, 3);
 		}
-	cv::merge((const cv::Mat *)d, im1->channels(), *im);
+	cv::merge((const cv::Mat *)d, op[0]->channels(), *im);
 	delete []d;
 	}
 
@@ -885,13 +901,13 @@ return r;
 }
 
 
-std::vector<ImageInfoCV		*> ImageInfoCV::Voronoi (ImageInfoCV *imSrc,ParametreOperation *paramOCV)
+std::vector<ImageInfoCV		*> ImageInfoCV::Voronoi (std::vector<ImageInfoCV *> op,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-if (imSrc->channels()==1)
+if (op[0]->channels()==1)
 	{
 
-	connectedComponentsWithStats(*imSrc, *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV->intParam["connectivity"].valeur, CV_32S);
+	connectedComponentsWithStats(*op[0], *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV->intParam["connectivity"].valeur, CV_32S);
 	ImageInfoCV	imCtr ;
 	im->copyTo(imCtr);
 	findContours(imCtr, *(im->contours),*im->arbreContour, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
@@ -899,17 +915,17 @@ if (imSrc->channels()==1)
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[imSrc->channels()];
+	Mat *d=new Mat[op[0]->channels()];
 		
-	cv::split( *imSrc, planCouleur );
-	for (int i=0;i<imSrc->channels();i++)
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV->intParam["connectivity"].valeur, CV_32S);
 		ImageInfoCV	imCtr ;
 		d[i].copyTo(imCtr);
 		findContours(imCtr, im->contours[i],im->arbreContour[i], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
 		}
-	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
+	cv::merge((const cv::Mat *)d, op[0]->channels(), *im);
 	delete []d;
 	}
 
@@ -919,25 +935,25 @@ return r;
 }
 
 
-std::vector<ImageInfoCV *>ImageInfoCV::HoughLigne(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::HoughLigne(std::vector<ImageInfoCV *> op,ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
 
-if (imSrc!=this)
+if (op[0]!=this)
 	return r;
 if (ligne==NULL)
-	ligne = new std::vector<cv::Vec2f>[imSrc->channels()];
-if (imSrc->channels()==1)
+	ligne = new std::vector<cv::Vec2f>[op[0]->channels()];
+if (op[0]->channels()==1)
 	{
-	cv::HoughLines(*imSrc,ligne[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
+	cv::HoughLines(*op[0],ligne[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
 		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["srn"].valeur,pOCV->doubleParam["stn"].valeur);
 	}
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[imSrc->channels()];
-	cv::split( *imSrc, planCouleur );
-	for (int i=0;i<imSrc->channels();i++)
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		cv::HoughLines( planCouleur[i],ligne[i],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
 		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["srn"].valeur,pOCV->doubleParam["stn"].valeur);
@@ -951,20 +967,20 @@ return r;
 }
 
 
-std::vector<ImageInfoCV *>ImageInfoCV::HoughCercle(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::HoughCercle(std::vector<ImageInfoCV *> op,ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
 
-if (imSrc!=this)
+if (op[0]!=this)
 	return r;
 if (cercle==NULL)
-	cercle = new std::vector<cv::Vec3f>[imSrc->channels()];
-if (imSrc->channels()==1)
+	cercle = new std::vector<cv::Vec3f>[op[0]->channels()];
+if (op[0]->channels()==1)
 	{
 /*   HoughCircles(*imSrc, cercle[0], cv::HOUGH_GRADIENT, 1, 10,
                  100, 30, 1, 30);
 */
-	cv::HoughCircles(*imSrc,cercle[0],pOCV->intParam["method"].valeur,pOCV->doubleParam["dp"].valeur,
+	cv::HoughCircles(*op[0],cercle[0],pOCV->intParam["method"].valeur,pOCV->doubleParam["dp"].valeur,
 		pOCV->doubleParam["minDistance"].valeur,pOCV->doubleParam["param1"].valeur,pOCV->doubleParam["param2"].valeur,
 		pOCV->intParam["min_radius"].valeur,pOCV->intParam["max_radius"].valeur);
 
@@ -972,9 +988,9 @@ if (imSrc->channels()==1)
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[imSrc->channels()];
-	cv::split( *imSrc, planCouleur );
-	for (int i=0;i<imSrc->channels();i++)
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		cv::HoughCircles(d[i],cercle[i],pOCV->doubleParam["method"].valeur,pOCV->doubleParam["dp"].valeur,
 			pOCV->intParam["minDistance"].valeur,pOCV->doubleParam["param1"].valeur,pOCV->doubleParam["param2"].valeur,
@@ -987,25 +1003,25 @@ r.push_back(this);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::HoughLigneProba(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::HoughLigneProba(std::vector<ImageInfoCV *> op,ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
 
-if (imSrc != this)
+if (op[0] != this)
 	return r;
 if (ligneP==NULL)
-	ligneP = new std::vector<cv::Vec4i>[imSrc->channels()];
-if (imSrc->channels()==1)
+	ligneP = new std::vector<cv::Vec4i>[op[0]->channels()];
+if (op[0]->channels()==1)
 	{
-	cv::HoughLinesP(*imSrc,ligneP[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
+	cv::HoughLinesP(*op[0],ligneP[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
 		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["minLineLength"].valeur,pOCV->doubleParam["maxLineGap"].valeur);
 	}
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[imSrc->channels()];
-	cv::split( *imSrc, planCouleur );
-	for (int i=0;i<imSrc->channels();i++)
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		cv::HoughLinesP( planCouleur[i],ligneP[i],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
 		pOCV->intParam["threshold"].valeur,pOCV->doubleParam["minLineLength"].valeur,pOCV->doubleParam["maxLineGap"].valeur);
@@ -1019,26 +1035,26 @@ r.push_back(this);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::BonAttributs(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::BonAttributs(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
 
 
-if (imSrc!=this)
+if (op[0]!=this)
 	return r;
 if (boncoin==NULL)
-	boncoin = new std::vector<cv::Point2f>[imSrc->channels()];
-if (imSrc->channels()==1)
+	boncoin = new std::vector<cv::Point2f>[op[0]->channels()];
+if (op[0]->channels()==1)
 	{
-	cv::goodFeaturesToTrack(*imSrc,boncoin[0],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
+	cv::goodFeaturesToTrack(*op[0],boncoin[0],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
 		pOCV->doubleParam["minDistance"].valeur,cv::noArray(),pOCV->intParam["blockSize"].valeur,
 		pOCV->intParam["useHarrisDetector"].valeur,pOCV->doubleParam["k"].valeur);
 	}
 else
 	{
 	std::vector<Mat> planCouleur;
-	cv::split( *imSrc, planCouleur );
-	for (int i=0;i<imSrc->channels();i++)
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		cv::goodFeaturesToTrack(planCouleur[i],boncoin[i],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
 			pOCV->doubleParam["minDistance"].valeur,Mat(),pOCV->intParam["blockSize"].valeur,
@@ -1051,27 +1067,27 @@ r.push_back(this);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::DetectCoinHarris(ImageInfoCV	*imSrc,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::DetectCoinHarris(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-if (imSrc->channels()==1)
+if (op[0]->channels()==1)
 	{
-	cv::cornerHarris(*imSrc, *im, pOCV->intParam["blockSize"].valeur,pOCV-> intParam["ksize"].valeur,pOCV->doubleParam["k"].valeur, 
+	cv::cornerHarris(*op[0], *im, pOCV->intParam["blockSize"].valeur,pOCV-> intParam["ksize"].valeur,pOCV->doubleParam["k"].valeur, 
 	pOCV->intParam["borderType"].valeur);
 
 	}
 else
 	{
 	std::vector<Mat> planCouleur;
-	Mat *d=new Mat[imSrc->channels()];
-	cv::split( *imSrc, planCouleur );
-	for (int i=0;i<imSrc->channels();i++)
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
 		{
 		cv::cornerHarris(planCouleur[i], d[i], pOCV->intParam["blockSize"].valeur,pOCV-> intParam["ksize"].valeur,pOCV->doubleParam["k"].valeur, 
 		pOCV->intParam["borderType"].valeur);
 		}
-	cv::merge((const cv::Mat *)d, imSrc->channels(), *im);
+	cv::merge((const cv::Mat *)d, op[0]->channels(), *im);
 	delete []d;
 	}
 
@@ -1082,10 +1098,10 @@ return r;
 
 
 
-std::vector<ImageInfoCV	*> ImageInfoCV::DetectOrb(ImageInfoCV	*im, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*> ImageInfoCV::DetectOrb(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
-if (im != this)
+if (op[0] != this)
 	return r;
 
 
@@ -1115,7 +1131,7 @@ if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getScoreType() != pOCV->intPa
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getWTA_K() != pOCV->intParam["WTA_K"].valeur)
 	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setWTA_K(pOCV->intParam["WTA_K"].valeur);
 
-pOCV->detecteur["ORB"]->detectAndCompute(*im, Mat(), *(im->PointCle()), *(im->Descripteur(IMAGEINFOCV_ORB_DES)));
+pOCV->detecteur["ORB"]->detectAndCompute(*op[0], Mat(), *(op[0]->PointCle()), *(op[0]->Descripteur(IMAGEINFOCV_ORB_DES)));
 
 
 AjoutOpAttribut(pOCV);
@@ -1124,12 +1140,12 @@ r.push_back(this);
 return r;
 }
 
-std::vector<ImageInfoCV	*>ImageInfoCV::DetectMser(ImageInfoCV	*im, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectMser(std::vector<ImageInfoCV	*>op , ParametreOperation *pOCV)
     {
     std::vector<ImageInfoCV	*> r;
-    if (im != this)
+    if (op[0] != this)
         return r;
-    if (im != this)
+    if (op[0] != this)
         return r;
 
 
@@ -1146,7 +1162,7 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectMser(ImageInfoCV	*im, ParametreOper
     if (pOCV->detecteur["MSER"].dynamicCast<cv::MSER>())
     {
         std::vector<cv::Rect>  zone;
-        pOCV->detecteur["MSER"].dynamicCast<cv::MSER>()->detectRegions(*im, kMser, zone);
+        pOCV->detecteur["MSER"].dynamicCast<cv::MSER>()->detectRegions(*op[0], kMser, zone);
     }
 
     AjoutOpAttribut(pOCV);
@@ -1155,10 +1171,10 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectMser(ImageInfoCV	*im, ParametreOper
     return r;
     }
 
-std::vector<ImageInfoCV	*>ImageInfoCV::DetectBlob(ImageInfoCV	*im, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectBlob(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
     {
     std::vector<ImageInfoCV	*> r;
-    if (im != this)
+    if (op[0] != this)
         return r;
 
 
@@ -1189,7 +1205,7 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectBlob(ImageInfoCV	*im, ParametreOper
         pOCV->detecteur["BLOB"] = b;
         }
 
-    pOCV->detecteur["BLOB"]->detect(*im, kBlob, Mat());
+    pOCV->detecteur["BLOB"]->detect(*op[0], kBlob, Mat());
 
 
     AjoutOpAttribut(pOCV);
@@ -1198,10 +1214,10 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectBlob(ImageInfoCV	*im, ParametreOper
     return r;
     }
 
-std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(ImageInfoCV	*im, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
     {
     std::vector<ImageInfoCV	*> r;
-    if (im != this)
+    if (op[0] != this)
         return r;
 
 
@@ -1213,7 +1229,7 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(ImageInfoCV	*im, ParametreOpe
         }
 
 
-    pOCV->detecteur["BRISK"]->detectAndCompute(*im, Mat(), *(im->PointCle(IMAGEINFOCV_BRISK_DES)), *(im->Descripteur(IMAGEINFOCV_BRISK_DES)));
+    pOCV->detecteur["BRISK"]->detectAndCompute(*op[0], Mat(), *(op[0]->PointCle(IMAGEINFOCV_BRISK_DES)), *(op[0]->Descripteur(IMAGEINFOCV_BRISK_DES)));
 
 
     AjoutOpAttribut(pOCV);
@@ -1223,11 +1239,11 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(ImageInfoCV	*im, ParametreOpe
     }
 
 
-std::vector<ImageInfoCV	*>ImageInfoCV::DetectAkaze(ImageInfoCV	*im, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectAkaze(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
-if (im != this)
-return r;
+if (op[0] != this)
+    return r;
 
 
 if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("AKAZE") == pOCV->detecteur.end())
@@ -1252,7 +1268,7 @@ if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getNOctaves() != pOCV->in
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getThreshold() != pOCV->doubleParam["Threshold"].valeur)
     pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setThreshold(pOCV->doubleParam["Threshold"].valeur);
 
-pOCV->detecteur["AKAZE"]->detectAndCompute(*im, Mat(), *(im->PointCle(IMAGEINFOCV_AKAZE_DES)), *(im->Descripteur(IMAGEINFOCV_AKAZE_DES)));
+pOCV->detecteur["AKAZE"]->detectAndCompute(*op[0], Mat(), *(op[0]->PointCle(IMAGEINFOCV_AKAZE_DES)), *(op[0]->Descripteur(IMAGEINFOCV_AKAZE_DES)));
 
 
 AjoutOpAttribut(pOCV);
@@ -1261,29 +1277,30 @@ r.push_back(this);
 return r;
 }
 
-std::vector<ImageInfoCV	*>ImageInfoCV::AppariePoint(ImageInfoCV	*im1, ImageInfoCV	*im2, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*>ImageInfoCV::AppariePoint(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 
 cv::Ptr<cv::DescriptorMatcher> descriptorMatcher = cv::DescriptorMatcher::create("BruteForce");
 matches.clear();
-descriptorMatcher->match(*im1->Descripteur(), *im2->Descripteur(), matches, Mat());
+descriptorMatcher->match(*op[0]->Descripteur(), *op[1]->Descripteur(), matches, Mat());
 AjoutOpAttribut(pOCV);
-pOCV->imgParam[pOCV->nomOperation + "prec"] = im2;
+pOCV->imgParam[pOCV->nomOperation + "prec"] = op[1];
 std::vector<ImageInfoCV	*> r;
-r.push_back(im1);
+r.push_back(op[0]);
 return r;
 }
 
 
 
-std::vector<ImageInfoCV *>ImageInfoCV::FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
+//std::vector<ImageInfoCV *>ImageInfoCV::FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::FlotOptiqueLucasKanadePyramide(std::vector<ImageInfoCV	*> op,ParametreOperation *pOCV)
 {
 
 std::vector<ImageInfoCV	*> r;
 
-if (imPrec==NULL || imSuiv==NULL)
+if (op.size()<2 || op[0]==NULL || op[1]==NULL)
 	return r;
-if (channels()!=imSuiv->channels())
+if (channels()!=op[1]->channels())
 	{
 	pOCV->opErreur=3;
 	pOCV->msgErreur="depth images are different";
@@ -1295,13 +1312,13 @@ if (boncoin==NULL )
 	pOCV->msgErreur="No feature to track";
 	return r;
 	}
-if (imSuiv->BonCoin(true)==NULL)
+if (op[1]->BonCoin(true)==NULL)
 	{
 	pOCV->opErreur=2;
 	pOCV->msgErreur="Unitialized op2 BonCoin";
 	return r;
 	}
-if (imSuiv->CoinRef(true)==NULL)
+if (op[1]->CoinRef(true)==NULL)
 	{
 	pOCV->opErreur=3;
 	pOCV->msgErreur="Unitialized op2 CoinRef";
@@ -1312,93 +1329,94 @@ cv::TermCriteria critere(pOCV->intParam["typeCriteria"].valeur,pOCV->intParam["m
 
 std::vector<uchar> status;
 std::vector<float> err;
-for (int i=0;i<imPrec->channels();i++)
+for (int i=0;i<op[0]->channels();i++)
 	{
-	calcOpticalFlowPyrLK(*imPrec,*imSuiv,imPrec->BonCoin()[i],imSuiv->BonCoin()[i],status,err,pOCV->sizeParam["winSize"].valeur,
+	calcOpticalFlowPyrLK(*op[0],*op[1],op[0]->BonCoin()[i],op[1]->BonCoin()[i],status,err,pOCV->sizeParam["winSize"].valeur,
 		pOCV->intParam["maxLevel"].valeur,critere,pOCV->intParam["flag"].valeur,pOCV->doubleParam["minEigThreshold"].valeur);
 	int k,l;
-	imSuiv->CoinRef()[i].resize(imSuiv->BonCoin()[i].size());
-	for (k=l=0;k<imSuiv->BonCoin()[i].size();k++)
+	op[1]->CoinRef()[i].resize(op[1]->BonCoin()[i].size());
+	for (k=l=0;k<op[1]->BonCoin()[i].size();k++)
 		{
-		if (status[k] || imSuiv==imPrec)
+		if (status[k] || op[1]==op[0])
 			{
-			imSuiv->CoinRef()[i][l]=boncoin[i][k];
-			imSuiv->BonCoin()[i][l++]=imSuiv->BonCoin()[i][k];
+			op[1]->CoinRef()[i][l]=boncoin[i][k];
+			op[1]->BonCoin()[i][l++]=op[1]->BonCoin()[i][k];
 			}
 		}
-	imSuiv->BonCoin()[i].resize(l);
-	for (k=l=0;k<imSuiv->BonCoin()[i].size();k++)
+	op[1]->BonCoin()[i].resize(l);
+	for (k=l=0;k<op[1]->BonCoin()[i].size();k++)
 		{
 		if (!status[k])
 			{
-			imSuiv->CoinRef()[i][l++]=boncoin[i][k];
+			op[1]->CoinRef()[i][l++]=boncoin[i][k];
 			}
 		}
 	}
 //imSuiv->CloneStat(this);
 AjoutOpAttribut(pOCV);
-pOCV->imgParam[pOCV->nomOperation + "prec"] = imSuiv;
+pOCV->imgParam[pOCV->nomOperation + "prec"] = op[1];
 
-r.push_back(imSuiv);
+r.push_back(op[1]);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
+//std::vector<ImageInfoCV *>ImageInfoCV::FlotOptiqueFarnerback(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::FlotOptiqueFarnerback(std::vector<ImageInfoCV	*>op,ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
 
-if (imPrec==NULL )
+if (op[0]==NULL )
 	{
-	r.push_back(imSuiv);
+	r.push_back(op[1]);
 	return r;
 	}
-if (imPrec->channels()!=imSuiv->channels())
+if (op[0]->channels()!=op[1]->channels())
 	return r;
-if (imSuiv->FlotOptique(true)==NULL)
+if (op[1]->FlotOptique(true)==NULL)
 	return r;
-if (imPrec->channels()==1)
+if (op[0]->channels()==1)
 	{
-	calcOpticalFlowFarneback(*imPrec, *imSuiv, imSuiv->FlotOptique()[0], pOCV->doubleParam["pyr_scale"].valeur, pOCV->intParam["levels"].valeur, pOCV->sizeParam["winSize"].valeur.width, 
+	calcOpticalFlowFarneback(*op[0], *op[1], op[1]->FlotOptique()[0], pOCV->doubleParam["pyr_scale"].valeur, pOCV->intParam["levels"].valeur, pOCV->sizeParam["winSize"].valeur.width, 
 		pOCV->intParam["iterations"].valeur, pOCV->doubleParam["poly_sigma"].valeur, pOCV->intParam["flag"].valeur, pOCV->intParam["flag"].valeur);
 	}
 else
 	{
 	std::vector<Mat> d1,d2;
-	cv::split( *imPrec, d1 );
-	cv::split( *imSuiv, d2 );
-	for (int i=0;i<imPrec->channels();i++)
+	cv::split( *op[0], d1 );
+	cv::split( *op[1], d2 );
+	for (int i=0;i<op[0]->channels();i++)
 		{
-		calcOpticalFlowFarneback(d1[i], d2[i], imSuiv->FlotOptique()[i], pOCV->doubleParam["pyr_scale"].valeur, pOCV->intParam["levels"].valeur, pOCV->sizeParam["winSize"].valeur.width,
+		calcOpticalFlowFarneback(d1[i], d2[i], op[1]->FlotOptique()[i], pOCV->doubleParam["pyr_scale"].valeur, pOCV->intParam["levels"].valeur, pOCV->sizeParam["winSize"].valeur.width,
 			pOCV->intParam["iterations"].valeur, pOCV->doubleParam["poly_sigma"].valeur, pOCV->intParam["flag"].valeur, pOCV->intParam["flag"].valeur);
 		}
 	}
 AjoutOpAttribut(pOCV);
 
 
-r.push_back(imSuiv);
+r.push_back(op[1]);
 return r;
 }
 
 
-std::vector<ImageInfoCV *> ImageInfoCV::PhaseCorrelate(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV)
+std::vector<ImageInfoCV *> ImageInfoCV::PhaseCorrelate(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
-if (imPrec == NULL)
+if (op[0] == NULL)
 	{
-	r.push_back(imSuiv);
+	r.push_back(op[1]);
 	return r;
 	}
-if (imPrec->channels() != imSuiv->channels())
+if (op[0]->channels() != op[1]->channels())
 	return r;
-if (!imSuiv->Ponderation())
+if (!op[1]->Ponderation())
 	{
-	imSuiv->Ponderation(true);
+	op[1]->Ponderation(true);
 	}
 Mat im1,im2;
-imPrec->convertTo(im1, CV_64F);
-imSuiv->convertTo(im2, CV_64F);
+op[0]->convertTo(im1, CV_64F);
+op[1]->convertTo(im2, CV_64F);
 pOCV->doubleParam["response"]=0;
-cv::Point2d shift = cv::phaseCorrelate(im1, im2, *imSuiv->Ponderation());
+cv::Point2d shift = cv::phaseCorrelate(im1, im2, *op[1]->Ponderation());
 double rayon = std::sqrt(shift.x*shift.x + shift.y*shift.y);
 pOCV->doubleParam["dx"].valeur=shift.x;
 pOCV->doubleParam["dx"].mini=shift.x;
@@ -1409,15 +1427,15 @@ pOCV->doubleParam["dy"].mini=shift.y;
 pOCV->doubleParam["dy"].maxi=shift.y;
 pOCV->doubleParam["dy"].res=false;
 AjoutOpAttribut(pOCV);
-r.push_back(imSuiv); 
+r.push_back(op[1]); 
 return r;
 }
 
 
-std::vector<ImageInfoCV *> ImageInfoCV::MAJHistoriqueMvt(ImageInfoCV	*imPrec, ImageInfoCV	*imSuiv, ParametreOperation *pOCV)
+std::vector<ImageInfoCV *> ImageInfoCV::MAJHistoriqueMvt(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
-if (imPrec == NULL)
+if (op[0] == NULL)
 	{
 	if (pOCV->imgParam.find(pOCV->nomOperation + "prec") == pOCV->imgParam.end())
 		
@@ -1425,20 +1443,20 @@ if (imPrec == NULL)
 		throw std::string("First image is NULL in MAJHistoriqueMvt");
 		return r;
 		}
-	imPrec = pOCV->imgParam[pOCV->nomOperation + "prec"];
+	op[0] = pOCV->imgParam[pOCV->nomOperation + "prec"];
 	}
-if (imSuiv == NULL)
+if (op[1] == NULL)
 	{
 
 	throw std::string("Second image is NULL in MAJHistoriqueMvt");
 	return r;
 	}
-if (imPrec->channels() != imSuiv->channels() || imPrec->size() != imSuiv->size())
+if (op[0]->channels() != op[1]->channels() || op[0]->size() != op[1]->size())
 {
 	throw std::string("Channel and size must be equal");
 	return r;
 }
-if (imPrec->channels() != 1)
+if (op[0]->channels() != 1)
 {
 	throw std::string("Number of channel must be 1");
 	return r;
@@ -1446,17 +1464,17 @@ if (imPrec->channels() != 1)
 ImageInfoCV *mhi=NULL;
 if (pOCV->imgParam.find(pOCV->nomOperation + "mhi") == pOCV->imgParam.end())
 	{
-	mhi=new ImageInfoCV(imPrec->rows,imPrec->cols,CV_32FC1);
+	mhi=new ImageInfoCV(op[0]->rows,op[0]->cols,CV_32FC1);
 	pOCV->imgParam[pOCV->nomOperation + "mhi"] = mhi;
 	}
 else
 	mhi = pOCV->imgParam[pOCV->nomOperation + "mhi"];
 Mat *silh1=mhi->Silh(true);
-absdiff(*imSuiv, *imPrec, *silh1); 
+absdiff(*op[1], *op[0], *silh1); 
 threshold(*silh1, *silh1, pOCV->doubleParam["thresh"].valeur, pOCV->doubleParam["maxval"].valeur, pOCV->intParam["threshold_type"].valeur);
 pOCV->doubleParam["timestamp"].valeur = (double)clock() / CLOCKS_PER_SEC;
 cv::motempl::updateMotionHistory(*silh1, *mhi, pOCV->doubleParam["timestamp"].valeur, pOCV->doubleParam["duration"].valeur); // update MHI
-pOCV->imgParam[pOCV->nomOperation+"prec"] = imSuiv;
+pOCV->imgParam[pOCV->nomOperation+"prec"] = op[1];
 mhi->ParamOCVUpdateMotionHistory(pOCV);
 
 r.push_back(mhi);
@@ -1468,9 +1486,9 @@ return r;
 
 
 
-std::vector<ImageInfoCV	*>ImageInfoCV::CalcOrientationMvt(ImageInfoCV	*mhi, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*>ImageInfoCV::CalcOrientationMvt(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
 {
-if (mhi->depth()!=CV_32FC1)
+if (op[0]->depth()!=CV_32FC1)
 	throw std::string("CalcOrientationMvt :image must be single channel floating-point");
 if (masque)
 	delete masque;
@@ -1478,16 +1496,16 @@ if (orient)
 	delete orient;
 masque = new Mat();
 orient = new Mat();	// calculate motion gradient orientation and valid orientation mask
-cv::motempl::calcMotionGradient(*mhi, *masque, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
-mhi->AjoutOpAttribut(pOCV);
+cv::motempl::calcMotionGradient(*op[0], *masque, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
+op[0]->AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
 r.push_back(this);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::SegmenteMvt(ImageInfoCV	*mhi, ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::SegmenteMvt(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
 {
-if (mhi->depth() != CV_32FC1)
+if (op[0]->depth() != CV_32FC1)
 	throw std::string("CalcOrientationMvt :image must be single channel floating-point");
 if (!masque)
 	throw std::string("SegmenteMvt : masque is NULL");
@@ -1496,30 +1514,30 @@ if (!orient)
 regionsMvt.clear();
 if (segmvt==NULL)
 	segmvt  = new cv::Mat();
-cv::motempl::segmentMotion(*mhi, *segmvt, regionsMvt, pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur, pOCV->doubleParam["segThresh"].valeur);
+cv::motempl::segmentMotion(*op[0], *segmvt, regionsMvt, pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur, pOCV->doubleParam["segThresh"].valeur);
 if (pOCV->intParam["calcGlobalOrientation"].valeur==1)
 	{
 	Mat mask;
-	mhi->convertTo(mask, CV_8U, 255. / pOCVUpdateMotionHistory->doubleParam["duration"].valeur, (pOCVUpdateMotionHistory->doubleParam["duration"].valeur - pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur)*255. / pOCVUpdateMotionHistory->doubleParam["duration"].valeur);
+	op[0]->convertTo(mask, CV_8U, 255. / pOCVUpdateMotionHistory->doubleParam["duration"].valeur, (pOCVUpdateMotionHistory->doubleParam["duration"].valeur - pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur)*255. / pOCVUpdateMotionHistory->doubleParam["duration"].valeur);
 	angle.resize(regionsMvt.size());
 	for (int i = 0; i < (int)regionsMvt.size(); i++) 
 		{
 		Mat silh_roi = (*silh)(regionsMvt[i]);
-		Mat mhi_roi = (*mhi)(regionsMvt[i]);
+		Mat mhi_roi = (*op[0])(regionsMvt[i]);
 		Mat orient_roi = (*orient)(regionsMvt[i]);
 		Mat mask_roi = mask(regionsMvt[i]);
 		angle[i] = cv::motempl::calcGlobalOrientation(orient_roi, mask_roi, mhi_roi, pOCVUpdateMotionHistory->doubleParam["timestamp"].valeur, pOCVUpdateMotionHistory->doubleParam["duration"].valeur);
 
 		}
 	}
-mhi->AjoutOpAttribut(pOCV);
+op[0]->AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
-r.push_back(mhi);
+r.push_back(op[0]);
 return r;
 }
 
 
-std::vector<ImageInfoCV		*>ImageInfoCV::TransAffine(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+std::vector<ImageInfoCV		*>ImageInfoCV::TransAffine(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 ImageInfoCV *imDst = new ImageInfoCV();
 Mat			inter;
@@ -1538,7 +1556,7 @@ dstTri[1] = pOCV->pointParam["dst2"].valeur;
 dstTri[2] = pOCV->pointParam["dst3"].valeur;
 
 affinite = getAffineTransform(srcTri, dstTri);
-cv::warpAffine(*imSrc, inter, affinite, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
+cv::warpAffine(*op[0], inter, affinite, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
 
 /** Rotating the image after Warp */
 
@@ -1553,9 +1571,9 @@ r.push_back(imDst);
 return r;
 }
 
-std::vector<ImageInfoCV		*>ImageInfoCV::TransPerspective(ImageInfoCV	*mhi, ParametreOperation *pOCV)
+std::vector<ImageInfoCV		*>ImageInfoCV::TransPerspective(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
 {
-if (mhi->depth() != CV_32FC1)
+if (op[0]->depth() != CV_32FC1)
 	throw std::string("CalcOrientationMvt :image must be single channel floating-point");
 if (masque)
 	delete masque;
@@ -1563,24 +1581,24 @@ if (orient)
 	delete orient;
 masque = new Mat();
 orient = new Mat();	// calculate motion gradient orientation and valid orientation mask
-cv::motempl::calcMotionGradient(*mhi, *masque, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
-mhi->AjoutOpAttribut(pOCV);
+cv::motempl::calcMotionGradient(*op[0], *masque, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
+op[0]->AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
 r.push_back(this);
 return r;
 }
 
-std::vector<ImageInfoCV		*>ImageInfoCV::Dimension(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+std::vector<ImageInfoCV		*>ImageInfoCV::Dimension(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 	ImageInfoCV *imDst = new ImageInfoCV();
-	cv::resize(*imSrc, *imDst, pOCV->sizeParam["dsize"].valeur, pOCV->doubleParam["fx"].valeur, pOCV->doubleParam["fy"].valeur, pOCV->intParam["interpolationFlags"].valeur);
+	cv::resize(*op[0], *imDst, pOCV->sizeParam["dsize"].valeur, pOCV->doubleParam["fx"].valeur, pOCV->doubleParam["fy"].valeur, pOCV->intParam["interpolationFlags"].valeur);
 
 	std::vector<ImageInfoCV	*> r;
 	r.push_back(imDst);
 	return r;
 }
 
-std::vector<ImageInfoCV		*>ImageInfoCV::CorrigeAberation(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+std::vector<ImageInfoCV		*>ImageInfoCV::CorrigeAberation(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 	ImageInfoCV *imDst = new ImageInfoCV();
 	cv::Mat matriceCamera(3,3,CV_64FC1);
@@ -1601,24 +1619,24 @@ std::vector<ImageInfoCV		*>ImageInfoCV::CorrigeAberation(ImageInfoCV	*imSrc, Par
 	coeffDistor.push_back(pOCV->doubleParam["k5"].valeur);
 	coeffDistor.push_back(pOCV->doubleParam["k6"].valeur);
 
-	cv::undistort(*imSrc, *imDst, matriceCamera, coeffDistor, cv::noArray());
+	cv::undistort(*op[0], *imDst, matriceCamera, coeffDistor, cv::noArray());
 
 	std::vector<ImageInfoCV	*> r;
 	r.push_back(imDst);
 	return r;
 }
 
-std::vector<ImageInfoCV		*>ImageInfoCV::LogPolar(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+std::vector<ImageInfoCV		*>ImageInfoCV::LogPolar(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 	ImageInfoCV *imDst = new ImageInfoCV();
-	cv::logPolar(*imSrc, *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur ,pOCV->intParam["interpolationFlags"].valeur);
+	cv::logPolar(*op[0], *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur ,pOCV->intParam["interpolationFlags"].valeur);
 
 	std::vector<ImageInfoCV	*> r;
 	r.push_back(imDst);
 	return r;
 }
 
-std::vector<ImageInfoCV	*> ImageInfoCV::Fond_MOG(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*> ImageInfoCV::Fond_MOG(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 ImageInfoCV *imDst = NULL;
 
@@ -1643,7 +1661,7 @@ if (pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->g
 	pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setNMixtures(pOCV->intParam["mixtures"].valeur);
 if (pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->getNoiseSigma()!=pOCV->doubleParam["NoiseSigma"].valeur)
 	pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->setNoiseSigma(pOCV->doubleParam["NoiseSigma"].valeur);
-pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->apply(*imSrc, *imDst, pOCV->doubleParam["learningRate"].valeur);
+pOCV->ecartFond["MOG"].dynamicCast<cv::bgsegm::BackgroundSubtractorMOG>()->apply(*op[0], *imDst, pOCV->doubleParam["learningRate"].valeur);
 std::vector<ImageInfoCV	*> r;
 switch (pOCV->intParam["ResultImage"].valeur){
 case 0:
@@ -1673,7 +1691,7 @@ case 2:
 		}
 	else
 		premierPlan = pOCV->imgParam[pOCV->nomOperation + "premierPlan"];
-	imSrc->copyTo(*premierPlan,*imDst);
+	op[0]->copyTo(*premierPlan,*imDst);
 	r.push_back(premierPlan);
 	}
 	break;
@@ -1683,7 +1701,7 @@ return r;
 }
 
 
-std::vector<ImageInfoCV	*> ImageInfoCV::Fond_MOG2(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*> ImageInfoCV::Fond_MOG2(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 ImageInfoCV *imDst = NULL;
 
@@ -1725,7 +1743,7 @@ if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getShad
 	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setShadowValue(pOCV->intParam["ShadowValue"].valeur);
 if (pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->getShadowThreshold()!=pOCV->doubleParam["ShadowThreshold"].valeur)
 	pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->setVarThreshold(pOCV->doubleParam["ShadowThreshold"].valeur);
-pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->apply(*imSrc, *imDst, pOCV->doubleParam["learningRate"].valeur);
+pOCV->ecartFond["MOG2"].dynamicCast<cv::BackgroundSubtractorMOG2>()->apply(*op[0], *imDst, pOCV->doubleParam["learningRate"].valeur);
 std::vector<ImageInfoCV	*> r;
 switch (pOCV->intParam["ResultImage"].valeur){
 case 0:
@@ -1758,7 +1776,7 @@ case 2:
 		premierPlan = pOCV->imgParam[pOCV->nomOperation + "premierPlan"];
 		premierPlan->setTo(cv::Scalar(0,0,0));
 		}
-	imSrc->copyTo(*premierPlan, *imDst);
+	op[0]->copyTo(*premierPlan, *imDst);
 	r.push_back(premierPlan);
 	}
 	break;
@@ -1767,7 +1785,7 @@ return r;
 }
 
 
-std::vector<ImageInfoCV	*> ImageInfoCV::Fond_KNN(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*> ImageInfoCV::Fond_KNN(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 ImageInfoCV *imDst = NULL;
 
@@ -1799,7 +1817,7 @@ if (pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->getShadow
 	pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->setShadowValue(pOCV->intParam["ShadowValue"].valeur);
 if (pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->getShadowThreshold() != pOCV->doubleParam["ShadowThreshold"].valeur)
 	pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->setShadowThreshold(pOCV->doubleParam["ShadowThreshold"].valeur);
-pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->apply(*imSrc, *imDst, pOCV->doubleParam["learningRate"].valeur);
+pOCV->ecartFond["KNN"].dynamicCast<cv::BackgroundSubtractorKNN>()->apply(*op[0], *imDst, pOCV->doubleParam["learningRate"].valeur);
 std::vector<ImageInfoCV	*> r;
 switch (pOCV->intParam["ResultImage"].valeur){
 case 0:
@@ -1832,7 +1850,7 @@ case 2:
 		premierPlan = pOCV->imgParam[pOCV->nomOperation + "premierPlan"];
 		premierPlan->setTo(cv::Scalar(0, 0, 0));
 		}
-	imSrc->copyTo(*premierPlan, *imDst);
+	op[0]->copyTo(*premierPlan, *imDst);
 	r.push_back(premierPlan);
 	}
 	break;
@@ -1841,7 +1859,7 @@ return r;
 }
 
 
-std::vector<ImageInfoCV	*> ImageInfoCV::Fond_GMG(ImageInfoCV	*imSrc, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*> ImageInfoCV::Fond_GMG(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 ImageInfoCV *imDst = NULL;
 
@@ -1881,7 +1899,7 @@ if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->g
 if (pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->getMaxVal() != pOCV->doubleParam["MaxVal"].valeur)
 	pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->setMaxVal(pOCV->doubleParam["MaxVal"].valeur);
 */
-pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->apply(*imSrc, *imDst);
+pOCV->ecartFond["GMG"].dynamicCast<cv::bgsegm::BackgroundSubtractorGMG>()->apply(*op[0], *imDst);
 std::vector<ImageInfoCV	*> r;
 switch (pOCV->intParam["ResultImage"].valeur){
 case 0:
@@ -1914,7 +1932,7 @@ case 2:
 		premierPlan = pOCV->imgParam[pOCV->nomOperation + "premierPlan"];
 		premierPlan->setTo(cv::Scalar(0, 0, 0));
 		}
-	imSrc->copyTo(*premierPlan, *imDst);
+	op[0]->copyTo(*premierPlan, *imDst);
 	r.push_back(premierPlan);
 	}
 	break;
