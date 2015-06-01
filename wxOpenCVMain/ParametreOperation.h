@@ -67,15 +67,15 @@ bool opAttribut;/*<! vrai lorsque l'opérateur modifie l'une des images sans crée
 int	 opErreur; /*<! non nul lorsqu'une erreur s'est produite */
 std::string msgErreur; /*<! message d'erreur */
 
-ImageInfoCV *op1;	/*!< Opérande 1 pour l'opération demandée */
-ImageInfoCV *op2;	/*!< Opérande 2 pour l'opération demandée */
-ImageInfoCV *op3;	/*!< Opérande 3 pour l'opération demandée uniquement fusion plan*/
+std::vector <ImageInfoCV *> op;	/*!< Opérande 1 pour l'opération demandée */
 //ParametreOperation pOCV;	/*!< parametre de l'opérateur Unaire */
-int	indOp1Fenetre;	/*!< Indice de la fenêtre contenant l'image de opérande 1 */
-int indOp2Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
-int indOp3Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
+std:: vector<int>	indOpFenetre;	/*!< Indice de la fenêtre contenant l'image de opérande 1 */
+//int indOp2Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
+//int indOp3Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
 
 
+// Operation cas général nombre d'images, les images dans un tableau et les paramètres
+std::vector<ImageInfoCV*>  (ImageInfoCV::*Operation)( std::vector<ImageInfoCV *> ,ParametreOperation *) ;
 // surjection nombre d'images, les images dans un tableau et les paramètres
 std::vector<ImageInfoCV*>  (ImageInfoCV::*opSurjecMultiple)(int,ImageInfoCV **,ParametreOperation *) ;
 // Opération programmée ternaire : Fusion plan

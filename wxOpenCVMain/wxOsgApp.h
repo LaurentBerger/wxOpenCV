@@ -116,19 +116,19 @@ void RetirerListe(FenetrePrincipale *);
 // Méthodes liées à des opérations sur les images
 void DefOperateurImage(wxString &);
 void DefEtapeOperation(int x){pOCV.indEtape=x;};
-void DefOperande1(ImageInfoCV* im,int i=-1){pOCV.op1=im;pOCV.indOp1Fenetre=i;};
-void DefOperande2(ImageInfoCV* im,int i=-1){pOCV.op2=im;pOCV.indOp2Fenetre=i;};
-void DefOperande3(ImageInfoCV* im,int i=-1){pOCV.op3=im;pOCV.indOp3Fenetre=i;};
+void DefOperande1(ImageInfoCV* im,int i=-1);
+void DefOperande2(ImageInfoCV* im,int i=-1);
+void DefOperande3(ImageInfoCV* im,int i=-1);
 void DefParametreOCV(ParametreOperation &x){pOCV=x;};
 bool OpUnaire(){return pOCV.opUnaireSelec!=NULL || pOCV.opSurjecUnaire!=NULL;} /*!< Vrai si opération unaire sélectionnée */
 bool OpBinaire(){return pOCV.opBinaireSelec!=NULL;} /*!< Vrai si opération binaire sélectionnée */
 bool OpNaire(){return pOCV.opNaireSelec!=NULL;};
-ImageInfoCV *Op1(){return pOCV.op1;};
-ImageInfoCV *Op2(){return pOCV.op2;};
-ImageInfoCV *Op3(){return pOCV.op3;};
-int IndOp1(){return pOCV.indOp1Fenetre;};
-int IndOp2(){return pOCV.indOp2Fenetre;};
-int IndOp3(){return pOCV.indOp3Fenetre;};
+ImageInfoCV *Op1();
+ImageInfoCV *Op2();
+ImageInfoCV *Op3();
+int IndOp1();
+int IndOp2();
+int IndOp3();
 int NbOperande(){return pOCV.nbOperande;};
 int NumSeqOpe(int *x=NULL){if (x!=NULL) numSeqOpe=*x;return numSeqOpe;};
 void AnnuleOp();

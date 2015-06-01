@@ -3471,3 +3471,14 @@ for (itp = origineImage.pointParam.begin(); itp != origineImage.pointParam.end()
 	nb++;
 }
 }
+
+void  wxOsgApp::DefOperande1(ImageInfoCV* im,int i=-1){pOCV.op1=im;pOCV.indOp1Fenetre=i;};
+void  wxOsgApp::DefOperande2(ImageInfoCV* im,int i=-1){pOCV.op2=im;pOCV.indOp2Fenetre=i;};
+void  wxOsgApp::DefOperande3(ImageInfoCV* im,int i=-1){pOCV.op3=im;pOCV.indOp3Fenetre=i;};
+ImageInfoCV *wxOsgApp::Op1(){return pOCV.op1;};
+ImageInfoCV *wxOsgApp::Op2(){return pOCV.op2;};
+ImageInfoCV *wxOsgApp::Op3(){return pOCV.op3;};
+int wxOsgApp::IndOp1(){return pOCV.indOp1Fenetre;};
+int wxOsgApp::IndOp2(){return pOCV.indOp2Fenetre;};
+int wxOsgApp::IndOp3(){return pOCV.indOp3Fenetre;};
+int wxOsgApp::IdFenetreOp1pre(){return origineImage.indOp1Fenetre;};

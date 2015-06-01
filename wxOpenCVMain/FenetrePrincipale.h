@@ -497,7 +497,7 @@ int IdFenetre(){return idFenetre;};
      *  \return identifiant unique de l'objet instancié
      *
      */
-int IdFenetreOp1pre(){return origineImage.indOp1Fenetre;};
+int IdFenetreOp1pre();
     /*!
      *  \brief fonction IdFenetreOp1pre
      *  identificateur de la fenetre contenant l'image operateur1.
