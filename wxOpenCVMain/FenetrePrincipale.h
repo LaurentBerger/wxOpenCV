@@ -875,6 +875,7 @@ void PrepOperation(wxCommandEvent& event);
      *  \param event : premier argument de l'opérande
      */
 void ParamAlgo(wxCommandEvent& event);
+void FenetreOpe();	// Fenetre contenant la liste des opérandes en cours de sélection pour les opéérations
 /* Palette et Image */
 void DefSeuilNivBas(double x,int plan=-1);
 void DefCoeffCanal(double x,int plan=-1);

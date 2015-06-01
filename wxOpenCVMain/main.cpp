@@ -764,6 +764,7 @@ bool b=false;
 	quitter=false;
 	serveur = NULL;
 	fSeqOpe=NULL;
+	fenOpe=NULL;
     configApp=new wxFileConfig("wxOpenCV","LB","wxOpenCV.ini",wxEmptyString);
 	LectureFichierConfig();
 #ifndef __MULTILANGUE__

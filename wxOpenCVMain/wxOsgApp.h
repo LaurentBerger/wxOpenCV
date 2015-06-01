@@ -73,7 +73,8 @@ int					modeSouris;				// utilisé pour la sélection d'image
 
 ControleCamera		*ctrlCamera;
 OutilsImage			*outils;
-void				*fSeqOpe;
+void				*fSeqOpe;		// Fenetre permettant d'écécuter plusieurs séquences
+void				*fenOpe;		//  Fenetre pour définir plusieurs opérandes
 
 #ifdef __CESTFINII__
 // surjection nombre d'images, les images dans un tableau et les paramètres
@@ -252,6 +253,8 @@ ImageStatistiques	*ImgStat(){if (nbFenetre>0 && indFenetre>=0) return listeFenet
 OutilsImage			*Outils(){return outils;};
 void				*FenetreSeqOpe(void *f){fSeqOpe=f;return fSeqOpe;};
 void				*FenetreSeqOpe(){return fSeqOpe;};
+void				*FenetreOperande(){return fenOpe;};
+void				FenetreOperande(void *f){fenOpe=f;};
 ServeurScilab		*Serveur(){return serveur;};
 
 void TracerZoom(wxPoint p);
