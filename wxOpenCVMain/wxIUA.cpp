@@ -102,6 +102,12 @@ enum
 	ID_DES_MATCH,
 	ID_DES_KNNMATCH,
 
+    ID_DES_PANOFEATURE,
+    ID_DES_PANORESIZE,
+    ID_DES_PANOMATCH,
+    ID_DES_PANOBESTMATCH,
+    ID_DES_PANOHOMOGRAPHY,
+
 
 
 	ID_FIN_OP, // Fin des opérateurs sur les images
@@ -268,6 +274,11 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_DES_MATCH, Match_xpm, _("Match"), "matchdescriptormatcher", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_KNNMATCH, knnMatch_xpm,_("knn Match"), "kbbmatchdescriptormatcher", 11); 
 
+    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOFEATURE, panofeature_xpm,_("Stitching feature"), "orbfeatures2d", 12);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_PANORESIZE, panoresize_xpm,_("Stitching feature"), "orbfeatures2d", 12);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOMATCH, panomatch_xpm,_("Stitching feature"), "orbfeatures2d", 12);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOBESTMATCH, panobestmatch_xpm,_("Stitching feature"), "orbfeatures2d", 12);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOHOMOGRAPHY, panohomography_xpm,_("Stitching feature"), "orbfeatures2d", 12);
 
 }
 
@@ -322,6 +333,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
 	InstallationbarreOutils(9);
 	InstallationbarreOutils(10);
 	InstallationbarreOutils(11);
+	InstallationbarreOutils(12);
 
 
     wxWindow* wnd10 = CreateTextCtrl(wxEmptyString);
@@ -1076,6 +1088,11 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 		m_mgr.AddPane(tb, wxAuiPaneInfo().
 					  Name("Feature 2D").Caption("Feature 2D").
 					  ToolbarPane().Top().Row(5));
+		break;
+	case 12:
+		m_mgr.AddPane(tb, wxAuiPaneInfo().
+					  Name("Stitching").Caption("Stitching").
+					  ToolbarPane().Top().Row(7));
 		break;
 		}
 	    // add the toolbars to the manager

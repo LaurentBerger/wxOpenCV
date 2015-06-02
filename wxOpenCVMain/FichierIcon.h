@@ -81,6 +81,13 @@
 #include "bitmaps/statconnexe.xpm"
 #include "bitmaps/voronoi.xpm"
 #else
+#include "bitmaps\panofeature.xpm"
+#include "bitmaps\panoresize.xpm"
+#include "bitmaps\panomatch.xpm"
+#include "bitmaps\panobestmatch.xpm"
+#include "bitmaps\panohomography.xpm"
+
+
 #include "bitmaps\phasecorrelate.xpm"
 #include "bitmaps\segmentationmotion.xpm"
 #include "bitmaps\independantmotion.xpm"
