@@ -607,6 +607,22 @@ if (pAct->opSurjecUnaire)
 	DefPointeurSouris(0,0);
 
 	}
+if (pAct->operateur)
+	{
+	try
+		{
+
+		r =((*pAct->op[0]).*pAct->operateur)(pAct->op,pAct);
+		}
+	catch(cv::Exception& e)
+		{
+		wxString s(e.msg);
+
+		wxMessageBox("An error occured in surjection operator :"+s);
+		}
+	DefPointeurSouris(0,0);
+
+	}
 
 return r; // Le pointeur imTab n'est pas libéré
 }
@@ -614,7 +630,7 @@ return r; // Le pointeur imTab n'est pas libéré
 
 void wxOsgApp::CreerFenetreOperation()
 {
-if ((pOCV.opBinaireSelec==NULL && pOCV.opUnaireSelec==NULL && pOCV.opSurjecMultiple==NULL && pOCV.opNaireSelec==NULL&& pOCV.opSurjecUnaire==NULL) || pOCV.op.size()==0)
+if ((pOCV.operateur==NULL && pOCV.opBinaireSelec==NULL && pOCV.opUnaireSelec==NULL && pOCV.opSurjecMultiple==NULL && pOCV.opNaireSelec==NULL&& pOCV.opSurjecUnaire==NULL) || pOCV.op.size()==0)
 	return;
 
 vector<ImageInfoCV*> r=ExecuterOperation();

@@ -45,6 +45,7 @@ eSauver=NULL;
 void ImageInfoCV::InitImageInfo(void *eTiff)
 {
 InitOp();
+pano=NULL;
 cercle=NULL;
 ligne=NULL;
 ligneP=NULL;

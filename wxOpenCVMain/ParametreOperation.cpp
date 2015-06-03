@@ -921,25 +921,41 @@ if (s=="detailfeaturesfinder")
 	{
 	nomOperation=s;
 	nbOperande= 10;
-	nbImageRes=1;
+	nbImageRes=0;
+    intParam["orb"]=DomaineParametreOp<int>(1,0,1,1);
+    intParam["surf"]=DomaineParametreOp<int>(0,0,1,1);
+    doubleParam["surf_hess_thresh"]=DomaineParametreOp<double>(300,1,1000,1);
+	intParam["surf_num_octaves"]=DomaineParametreOp<int>(3,1,8,1);
+	intParam["surf_num_layers"]=DomaineParametreOp<int>(4,1,8,1);
+	intParam["surf_num_octaves_descr"]=DomaineParametreOp<int>(3,1,8,1);
+	intParam["surf_num_layers_descr"]=DomaineParametreOp<int>(4,1,8,1);
+    doubleParam["orb_scaleFactor"]=DomaineParametreOp<double>(1.3,1,1000,1);
+	intParam["orb_nfeatures"]=DomaineParametreOp<int>(1500,1,500000,1);
+	intParam["orb_nlevels"]=DomaineParametreOp<int>(5,1,8,10);
+    sizeParam["orb_grid_size"]=DomaineParametreOp<cv::Size>(cv::Size(3,1),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
 	}
 if (s=="detailmatchesinfo")
 	{
+    intParam["try_use_gpu"]=DomaineParametreOp<int>(0,0,1,1);
+    doubleParam["match_conf"]=DomaineParametreOp<double>(0.3,0.01,1000,0.1);
+    intParam["num_matches_thresh1"] = DomaineParametreOp<int>(6,1,1000,1);
+    intParam["num_matches_thresh2"] = DomaineParametreOp<int>(6,1,1000,1);
 	nomOperation=s;
 	nbOperande= 10;
-	nbImageRes=1;
+	nbImageRes=0;
 	}
 if (s=="leavebiggestcomponent")
 	{
 	nomOperation=s;
 	nbOperande= 10;
-	nbImageRes=1;
+	nbImageRes=0;
+    doubleParam["conf_thresh"]=DomaineParametreOp<double>(0.6,0.,1000,0.1);
 	}
 if (s=="homographybasedestimator")
 	{
 	nomOperation=s;
 	nbOperande= 10;
-	nbImageRes=1;
+	nbImageRes=0;
 	}
 
 if (nomOperation=="")
@@ -1475,27 +1491,27 @@ if (s=="calcopticalflowfarneback")
 if (s=="detailfeaturesfinder")
 	{
 	opAttribut=true;
-	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	lienHtml="http://docs.opencv.org/3.0-beta/modules/stitching/doc/matching.html#detail-featuresfinder";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
-	Operation = &ImageInfoCV::DetailFeaturesFinder;
+	operateur = &ImageInfoCV::DetailFeaturesFinder;
 
 	return true;
 	}
 if (s=="detailmatchesinfo")
 	{
 	opAttribut=true;
-	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	lienHtml="http://docs.opencv.org/3.0-beta/modules/stitching/doc/matching.html#detail-featuresmatcher-match";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
-	Operation = &ImageInfoCV::DetailMatchesInfo;
+	operateur = &ImageInfoCV::DetailMatchesInfo;
 
 	return true;
 	}
 if (s=="leavebiggestcomponent")
 	{
 	opAttribut=true;
-	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	lienHtml="http://docs.opencv.org/3.0-beta/modules/stitching/doc/matching.html#detail-bestof2nearestmatcher";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
-	Operation = &ImageInfoCV::LeaveBiggestComponent;
+	operateur = &ImageInfoCV::LeaveBiggestComponent;
 
 	return true;
 	}
@@ -1504,7 +1520,7 @@ if (s=="homographybasedestimator")
 	opAttribut=true;
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
-	Operation = &ImageInfoCV::HomographyBasedEstimator;
+	operateur = &ImageInfoCV::HomographyBasedEstimator;
 
 	return true;
 	}

@@ -1,7 +1,8 @@
 ﻿#ifndef __PANORAMIQUE__
 #define __PANORAMIQUE__
 
-#includ "ImageInfo.h"
+class ImageInfoCV;
+
 #include "opencv2/opencv_modules.hpp"
 #include <opencv2/core/utility.hpp>
 #include "opencv2/imgcodecs.hpp"
@@ -20,15 +21,16 @@
 
 class Panoramique {
 public :
+std::vector<int> bijection;
 std::vector<cv::detail::ImageFeatures> features;
-std::vector<ImageInfoCV *> img;
+std::vector<ImageInfoCV *> tabImg;
 std::vector<cv::detail::MatchesInfo> appariement;
 cv::detail::HomographyBasedEstimator estimateur;
-cv::vector<detail::CameraParams> cameras;
-cv::detail::BundleAdjusterBase adjuster;
-cv::detail::ExposureCompensator correcteurExpo;
-ccv::detail::SeamFinder couture;
-detail::Blender blender;
+std::vector<cv::detail::CameraParams> cameras;
+cv::Ptr<cv::detail::BundleAdjusterBase> adjuster;
+cv::Ptr<cv::detail::ExposureCompensator> correcteurExpo;
+cv::Ptr<cv::detail::SeamFinder> couture;
+cv::detail::Blender blender;
 };
 
 #endif

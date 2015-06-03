@@ -1,7 +1,7 @@
 #include "ImageInfo.h"
 #include <vector>
 #include "opencv2/optflow.hpp"
-
+#include "Panoramique.h"
 
 /**
  * @function IndOpConvolution
@@ -1943,6 +1943,34 @@ return r;
 
 std::vector<ImageInfoCV	*> ImageInfoCV::DetailFeaturesFinder(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
+if (this->pano==NULL)
+{
+    pano = new Panoramique;
+}
+if (pOCV->pano.size()==0)
+{
+    pOCV->pano.push_back(pano);
+}
+cv::Ptr<cv::detail::FeaturesFinder> finder;
+if (pOCV->intParam["orb"].valeur==1 )
+{
+    finder = cv::makePtr<cv::detail::OrbFeaturesFinder>(pOCV->sizeParam["orb_grid_size"].valeur,pOCV->intParam["orb_nfeatures"].valeur,(float)pOCV->doubleParam["orb_scaleFactor"].valeur,pOCV->intParam["orb_nlevels"].valeur);
+    pOCV->intParam["surf"].valeur=0;
+}
+if (pOCV->intParam["surf"].valeur==1)
+{
+    finder = cv::makePtr<cv::detail::SurfFeaturesFinder>(pOCV->doubleParam["surf_hess_thresh"].valeur,pOCV->intParam["surf_num_octaves"].valeur,
+        pOCV->intParam["surf_num_layers"].valeur,pOCV->intParam["surf_num_octaves_descr"].valeur,pOCV->intParam["surf_num_layers_descr"].valeur);
+    pOCV->intParam["orb"].valeur=0;
+}
+pano->features.resize(pOCV->op.size());
+for (int i = 0; i < pOCV->op.size(); ++i)
+{
+    (*finder)(*pOCV->op[i], pano->features[i]);
+    pano->features[i].img_idx = i;
+}
+finder->collectGarbage();
+
 std::vector<ImageInfoCV	*> r;
 r.push_back(this);
 return r;
@@ -1952,13 +1980,35 @@ std::vector<ImageInfoCV	*> ImageInfoCV::DetailMatchesInfo(std::vector< ImageInfo
 {
 std::vector<ImageInfoCV	*> r;
 r.push_back(this);
-return r;
-}
-std::vector<ImageInfoCV	*> ImageInfoCV::LeaveBiggestComponent(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
-{
-std::vector<ImageInfoCV	*> r;
+if (pano==NULL)
+    return r;
+cv::detail::BestOf2NearestMatcher matcher(pOCV->intParam["try_use_gpu"].valeur, pOCV->doubleParam["match_conf"].valeur,
+    pOCV->intParam["num_matches_thresh1"].valeur,pOCV->intParam["num_matches_thresh2"].valeur);
+
+matcher(pano->features, pano->appariement);
+matcher.collectGarbage();
+
 r.push_back(this);
 return r;
+}
+
+std::vector<ImageInfoCV	*> ImageInfoCV::LeaveBiggestComponent(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
+{
+    std::vector<ImageInfoCV	*> r;
+    if (pano==NULL)
+        return r;
+    pano->bijection = cv::detail::leaveBiggestComponent(pano->features, pano->appariement, pOCV->doubleParam["conf_thresh"].valeur);
+    if (pano->bijection.size()<2)
+    {
+		throw std::string("LeaveBiggestComponent : Cannot match this images!");
+		return r;
+	}
+    std::vector<ImageInfoCV	*> bonnesImages;
+    for (size_t i = 0; i < pano->bijection.size(); ++i)
+        bonnesImages.push_back(pOCV->op[pano->bijection[i]]);
+    pOCV->op= bonnesImages;
+    r.push_back(this);
+    return r;
 }
 std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
 {

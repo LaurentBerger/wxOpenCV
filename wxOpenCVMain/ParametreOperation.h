@@ -5,7 +5,7 @@
 #include <string>
 #include <iostream>
 #include "opencv2/opencv.hpp"
-
+#include "Panoramique.h"
 #include "opencv2/bgsegm.hpp"
 
 class ImageInfoCV;
@@ -51,6 +51,7 @@ std::map<std::string, DomaineParametreOp<cv::Point> > pointParam;
 std::map<std::string, ImageInfoCV* > imgParam;
 std::map<std::string, cv::Ptr<cv::BackgroundSubtractor> > ecartFond;
 std::map<std::string, cv::Ptr<cv::Feature2D> >detecteur;
+std::vector<Panoramique *> pano;
 std::vector<cv::Vec3f> cercle;
 std::vector<cv::Vec4i> ligneP;
 std::vector<cv::Vec2f> ligne;
@@ -75,7 +76,7 @@ std:: vector<int>	indOpFenetre;	/*!< Indice de la fenêtre contenant l'image de o
 
 
 // Operation cas général nombre d'images, les images dans un tableau et les paramètres
-std::vector<ImageInfoCV*>  (ImageInfoCV::*Operation)( std::vector<ImageInfoCV *> ,ParametreOperation *) ;
+std::vector<ImageInfoCV*>  (ImageInfoCV::*operateur)( std::vector<ImageInfoCV *> ,ParametreOperation *) ;
 // surjection nombre d'images, les images dans un tableau et les paramètres
 std::vector<ImageInfoCV*>(ImageInfoCV::*opSurjecMultiple)(std::vector<ImageInfoCV *>, ParametreOperation *);
 // Opération programmée ternaire : Fusion plan

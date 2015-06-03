@@ -145,6 +145,8 @@ cv::Mat *segmvt;					/*<! segmentation issue de l'analyse du mouvement (segmentM
 std::vector<cv::Rect> regionsMvt;	/*<! Regions issues de l'analyse du mouvement (segmentMotion)*/
 std::vector<double> angle;			/*<! Angle issus de l'analyse du mouvement (calcGlobalOrientation)*/
 
+Panoramique         *pano;          /*<! Panoramique construit avec cette image en premier argument  */
+
 std::map<std::string, ParametreOperation> listeOpAttribut;
 ParametreOperation *pOCVUpdateMotionHistory;
 
