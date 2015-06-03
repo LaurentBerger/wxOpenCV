@@ -3510,6 +3510,16 @@ void  wxOsgApp::DefOperande3(ImageInfoCV* im, int i)
         pOCV.indOpFenetre[2]=i;
     }
 }
+void  wxOsgApp::DefOperandeN(ImageInfoCV* im, int i)
+{ 
+    pOCV.op.push_back(im); 
+    pOCV.indOpFenetre.push_back(i); 
+}
+
+void  wxOsgApp::SupOperandeN(ImageInfoCV* im, int i)
+{ 
+}
+
 ImageInfoCV *wxOsgApp::Op1()
 {
 if (pOCV.op.size()>=1)

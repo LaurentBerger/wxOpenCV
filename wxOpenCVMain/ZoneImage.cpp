@@ -379,12 +379,20 @@ if (ModeCoupe())
 
 void ZoneImage::GestionCurseurSouris(wxMouseEvent &event)
 {
-if (osgApp->Op1()==NULL)
-	osgApp->DefOperande1(f->ImAcq(),f->IdFenetre());
-else if (osgApp->Op2()==NULL)
-	osgApp->DefOperande2(f->ImAcq(),f->IdFenetre());
+    if (event.ControlDown() && !event.ShiftDown())
+    {
+        if (osgApp->Op1()==NULL)
+	        osgApp->DefOperande1(f->ImAcq(),f->IdFenetre());
+        else if (osgApp->Op2()==NULL)
+	        osgApp->DefOperande2(f->ImAcq(),f->IdFenetre());
+        else 
+            osgApp->DefOperandeN(f->ImAcq(),f->IdFenetre());
+    }
+    if (event.ControlDown() && event.ShiftDown())
+    {
+	    osgApp->SupOperandeN(f->ImAcq(),f->IdFenetre());
+    }
 }
-
 
 void ZoneImage::TracerRectangle(int ind,bool croix)
 {

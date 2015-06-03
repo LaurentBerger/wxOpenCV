@@ -274,11 +274,10 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_DES_MATCH, Match_xpm, _("Match"), "matchdescriptormatcher", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_KNNMATCH, knnMatch_xpm,_("knn Match"), "kbbmatchdescriptormatcher", 11); 
 
-    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOFEATURE, panofeature_xpm,_("Stitching feature"), "orbfeatures2d", 12);
-    CONSTRUCTEUR_CMD(bouton, ID_DES_PANORESIZE, panoresize_xpm,_("Stitching feature"), "orbfeatures2d", 12);
-    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOMATCH, panomatch_xpm,_("Stitching feature"), "orbfeatures2d", 12);
-    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOBESTMATCH, panobestmatch_xpm,_("Stitching feature"), "orbfeatures2d", 12);
-    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOHOMOGRAPHY, panohomography_xpm,_("Stitching feature"), "orbfeatures2d", 12);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOFEATURE, panofeature_xpm,_("Stitching feature"), "detailFeaturesFinder", 12);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOMATCH, panomatch_xpm,_("Stitching feature"), "detailMatchesInfo", 12);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOBESTMATCH, panobestmatch_xpm,_("Stitching feature"), "leaveBiggestComponent", 12);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOHOMOGRAPHY, panohomography_xpm,_("Stitching feature"), "HomographyBasedEstimator", 12);
 
 }
 

@@ -119,6 +119,9 @@ void DefEtapeOperation(int x){pOCV.indEtape=x;};
 void DefOperande1(ImageInfoCV* im,int i=-1);
 void DefOperande2(ImageInfoCV* im,int i=-1);
 void DefOperande3(ImageInfoCV* im,int i=-1);
+void DefOperandeN(ImageInfoCV* im,int i=-1);
+void SupOperandeN(ImageInfoCV* im,int i=-1);
+
 void DefParametreOCV(ParametreOperation &x){pOCV=x;};
 bool OpUnaire(){return pOCV.opUnaireSelec!=NULL || pOCV.opSurjecUnaire!=NULL;} /*!< Vrai si opération unaire sélectionnée */
 bool OpBinaire(){return pOCV.opBinaireSelec!=NULL;} /*!< Vrai si opération binaire sélectionnée */
