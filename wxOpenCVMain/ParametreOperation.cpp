@@ -249,6 +249,29 @@ listeParam["ResultImage"].insert(std::pair<string, int>(_("Mask").ToStdString(),
 listeParam["ResultImage"].insert(std::pair<string, int>(_("Background").ToStdString(), 1));
 listeParam["ResultImage"].insert(std::pair<string, int>(_("Foreground").ToStdString(), 2));
 
+listeParam["ba_cost_func"].insert(std::pair<string, int>(_("reproj").ToStdString(), 0));
+listeParam["ba_cost_func"].insert(std::pair<string, int>(_("ray").ToStdString(), 1));
+
+listeParam["warp_type"].insert(std::pair<string, int>(_("plane").ToStdString(), 0));
+listeParam["warp_type"].insert(std::pair<string, int>(_("cylindrical").ToStdString(), 1));
+listeParam["warp_type"].insert(std::pair<string, int>(_("fisheye").ToStdString(), 2));
+listeParam["warp_type"].insert(std::pair<string, int>(_("stereographic").ToStdString(), 3));
+listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlaneA2B1").ToStdString(), 4));
+listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlaneA1.5B1").ToStdString(), 5));
+listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlanePortraitA2B1").ToStdString(), 6));
+listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlanePortraitA1.5B1").ToStdString(), 7));
+listeParam["warp_type"].insert(std::pair<string, int>(_("paniniA2B1").ToStdString(), 8));
+listeParam["warp_type"].insert(std::pair<string, int>(_("paniniA1.5B1").ToStdString(), 9));
+listeParam["warp_type"].insert(std::pair<string, int>(_("paniniPortraitA2B1").ToStdString(), 10));
+listeParam["warp_type"].insert(std::pair<string, int>(_("paniniPortraitA1.5B1").ToStdString(), 11));
+listeParam["warp_type"].insert(std::pair<string, int>(_("mercator").ToStdString(), 12));
+listeParam["warp_type"].insert(std::pair<string, int>(_("transverseMercator").ToStdString(), 13));
+
+listeParam["seam_find_type"].insert(std::pair<string, int>(_("no").ToStdString(), 0));
+listeParam["seam_find_type"].insert(std::pair<string, int>(_("voronoi").ToStdString(), 1));
+listeParam["seam_find_type"].insert(std::pair<string, int>(_("gc_color").ToStdString(), 2));
+listeParam["seam_find_type"].insert(std::pair<string, int>(_("dp_color").ToStdString(), 3));
+listeParam["seam_find_type"].insert(std::pair<string, int>(_("dp_colorgrad").ToStdString(), 4));
 
 }
 
@@ -956,6 +979,7 @@ if (s=="homographybasedestimator")
 	nomOperation=s;
 	nbOperande= 10;
 	nbImageRes=0;
+    intParam["is_focals_estimated"]=DomaineParametreOp<int>(0,0,1,1);
 	}
 
 if (nomOperation=="")

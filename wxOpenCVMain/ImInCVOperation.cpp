@@ -2012,7 +2012,71 @@ std::vector<ImageInfoCV	*> ImageInfoCV::LeaveBiggestComponent(std::vector< Image
 }
 std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
 {
-std::vector<ImageInfoCV	*> r;
-r.push_back(this);
-return r;
+    std::vector<ImageInfoCV	*> r;
+    if (pano==NULL)
+        return r;
+    cv::detail::HomographyBasedEstimator estimator(pOCV->intParam["is_focals_estimated"].valeur);
+    if (!estimator(pano->features, pano->appariement, pano->cameras))
+    {
+		throw std::string("HomographyBasedEstimator : Homography estimation failed!");
+		return r;
+    }
+
+    for (size_t i = 0; i < pano->cameras.size(); ++i)
+    {
+        Mat R;
+        pano->cameras[i].R.convertTo(R, CV_32F);
+        pano->cameras[i].R = R;
+    }
+
+    
+    if (pOCV->intParam["ba_cost_func"].valeur == 0) 
+        pano->adjuster = cv::makePtr<cv::detail::BundleAdjusterReproj>();
+    else if (pOCV->intParam["ba_cost_func"].valeur == 1) 
+        pano->adjuster = cv::makePtr<cv::detail::BundleAdjusterRay>();
+    else
+    {
+		throw std::string("HomographyBasedEstimator : unknown BundleAdjusterReproj!");
+		return r;
+    }
+    pano->adjuster->setConfThresh((float)pOCV->doubleParam["conf_thresh"].valeur);
+    cv::Mat_<uchar> refine_mask = Mat::zeros(3, 3, CV_8U);
+    if (pOCV->intParam["ba_refine_mask_0"].valeur == 1) refine_mask(0,0) = 1;
+    if (pOCV->intParam["ba_refine_mask_1"].valeur == 1) refine_mask(0,1) = 1;
+    if (pOCV->intParam["ba_refine_mask_2"].valeur == 1) refine_mask(0,2) = 1;
+    if (pOCV->intParam["ba_refine_mask_3"].valeur == 1) refine_mask(1,1) = 1;
+    if (pOCV->intParam["ba_refine_mask_4"].valeur == 1) refine_mask(1,2) = 1;
+    pano->adjuster->setRefinementMask(refine_mask);
+    if (!(*pano->adjuster)(pano->features, pano->appariement, pano->cameras))
+    {
+		throw std::string("HomographyBasedEstimator : Camera parameters adjusting failed!");
+		return r;
+    }
+
+    // Find median focal length
+
+    std::vector<double> focals;
+    for (size_t i = 0; i < pano->cameras.size(); ++i)
+    {
+        focals.push_back(pano->cameras[i].focal);
+    }
+
+    sort(focals.begin(), focals.end());
+    float warped_image_scale;
+    if (focals.size() % 2 == 1)
+        warped_image_scale = static_cast<float>(focals[focals.size() / 2]);
+    else
+        warped_image_scale = static_cast<float>(focals[focals.size() / 2 - 1] + focals[focals.size() / 2]) * 0.5f;
+    if (pOCV->intParam["do_wave_correct"].valeur!=0)
+    {
+        std::vector<Mat> rmats;
+        for (size_t i = 0; i < pano->cameras.size(); ++i)
+            rmats.push_back(pano->cameras[i].R.clone());
+        cv::detail::waveCorrect(rmats, (cv::detail::WaveCorrectKind)pOCV->intParam["do_wave_correct"].valeur);
+        for (size_t i = 0; i < pano->cameras.size(); ++i)
+            pano->cameras[i].R = rmats[i];
+    }
+
+    r.push_back(this);
+    return r;
 }
