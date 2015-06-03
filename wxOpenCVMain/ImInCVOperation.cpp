@@ -1941,3 +1941,28 @@ return r;
 }
 
 
+std::vector<ImageInfoCV	*> ImageInfoCV::DetailFeaturesFinder(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+r.push_back(this);
+return r;
+}
+
+std::vector<ImageInfoCV	*> ImageInfoCV::DetailMatchesInfo(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+r.push_back(this);
+return r;
+}
+std::vector<ImageInfoCV	*> ImageInfoCV::LeaveBiggestComponent(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+r.push_back(this);
+return r;
+}
+std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+r.push_back(this);
+return r;
+}

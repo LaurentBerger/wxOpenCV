@@ -305,6 +305,11 @@ std::vector<ImageInfoCV	*>Fond_KNN(std::vector< ImageInfoCV *>, ParametreOperati
 std::vector<ImageInfoCV	*>Fond_GMG(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 
 
+std::vector<ImageInfoCV	*>DetailFeaturesFinder(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>DetailMatchesInfo(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>LeaveBiggestComponent(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>HomographyBasedEstimator(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+
 std::vector<ImageInfoCV *>Negation(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>Laplacien(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>ScharrX(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);

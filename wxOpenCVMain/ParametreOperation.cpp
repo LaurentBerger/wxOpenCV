@@ -917,6 +917,30 @@ if (s=="updatemotionhistory")
 	nbImageRes=1;
 	nomOperation=s;
 	}
+if (s=="detailfeaturesfinder")
+	{
+	nomOperation=s;
+	nbOperande= 10;
+	nbImageRes=1;
+	}
+if (s=="detailmatchesinfo")
+	{
+	nomOperation=s;
+	nbOperande= 10;
+	nbImageRes=1;
+	}
+if (s=="leavebiggestcomponent")
+	{
+	nomOperation=s;
+	nbOperande= 10;
+	nbImageRes=1;
+	}
+if (s=="homographybasedestimator")
+	{
+	nomOperation=s;
+	nbOperande= 10;
+	nbImageRes=1;
+	}
 
 if (nomOperation=="")
 	return false;
@@ -1445,6 +1469,42 @@ if (s=="calcopticalflowfarneback")
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
 	opBinaireSelec = &ImageInfoCV::FlotOptiqueFarnerback;
 	opVideo=true;
+
+	return true;
+	}
+if (s=="detailfeaturesfinder")
+	{
+	opAttribut=true;
+	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
+	Operation = &ImageInfoCV::DetailFeaturesFinder;
+
+	return true;
+	}
+if (s=="detailmatchesinfo")
+	{
+	opAttribut=true;
+	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
+	Operation = &ImageInfoCV::DetailMatchesInfo;
+
+	return true;
+	}
+if (s=="leavebiggestcomponent")
+	{
+	opAttribut=true;
+	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
+	Operation = &ImageInfoCV::LeaveBiggestComponent;
+
+	return true;
+	}
+if (s=="homographybasedestimator")
+	{
+	opAttribut=true;
+	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
+	Operation = &ImageInfoCV::HomographyBasedEstimator;
 
 	return true;
 	}
