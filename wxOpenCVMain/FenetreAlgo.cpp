@@ -97,7 +97,7 @@ for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->
 		wxWindow *w=CreerOngletEtape(classeur,nb);
 		listeOnglet[w] = std::pair<wxString, int>(it->second.nomOperation, nb);
 		wxString nom(_("Step"));
-		nom.Printf("%s %d : %s", nom, nb, it->second.nomOperation);
+		nom.Printf("%s %d : %s", nom, it->second.indEtape, it->second.nomOperation);
 		classeur->InsertPage(0,w,nom,nbEtape==1);
 		nb--;
 		}

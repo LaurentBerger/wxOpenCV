@@ -21,6 +21,7 @@ class ImageInfoCV;
 
 class Panoramique {
 public :
+double warped_image_scale ,seam_work_aspect;
 std::vector<int> bijection;
 std::vector<cv::detail::ImageFeatures> features;
 std::vector<ImageInfoCV *> tabImg;
@@ -31,6 +32,8 @@ cv::Ptr<cv::detail::BundleAdjusterBase> adjuster;
 cv::Ptr<cv::detail::ExposureCompensator> correcteurExpo;
 cv::Ptr<cv::detail::SeamFinder> couture;
 cv::detail::Blender blender;
+std::vector <ImageInfoCV *> op;	/*!< Opérande du panorama */
+std:: vector<int>	indOpFenetre;	/*!< Indices des fenêtres  des opérandes */
 };
 
 #endif

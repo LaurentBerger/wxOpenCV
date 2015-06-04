@@ -254,24 +254,29 @@ listeParam["ba_cost_func"].insert(std::pair<string, int>(_("ray").ToStdString(),
 
 listeParam["warp_type"].insert(std::pair<string, int>(_("plane").ToStdString(), 0));
 listeParam["warp_type"].insert(std::pair<string, int>(_("cylindrical").ToStdString(), 1));
-listeParam["warp_type"].insert(std::pair<string, int>(_("fisheye").ToStdString(), 2));
-listeParam["warp_type"].insert(std::pair<string, int>(_("stereographic").ToStdString(), 3));
-listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlaneA2B1").ToStdString(), 4));
-listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlaneA1.5B1").ToStdString(), 5));
-listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlanePortraitA2B1").ToStdString(), 6));
-listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlanePortraitA1.5B1").ToStdString(), 7));
-listeParam["warp_type"].insert(std::pair<string, int>(_("paniniA2B1").ToStdString(), 8));
-listeParam["warp_type"].insert(std::pair<string, int>(_("paniniA1.5B1").ToStdString(), 9));
-listeParam["warp_type"].insert(std::pair<string, int>(_("paniniPortraitA2B1").ToStdString(), 10));
-listeParam["warp_type"].insert(std::pair<string, int>(_("paniniPortraitA1.5B1").ToStdString(), 11));
-listeParam["warp_type"].insert(std::pair<string, int>(_("mercator").ToStdString(), 12));
-listeParam["warp_type"].insert(std::pair<string, int>(_("transverseMercator").ToStdString(), 13));
+listeParam["warp_type"].insert(std::pair<string, int>(_("spherical").ToStdString(), 2));
+listeParam["warp_type"].insert(std::pair<string, int>(_("fisheye").ToStdString(), 3));
+listeParam["warp_type"].insert(std::pair<string, int>(_("stereographic").ToStdString(), 4));
+listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlaneA2B1").ToStdString(), 5));
+listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlaneA1.5B1").ToStdString(), 6));
+listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlanePortraitA2B1").ToStdString(), 7));
+listeParam["warp_type"].insert(std::pair<string, int>(_("compressedPlanePortraitA1.5B1").ToStdString(), 8));
+listeParam["warp_type"].insert(std::pair<string, int>(_("paniniA2B1").ToStdString(), 9));
+listeParam["warp_type"].insert(std::pair<string, int>(_("paniniA1.5B1").ToStdString(), 10));
+listeParam["warp_type"].insert(std::pair<string, int>(_("paniniPortraitA2B1").ToStdString(), 11));
+listeParam["warp_type"].insert(std::pair<string, int>(_("paniniPortraitA1.5B1").ToStdString(), 12));
+listeParam["warp_type"].insert(std::pair<string, int>(_("mercator").ToStdString(), 13));
+listeParam["warp_type"].insert(std::pair<string, int>(_("transverseMercator").ToStdString(), 14));
 
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("no").ToStdString(), 0));
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("voronoi").ToStdString(), 1));
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("gc_color").ToStdString(), 2));
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("dp_color").ToStdString(), 3));
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("dp_colorgrad").ToStdString(), 4));
+
+
+listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_HORIZ").ToStdString(), cv::detail::WAVE_CORRECT_HORIZ));
+listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_VERT").ToStdString(), cv::detail::WAVE_CORRECT_VERT));
 
 }
 
@@ -990,6 +995,8 @@ if (s=="homographybasedestimator")
 	nbOperande= 10;
 	nbImageRes=0;
     intParam["is_focals_estimated"]=DomaineParametreOp<int>(0,0,1,1);
+    intParam["do_wave_correct"]=DomaineParametreOp<int>(0,0,1,1);
+    intParam["wave_correct"]=DomaineParametreOp<int>(0,0,1,1);
 	}
 
 if (nomOperation=="")

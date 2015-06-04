@@ -659,7 +659,7 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 			menu.Check(MENU_POINTKAZE, true);
 		menuParametre = true;
 		}
-	if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre)
+	if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre || f->ImAcq()->EtapeOp()>0)
 		{
 		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
 		}

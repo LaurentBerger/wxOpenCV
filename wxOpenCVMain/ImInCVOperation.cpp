@@ -2004,7 +2004,8 @@ for (int i = 0; i < pOCV->op.size(); ++i)
 }
 finder->collectGarbage();
 AjoutOpAttribut(pOCV);
-
+pano->op=pOCV->op;
+pano->indOpFenetre=pOCV->indOpFenetre;
 std::vector<ImageInfoCV	*> r;
 r.push_back(this);
 return r;
@@ -2039,11 +2040,16 @@ std::vector<ImageInfoCV	*> ImageInfoCV::LeaveBiggestComponent(std::vector< Image
 		return r;
 	}
     std::vector<ImageInfoCV	*> bonnesImages;
+    std::vector<int> bonIndices;
     for (size_t i = 0; i < pano->bijection.size(); ++i)
-        bonnesImages.push_back(pOCV->op[pano->bijection[i]]);
-    pOCV->op= bonnesImages;
+    {
+        bonnesImages.push_back(pano->op[pano->bijection[i]]);
+        bonIndices.push_back(pano->indOpFenetre[pano->bijection[i]]);
+    }
+    pano->op= bonnesImages;
+    pano->indOpFenetre= bonIndices;
     r.push_back(this);
-AjoutOpAttribut(pOCV);
+    AjoutOpAttribut(pOCV);
     return r;
 }
 std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
@@ -2108,12 +2114,114 @@ std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< Im
         std::vector<Mat> rmats;
         for (size_t i = 0; i < pano->cameras.size(); ++i)
             rmats.push_back(pano->cameras[i].R.clone());
-        cv::detail::waveCorrect(rmats, (cv::detail::WaveCorrectKind)pOCV->intParam["do_wave_correct"].valeur);
+        cv::detail::waveCorrect(rmats, (cv::detail::WaveCorrectKind)pOCV->intParam["wave_correct"].valeur);
         for (size_t i = 0; i < pano->cameras.size(); ++i)
             pano->cameras[i].R = rmats[i];
     }
 
-AjoutOpAttribut(pOCV);
+    AjoutOpAttribut(pOCV);
+    r.push_back(this);
+    return r;
+}
+
+std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
+{
+    std::vector<ImageInfoCV	*> r;
+    if (pano==NULL)
+        return r;
+    if (pano->op.size()<=1)
+    {
+		throw std::string("WraperWrap : not enough image!");
+		return r;
+    }
+    
+    int num_images=pano->op.size();
+    std::vector<cv::Point> corners(num_images);
+    std::vector<cv::UMat> masks_warped(num_images);
+    std::vector<cv::UMat> images_warped(num_images);
+    std::vector<cv::Size> sizes(num_images);
+    std::vector<cv::UMat> masks(num_images);
+
+    // Prepare images masks
+    for (int i = 0; i < num_images; ++i)
+    {
+        masks[i].create(pano->op[i]->size(), CV_8U);
+        masks[i].setTo(cv::Scalar::all(255));
+    }
+
+    // Warp images and their masks
+
+    cv::Ptr<cv::WarperCreator> warper_creator;
+#ifdef HAVE_OPENCV_CUDAWARPING
+    if (try_cuda && cuda::getCudaEnabledDeviceCount() > 0)
+    {
+        if (pOCV->intParam["warp_type"].valeur ==0)
+            warper_creator = cv::makePtr<cv::PlaneWarperGpu>();
+        else if (pOCV->intParam["warp_type"].valeur ==1)
+            warper_creator = cv::makePtr<cv::CylindricalWarperGpu>();
+        else if (pOCV->intParam["warp_type"].valeur ==2)
+            warper_creator = cv::makePtr<cv::SphericalWarperGpu>();
+    }
+    else
+#endif
+    {
+        if (pOCV->intParam["warp_type"].valeur ==0)
+            warper_creator = cv::makePtr<cv::PlaneWarper>();
+        else if (pOCV->intParam["warp_type"].valeur ==1)
+            warper_creator = cv::makePtr<cv::CylindricalWarper>();
+        else if (pOCV->intParam["warp_type"].valeur ==2)
+            warper_creator = cv::makePtr<cv::SphericalWarper>();
+        else if (pOCV->intParam["warp_type"].valeur ==3)
+            warper_creator = cv::makePtr<cv::FisheyeWarper>();
+        else if (pOCV->intParam["warp_type"].valeur ==4)
+            warper_creator = cv::makePtr<cv::StereographicWarper>();
+        else if (pOCV->intParam["warp_type"].valeur ==5)
+            warper_creator = cv::makePtr<cv::CompressedRectilinearWarper>(2.0f, 1.0f);
+        else if (pOCV->intParam["warp_type"].valeur ==6)
+            warper_creator = cv::makePtr<cv::CompressedRectilinearWarper>(1.5f, 1.0f);
+        else if (pOCV->intParam["warp_type"].valeur ==7)
+            warper_creator = cv::makePtr<cv::CompressedRectilinearPortraitWarper>(2.0f, 1.0f);
+        else if (pOCV->intParam["warp_type"].valeur ==8)
+            warper_creator = cv::makePtr<cv::CompressedRectilinearPortraitWarper>(1.5f, 1.0f);
+        else if (pOCV->intParam["warp_type"].valeur ==9)
+            warper_creator = cv::makePtr<cv::PaniniWarper>(2.0f, 1.0f);
+        else if (pOCV->intParam["warp_type"].valeur ==10)
+            warper_creator = cv::makePtr<cv::PaniniWarper>(1.5f, 1.0f);
+        else if (pOCV->intParam["warp_type"].valeur ==11)
+            warper_creator = cv::makePtr<cv::PaniniPortraitWarper>(2.0f, 1.0f);
+        else if (pOCV->intParam["warp_type"].valeur ==12)
+            warper_creator = cv::makePtr<cv::PaniniPortraitWarper>(1.5f, 1.0f);
+        else if (pOCV->intParam["warp_type"].valeur ==13)
+            warper_creator = cv::makePtr<cv::MercatorWarper>();
+        else if (pOCV->intParam["warp_type"].valeur ==14)
+            warper_creator = cv::makePtr<cv::TransverseMercatorWarper>();
+    }
+
+    if (!warper_creator)
+    {
+		throw std::string("WraperWrap : unknown wrapper!");
+		return r;
+    }
+
+    cv::Ptr<cv::detail::RotationWarper> warper = warper_creator->create(static_cast<float>(pano->warped_image_scale * pano->seam_work_aspect));
+
+    for (int i = 0; i < num_images; ++i)
+    {
+        cv::Mat_<float> K;
+        pano->cameras[i].K().convertTo(K, CV_32F);
+        float swa = (float)pano->seam_work_aspect;
+        K(0,0) *= swa; K(0,2) *= swa;
+        K(1,1) *= swa; K(1,2) *= swa;
+
+        corners[i] = warper->warp(*pano->op[i], K, pano->cameras[i].R, cv::INTER_LINEAR, cv::BORDER_REFLECT, images_warped[i]);
+        sizes[i] = images_warped[i].size();
+
+        warper->warp(masks[i], K, pano->cameras[i].R, cv::INTER_NEAREST, cv::BORDER_CONSTANT, masks_warped[i]);
+    }
+
+    std::vector<cv::UMat> images_warped_f(num_images);
+    for (int i = 0; i < num_images; ++i)
+        images_warped[i].convertTo(images_warped_f[i], CV_32F);
     r.push_back(this);
     return r;
 }
