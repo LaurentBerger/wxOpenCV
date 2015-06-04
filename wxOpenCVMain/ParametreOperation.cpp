@@ -285,6 +285,7 @@ opNaireSelec=NULL;
 opBinaireSelec=NULL;
 opUnaireSelec=NULL;
 opSurjecUnaire=NULL;
+operateur=NULL;
 nomOperation="";
 nomSequence="";
 nbImageRes=0;
@@ -706,21 +707,24 @@ if (s=="filter2d")
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
-	intParam["IndOpConvolution"]=DomaineParametreOp<int>(xx.IndOpConvolution(),0,NB_OP_CONVOLUTION,1);
+	intParam["indOpConvolution"]=DomaineParametreOp<int>(xx.IndOpConvolution(),0,NB_OP_CONVOLUTION,1);
 	}
 if (s=="dilate")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
-	intParam["IndOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	}
 if (s=="erode")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
-	intParam["IndOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
+	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	}
 if (s=="openning")
 	{
@@ -728,12 +732,18 @@ if (s=="openning")
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
+	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	}
 if (s=="closing")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
+	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	}
 if (s=="tophat")
 	{

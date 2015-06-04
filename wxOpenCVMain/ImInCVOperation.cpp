@@ -202,10 +202,26 @@ std::vector<ImageInfoCV *>ImageInfoCV::Erosion(std::vector< ImageInfoCV*> op,Par
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-if (op.size()==1)
-    cv::erode(*op[0], *im, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur]);
+if (pOCV)
+{
+	int nbIter;
+	int borderType;
+	cv::Scalar borderValue=cv::morphologyDefaultBorderValue();
+	cv::Point ancrage;
+	nbIter=pOCV->intParam["nbIter"].valeur;
+	borderType=pOCV->intParam["borderType"].valeur;
+	ancrage=pOCV->pointParam["anchor"].valeur;
+    if (op.size() == 1|| op[1]==NULL)
+        cv::erode(*op[0], *im, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue);
+    else
+        cv::erode(*op[0], *im, *op[1],ancrage,nbIter,borderType,borderValue);
+    
+}
 else
-    cv::erode(*op[0], *im, *op[1]);
+    if (op.size()==1|| op[1]==NULL)
+        cv::erode(*op[0], *im, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur]);
+    else
+        cv::erode(*op[0], *im, *op[1]);
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
 return r;
@@ -219,10 +235,27 @@ std::vector<ImageInfoCV *>ImageInfoCV::Dilatation(std::vector< ImageInfoCV*> op,
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-if (op.size() == 1)
-    cv::dilate(*op[0], *im, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur]);
+if (pOCV)
+{
+	int nbIter;
+	int borderType;
+	cv::Scalar borderValue=cv::morphologyDefaultBorderValue();
+	cv::Point ancrage;
+	nbIter=pOCV->intParam["nbIter"].valeur;
+	borderType=pOCV->intParam["borderType"].valeur;
+	ancrage=pOCV->pointParam["anchor"].valeur;
+    if (op.size() == 1|| op[1]==NULL)
+        cv::dilate(*op[0], *im, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue);
+    else
+        cv::dilate(*op[0], *im, *op[1],ancrage,nbIter,borderType,borderValue);
+    
+}
 else
-    cv::dilate(*op[0], *im, *op[1]);
+
+    if (op.size() == 1|| op[1]==NULL)
+        cv::dilate(*op[0], *im, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur]);
+    else
+        cv::dilate(*op[0], *im, *op[1]);
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
 return r;
@@ -242,14 +275,14 @@ if (pOCV)
 	nbIter=pOCV->intParam["nbIter"].valeur;
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
-	if (op.size()==1)
-		cv::morphologyEx( *op[0], *im,cv::MORPH_OPEN, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
+	if (op.size()==1|| op[1]==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_OPEN, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
 		cv::morphologyEx( *op[0], *im,cv::MORPH_OPEN, *op[1],ancrage,nbIter,borderType,borderValue);
 	}
 else
-    if (op.size() == 1)
-		cv::morphologyEx( *op[0], *im,cv::MORPH_OPEN, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+    if (op.size() == 1|| op[1]==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_OPEN, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur] );
 	else
 		cv::morphologyEx( *op[0], *im,cv::MORPH_OPEN, *op[1]);
 	std::vector<ImageInfoCV	*> r;
@@ -270,14 +303,14 @@ if (pOCV)
 	nbIter=pOCV->intParam["nbIter"].valeur;
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
-	if (op.size()==1)
-		cv::morphologyEx( *op[0], *im,cv::MORPH_CLOSE, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
+	if (op.size()==1 || op[1]==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_CLOSE, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
 		cv::morphologyEx( *op[0], *im,cv::MORPH_CLOSE, *op[1],ancrage,nbIter,borderType,borderValue);
 	}
 else
-	if (op.size()==1)
-		cv::morphologyEx( *op[0], *im,cv::MORPH_CLOSE, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+	if (op.size()==1|| op[1]==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_CLOSE, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur] );
 	else
 		cv::morphologyEx( *op[0], *im,cv::MORPH_CLOSE, *op[1]);
 	std::vector<ImageInfoCV	*> r;
@@ -298,14 +331,14 @@ if (pOCV)
 	nbIter=pOCV->intParam["nbIter"].valeur;
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
-	if (op.size()==1)
-		cv::morphologyEx( *op[0], *im,cv::MORPH_TOPHAT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
+	if (op.size()==1|| op[1]==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_TOPHAT, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
 		cv::morphologyEx( *op[0], *im,cv::MORPH_TOPHAT, *op[1],ancrage,nbIter,borderType,borderValue);
 	}
 else
-	if (op.size()==1)
-		cv::morphologyEx( *op[0], *im,cv::MORPH_TOPHAT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+	if (op.size()==1|| op[1]==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_TOPHAT, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur] );
 	else
 		cv::morphologyEx( *op[0], *im,cv::MORPH_TOPHAT, *op[1]);
 	std::vector<ImageInfoCV	*> r;
@@ -326,14 +359,14 @@ if (pOCV)
 	nbIter=pOCV->intParam["nbIter"].valeur;
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
-	if (op.size()==1)
-		cv::morphologyEx( *op[0], *im,cv::MORPH_BLACKHAT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
+	if (op.size()==1|| op[1]==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_BLACKHAT, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
 		cv::morphologyEx( *op[0], *im,cv::MORPH_BLACKHAT, *op[1],ancrage,nbIter,borderType,borderValue);
 	}
 else
-	if (op.size()==1)
-		cv::morphologyEx( *op[0], *im,cv::MORPH_BLACKHAT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+	if (op.size()==1|| op[1]==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_BLACKHAT, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur] );
 	else
 		cv::morphologyEx( *op[0], *im,cv::MORPH_BLACKHAT, *op[1]);
 	std::vector<ImageInfoCV	*> r;
@@ -354,14 +387,14 @@ if (pOCV)
 	nbIter=pOCV->intParam["nbIter"].valeur;
 	borderType=pOCV->intParam["borderType"].valeur;
 	ancrage=pOCV->pointParam["anchor"].valeur;
-	if (op.size()==NULL)
-		cv::morphologyEx( *op[0], *im,cv::MORPH_GRADIENT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
+	if (op.size()==1 || op[1]==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_GRADIENT, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur],ancrage,nbIter,borderType,borderValue );
 	else
 		cv::morphologyEx( *op[0], *im,cv::MORPH_GRADIENT, *op[1],ancrage,nbIter,borderType,borderValue);
 	}
 else
-	if (op.size()==NULL)
-		cv::morphologyEx( *op[0], *im,cv::MORPH_GRADIENT, *op[0]->opMorph[pOCV->intParam["IndOpMorphologie"].valeur] );
+	if (op.size()==1 || op[1]==NULL)
+		cv::morphologyEx( *op[0], *im,cv::MORPH_GRADIENT, *op[0]->opMorph[pOCV->intParam["indOpMorphologie"].valeur] );
 	else
 		cv::morphologyEx( *op[0], *im,cv::MORPH_GRADIENT, *op[1]);
 std::vector<ImageInfoCV	*> r;
@@ -379,7 +412,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::Convolution(std::vector< ImageInfoCV*> op
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-if (op.size()==NULL)
+if (op.size()==1 || op[1]==NULL)
 	cv::filter2D( *op[0], *im,typeResultat, *op[0]->opnn[pOCV->intParam["IndOpConvolution"].valeur] );
 else
 	cv::filter2D( *op[0], *im,typeResultat, *op[1]);
@@ -1970,6 +2003,7 @@ for (int i = 0; i < pOCV->op.size(); ++i)
     pano->features[i].img_idx = i;
 }
 finder->collectGarbage();
+AjoutOpAttribut(pOCV);
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(this);
@@ -1988,6 +2022,7 @@ cv::detail::BestOf2NearestMatcher matcher(pOCV->intParam["try_use_gpu"].valeur, 
 matcher(pano->features, pano->appariement);
 matcher.collectGarbage();
 
+AjoutOpAttribut(pOCV);
 r.push_back(this);
 return r;
 }
@@ -2008,6 +2043,7 @@ std::vector<ImageInfoCV	*> ImageInfoCV::LeaveBiggestComponent(std::vector< Image
         bonnesImages.push_back(pOCV->op[pano->bijection[i]]);
     pOCV->op= bonnesImages;
     r.push_back(this);
+AjoutOpAttribut(pOCV);
     return r;
 }
 std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
@@ -2077,6 +2113,7 @@ std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< Im
             pano->cameras[i].R = rmats[i];
     }
 
+AjoutOpAttribut(pOCV);
     r.push_back(this);
     return r;
 }

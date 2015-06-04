@@ -711,8 +711,13 @@ for (int i=indEtape;i<nbEtape;i++)
 		app->DefOperande1(listeOp[i].first->op[0],indFen1);
 	//else
 //		app->DefOperande1(im[0]);
-	int indFen2=app->RechercheFenetre(listeOp[i].first->op[1]);
-	app->DefOperande2(listeOp[i].first->op[1],indFen2);
+	int indFen2=-1;
+    if (listeOp[i].first->op.size()>1)
+        indFen2=app->RechercheFenetre(listeOp[i].first->op[1]);
+	if(indFen2>=0)
+        app->DefOperande2(listeOp[i].first->op[1],indFen2);
+    else
+        app->DefOperande2(NULL,indFen2);
 	r=app->ExecuterOperation(pOCV);
 	if (r.size()!=0)
 		{

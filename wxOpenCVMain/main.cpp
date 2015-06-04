@@ -690,7 +690,7 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 		numEtape=0;
 	if (idOperation==-1)
 		idOperation=numOpFaite++;
-	if (pOCV.opUnaireSelec)
+	if (pOCV.indOpFenetre.size()>=1)
         f->DefHistorique(pOCV.indOpFenetre[0], -1, -1, idOperation, numEtape, pOCV.nomOperation, &pOCV);
 	if (pOCV.indOpFenetre.size()>=2)
         f->DefHistorique(pOCV.indOpFenetre[0], pOCV.indOpFenetre[1], -1, idOperation, numEtape, pOCV.nomOperation, &pOCV);
@@ -757,6 +757,8 @@ if (pOCV.nbImageRes==0)
 		f->ParamAlgo(evt);
 		}
 	}
+pOCV.op.clear();
+pOCV.indOpFenetre.clear();
 pOCV.doubleParam.clear();
 pOCV.intParam.clear();
 }

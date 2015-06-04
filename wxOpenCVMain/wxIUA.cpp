@@ -200,7 +200,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_NEGATION, nonlogique_xpm, _("Not"), "bitwise-not", 0);
 
     CONSTRUCTEUR_CMD(bouton, ID_EROSION, erosion_xpm, _("Erode"), "erode", 1);
-    CONSTRUCTEUR_CMD(bouton, ID_DILATATION, dilatation_xpm, _("Dilate"), "bitwise-not", 1);
+    CONSTRUCTEUR_CMD(bouton, ID_DILATATION, dilatation_xpm, _("Dilate"), "dilate", 1);
     CONSTRUCTEUR_CMD(bouton, ID_OUVERTURE, ouverture_xpm, _("Openning"), "openning", 1);
     CONSTRUCTEUR_CMD(bouton, ID_FERMETURE, fermeture_xpm, _("closing"), "closing", 1);
     CONSTRUCTEUR_CMD(bouton, ID_CHAPHAUTBL, chaphautblanc_xpm, _("Top hat"), "tophat", 1);
