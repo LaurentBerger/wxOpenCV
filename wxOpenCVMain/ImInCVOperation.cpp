@@ -1980,6 +1980,17 @@ if (this->pano==NULL)
 {
     pano = new Panoramique;
 }
+pano->is_compose_scale_set = false;
+pano->try_cuda = false;
+pano->is_work_scale_set = false;
+pano->seam_work_aspect = 1;
+pano->work_megapix = 0.6;
+pano->seam_megapix = 0.1;
+pano->compose_megapix = -1;
+pano->work_scale = 1;
+pano->seam_scale = 1;
+pano->compose_scale = 1;
+
 if (pOCV->pano.size()==0)
 {
     pOCV->pano.push_back(pano);
@@ -1997,15 +2008,40 @@ if (pOCV->intParam["surf"].valeur==1)
     pOCV->intParam["orb"].valeur=0;
 }
 pano->features.resize(pOCV->op.size());
+Mat img;
+pano->op=pOCV->op;
+pano->indOpFenetre=pOCV->indOpFenetre;
+pano->tabImg.resize(pano->op.size());
 for (int i = 0; i < pOCV->op.size(); ++i)
 {
-    (*finder)(*pOCV->op[i], pano->features[i]);
+	if (pano->work_megapix < 0)
+	{
+		img = *pano->op[i];
+		pano->work_scale = 1;
+		pano->is_work_scale_set = true;
+	}
+	else
+	{
+		if (!pano->is_work_scale_set)
+		{
+			pano->work_scale = cv::min(1.0, sqrt(pano->work_megapix * 1e6 / pano->op[i]->size().area()));
+			pano->is_work_scale_set = true;
+		}
+		cv::resize(*pano->op[i], img, cv::Size(), pano->work_scale, pano->work_scale);
+	}
+	if (!pano->is_seam_scale_set)
+	{
+		pano->seam_scale = cv::min(1.0, sqrt(pano->seam_megapix * 1e6 / pano->op[i]->size().area()));
+		pano->seam_work_aspect = pano->seam_scale / pano->work_scale;
+		pano->is_seam_scale_set = true;
+	}
+	(*finder)(*pOCV->op[i], pano->features[i]);
     pano->features[i].img_idx = i;
+	cv::resize(*pano->op[i], img, cv::Size(), pano->seam_scale, pano->seam_scale);
+	pano->tabImg[i] = img.clone();
 }
 finder->collectGarbage();
 AjoutOpAttribut(pOCV);
-pano->op=pOCV->op;
-pano->indOpFenetre=pOCV->indOpFenetre;
 std::vector<ImageInfoCV	*> r;
 r.push_back(this);
 return r;
@@ -2039,15 +2075,18 @@ std::vector<ImageInfoCV	*> ImageInfoCV::LeaveBiggestComponent(std::vector< Image
 		throw std::string("LeaveBiggestComponent : Cannot match this images!");
 		return r;
 	}
-    std::vector<ImageInfoCV	*> bonnesImages;
-    std::vector<int> bonIndices;
+	std::vector<ImageInfoCV	*> bonnesImages;
+	std::vector<Mat> bonnesMat;
+	std::vector<int> bonIndices;
     for (size_t i = 0; i < pano->bijection.size(); ++i)
     {
-        bonnesImages.push_back(pano->op[pano->bijection[i]]);
-        bonIndices.push_back(pano->indOpFenetre[pano->bijection[i]]);
+		bonnesMat.push_back(pano->tabImg[pano->bijection[i]]);
+		bonnesImages.push_back(pano->op[pano->bijection[i]]);
+		bonIndices.push_back(pano->indOpFenetre[pano->bijection[i]]);
     }
-    pano->op= bonnesImages;
-    pano->indOpFenetre= bonIndices;
+	pano->op = bonnesImages;
+	pano->tabImg = bonnesMat;
+	pano->indOpFenetre = bonIndices;
     r.push_back(this);
     AjoutOpAttribut(pOCV);
     return r;
@@ -2104,11 +2143,10 @@ std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< Im
     }
 
     sort(focals.begin(), focals.end());
-    float warped_image_scale;
     if (focals.size() % 2 == 1)
-        warped_image_scale = static_cast<float>(focals[focals.size() / 2]);
+        pano->warped_image_scale = static_cast<float>(focals[focals.size() / 2]);
     else
-        warped_image_scale = static_cast<float>(focals[focals.size() / 2 - 1] + focals[focals.size() / 2]) * 0.5f;
+        pano->warped_image_scale = static_cast<float>(focals[focals.size() / 2 - 1] + focals[focals.size() / 2]) * 0.5f;
     if (pOCV->intParam["do_wave_correct"].valeur!=0)
     {
         std::vector<Mat> rmats;
@@ -2129,13 +2167,15 @@ std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, 
     std::vector<ImageInfoCV	*> r;
     if (pano==NULL)
         return r;
-    if (pano->op.size()<=1)
+	if (pano->cameras.size() == 0)
+		return r;
+	if (pano->op.size()<=1)
     {
 		throw std::string("WraperWrap : not enough image!");
 		return r;
     }
     
-    int num_images=pano->op.size();
+    int num_images=pano->tabImg.size();
     pano->corners.resize(num_images);
     pano->masks_warped.resize(num_images);
     pano->images_warped.resize(num_images);
@@ -2145,13 +2185,12 @@ std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, 
     // Prepare images masks
     for (int i = 0; i < num_images; ++i)
     {
-        pano->masks[i].create(pano->op[i]->size(), CV_8U);
+		pano->masks[i].create(pano->tabImg[i].size(), CV_8U);
 		pano->masks[i].setTo(cv::Scalar::all(255));
     }
 
     // Warp images and their masks
 
-    cv::Ptr<cv::WarperCreator> warper_creator;
 #ifdef HAVE_OPENCV_CUDAWARPING
     if (try_cuda && cuda::getCudaEnabledDeviceCount() > 0)
     {
@@ -2166,44 +2205,44 @@ std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, 
 #endif
     {
         if (pOCV->intParam["warp_type"].valeur ==0)
-            warper_creator = cv::makePtr<cv::PlaneWarper>();
+            pano->warper_creator = cv::makePtr<cv::PlaneWarper>();
         else if (pOCV->intParam["warp_type"].valeur ==1)
-            warper_creator = cv::makePtr<cv::CylindricalWarper>();
+			pano->warper_creator = cv::makePtr<cv::CylindricalWarper>();
         else if (pOCV->intParam["warp_type"].valeur ==2)
-            warper_creator = cv::makePtr<cv::SphericalWarper>();
+			pano->warper_creator = cv::makePtr<cv::SphericalWarper>();
         else if (pOCV->intParam["warp_type"].valeur ==3)
-            warper_creator = cv::makePtr<cv::FisheyeWarper>();
+			pano->warper_creator = cv::makePtr<cv::FisheyeWarper>();
         else if (pOCV->intParam["warp_type"].valeur ==4)
-            warper_creator = cv::makePtr<cv::StereographicWarper>();
+			pano->warper_creator = cv::makePtr<cv::StereographicWarper>();
         else if (pOCV->intParam["warp_type"].valeur ==5)
-            warper_creator = cv::makePtr<cv::CompressedRectilinearWarper>(2.0f, 1.0f);
+			pano->warper_creator = cv::makePtr<cv::CompressedRectilinearWarper>(2.0f, 1.0f);
         else if (pOCV->intParam["warp_type"].valeur ==6)
-            warper_creator = cv::makePtr<cv::CompressedRectilinearWarper>(1.5f, 1.0f);
+			pano->warper_creator = cv::makePtr<cv::CompressedRectilinearWarper>(1.5f, 1.0f);
         else if (pOCV->intParam["warp_type"].valeur ==7)
-            warper_creator = cv::makePtr<cv::CompressedRectilinearPortraitWarper>(2.0f, 1.0f);
+			pano->warper_creator = cv::makePtr<cv::CompressedRectilinearPortraitWarper>(2.0f, 1.0f);
         else if (pOCV->intParam["warp_type"].valeur ==8)
-            warper_creator = cv::makePtr<cv::CompressedRectilinearPortraitWarper>(1.5f, 1.0f);
+			pano->warper_creator = cv::makePtr<cv::CompressedRectilinearPortraitWarper>(1.5f, 1.0f);
         else if (pOCV->intParam["warp_type"].valeur ==9)
-            warper_creator = cv::makePtr<cv::PaniniWarper>(2.0f, 1.0f);
+			pano->warper_creator = cv::makePtr<cv::PaniniWarper>(2.0f, 1.0f);
         else if (pOCV->intParam["warp_type"].valeur ==10)
-            warper_creator = cv::makePtr<cv::PaniniWarper>(1.5f, 1.0f);
+			pano->warper_creator = cv::makePtr<cv::PaniniWarper>(1.5f, 1.0f);
         else if (pOCV->intParam["warp_type"].valeur ==11)
-            warper_creator = cv::makePtr<cv::PaniniPortraitWarper>(2.0f, 1.0f);
+			pano->warper_creator = cv::makePtr<cv::PaniniPortraitWarper>(2.0f, 1.0f);
         else if (pOCV->intParam["warp_type"].valeur ==12)
-            warper_creator = cv::makePtr<cv::PaniniPortraitWarper>(1.5f, 1.0f);
+			pano->warper_creator = cv::makePtr<cv::PaniniPortraitWarper>(1.5f, 1.0f);
         else if (pOCV->intParam["warp_type"].valeur ==13)
-            warper_creator = cv::makePtr<cv::MercatorWarper>();
+			pano->warper_creator = cv::makePtr<cv::MercatorWarper>();
         else if (pOCV->intParam["warp_type"].valeur ==14)
-            warper_creator = cv::makePtr<cv::TransverseMercatorWarper>();
+			pano->warper_creator = cv::makePtr<cv::TransverseMercatorWarper>();
     }
 
-    if (!warper_creator)
+	if (!pano->warper_creator)
     {
 		throw std::string("WraperWrap : unknown wrapper!");
 		return r;
     }
 
-    cv::Ptr<cv::detail::RotationWarper> warper = warper_creator->create(static_cast<float>(pano->warped_image_scale * pano->seam_work_aspect));
+	pano->warper = pano->warper_creator->create(static_cast<float>(pano->warped_image_scale * pano->seam_work_aspect));
 
     for (int i = 0; i < num_images; ++i)
     {
@@ -2213,17 +2252,18 @@ std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, 
         K(0,0) *= swa; K(0,2) *= swa;
         K(1,1) *= swa; K(1,2) *= swa;
 
-		pano->corners[i] = warper->warp(*pano->op[i], K, pano->cameras[i].R, cv::INTER_LINEAR, cv::BORDER_REFLECT, pano->images_warped[i]);
+		pano->corners[i] = pano->warper->warp(pano->tabImg[i], K, pano->cameras[i].R, cv::INTER_LINEAR, cv::BORDER_REFLECT, pano->images_warped[i]);
 		pano->sizes[i] = pano->images_warped[i].size();
 
-		warper->warp(pano->masks[i], K, pano->cameras[i].R, cv::INTER_NEAREST, cv::BORDER_CONSTANT, pano->masks_warped[i]);
+		pano->warper->warp(pano->masks[i], K, pano->cameras[i].R, cv::INTER_NEAREST, cv::BORDER_CONSTANT, pano->masks_warped[i]);
     }
 
     pano->images_warped_f.resize(num_images);
     for (int i = 0; i < num_images; ++i)
 		pano->images_warped[i].convertTo(pano->images_warped_f[i], CV_32F);
-    r.push_back(this);
-    return r;
+	AjoutOpAttribut(pOCV);
+	r.push_back(this);
+	return r;
 }
 
 
@@ -2280,11 +2320,15 @@ std::vector<ImageInfoCV	*> ImageInfoCV::CorrectionExpo(std::vector< ImageInfoCV 
 	pano->images_warped.clear();
 	pano->images_warped_f.clear();
 	pano->masks.clear();
+	AjoutOpAttribut(pOCV);
+	r.push_back(this);
+	return r;
 }
 
 std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
 {
 	std::vector<ImageInfoCV	*> r;
+	bool timelapse = false;
 	if (pano == NULL)
 		return r;
 	if (pano->op.size() <= 1)
@@ -2298,26 +2342,25 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 	cv::Ptr<cv::detail::Timelapser> timelapser;
 	//double compose_seam_aspect = 1;
 	double compose_work_aspect = 1;
+	Mat img;
 
 	for (int img_idx = 0; img_idx < pano->op.size(); ++img_idx)
 	{
 		LOGLN("Compositing image #" << indices[img_idx] + 1);
 
 		// Read image and resize it if necessary
-		full_img = imread(img_names[img_idx]);
-		if (!is_compose_scale_set)
+		if (!pano->is_compose_scale_set)
 		{
-			if (compose_megapix > 0)
-				compose_scale = min(1.0, sqrt(compose_megapix * 1e6 / full_img.size().area()));
-			is_compose_scale_set = true;
-
+			if (pano->compose_megapix > 0)
+				pano->compose_scale = cv::min(1.0, sqrt(pano->compose_megapix * 1e6 / pano->op[img_idx]->size().area()));
+			pano->is_compose_scale_set = true;
 			// Compute relative scales
 			//compose_seam_aspect = compose_scale / seam_scale;
-			compose_work_aspect = compose_scale / work_scale;
+			compose_work_aspect = 1;
 
 			// Update warped image scale
 			pano->warped_image_scale *= static_cast<float>(compose_work_aspect);
-			warper = warper_creator->create(pano->warped_image_scale);
+			pano->warper = pano->warper_creator->create(pano->warped_image_scale);
 
 			// Update corners and sizes
 			for (int i = 0; i < pano->op.size(); ++i)
@@ -2329,36 +2372,36 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 
 				// Update corner and size
 				cv::Size sz = pano->op[i]->size();
-				if (std::abs(compose_scale - 1) > 1e-1)
+				if (std::abs(pano->compose_scale - 1) > 1e-1)
 				{
-					sz.width = cvRound(pano->op[i]->width * compose_scale);
-					sz.height = cvRound(pano->op[i]->height * compose_scale);
+					sz.width = cvRound(pano->op[i]->size().width * pano->compose_scale);
+					sz.height = cvRound(pano->op[i]->size().height * pano->compose_scale);
 				}
 
 				Mat K;
 				pano->cameras[i].K().convertTo(K, CV_32F);
 				cv::Rect roi = pano->warper->warpRoi(sz, K, pano->cameras[i].R);
 				pano->corners[i] = roi.tl();
-				sizes[i] = roi.size();
+				pano->sizes[i] = roi.size();
 			}
 		}
-		if (abs(compose_scale - 1) > 1e-1)
-			resize(full_img, img, Size(), compose_scale, compose_scale);
+		if (abs(pano->compose_scale - 1) > 1e-1)
+			cv::resize(*pano->op[img_idx], img, cv::Size(), pano->compose_scale, pano->compose_scale);
 		else
-			img = full_img;
-		full_img.release();
-		Size img_size = img.size();
+			img = *pano->op[img_idx];
+		img = *pano->op[img_idx];
+		cv::Size img_size = img.size();
 
 		Mat K;
 		pano->cameras[img_idx].K().convertTo(K, CV_32F);
 
 		// Warp the current image
-		warper->warp(img, K, cameras[img_idx].R, cv::INTER_LINEAR, cv::BORDER_REFLECT, img_warped);
+		pano->warper->warp(img, K, pano->cameras[img_idx].R, cv::INTER_LINEAR, cv::BORDER_REFLECT, img_warped);
 
 		// Warp the current image mask
 		mask.create(img_size, CV_8U);
-		mask.setTo(Scalar::all(255));
-		warper->warp(mask, K, cameras[img_idx].R, cv::INTER_NEAREST, cv::BORDER_CONSTANT, mask_warped);
+		mask.setTo(cv::Scalar::all(255));
+		pano->warper->warp(mask, K, pano->cameras[img_idx].R, cv::INTER_NEAREST, cv::BORDER_CONSTANT, mask_warped);
 
 		// Compensate exposure
 		pano->correcteurExpo->apply(img_idx, pano->corners[img_idx], img_warped, mask_warped);
@@ -2374,18 +2417,18 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 
 		if (!blender && !timelapse)
 		{
-			blender = detail::Blender::createDefault(blend_type, try_cuda);
-			Size dst_sz = detail::resultRoi(corners, sizes).size();
-			float blend_width = sqrt(static_cast<float>(dst_sz.area())) * blend_strength / 100.f;
+			blender = cv::detail::Blender::createDefault(pOCV->intParam["blend_type"].valeur, pano->try_cuda);
+			cv::Size dst_sz = cv::detail::resultRoi(pano->corners, pano->sizes).size();
+			float blend_width = sqrt(static_cast<float>(dst_sz.area())) * pOCV->doubleParam["blend_strength"].valeur / 100.f;
 			if (blend_width < 1.f)
-				blender = detail::Blender::createDefault(detail::Blender::NO, try_cuda);
-			else if (blend_type == detail::Blender::MULTI_BAND)
+				blender = cv::detail::Blender::createDefault(cv::detail::Blender::NO, pano->try_cuda);
+			else if (pOCV->intParam["blend_type"].valeur == cv::detail::Blender::MULTI_BAND)
 			{
-				detail::MultiBandBlender* mb = dynamic_cast<detail::MultiBandBlender*>(blender.get());
+				cv::detail::MultiBandBlender* mb = dynamic_cast<cv::detail::MultiBandBlender*>(blender.get());
 				mb->setNumBands(static_cast<int>(ceil(log(blend_width) / log(2.)) - 1.));
 				LOGLN("Multi-band blender, number of bands: " << mb->numBands());
 			}
-			else if (blend_type == cv::detail::Blender::FEATHER)
+			else if (pOCV->intParam["blend_type"].valeur == cv::detail::Blender::FEATHER)
 			{
 				cv::detail::FeatherBlender* fb = dynamic_cast<cv::detail::FeatherBlender*>(blender.get());
 				fb->setSharpness(1.f / blend_width);
@@ -2393,24 +2436,8 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 			}
 			blender->prepare(pano->corners, pano->sizes);
 		}
-		else if (timelapser)
-		{
-			CV_Assert(timelapse);
-			timelapser = cv::detail::Timelapser::createDefault(timelapse_type);
-			timelapser->initialize(pano->corners, pano->sizes);
-		}
 
-		// Blend the current image
-		if (timelapse)
-		{
-			timelapser->process(img_warped_s, Mat::ones(img_warped_s.size(), CV_8UC1), pano->corners[img_idx]);
-
-			imwrite("fixed_" + img_names[img_idx], timelapser->getDst());
-		}
-		else
-		{
 			blender->feed(img_warped_s, mask_warped, pano->corners[img_idx]);
-		}
 	}
 
 	if (!timelapse)

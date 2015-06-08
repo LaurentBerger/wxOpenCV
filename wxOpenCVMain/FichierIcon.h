@@ -1,5 +1,12 @@
 #ifdef __WXGTK__
-#include "bitmaps/panowraper_xpm.h"
+#include "bitmaps/panofeature.xpm"
+#include "bitmaps/panoresize.xpm"
+#include "bitmaps/panomatch.xpm"
+#include "bitmaps/panobestmatch.xpm"
+#include "bitmaps/panohomography.xpm"
+#include "bitmaps/panowraper.xpm"
+#include "bitmaps/panocomposition.xpm"
+#include "bitmaps/panocorrectexpo.xpm"
 #include "bitmaps/phasecorrelate.xpm"
 #include "bitmaps/segmentationmotion.xpm"
 #include "bitmaps/independantmotion.xpm"
@@ -88,6 +95,9 @@
 #include "bitmaps\panobestmatch.xpm"
 #include "bitmaps\panohomography.xpm"
 #include "bitmaps\panowraper.xpm"
+#include "bitmaps\panocomposition.xpm"
+#include "bitmaps\panocorrectexpo.xpm"
+
 
 
 #include "bitmaps\phasecorrelate.xpm"

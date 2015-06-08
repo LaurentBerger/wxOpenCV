@@ -21,14 +21,22 @@ class ImageInfoCV;
 
 class Panoramique {
 public :
-double warped_image_scale ,seam_work_aspect;
+double warped_image_scale, seam_work_aspect, work_scaleseam_scale, compose_scale, work_scale;
+double seam_scale;
+bool is_compose_scale_set, try_cuda, is_work_scale_set, is_seam_scale_set;
+double work_megapix;
+double seam_megapix;
+double compose_megapix;
+
 std::vector<int> bijection;
 std::vector<cv::detail::ImageFeatures> features;
-std::vector<ImageInfoCV *> tabImg;
+std::vector<cv::Mat> tabImg;
 std::vector<cv::detail::MatchesInfo> appariement;
 cv::detail::HomographyBasedEstimator estimateur;
 std::vector<cv::detail::CameraParams> cameras;
 cv::Ptr<cv::detail::BundleAdjusterBase> adjuster;
+cv::Ptr<cv::WarperCreator> warper_creator;
+cv::Ptr<cv::detail::RotationWarper> warper;
 cv::Ptr<cv::detail::ExposureCompensator> correcteurExpo;
 cv::Ptr<cv::detail::SeamFinder> couture;
 cv::detail::Blender blender;

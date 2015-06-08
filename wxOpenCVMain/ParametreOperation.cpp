@@ -275,6 +275,15 @@ listeParam["seam_find_type"].insert(std::pair<string, int>(_("gc_colorgrad").ToS
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("dp_color").ToStdString(), 4));
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("dp_colorgrad").ToStdString(), 5));
 
+listeParam["blend_type"].insert(std::pair<string, int>(_("NO").ToStdString(), cv::detail::Blender::NO));
+listeParam["blend_type"].insert(std::pair<string, int>(_("FEATHER").ToStdString(), cv::detail::Blender::FEATHER));
+listeParam["blend_type"].insert(std::pair<string, int>(_("MULTI_BAND").ToStdString(), cv::detail::Blender::MULTI_BAND));
+
+listeParam["expos_comp_type"].insert(std::pair<string, int>(_("NO").ToStdString(), cv::detail::ExposureCompensator::NO));
+listeParam["expos_comp_type"].insert(std::pair<string, int>(_("GAIN").ToStdString(), cv::detail::ExposureCompensator::GAIN));
+listeParam["expos_comp_type"].insert(std::pair<string, int>(_("GAIN_BLOCKS").ToStdString(), cv::detail::ExposureCompensator::GAIN_BLOCKS));
+ 
+
 
 listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_HORIZ").ToStdString(), cv::detail::WAVE_CORRECT_HORIZ));
 listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_VERT").ToStdString(), cv::detail::WAVE_CORRECT_VERT));
@@ -997,7 +1006,13 @@ if (s == "homographybasedestimator")
 	nbImageRes = 0;
 	intParam["is_focals_estimated"] = DomaineParametreOp<int>(0, 0, 1, 1);
 	intParam["do_wave_correct"] = DomaineParametreOp<int>(0, 0, 1, 1);
-	intParam["wave_correct"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	intParam["ba_refine_mask_0"] = DomaineParametreOp<int>(1, 0, 1, 1);
+	intParam["ba_refine_mask_1"] = DomaineParametreOp<int>(1, 0, 1, 1);
+	intParam["ba_refine_mask_2"] = DomaineParametreOp<int>(1, 0, 1, 1);
+	intParam["ba_refine_mask_3"] = DomaineParametreOp<int>(1, 0, 1, 1);
+	intParam["ba_refine_mask_4"] = DomaineParametreOp<int>(1, 0, 1, 1);
+	intParam["ba_refine_mask_5"] = DomaineParametreOp<int>(1, 0, 1, 1);
+	doubleParam["conf_thresh"] = DomaineParametreOp<double>(0.6, 0., 1000, 0.1);
 }
 if (s == "wraperwrap")
 {
@@ -1006,7 +1021,24 @@ if (s == "wraperwrap")
 	nbImageRes = 0;
 	intParam["warp_type"] = DomaineParametreOp<int>(0, 0, 1, 1);
 }
-if (nomOperation=="")
+if (s == "correctionexpo")
+{
+	nomOperation = s;
+	nbOperande = 10;
+	nbImageRes = 0;
+	intParam["warp_type"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	intParam["expos_comp_type"] = DomaineParametreOp<int>(cv::detail::ExposureCompensator::GAIN_BLOCKS, cv::detail::ExposureCompensator::NO, cv::detail::ExposureCompensator::GAIN_BLOCKS, 1);
+	intParam["seam_find_type"] = DomaineParametreOp<int>(2, 0, 5, 1);
+}
+if (s == "panocomposition")
+{
+	nomOperation = s;
+	nbOperande = 10;
+	nbImageRes = 1;
+	intParam["blend_type"] = DomaineParametreOp<int>(cv::detail::Blender::MULTI_BAND, cv::detail::Blender::NO, cv::detail::Blender::MULTI_BAND, 1);
+	doubleParam["blend_strength"] = DomaineParametreOp<double>(5, 0., 1000, 0.1);
+}
+if (nomOperation == "")
 	return false;
 InitPtrFonction();
 return true;
@@ -1578,6 +1610,24 @@ if (s == "wraperwrap")
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=660&zoom=70,250,100";
 	operateur = &ImageInfoCV::WraperWrap;
+
+	return true;
+}
+if (s == "correctionexpo")
+{
+	opAttribut = true;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=660&zoom=70,250,100";
+	operateur = &ImageInfoCV::CorrectionExpo;
+
+	return true;
+}
+if (s == "panocomposition")
+{
+	opAttribut = true;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=660&zoom=70,250,100";
+	operateur = &ImageInfoCV::PanoComposition;
 
 	return true;
 }

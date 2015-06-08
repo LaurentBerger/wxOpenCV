@@ -1,5 +1,5 @@
 /* XPM */
-static char * panowraper_xpm[] = {
+static const char * panowraper_xpm[] = {
 "48 48 89 1",
 " 	c None",
 ".	c #FFFFFF",
