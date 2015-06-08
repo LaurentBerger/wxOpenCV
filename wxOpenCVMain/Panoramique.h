@@ -34,6 +34,14 @@ cv::Ptr<cv::detail::SeamFinder> couture;
 cv::detail::Blender blender;
 std::vector <ImageInfoCV *> op;	/*!< Opérande du panorama */
 std:: vector<int>	indOpFenetre;	/*!< Indices des fenêtres  des opérandes */
+
+std::vector<cv::UMat> images_warped;
+std::vector<cv::Size> sizes;
+std::vector<cv::UMat> masks;
+std::vector<cv::Point> corners;
+std::vector<cv::UMat> masks_warped;
+std::vector<cv::UMat> images_warped_f;
+
 };
 
 #endif

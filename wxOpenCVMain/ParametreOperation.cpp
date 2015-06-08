@@ -271,8 +271,9 @@ listeParam["warp_type"].insert(std::pair<string, int>(_("transverseMercator").To
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("no").ToStdString(), 0));
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("voronoi").ToStdString(), 1));
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("gc_color").ToStdString(), 2));
-listeParam["seam_find_type"].insert(std::pair<string, int>(_("dp_color").ToStdString(), 3));
-listeParam["seam_find_type"].insert(std::pair<string, int>(_("dp_colorgrad").ToStdString(), 4));
+listeParam["seam_find_type"].insert(std::pair<string, int>(_("gc_colorgrad").ToStdString(), 3));
+listeParam["seam_find_type"].insert(std::pair<string, int>(_("dp_color").ToStdString(), 4));
+listeParam["seam_find_type"].insert(std::pair<string, int>(_("dp_colorgrad").ToStdString(), 5));
 
 
 listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_HORIZ").ToStdString(), cv::detail::WAVE_CORRECT_HORIZ));
@@ -989,16 +990,22 @@ if (s=="leavebiggestcomponent")
 	nbImageRes=0;
     doubleParam["conf_thresh"]=DomaineParametreOp<double>(0.6,0.,1000,0.1);
 	}
-if (s=="homographybasedestimator")
-	{
-	nomOperation=s;
-	nbOperande= 10;
-	nbImageRes=0;
-    intParam["is_focals_estimated"]=DomaineParametreOp<int>(0,0,1,1);
-    intParam["do_wave_correct"]=DomaineParametreOp<int>(0,0,1,1);
-    intParam["wave_correct"]=DomaineParametreOp<int>(0,0,1,1);
-	}
-
+if (s == "homographybasedestimator")
+{
+	nomOperation = s;
+	nbOperande = 10;
+	nbImageRes = 0;
+	intParam["is_focals_estimated"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	intParam["do_wave_correct"] = DomaineParametreOp<int>(0, 0, 1, 1);
+	intParam["wave_correct"] = DomaineParametreOp<int>(0, 0, 1, 1);
+}
+if (s == "wraperwrap")
+{
+	nomOperation = s;
+	nbOperande = 10;
+	nbImageRes = 0;
+	intParam["warp_type"] = DomaineParametreOp<int>(0, 0, 1, 1);
+}
 if (nomOperation=="")
 	return false;
 InitPtrFonction();
@@ -1556,15 +1563,24 @@ if (s=="leavebiggestcomponent")
 
 	return true;
 	}
-if (s=="homographybasedestimator")
-	{
-	opAttribut=true;
-	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
-	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
+if (s == "homographybasedestimator")
+{
+	opAttribut = true;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
 	operateur = &ImageInfoCV::HomographyBasedEstimator;
 
 	return true;
-	}
+}
+if (s == "wraperwrap")
+{
+	opAttribut = true;
+	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=660&zoom=70,250,100";
+	operateur = &ImageInfoCV::WraperWrap;
+
+	return true;
+}
 
 return false;
 }

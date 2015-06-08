@@ -312,6 +312,9 @@ std::vector<ImageInfoCV	*>DetailMatchesInfo(std::vector< ImageInfoCV *>, Paramet
 std::vector<ImageInfoCV	*>LeaveBiggestComponent(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>HomographyBasedEstimator(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> ImageInfoCV::CorrectionExpo(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+
 
 std::vector<ImageInfoCV *>Negation(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>Laplacien(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);

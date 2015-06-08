@@ -107,6 +107,7 @@ enum
     ID_DES_PANOMATCH,
     ID_DES_PANOBESTMATCH,
     ID_DES_PANOHOMOGRAPHY,
+	ID_PANO_WRAPPER,
 
 
 
@@ -277,8 +278,9 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_DES_PANOFEATURE, panofeature_xpm,_("Stitching feature"), "detailfeaturesfinder", 12);
     CONSTRUCTEUR_CMD(bouton, ID_DES_PANOMATCH, panomatch_xpm,_("Stitching feature"), "detailmatchesinfo", 12);
     CONSTRUCTEUR_CMD(bouton, ID_DES_PANOBESTMATCH, panobestmatch_xpm,_("Stitching feature"), "leavebiggestcomponent", 12);
-    CONSTRUCTEUR_CMD(bouton, ID_DES_PANOHOMOGRAPHY, panohomography_xpm,_("Stitching feature"), "homographybasedestimator", 12);
-
+	CONSTRUCTEUR_CMD(bouton, ID_DES_PANOHOMOGRAPHY, panohomography_xpm, _("Stitching feature"), "homographybasedestimator", 12);
+	CONSTRUCTEUR_CMD(bouton, ID_PANO_WRAPPER, panowraper_xpm, _("Wrapper"), "wraperwrap", 12);
+	
 }
 
 
