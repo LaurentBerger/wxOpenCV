@@ -295,11 +295,6 @@ bool ParametreOperation::InitOperation(string s)
 if (listeParam.size()==0)
 	InitParamType();
 ImageInfoCV xx;
-opSurjecMultiple=NULL;
-opNaireSelec=NULL;
-opBinaireSelec=NULL;
-opUnaireSelec=NULL;
-opSurjecUnaire=NULL;
 operateur=NULL;
 nomOperation="";
 nomSequence="";
@@ -414,7 +409,7 @@ if (s == "undistort")
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
-	opUnaireSelec = &ImageInfoCV::CorrigeAberation;
+	operateur = &ImageInfoCV::CorrigeAberation;
 	}
 if (s == "wrapAffine") // inclus la différence de deux images successives
 	{
@@ -808,7 +803,6 @@ if (s=="scharr_x")
 if (s=="scharr_y")
 	{
 	nbImageRes=1;
-	opUnaireSelec = &ImageInfoCV::ScharrY;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
@@ -1068,7 +1062,7 @@ if (s == "fond_gaussianmixture2")
 	opVideo = true;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractormog2";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=375&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::Fond_MOG2;
+	operateur = &ImageInfoCV::Fond_MOG2;
 	}
 if (s == "fond_gaussianmixture")
 	{
@@ -1078,7 +1072,7 @@ if (s == "fond_gaussianmixture")
 	opVideo = true;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractormog";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=373&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::Fond_MOG;
+	operateur = &ImageInfoCV::Fond_MOG;
 	}
 if (s == "fond_knn")
 	{
@@ -1088,7 +1082,7 @@ if (s == "fond_knn")
 	opVideo = true;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractorknn";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=373&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::Fond_KNN;
+	operateur = &ImageInfoCV::Fond_KNN;
 	}
 
 if (s == "fond_gmg")
@@ -1099,7 +1093,7 @@ if (s == "fond_gmg")
 	opVideo = true;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractorgmg";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=373&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::Fond_GMG;
+	operateur = &ImageInfoCV::Fond_GMG;
 	}
 
 if (s == "updatemotionhistory") // inclus la différence de deux images successives
@@ -1109,7 +1103,7 @@ if (s == "updatemotionhistory") // inclus la différence de deux images successiv
 	opVideo = true;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#updatemotionhistory";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=370&zoom=70,250,100";
-	opBinaireSelec = &ImageInfoCV::MAJHistoriqueMvt;
+	operateur = &ImageInfoCV::MAJHistoriqueMvt;
 	}
 if (s == "calcmotiongradient") // inclus la différence de deux images successives
 	{
@@ -1120,7 +1114,7 @@ if (s == "calcmotiongradient") // inclus la différence de deux images successive
 	nbOperande = 1;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#calcmotiongradient";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=371&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::CalcOrientationMvt;
+	operateur = &ImageInfoCV::CalcOrientationMvt;
 	}
 if (s == "segmentmotion") // inclus la différence de deux images successives
 {
@@ -1131,7 +1125,7 @@ if (s == "segmentmotion") // inclus la différence de deux images successives
 	nbOperande = 1;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#segmentmotion";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=371&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::SegmenteMvt;
+	operateur = &ImageInfoCV::SegmenteMvt;
 
 }
 if (s == "cornerharris")
@@ -1140,7 +1134,7 @@ if (s == "cornerharris")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#cornerharris";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=327&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::DetectCoinHarris;
+	operateur = &ImageInfoCV::DetectCoinHarris;
 	}
 
 if (s == "mserfeatures2d")
@@ -1150,7 +1144,7 @@ if (s == "mserfeatures2d")
     nbOperande = 1;
     lienHtml = "http://docs.opencv.org/trunk/d3/d28/classcv_1_1MSER.html";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
-    opUnaireSelec = &ImageInfoCV::DetectMser;
+    operateur = &ImageInfoCV::DetectMser;
     }
 if (s == "blobfeatures2d")
     {
@@ -1159,7 +1153,7 @@ if (s == "blobfeatures2d")
     nbOperande = 1;
     lienHtml = "http://docs.opencv.org/trunk/d0/d7a/classcv_1_1SimpleBlobDetector.html";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
-    opUnaireSelec = &ImageInfoCV::DetectBlob;
+    operateur = &ImageInfoCV::DetectBlob;
     }
 if (s == "orbfeatures2d")
     {
@@ -1168,7 +1162,7 @@ if (s == "orbfeatures2d")
     nbOperande = 1;
     lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#orb";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
-    opUnaireSelec = &ImageInfoCV::DetectOrb;
+    operateur = &ImageInfoCV::DetectOrb;
     }
 if (s == "akazefeatures2d")
     {
@@ -1177,7 +1171,7 @@ if (s == "akazefeatures2d")
     nbOperande = 1;
     lienHtml = "http://docs.opencv.org/trunk/de/dbf/classcv_1_1BRISK.html#details";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=4418&zoom=70,250,100";
-    opUnaireSelec = &ImageInfoCV::DetectAkaze;
+    operateur = &ImageInfoCV::DetectAkaze;
     }
 if (s == "briskfeatures2d")
     {
@@ -1186,7 +1180,7 @@ if (s == "briskfeatures2d")
     nbOperande = 1;
     lienHtml = "http://docs.opencv.org/trunk/d8/d30/classcv_1_1AKAZE.html";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
-    opUnaireSelec = &ImageInfoCV::DetectBrisk;
+    operateur = &ImageInfoCV::DetectBrisk;
     }
 
 if (s == "matchdescriptormatcher")
@@ -1197,7 +1191,7 @@ if (s == "matchdescriptormatcher")
 	nbOperande = 1;
 	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#match";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
-	opBinaireSelec = &ImageInfoCV::AppariePoint;
+	operateur = &ImageInfoCV::AppariePoint;
 	}
 if (s == "goodfeaturestotrack")
 	{
@@ -1206,7 +1200,7 @@ if (s == "goodfeaturestotrack")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=329&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::BonAttributs;
+	operateur = &ImageInfoCV::BonAttributs;
 	}
 if(	s=="houghcircles")
 	{
@@ -1215,7 +1209,7 @@ if(	s=="houghcircles")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=330&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::HoughCercle;
+	operateur = &ImageInfoCV::HoughCercle;
 	}
 if(	s=="houghlines")
 	{
@@ -1224,7 +1218,7 @@ if(	s=="houghlines")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=332&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::HoughLigne;
+	operateur = &ImageInfoCV::HoughLigne;
 	}
 if(	s=="houghlinesp")
 	{
@@ -1233,18 +1227,18 @@ if(	s=="houghlinesp")
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlinesp";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=333&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::HoughLigneProba;
+	operateur = &ImageInfoCV::HoughLigneProba;
 	}
 if (s=="cvtcolor")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#cvtcolor";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
 	nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::RGB_L;
+	operateur = &ImageInfoCV::RGB_L;
 	}
 if (s=="watershed")
 	{
-	opBinaireSelec = &ImageInfoCV::PartageEaux;
+	operateur = &ImageInfoCV::PartageEaux;
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#watershed";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
@@ -1252,7 +1246,7 @@ if (s=="watershed")
 	}
 if (s=="split")
 	{
-	opSurjecUnaire = &ImageInfoCV::SeparationPlan;
+	operateur = &ImageInfoCV::SeparationPlan;
 	nbOperande= 1;
 	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#split";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
@@ -1260,7 +1254,7 @@ if (s=="split")
 	}
 if (s=="merge")
 	{
-	opNaireSelec = &ImageInfoCV::FusionPlan;
+	operateur = &ImageInfoCV::FusionPlan;
 	nbOperande= 3;
 	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#merge";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=149&zoom=70,250,100";
@@ -1268,7 +1262,7 @@ if (s=="merge")
 	}
 if (s == "bitwise-and")
 {
-	opBinaireSelec = &ImageInfoCV::EtLogique;
+	operateur = &ImageInfoCV::EtLogique;
 	lienHtml = "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#bitwise-and";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=124&zoom=70,250,100";
 	nbOperande = 2;
@@ -1278,7 +1272,7 @@ if (s == "bitwise-or")
 {
 	lienHtml = "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#bitwise-or";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=125&zoom=70,250,100";
-	opBinaireSelec = &ImageInfoCV::OuLogique;
+	operateur = &ImageInfoCV::OuLogique;
 	nbOperande = 2;
 	nbImageRes = 1;
 }
@@ -1286,7 +1280,7 @@ if (s == "bitwise-xor")
 {
 	lienHtml = "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#bitwise-xor";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=126&zoom=70,250,100";
-	opBinaireSelec = &ImageInfoCV::OuExcluLogique;
+	operateur = &ImageInfoCV::OuExcluLogique;
 	nbOperande = 2;
 	nbImageRes = 1;
 }
@@ -1295,13 +1289,13 @@ if (s == "bitwise-not")
 	lienHtml = "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#bitwise-not";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=126&zoom=70,250,100";
 
-	opUnaireSelec = &ImageInfoCV::Negation;
+	operateur = &ImageInfoCV::Negation;
 	nbOperande = 1;
 	nbImageRes = 1;
 }
 if (s == "add")
 	{
-	opBinaireSelec = &ImageInfoCV::Add;
+	operateur = &ImageInfoCV::Add;
 	nbOperande= 2;
 	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#add";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
@@ -1309,7 +1303,7 @@ if (s == "add")
 	}
 if (s=="subtract")
 	{
-	opBinaireSelec = &ImageInfoCV::Sub;
+	operateur = &ImageInfoCV::Sub;
 	nbOperande= 2;
 	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#subtract";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=172&zoom=70,250,100";
@@ -1317,7 +1311,7 @@ if (s=="subtract")
 	}
 if (s=="multiply")
 	{
-	opBinaireSelec = &ImageInfoCV::Mul;
+	operateur = &ImageInfoCV::Mul;
 	nbOperande= 2;
 	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#multiply";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=153&zoom=70,250,100";
@@ -1325,7 +1319,7 @@ if (s=="multiply")
 	}
 if (s=="divide")
 	{
-	opBinaireSelec = &ImageInfoCV::Div;
+	operateur = &ImageInfoCV::Div;
 	nbOperande= 2;
 	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#divide";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=136&zoom=70,250,100";
@@ -1333,7 +1327,7 @@ if (s=="divide")
 	}
 if (s=="filter2d")
 	{
-	opBinaireSelec = &ImageInfoCV::Convolution;
+	operateur = &ImageInfoCV::Convolution;
 	nbOperande= 2;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#filter2d";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100";
@@ -1341,7 +1335,7 @@ if (s=="filter2d")
 	}
 if (s=="dilate")
 	{
-	opBinaireSelec = &ImageInfoCV::Dilatation;
+	operateur = &ImageInfoCV::Dilatation;
 	nbOperande= 2;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#dilate";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100";
@@ -1349,63 +1343,63 @@ if (s=="dilate")
 	}
 if (s=="erode")
 	{
-	opBinaireSelec = &ImageInfoCV::Erosion;
+	operateur = &ImageInfoCV::Erosion;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=255&zoom=70,250,100";
 	return true;
 	}
 if (s=="openning")
 	{
-	opBinaireSelec = &ImageInfoCV::Ouverture;
+	operateur = &ImageInfoCV::Ouverture;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=morphologyex#morphologyex";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
 if (s=="closing")
 	{
-	opBinaireSelec = &ImageInfoCV::Fermeture;
+	operateur = &ImageInfoCV::Fermeture;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
 if (s=="tophat")
 	{
-	opBinaireSelec = &ImageInfoCV::ChapeauHaut;
+	operateur = &ImageInfoCV::ChapeauHaut;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
 if (s=="blackhat")
 	{
-	opBinaireSelec = &ImageInfoCV::ChapeauBas;
+	operateur = &ImageInfoCV::ChapeauBas;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
 if (s=="morph_gradient")
 	{
-	opBinaireSelec = &ImageInfoCV::GradMorph;
+	operateur = &ImageInfoCV::GradMorph;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#erode";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
 if (s=="scharr_mod")
 	{
-	opUnaireSelec = &ImageInfoCV::ScharrModule;
+	operateur = &ImageInfoCV::ScharrModule;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
 	return true;
 	}
 if (s=="scharr_x")
 	{
-	opUnaireSelec = &ImageInfoCV::ScharrX;
+	operateur = &ImageInfoCV::ScharrX;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
 	return true;
 	}
 if (s=="scharr_y")
 	{
-	opUnaireSelec = &ImageInfoCV::ScharrY;
+	operateur = &ImageInfoCV::ScharrY;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
 	return true;
@@ -1414,35 +1408,35 @@ if (s=="laplacian")
 	{
 	lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/filtering.html#laplacian";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=261&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::Laplacien;
+	operateur = &ImageInfoCV::Laplacien;
 	return true;
 	}
 if (s=="canny")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=331&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::Canny;
+	operateur = &ImageInfoCV::Canny;
 	return true;
 	}
 if (s=="contour")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#findContour";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=308&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::Contour;
+	operateur = &ImageInfoCV::Contour;
 	return true;
 	}
 if (s=="FFT")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=133&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::FFT;
+	operateur = &ImageInfoCV::FFT;
 	return true;
 	}
 if (s=="IFFT")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=133&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::IFFT;
+	operateur = &ImageInfoCV::IFFT;
 	return true;
 	}
 if (s=="threshold")
@@ -1450,91 +1444,91 @@ if (s=="threshold")
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html?highlight=threshold#threshold";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=291&zoom=70,250,100";
 	nomOperation=s;
-	opUnaireSelec = &ImageInfoCV::Seuillage;
+	operateur = &ImageInfoCV::Seuillage;
 	return true;
 	}
 if (s=="adaptivethreshold")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html?highlight=threshold#adaptivethreshold";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=280&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::SeuillageAdaptatif;
+	operateur = &ImageInfoCV::SeuillageAdaptatif;
 	return true;
 	}
 if (s=="medianblur")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=medianblur#medianblur";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::LissageMedian;
+	operateur = &ImageInfoCV::LissageMedian;
 	return true;
 	}
 if (s=="blur")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=blur#blur";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=254&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::LissageMoyenne;
+	operateur = &ImageInfoCV::LissageMoyenne;
 	return true;
 	}
 if (s=="gaussianblur")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html?highlight=gaussianblur#gaussianblur";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=263&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::LissageGaussien;
+	operateur = &ImageInfoCV::LissageGaussien;
 	return true;
 	}
 if (s=="connectedcomponents")
 	{
 	lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#connectedcomponents";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=263&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::ComposanteConnexe;
+	operateur = &ImageInfoCV::ComposanteConnexe;
 	return true;
 	}
 if (s=="distancetransform")
 	{
 	lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/miscellaneous_transformations.html#distancetransform";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=287&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::DistanceDiscrete;
+	operateur = &ImageInfoCV::DistanceDiscrete;
 	return true;
 	}
 if (s=="medianaxis")
 	{
 	lienHtml="http://docs.opencv.org/trunk/modules/imgproc/doc/miscellaneous_transformations.html#distancetransform";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=287&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	operateur = &ImageInfoCV::LigneMediane;
 	return true;
 	}
 if (s == "wrapAffine")
 	{
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#warpaffine";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::TransAffine;
+	operateur = &ImageInfoCV::TransAffine;
 	return true;
 	}
 if (s == "resize")
 	{
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#resize";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::Dimension;
+	operateur = &ImageInfoCV::Dimension;
 	return true;
 	}
 if (s == "logPolar")
 	{
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#logpolar";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::LogPolar;
+	operateur = &ImageInfoCV::LogPolar;
 	return true;
 	}
 if (s == "undistort")
 	{
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#undistort";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=278&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::CorrigeAberation;
+	operateur = &ImageInfoCV::CorrigeAberation;
 	return true;
 	}
 if (s == "buildopticalflowpyramid")
 	{
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#buildopticalflowpyramid";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=366&zoom=70,250,100";
-	opUnaireSelec = &ImageInfoCV::LigneMediane;
+	operateur = &ImageInfoCV::LigneMediane;
 	return true;
 	}
 if (s == "calcopticalflowpyrlk")
@@ -1542,7 +1536,7 @@ if (s == "calcopticalflowpyrlk")
 	opAttribut = true;
 	lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#calcopticalflowpyrlk";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=365&zoom=70,250,100";
-	opBinaireSelec = &ImageInfoCV::FlotOptiqueLucasKanadePyramide;
+	operateur = &ImageInfoCV::FlotOptiqueLucasKanadePyramide;
 	opVideo = true;
 
 	return true;
@@ -1552,7 +1546,7 @@ if (s == "phasecorrelate")
 	opAttribut = true;
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/motion_analysis_and_object_tracking.html#phasecorrelate";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=365&zoom=70,250,100";
-	opBinaireSelec = &ImageInfoCV::PhaseCorrelate;
+	operateur = &ImageInfoCV::PhaseCorrelate;
 	opVideo = true;
 
 	return true;
@@ -1563,7 +1557,7 @@ if (s=="calcopticalflowfarneback")
 	opAttribut=true;
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#calcopticalflowfarneback";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=367&zoom=70,250,100";
-	opBinaireSelec = &ImageInfoCV::FlotOptiqueFarnerback;
+	operateur = &ImageInfoCV::FlotOptiqueFarnerback;
 	opVideo=true;
 
 	return true;
@@ -1640,11 +1634,11 @@ std::vector<ImageInfoCV*> ParametreOperation::ExecuterOperation()
 {
 std::vector <ImageInfoCV*> r;
 nbImageRes=1;
-if (opNaireSelec)
+if (operateur)
 	{
 	try
 		{
-		r =(op[0]->*opNaireSelec) (op,this);
+		r =(op[0]->*operateur) (op,this);
 		}
 	catch(cv::Exception& e)
 		{
@@ -1653,49 +1647,6 @@ if (opNaireSelec)
 
 	}
 
-if (opBinaireSelec)
-	{
-
-	try
-		{
-			r =(op[0]->*opBinaireSelec)(op,this);
-		}
-	catch(cv::Exception& e)
-		{
-		wxString s(e.msg);
-
-		}
-
-	}
-if (opUnaireSelec)
-	{
-	try
-		{
-
-		r =(op[0]->*opUnaireSelec)(op,this);
-		}
-	catch(cv::Exception& e)
-		{
-		wxString s(e.msg);
-
-		}
-
-	}
-
-if (opSurjecUnaire)
-	{
-	try
-		{
-
-		r =(op[0]->*opSurjecUnaire)(op,this);
-		}
-	catch(cv::Exception& e)
-		{
-		wxString s(e.msg);
-
-		}
-
-	}
 
 return r; // Le pointeur imTab n'est pas libéré
 }

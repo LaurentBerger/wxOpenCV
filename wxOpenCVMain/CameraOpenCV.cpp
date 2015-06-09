@@ -522,7 +522,7 @@ if (captureVideo->isOpened())
 						ParametreOperation pOCV=*it;
 						pOCV.indOpFenetre[0]=-1;
                         pOCV.indOpFenetre[1] = -1;
-						if (pOCV.opUnaireSelec) // op1 est initialisé
+						if (pOCV.nbOperande==1) // op1 est initialisé
                             {
                             if (indOp>0) // Si une opération a déjà été effectuée l'image précédente est retenue comme paramètre
 							    pOCV.op[0]=im[indOp-1][0];
@@ -532,7 +532,7 @@ if (captureVideo->isOpened())
                                 effaceImage[imIni]=false;
                                 }
                             }
-                        else if (pOCV.opBinaireSelec ) // initialisation op2
+                        else if (pOCV.nbOperande==2 ) // initialisation op2
                             {
 							if (pOCV.opVideo)
 								{
@@ -595,7 +595,7 @@ if (captureVideo->isOpened())
 
 						if (im[indOp].size()!=0) // Si l'opérateur donne un résultat non nul
 							effaceImage[im[indOp][0]]=false;
-						if (pOCV.opBinaireSelec && pOCV.opVideo) // Pour les opérateurs binaires spécifiques à la vidéo
+						if (pOCV.nbOperande==2 && pOCV.opVideo) // Pour les opérateurs binaires spécifiques à la vidéo
 							memoriseImage=true;
                         indOp++;							
 						}

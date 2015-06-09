@@ -543,70 +543,6 @@ if (pOCVNouveau==NULL)
 	pAct=&pOCV;
 else
 	pAct=pOCVNouveau;
-if (pAct->opNaireSelec)
-	{
-	try
-		{
-        r = ((*pAct->op[0]).*pAct->opNaireSelec)(pAct->op, pAct);
-		}
-	catch(cv::Exception& e)
-		{
-		wxString s(e.msg);
-
-		wxMessageBox("An error occured in naire operator :"+s);
-		}
-	DefPointeurSouris(0,0);
-
-	}
-
-if (pAct->opBinaireSelec)
-	{
-	
-	try
-		{
-		r =((*pAct->op[0]).*pAct->opBinaireSelec)(pAct->op,pAct);
-		}
-	catch(cv::Exception& e)
-		{
-		wxString s(e.msg);
-
-		wxMessageBox("An error occured in binary operator :"+s);
-		}
-	DefPointeurSouris(0, 0);
-	}
-if (pAct->opUnaireSelec)
-	{
-	try
-		{
-
-		r =((*pAct->op[0]).*pAct->opUnaireSelec)(pAct->op,pAct);
-		}
-	catch(cv::Exception& e)
-		{
-		wxString s(e.msg);
-
-		wxMessageBox("An error occured in unary operator :"+s);
-		}
-	DefPointeurSouris(0,0);
-
-	}
-
-if (pAct->opSurjecUnaire)
-	{
-	try
-		{
-
-		r =((*pAct->op[0]).*pAct->opSurjecUnaire)(pAct->op,pAct);
-		}
-	catch(cv::Exception& e)
-		{
-		wxString s(e.msg);
-
-		wxMessageBox("An error occured in surjection operator :"+s);
-		}
-	DefPointeurSouris(0,0);
-
-	}
 if (pAct->operateur)
 	{
 	try
@@ -630,7 +566,7 @@ return r; // Le pointeur imTab n'est pas libéré
 
 void wxOsgApp::CreerFenetreOperation()
 {
-if ((pOCV.operateur==NULL && pOCV.opBinaireSelec==NULL && pOCV.opUnaireSelec==NULL && pOCV.opSurjecMultiple==NULL && pOCV.opNaireSelec==NULL&& pOCV.opSurjecUnaire==NULL) || pOCV.op.size()==0)
+if (pOCV.operateur==NULL  || pOCV.op.size()==0)
 	return;
 
 vector<ImageInfoCV*> r=ExecuterOperation();
@@ -3538,42 +3474,20 @@ void  wxOsgApp::SupOperandeN(ImageInfoCV* im, int i)
 { 
 }
 
-ImageInfoCV *wxOsgApp::Op1()
+ImageInfoCV * wxOsgApp::OpId(int id)
 {
-if (pOCV.op.size()>=1)
-    return pOCV.op[0];
+if (pOCV.op.size()>id)
+    return pOCV.op[id];
 return NULL;
 };
-ImageInfoCV *wxOsgApp::Op2()
-{
-if (pOCV.op.size()>=2)
-    return pOCV.op[1];
-return NULL;
-};
-ImageInfoCV *wxOsgApp::Op3()
-{
-if (pOCV.op.size()>=3)
-    return pOCV.op[2];
-return NULL;
-};
-int wxOsgApp::IndOp1()
+
+int wxOsgApp::IndOpId(int id)
 { 
-if (pOCV.op.size()>=1)
-    return pOCV.indOpFenetre[0];
+if (pOCV.op.size()>id)
+    return pOCV.indOpFenetre[id];
 return -1;
 };
-int wxOsgApp::IndOp2()
-{ 
-if (pOCV.op.size()>=2)
-    return pOCV.indOpFenetre[1];
-return -1;
-};
-int wxOsgApp::IndOp3()
-{ 
-if (pOCV.op.size()>=3)
-    return pOCV.indOpFenetre[2];
-return -1;
-};
+
 int FenetrePrincipale::IdFenetreOp1pre()
 { 
 if (origineImage.op.size()>=1)

@@ -123,15 +123,15 @@ void DefOperandeN(ImageInfoCV* im,int i=-1);
 void SupOperandeN(ImageInfoCV* im,int i=-1);
 
 void DefParametreOCV(ParametreOperation &x){pOCV=x;};
-bool OpUnaire(){return pOCV.opUnaireSelec!=NULL || pOCV.opSurjecUnaire!=NULL;} /*!< Vrai si opération unaire sélectionnée */
-bool OpBinaire(){return pOCV.opBinaireSelec!=NULL;} /*!< Vrai si opération binaire sélectionnée */
-bool OpNaire(){return pOCV.opNaireSelec!=NULL;};
-ImageInfoCV *Op1();
-ImageInfoCV *Op2();
-ImageInfoCV *Op3();
-int IndOp1();
-int IndOp2();
-int IndOp3();
+bool Operateur(){return pOCV.operateur;} /*!< Vrai si opération unaire sélectionnée */
+ImageInfoCV *Op1(){return OpId(0);};
+ImageInfoCV *Op2(){return OpId(1);};
+ImageInfoCV *Op3(){return OpId(2);};
+ImageInfoCV *OpId(int id);
+int IndOpId(int id);
+int IndOp1(){return IndOpId(0);};
+int IndOp2(){return IndOpId(1);};
+int IndOp3(){return IndOpId(2);};
 int IdFenetreOp1pre();
 int NbOperande(){ return pOCV.nbOperande; };
 int NumSeqOpe(int *x=NULL){if (x!=NULL) numSeqOpe=*x;return numSeqOpe;};

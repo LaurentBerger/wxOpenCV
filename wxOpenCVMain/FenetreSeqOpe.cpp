@@ -770,7 +770,7 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
     if(it->indOpFenetre.size()>=2)
         indFen2=it->indOpFenetre[1];
 	bool annuler=false;
-	while (it->opBinaireSelec && !app->Graphique(indFen2) && !videoActive)
+	while (it->operateur && it->nbOperande>=2 && !app->Graphique(indFen2) && !videoActive)
 		{
 			wxTextEntryDialog  adr( NULL,_("Empty image. Give window id of image"),"0");
 			if (adr.ShowModal())
@@ -781,7 +781,7 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		}
 	if (annuler)
 		return false;
-	if (it->opBinaireSelec && !videoActive && app->Fenetre(indFen2))
+	if (it->operateur && indFen2!=-1 && !videoActive && app->Fenetre(indFen2))
 		it->op[1]=app->Graphique(indFen2)->ImAcq();
 	else
 		it->op[1] =NULL;
