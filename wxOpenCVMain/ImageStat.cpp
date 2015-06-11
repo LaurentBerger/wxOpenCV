@@ -108,6 +108,20 @@ if (i==1)
 	else if (ongletHistogramme)
 		ongletHistogramme->Plot(true);
 	}
+if (i == 5)
+{
+    for (int j = 0; j < 3;j++)
+        if (j >= fenMere->ImAcq()->channels())
+        {
+            slNivMin[j]->Disable();
+            slGain[j]->Disable();
+        }
+        else
+        {
+            slNivMin[j]->Enable();
+            slGain[j]->Enable();
+        }
+}
 }
 
 
@@ -145,24 +159,40 @@ wxString	legende[]={_T("Color Min"),_T("Color Max"),_T("0")};
 ongletCouleur = new wxWindow(listeFenetreOnglet,-1); 
 slNivMin = new wxSlider*[fenMere->ImAcq()->channels()];
 slGain = new wxSlider*[fenMere->ImAcq()->channels()];
-for (int	i=0,j=0;j<fenMere->ImAcq()->channels();j++)
+for (int	i=0,j=0;j<3;j++)
 	{
 	wxString s;
 	s.Printf("%.0lf",fenMere->SeuilNivBas(j));
 	new wxTextCtrl(ongletCouleur,ID_VAL_LUM_ROUGE+j,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
 	position[i].y+=taille[1].y;
 	i++;
-	slNivMin[j]=new wxSlider(ongletCouleur,ID_ASC_LUM_ROUGE+j,fenMere->SeuilNivBas(j), -16383,16383 ,position[i], taille[i],style);
+    double seuilBas, coeff;
+    if (j < fenMere->ImAcq()->channels())
+    {
+        seuilBas = fenMere->SeuilNivBas(j);
+        coeff = fenMere->CoeffCanal(j);
+    }
+    else
+    {
+        seuilBas = fenMere->SeuilNivBas(0);
+        coeff = fenMere->CoeffCanal(0);
+    }
+	slNivMin[j]=new wxSlider(ongletCouleur,ID_ASC_LUM_ROUGE+j,seuilBas, -16383,16383 ,position[i], taille[i],style);
 	slNivMin[j]->SetForegroundColour(wxColour(255,0,0));
 	position[i].y+=taille[1].y;
 	i++;
-	slGain[j]=new wxSlider(ongletCouleur,ID_ASC_GAIN_ROUGE+j,fenMere->CoeffCanal(j)*100, -fenMere->CoeffCanal(j)*1000,fenMere->CoeffCanal(j)*1000 ,position[i], taille[i],style);
+	slGain[j]=new wxSlider(ongletCouleur,ID_ASC_GAIN_ROUGE+j,seuilBas*100, -fenMere->CoeffCanal(j)*1000,coeff*1000 ,position[i], taille[i],style);
 	position[i].y+=taille[1].y;
 	i++;
 	s.Printf("%.1lf",fenMere->CoeffCanal(j));
 	new wxTextCtrl(ongletCouleur,ID_VAL_GAIN_ROUGE+j,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
 	position[i].y+=taille[1].y;
 	i++;
+    if (j >= fenMere->ImAcq()->channels())
+    {
+        slNivMin[j]->Disable();
+        slGain[j]->Disable();
+    }
 	i=0;
 	}
 //spAjustAuto =  new wxSpinCtrl(ongletCouleur,100,legende[i],position[i], taille[i],wxSP_WRAP|wxSP_ARROW_KEYS ); 

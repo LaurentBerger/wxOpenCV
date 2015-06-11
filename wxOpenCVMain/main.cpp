@@ -173,8 +173,9 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
 	EVT_MENU(Menu_Rectangle,  FenetrePrincipale::MAJRectangle)
 	EVT_MENU(Menu_Coupe,  FenetrePrincipale::MAJCoupe)
 	EVT_MENU(Menu_FilMax,  FenetrePrincipale::MAJFiltreMax)
-	EVT_MENU(Menu_ParAlg,  FenetrePrincipale::ParamAlgo)
-	EVT_MENU(Menu_Contour,  FenetrePrincipale::TracerContour)
+    EVT_MENU(Menu_ParAlg, FenetrePrincipale::ParamAlgo)
+    EVT_MENU(Menu_ParPano, FenetrePrincipale::ParamPano)
+    EVT_MENU(Menu_Contour, FenetrePrincipale::TracerContour)
 	EVT_MENU(MENU_LIGNEHOUGH,  FenetrePrincipale::TracerLigneHough)
 	EVT_MENU(MENU_LIGNEPROBAHOUGH,  FenetrePrincipale::TracerLigneProbaHough)
 	EVT_MENU(MENU_CERCLEHOUGH,  FenetrePrincipale::TracerCercleHough)
@@ -689,7 +690,9 @@ if (pOCV.nbImageRes==0)
     FenetrePrincipale *f = Graphique(pOCV.indOpFenetre[0]);
 	if (f)
 		{
-		wxCommandEvent evt;
+        f->NouvelleImage();
+        f->MAJNouvelleImage();
+        wxCommandEvent evt;
 		f->ParamAlgo(evt);
 		}
 	}
@@ -1340,6 +1343,7 @@ zoomActif=false;
 statActif=false;
 fenetreSauvee =0;
 fenAlgo=NULL;
+fenPano = NULL;
 idFenetre=-1;
 
     m_dragMode = TEST_DRAG_NONE;

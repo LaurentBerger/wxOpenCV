@@ -10,7 +10,6 @@
 #include <wx/fileconf.h>
 #include <wx/graphics.h>
 #include <wx/dcbuffer.h>
-
 //#include <wx/dde.h>
 #include <string>
 #include <map>
@@ -20,6 +19,7 @@
 class ControleCamera;
 class ImageStatistiques;
 class FenetreAlgo;
+class FenetrePano;
 class OutilsImage;
 class BarreInfo;
 class FenetreZoom;
@@ -443,6 +443,7 @@ wxOsgApp			*osgApp;
 FenetreZoom			*fenZoom;
 ImageStatistiques	*imgStatIm;
 FenetreAlgo			*fenAlgo;
+FenetrePano			*fenPano;
 HorodatageSequence  *dateSeq;
 wxTimer				*horlogeSeq;
 BarreInfo			*barreEtat;
@@ -517,11 +518,21 @@ ParametreOperation *OrigineImage(){return &origineImage;};
      *  \brief fonction OrigineImage
      *  caractéristiques de l'opération.
      */
-void RAZFenAlgo(){fenAlgo=NULL;};
-    /*!
-     *  \brief fonction RAZFenAlgo
-     *  Appelée lors de la fermeture de la fenêtre algorithme.
-     */
+void RAZFenAlgo(){ fenAlgo = NULL; };
+/*!
+*  \brief fonction RAZFenAlgo
+*  Appelée lors de la fermeture de la fenêtre algorithme.
+*/
+void RAZFenParam(){ fenPano = NULL; };
+/*!
+*  \brief fonction RAZFenParam
+*  Appelée lors de la fermeture de la fenêtre algorithme.
+*/
+void ParamPano(wxCommandEvent& event);
+/*!
+*  \brief fonction ParamPano
+*  Accès aux informations du panorama
+*/
 
 //void AdjustHV(int orientation);
 void OnSize( wxSizeEvent &);
@@ -1076,6 +1087,7 @@ enum
     Menu_Coupe,
     Menu_FilMax,
 	Menu_ParAlg,
+    Menu_ParPano,
 	Menu_Contour,
 	MENU_LIGNEHOUGH,
 	MENU_LIGNEPROBAHOUGH,

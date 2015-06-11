@@ -482,7 +482,7 @@ ParametreOperation *ParamOCVUpdateMotionHistory(ParametreOperation *p = NULL);
 ParametreOperation *AjoutOpAttribut(ParametreOperation *p);
 std::map<std::string,ParametreOperation> *ListeOpAttribut(){return &listeOpAttribut;};
 ParametreOperation *OpAttribut(std::string s){if (listeOpAttribut.find(s) != listeOpAttribut.end()) return &listeOpAttribut[s];return NULL;};
-
+Panoramique *ParamPano(){return pano;};
 
 int EtapeOp();  /*<! retourne l'indice de l'étape de l'opérateur le plus grand */
 void CloneStat(ImageInfoCV *im);

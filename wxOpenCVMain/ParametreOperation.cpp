@@ -252,6 +252,9 @@ listeParam["ResultImage"].insert(std::pair<string, int>(_("Foreground").ToStdStr
 listeParam["ba_cost_func"].insert(std::pair<string, int>(_("reproj").ToStdString(), 0));
 listeParam["ba_cost_func"].insert(std::pair<string, int>(_("ray").ToStdString(), 1));
 
+listeParam["Stitch_descriptor"].insert(std::pair<string, int>(_("orb").ToStdString(), 0));
+listeParam["Stitch_descriptor"].insert(std::pair<string, int>(_("sift").ToStdString(), 1));
+
 listeParam["warp_type"].insert(std::pair<string, int>(_("plane").ToStdString(), 0));
 listeParam["warp_type"].insert(std::pair<string, int>(_("cylindrical").ToStdString(), 1));
 listeParam["warp_type"].insert(std::pair<string, int>(_("spherical").ToStdString(), 2));
@@ -962,10 +965,9 @@ if (s=="updatemotionhistory")
 if (s=="detailfeaturesfinder")
 	{
 	nomOperation=s;
-	nbOperande= 10;
-	nbImageRes=0;
-    intParam["orb"]=DomaineParametreOp<int>(1,0,1,1);
-    intParam["surf"]=DomaineParametreOp<int>(0,0,1,1);
+	nbOperande= 15;
+	nbImageRes=1;
+	intParam["Stitch_descriptor"] = DomaineParametreOp<int>(1, 0, 1, 1);
     doubleParam["surf_hess_thresh"]=DomaineParametreOp<double>(300,1,1000,1);
 	intParam["surf_num_octaves"]=DomaineParametreOp<int>(3,1,8,1);
 	intParam["surf_num_layers"]=DomaineParametreOp<int>(4,1,8,1);
@@ -1028,7 +1030,7 @@ if (s == "panocomposition")
 {
 	nomOperation = s;
 	nbOperande = 10;
-	nbImageRes = 1;
+	nbImageRes = 0;
 	intParam["blend_type"] = DomaineParametreOp<int>(cv::detail::Blender::MULTI_BAND, cv::detail::Blender::NO, cv::detail::Blender::MULTI_BAND, 1);
 	doubleParam["blend_strength"] = DomaineParametreOp<double>(5, 0., 1000, 0.1);
 }
@@ -1188,7 +1190,7 @@ if (s == "matchdescriptormatcher")
 	opAttribut = true;
 	opVideo = true;
 	nomOperation = s;
-	nbOperande = 1;
+	nbOperande = 2;
 	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#match";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
 	operateur = &ImageInfoCV::AppariePoint;

@@ -63,7 +63,7 @@ hdc.SetBrush(*wxRED_BRUSH);
 			int			fZoomNume,fZoomDeno;
 
 			CalculZoom(fZoomNume,fZoomDeno);
-			dst=wxRect(0,0,imAcq->cols*fZoomNume/fZoomDeno-1,imAcq->rows*fZoomNume/fZoomDeno-1);
+			dst=wxRect(0,0,max(imAcq->cols*fZoomNume/fZoomDeno-1,1),max(imAcq->rows*fZoomNume/fZoomDeno-1,1));
 			wxImage		sousImage=d->GetSubImage(src);
 			wxImage		imageZoom=sousImage.Scale(dst.GetRight()-dst.GetLeft()+1,dst.GetBottom()-dst.GetTop()+1);
 
@@ -96,6 +96,12 @@ wxPaintDC	hdc(this);
 
 void FenetrePrincipale::DrawWindow(wxBufferedPaintDC &hdc)
 {
+    if (imAffichee->GetHeight() != imAcq->rows || imAffichee->GetWidth() != imAcq->cols)
+    {
+        imAffichee = NULL;
+        delete tabRGB;
+        tabRGB = NULL;
+    }
 if (!imAcq)
 	return;
 if (!imAffichee)

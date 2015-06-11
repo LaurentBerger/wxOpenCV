@@ -659,11 +659,15 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 			menu.Check(MENU_POINTKAZE, true);
 		menuParametre = true;
 		}
-	if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre || f->ImAcq()->EtapeOp()>0)
-		{
-		menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
-		}
-	menu.AppendCheckItem(SEQ_OPE, _T("Sequenceoperation"));
+    if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre || f->ImAcq()->EtapeOp()>0)
+    {
+        menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
+    }
+    if (f->ImAcq()->ParamPano()!=NULL)
+    {
+        menu.AppendCheckItem(Menu_ParPano, _T("Pano. results"));
+    }
+    menu.AppendCheckItem(SEQ_OPE, _T("Sequenceoperation"));
 	if(f->Cam() && f->Cam()->IsRunning() && f->SeqOp()->size()!=0)
 		{
 		menu.Append(STOP_SEQ, _T("&Stop Sequence"));
@@ -689,13 +693,15 @@ else
 	{
 	for (int i=0;i<osgApp->NbOperande();i++)
 	{
+		char tmp[2] = { char(i + 65), 0 };
+		wxString op = wxString::FromUTF8(tmp);
 		if (osgApp->OpId(i)!=NULL)
 			{
 			wxString s=osgApp->Fenetre(osgApp->IndOpId(i))->GetTitle();
-			menu.AppendCheckItem(MENU_OP1+i, char(i+65)+" = "+s);
+			menu.AppendCheckItem(MENU_OP1+i, op+" = "+s);
 			}
 		else
-			menu.AppendCheckItem(MENU_OP1+i, "Image as "+char(i+65));
+			menu.AppendCheckItem(MENU_OP1+i, "Image as "+op);
 
 		if (osgApp->OpId(i)==f->ImAcq())
 			menu.Check(MENU_OP1+i, true);

@@ -1996,16 +1996,14 @@ if (pOCV->pano.size()==0)
     pOCV->pano.push_back(pano);
 }
 cv::Ptr<cv::detail::FeaturesFinder> finder;
-if (pOCV->intParam["orb"].valeur==1 )
+if (pOCV->intParam["Stitch_descriptor"].valeur==0 )
 {
     finder = cv::makePtr<cv::detail::OrbFeaturesFinder>(pOCV->sizeParam["orb_grid_size"].valeur,pOCV->intParam["orb_nfeatures"].valeur,(float)pOCV->doubleParam["orb_scaleFactor"].valeur,pOCV->intParam["orb_nlevels"].valeur);
-    pOCV->intParam["surf"].valeur=0;
 }
-if (pOCV->intParam["surf"].valeur==1)
+if (pOCV->intParam["Stitch_descriptor"].valeur==1)
 {
     finder = cv::makePtr<cv::detail::SurfFeaturesFinder>(pOCV->doubleParam["surf_hess_thresh"].valeur,pOCV->intParam["surf_num_octaves"].valeur,
         pOCV->intParam["surf_num_layers"].valeur,pOCV->intParam["surf_num_octaves_descr"].valeur,pOCV->intParam["surf_num_layers_descr"].valeur);
-    pOCV->intParam["orb"].valeur=0;
 }
 pano->features.resize(pOCV->op.size());
 Mat img;
@@ -2041,9 +2039,11 @@ for (int i = 0; i < pOCV->op.size(); ++i)
 	pano->tabImg[i] = img.clone();
 }
 finder->collectGarbage();
-AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
-r.push_back(this);
+ImageInfoCV *t = new ImageInfoCV(1, 1, pano->op[0]->type());
+t->pano = pano;
+pano = NULL;
+r.push_back(t);
 return r;
 }
 
@@ -2070,7 +2070,7 @@ std::vector<ImageInfoCV	*> ImageInfoCV::LeaveBiggestComponent(std::vector< Image
     if (pano==NULL)
         return r;
     pano->bijection = cv::detail::leaveBiggestComponent(pano->features, pano->appariement, pOCV->doubleParam["conf_thresh"].valeur);
-    if (pano->bijection.size()<2)
+    if (pano->bijection.size()<1)
     {
 		throw std::string("LeaveBiggestComponent : Cannot match this images!");
 		return r;
@@ -2096,7 +2096,9 @@ std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< Im
     std::vector<ImageInfoCV	*> r;
     if (pano==NULL)
         return r;
+    pano->cameras.clear();
     cv::detail::HomographyBasedEstimator estimator(pOCV->intParam["is_focals_estimated"].valeur);
+    
     if (!estimator(pano->features, pano->appariement, pano->cameras))
     {
 		throw std::string("HomographyBasedEstimator : Homography estimation failed!");
@@ -2176,6 +2178,11 @@ std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, 
     }
     
     int num_images=pano->tabImg.size();
+    pano->corners.clear();
+    pano->masks_warped.clear();
+    pano->images_warped.clear();
+    pano->sizes.clear();
+    pano->masks.clear();
     pano->corners.resize(num_images);
     pano->masks_warped.resize(num_images);
     pano->images_warped.resize(num_images);
@@ -2317,9 +2324,6 @@ std::vector<ImageInfoCV	*> ImageInfoCV::CorrectionExpo(std::vector< ImageInfoCV 
 
 	// Release unused memory
 //	pano->images.clear();
-	pano->images_warped.clear();
-	pano->images_warped_f.clear();
-	pano->masks.clear();
 	AjoutOpAttribut(pOCV);
 	r.push_back(this);
 	return r;
@@ -2327,6 +2331,9 @@ std::vector<ImageInfoCV	*> ImageInfoCV::CorrectionExpo(std::vector< ImageInfoCV 
 
 std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
 {
+	pano->images_warped.clear();
+	pano->images_warped_f.clear();
+	pano->masks.clear();
 	std::vector<ImageInfoCV	*> r;
 	bool timelapse = false;
 	if (pano == NULL)
@@ -2444,9 +2451,14 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 	{
 		ImageInfoCV * result = new ImageInfoCV();
 		Mat result_mask;
+        result->pano = pano;
 		blender->blend(*result, result_mask);
-		r.push_back(result);
-		return r;
+        this->release();
+        this->create(result->rows,result->cols, result->type());
+        result->copyTo(*this);
+		r.push_back(this);
+        AjoutOpAttribut(pOCV);
+        return r;
 
 	}
 

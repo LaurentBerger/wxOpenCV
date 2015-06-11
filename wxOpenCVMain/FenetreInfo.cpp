@@ -171,9 +171,12 @@ ShapedFrame::ShapedFrame(wxFrame *parent,wxPoint &pSrc)
 			for (int j=0;j<im->cols;j++)
 				{
 				cv::Vec3b x=im->at<cv::Vec3b>(i,j);
-				if (x==ref)
+				//if (x==ref)
 					{
-					 memDC.DrawRectangle(wxRect(j, i, 2, 2));
+                    memDC.SetBrush(wxBrush(wxColour(x[2], x[1], x[0])));
+                    memDC.SetPen((wxColour(x[2], x[1], x[0])));
+
+					memDC.DrawRectangle(wxRect(j, i, 2, 2));
 
 					}
 
