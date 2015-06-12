@@ -24,7 +24,8 @@ public :
 double warped_image_scale, seam_work_aspect, work_scaleseam_scale, compose_scale, work_scale;
 double warped_image_scalePano;
 double seam_scale;
-bool is_compose_scale_set, try_cuda, is_work_scale_set, is_seam_scale_set;
+bool is_compose_scale_set, try_cuda;
+bool is_work_scale_set, is_seam_scale_set;
 double work_megapix;
 double seam_megapix;
 double compose_megapix;

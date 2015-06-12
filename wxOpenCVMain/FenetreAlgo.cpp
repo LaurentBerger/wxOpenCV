@@ -710,7 +710,6 @@ for (int ii=indEtape;ii<nbEtape;ii++)
 		wxMessageBox(_("Previous image is closed?"),_("Problem"), wxOK );
 		return ;
 		}
-//	if (im==NULL)
 		app->DefOperande1(listeOp[i].first->op[0],indFen1);
 	//else
 //		app->DefOperande1(im[0]);

@@ -584,7 +584,7 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	FenetreZoom *fenZoom = new FenetreZoom(f);
 	f->DefOSGApp(this);
 	wxString s;
-	int ind=-1;
+    int ind = -1;
 	if (pOCV.nomOperation=="Convolution")
 		{
 		ind = r[nbres]->IndOpConvolution();

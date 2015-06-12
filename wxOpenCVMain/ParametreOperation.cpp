@@ -1640,6 +1640,7 @@ if (operateur)
 	{
 	try
 		{
+        // 
 		r =(op[0]->*operateur) (op,this);
 		}
 	catch(cv::Exception& e)
@@ -1650,5 +1651,5 @@ if (operateur)
 	}
 
 
-return r; // Le pointeur imTab n'est pas libéré
+return r; 
 }

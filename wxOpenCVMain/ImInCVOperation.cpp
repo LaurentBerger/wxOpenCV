@@ -2173,7 +2173,7 @@ std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, 
 		return r;
 	if (pano->op.size()<=1)
     {
-		throw std::string("WraperWrap : not enough image!");
+		throw std::string("WraperWrap : not enough image! ");
 		return r;
     }
     

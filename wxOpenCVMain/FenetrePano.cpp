@@ -143,7 +143,7 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
 
                 wxString s;
                 int nb = pano->appariement[i].num_inliers;
-                s.Printf("Image %d ", nb);
+                s.Printf("Image  %d ", nb);
                 wxStaticText *ws = new wxStaticText(page, -1, s, wxPoint(col, ligne));
                  nb = pano->appariement[i].num_inliers;
                 s.Printf("%d ",  nb);
