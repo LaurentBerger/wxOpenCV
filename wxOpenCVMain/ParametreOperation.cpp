@@ -1003,11 +1003,9 @@ if (s == "homographybasedestimator")
 	intParam["is_focals_estimated"] = DomaineParametreOp<int>(0, 0, 1, 1);
 	intParam["do_wave_correct"] = DomaineParametreOp<int>(0, 0, 1, 1);
 	intParam["ba_refine_mask_0"] = DomaineParametreOp<int>(1, 0, 1, 1);
-	intParam["ba_refine_mask_1"] = DomaineParametreOp<int>(1, 0, 1, 1);
 	intParam["ba_refine_mask_2"] = DomaineParametreOp<int>(1, 0, 1, 1);
 	intParam["ba_refine_mask_3"] = DomaineParametreOp<int>(1, 0, 1, 1);
 	intParam["ba_refine_mask_4"] = DomaineParametreOp<int>(1, 0, 1, 1);
-	intParam["ba_refine_mask_5"] = DomaineParametreOp<int>(1, 0, 1, 1);
 	doubleParam["conf_thresh"] = DomaineParametreOp<double>(0.6, 0., 1000, 0.1);
 }
 if (s == "wraperwrap")

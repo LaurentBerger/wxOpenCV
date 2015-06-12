@@ -2125,7 +2125,6 @@ std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< Im
     pano->adjuster->setConfThresh((float)pOCV->doubleParam["conf_thresh"].valeur);
     cv::Mat_<uchar> refine_mask = Mat::zeros(3, 3, CV_8U);
     if (pOCV->intParam["ba_refine_mask_0"].valeur == 1) refine_mask(0,0) = 1;
-    if (pOCV->intParam["ba_refine_mask_1"].valeur == 1) refine_mask(0,1) = 1;
     if (pOCV->intParam["ba_refine_mask_2"].valeur == 1) refine_mask(0,2) = 1;
     if (pOCV->intParam["ba_refine_mask_3"].valeur == 1) refine_mask(1,1) = 1;
     if (pOCV->intParam["ba_refine_mask_4"].valeur == 1) refine_mask(1,2) = 1;

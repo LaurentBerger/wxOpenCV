@@ -539,46 +539,47 @@ int ind=listeOnglet[classeur->GetCurrentPage()].second;
 ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
 nom=st->GetLabel();
-if (pOCV->doubleParam.find(nom)!=pOCV->doubleParam.end())
+double x = w.GetValue();
+if (pOCV->doubleParam.find(nom) != pOCV->doubleParam.end())
 	{
-	if (pOCV->doubleParam[nom].valeur==((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+	if (pOCV->doubleParam[nom].valeur==x)
 		return;
-	pOCV->doubleParam[nom].valeur=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+	pOCV->doubleParam[nom].valeur=x;
 	}
 if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
 	{
-	if (pOCV->intParam[nom].valeur==((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+	if (pOCV->intParam[nom].valeur==(int)x)
 		return;
-	pOCV->intParam[nom].valeur=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+	pOCV->intParam[nom].valeur=x;
 	}
 if (pOCV->sizeParam.find(nom.substr(0, nom.length() - 2)) != pOCV->sizeParam.end())
 {
 	if ((w.GetId()) % 4 == 0)
 	{
-		if (pOCV->sizeParam[nom.substr(0, nom.length() - 2)].valeur.width == ((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
+        if (pOCV->sizeParam[nom.substr(0, nom.length() - 2)].valeur.width == (int)x)
 			return;
-		pOCV->sizeParam[nom.substr(0, nom.length() - 2)].valeur.width = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+        pOCV->sizeParam[nom.substr(0, nom.length() - 2)].valeur.width = (int)x;
 	}
 	else
 	{
-		if (pOCV->sizeParam[nom.substr(0, nom.length() - 2)].valeur.height == ((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
+        if (pOCV->sizeParam[nom.substr(0, nom.length() - 2)].valeur.height == (int)x)
 			return;
-		pOCV->sizeParam[nom.substr(0, nom.length() - 2)].valeur.height = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+        pOCV->sizeParam[nom.substr(0, nom.length() - 2)].valeur.height = (int)x;
 	}
 }
 if (pOCV->pointParam.find(nom.substr(0,nom.length()-2)) != pOCV->pointParam.end())
 	{
 	if (nom.substr(nom.length()-1, 1)=='x')
 	{
-		if (pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.x == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+        if (pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.x == (int)x)
 			return;
-		pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.x = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+        pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.x = (int)x;
 	}
 	else
 	{
-		if (pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.y == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+        if (pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.y == (int)x)
 			return;
-		pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.y = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+        pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.y = (int)x;
 	}
 }
 ExecuterOperation(ind);
@@ -680,12 +681,13 @@ wxFrame::OnCloseWindow(event);
 
 }
 
-void FenetreAlgo::ExecuterOperation(int indEtape)
+void FenetreAlgo::ExecuterOperation(int indOperation)
 {
 if (!osgApp)
 	return;
 wxOsgApp	*app=(wxOsgApp *)osgApp;
 ImageInfoCV **im=NULL;
+int indEtape = listeOp[indOperation].first->indEtape;
 for (int i=indEtape;i<nbEtape;i++)
 	{
 	int indFen1=app->RechercheFenetre(listeOp[i].first->op[0]);
@@ -702,7 +704,8 @@ for (int ii=indEtape;ii<nbEtape;ii++)
     int i = 0;
     while(i<listeOp.size() && listeOp[i].first->indEtape!=ii)
         i++;
-	wxString  nomOperation(listeOp[i].first->nomOperation);
+    pOCV = listeOp[i].first;
+    wxString  nomOperation(listeOp[i].first->nomOperation);
 	app->DefOperateurImage(nomOperation);
 	int indFen1=app->RechercheFenetre(listeOp[i].first->op[0]);
 	if (indFen1<0 )
@@ -721,6 +724,7 @@ for (int ii=indEtape;ii<nbEtape;ii++)
     else
         app->DefOperande2(NULL,indFen2);
 	r=app->ExecuterOperation(pOCV);
+    listeOp[i].first->indEtape = ii;
 	if (r.size()!=0)
 		{
 		FenetrePrincipale *f;
