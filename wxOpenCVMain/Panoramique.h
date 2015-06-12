@@ -22,6 +22,7 @@ class ImageInfoCV;
 class Panoramique {
 public :
 double warped_image_scale, seam_work_aspect, work_scaleseam_scale, compose_scale, work_scale;
+double warped_image_scalePano;
 double seam_scale;
 bool is_compose_scale_set, try_cuda, is_work_scale_set, is_seam_scale_set;
 double work_megapix;
@@ -34,6 +35,7 @@ std::vector<cv::Mat> tabImg;
 std::vector<cv::detail::MatchesInfo> appariement;
 cv::detail::HomographyBasedEstimator estimateur;
 std::vector<cv::detail::CameraParams> cameras;
+std::vector<cv::detail::CameraParams> camerasPano;
 cv::Ptr<cv::detail::BundleAdjusterBase> adjuster;
 cv::Ptr<cv::WarperCreator> warper_creator;
 cv::Ptr<cv::detail::RotationWarper> warper;
@@ -44,9 +46,12 @@ std::vector <ImageInfoCV *> op;	/*!< Opérande du panorama */
 std:: vector<int>	indOpFenetre;	/*!< Indices des fenêtres  des opérandes */
 
 std::vector<cv::UMat> images_warped;
-std::vector<cv::Size> sizes;
+std::vector<cv::Size> sizes; 
+std::vector<cv::Size> sizesPano; 
 std::vector<cv::UMat> masks;
 std::vector<cv::Point> corners;
+std::vector<cv::Point> cornersPano;
+
 std::vector<cv::UMat> masks_warped;
 std::vector<cv::UMat> images_warped_f;
 

@@ -2331,11 +2331,15 @@ std::vector<ImageInfoCV	*> ImageInfoCV::CorrectionExpo(std::vector< ImageInfoCV 
 
 std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
 {
-	pano->images_warped.clear();
-	pano->images_warped_f.clear();
-	pano->masks.clear();
+    pano->camerasPano = pano->cameras;
+    pano->cornersPano = pano->corners;
+    pano->sizesPano = pano->sizes;
+
 	std::vector<ImageInfoCV	*> r;
 	bool timelapse = false;
+    pano->is_compose_scale_set = false;
+    pano->compose_scale = 1;
+    pano->warped_image_scalePano = pano->warped_image_scale;
 	if (pano == NULL)
 		return r;
 	if (pano->op.size() <= 1)
@@ -2366,16 +2370,16 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 			compose_work_aspect = 1;
 
 			// Update warped image scale
-			pano->warped_image_scale *= static_cast<float>(compose_work_aspect);
-			pano->warper = pano->warper_creator->create(pano->warped_image_scale);
+			pano->warped_image_scalePano *= static_cast<float>(compose_work_aspect);
+			pano->warper = pano->warper_creator->create(pano->warped_image_scalePano);
 
 			// Update corners and sizes
 			for (int i = 0; i < pano->op.size(); ++i)
 			{
 				// Update intrinsics
-				pano->cameras[i].focal *= compose_work_aspect;
-				pano->cameras[i].ppx *= compose_work_aspect;
-				pano->cameras[i].ppy *= compose_work_aspect;
+                pano->camerasPano[i].focal *= compose_work_aspect;
+                pano->camerasPano[i].ppx *= compose_work_aspect;
+                pano->camerasPano[i].ppy *= compose_work_aspect;
 
 				// Update corner and size
 				cv::Size sz = pano->op[i]->size();
@@ -2386,9 +2390,9 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 				}
 
 				Mat K;
-				pano->cameras[i].K().convertTo(K, CV_32F);
-				cv::Rect roi = pano->warper->warpRoi(sz, K, pano->cameras[i].R);
-				pano->corners[i] = roi.tl();
+                pano->camerasPano[i].K().convertTo(K, CV_32F);
+                cv::Rect roi = pano->warper->warpRoi(sz, K, pano->camerasPano[i].R);
+				pano->cornersPano[i] = roi.tl();
 				pano->sizes[i] = roi.size();
 			}
 		}
@@ -2400,18 +2404,18 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 		cv::Size img_size = img.size();
 
 		Mat K;
-		pano->cameras[img_idx].K().convertTo(K, CV_32F);
+        pano->camerasPano[img_idx].K().convertTo(K, CV_32F);
 
 		// Warp the current image
-		pano->warper->warp(img, K, pano->cameras[img_idx].R, cv::INTER_LINEAR, cv::BORDER_REFLECT, img_warped);
+        pano->warper->warp(img, K, pano->camerasPano[img_idx].R, cv::INTER_LINEAR, cv::BORDER_REFLECT, img_warped);
 
 		// Warp the current image mask
 		mask.create(img_size, CV_8U);
 		mask.setTo(cv::Scalar::all(255));
-		pano->warper->warp(mask, K, pano->cameras[img_idx].R, cv::INTER_NEAREST, cv::BORDER_CONSTANT, mask_warped);
+        pano->warper->warp(mask, K, pano->camerasPano[img_idx].R, cv::INTER_NEAREST, cv::BORDER_CONSTANT, mask_warped);
 
 		// Compensate exposure
-		pano->correcteurExpo->apply(img_idx, pano->corners[img_idx], img_warped, mask_warped);
+		pano->correcteurExpo->apply(img_idx, pano->cornersPano[img_idx], img_warped, mask_warped);
 
 		img_warped.convertTo(img_warped_s, CV_16S);
 		img_warped.release();
@@ -2425,7 +2429,7 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 		if (!blender && !timelapse)
 		{
 			blender = cv::detail::Blender::createDefault(pOCV->intParam["blend_type"].valeur, pano->try_cuda);
-			cv::Size dst_sz = cv::detail::resultRoi(pano->corners, pano->sizes).size();
+			cv::Size dst_sz = cv::detail::resultRoi(pano->cornersPano, pano->sizes).size();
 			float blend_width = sqrt(static_cast<float>(dst_sz.area())) * pOCV->doubleParam["blend_strength"].valeur / 100.f;
 			if (blend_width < 1.f)
 				blender = cv::detail::Blender::createDefault(cv::detail::Blender::NO, pano->try_cuda);
@@ -2441,10 +2445,10 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 				fb->setSharpness(1.f / blend_width);
 				LOGLN("Feather blender, sharpness: " << fb->sharpness());
 			}
-			blender->prepare(pano->corners, pano->sizes);
+			blender->prepare(pano->cornersPano, pano->sizes);
 		}
 
-			blender->feed(img_warped_s, mask_warped, pano->corners[img_idx]);
+			blender->feed(img_warped_s, mask_warped, pano->cornersPano[img_idx]);
 	}
 
 	if (!timelapse)

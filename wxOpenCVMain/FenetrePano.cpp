@@ -156,6 +156,36 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
                 }
             }
             break;
+        case 2:
+            colonne.resize(pano->features.size());
+            col = 100;
+            for (int i = 0; i < pano->features.size(); i++)
+            {
+                colonne[i] = col;
+                wxString s;
+                s.Printf("Image %d ", i);
+                wxStaticText *ws = new wxStaticText(page, -1, s, wxPoint(colonne[i], ligne));
+                col += ws->GetSize().x + 10;
+            }
+            for (int i = 0; i < pano->appariement.size(); i++)
+            {
+
+                wxString s;
+                int nb = pano->appariement[i].num_inliers;
+                s.Printf("Image %d ", nb);
+                wxStaticText *ws = new wxStaticText(page, -1, s, wxPoint(col, ligne));
+                nb = pano->appariement[i].num_inliers;
+                s.Printf("%d ", nb);
+
+                ws = new wxStaticText(page, -1, s, wxPoint(colonne[i], ligne));
+                if ((i + 1) % pano->features.size() == 0)
+                {
+                    ligne += 20;
+                    col = 10;
+                }
+            }
+            break;
+
         default:
             break;
     }
@@ -169,6 +199,7 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
 
 FenetrePano::~FenetrePano()
 {
+    fenMere->RAZFenParam();
 
 }
 

@@ -696,9 +696,12 @@ for (int i=indEtape;i<nbEtape;i++)
 		}
 	}
 vector<ImageInfoCV*>r;
-for (int i=indEtape;i<nbEtape;i++)
+for (int ii=indEtape;ii<nbEtape;ii++)
 	{
-	ParametreOperation *pOCV=listeOp[i].first;
+    ParametreOperation *pOCV=NULL;
+    int i = 0;
+    while(i<listeOp.size() && listeOp[i].first->indEtape!=ii)
+        i++;
 	wxString  nomOperation(listeOp[i].first->nomOperation);
 	app->DefOperateurImage(nomOperation);
 	int indFen1=app->RechercheFenetre(listeOp[i].first->op[0]);
@@ -741,3 +744,9 @@ for (int i=indEtape;i<nbEtape;i++)
 	}
 
 }
+
+
+
+
+
+
