@@ -1232,7 +1232,8 @@ if (s=="cvtcolor")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#cvtcolor";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
-	nomOperation=s;
+    nbOperande = 1;
+    nomOperation = s;
 	operateur = &ImageInfoCV::RGB_L;
 	}
 if (s=="watershed")

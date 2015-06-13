@@ -2286,7 +2286,9 @@ std::vector<ImageInfoCV	*> ImageInfoCV::CorrectionExpo(std::vector< ImageInfoCV 
 	pano->correcteurExpo = cv::detail::ExposureCompensator::createDefault(pOCV->intParam["expos_comp_type"].valeur);
 	pano->correcteurExpo->feed(pano->corners, pano->images_warped, pano->masks_warped);
 
-	
+    if (pano->op[0]->channels() == 1)
+        pOCV->intParam["seam_find_type"].valeur = 0;
+
 	if (pOCV->intParam["seam_find_type"].valeur == 0)
 		pano->couture = cv::makePtr<cv::detail::NoSeamFinder>();
 	else if (pOCV->intParam["seam_find_type"].valeur == 1)
@@ -2353,7 +2355,8 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 	//double compose_seam_aspect = 1;
 	double compose_work_aspect = 1;
 	Mat img;
-
+    if (pano->op[0]->channels() == 1)
+        pOCV->intParam["blend_type"].valeur = 0;
 	for (int img_idx = 0; img_idx < pano->op.size(); ++img_idx)
 	{
 		LOGLN("Compositing image #" << indices[img_idx] + 1);
@@ -2414,7 +2417,8 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
         pano->warper->warp(mask, K, pano->camerasPano[img_idx].R, cv::INTER_NEAREST, cv::BORDER_CONSTANT, mask_warped);
 
 		// Compensate exposure
-		pano->correcteurExpo->apply(img_idx, pano->cornersPano[img_idx], img_warped, mask_warped);
+        if (pano->op[0]->channels()==3)
+            pano->correcteurExpo->apply(img_idx, pano->cornersPano[img_idx], img_warped, mask_warped);
 
 		img_warped.convertTo(img_warped_s, CV_16S);
 		img_warped.release();

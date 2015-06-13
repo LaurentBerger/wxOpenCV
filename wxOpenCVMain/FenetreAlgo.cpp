@@ -733,9 +733,12 @@ for (int ii=indEtape;ii<nbEtape;ii++)
 		
 		if (f->ImAcq()!=r[0])
 			f->AssosierImage(r[0]);
-		if (i<nbEtape-1)
+		if (ii<nbEtape-1)
 			{
-			listeOp[i+1].first->op[0] =r[0];
+            int i = 0;
+            while (i<listeOp.size() && listeOp[i].first->indEtape != ii+1)
+                i++;
+            listeOp[i ].first->op[0] = r[0];
 			}
 
 		f->NouvelleImage();

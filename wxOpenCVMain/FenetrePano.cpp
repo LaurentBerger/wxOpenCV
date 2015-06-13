@@ -90,6 +90,7 @@ partieBasse->Add(caseNomMacro,0, wxALIGN_CENTER_VERTICAL|wxALL);
 panneau->SetSizer(partieBasse);
 SetSizerAndFit( topsizer );
 Bind(wxEVT_SPINCTRL, &FenetrePano::OnSpinEntier, this);
+Bind(wxEVT_TEXT_ENTER, &FenetrePano::OnTextValider, this);
 Show(true);
 }
 
@@ -172,6 +173,9 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
             }
             break;
         case 3:
+            if (pano->cameras.size() == 0)
+                return page;
+
             new wxStaticText(page, -1, _("Camera "), wxPoint(col, ligne));
             sb = new wxSpinCtrl(page, 1000, _("Camera "), wxPoint(100, ligne), wxSize(50, 50));
             sb->SetRange(0, pano->cameras.size()-1);
@@ -181,13 +185,13 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
             new wxStaticText(page, -1, _("ppy "), wxPoint(10, ligne + 40), wxSize(100, 20));
             new wxStaticText(page, -1, _("aspect "), wxPoint(10, ligne + 60), wxSize(100, 20));
             s.Printf("%lf", pano->cameras[0].focal);
-            new wxTextCtrl(page, 1100, s, wxPoint(110, ligne), wxSize(60, 20));
+            new wxTextCtrl(page, 1100, s, wxPoint(110, ligne), wxSize(60, 20), wxTE_PROCESS_ENTER);
             s.Printf("%lf", pano->cameras[0].ppx);
-            new wxTextCtrl(page, 1101, s, wxPoint(110, ligne + 20), wxSize(60, 20));
+            new wxTextCtrl(page, 1101, s, wxPoint(110, ligne + 20), wxSize(60, 20), wxTE_PROCESS_ENTER);
             s.Printf("%lf", pano->cameras[0].ppy);
-            new wxTextCtrl(page, 1102, s, wxPoint(110, ligne + 40), wxSize(60, 20));
+            new wxTextCtrl(page, 1102, s, wxPoint(110, ligne + 40), wxSize(60, 20), wxTE_PROCESS_ENTER);
             s.Printf("%lf", pano->cameras[0].aspect);
-            new wxTextCtrl(page, 1103, s, wxPoint(110, ligne + 60), wxSize(60, 20));
+            new wxTextCtrl(page, 1103, s, wxPoint(110, ligne + 60), wxSize(60, 20), wxTE_PROCESS_ENTER);
             for (int i = 0; i < 3; i++)
             {
                 int nbc = pano->cameras[0].R.channels();
@@ -199,7 +203,7 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
 
                     wxString s;
                     s.Printf("%lf",  pano->cameras[0].R.at<float>(j,i));
-                    wxTextCtrl *ws = new wxTextCtrl(page, 2000+i*3+j, s, wxPoint(col, ligne),wxSize(60,20));
+                    wxTextCtrl *ws = new wxTextCtrl(page, 2000 + i * 3 + j, s, wxPoint(col, ligne), wxSize(60, 20), wxTE_PROCESS_ENTER);
                     col += 70;
                 }
                 ligne += 20;
@@ -210,7 +214,7 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
                 col = 400;
                 wxString s;
                 s.Printf("%lf", pano->cameras[0].t.at<double>(i, 0));
-                wxTextCtrl *ws = new wxTextCtrl(page, 3000 + i, s, wxPoint(col, ligne), wxSize(60,20));
+                wxTextCtrl *ws = new wxTextCtrl(page, 3000 + i, s, wxPoint(col, ligne), wxSize(60, 20),wxTE_PROCESS_ENTER);
                 ligne += 20;
             }
             break;
@@ -308,6 +312,60 @@ if (!osgApp)
 
 void FenetrePano::OnTextValider(wxCommandEvent &w)
 {
+    if (fenMere == NULL || fenMere->ImAcq() == NULL || fenMere->ImAcq()->ParamPano() == NULL)
+        return;
+    Panoramique *pano = fenMere->ImAcq()->ParamPano();
+    wxSpinCtrl* ws = (wxSpinCtrl*)wxWindow::FindWindowById(1000, this);
+    if (ws == NULL)
+        return;
+    int i = ws->GetValue();
+    wxString s;
+    double val;
+    s = w.GetString();
+    s.ToDouble(&val);
+    switch (w.GetId())
+    {
+    case 1100:
+        pano->cameras[i].focal = val;
+        break;
+    case 1101:
+        pano->cameras[i].ppx = val;
+        break;
+    case 1102:
+        pano->cameras[i].ppy = val;
+        break;
+    case 1103:
+        pano->cameras[i].aspect = val;
+        break;
+    case 2000:
+        pano->cameras[i].R.at<float>(0, 0) = (float)val;
+        break;
+    case 2001:
+        pano->cameras[i].R.at<float>(0, 1) = (float)val;
+        break;
+    case 2002:
+        pano->cameras[i].R.at<float>(0, 2) = (float)val;
+        break;
+    case 2003:
+        pano->cameras[i].R.at<float>(1, 0) = (float)val;
+        break;
+    case 2004:
+        pano->cameras[i].R.at<float>(1,1) = (float)val;
+        break;
+    case 2005:
+        pano->cameras[i].R.at<float>(1,2) = (float)val;
+        break;
+    case 2006:
+        pano->cameras[i].R.at<float>(2,0) = (float)val;
+        break;
+    case 2007:
+        pano->cameras[i].R.at<float>(2,1) = (float)val;
+        break;
+    case 2008:
+        pano->cameras[i].R.at<float>(2,2) = (float)val;
+        break;
+
+    }
 }
 void FenetrePano::OnKeyDown(wxKeyEvent &)
 {
