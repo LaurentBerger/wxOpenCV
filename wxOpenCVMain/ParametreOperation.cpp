@@ -1020,7 +1020,6 @@ if (s == "correctionexpo")
 	nomOperation = s;
 	nbOperande = 10;
 	nbImageRes = 0;
-	intParam["warp_type"] = DomaineParametreOp<int>(0, 0, 1, 1);
 	intParam["expos_comp_type"] = DomaineParametreOp<int>(cv::detail::ExposureCompensator::GAIN_BLOCKS, cv::detail::ExposureCompensator::NO, cv::detail::ExposureCompensator::GAIN_BLOCKS, 1);
 	intParam["seam_find_type"] = DomaineParametreOp<int>(2, 0, 5, 1);
 }

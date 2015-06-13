@@ -66,11 +66,8 @@ osgApp=osg;
 classeur = new wxNotebook(this, wxID_ANY);
 classeur->InsertPage(0, CreerOngletEtape(classeur, 0), _("Features"), true);
 classeur->InsertPage(1, CreerOngletEtape(classeur, 1), _("Match"), true);
-classeur->InsertPage(2, CreerOngletEtape(classeur, 0), _("Best Match"), true);
-classeur->InsertPage(3, CreerOngletEtape(classeur, 0), _("Homography"), true);
-classeur->InsertPage(4, CreerOngletEtape(classeur, 0), _("Wrap"), true);
-classeur->InsertPage(5, CreerOngletEtape(classeur, 0), _("Correct Expo"), true);
-classeur->InsertPage(6, CreerOngletEtape(classeur, 0), _("Pano Compo"), true);
+classeur->InsertPage(2, CreerOngletEtape(classeur, 2), _("Best Match"), true);
+classeur->InsertPage(3, CreerOngletEtape(classeur, 3), _("Homography"), true);
 wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
 topsizer->Add( classeur, 1, wxGROW|wxEXPAND,10  );
 wxBoxSizer *partieBasse=new wxBoxSizer(wxHORIZONTAL);
@@ -92,6 +89,7 @@ partieBasse->Add(st, 0, wxALIGN_CENTER_VERTICAL | wxALL);
 partieBasse->Add(caseNomMacro,0, wxALIGN_CENTER_VERTICAL|wxALL);
 panneau->SetSizer(partieBasse);
 SetSizerAndFit( topsizer );
+Bind(wxEVT_SPINCTRL, &FenetrePano::OnSpinEntier, this);
 Show(true);
 }
 
@@ -114,6 +112,8 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
     int col = 10;
     vector<int >colonne;
     wxWindow *page = new wxWindow(classeur,-1);
+    wxSpinCtrl *sb = NULL;
+    wxString s;
     switch(indOp)
     {
         case 0:
@@ -138,17 +138,21 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
                 wxStaticText *ws = new wxStaticText(page, -1, s, wxPoint(colonne[i], ligne));
                 col += ws->GetSize().x + 10;
             }
+            ligne += 20;
             for (int i = 0; i < pano->appariement.size(); i++)
             {
 
                 wxString s;
+                wxStaticText *ws;
+                if (i%pano->op.size() == 0)
+                {
+                    s.Printf("Image %d ", int(i/pano->op.size()));
+                    ws = new wxStaticText(page, -1, s, wxPoint(10, ligne));
+                }
                 int nb = pano->appariement[i].num_inliers;
-                s.Printf("Image %d ", nb);
-                wxStaticText *ws = new wxStaticText(page, -1, s, wxPoint(col, ligne));
-                 nb = pano->appariement[i].num_inliers;
                 s.Printf("%d ",  nb);
 
-                ws = new wxStaticText(page, -1, s, wxPoint(colonne[i], ligne));
+                ws = new wxStaticText(page, -1, s, wxPoint(colonne[i%pano->features.size()], ligne));
                 if ((i + 1) % pano->features.size() == 0)
                 {
                     ligne += 20;
@@ -157,32 +161,57 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
             }
             break;
         case 2:
-            colonne.resize(pano->features.size());
-            col = 100;
-            for (int i = 0; i < pano->features.size(); i++)
-            {
-                colonne[i] = col;
-                wxString s;
-                s.Printf("Image %d ", i);
-                wxStaticText *ws = new wxStaticText(page, -1, s, wxPoint(colonne[i], ligne));
-                col += ws->GetSize().x + 10;
-            }
-            for (int i = 0; i < pano->appariement.size(); i++)
+            for (int i = 0; i < pano->bijection.size(); i++)
             {
 
                 wxString s;
-                int nb = pano->appariement[i].num_inliers;
-                s.Printf("Image %d ", nb);
+                s.Printf("Image %d is in panorama", i, pano->indOpFenetre[i]);
                 wxStaticText *ws = new wxStaticText(page, -1, s, wxPoint(col, ligne));
-                nb = pano->appariement[i].num_inliers;
-                s.Printf("%d ", nb);
-
-                ws = new wxStaticText(page, -1, s, wxPoint(colonne[i], ligne));
-                if ((i + 1) % pano->features.size() == 0)
+                ligne += 20;
+                col = 10;
+            }
+            break;
+        case 3:
+            new wxStaticText(page, -1, _("Camera "), wxPoint(col, ligne));
+            sb = new wxSpinCtrl(page, 1000, _("Camera "), wxPoint(100, ligne), wxSize(50, 50));
+            sb->SetRange(0, pano->cameras.size()-1);
+            ligne = 60;
+            new wxStaticText(page, -1, _("focal "), wxPoint(10, ligne),wxSize(100,20));
+            new wxStaticText(page, -1, _("ppx "), wxPoint(10, ligne + 20), wxSize(100, 20));
+            new wxStaticText(page, -1, _("ppy "), wxPoint(10, ligne + 40), wxSize(100, 20));
+            new wxStaticText(page, -1, _("aspect "), wxPoint(10, ligne + 60), wxSize(100, 20));
+            s.Printf("%lf", pano->cameras[0].focal);
+            new wxTextCtrl(page, 1100, s, wxPoint(110, ligne), wxSize(60, 20));
+            s.Printf("%lf", pano->cameras[0].ppx);
+            new wxTextCtrl(page, 1101, s, wxPoint(110, ligne + 20), wxSize(60, 20));
+            s.Printf("%lf", pano->cameras[0].ppy);
+            new wxTextCtrl(page, 1102, s, wxPoint(110, ligne + 40), wxSize(60, 20));
+            s.Printf("%lf", pano->cameras[0].aspect);
+            new wxTextCtrl(page, 1103, s, wxPoint(110, ligne + 60), wxSize(60, 20));
+            for (int i = 0; i < 3; i++)
+            {
+                int nbc = pano->cameras[0].R.channels();
+                int ty = pano->cameras[0].R.type();
+                int de = pano->cameras[0].R.depth();
+                col = 200;
+                for (int j = 0; j < 3; j++)
                 {
-                    ligne += 20;
-                    col = 10;
+
+                    wxString s;
+                    s.Printf("%lf",  pano->cameras[0].R.at<float>(j,i));
+                    wxTextCtrl *ws = new wxTextCtrl(page, 2000+i*3+j, s, wxPoint(col, ligne),wxSize(60,20));
+                    col += 70;
                 }
+                ligne += 20;
+            }
+            ligne = 60;
+            for (int i = 0; i < 3; i++)
+            {
+                col = 400;
+                wxString s;
+                s.Printf("%lf", pano->cameras[0].t.at<double>(i, 0));
+                wxTextCtrl *ws = new wxTextCtrl(page, 3000 + i, s, wxPoint(col, ligne), wxSize(60,20));
+                ligne += 20;
             }
             break;
 
@@ -216,7 +245,46 @@ void FenetrePano::OnPaint(wxPaintEvent& event)
 
 void FenetrePano::OnSpinEntier(wxSpinEvent &w)
 {
+    if (fenMere == NULL || fenMere->ImAcq() == NULL || fenMere->ImAcq()->ParamPano() == NULL)
+        return ;
+    Panoramique *pano = fenMere->ImAcq()->ParamPano();
+    if (w.GetId() == 1000) // Bouton indice de caméra
+    {
+        wxTextCtrl *ws;
+        wxString s;
+        ws=(wxTextCtrl*)wxWindow::FindWindowById(1100, this); 
+        s.Printf("%lf", pano->cameras[w.GetValue()].focal);
+        ws->SetValue(s);
+        ws = (wxTextCtrl*)wxWindow::FindWindowById(1101, this);
+        s.Printf("%lf", pano->cameras[w.GetValue()].ppx);
+        ws->SetValue(s);
+        ws = (wxTextCtrl*)wxWindow::FindWindowById(1102, this);
+        s.Printf("%lf", pano->cameras[w.GetValue()].ppy);
+        ws->SetValue(s);
+        ws = (wxTextCtrl*)wxWindow::FindWindowById(1103, this);
+        s.Printf("%lf", pano->cameras[w.GetValue()].aspect);
+        ws->SetValue(s);
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
 
+                wxString s;
+                s.Printf("%f", pano->cameras[w.GetValue()].R.at<float>(j, i));
+                ws = (wxTextCtrl*)wxWindow::FindWindowById( 2000 + i * 3 + j,this);
+                ws->SetValue(s);
+                
+            }
+        }
+        for (int i = 0; i < 3; i++)
+        {
+            wxString s;
+            s.Printf("%f", pano->cameras[w.GetValue()].t.at<double>(i, 0));
+            ws = (wxTextCtrl*)wxWindow::FindWindowById(3000 + i, this);
+            ws->SetValue(s);
+        }
+
+    }
 }
 
 void FenetrePano::OnSpinReel(wxSpinDoubleEvent &w)
