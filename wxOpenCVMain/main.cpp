@@ -3103,15 +3103,26 @@ while ( bCont )
 		wxString chemin=configApp->GetPath();
 	// Lecture d'une séquence d'opération
 		configApp->SetPath(chemin+"/"+cleIndEtape);
-		if (opValide && !configApp->Read("op",&valCleChaine))
-			opValide=false;
-		else
-			listeOperation[nbOperation].nomOperation=valCleChaine;
-        listeOperation[nbOperation].indOpFenetre.resize(2);
-        if (opValide && !configApp->Read("op1", &listeOperation[nbOperation].indOpFenetre[0]))
-			opValide=false;
-        if (opValide && !configApp->Read("op2", &listeOperation[nbOperation].indOpFenetre[1]))
-			opValide=false;
+        int val;
+        if (opValide && !configApp->Read("op", &valCleChaine))
+            opValide = false;
+        else
+            listeOperation[nbOperation].nomOperation = valCleChaine;
+        if (opValide && !configApp->Read("nbOperande", &val))
+            opValide = false;
+        else
+            listeOperation[nbOperation].nbOperande = val;
+        listeOperation[nbOperation].indOpFenetre.resize(listeOperation[nbOperation].nbOperande);
+        listeOperation[nbOperation].op.resize(listeOperation[nbOperation].nbOperande);
+
+        for (int i = 0; i < listeOperation[nbOperation].nbOperande; i++)
+        {
+            string s("op");
+            s += to_string(i);
+            if (opValide && !configApp->Read(s, &listeOperation[nbOperation].indOpFenetre[0]))
+			    opValide=false;
+            listeOperation[nbOperation].op[i] = NULL;
+        }
 		if (opValide && !configApp->Read("res",&listeOperation[nbOperation].indRes))
 			opValide=false;
 		if (opValide && !configApp->Read("idOperation",&listeOperation[nbOperation].idOperation))
@@ -3120,9 +3131,11 @@ while ( bCont )
 			opValide=false;
 		if (opValide)
 			{
-            listeOperation[nbOperation].op.resize(2);
-			listeOperation[nbOperation].op[0]=NULL;
-			listeOperation[nbOperation].op[1]=NULL;
+            listeOperation[nbOperation].op.resize(listeOperation[nbOperation].nbOperande);
+            for (int i = 0; i < listeOperation[nbOperation].nbOperande; i++)
+            {
+                listeOperation[nbOperation].op[i] = NULL;
+            }
 			if (listeOperation[nbOperation].idOperation>numOpFaite)
 				numOpFaite =listeOperation[nbOperation].idOperation;
 			wxString cheminParam(chemin+"/"+cleIndEtape+"/paramEntier");
@@ -3364,9 +3377,15 @@ wxString chaine;
 chemin.Printf("/operateur/%d/",origineImage.idOperation);
 SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
 chemin.Printf("/operateur/%d/%d/",origineImage.idOperation,origineImage.indEtape);
+SauverFichierConfig(chemin, "op", origineImage.nomOperation);
+SauverFichierConfig(chemin, "nbOperande",(long) origineImage.nbOperande);
 SauverFichierConfig(chemin,"op",origineImage.nomOperation);
-SauverFichierConfig(chemin, "op1", (long)origineImage.indOpFenetre[0]);
-SauverFichierConfig(chemin, "op2", (long)origineImage.indOpFenetre[1]);
+for (int i = 0; i < origineImage.nbOperande; i++)
+{
+    string s("op");
+    s += to_string(i);
+    SauverFichierConfig(chemin, s, (long)origineImage.indOpFenetre[i]);
+}
 SauverFichierConfig(chemin,"res",(long)origineImage.indRes);
 SauverFichierConfig(chemin,"indEtape",(long)origineImage.indEtape);
 SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);

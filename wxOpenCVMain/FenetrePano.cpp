@@ -213,8 +213,11 @@ wxWindow *FenetrePano::CreerOngletEtape(wxNotebook *classeur, int indOp)
             {
                 col = 400;
                 wxString s;
-                s.Printf("%lf", pano->cameras[0].t.at<double>(i, 0));
-                wxTextCtrl *ws = new wxTextCtrl(page, 3000 + i, s, wxPoint(col, ligne), wxSize(60, 20),wxTE_PROCESS_ENTER);
+                if (pano->cameras[0].t.depth() == CV_32F)
+                    s.Printf("%f", pano->cameras[0].t.at<float>(i, 0));
+                else
+                    s.Printf("%lf", pano->cameras[0].t.at<double>(i, 0));
+                wxTextCtrl *ws = new wxTextCtrl(page, 2100 + i, s, wxPoint(col, ligne), wxSize(60, 20), wxTE_PROCESS_ENTER);
                 ligne += 20;
             }
             break;
@@ -283,8 +286,11 @@ void FenetrePano::OnSpinEntier(wxSpinEvent &w)
         for (int i = 0; i < 3; i++)
         {
             wxString s;
-            s.Printf("%f", pano->cameras[w.GetValue()].t.at<double>(i, 0));
-            ws = (wxTextCtrl*)wxWindow::FindWindowById(3000 + i, this);
+            if (pano->cameras[w.GetValue()].t.depth() == CV_32F)
+                s.Printf("%f", pano->cameras[w.GetValue()].t.at<float>(i, 0));
+            else
+                s.Printf("%lf", pano->cameras[w.GetValue()].t.at<double>(i, 0));
+            ws = (wxTextCtrl*)wxWindow::FindWindowById(2100 + i, this);
             ws->SetValue(s);
         }
 
@@ -362,9 +368,26 @@ void FenetrePano::OnTextValider(wxCommandEvent &w)
         pano->cameras[i].R.at<float>(2,1) = (float)val;
         break;
     case 2008:
-        pano->cameras[i].R.at<float>(2,2) = (float)val;
+        pano->cameras[i].R.at<float>(2, 2) = (float)val;
         break;
-
+    case 2100:
+        if (pano->cameras[i].t.depth()==CV_32F)
+            pano->cameras[i].t.at<float>(0, 0) = (float)val;
+        else
+            pano->cameras[i].t.at<double>(0, 0) = (float)val;
+        break;
+    case 2101:
+        if (pano->cameras[i].t.depth() == CV_32F)
+            pano->cameras[i].t.at<float>(1, 0) = (float)val;
+        else
+            pano->cameras[i].t.at<double>(1, 0) = (float)val;
+        break;
+    case 2102:
+        if (pano->cameras[i].t.depth() == CV_32F)
+            pano->cameras[i].t.at<float>(2, 0) = (float)val;
+        else
+            pano->cameras[i].t.at<double>(2, 0) = (float)val;
+        break;
     }
 }
 void FenetrePano::OnKeyDown(wxKeyEvent &)

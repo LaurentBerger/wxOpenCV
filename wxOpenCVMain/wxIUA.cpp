@@ -288,6 +288,11 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
 
 }
 
+void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
+{
+    wxMessageBox("Bouton");
+}
+
 
 InterfaceAvance::InterfaceAvance(wxWindow* parent,
                  wxWindowID id,
@@ -1028,10 +1033,15 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 	std::map<int,Commande>::iterator it;
 
 	for (it = bouton.begin(); it != bouton.end(); it++)
-	if (it->second.numBarreoutils == indBarre)
-		tb->AddTool(it->second.idEvt, "", it->second.bitmap, it->second.chaineAide);
+        if (it->second.numBarreoutils == indBarre)
+        {
+ 	        tb->AddTool(it->second.idEvt, "", it->second.bitmap, it->second.chaineAide);
+
+        }
+        tb->Bind(wxEVT_CONTEXT_MENU, wxMouseEventHandler(InterfaceAvance::OnMyButtonRightDown));
 	tb->Realize();
-	switch (indBarre)
+
+    switch (indBarre)
 	{
 	case 0: // Opération arithmétique
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().

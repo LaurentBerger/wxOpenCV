@@ -134,7 +134,12 @@ private:
 
     void OnQuit(wxCommandEvent& event);
 // Fonctions liées aux boutons
-	void Ouvrir(wxCommandEvent& event);
+    void OnMyButtonRightDown(wxMouseEvent& event);
+    /*!
+    *  \brief Réglage des paramètres de l'opération par défaut
+    *  \param event : évènement envoyé par le gestionnaire d'évènement de WX
+    */
+    void Ouvrir(wxCommandEvent& event);
     /*!
      *  \brief gestionnaire d'évènement du bouton ouvrir
      *

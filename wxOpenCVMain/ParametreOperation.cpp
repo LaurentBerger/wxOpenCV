@@ -26,8 +26,13 @@ void ParametreOperation::write(cv::FileStorage& fs) const {
     s+= to_string(indEtape);
     fs<<s<<"{:";
     fs<< "op"<< this->nomOperation;
-    fs << "op1" << indOpFenetre[0];
-    fs << "op2" << indOpFenetre[1];
+    fs << "nbOperande" << nbOperande;
+    for (int i = 0; i < nbOperande; i++)
+    {
+        string s("op");
+        s += to_string(i);
+        fs << s << indOpFenetre[i];
+    }
     fs << "res" << indRes;
     fs << "indEtape" << indEtape;
     fs << "idOperation" << idOperation;
@@ -153,8 +158,16 @@ void ParametreOperation::read(const cv::FileNode& node)                         
     {
         cv::FileNode op = node;
         nomOperation=(string)op["op"];
-        indOpFenetre[0] = (int)op["op1"];
-        indOpFenetre[1] = (int)op["op2"];
+        nbOperande= op["nbOperande"];
+        indOpFenetre.resize(nbOperande);
+        this->op.resize(nbOperande);
+        for (int i = 0; i < nbOperande; i++)
+        {
+            string s("op");
+            s += to_string(i);
+            indOpFenetre[i] = op[s];
+            this->op[i] = NULL;
+        }
         indRes = (int)op["res"];
         indEtape = (int)op["indEtape"];
         idOperation = (int)op["idOperation"];
@@ -752,7 +765,8 @@ if (s=="openning")
 if (s=="closing")
 	{
 	nbImageRes=1;
-	nomOperation=s;
+    nbOperande = 1;
+    nomOperation = s;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
@@ -761,7 +775,8 @@ if (s=="closing")
 if (s=="tophat")
 	{
 	nbImageRes=1;
-	nomOperation=s;
+    nbOperande = 1;
+    nomOperation = s;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
@@ -770,7 +785,8 @@ if (s=="tophat")
 if (s=="blackhat")
 	{
 	nbImageRes=1;
-	nomOperation=s;
+    nbOperande = 1;
+    nomOperation = s;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
@@ -779,7 +795,8 @@ if (s=="blackhat")
 if (s=="morph_gradient")
 	{
 	nbImageRes=1;
-	nomOperation=s;
+    nbOperande = 1;
+    nomOperation = s;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
@@ -788,7 +805,8 @@ if (s=="morph_gradient")
 if (s=="scharr_mod")
 	{
 	nbImageRes=1;
-	nomOperation=s;
+    nbOperande = 1;
+    nomOperation = s;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
@@ -797,7 +815,8 @@ if (s=="scharr_mod")
 if (s=="scharr_x")
 	{
 	nbImageRes=1;
-	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
+    nbOperande = 1;
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
@@ -806,7 +825,8 @@ if (s=="scharr_x")
 if (s=="scharr_y")
 	{
 	nbImageRes=1;
-	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
+    nbOperande = 1;
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
@@ -815,7 +835,8 @@ if (s=="scharr_y")
 if (s=="laplacian")
 	{
 	nbImageRes=1;
-	intParam["ddepth"]=DomaineParametreOp<int>(50.,0.0,255.0,1.0);
+    nbOperande = 1;
+    intParam["ddepth"] = DomaineParametreOp<int>(50., 0.0, 255.0, 1.0);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.0,255.0,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,255.0,1.0);
 	intParam["ksize"]=DomaineParametreOp<int>(3,1,7,2);
@@ -825,7 +846,8 @@ if (s=="laplacian")
 if (s=="canny")
 	{
 	nbImageRes=1;
-	doubleParam["threshold1"]=DomaineParametreOp<double>(50.,0.0,255.0,1.0);
+    nbOperande = 1;
+    doubleParam["threshold1"] = DomaineParametreOp<double>(50., 0.0, 255.0, 1.0);
 	doubleParam["threshold2"]=DomaineParametreOp<double>(100,0.0,255.0,1.0);
 	intParam["aperture_size"]=DomaineParametreOp<int>((int)3,(int)1,(int)255,(int)2);
 	intParam["kernel_size"]=DomaineParametreOp<int>(3,1,255,2);
@@ -834,7 +856,8 @@ if (s=="canny")
 if (s=="contour")
 	{
 	nbImageRes=1;
-	intParam["mode"]=DomaineParametreOp<int>(cv::RETR_EXTERNAL,cv::RETR_EXTERNAL,cv::RETR_TREE,1);
+    nbOperande = 1;
+    intParam["mode"] = DomaineParametreOp<int>(cv::RETR_EXTERNAL, cv::RETR_EXTERNAL, cv::RETR_TREE, 1);
 	intParam["method"]=DomaineParametreOp<int>(cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_TC89_L1 ,1);
 	nomOperation=s;
 	}
@@ -842,22 +865,26 @@ if (s=="contour")
 if (s=="cvtcolor")
 	{
 	nbImageRes=1;
-	intParam["ColorSpaceCode"]=DomaineParametreOp<int>(cv::COLOR_BGR2GRAY,cv::COLOR_BGR2GRAY,cv::COLOR_RGB2GRAY,1);
+    nbOperande = 1;
+    intParam["ColorSpaceCode"] = DomaineParametreOp<int>(cv::COLOR_BGR2GRAY, cv::COLOR_BGR2GRAY, cv::COLOR_RGB2GRAY, 1);
 	nomOperation=s;
 	}
 if (s=="FFT")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	nomOperation=s;
 	}
 if (s=="IFFT")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	nomOperation=s;
 	}
 if (s=="threshold")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	doubleParam["thresh"]=DomaineParametreOp<double>(50.,0.0,255.0,1.0);
 	doubleParam["maxval"]=DomaineParametreOp<double>(255.,0.0,255.0,1.0);
 	intParam["threshold_type"]=DomaineParametreOp<int>(cv::THRESH_BINARY,cv::THRESH_BINARY,cv::THRESH_TOZERO_INV,1);
@@ -865,7 +892,8 @@ if (s=="threshold")
 	}
 if (s=="adaptivethreshold")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	doubleParam["maxValue"]=DomaineParametreOp<double>(255.,0.0,255.0,1.0);
 	intParam["thresholdType"]=DomaineParametreOp<int>(cv::THRESH_BINARY,cv::THRESH_BINARY,cv::THRESH_TOZERO_INV,1);
 	intParam["adaptiveMethod"]=DomaineParametreOp<int>(cv::ADAPTIVE_THRESH_GAUSSIAN_C,cv::ADAPTIVE_THRESH_GAUSSIAN_C,cv::ADAPTIVE_THRESH_MEAN_C,1);
@@ -875,13 +903,15 @@ if (s=="adaptivethreshold")
 	}
 if (s=="medianblur")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	intParam["ksize"]=DomaineParametreOp<int>(3,1,255,2);
 	nomOperation=s;
 	}
 if (s=="blur")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	sizeParam["ksize"]=DomaineParametreOp<cv::Size>(cv::Size(3,3),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
@@ -889,7 +919,8 @@ if (s=="blur")
 	}
 if (s=="gaussianblur")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	sizeParam["ksize"]=DomaineParametreOp<cv::Size>(cv::Size(3,3),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
 	doubleParam["sigmaX"]=DomaineParametreOp<double>(0.1,0,255.0,0.1);
 	doubleParam["sigmaY"]=DomaineParametreOp<double>(0.1,0,255.0,0.1);
@@ -898,29 +929,34 @@ if (s=="gaussianblur")
 	}
 if (s=="connectedcomponents")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	intParam["connectivity"]=DomaineParametreOp<int>(4,4,8,4);
 	intParam["ltype"]=DomaineParametreOp<int>(CV_32S,CV_32S,CV_32S,0);
 	nomOperation=s;
 	}
 if (s=="distancetransform")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	nomOperation=s;
 	}
 if (s=="medianaxis")
 	{
 	nbImageRes=1;
-	nomOperation=s;
+    nbOperande = 1;
+    nomOperation = s;
 	}
 if (s=="buildopticalflowpyramid")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	nomOperation=s;
 	}
 if (s == "calcopticalflowpyrlk")
 {
-	nbImageRes = 0;
+    nbOperande = 2;
+    nbImageRes = 0;
 	nomOperation = s;
 	opVideo = true;
 	intParam["typeCriteria"] = DomaineParametreOp<int>(cv::TermCriteria::COUNT, cv::TermCriteria::COUNT, cv::TermCriteria::COUNT | cv::TermCriteria::EPS, 1);
@@ -934,7 +970,8 @@ if (s == "calcopticalflowpyrlk")
 }
 if (s == "phasecorrelate")
 {
-	nbImageRes = 0;
+    nbOperande = 2;
+    nbImageRes = 0;
 	nomOperation = s;
 	opVideo = true;
 }
@@ -950,11 +987,13 @@ if (s=="calcopticalflowfarneback")
 	intParam["poly_n"]=DomaineParametreOp<int>(5,1,20,1);
 	doubleParam["poly_sigma"]=DomaineParametreOp<double>(1.2,0.0000001,100.0,0.001);
 	intParam["flag"]=DomaineParametreOp<int>(0,0,cv::OPTFLOW_LK_GET_MIN_EIGENVALS,4);
+    nbOperande = 2;
 
 	}
 if (s=="estimaterigidtransform")
 	{
-	nbImageRes=1;
+    nbOperande = 1;
+    nbImageRes = 1;
 	nomOperation=s;
 	}
 if (s=="updatemotionhistory")
@@ -985,20 +1024,20 @@ if (s=="detailmatchesinfo")
     intParam["num_matches_thresh1"] = DomaineParametreOp<int>(6,1,1000,1);
     intParam["num_matches_thresh2"] = DomaineParametreOp<int>(6,1,1000,1);
 	nomOperation=s;
-	nbOperande= 10;
+	nbOperande= 1;
 	nbImageRes=0;
 	}
 if (s=="leavebiggestcomponent")
 	{
 	nomOperation=s;
-	nbOperande= 10;
+	nbOperande= 1;
 	nbImageRes=0;
     doubleParam["conf_thresh"]=DomaineParametreOp<double>(0.6,0.,1000,0.1);
 	}
 if (s == "homographybasedestimator")
 {
 	nomOperation = s;
-	nbOperande = 10;
+	nbOperande = 1;
 	nbImageRes = 0;
 	intParam["is_focals_estimated"] = DomaineParametreOp<int>(0, 0, 1, 1);
 	intParam["do_wave_correct"] = DomaineParametreOp<int>(0, 0, 1, 1);
@@ -1011,14 +1050,14 @@ if (s == "homographybasedestimator")
 if (s == "wraperwrap")
 {
 	nomOperation = s;
-	nbOperande = 10;
+	nbOperande = 1;
 	nbImageRes = 0;
 	intParam["warp_type"] = DomaineParametreOp<int>(0, 0, 1, 1);
 }
 if (s == "correctionexpo")
 {
 	nomOperation = s;
-	nbOperande = 10;
+	nbOperande = 1;
 	nbImageRes = 0;
 	intParam["expos_comp_type"] = DomaineParametreOp<int>(cv::detail::ExposureCompensator::GAIN_BLOCKS, cv::detail::ExposureCompensator::NO, cv::detail::ExposureCompensator::GAIN_BLOCKS, 1);
 	intParam["seam_find_type"] = DomaineParametreOp<int>(2, 0, 5, 1);
@@ -1026,7 +1065,7 @@ if (s == "correctionexpo")
 if (s == "panocomposition")
 {
 	nomOperation = s;
-	nbOperande = 10;
+	nbOperande = 1;
 	nbImageRes = 0;
 	intParam["blend_type"] = DomaineParametreOp<int>(cv::detail::Blender::MULTI_BAND, cv::detail::Blender::NO, cv::detail::Blender::MULTI_BAND, 1);
 	doubleParam["blend_strength"] = DomaineParametreOp<double>(5, 0., 1000, 0.1);
