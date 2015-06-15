@@ -7,6 +7,7 @@
 using namespace std;
 
 map<string,map<string,int> > ParametreOperation::listeParam;
+map<std::string, ParametreOperation> ImageInfoCV::listeOperation;
 
 #ifndef __WIN32__ // en rélaité C++11
 std::string to_string(double x)
@@ -308,6 +309,7 @@ listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_VERT").
 
 bool ParametreOperation::InitOperation(string s)
 {
+    bool initEnCours = false;
 if (listeParam.size()==0)
 	InitParamType();
 ImageInfoCV xx;
@@ -323,6 +325,11 @@ refPDF="";
 lienHtml="";
 opVideo=false;
 opErreur=0;
+if (xx.listeOperation.size() != 0 && xx.listeOperation.find(s) != xx.listeOperation.end())
+{
+    *this = xx.listeOperation[s];
+    return true;
+}
 //intParam["Save result"] = DomaineParametreOp<int>(0, 0, 0, 1);
 //intParam["Send packet"] = DomaineParametreOp<int>(0, 0, 0, 1);
 if (s == "fond_gaussianmixture")
@@ -337,7 +344,7 @@ if (s == "fond_gaussianmixture")
 	doubleParam["NoiseSigma"] = DomaineParametreOp<double>(30 * .5, 0, 100, 0.01);
 	doubleParam["learningRate"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
 	intParam["ResultImage"] = DomaineParametreOp<int>(0, 0, 2, 1);
-
+    xx.listeOperation.insert(make_pair(s, *this));
 	}
 
 if (s == "fond_gaussianmixture2")
@@ -360,7 +367,8 @@ if (s == "fond_gaussianmixture2")
 	intParam["ShadowValue"] = DomaineParametreOp<int>(127, 0, 255, 1);
 	doubleParam["learningRate"] = DomaineParametreOp<double>(-1, -1, 100, 0.01);
 	intParam["ResultImage"] = DomaineParametreOp<int>(0, 0, 2, 1);
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 
 if (s == "fond_knn")
 	{
@@ -377,7 +385,8 @@ if (s == "fond_knn")
 	intParam["DetectShadows"] = DomaineParametreOp<int>(0, 0, 1, 1);
 	doubleParam["learningRate"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
 	intParam["ResultImage"] = DomaineParametreOp<int>(0, 0, 2, 1);
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 
 if (s == "fond_gmg")
 	{
@@ -396,7 +405,8 @@ if (s == "fond_gmg")
 	doubleParam["MaxVal"] = DomaineParametreOp<double>(0, 0, 100, 0.01);
 	doubleParam["learningRate"] = DomaineParametreOp<double>(0.025, -1, 100, 0.01);
 	intParam["ResultImage"] = DomaineParametreOp<int>(0, 0, 2, 1);
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 
 
 if (s == "logPolar")
@@ -407,7 +417,8 @@ if (s == "logPolar")
 	pointParam["center"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
 	doubleParam["M"] = DomaineParametreOp<double>(1, 0, 10000, 1);
 	intParam["interpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, CV_INTER_LANCZOS4, 1);
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "undistort")
 	{
 	doubleParam["fx"] = DomaineParametreOp<double>(1000, 00, 10000, 1);
@@ -426,7 +437,8 @@ if (s == "undistort")
 	nbImageRes = 1;
 	nbOperande = 1;
 	operateur = &ImageInfoCV::CorrigeAberation;
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "wrapAffine") // inclus la différence de deux images successives
 	{
 	nomOperation = s;
@@ -445,7 +457,8 @@ if (s == "wrapAffine") // inclus la différence de deux images successives
 	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_LINEAR, CV_INTER_LANCZOS4, 1);
 	intParam["borderMode"] = DomaineParametreOp<int>(IPL_BORDER_CONSTANT, IPL_BORDER_CONSTANT, IPL_BORDER_WRAP, 1);
 	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "resize") // inclus la différence de deux images successives
 	{
 	nomOperation = s;
@@ -455,13 +468,15 @@ if (s == "resize") // inclus la différence de deux images successives
 	doubleParam["fy"] = DomaineParametreOp<double>(0, 0.0000, 10000,1);
 	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
 	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_NN, CV_INTER_LANCZOS4, 1);
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "wrapPerspective") // inclus la différence de deux images successives
 	{
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 
 if (s == "updatemotionhistory") // inclus la différence de deux images successives
 {
@@ -474,6 +489,7 @@ if (s == "updatemotionhistory") // inclus la différence de deux images successiv
 	doubleParam["thresh"] = DomaineParametreOp<double>(50., 0.0, 255.0, 1.0);
 	doubleParam["maxval"] = DomaineParametreOp<double>(255., 0.0, 255.0, 1.0);
 	intParam["threshold_type"] = DomaineParametreOp<int>(cv::THRESH_BINARY, cv::THRESH_BINARY, cv::THRESH_TOZERO_INV, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "calcmotiongradient") // inclus la différence de deux images successives
 {
@@ -484,7 +500,8 @@ if (s == "calcmotiongradient") // inclus la différence de deux images successive
 	doubleParam["delta1"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
 	doubleParam["delta2"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
 	intParam["aperture_size"] = DomaineParametreOp<int>((int)3, (int)3, (int)7, (int)2);
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "segmentmotion") // inclus la différence de deux images successives
 	{
 	opAttribut = true;
@@ -494,7 +511,8 @@ if (s == "segmentmotion") // inclus la différence de deux images successives
 	doubleParam["timestamp"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
 	doubleParam["segthresh"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
 	intParam["calcGlobalOrientation"] = DomaineParametreOp<int>(0, 0, 1, 1);
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "cornerharris")
 	{
 	nomOperation = s;
@@ -504,7 +522,8 @@ if (s == "cornerharris")
 	intParam["ksize"] = DomaineParametreOp<int>(1, 1, 7, 2);
 	intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
 	doubleParam["k"] = DomaineParametreOp<double>(0.04, 0.01, 10, 0.01);
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "matchdescriptormatcher")
 	{
 	opAttribut = true;
@@ -514,7 +533,8 @@ if (s == "matchdescriptormatcher")
 	nbOperande = 2;
 	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#match";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "mserfeatures2d")
     {
     nomOperation = s;
@@ -531,7 +551,8 @@ if (s == "mserfeatures2d")
     doubleParam["minMargin"] = DomaineParametreOp<double>(0.003, 0, 100, .1);
     intParam["pass2Only"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["edgeBlurSize"] = DomaineParametreOp<int>(5, 1, 13, 2);
-    }
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "blobfeatures2d")
     {
     nomOperation = s;
@@ -557,7 +578,8 @@ if (s == "blobfeatures2d")
     intParam["filterByConvexity"] = DomaineParametreOp<int>(0, 0, 1, 1);
     doubleParam["minConvexity"] = DomaineParametreOp<double>(0.95, 0, 10000, 0.1);
     doubleParam["maxConvexity"] = DomaineParametreOp<double>(10000,0,10000,0.1);
-    }
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "orbfeatures2d")
     {
     nomOperation = s;
@@ -573,7 +595,8 @@ if (s == "orbfeatures2d")
     doubleParam["ScaleFactor"] = DomaineParametreOp<double>(1.2, 1, 10, 0.1);
     intParam["ScoreType"] = DomaineParametreOp<int>(cv::ORB::HARRIS_SCORE, cv::ORB::HARRIS_SCORE, cv::ORB::FAST_SCORE, 1);
     intParam["WTA_K"] = DomaineParametreOp<int>(2, 2, 4, 1);
-    }
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "akazefeatures2d")
     {
     nomOperation = s;
@@ -587,7 +610,8 @@ if (s == "akazefeatures2d")
     intParam["NOctaveLayers"] = DomaineParametreOp<int>(4, 1, 128, 1);
     intParam["NOctaves"] = DomaineParametreOp<int>(4, 1, 200, 2);
     doubleParam["Threshold"] = DomaineParametreOp<double>(0.001, 0.0001, 10, 0.001);
-    }
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "briskfeatures2d")
     {
     nomOperation = s;
@@ -597,7 +621,8 @@ if (s == "briskfeatures2d")
     intParam["thresh"] = DomaineParametreOp<int>(30, 1, 255, 1);
     intParam["octaves"] = DomaineParametreOp<int>(3, 1, 255, 1);
     doubleParam["patternScale"] = DomaineParametreOp<double>(1.0, 0.1, 100, 0.1);;
-    }
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "goodfeaturestotrack")
 	{
 	nbImageRes=0;
@@ -609,8 +634,9 @@ if (s == "goodfeaturestotrack")
 	intParam["blockSize"]=DomaineParametreOp<int>(2,2,9,1);
 	intParam["useHarrisDetector"]=DomaineParametreOp<int>(1,0,1,1);
 	doubleParam["k"]=DomaineParametreOp<double>(0.04,0.01,1,0.01);
-	}
-if(	s=="houghcircles")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "houghcircles")
 	{
 	nbImageRes=0;
 	nomOperation=s;
@@ -622,8 +648,9 @@ if(	s=="houghcircles")
 	doubleParam["param2"]=DomaineParametreOp<double>(30,3,200,0.1);
 	intParam["min_radius"]=DomaineParametreOp<int>(100,0,1000,1);
 	intParam["max_radius"]=DomaineParametreOp<int>(130,0,1000,1);
-	}
-if(	s=="houghlines")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "houghlines")
 	{
 	nomOperation=s;
 	nbOperande= 1;
@@ -634,8 +661,9 @@ if(	s=="houghlines")
 	intParam["threshold"]=DomaineParametreOp<int>(50,3,1000,1);
 	doubleParam["srn"]=DomaineParametreOp<double>(0.0,0.00,1,0.1);
 	doubleParam["stn"]=DomaineParametreOp<double>(0.0,0,1000,0.1);
-	}
-if(	s=="houghlinesp")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "houghlinesp")
 	{
 	nbImageRes=0;
 	nomOperation=s;
@@ -645,48 +673,56 @@ if(	s=="houghlinesp")
 	intParam["threshold"]=DomaineParametreOp<int>(50,3,1000,1);
 	doubleParam["minLineLength"]=DomaineParametreOp<double>(10,1,1000,0.1);
 	doubleParam["maxLineGap"]=DomaineParametreOp<double>(0.0,1,1000,1);
-	}
-if (s=="watershed")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "watershed")
 	{
 	nomOperation=s;
 	nbOperande= 1;
 	nbImageRes=1;
-	}
-if (s=="split")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "split")
 	{
 	nomOperation=s;
 	nbOperande= 1;
 	nbImageRes=1;
-	}
-if (s=="merge")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "merge")
 	{
 	nomOperation = s;
 	nbOperande= 3;
 	nbImageRes=1;
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "bitwise-and")
 {
 	nomOperation = s;
 	nbOperande = 2;
 	nbImageRes = 1;
+    xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "bitwise-or")
 {
 	nomOperation = s;
 	nbOperande = 2;
 	nbImageRes = 1;
+    xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "bitwise-xor")
 {
 	nomOperation = s;
 	nbOperande = 2;
 	nbImageRes = 1;
+    xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "bitwise-not")
 {
 	nomOperation = s;
 	nbOperande = 1;
 	nbImageRes = 1;
+    xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "add")
 {
@@ -694,6 +730,7 @@ if (s == "add")
 	nbOperande = 2;
 	intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
 	nbImageRes = 1;
+    xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "AdditionPonderee")
 	{
@@ -704,55 +741,51 @@ if (s == "AdditionPonderee")
 	doubleParam["alpha"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	doubleParam["beta"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	doubleParam["gamma"]=DomaineParametreOp<double>(1,0.1,10,0.1);
-	}
-if (s=="subtract")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "subtract")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	nbOperande= 2;
-	}
-if (s=="multiply")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "multiply")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	nbOperande= 2;
-	}
-if (s=="divide")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "divide")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
-	}
-if (s=="filter2d")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "filter2d")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["indOpConvolution"]=DomaineParametreOp<int>(xx.IndOpConvolution(),0,NB_OP_CONVOLUTION,1);
-	}
-if (s=="dilate")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "dilate")
 	{
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
-	}
-if (s=="erode")
-	{
-	nbImageRes=1;
-	nomOperation=s;
-	nbOperande= 2;
-	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
-	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
-	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	}
-if (s=="openning")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "erode")
 	{
 	nbImageRes=1;
 	nomOperation=s;
@@ -761,8 +794,20 @@ if (s=="openning")
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	}
-if (s=="closing")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "openning")
+	{
+	nbImageRes=1;
+	nomOperation=s;
+	nbOperande= 2;
+	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
+	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "closing")
 	{
 	nbImageRes=1;
     nbOperande = 1;
@@ -771,8 +816,9 @@ if (s=="closing")
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	}
-if (s=="tophat")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "tophat")
 	{
 	nbImageRes=1;
     nbOperande = 1;
@@ -781,8 +827,9 @@ if (s=="tophat")
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	}
-if (s=="blackhat")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "blackhat")
 	{
 	nbImageRes=1;
     nbOperande = 1;
@@ -791,8 +838,9 @@ if (s=="blackhat")
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	}
-if (s=="morph_gradient")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "morph_gradient")
 	{
 	nbImageRes=1;
     nbOperande = 1;
@@ -801,8 +849,9 @@ if (s=="morph_gradient")
 	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
-	}
-if (s=="scharr_mod")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "scharr_mod")
 	{
 	nbImageRes=1;
     nbOperande = 1;
@@ -811,8 +860,9 @@ if (s=="scharr_mod")
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	}
-if (s=="scharr_x")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "scharr_x")
 	{
 	nbImageRes=1;
     nbOperande = 1;
@@ -821,8 +871,9 @@ if (s=="scharr_x")
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	nomOperation=s;
-	}
-if (s=="scharr_y")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "scharr_y")
 	{
 	nbImageRes=1;
     nbOperande = 1;
@@ -831,8 +882,9 @@ if (s=="scharr_y")
 	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	nomOperation=s;
-	}
-if (s=="laplacian")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "laplacian")
 	{
 	nbImageRes=1;
     nbOperande = 1;
@@ -842,8 +894,9 @@ if (s=="laplacian")
 	intParam["ksize"]=DomaineParametreOp<int>(3,1,7,2);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	nomOperation=s;
-	}
-if (s=="canny")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "canny")
 	{
 	nbImageRes=1;
     nbOperande = 1;
@@ -852,36 +905,41 @@ if (s=="canny")
 	intParam["aperture_size"]=DomaineParametreOp<int>((int)3,(int)1,(int)255,(int)2);
 	intParam["kernel_size"]=DomaineParametreOp<int>(3,1,255,2);
 	nomOperation=s;
-	}
-if (s=="contour")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "contour")
 	{
 	nbImageRes=1;
     nbOperande = 1;
     intParam["mode"] = DomaineParametreOp<int>(cv::RETR_EXTERNAL, cv::RETR_EXTERNAL, cv::RETR_TREE, 1);
 	intParam["method"]=DomaineParametreOp<int>(cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_TC89_L1 ,1);
 	nomOperation=s;
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 
-if (s=="cvtcolor")
+if (s == "cvtcolor")
 	{
 	nbImageRes=1;
     nbOperande = 1;
     intParam["ColorSpaceCode"] = DomaineParametreOp<int>(cv::COLOR_BGR2GRAY, cv::COLOR_BGR2GRAY, cv::COLOR_RGB2GRAY, 1);
 	nomOperation=s;
-	}
-if (s=="FFT")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "FFT")
 	{
     nbOperande = 1;
     nbImageRes = 1;
 	nomOperation=s;
-	}
-if (s=="IFFT")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "IFFT")
 	{
     nbOperande = 1;
     nbImageRes = 1;
 	nomOperation=s;
-	}
-if (s=="threshold")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "threshold")
 	{
     nbOperande = 1;
     nbImageRes = 1;
@@ -889,8 +947,9 @@ if (s=="threshold")
 	doubleParam["maxval"]=DomaineParametreOp<double>(255.,0.0,255.0,1.0);
 	intParam["threshold_type"]=DomaineParametreOp<int>(cv::THRESH_BINARY,cv::THRESH_BINARY,cv::THRESH_TOZERO_INV,1);
 	nomOperation=s;
-	}
-if (s=="adaptivethreshold")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "adaptivethreshold")
 	{
     nbOperande = 1;
     nbImageRes = 1;
@@ -900,15 +959,17 @@ if (s=="adaptivethreshold")
 	intParam["blockSize"]=DomaineParametreOp<int>(21,3,1000,2);
 	doubleParam["C"]=DomaineParametreOp<double>(-0,-255,255,1);
 	nomOperation=s;
-	}
-if (s=="medianblur")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "medianblur")
 	{
     nbOperande = 1;
     nbImageRes = 1;
 	intParam["ksize"]=DomaineParametreOp<int>(3,1,255,2);
 	nomOperation=s;
-	}
-if (s=="blur")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "blur")
 	{
     nbOperande = 1;
     nbImageRes = 1;
@@ -916,8 +977,9 @@ if (s=="blur")
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	nomOperation=s;
-	}
-if (s=="gaussianblur")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "gaussianblur")
 	{
     nbOperande = 1;
     nbImageRes = 1;
@@ -926,33 +988,38 @@ if (s=="gaussianblur")
 	doubleParam["sigmaY"]=DomaineParametreOp<double>(0.1,0,255.0,0.1);
 	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
 	nomOperation=s;
-	}
-if (s=="connectedcomponents")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "connectedcomponents")
 	{
     nbOperande = 1;
     nbImageRes = 1;
 	intParam["connectivity"]=DomaineParametreOp<int>(4,4,8,4);
 	intParam["ltype"]=DomaineParametreOp<int>(CV_32S,CV_32S,CV_32S,0);
 	nomOperation=s;
-	}
-if (s=="distancetransform")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "distancetransform")
 	{
     nbOperande = 1;
     nbImageRes = 1;
 	nomOperation=s;
-	}
-if (s=="medianaxis")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "medianaxis")
 	{
 	nbImageRes=1;
     nbOperande = 1;
     nomOperation = s;
-	}
-if (s=="buildopticalflowpyramid")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "buildopticalflowpyramid")
 	{
     nbOperande = 1;
     nbImageRes = 1;
 	nomOperation=s;
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "calcopticalflowpyrlk")
 {
     nbOperande = 2;
@@ -966,6 +1033,7 @@ if (s == "calcopticalflowpyrlk")
 	sizeParam["winSize"] = DomaineParametreOp<cv::Size>(cv::Size(21, 21), cv::Size(3, 3), cv::Size(255, 255), cv::Size(2, 2));
 	intParam["flag"] = DomaineParametreOp<int>(0, cv::OPTFLOW_USE_INITIAL_FLOW, cv::OPTFLOW_LK_GET_MIN_EIGENVALS, 1);
 	doubleParam["minEigThreshold"] = DomaineParametreOp<double>(0.001, 0.0000001, 100.0, 0.001);
+    xx.listeOperation.insert(make_pair(s, *this));
 
 }
 if (s == "phasecorrelate")
@@ -974,8 +1042,9 @@ if (s == "phasecorrelate")
     nbImageRes = 0;
 	nomOperation = s;
 	opVideo = true;
+    xx.listeOperation.insert(make_pair(s, *this));
 }
-if (s=="calcopticalflowfarneback")
+if (s == "calcopticalflowfarneback")
 	{
 	nbImageRes=0;
 	opVideo=true;
@@ -988,20 +1057,22 @@ if (s=="calcopticalflowfarneback")
 	doubleParam["poly_sigma"]=DomaineParametreOp<double>(1.2,0.0000001,100.0,0.001);
 	intParam["flag"]=DomaineParametreOp<int>(0,0,cv::OPTFLOW_LK_GET_MIN_EIGENVALS,4);
     nbOperande = 2;
-
-	}
-if (s=="estimaterigidtransform")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "estimaterigidtransform")
 	{
     nbOperande = 1;
     nbImageRes = 1;
 	nomOperation=s;
-	}
-if (s=="updatemotionhistory")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "updatemotionhistory")
 	{
 	nbImageRes=1;
 	nomOperation=s;
-	}
-if (s=="detailfeaturesfinder")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "detailfeaturesfinder")
 	{
 	nomOperation=s;
 	nbOperande= 15;
@@ -1016,8 +1087,9 @@ if (s=="detailfeaturesfinder")
 	intParam["orb_nfeatures"]=DomaineParametreOp<int>(1500,1,500000,1);
 	intParam["orb_nlevels"]=DomaineParametreOp<int>(5,1,8,10);
     sizeParam["orb_grid_size"]=DomaineParametreOp<cv::Size>(cv::Size(3,1),cv::Size(1,1),cv::Size(255,255),cv::Size(2,2));
-	}
-if (s=="detailmatchesinfo")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "detailmatchesinfo")
 	{
     intParam["try_use_gpu"]=DomaineParametreOp<int>(0,0,1,1);
     doubleParam["match_conf"]=DomaineParametreOp<double>(0.3,0.01,1000,0.1);
@@ -1026,14 +1098,16 @@ if (s=="detailmatchesinfo")
 	nomOperation=s;
 	nbOperande= 1;
 	nbImageRes=0;
-	}
-if (s=="leavebiggestcomponent")
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "leavebiggestcomponent")
 	{
 	nomOperation=s;
 	nbOperande= 1;
 	nbImageRes=0;
     doubleParam["conf_thresh"]=DomaineParametreOp<double>(0.6,0.,1000,0.1);
-	}
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "homographybasedestimator")
 {
 	nomOperation = s;
@@ -1046,6 +1120,7 @@ if (s == "homographybasedestimator")
 	intParam["ba_refine_mask_3"] = DomaineParametreOp<int>(1, 0, 1, 1);
 	intParam["ba_refine_mask_4"] = DomaineParametreOp<int>(1, 0, 1, 1);
 	doubleParam["conf_thresh"] = DomaineParametreOp<double>(0.6, 0., 1000, 0.1);
+    xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "wraperwrap")
 {
@@ -1053,6 +1128,7 @@ if (s == "wraperwrap")
 	nbOperande = 1;
 	nbImageRes = 0;
 	intParam["warp_type"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "correctionexpo")
 {
@@ -1061,6 +1137,7 @@ if (s == "correctionexpo")
 	nbImageRes = 0;
 	intParam["expos_comp_type"] = DomaineParametreOp<int>(cv::detail::ExposureCompensator::GAIN_BLOCKS, cv::detail::ExposureCompensator::NO, cv::detail::ExposureCompensator::GAIN_BLOCKS, 1);
 	intParam["seam_find_type"] = DomaineParametreOp<int>(2, 0, 5, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "panocomposition")
 {
@@ -1069,6 +1146,7 @@ if (s == "panocomposition")
 	nbImageRes = 0;
 	intParam["blend_type"] = DomaineParametreOp<int>(cv::detail::Blender::MULTI_BAND, cv::detail::Blender::NO, cv::detail::Blender::MULTI_BAND, 1);
 	doubleParam["blend_strength"] = DomaineParametreOp<double>(5, 0., 1000, 0.1);
+    xx.listeOperation.insert(make_pair(s, *this));
 }
 if (nomOperation == "")
 	return false;

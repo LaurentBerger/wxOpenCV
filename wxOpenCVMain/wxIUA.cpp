@@ -20,7 +20,7 @@
 
 #include "InterfaceAvance.h"
 #include "courbeplplot.h"
-
+#include "FenetreAlgo.h"
 
 
 #ifdef __WINDOWS__
@@ -290,7 +290,13 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
 
 void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
 {
-    wxMessageBox("Bouton");
+    std::string s;
+    ImageInfoCV xx;
+
+    s = bouton[event.GetId()].chaineOperation.c_str();
+    ParametreOperation p(s);
+    FenetreAlgo *f = new FenetreAlgo(NULL, _("Operation"), wxDefaultPosition, wxDefaultSize, xx.listeOperation[s], wxDEFAULT_FRAME_STYLE);
+    f->Show(true);
 }
 
 
@@ -1038,7 +1044,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
  	        tb->AddTool(it->second.idEvt, "", it->second.bitmap, it->second.chaineAide);
 
         }
-        tb->Bind(wxEVT_CONTEXT_MENU, wxMouseEventHandler(InterfaceAvance::OnMyButtonRightDown));
+        tb->Bind(wxEVT_AUITOOLBAR_RIGHT_CLICK, wxMouseEventHandler(InterfaceAvance::OnMyButtonRightDown),this);
 	tb->Realize();
 
     switch (indBarre)

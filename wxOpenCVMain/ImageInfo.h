@@ -47,6 +47,8 @@ static ImageInfoCV **op77;
 static ImageInfoCV **opnn;
 static ImageInfoCV **opMorph;
 
+static std::map<std::string, ParametreOperation> listeOperation;
+
 protected :
 //
 

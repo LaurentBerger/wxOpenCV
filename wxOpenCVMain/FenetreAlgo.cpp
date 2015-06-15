@@ -5,6 +5,8 @@
 
 using namespace std;
 
+
+
 void FenetrePrincipale::ParamAlgo(wxCommandEvent& event)
 {
 
@@ -31,31 +33,9 @@ FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const 
      : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX  | wxCAPTION )
 {
 
-/*
-    wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
-
-    wxNotebook *notebook = new wxNotebook( this, wxID_ANY );
-    topsizer->Add( notebook, 1, wxGROW );
-
-    wxButton *button = new wxButton( this, wxID_OK, wxT("OK") );
-    topsizer->Add( button, 0, wxALIGN_RIGHT | wxALL, 10 );
-
-    // First page: one big text ctrl
-    wxTextCtrl *multi = new wxTextCtrl( notebook, wxID_ANY, wxT("TextCtrl."), wxDefaultPosition, wxDefaultSize, wxTE_MULTILINE );
-    notebook->AddPage( multi, wxT("Page One") );
-
-    // Second page: a text ctrl and a button
-    wxPanel *panel = new wxPanel( notebook, wxID_ANY );
-    notebook->AddPage( panel, wxT("Page Two") );
-
-
-    // Tell dialog to use sizer
-    SetSizerAndFit( topsizer );
-*/
 wxSize s(size);
 tailleMax=wxSize(0,0);
 wxPoint p(0,100);
-//panneau=new wxPanel(this, wxID_ANY,  p, s, wxTAB_TRAVERSAL  | wxNO_BORDER | wxNO_FULL_REPAINT_ON_RESIZE   );
 
 int hMax=0,lMax=0;
 ParametreOperation *pOCV=frame->ParamOCV();
@@ -150,10 +130,49 @@ Show(true);
 }
 
 
+FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
+         const wxSize& size, ParametreOperation &pOCV, long style)
+         : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCAPTION)
+{
+
+    wxSize s(size);
+    tailleMax = wxSize(0, 0);
+    wxPoint p(0, 100);
+
+    int hMax = 0, lMax = 0;
+    fenMere = frame;
+
+    classeur = new wxNotebook(this, wxID_ANY);
+    FenetrePrincipale *f = fenMere;
+    nbEtape = 1;
+    nbParamMax = pOCV.intParam.size() + pOCV.doubleParam.size() + pOCV.pointParam.size() + pOCV.sizeParam.size();
+    nbParamMax = 2 * (nbParamMax + 2);
+    f = fenMere;
+    listeOp.push_back(make_pair(&pOCV,-1));
+    wxWindow *w = CreerOngletEtape(classeur, 0);
+    classeur->InsertPage(0, w, pOCV.nomOperation, nbEtape == 1);
+    wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
+    topsizer->Add(classeur, 1, wxGROW | wxEXPAND, 10);
+    wxBoxSizer *partieBasse = new wxBoxSizer(wxHORIZONTAL);
+    panneau = new wxPanel(this, wxID_ANY);
+    wxColour fond(*wxLIGHT_GREY);
+    fond.Set(fond.Red(), 255, fond.Blue());
+    panneau->SetBackgroundColour(fond);
+    topsizer->Add(panneau, 1, wxGROW | wxEXPAND, 10);
+
+    panneau->SetSizer(partieBasse);
+    Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
+    Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreAlgo::ComboBox, this);
+    SetSizerAndFit(topsizer);
+    Show(true);
+}
+
+
+
 void FenetreAlgo::ComboBox(wxCommandEvent &w)
 {
 wxOsgApp *app=(wxOsgApp *)osgApp;
-if (!osgApp || !fenMere)
+if (!osgApp )
 	return;
 string nom;
 int ind=listeOnglet[classeur->GetCurrentPage()].second;
@@ -438,7 +457,8 @@ return page;
 
 FenetreAlgo::~FenetreAlgo()
 {
-fenMere->RAZFenAlgo();
+if (fenMere)
+    fenMere->RAZFenAlgo();
 
 }
 
@@ -582,7 +602,8 @@ if (pOCV->pointParam.find(nom.substr(0,nom.length()-2)) != pOCV->pointParam.end(
         pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.y = (int)x;
 	}
 }
-ExecuterOperation(ind);
+if (fenMere)
+    ExecuterOperation(ind);
 }
 
 void  FenetreAlgo::OnSpinPlus(wxSpinEvent& w)

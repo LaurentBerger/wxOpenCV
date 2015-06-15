@@ -32,6 +32,9 @@ public :
 FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos, 
         const wxSize& size,wxOsgApp *, long style = wxDEFAULT_FRAME_STYLE);
         /*!< Constructeur de la fenetre parametrage */
+FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
+    const wxSize& size, ParametreOperation &pOCV, long style);
+
 ~FenetreAlgo();
         /*!< destructeur de la fenetre parametrage */
 wxWindow *CreerOngletEtape(wxNotebook *,int);
