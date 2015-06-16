@@ -521,7 +521,8 @@ if (captureVideo->isOpened())
 						{
 						ParametreOperation pOCV=*it;
 						pOCV.indOpFenetre[0]=-1;
-                        pOCV.indOpFenetre[1] = -1;
+						if (pOCV.indOpFenetre.size()>=2)
+							pOCV.indOpFenetre[1] = -1;
 						if (pOCV.nbOperande==1) // op1 est initialisé
                             {
                             if (indOp>0) // Si une opération a déjà été effectuée l'image précédente est retenue comme paramètre

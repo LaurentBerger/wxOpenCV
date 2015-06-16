@@ -318,7 +318,7 @@ nomOperation="";
 nomSequence="";
 nbImageRes=0;
 nbOperande=0;
-indEtape=0;
+indEtape=-1;
 idOperation=-1;
 indRes=-1;
 refPDF="";
@@ -328,6 +328,7 @@ opErreur=0;
 if (xx.listeOperation.size() != 0 && xx.listeOperation.find(s) != xx.listeOperation.end())
 {
     *this = xx.listeOperation[s];
+	InitPtrFonction();
     return true;
 }
 //intParam["Save result"] = DomaineParametreOp<int>(0, 0, 0, 1);
@@ -1645,7 +1646,7 @@ if (s == "buildopticalflowpyramid")
 	{
 	lienHtml="http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html?highlight=buildoptical#buildopticalflowpyramid";
 	refPDF="http://docs.opencv.org/opencv3refman.pdf#page=366&zoom=70,250,100";
-	operateur = &ImageInfoCV::LigneMediane;
+	//operateur = &ImageInfoCV::LigneMediane;
 	return true;
 	}
 if (s == "calcopticalflowpyrlk")

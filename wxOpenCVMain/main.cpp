@@ -3109,7 +3109,10 @@ while ( bCont )
         else
             listeOperation[nbOperation].nomOperation = valCleChaine;
         if (opValide && !configApp->Read("nbOperande", &val))
-            opValide = false;
+            {
+			opValide = false;
+			listeOperation[nbOperation].nbOperande=0;
+			}
         else
             listeOperation[nbOperation].nbOperande = val;
         listeOperation[nbOperation].indOpFenetre.resize(listeOperation[nbOperation].nbOperande);

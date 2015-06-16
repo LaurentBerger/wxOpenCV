@@ -781,10 +781,11 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		}
 	if (annuler)
 		return false;
-	if (it->operateur && indFen2!=-1 && !videoActive && app->Fenetre(indFen2))
-		it->op[1]=app->Graphique(indFen2)->ImAcq();
-	else
-		it->op[1] =NULL;
+	if (it->op.size()>=2)
+		if (it->operateur && indFen2!=-1 && !videoActive && app->Fenetre(indFen2))
+			it->op[1]=app->Graphique(indFen2)->ImAcq();
+		else
+			it->op[1] =NULL;
 	}
 return true;
 }

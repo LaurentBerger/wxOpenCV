@@ -220,7 +220,8 @@ if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 		pOCV->sizeParam[nom].valeur.height=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
 		}
 	}
-ExecuterOperation(ind);
+if (fenMere)
+	ExecuterOperation(ind);
 
 }
 
