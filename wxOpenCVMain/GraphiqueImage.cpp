@@ -375,13 +375,22 @@ if (tabRGB==NULL)
 	tabRGB = new unsigned char[taille];
 	tabRGBTransparence = new unsigned char[taille];
 	}
+unsigned char *dMasque;
+bool masqueActif=false;
+if (imSrc->MasqueOperateur()->rows*imSrc->MasqueOperateur()->cols != 0)
+{
+    masqueActif = true;
+    dMasque = imSrc->MasqueOperateur()->ptr(0);
+}
 int	nbCanaux=im->channels();
 switch(im->depth()){
 case CV_32F :
 	for (int i=0;i<im->rows;i++)		
 		if (nbCanaux%2==1)	// Nombre réel
 			{
-			float *g=NULL;
+            if (masqueActif)
+                dMasque = imSrc->MasqueOperateur()->ptr(i);
+            float *g = NULL;
 			if (correctionGain && imGain)
 				g=(float*)imGain->ptr(i);
 			float *d=(float*)im->ptr(i);
@@ -398,7 +407,9 @@ case CV_32F :
 					if (v>=nbCouleurPalette)
 						v=nbCouleurPalette-1;
 					unsigned short val=(unsigned short)v;
-					if (!planActif[indCanal])
+                    if (masqueActif && *dMasque == 0)
+                        val = val / 2;
+                    if (!planActif[indCanal])
 						val=0;
 					switch(indCanal){
 					case 0:
@@ -421,12 +432,16 @@ case CV_32F :
 						break;
 						}
 					}
-				}
+                if (masqueActif)
+                    dMasque++;
+                }
 
 			}
 		else
 			{
-			complex<float> *d=(complex<float>*)im->ptr(i);
+            if (masqueActif)
+                dMasque = imSrc->MasqueOperateur()->ptr(i);
+            complex<float> *d = (complex<float>*)im->ptr(i);
 			unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 			for (int j=0;j<im->cols;j++,debLigne+=3)
 				{
@@ -455,7 +470,9 @@ case CV_32F :
 					if (v>=nbCouleurPalette)
 						v=nbCouleurPalette-1;
 					unsigned short val=(unsigned short)v;
-					if (!planActif[indCanal])
+                    if (masqueActif && *dMasque == 0)
+                        val = val / 2;
+                    if (!planActif[indCanal])
 						val=0;
 					switch(indCanal){
 					case 0:
@@ -478,13 +495,17 @@ case CV_32F :
 						break;
 						}
 					}
-				}
+                if (masqueActif)
+                    dMasque++;
+                }
 			}
 	break;
 case CV_32S :
 	for (int i=0;i<im->rows;i++)		
 		{
-		long *d=(long*)im->ptr(i);
+        if (masqueActif)
+            dMasque = imSrc->MasqueOperateur()->ptr(i);
+        long *d = (long*)im->ptr(i);
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 		float *g=NULL;
 		if (correctionGain && imGain)
@@ -496,12 +517,14 @@ case CV_32S :
 				double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
 				if (correctionGain)
 					v=*g++*v;
-				if (v<0)
+                if (v<0)
 					v =0;
 				if (v>=nbCouleurPalette)
 					v=nbCouleurPalette-1;
 				unsigned short val=(unsigned short)v;
-				if (!planActif[indCanal])
+                if (masqueActif && *dMasque == 0)
+                    val = val / 2;
+                if (!planActif[indCanal])
 					val=0;
 				switch(indCanal){
 				case 0:
@@ -524,13 +547,17 @@ case CV_32S :
 					break;
 					}
 				}
-			}
+            if (masqueActif)
+                dMasque++;
+            }
 		}
 	break;
 case CV_16U :
 	for (int i=0;i<im->rows;i++)		
 		{
-		unsigned short *d=(unsigned short*)im->ptr(i);
+        if (masqueActif)
+            dMasque = imSrc->MasqueOperateur()->ptr(i);
+        unsigned short *d = (unsigned short*)im->ptr(i);
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 		float *g=NULL;
 		if (correctionGain && imGain)
@@ -547,7 +574,9 @@ case CV_16U :
 				if (v>=nbCouleurPalette)
 					v=nbCouleurPalette-1;
 				unsigned short val=(unsigned short)v;
-				if (!planActif[indCanal])
+                if (masqueActif && *dMasque == 0)
+                    val = val / 2;
+                if (!planActif[indCanal])
 					val=0;
 				switch(indCanal){
 				case 0:
@@ -570,13 +599,17 @@ case CV_16U :
 					break;
 					}
 				}
-			}
+            if (masqueActif)
+                dMasque++;
+            }
 		}
 	break;
 case CV_16S :
 	for (int i=0;i<im->rows;i++)		
 		{
-		short *d=(short*)im->ptr(i);
+        if (masqueActif)
+            dMasque = imSrc->MasqueOperateur()->ptr(i);
+        short *d = (short*)im->ptr(i);
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 		float *g=NULL;
 		if (correctionGain && imGain)
@@ -593,7 +626,9 @@ case CV_16S :
 				if (v>=nbCouleurPalette)
 					v=nbCouleurPalette-1;
 				unsigned short val=(unsigned short)v;
-				if (!planActif[indCanal])
+                if (masqueActif && *dMasque==0)
+                    val = val / 2;
+                if (!planActif[indCanal])
 					val=0;
 				switch(indCanal){
 				case 0:
@@ -616,13 +651,17 @@ case CV_16S :
 					break;
 					}
 				}
-			}
+            if (masqueActif)
+                dMasque++;
+            }
 		}
 	break;
 case CV_8U :
 	for (int i=0;i<im->rows;i++)		
 		{
-		unsigned char *d=im->data+i*im->step[0];
+        if (masqueActif)
+            dMasque = imSrc->MasqueOperateur()->ptr(i);
+        unsigned char *d = im->data + i*im->step[0];
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 		float *g=NULL;
 		if (correctionGain && imGain)
@@ -639,6 +678,8 @@ case CV_8U :
 				if (v>=nbCouleurPalette)
 					v=nbCouleurPalette-1;
 				unsigned short val=(unsigned short)v;
+                if (masqueActif && *dMasque==0)
+                    val = val / 2;
 				if (!planActif[indCanal])
 					val=0;
 				switch(indCanal){
@@ -662,7 +703,9 @@ case CV_8U :
 					break;
 					}
 				}
-			}
+            if (masqueActif)
+                dMasque++;
+            }
 		}
 	}
 

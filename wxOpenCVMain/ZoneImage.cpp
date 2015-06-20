@@ -21,10 +21,11 @@ facteurZoom=-1;
 osgApp=NULL;
 bitmapAffiche=NULL;
 f3D=NULL;
-for (int i=0;i<10;i++)
+for (int i=0;i<NB_MAX_RECTANGLE;i++)
 	{
 	rectSelect[i].SetSize(wxSize(0,0));
 	rectCoupe[i].SetSize(wxSize(0,0));
+    rectDsMasque[i] = false;
 	}
 indRect=0;
 indCoupe=0;
@@ -41,7 +42,8 @@ Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::SelectPalette, this, NOIRETBLANC_,
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::ModeComplexe,this,M_MODULE_,PHASE_RD);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR2,ZOOM8SUR1);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SequenceOperation,this,SEQ_OPE);
-Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::RazSeqOp,this,STOP_SEQ);
+Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::RazSeqOp, this, STOP_SEQ);
+Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::MenuMasque, this, RECT_DS_MASQUE, RECT_DS_MASQUE + NB_MAX_RECTANGLE);
 
 /*Connect(ZOOM1SUR2,ZOOM8SUR1  ,wxCommandEventHandler(ZoneImage::MAJZoom));
 Connect(ZOOM1SUR1,wxEVT_MENU,  wxCommandEventHandler(ZoneImage::MAJZoom));
@@ -71,7 +73,25 @@ if (f3D)
 
 }
 
+void ZoneImage::MenuMasque(wxCommandEvent& event)
+{
+    int ind = event.GetId() - RECT_DS_MASQUE;
+    
+    if (ind >= 0 && ind < NB_MAX_RECTANGLE)
+        rectDsMasque[ind] = !rectDsMasque[ind];
+    int nb = 0;
+    for (int i = 0; i < NB_MAX_RECTANGLE;i++)
+        if (rectSelect[i].GetHeight()*rectSelect[i].GetWidth()>0)
+        {
+                f->ImAcq()->MajMasque(rectDsMasque[i], cv::Rect(rectSelect[i].GetLeftTop().x, rectSelect[i].GetLeftTop().y, rectSelect[i].GetWidth(), rectSelect[i].GetHeight()));
+                nb++;
+        }
 
+    if (nb == 0)
+        f->ImAcq()->MajMasque();
+    f->NouvelleImage();
+    f->MAJNouvelleImage();
+}
 void ZoneImage::OnPaint(wxPaintEvent &evt)
 {
     wxSize size = GetClientSize();
@@ -547,6 +567,23 @@ wxMenu *ZoneImage::CreateMenuZoom(wxString *title)
     return menu;
 }
 
+wxMenu *ZoneImage::CreateMenuMasque(wxString *title)
+{
+    wxMenu *menu = new wxMenu;
+    for (int i = 0; i < NB_MAX_RECTANGLE; i++)
+    {
+        wxString s;
+        s.Printf("Rectangle %d", i);
+        menu->AppendCheckItem(RECT_DS_MASQUE + i, s);
+       if (rectDsMasque[i])
+            menu->Check(RECT_DS_MASQUE + i, true);
+        else
+            menu->Check(RECT_DS_MASQUE + i, false);
+    }
+
+    return menu;
+}
+
 void ZoneImage::OnMenuContext(wxContextMenuEvent& event)
 {
     wxPoint point = event.GetPosition();
@@ -573,8 +610,9 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.Append(Menu_Popup_Palette, _T("&Palette"), CreateMenuPalette(NULL));
 	menu.Append(Menu_Popup_Zoom, _T("&Zoom"), CreateMenuZoom(NULL));
 	menu.AppendCheckItem(Menu_Rectangle, _T("Stat Rectangle"));
-	menu.AppendCheckItem(Menu_Coupe, _T("Section"));
-	bool menuParametre=false;
+    menu.AppendCheckItem(Menu_Coupe, _T("Section"));
+    menu.Append(Menu_Masque, _T("Mask"),CreateMenuMasque(NULL));
+    bool menuParametre = false;
 	if (f->ImAcq()->PtContours())
 		{
 		menu.AppendCheckItem(Menu_Contour, _T("Draw Contour "));

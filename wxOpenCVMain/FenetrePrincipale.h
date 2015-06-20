@@ -76,6 +76,7 @@ wxBitmap            mBuffer;       /*!< Double buffering */
 void				*f3D;			/*!< lien sur la fenetre 3D représentant l'image */
 int					facteurZoom;	/*!< zoom=2^facteurZoom*/
 wxRect				rectSelect[NB_MAX_RECTANGLE]; /*!< zone rectangulaire sélectionnée*/
+bool                rectDsMasque[NB_MAX_RECTANGLE]; /*!< Rectangle i dans le masque */
 wxRect				rectCoupe[NB_MAX_RECTANGLE]; /*!< diagonale d'un rectangle associée à une coupe*/
 bool				modeRect;	/*!< Sélection des rectangles actives */
 bool				modeCoupe; /*!< Sélection des coupes actives */
@@ -315,11 +316,13 @@ private:
 	void SelectPalette(wxCommandEvent& event);
 	void ModeComplexe(wxCommandEvent& event);
 	void MAJZoom(wxCommandEvent& event);
+    void MenuMasque(wxCommandEvent& event);
 	void SequenceOperation(wxCommandEvent& event);
 
 wxMenu *CreateMenuComplex(wxString *title);
 wxMenu *CreateMenuPalette(wxString *title);
 wxMenu *CreateMenuZoom(wxString *title);
+wxMenu *CreateMenuMasque(wxString *title);
 };
 
 
@@ -1085,6 +1088,7 @@ enum
     Menu_3D ,
     Menu_Rectangle,
     Menu_Coupe,
+    Menu_Masque,
     Menu_FilMax,
 	Menu_ParAlg,
     Menu_ParPano,
@@ -1121,6 +1125,7 @@ enum
 
     DEFINITION_FOND_MICRO,
     DEFINITION_FOND_QUADRIQUE,
+    RECT_DS_MASQUE=2900,
     ZOOM1SUR2=3000,
     ZOOM1SUR1,
     ZOOM2SUR1,

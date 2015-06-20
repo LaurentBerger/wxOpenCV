@@ -77,7 +77,8 @@ wxStaticText		*wst;
 wxHyperlinkCtrl		*whc;
 wxSpinCtrlDouble	*wsd;
 
-if ((whc=(wxHyperlinkCtrl*)wxWindow::FindWindowById(indHyper,panneau))!=NULL)
+lienCombo.clear();
+if((whc = (wxHyperlinkCtrl*)wxWindow::FindWindowById(indHyper, panneau)) != NULL)
 	whc->SetURL(pOCV->lienHtml);
 else
 	new wxHyperlinkCtrl (panneau,indHyper," OpenCV Documentation",pOCV->lienHtml,wxPoint(10,ligne-30),wxSize(150,20));
@@ -178,7 +179,10 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
             }
         wxComboBox *cb;
         if ((cb = (wxComboBox*)panneau->FindWindowById(indCombo, panneau)) == NULL)
-            cb = new wxComboBox(panneau, indCombo, choixDefaut, p, wxSize(250, -1), nbChaine, choix);
+        {
+            cb = new wxComboBox(panneau, indCombo, choixDefaut, p, wxSize(250, -1), nbChaine, choix,0,wxDefaultValidator,iti->first);
+            lienCombo.insert(make_pair(indCombo, iti->first));
+        }
         else
             {
             cb->Clear();
@@ -186,7 +190,8 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
             cb->SetSelection(0);
             cb->Move(p);
             cb->Show(true);
-            }
+            lienCombo.insert(make_pair(indCombo, iti->first));
+        }
         if (iti->second.res)
             cb->Disable();
         indCombo++;
@@ -397,14 +402,13 @@ void FenetreSequenceOperation::ComboBox(wxCommandEvent &w)
     std::map <int, std::vector <ParametreOperation > >  *t = app->TabSeqOperation();
     std::map <int, std::vector <ParametreOperation > >::iterator it = (*t).begin();
     for (int i = 0; i<ws->GetValue(); i++, it++);
-    nom = ((wxWindow*)w.GetEventObject())->GetName();
+    wxComboBox *cb = ((wxComboBox*)w.GetEventObject());
     ParametreOperation p = it->second[opSelec];
     wxStaticText *st = (wxStaticText*)wxWindow::FindWindowById(w.GetId() - 150, this);
     if (!st)
         throw("wxStaticText undefined");
-    nom = st->GetLabel();
-
-    nom = st->GetLabel();
+    if (lienCombo.find(w.GetId()) != lienCombo.end())
+        nom = lienCombo[w.GetId()];
     if (it->second[opSelec].intParam.find(nom) != it->second[opSelec].intParam.end())
         {
 

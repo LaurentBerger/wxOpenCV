@@ -41,10 +41,16 @@ if (pOCV)
 	{
     if (op[0]->depth() != op[1]->depth())
 		pOCV->intParam["ddepth"].valeur=CV_32F;
-    cv::add(*op[0], *op[1], *im, cv::noArray(), pOCV->intParam["ddepth"].valeur);
-	}
+    if (pOCV->intParam["image_mask"].valeur == 1)
+        cv::add(*op[0], *op[1], *im,*op[0]->MasqueOperateur(), pOCV->intParam["ddepth"].valeur);
+    else
+        cv::add(*op[0], *op[1], *im, cv::noArray(), pOCV->intParam["ddepth"].valeur);
+}
 else
-    cv::add(*op[0], *op[1], *im, cv::noArray(), typeResultat);
+    if (pOCV->intParam["image_mask"].valeur == 1)
+        cv::add(*op[0], *op[1], *im, *op[0]->MasqueOperateur(), typeResultat);
+    else
+        cv::add(*op[0], *op[1], *im, cv::noArray(), typeResultat);
 r.push_back(im);
 return r;
 }
@@ -86,10 +92,16 @@ if (pOCV)
 	{
 	if (op[0]->depth()!=op[1]->depth())
 		pOCV->intParam["ddepth"].valeur=CV_32F;
-	cv::subtract( *op[0], *op[1], *im,cv::noArray(),pOCV->intParam["ddepth"].valeur );
-	}
+    if (pOCV->intParam["image_mask"].valeur == 1)
+        cv::subtract(*op[0], *op[1], *im, *op[0]->MasqueOperateur(), pOCV->intParam["ddepth"].valeur);
+    else
+        cv::subtract(*op[0], *op[1], *im, Mat(), pOCV->intParam["ddepth"].valeur);
+}
 else
-	cv::subtract( *op[0], *op[1], *im,cv::noArray(),typeResultat );
+    if (pOCV->intParam["image_mask"].valeur == 1)
+        cv::subtract(*op[0], *op[1], *im, *op[0]->MasqueOperateur(), pOCV->intParam["ddepth"].valeur);
+    else
+        cv::subtract(*op[0], *op[1], *im, Mat(), pOCV->intParam["ddepth"].valeur);
 r.push_back(im);
 return r;
 }
@@ -148,8 +160,11 @@ if (op.size()<2)
     return r;
 ImageInfoCV	*im = new ImageInfoCV;
 
-cv::bitwise_and(*op[0], *op[1], *im, cv::noArray());
-	r.push_back(im);
+if (pOCV->intParam["image_mask"].valeur == 1)
+    cv::bitwise_and(*op[0], *op[1], *im, *op[0]->MasqueOperateur());
+else
+    cv::bitwise_and(*op[0], *op[1], *im, Mat());
+r.push_back(im);
 	return r;
 }
 
@@ -160,8 +175,11 @@ if (op.size()<2)
     return r;
 ImageInfoCV	*im = new ImageInfoCV;
 
-cv::bitwise_or(*op[0], *op[1], *im, cv::noArray());
-	r.push_back(im);
+if (pOCV->intParam["image_mask"].valeur == 1)
+    cv::bitwise_or(*op[0], *op[1], *im, *op[0]->MasqueOperateur());
+else
+    cv::bitwise_or(*op[0], *op[1], *im, Mat());
+r.push_back(im);
 	return r;
 }
 
@@ -172,8 +190,11 @@ if (op.size()<2)
     return r;
 ImageInfoCV	*im = new ImageInfoCV;
 
-cv::bitwise_xor(*op[0], *op[1], *im, cv::noArray());
-	r.push_back(im);
+if (pOCV->intParam["image_mask"].valeur == 1)
+    cv::bitwise_xor(*op[0], *op[1], *im, *op[0]->MasqueOperateur());
+else
+    cv::bitwise_xor(*op[0], *op[1], *im, Mat());
+r.push_back(im);
 	return r;
 }
 
@@ -186,8 +207,11 @@ std::vector<ImageInfoCV *>ImageInfoCV::Negation(std::vector< ImageInfoCV*> op,  
 {
 	ImageInfoCV	*im = new ImageInfoCV;
 
-	cv::bitwise_not(*op[0], *im, cv::noArray());
-	std::vector<ImageInfoCV	*> r;
+    if (pOCV->intParam["image_mask"].valeur == 1)
+        cv::bitwise_not(*op[0], *im, *op[0]->MasqueOperateur());
+    else
+        cv::bitwise_not(*op[0], *im, Mat());
+    std::vector<ImageInfoCV	*> r;
 	r.push_back(im);
 	return r;
 }
@@ -445,16 +469,16 @@ return r;
 std::vector<ImageInfoCV *>ImageInfoCV::ScharrModule(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
-ImageInfoCV	imx ;
-ImageInfoCV	imy;
-ImageInfoCV	imAbsx;
-ImageInfoCV	imAbsy;
+Mat	imx ;
+Mat	imy;
+Mat	imAbsx;
+Mat	imAbsy;
 
 cv::Scharr( *op[0], imx, pOCV->intParam["ddepth"].valeur,1,0,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
 cv::Scharr( *op[0], imy, pOCV->intParam["ddepth"].valeur,0,1,pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
-abs( imx);
-abs( imy);
-addWeighted( imx, 0.5, imy, 0.5, 0, *im );
+imAbsx = abs(imx);
+imAbsy = abs(imy);
+addWeighted(imAbsx, 0.5, imAbsy, 0.5, 0, *im);
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
@@ -1164,7 +1188,10 @@ if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getScoreType() != pOCV->intPa
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getWTA_K() != pOCV->intParam["WTA_K"].valeur)
 	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setWTA_K(pOCV->intParam["WTA_K"].valeur);
 
-pOCV->detecteur["ORB"]->detectAndCompute(*op[0], Mat(), *(op[0]->PointCle()), *(op[0]->Descripteur(IMAGEINFOCV_ORB_DES)));
+if (pOCV->intParam["image_mask"].valeur == 1)
+    pOCV->detecteur["ORB"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle()), *(op[0]->Descripteur(IMAGEINFOCV_ORB_DES)));
+else
+    pOCV->detecteur["ORB"]->detectAndCompute(*op[0], Mat(), *(op[0]->PointCle()), *(op[0]->Descripteur(IMAGEINFOCV_ORB_DES)));
 
 
 AjoutOpAttribut(pOCV);
@@ -1238,7 +1265,10 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectBlob(std::vector<ImageInfoCV	*> op,
         pOCV->detecteur["BLOB"] = b;
         }
 
-    pOCV->detecteur["BLOB"]->detect(*op[0], kBlob, Mat());
+    if (pOCV->intParam["image_mask"].valeur == 1)
+        pOCV->detecteur["BLOB"]->detect(*op[0], kBlob, *op[0]->MasqueOperateur());
+    else
+        pOCV->detecteur["BLOB"]->detect(*op[0], kBlob, Mat());
 
 
     AjoutOpAttribut(pOCV);
@@ -1262,7 +1292,10 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(std::vector<ImageInfoCV	*> op
         }
 
 
-    pOCV->detecteur["BRISK"]->detectAndCompute(*op[0], Mat(), *(op[0]->PointCle(IMAGEINFOCV_BRISK_DES)), *(op[0]->Descripteur(IMAGEINFOCV_BRISK_DES)));
+    if (pOCV->intParam["image_mask"].valeur == 1)
+        pOCV->detecteur["BRISK"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle(IMAGEINFOCV_BRISK_DES)), *(op[0]->Descripteur(IMAGEINFOCV_BRISK_DES)));
+    else
+        pOCV->detecteur["BRISK"]->detectAndCompute(*op[0], Mat(), *(op[0]->PointCle(IMAGEINFOCV_BRISK_DES)), *(op[0]->Descripteur(IMAGEINFOCV_BRISK_DES)));
 
 
     AjoutOpAttribut(pOCV);
@@ -1300,8 +1333,10 @@ if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getNOctaves() != pOCV->in
     pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setNOctaves(pOCV->intParam["NOctaves"].valeur);
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getThreshold() != pOCV->doubleParam["Threshold"].valeur)
     pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setThreshold(pOCV->doubleParam["Threshold"].valeur);
-
-pOCV->detecteur["AKAZE"]->detectAndCompute(*op[0], Mat(), *(op[0]->PointCle(IMAGEINFOCV_AKAZE_DES)), *(op[0]->Descripteur(IMAGEINFOCV_AKAZE_DES)));
+if (pOCV->intParam["image_mask"].valeur == 1)
+    pOCV->detecteur["AKAZE"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle(IMAGEINFOCV_AKAZE_DES)), *(op[0]->Descripteur(IMAGEINFOCV_AKAZE_DES)));
+else
+    pOCV->detecteur["AKAZE"]->detectAndCompute(*op[0], Mat(), *(op[0]->PointCle(IMAGEINFOCV_AKAZE_DES)), *(op[0]->Descripteur(IMAGEINFOCV_AKAZE_DES)));
 
 
 AjoutOpAttribut(pOCV);
@@ -1523,13 +1558,13 @@ std::vector<ImageInfoCV	*>ImageInfoCV::CalcOrientationMvt(std::vector<ImageInfoC
 {
 if (op[0]->depth()!=CV_32FC1)
 	throw std::string("CalcOrientationMvt :image must be single channel floating-point");
-if (masque)
-	delete masque;
+if (masqueMOG)
+delete masqueMOG;
 if (orient)
 	delete orient;
-masque = new Mat();
+masqueMOG = new Mat();
 orient = new Mat();	// calculate motion gradient orientation and valid orientation mask
-cv::motempl::calcMotionGradient(*op[0], *masque, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
+cv::motempl::calcMotionGradient(*op[0], *masqueMOG, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
 op[0]->AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
 r.push_back(this);
@@ -1540,7 +1575,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::SegmenteMvt(std::vector<ImageInfoCV	*> op
 {
 if (op[0]->depth() != CV_32FC1)
 	throw std::string("CalcOrientationMvt :image must be single channel floating-point");
-if (!masque)
+if (!masqueMOG)
 	throw std::string("SegmenteMvt : masque is NULL");
 if (!orient) 
 	throw std::string("SegmenteMvt : orient is NULL");
@@ -1608,13 +1643,13 @@ std::vector<ImageInfoCV		*>ImageInfoCV::TransPerspective(std::vector<ImageInfoCV
 {
 if (op[0]->depth() != CV_32FC1)
 	throw std::string("CalcOrientationMvt :image must be single channel floating-point");
-if (masque)
-	delete masque;
+if (masqueMOG)
+delete masqueMOG;
 if (orient)
 	delete orient;
-masque = new Mat();
+masqueMOG = new Mat();
 orient = new Mat();	// calculate motion gradient orientation and valid orientation mask
-cv::motempl::calcMotionGradient(*op[0], *masque, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
+cv::motempl::calcMotionGradient(*op[0], *masqueMOG, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
 op[0]->AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
 r.push_back(this);

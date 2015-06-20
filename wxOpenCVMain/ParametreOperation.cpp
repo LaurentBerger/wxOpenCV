@@ -305,6 +305,10 @@ listeParam["expos_comp_type"].insert(std::pair<string, int>(_("GAIN_BLOCKS").ToS
 listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_HORIZ").ToStdString(), cv::detail::WAVE_CORRECT_HORIZ));
 listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_VERT").ToStdString(), cv::detail::WAVE_CORRECT_VERT));
 
+listeParam["image_mask"].insert(std::pair<string, int>(_("enable mask").ToStdString(), 1));
+listeParam["image_mask"].insert(std::pair<string, int>(_("disable mask").ToStdString(),0));
+
+
 }
 
 bool ParametreOperation::InitOperation(string s)
@@ -527,7 +531,8 @@ if (s == "cornerharris")
 }
 if (s == "matchdescriptormatcher")
 	{
-	opAttribut = true;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    opAttribut = true;
 	opVideo = true;
 	nomOperation = s;
 	nbImageRes = 0;
@@ -538,6 +543,7 @@ if (s == "matchdescriptormatcher")
 }
 if (s == "mserfeatures2d")
     {
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     nomOperation = s;
     nbImageRes = 0;
     nbOperande = 1;
@@ -556,6 +562,7 @@ if (s == "mserfeatures2d")
 }
 if (s == "blobfeatures2d")
     {
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     nomOperation = s;
     nbImageRes = 0;
     nbOperande = 1;
@@ -587,6 +594,7 @@ if (s == "orbfeatures2d")
     nbImageRes = 0;
     nbOperande = 1;
     opAttribut = true;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
     doubleParam["FastThreshold"] = DomaineParametreOp<double>(20, 1, 100, 1);;
     intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128, 1);
@@ -604,6 +612,7 @@ if (s == "akazefeatures2d")
     nbImageRes = 0;
     nbOperande = 1;
     opAttribut = true;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["DescriptorChannels"] = DomaineParametreOp<int>(3, 1, 255, 1);
     intParam["DescriptorSize"] = DomaineParametreOp<int>(0, 0, 100, 1);;
     intParam["DescriptorType"] = DomaineParametreOp<int>(cv::AKAZE::DESCRIPTOR_MLDB, cv::AKAZE::DESCRIPTOR_KAZE_UPRIGHT, cv::AKAZE::DESCRIPTOR_MLDB, 1);
@@ -619,6 +628,7 @@ if (s == "briskfeatures2d")
     nbImageRes = 0;
     nbOperande = 1;
     opAttribut = true;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["thresh"] = DomaineParametreOp<int>(30, 1, 255, 1);
     intParam["octaves"] = DomaineParametreOp<int>(3, 1, 255, 1);
     doubleParam["patternScale"] = DomaineParametreOp<double>(1.0, 0.1, 100, 0.1);;
@@ -629,7 +639,8 @@ if (s == "goodfeaturestotrack")
 	nbImageRes=0;
 	nomOperation=s;
 	nbOperande= 1;
-	intParam["maxCorners"]=DomaineParametreOp<int>(500,1,1000,1);
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["maxCorners"] = DomaineParametreOp<int>(500, 1, 1000, 1);
 	doubleParam["qualityLevel"]=DomaineParametreOp<double>(0.1,0.01,1,0.01);
 	doubleParam["minDistance"]=DomaineParametreOp<double>(10,1,1000,01);
 	intParam["blockSize"]=DomaineParametreOp<int>(2,2,9,1);
@@ -702,6 +713,7 @@ if (s == "bitwise-and")
 	nomOperation = s;
 	nbOperande = 2;
 	nbImageRes = 1;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "bitwise-or")
@@ -709,6 +721,7 @@ if (s == "bitwise-or")
 	nomOperation = s;
 	nbOperande = 2;
 	nbImageRes = 1;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "bitwise-xor")
@@ -716,6 +729,7 @@ if (s == "bitwise-xor")
 	nomOperation = s;
 	nbOperande = 2;
 	nbImageRes = 1;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "bitwise-not")
@@ -723,6 +737,7 @@ if (s == "bitwise-not")
 	nomOperation = s;
 	nbOperande = 1;
 	nbImageRes = 1;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "add")
@@ -730,7 +745,8 @@ if (s == "add")
 	nomOperation = s;
 	nbOperande = 2;
 	intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
-	nbImageRes = 1;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    nbImageRes = 1;
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "AdditionPonderee")
@@ -738,7 +754,7 @@ if (s == "AdditionPonderee")
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
-	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
 	doubleParam["alpha"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	doubleParam["beta"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	doubleParam["gamma"]=DomaineParametreOp<double>(1,0.1,10,0.1);
@@ -748,7 +764,8 @@ if (s == "subtract")
 	{
 	nbImageRes=1;
 	nomOperation=s;
-	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
 	nbOperande= 2;
     xx.listeOperation.insert(make_pair(s, *this));
 }
@@ -756,7 +773,7 @@ if (s == "multiply")
 	{
 	nbImageRes=1;
 	nomOperation=s;
-	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	nbOperande= 2;
     xx.listeOperation.insert(make_pair(s, *this));
@@ -766,7 +783,7 @@ if (s == "divide")
 	nbImageRes=1;
 	nomOperation=s;
 	nbOperande= 2;
-	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
 	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
@@ -1159,7 +1176,13 @@ ParametreOperation::ParametreOperation(string s)
 {
 opErreur=0;
 op.resize(3);
+op[0] = NULL;
+op[1] = NULL;
+op[2] = NULL;
 indOpFenetre.resize(3);
+indOpFenetre[0] = -1;
+indOpFenetre[1] = -1;
+indOpFenetre[2] = -1;
 
 InitOperation(s);
 

@@ -23,6 +23,7 @@ std::map<wxWindow*,std::pair<wxString,int> >	    listeOnglet;/*<! Onglet associé
 std::vector<std::pair<Operation*,int> >			    listeOp;	/*<! Onglet associé à chaque opération */
 std::map<int, std::pair< FenetrePrincipale* ,int> >	idFenetre;	/*<! fenetre crée par l'éxécution de la séquence*/
 std::map <int, std::vector <ParametreOperation > >  seqActive;
+std::map<int, wxString>                              lienCombo; /*<! Lien entre numéro combo et nom de la proriété de l'opération*/
 
 wxPanel							*panneau;	/*!< Pointeur sur le panneau contenant le classeur */
 wxNotebook						*classeur;	/*!< le classeur avec ses différents onglets*/

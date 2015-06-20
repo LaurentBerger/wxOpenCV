@@ -141,7 +141,8 @@ cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopt
 cv::Mat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
 cv::Mat *silh;						/*<! Seuillage de la différence entre deux images pour updateMotion History */
 
-cv::Mat	*masque;					/*<! Masque pour calcMotionGradient */
+cv::Mat	masqueOperateur;			/*<! Masque pour les opérations cosntruit à partir des rectangles */
+cv::Mat	*masqueMOG;					/*<! Masque pour calcMotionGradient */
 cv::Mat *orient;					/*<! orientation pour calcMotionGradient*/
 cv::Mat *segmvt;					/*<! segmentation issue de l'analyse du mouvement (segmentMotion)*/
 std::vector<cv::Rect> regionsMvt;	/*<! Regions issues de l'analyse du mouvement (segmentMotion)*/
@@ -448,7 +449,8 @@ virtual void DiffusionMPI(void);
 
 // ********* Accès aux membres privés et
 //	Lecture des membres privés
-double *MinIm(){if (!minIm) ExtremumLoc(); return minIm;};		/*< Minimum de l'image pour chaque canal */
+void MajMasque(bool actif = false, cv::Rect r = cv::Rect());
+double *MinIm(){ if (!minIm) ExtremumLoc(); return minIm; };		/*< Minimum de l'image pour chaque canal */
 double *MaxIm(){if (!maxIm) ExtremumLoc();return maxIm;};		/*< Maximum de l'image pour chaque canal */
 char    *LitFctImage(void);
 char    *LitTypeSeuillage(void);
@@ -460,6 +462,7 @@ long	LitTailleOndelette(void);
 long  	LitNbIterOperateur(void);
 char  	LitConverCplxEnt(void);
 
+cv::Mat *MasqueOperateur(){ return &masqueOperateur; };
 cv::Mat	**StatComposante(){return statComposante;};
 cv::Mat	**CentreGComposante(){return centreGComposante;};
 cv::Mat	*FlotOptique(bool init=false){if (init ) {delete []flotOptique;flotOptique= new cv::Mat[channels()];} return flotOptique;};

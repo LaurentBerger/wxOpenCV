@@ -52,7 +52,8 @@ ligneP=NULL;
 boncoin=NULL;
 coinRef=NULL;
 flotOptique=NULL;
-masque=NULL;
+masqueMOG=NULL;
+masqueOperateur = Mat();
 orient=NULL;
 segmvt=NULL;
 minIm = NULL;			/*< Minimimum pour chaque plan de l'image */
@@ -210,12 +211,37 @@ delete pOCVUpdateMotionHistory;
 
 delete ponderation;
 delete silh;
-delete masque;
+delete masqueMOG;
 delete orient;
 delete segmvt;
 
 
 }
+
+void ImageInfoCV::MajMasque(bool actif, cv::Rect r)
+{
+    if (!actif &&r.area() == 0)
+        masqueOperateur = Mat();
+    else
+    {
+        if (masqueOperateur.rows == 0)
+            masqueOperateur = Mat::zeros(rows, cols, CV_8UC1);
+        for (int i = r.y; i <= r.y + r.height &&i<rows; i++)
+        {
+            unsigned char *d = (unsigned char*)masqueOperateur.ptr(i)+r.x;
+            for (int j = r.x; j <= r.x + r.width&& j<cols; j++, d++)
+            {
+
+                if (actif)
+                    *d = 255;
+                else
+                    *d = 0;
+            }
+        }
+    }
+}
+
+
 
 void ImageInfoCV::CloneStat(ImageInfoCV *im)
 {
