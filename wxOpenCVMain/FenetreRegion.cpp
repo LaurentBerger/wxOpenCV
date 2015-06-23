@@ -12,13 +12,46 @@ BEGIN_EVENT_TABLE( FenetreRegion, wxWindow )
 	EVT_MENU(RESET_LEVEL,  FenetreRegion::RAZNiveau)
 END_EVENT_TABLE()
 
-
+FenetreRegion::FenetreRegion( wxFrame* frame,std::vector<cv::KeyPoint> *p,wxString &titre) : wxWindow(frame,-1,wxPoint(0,0),wxSize(800,400))
+{
+gestionControlDown=0;
+osgApp=NULL;
+keyPt=NULL;
+fenParent=NULL;
+nbRegionMax=4000;
+regionSelect=NULL;
+cleTri =  NULL;
+valTri = NULL;
+keyPt=NULL;
+if (!p)
+    return;
+keyPt=p;
+listeRegion = new Tableur((wxFrame*)this,keyPt->size(),7); 
+listeRegion->SetSize(wxSize(800,400));
+//listeRegion->Refresh();
+listeRegion->DefTitreColonne(0, _("x"));
+listeRegion->DefTitreColonne(1, _("y"));
+listeRegion->DefTitreColonne(2, _("diameter"));
+listeRegion->DefTitreColonne(3, _("orientation"));
+listeRegion->DefTitreColonne(4, _("response"));
+listeRegion->DefTitreColonne(5, _("octave pyramid "));
+listeRegion->DefTitreColonne(6, "class id");
+listeRegion->SetColLabelSize(wxGRID_AUTOSIZE );
+listeRegion->SetColSize(0, 70);
+listeRegion->SetColSize(1, 70);
+listeRegion->SetColSize(2, 70);
+listeRegion->SetColSize(3, 70);
+listeRegion->SetColSize(4, 70);
+listeRegion->SetColSize(5, 70);
+listeRegion->SetColSize(6, 70);
+}
 FenetreRegion::FenetreRegion( wxFrame* frame) : wxWindow(frame,-1,wxPoint(0,0),wxSize(800,400))
 {
 gestionControlDown=0;
 osgApp=NULL;
 fenParent=NULL;
 nbRegionMax=4000;
+keyPt=NULL;
 regionSelect=NULL;
 cleTri =  NULL;
 valTri = NULL;
@@ -57,6 +90,31 @@ listeRegion->SetColSize(10, 40);
 listeRegion->SetColSize(10, 30);
 }
 
+
+
+void FenetreRegion::ListerPointInteret(std::vector<cv::KeyPoint> *p) 
+{
+if (!osgApp)
+	return;
+if (!fenParent)
+	return;
+if (!((FenetrePrincipale*)fenParent)->ImAcq())
+	return;
+if (p!=NULL)
+    keyPt= p;
+for (int ii=0;ii<keyPt->size();ii++)
+	{
+	
+	listeRegion->DefCellule(ii,0,(*keyPt)[ii].pt.x, "%5.1f");
+	listeRegion->DefCellule(ii,1,(*keyPt)[ii].pt.y, "%5.1f");
+	listeRegion->DefCellule(ii,2,(*keyPt)[ii].size, "%5.1f");
+	listeRegion->DefCellule(ii,3,(*keyPt)[ii].angle, "%5.1f");
+	listeRegion->DefCellule(ii,4,(*keyPt)[ii].response, "%5.1f");
+	listeRegion->DefCellule(ii,5,(*keyPt)[ii].octave, "%d");
+	listeRegion->DefCellule(ii,6,(*keyPt)[ii].class_id, "%d");
+	}
+	
+}
 
 
 

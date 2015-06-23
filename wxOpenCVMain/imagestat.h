@@ -38,6 +38,7 @@ wxWindow				*ongletCurseur; /*!< tableur des données proche du curseur */
 FenetreRegion			*ongletRegionR; /*!< Pour le regroupement des régions avant recherche quadrique */
 FenetreRegion			*ongletRegionV; /*!< Pour le regroupement des régions avant recherche quadrique */
 FenetreRegion			*ongletRegionB; /*!< Pour le regroupement des régions avant recherche quadrique */
+std::map <wxString,FenetreRegion*> ongletKeyPt; /*!< Onglet associé aux descripteurs */
 wxSlider				**slNivMin;				/*!< Réglage du niveau bas de la palette par canal*/
 wxSlider				**slGain;				/*!< Réglage du niveau haut de la palette par canal*/
 wxSpinCtrl				*spAjustAuto;			/*!< Ajustement auto de la palette avec % de satureation */
@@ -81,6 +82,7 @@ void OnRangeSelected(wxGridRangeSelectEvent &w);
 void DefOSGApp(void *w){osgApp=w;};
 void DefFenMere(FenetrePrincipale *f){fenMere =f;};
 		/*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
+void OuvertureOngletKeyPt(std::vector <cv::KeyPoint> *p,wxString titre);
 void OuvertureOngletCouleur();
 void OuvertureOngletStatus();
 void OuvertureOngletHistogramme();

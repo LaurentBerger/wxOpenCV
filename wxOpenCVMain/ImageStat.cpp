@@ -341,6 +341,8 @@ if (ongletDistribAngulaire && listeFenetreOnglet->GetCurrentPage()==ongletDistri
 }
 
 
+
+
 void ImageStatistiques::OuvertureOngletStatus()
 {
 if (!ongletStatus)
@@ -756,6 +758,24 @@ wxString ss;
 ss= ((wxTextCtrl*)w[art])->GetValue();
 w[art]->Refresh();
 return ss;
+}
+
+void ImageStatistiques::OuvertureOngletKeyPt(std::vector <cv::KeyPoint> *p, wxString titre)
+{
+    if (ongletKeyPt.find(titre) != ongletKeyPt.end())
+    {
+        ongletKeyPt.find(titre)->second->ListerPointInteret(p); 
+    }
+    else
+    {
+        FenetreRegion *f=new FenetreRegion((wxFrame*)listeFenetreOnglet,p,titre);
+        f->DefOsgApp(osgApp);
+        f->DefParent(fenMere);
+        f->ListerPointInteret();
+        ongletKeyPt.insert(make_pair(titre, f));
+	    listeFenetreOnglet->AddPage(f, titre);
+        f->Refresh();
+    }
 }
 
 void ImageStatistiques::OuvertureOngletRegion() 

@@ -695,6 +695,14 @@ if (pOCV.nbImageRes==0)
         wxCommandEvent evt;
 		f->ParamAlgo(evt);
 		}
+    if (pOCV.nomOperation == "orbfeatures2d")
+        listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES),_("ORB features"));
+    if (pOCV.nomOperation == "briskfeatures2d")
+        listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES),_("BRISK features"));
+    if (pOCV.nomOperation == "blobfeatures2d")
+        listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES),_("BLOB features"));
+    if (pOCV.nomOperation == "akazefeatures2d")
+        listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES),_("A-KAZE features"));
 	}
 pOCV.op.clear();
 pOCV.indOpFenetre.clear();

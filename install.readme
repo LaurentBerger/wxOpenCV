@@ -34,6 +34,13 @@ commande git
 git commit -F commit.txt
 git clone ssh://git@git.renater.fr:2222/wxopencv.git
 
+mettre à jour avec upstream
+git remote add upstream git@github.com:Itseez/opencv.git
+git checkout upstream/master
+git merge upstream/master
+
+
+
 Creation des fichiers de traduction ( gettext)
 
 dir /b *.cpp >liste.txt

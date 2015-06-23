@@ -12,12 +12,15 @@ class FenetreRegion : public wxWindow
 {
 
 public:
-FenetreRegion( wxFrame * );
+FenetreRegion( wxFrame *f );
+FenetreRegion( wxFrame* ,std::vector<cv::KeyPoint> *p,wxString &titre) ;
+
 ~FenetreRegion( ){delete []regionSelect;delete []cleTri;delete []valTri;};
 void DefOsgApp(void *w){osgApp=w;};
 void DefParent(void *w){fenParent=w;};
 
 void ListerRegion(int); 
+void ListerPointInteret(std::vector<cv::KeyPoint> *p=NULL); 
 void DefRegionSelect(int i,int val){regionSelect[i]=val;};;
 void LireNiveau(int *classe);
 
@@ -43,6 +46,7 @@ char	*regionSelect;
 long		*cleTri;
 float	*valTri;
 int		nbZoneId;
+std::vector<cv::KeyPoint> *keyPt;
 char	gestionControlDown;
     DECLARE_EVENT_TABLE()
 
