@@ -129,6 +129,8 @@ TracerPointORB(hdc);
 TracerPointFREAK(hdc);
 TracerPointBRISK(hdc);
 TracerPointKAZE(hdc);
+TracerPointAKAZE(hdc);
+TracerPointAGAST(hdc);
 TracerPointBLOB(hdc);
 if (cam && cam->IsRunning())
 	{

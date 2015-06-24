@@ -80,11 +80,12 @@ void ZoneImage::MenuMasque(wxCommandEvent& event)
     if (ind >= 0 && ind < NB_MAX_RECTANGLE)
         rectDsMasque[ind] = !rectDsMasque[ind];
     int nb = 0;
+    f->ImAcq()->MajMasque();
     for (int i = 0; i < NB_MAX_RECTANGLE;i++)
         if (rectSelect[i].GetHeight()*rectSelect[i].GetWidth()>0)
         {
                 f->ImAcq()->MajMasque(rectDsMasque[i], cv::Rect(rectSelect[i].GetLeftTop().x, rectSelect[i].GetLeftTop().y, rectSelect[i].GetWidth(), rectSelect[i].GetHeight()));
-                nb++;
+                if(rectDsMasque[i]) nb++;
         }
 
     if (nb == 0)
@@ -324,7 +325,24 @@ if (modeRect)
 			{
 			int ind=indRect;
 			osgApp->ImgStat()->Plot(true);
-			}
+            f->ImAcq()->MajMasque();
+            int nb=0;
+            for (int i = 0; i < NB_MAX_RECTANGLE;i++)
+                if (rectSelect[i].GetHeight()*rectSelect[i].GetWidth()>0 && rectDsMasque[i])
+                {
+                        f->ImAcq()->MajMasque(rectDsMasque[i], cv::Rect(rectSelect[i].GetLeftTop().x, rectSelect[i].GetLeftTop().y, rectSelect[i].GetWidth(), rectSelect[i].GetHeight()));
+                        nb++;
+                }
+
+            if (nb == 0)
+                f->ImAcq()->MajMasque();
+            if (nb)
+            {
+                f->NouvelleImage();
+                f->MAJNouvelleImage();
+
+            }
+            }
 		}
 	}
 if (modeCoupe)
@@ -692,9 +710,23 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 		}
 	if (f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
 		{
-		menu.AppendCheckItem(MENU_POINTKAZE, _T("AKAZE"));
+		menu.AppendCheckItem(MENU_POINTAKAZE, _T("AKAZE"));
+		if (f->TracerPointAKAZE())
+			menu.Check(MENU_POINTAKAZE, true);
+		menuParametre = true;
+		}
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES)->size() != 0)
+		{
+		menu.AppendCheckItem(MENU_POINTKAZE, _T("KAZE"));
 		if (f->TracerPointKAZE())
 			menu.Check(MENU_POINTKAZE, true);
+		menuParametre = true;
+		}
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES)->size() != 0)
+		{
+		menu.AppendCheckItem(MENU_POINTAGAST, _T("AGAST"));
+		if (f->TracerPointAGAST())
+			menu.Check(MENU_POINTAGAST, true);
 		menuParametre = true;
 		}
     if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre || f->ImAcq()->EtapeOp()>0)
@@ -897,6 +929,12 @@ case MENU_POINTORB:
 	break;
 case MENU_POINTKAZE:
     tracerKAZEPoint = !tracerKAZEPoint;
+    break;
+case MENU_POINTAKAZE:
+    tracerAKAZEPoint = !tracerAKAZEPoint;
+    break;
+case MENU_POINTAGAST:
+    tracerAGASTPoint = !tracerAGASTPoint;
     break;
 case MENU_POINTBRISK:
     tracerBRISKPoint = !tracerBRISKPoint;
@@ -1305,9 +1343,38 @@ void FenetrePrincipale::TracerPointKAZE(wxBufferedPaintDC &hdc)
 {
 if (!tracerKAZEPoint || !imAcq)
 	return;
-if (!imAcq->PointCle(IMAGEINFOCV_AKAZE_DES))
+if (!imAcq->PointCle(IMAGEINFOCV_KAZE_DES))
 	{
 	tracerKAZEPoint = false;
+	return;
+	}
+std::vector<cv::KeyPoint> *pts = imAcq->PointCle(IMAGEINFOCV_KAZE_DES);
+int fZoomNume, fZoomDeno;
+
+CalculZoom(fZoomNume, fZoomDeno);
+wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
+wxBrush brosse(wxColour(0, 128, 0, 128));
+hdc.SetPen(crayon[0]);
+hdc.SetBrush(brosse);
+for (int i = 0; i < pts->size(); i++)
+    {
+    wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+    wxPoint p1(RepereImageEcran(p_1));
+    wxPoint p(p1-wxPoint(2,2));
+    wxSize w(5,5);
+    hdc.DrawRectangle(p, w);
+    }
+
+TracerAppariementPoint(hdc);
+   }
+
+void FenetrePrincipale::TracerPointAKAZE(wxBufferedPaintDC &hdc)
+{
+if (!tracerAKAZEPoint || !imAcq)
+	return;
+if (!imAcq->PointCle(IMAGEINFOCV_AKAZE_DES))
+	{
+	tracerAKAZEPoint = false;
 	return;
 	}
 std::vector<cv::KeyPoint> *pts = imAcq->PointCle(IMAGEINFOCV_AKAZE_DES);
@@ -1329,6 +1396,36 @@ for (int i = 0; i < pts->size(); i++)
 
 TracerAppariementPoint(hdc);
    }
+
+void FenetrePrincipale::TracerPointAGAST(wxBufferedPaintDC &hdc)
+{
+if (!tracerKAZEPoint || !imAcq)
+	return;
+if (!imAcq->PointCle(IMAGEINFOCV_AGAST_DES))
+	{
+	tracerKAZEPoint = false;
+	return;
+	}
+std::vector<cv::KeyPoint> *pts = imAcq->PointCle(IMAGEINFOCV_AGAST_DES);
+int fZoomNume, fZoomDeno;
+
+CalculZoom(fZoomNume, fZoomDeno);
+wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
+wxBrush brosse(wxColour(0, 128, 0, 128));
+hdc.SetPen(crayon[0]);
+hdc.SetBrush(brosse);
+for (int i = 0; i < pts->size(); i++)
+    {
+    wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+    wxPoint p1(RepereImageEcran(p_1));
+    wxPoint p(p1-wxPoint(2,2));
+    wxSize w(5,5);
+    hdc.DrawRectangle(p, w);
+    }
+
+TracerAppariementPoint(hdc);
+   }
+
 
 
 void FenetrePrincipale::TracerPointORB(wxBufferedPaintDC &hdc)

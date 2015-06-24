@@ -641,6 +641,7 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 
 
 	f->AssosierImage(r[nbres]);
+    f->DynamiqueAffichage();
 	f->Bind(wxEVT_LEAVE_WINDOW, &FenetrePrincipale::SourisQuitterFen, f);
 
 	ImageStatistiques *imgStatIm = new ImageStatistiques(NULL, _("Image Statistic"),
@@ -702,7 +703,11 @@ if (pOCV.nbImageRes==0)
     if (pOCV.nomOperation == "blobfeatures2d")
         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES),_("BLOB features"));
     if (pOCV.nomOperation == "akazefeatures2d")
-        listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES),_("A-KAZE features"));
+        listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES),_("AKAZE features"));
+    if (pOCV.nomOperation == "kazefeatures2d")
+        listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES),_("KAZE features"));
+    if (pOCV.nomOperation == "agastfeatures2d")
+        listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES),_("AGAST features"));
 	}
 pOCV.op.clear();
 pOCV.indOpFenetre.clear();
@@ -1340,6 +1345,9 @@ tracerORBPoint = false;
 tracerBRISKPoint = false;
 tracerBLOBPoint = false;
 tracerKAZEPoint = false;
+tracerAKAZEPoint = false;
+tracerKAZEPoint = false;
+tracerAGASTPoint = false;
 tracerFREAKPoint = false;
 tracerMSERPoint=false;
 imgStatIm = NULL;
@@ -1846,6 +1854,18 @@ feuille->BitmapAffichee(NULL);
 feuille->Update();
 if (imgStatIm && ImAcq() && ImAcq()->StatComposante())
 	imgStatIm->ListerRegion();
+}
+
+void FenetrePrincipale::DynamiqueAffichage(char type)
+{
+    imAcq->ExtremumLoc();
+    for (int i = 0; i < imAcq->channels() && i < 3; i++)
+    {
+		seuilNivBas[i]=imAcq->MinIm()[i];
+		coeffCanal[i]=65536/(imAcq->MaxIm()[i]-imAcq->MinIm()[i]);
+    }
+
+
 }
 
 

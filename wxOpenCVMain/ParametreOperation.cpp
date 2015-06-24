@@ -757,9 +757,18 @@ if (s == "bitwise-not")
 	nomOperation = s;
 	nbOperande = 1;
 	nbImageRes = 1;
-    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
+if (s == "convertto")
+	{
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+	nomOperation = s;
+	nbOperande = 1;
+	nbImageRes = 1;
+    xx.listeOperation.insert(make_pair(s, *this));
+	}
+
 if (s == "add")
 {
 	nomOperation = s;
@@ -769,7 +778,7 @@ if (s == "add")
     nbImageRes = 1;
     xx.listeOperation.insert(make_pair(s, *this));
 }
-if (s == "AdditionPonderee")
+if (s == "addweighted")
 	{
 	nbImageRes=1;
 	nomOperation=s;
@@ -1463,6 +1472,14 @@ if (s == "bitwise-not")
 	nbOperande = 1;
 	nbImageRes = 1;
 }
+if (s == "convertto")
+	{
+	operateur = &ImageInfoCV::ConvertType;
+	nbOperande= 1;
+	lienHtml="http://docs.opencv.org/modules/core/doc/basic_structures.html#mat-convertto";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
+	return true;
+	}
 if (s == "add")
 	{
 	operateur = &ImageInfoCV::Add;
@@ -1471,6 +1488,14 @@ if (s == "add")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
 	return true;
 	}
+if (s == "addweighted")
+	{
+	operateur = &ImageInfoCV::AddPonderee;
+	nbOperande= 2;
+	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#addweighted";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
+	return true;
+}
 if (s=="subtract")
 	{
 	operateur = &ImageInfoCV::Sub;

@@ -5,17 +5,17 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: wxopencv\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-03-07 20:55+0100\n"
-"PO-Revision-Date: 2015-04-17 16:01+0100\n"
-"Last-Translator: Laurent Berger <laurent.berger@univ-lemans.fr>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2015-06-24 17:35+0200\n"
+"PO-Revision-Date: 2015-06-24 20:22+0100\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Generator: Poedit 1.6.10\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"X-Generator: Poedit 1.8.1\n"
 
 msgid "         Name "
 msgstr ""
@@ -60,13 +60,13 @@ msgid "10Log z"
 msgstr "10 log z"
 
 msgid "16 bits signed"
-msgstr "16 bits signé"
+msgstr "16 bits signés"
 
 msgid "16 signed bit"
-msgstr "16 bits signé"
+msgstr "16 bits signés"
 
 msgid "32 signed bit"
-msgstr "32 bits signé"
+msgstr "32 bits signés"
 
 msgid "3D"
 msgstr "3D"
@@ -95,6 +95,12 @@ msgstr "A(x,y)>seuil seuil sinon A(x,y)"
 msgid "A(x,y)>threshold 0 else A(x,y)"
 msgstr "A(x,y)>seuil 0 sinon A(x,y)"
 
+msgid "AGAST features"
+msgstr "Point d'intérêt AGAST"
+
+msgid "AKAZE features"
+msgstr "Point d'intérêt AKAZE"
+
 msgid "About wxOpenCV"
 msgstr "A propos de wxOpenCV"
 
@@ -104,6 +110,12 @@ msgstr "Seuillage adaptatif"
 msgid "Add 2 images"
 msgstr "Ajoute 2 images"
 
+msgid "Agatse keypoint"
+msgstr "Point d'intérêt  AGAST"
+
+msgid "Akaze keypoint"
+msgstr "Point d'intérêt  AKAZE"
+
 msgid "An error occured in calculation histogram  :"
 msgstr "Erreur dans le calcul de l'histogramme"
 
@@ -111,16 +123,40 @@ msgid "An error occured while saving file :"
 msgstr "Erreur pendant la sauvegarde"
 
 msgid "Are you sure you want to close/hide page?"
-msgstr "Voulez vous caché cette page?"
+msgstr "Voulez vous cacher cette page?"
 
 msgid "Are you sure you want to close/hide this notebook page?"
-msgstr "Voulez vous caché cette page?"
+msgstr "Voulez vous cacher cette page?"
 
 msgid "Are you sure you want to close/hide this pane?"
-msgstr "Voulez vous caché ce panneau?"
+msgstr "Voulez vous cacher ce panneau?"
+
+msgid "BGR to Gray"
+msgstr "BGR vers gris"
+
+msgid "BGR to HSV"
+msgstr "BGR vers HSV"
+
+msgid "BLOB features"
+msgstr "Point d'intérêt BLOB"
+
+msgid "BLOB keypoint"
+msgstr "Point d'intérêt BLOB"
+
+msgid "BRISK features"
+msgstr "Point d'intérêt  BRISK"
+
+msgid "BRISK keypoint"
+msgstr "Point d'intérêt  BRISK"
+
+msgid "Background"
+msgstr "Fond"
 
 msgid "Background image saved in "
 msgstr "Image de fond sauvée"
+
+msgid "Best Match"
+msgstr "Meilleur appariement"
 
 msgid "Bias image saved in "
 msgstr "Image de biais sauvée"
@@ -146,8 +182,23 @@ msgstr "Flou médian"
 msgid "Border type"
 msgstr "Type de frontière"
 
+msgid "Brightness"
+msgstr "Luminosité"
+
+msgid "Build pyramid optical flow"
+msgstr ""
+
+msgid "Calculate optical flow"
+msgstr "Calcul du flot optique"
+
+msgid "Calculate optical flow(farnerback)"
+msgstr "Calcul flot optique (Farnerback)"
+
+msgid "Camera "
+msgstr "Camera"
+
 msgid "Camera Control"
-msgstr "Contôle caméra"
+msgstr "Cont\\303\\264le caméra"
 
 msgid "Camera must be paused first!"
 msgstr "Caméra doit être en pause"
@@ -158,11 +209,17 @@ msgstr "Tâche ne peut être arrêtée"
 msgid "Canny"
 msgstr "Canny"
 
+msgid "Canny edge detector"
+msgstr "Détecteur de contour Canny"
+
 msgid "Client Size Reporter"
 msgstr "Surface client"
 
 msgid "Closing"
 msgstr "Fermeture"
+
+msgid "Compensate for lens distortion"
+msgstr "Correction des distorsions de la lentille"
 
 msgid "Connected component"
 msgstr "Composante connexe"
@@ -175,6 +232,9 @@ msgstr "frontière  zz|abcde|zz"
 
 msgid "Contour"
 msgstr "Contour"
+
+msgid "Contrast"
+msgstr "Contraste"
 
 msgid "Convolution"
 msgstr "Convolution"
@@ -195,8 +255,23 @@ msgstr "Croix"
 msgid "Customize..."
 msgstr "Personnalisé"
 
+msgid "DIFF_CHARBONNIER"
+msgstr ""
+
+msgid "DIFF_PM_G1"
+msgstr ""
+
+msgid "DIFF_PM_G2"
+msgstr ""
+
+msgid "DIFF_WEICKERT"
+msgstr ""
+
 msgid "Depth of destination"
-msgstr "Présicion du résultat"
+msgstr "Précision du résultat"
+
+msgid "Device address or Ip adress"
+msgstr "Adresse IP de la caméra"
 
 msgid "Difference between 2 images"
 msgstr "Différence entre 2 images"
@@ -213,11 +288,21 @@ msgstr "Voulez vous débuter l'acquisition?"
 msgid "Do you want really to stop grabbing?"
 msgstr "Voulez vous arrêter l'acquisition?"
 
+#, c-format
+msgid "Dock: %d Row: %d"
+msgstr ""
+
 msgid "Document is empty"
 msgstr "Document vide"
 
 msgid "Ellipse"
 msgstr "Ellipse"
+
+msgid "Empty image. Give window id of image"
+msgstr "Image vide. Donnez le numéro de la fenêtre"
+
+msgid "Empty image?"
+msgstr "Image vide ?"
 
 msgid "End"
 msgstr "Fin"
@@ -228,18 +313,33 @@ msgstr "Erosion"
 msgid "Error"
 msgstr "Erreur"
 
+msgid "Error : stream cannot be opened"
+msgstr "Erreur : le flux ne peut être ouvert"
+
 msgid "Error Saving File"
 msgstr "Erreur durant la sauvegarde"
 
 msgid "Execute all"
 msgstr "Tout exécuter"
 
+msgid "Exposure compensator"
+msgstr "Compensation d'exposition"
+
+msgid "Exposure time"
+msgstr "Temps de pose"
+
+msgid "FEATHER"
+msgstr ""
+
 msgid "FFT"
 msgstr "TFR"
 
+msgid "Features"
+msgstr "Traits"
+
 #, c-format
 msgid "File %s already exist. This timestamp file seems already used."
-msgstr "Fichier %sexiste déjà. Horodatage déjà utilisé?"
+msgstr "Fichier %sexiste déjà. "
 
 msgid "File already exist"
 msgstr "Fichier existe déjà"
@@ -247,8 +347,14 @@ msgstr "Fichier existe déjà"
 msgid "File already exist. Overwrite it?"
 msgstr "Remplacer le fichier existant?"
 
+msgid "File cannot be opened"
+msgstr "Fichier ne peut être ouvert"
+
 msgid "Filter name"
 msgstr "Nom du filtre"
+
+msgid "Foreground"
+msgstr "premier plan"
 
 msgid "Frei Chen x"
 msgstr "Frei Chen x"
@@ -258,6 +364,24 @@ msgstr "Frei Chen y"
 
 msgid "Frequency cut off ([0. 1.0] "
 msgstr "Frequence de coupure [0. 1.0] "
+
+msgid "GAIN"
+msgstr "gain"
+
+msgid "GAIN_BLOCKS"
+msgstr "gain par bloc"
+
+msgid "GMG method"
+msgstr "Méthode GMG"
+
+msgid "Gain"
+msgstr "Gain"
+
+msgid "Gaussian mixture"
+msgstr "Mélange gaussien"
+
+msgid "Gaussian mixture 2"
+msgstr "Mélange gaussien 2"
 
 msgid "Gradient X"
 msgstr "Gradient X"
@@ -276,22 +400,42 @@ msgid ""
 "(wo gradient)"
 msgstr "Niveausans gradient"
 
+msgid "Gray to RGB"
+msgstr "Gris vers RGB"
+
 msgid "Green Region"
 msgstr "Région vert"
+
+msgid "Harris edge detector"
+msgstr "Détecteur de Harris"
 
 msgid ""
 "Height\n"
 "Difference"
-msgstr "Différencede hauteur"
+msgstr ""
+"Différence\n"
+" de hauteur"
 
 msgid "Histogram"
 msgstr "histogramme"
+
+msgid "Homography"
+msgstr ""
+
+msgid "Hough circle"
+msgstr "Détection de cercle"
+
+msgid "Hough line"
+msgstr "Détection de ligne"
 
 msgid "Image Statistic"
 msgstr "Statistiques de l'image"
 
 msgid "Image parameters"
 msgstr "paramètres image"
+
+msgid "Independant motions"
+msgstr ""
 
 msgid "Index"
 msgstr "Index"
@@ -318,6 +462,12 @@ msgstr "Article 5"
 msgid "Item 5"
 msgstr "Article 5"
 
+msgid "KAZE features"
+msgstr "Point d'intérêt KAZE"
+
+msgid "Lanczos interpolation over 8x8 neighborhood"
+msgstr "Interpolation de Lanczos"
+
 msgid "Language"
 msgstr "Langage"
 
@@ -329,6 +479,10 @@ msgstr "Laplacien 4 connexe"
 
 msgid "Laplacian 8 connex"
 msgstr "Laplacien 8 connexe"
+
+#, c-format
+msgid "Layer: %d"
+msgstr "Couche: %d"
 
 msgid ""
 "Level\n"
@@ -352,8 +506,26 @@ msgstr ""
 "Niveau\n"
 "écart (sans gradient)"
 
+msgid "Load"
+msgstr "Charger"
+
+msgid "Log polar"
+msgstr "log polaire"
+
 msgid "Log window "
 msgstr "Fenetre info"
+
+msgid "MSER region"
+msgstr "Région MSER"
+
+msgid "MULTI_BAND"
+msgstr "Multi bande"
+
+msgid "Mask"
+msgstr "Masque"
+
+msgid "Match"
+msgstr "Apparier"
 
 msgid "Mean"
 msgstr "Moyenne"
@@ -391,17 +563,42 @@ msgstr "Filtre morph."
 msgid "Morphology parameters"
 msgstr "Paramètres morphologie"
 
+msgid "NO"
+msgstr "Non"
+
+msgid "No new window"
+msgstr "Pas de nouvelle fenêtre"
+
 msgid "No sequence available"
 msgstr "Pas de séquence"
 
+msgid "Not"
+msgstr "Négation"
+
 msgid "Notebook"
 msgstr "Notebook"
+
+msgid "ORB features"
+msgstr "Point d'intérêt ORB"
+
+msgid "ORB keypoint"
+msgstr "Point d'intérêt ORB"
 
 msgid "Open"
 msgstr "Ouvrir"
 
 msgid "Open Sequence"
 msgstr ""
+
+msgid "Open Timestamp"
+msgstr ""
+
+msgid "Open video file"
+msgstr ""
+
+#, c-format
+msgid "OpenCV : Build info %s "
+msgstr "Version d'OPENCV %s"
 
 #, c-format
 msgid "OpenCV compatible camera detected (%dX%d : %d)"
@@ -412,6 +609,9 @@ msgstr "Pas de caméra opencv détectée"
 
 msgid "Openning"
 msgstr "Ouverture"
+
+msgid "Operation"
+msgstr "Opération"
 
 msgid "Operation with two images not supported?"
 msgstr "Opération avec deux images non prévues? "
@@ -464,8 +664,15 @@ msgstr "Forme"
 msgid "Periodic boundary"
 msgstr "Frontière périodique"
 
+msgid "Phase correlation"
+msgstr "Corrélation de phase"
+
 msgid "Please choose language:"
 msgstr "Choisissez votre langue"
+
+#, c-format
+msgid "Position: %d"
+msgstr "Position %d"
 
 msgid "Previous image is closed?"
 msgstr "Image précédente fermée?"
@@ -481,6 +688,19 @@ msgstr "problème"
 
 msgid "Process is stopped!"
 msgstr "Tâche arrêtée"
+
+#, c-format
+msgid "Proportion: %d"
+msgstr "Proportion: %d"
+
+msgid "RGB to Gray"
+msgstr "RGB vers gris"
+
+msgid "RGB to HSV"
+msgstr "RGB vers HSV"
+
+msgid "RGB to gray"
+msgstr "RGB vers gris"
 
 msgid "Ready"
 msgstr "prêt"
@@ -509,6 +729,9 @@ msgstr "rapport"
 msgid "Reset Windows"
 msgstr "Restaurée fenêtre"
 
+msgid "Resize"
+msgstr "Dimension"
+
 msgid "Right-click to close, double click to cycle shape"
 msgstr "Clic droit pour fermer, double clic arrondir"
 
@@ -521,6 +744,9 @@ msgstr "Roberts y"
 msgid "Same as input"
 msgstr "Identique à l'entrée"
 
+msgid "Saturation"
+msgstr "saturation"
+
 msgid "Save"
 msgstr "Enregistrer"
 
@@ -529,6 +755,12 @@ msgstr "Enregistrer sous"
 
 msgid "Save all step as Macro"
 msgstr "Enregistre la macro"
+
+msgid "Save all step as Macro in cfg "
+msgstr "Sauver la macro dans le fichier de config"
+
+msgid "Save all step as Macro in xml"
+msgstr "Sauver la macro dans un fichier XML"
 
 msgid "Select file to process"
 msgstr "Fichier à traiter"
@@ -546,6 +778,13 @@ msgstr ""
 msgid "Server %s failed to start"
 msgstr "Server %s en échec"
 
+msgid "Size"
+msgstr "Taille"
+
+#, c-format
+msgid "Size: %d x %d"
+msgstr "Taille: %d x %d"
+
 msgid "Skeleton"
 msgstr "Squelette"
 
@@ -560,6 +799,9 @@ msgstr "Début"
 
 msgid "Step"
 msgstr "pas"
+
+msgid "Stitching feature"
+msgstr "Point d'intérêt du panorama"
 
 msgid "Stop"
 msgstr "Arrêt"
@@ -598,6 +840,9 @@ msgstr "Symetrique/limite"
 msgid "Test"
 msgstr "Test"
 
+msgid "TestGLCanvas"
+msgstr ""
+
 msgid "Text Control"
 msgstr ""
 
@@ -616,6 +861,9 @@ msgstr "Horodatage terminé"
 msgid "Top hat"
 msgstr "Chapeau haut"
 
+msgid "Transform affine-rotation"
+msgstr ""
+
 msgid "Transform distance"
 msgstr "Dsitanc discrète"
 
@@ -627,6 +875,12 @@ msgstr "Indéfini"
 
 msgid "Undefined operation"
 msgstr "opération indéfinie"
+
+msgid "Update motion history"
+msgstr ""
+
+msgid "Use File Config"
+msgstr ""
 
 msgid "User 1"
 msgstr "Perso 1"
@@ -667,11 +921,32 @@ msgstr "Perso 4 5x5"
 msgid "User 5"
 msgstr "Perso 5"
 
+msgid "Value out of range"
+msgstr ""
+
+msgid "Very good features"
+msgstr ""
+
+msgid "Video RGB 24bits"
+msgstr ""
+
+msgid "Video RGB float"
+msgstr ""
+
 msgid "Video Toolbar"
 msgstr "Outils Vidéo"
 
+msgid "Video file"
+msgstr ""
+
 msgid "Voronoi"
 msgstr "Voronoi"
+
+msgid "WAVE_CORRECT_HORIZ"
+msgstr ""
+
+msgid "WAVE_CORRECT_VERT"
+msgstr ""
 
 msgid "Warning"
 msgstr "Attention"
@@ -682,14 +957,62 @@ msgstr "Attention"
 msgid "Watershed"
 msgstr "partage des eaux"
 
+msgid "Wraper Wrap"
+msgstr ""
+
+msgid "Wrapper"
+msgstr ""
+
 msgid "You must defined convolution operator first!"
 msgstr "Opérateur de convolution doit être défini!"
 
 msgid "You must defined morphological operator first!"
 msgstr "Opérateur de morphologie doit être défini!"
 
+msgid "aspect "
+msgstr ""
+
+msgid "bicubic interpolation"
+msgstr ""
+
+msgid "bilinear interpolation"
+msgstr ""
+
+msgid "closing"
+msgstr ""
+
+msgid "compressedPlaneA1.5B1"
+msgstr ""
+
+msgid "compressedPlaneA2B1"
+msgstr ""
+
+msgid "compressedPlanePortraitA1.5B1"
+msgstr ""
+
+msgid "compressedPlanePortraitA2B1"
+msgstr ""
+
+msgid "cylindrical"
+msgstr ""
+
+msgid "diameter"
+msgstr ""
+
+msgid "disable mask"
+msgstr ""
+
 msgid "double"
 msgstr "réel 8 octets"
+
+msgid "dp_color"
+msgstr ""
+
+msgid "dp_colorgrad"
+msgstr ""
+
+msgid "enable mask"
+msgstr ""
 
 msgid "equal last pixel"
 msgstr "Egal au dernier pixel"
@@ -697,11 +1020,29 @@ msgstr "Egal au dernier pixel"
 msgid "euclidean distance"
 msgstr "Distance euclidienne"
 
+msgid "exclusive or"
+msgstr ""
+
+msgid "fisheye"
+msgstr ""
+
 msgid "float"
 msgstr "Réel 4 octets"
 
+msgid "focal "
+msgstr ""
+
+msgid "gc_color"
+msgstr ""
+
+msgid "gc_colorgrad"
+msgstr ""
+
 msgid "grid_content"
 msgstr "tableur"
+
+msgid "hough line proba."
+msgstr ""
 
 msgid "imaginary part"
 msgstr "Partie imaginaire"
@@ -709,20 +1050,89 @@ msgstr "Partie imaginaire"
 msgid "inverse FFT"
 msgstr "TFR inverse"
 
+msgid "kaze keypoint"
+msgstr ""
+
+msgid "knn Match"
+msgstr ""
+
+msgid "knn method"
+msgstr ""
+
+msgid "logical and"
+msgstr ""
+
+msgid "logical or"
+msgstr ""
+
+msgid "mercator"
+msgstr ""
+
 msgid "modulus"
 msgstr "Module"
+
+msgid "motion Gradient"
+msgstr ""
+
+msgid "nearest neighbor interpolation"
+msgstr ""
+
+msgid "no"
+msgstr ""
+
+msgid "octave pyramid "
+msgstr ""
+
+msgid "orb"
+msgstr ""
+
+msgid "orientation"
+msgstr ""
 
 msgid "osgviewerWX"
 msgstr "Visualisateur OSG"
 
+msgid "paniniA1.5B1"
+msgstr ""
+
+msgid "paniniA2B1"
+msgstr ""
+
+msgid "paniniPortraitA1.5B1"
+msgstr ""
+
+msgid "paniniPortraitA2B1"
+msgstr ""
+
 msgid "phase (rd)"
 msgstr "phase (rd)"
+
+msgid "plane"
+msgstr ""
+
+msgid "ppx "
+msgstr ""
+
+msgid "ppy "
+msgstr ""
 
 msgid "product"
 msgstr "Produit"
 
+msgid "ray"
+msgstr ""
+
 msgid "real part"
 msgstr "partie réelle"
+
+msgid "reproj"
+msgstr ""
+
+msgid "resampling using pixel area relation"
+msgstr ""
+
+msgid "response"
+msgstr ""
 
 msgid "same"
 msgstr "Identique"
@@ -748,8 +1158,17 @@ msgstr ""
 msgid "settings"
 msgstr "Réglages"
 
+msgid "sift"
+msgstr ""
+
+msgid "spherical"
+msgstr ""
+
 msgid "split color plan"
 msgstr "Séparation des plans"
+
+msgid "stereographic"
+msgstr ""
 
 msgid "tb5"
 msgstr ""
@@ -766,6 +1185,9 @@ msgstr "Seuillage fonctiondes voisins"
 msgid "threshold weighted sum of neighbourhood"
 msgstr "Seuillage fonction des voisins pondérées"
 
+msgid "transverseMercator"
+msgstr ""
+
 msgid "unable to load plplot"
 msgstr "plplot non trouvé"
 
@@ -781,6 +1203,9 @@ msgstr "Inconnu"
 msgid "user"
 msgstr "Utilisateur"
 
+msgid "voronoi"
+msgstr ""
+
 msgid "wxAUI"
 msgstr ""
 
@@ -794,8 +1219,17 @@ msgstr ""
 "wxOpenCV \n"
 "Traitement d'images utilisant wxWidgets, OpenSceneGraph, OpenCv and Plplot\n"
 
+msgid "wxToolBar Sample"
+msgstr ""
+
+msgid "x"
+msgstr ""
+
 msgid "x Difference"
 msgstr "Différence x"
+
+msgid "y"
+msgstr ""
 
 msgid "y Difference"
 msgstr "Différence y"

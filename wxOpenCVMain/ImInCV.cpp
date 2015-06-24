@@ -332,6 +332,10 @@ if (im->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
     descORB = *im->Descripteur(IMAGEINFOCV_ORB_DES);
 if (im->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
     descAKAZE = *im->Descripteur(IMAGEINFOCV_AKAZE_DES);
+if (im->PointCle(IMAGEINFOCV_KAZE_DES)->size() != 0)
+    descAKAZE = *im->Descripteur(IMAGEINFOCV_KAZE_DES);
+if (im->PointCle(IMAGEINFOCV_AGAST_DES)->size() != 0)
+    descAKAZE = *im->Descripteur(IMAGEINFOCV_AGAST_DES);
 if (im->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
     descBRISK = *im->Descripteur(IMAGEINFOCV_BRISK_DES);
 if (im->PointCleMSER()->size() != 0)
@@ -400,6 +404,12 @@ case IMAGEINFOCV_BRISK_DES:
 case IMAGEINFOCV_AKAZE_DES:
     return &descAKAZE;
     break;
+case IMAGEINFOCV_KAZE_DES:
+    return &descKAZE;
+    break;
+case IMAGEINFOCV_AGAST_DES:
+    return &descAGAST;
+    break;
 case -1 :
     if (descORB.size>0)
         return &descORB;
@@ -425,6 +435,12 @@ case IMAGEINFOCV_BLOB_DES:
 	break;
 case IMAGEINFOCV_AKAZE_DES:
 	return &kAkaze;
+	break;
+case IMAGEINFOCV_KAZE_DES:
+	return &kKaze;
+	break;
+case IMAGEINFOCV_AGAST_DES:
+	return &kAgast;
 	break;
 	}
 return NULL;

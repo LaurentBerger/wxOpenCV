@@ -132,12 +132,14 @@ std::vector<cv::Point2f> *coinRef;	/*<! Les pixels de références de l'image pour
 std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
 std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
 std::vector<cv::KeyPoint> kAkaze;	/*<! Point clef de Akaze */
-std::vector<cv::KeyPoint> kkaze;	/*<! Point clef de kaze */
+std::vector<cv::KeyPoint> kKaze;	/*<! Point clef de kaze */
+std::vector<cv::KeyPoint> kAgast;	/*<! Point clef de kaze */
 std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de blob */
 std::vector<std::vector <cv::Point > > kMser;	/*<! region et point détectés par mser */
 cv::Mat	descORB;				    /*<! Descripteur associé à l'un des points clé ORB*/
 cv::Mat	descAKAZE;				    /*<! Descripteur associé à l'un des points clé AKAZE*/
 cv::Mat	descKAZE;				    /*<! Descripteur associé à l'un des points clé KAZE*/
+cv::Mat	descAGAST;				    /*<! Descripteur associé à l'un des points clé KAZE*/
 cv::Mat	descBRISK;				    /*<! Descripteur associé à l'un des points clé BRISK*/
 std::vector<cv::DMatch> matches;	/*<! Descripteur appariés */
 
@@ -286,6 +288,7 @@ ImageInfoCV 	&operator= (ImageInfoCV	&z);
 ImageInfoCV	*Variance (long);
 
 // Fonctions membres equivalentes aux opérateurs utilisant OPENCV
+std::vector<ImageInfoCV *>ConvertType(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>EtLogique(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>OuLogique(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>OuExcluLogique(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);

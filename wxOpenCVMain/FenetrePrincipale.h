@@ -365,8 +365,10 @@ bool				tracerRegionMvt;	/*!< 1 Tracer des regions identifiées par le mouvement
 bool				tracerBLOBPoint;	/*!< 1 Tracer des descripteurs BRISK */
 bool				tracerBRISKPoint;	/*!< 1 Tracer des descripteurs BRISK */
 bool				tracerFREAKPoint;	/*!< 1 Tracer des descripteurs FREAK */
-bool				tracerKAZEPoint;	/*!< 1 Tracer des descripteurs FREAK */
-bool				tracerMSERPoint;	/*!< 1 Tracer des descripteurs BRIEF */
+bool				tracerKAZEPoint;	/*!< 1 Tracer des descripteurs KAZE */
+bool				tracerAKAZEPoint;	/*!< 1 Tracer des descripteurs AKAZE */
+bool				tracerAGASTPoint;	/*!< 1 Tracer des descripteurs AGAST */
+bool				tracerMSERPoint;	/*!< 1 Tracer des descripteurs MSER */
 bool				tracerORBPoint;		/*!< 1 Tracer des descripteurs ORB */
 bool				tracerAppariementPoint; /*!< 1 Tracerdes relations des points clés de deux images */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
@@ -565,12 +567,14 @@ void DefImageQuadrique();
 void Enregistrer(wxCommandEvent& event);
 void EnregistrerSous(wxCommandEvent& event);
 
-bool TracerPointORB(){ return	tracerORBPoint; };		/*!< 1 tracer des contours des régions */
-bool TracerPointBRISK(){ return	tracerBRISKPoint; };		/*!< 1 tracer des contours des régions */
-bool TracerPointBLOB(){ return	tracerBLOBPoint; };		/*!< 1 tracer des contours des régions */
-bool TracerPointKAZE(){ return	tracerKAZEPoint; };		/*!< 1 tracer des contours des régions */
-bool TracerPointFREAK(){ return	tracerFREAKPoint; };		/*!< 1 tracer des contours des régions */
-bool TracerPointMSER(){ return	tracerMSERPoint; };		/*!< 1 tracer des contours des régions */
+bool TracerPointORB(){ return	tracerORBPoint; };		/*!< 1 tracer des descripteurs des ORB */
+bool TracerPointBRISK(){ return	tracerBRISKPoint; };		/*!< 1 tracer des descripteurs des BRISK */
+bool TracerPointBLOB(){ return	tracerBLOBPoint; };		/*!< 1 tracer des contours des descripteurs des BLOB  */
+bool TracerPointKAZE(){ return	tracerKAZEPoint; };		/*!< 1 tracer des contours des descripteurs des KAZE  */
+bool TracerPointAKAZE(){ return	tracerAKAZEPoint; };		/*!< 1 tracer des contours des descripteurs des KAZE  */
+bool TracerPointAGAST(){ return	tracerAGASTPoint; };		/*!< 1 tracer des contours des descripteurs des KAZE  */
+bool TracerPointFREAK(){ return	tracerFREAKPoint; };		/*!< 1 tracer des contours des descripteurs des ORB  */
+bool TracerPointMSER(){ return	tracerMSERPoint; };		/*!< 1 tracer des contours des descripteurs des MSER  */
 bool TracerContour(){ return	tracerContour; };		/*!< 1 tracer des contours des régions */
 bool TracerLigneHough(){ return	tracerLigneHough; };	/*!< 1 tracer des lignes détectées par hough */
 bool TracerLigneProbaHough(){return	tracerLigneProbaHough;};	/*!< 1 tracer des cercle segments par hough */
@@ -676,6 +680,18 @@ void TracerPointKAZE(wxBufferedPaintDC &hdc);
 /*!
 *  \brief TracerPointKAZE
 *  tracer des points KAZE d'une image
+*/
+
+void TracerPointAKAZE(wxBufferedPaintDC &hdc);
+/*!
+*  \brief TracerPoinAtKAZE
+*  tracer des points AKAZE d'une image
+*/
+
+void TracerPointAGAST(wxBufferedPaintDC &hdc);
+/*!
+*  \brief TracerPointAGAST
+*  tracer des points AGAST d'une image
 */
 
 void TracerContour(wxBufferedPaintDC &hdc);
@@ -897,6 +913,7 @@ double SeuilNivBas(int plan=-1){if (plan==-1) return seuilNivBas[0];return seuil
 double CoeffCanal(int plan=-1){if (plan==-1) return coeffCanal[0];return coeffCanal[plan];};
 int  NbCouleurPalette(){return nbCouleurPalette;};
 void InitPalette(int nbCouleur);
+void DynamiqueAffichage(char type=0);
 void TracerDIB(wxImage *d, wxBufferedPaintDC &hdc, wxPoint *curseur = NULL);
 void DrawWindow(wxBufferedPaintDC &hdc);
 void DrawRectangles(wxBufferedPaintDC &hdc);
@@ -1103,7 +1120,9 @@ enum
 	MENU_POINTMSER,
 	MENU_POINTBRISK,
 	MENU_POINTBLOB,
+	MENU_POINTAKAZE,
 	MENU_POINTKAZE,
+	MENU_POINTAGAST,
     Menu_Popup_Palette,
     Menu_Popup_Zoom,
     ARCENCIEL_ = 2684,

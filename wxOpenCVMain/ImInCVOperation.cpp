@@ -55,9 +55,24 @@ r.push_back(im);
 return r;
 }
 
+std::vector<ImageInfoCV *>ImageInfoCV::ConvertType(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+if (op.size()<2)
+    return r;
+ImageInfoCV	*im = new ImageInfoCV;
+
+
+    pOCV->intParam["ddepth"].valeur = CV_32F;
+    op[0]->convertTo( *im, pOCV->intParam["ddepth"].valeur, pOCV->intParam["alpha"].valeur,pOCV->intParam["beta"].valeur);
+r.push_back(im);
+return r;
+}
+
+
 /**
- * @function Add
- * @brief Addition de deux images
+ * @function AddPonderee
+ * @brief Addition pondérée de deux images
  */
 std::vector<ImageInfoCV *>ImageInfoCV::AddPonderee(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
@@ -70,7 +85,7 @@ ImageInfoCV	*im = new ImageInfoCV;
 if (op[0]->depth() != op[1]->depth())
     pOCV->intParam["ddepth"].valeur = CV_32F;
 if (pOCV)
-    cv::addWeighted(*op[0], pOCV->intParam["alpha"].valeur, *op[1], pOCV->intParam["beta"].valeur, pOCV->intParam["gamma"].valeur, *im, pOCV->intParam["ddepth"].valeur);
+    cv::addWeighted(*op[0], pOCV->doubleParam["alpha"].valeur, *op[1], pOCV->doubleParam["beta"].valeur, pOCV->doubleParam["gamma"].valeur, *im, pOCV->intParam["ddepth"].valeur);
 else
 	cv::addWeighted( *op[0],1, *op[1],1,0, *im,-1);
 r.push_back(im);
@@ -1334,7 +1349,7 @@ if (op[0] != this)
     return r;
 
 
-if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("AKAZE") == pOCV->detecteur.end())
+if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("KAZE") == pOCV->detecteur.end())
     {
     cv::Ptr<cv::Feature2D> b;
     b = cv::KAZE::create();

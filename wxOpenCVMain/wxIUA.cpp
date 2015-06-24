@@ -36,6 +36,7 @@ enum
     ID_SOUSTRACTION,
     ID_DIVISION,
 	ID_MULTIPLICATION,
+    ID_ADDITION_PONDEREE,
 	ID_OU_LOGIQUE,
 	ID_ET_LOGIQUE,
 	ID_OUEXCLU_LOGIQUE,
@@ -85,6 +86,7 @@ enum
 	ID_FUSIONPLAN,
 	ID_SEPARATIONPLAN,
 	ID_RGBLUMINANCE,
+    ID_CONVERTTYPE,
 	ID_ROTATION_AFFINE,
 	ID_NOUVELLE_DIMENSION,
 	ID_LOGPOLAR,
@@ -97,6 +99,8 @@ enum
 	ID_DES_ORB,
 	ID_DES_BRISK,
     ID_DES_AKAZE,
+    ID_DES_KAZE,
+    ID_DES_AGAST,
     ID_DES_MSER,
     ID_DES_BLOB,
 	ID_DES_MATCH,
@@ -197,6 +201,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_ADDITION,addition_xpm, _("Add 2 images"), "add", 0);
     CONSTRUCTEUR_CMD(bouton, ID_SOUSTRACTION, soustraction_xpm, _("Difference between 2 images"), "subtract", 0);
     CONSTRUCTEUR_CMD(bouton, ID_MULTIPLICATION, multiplication_xpm,_("product"), "multiply", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_ADDITION_PONDEREE, additionponderee_xpm,_("Add weighted"), "addweighted", 0);
     CONSTRUCTEUR_CMD(bouton, ID_DIVISION, division_xpm,_("Divide"), "divide", 0);
     CONSTRUCTEUR_CMD(bouton, ID_ET_LOGIQUE, etlogique_xpm,_("logical and"), "bitwise-and", 0);
     CONSTRUCTEUR_CMD(bouton, ID_OU_LOGIQUE, oulogique_xpm,_("logical or"), "bitwise-or", 0);
@@ -243,6 +248,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_FUSIONPLAN, fusionplan_xpm, _("Merge color plan"), "merge", 7);
     CONSTRUCTEUR_CMD(bouton, ID_SEPARATIONPLAN, separationplan_xpm, _("split color plan"), "split", 7);
     CONSTRUCTEUR_CMD(bouton, ID_RGBLUMINANCE, rgbluminance_xpm,_("RGB to gray"), "cvtcolor", 7);
+    CONSTRUCTEUR_CMD(bouton, ID_CONVERTTYPE, converttype_xpm,_("Convert type"), "convertto", 7);
 	CONSTRUCTEUR_CMD(bouton, ID_ROTATION_AFFINE,wrapaffine_xpm, _("Transform affine-rotation"), "wrapAffine", 7);
 	CONSTRUCTEUR_CMD(bouton, ID_NOUVELLE_DIMENSION, resize_xpm,_("Resize"), "resize", 7);
 	CONSTRUCTEUR_CMD(bouton, ID_LOGPOLAR, logpolar_xpm,_("Log polar"), "logPolar", 7);
@@ -273,6 +279,8 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_DES_ORB, ORB_xpm,_("ORB keypoint"), "orbfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_BRISK, BRISK_xpm, _("BRISK keypoint"), "briskfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_AKAZE, AKAZE_xpm,_("Akaze keypoint"), "akazefeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_KAZE, KAZE_xpm,_("kaze keypoint"), "kazefeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_AGAST, Agast_xpm,_("Agatse keypoint"), "agastfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_BLOB, blob_xpm,_("BLOB keypoint"), "blobfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_MSER, mser_xpm,_("MSER region"), "mserfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_MATCH, Match_xpm, _("Match"), "matchdescriptormatcher", 11);

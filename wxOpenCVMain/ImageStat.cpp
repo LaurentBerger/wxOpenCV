@@ -384,6 +384,8 @@ if (!ongletStatus)
 	new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
 	switch(fenMere->ImAcq()->depth())
 		{
+	case CV_32S:
+		texte="int (32 bits)";
 		break;
 	case CV_16U:
 		texte="unsigned short (16 bits)";
@@ -446,6 +448,8 @@ else
 	((wxStaticText*)wxWindow::FindWindowById(303, ongletStatus))->SetLabelText(texte);
 	switch (fenMere->ImAcq()->depth())
 	{
+	case CV_32S:
+		texte = "int (32 bits)";
 		break;
 	case CV_16U:
 		texte = "unsigned short (16 bits)";
