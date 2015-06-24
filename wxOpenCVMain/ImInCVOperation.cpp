@@ -1303,6 +1303,67 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(std::vector<ImageInfoCV	*> op
     r.push_back(this);
     return r;
     }
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectAgast(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+if (op[0] != this)
+    return r;
+
+
+if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("AKAZE") == pOCV->detecteur.end())
+    {
+    cv::Ptr<cv::Feature2D> b;
+ //   b = cv::AGAST();create();
+    pOCV->detecteur["AGAST"] = b;
+    }
+
+
+
+AjoutOpAttribut(pOCV);
+
+r.push_back(this);
+return r;
+}
+
+
+
+std::vector<ImageInfoCV	*>ImageInfoCV::DetectKaze(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+if (op[0] != this)
+    return r;
+
+
+if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("AKAZE") == pOCV->detecteur.end())
+    {
+    cv::Ptr<cv::Feature2D> b;
+    b = cv::KAZE::create();
+    pOCV->detecteur["KAZE"] = b;
+    }
+
+if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getExtended() != pOCV->intParam["extended"].valeur)
+    pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->setExtended(pOCV->intParam["DescriptorChannels"].valeur);
+if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getUpright() != pOCV->doubleParam["upright"].valeur)
+    pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->setUpright(pOCV->doubleParam["upright"].valeur);
+if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getDiffusivity() != pOCV->intParam["Diffusivity"].valeur)
+    pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->setDiffusivity(pOCV->intParam["Diffusivity"].valeur);
+if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getNOctaveLayers() != pOCV->intParam["NOctaveLayers"].valeur)
+    pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->setNOctaveLayers(pOCV->intParam["NOctaveLayers"].valeur);
+if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getNOctaves() != pOCV->intParam["NOctaves"].valeur)
+    pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->setNOctaves(pOCV->intParam["NOctaves"].valeur);
+if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getThreshold() != pOCV->doubleParam["Threshold"].valeur)
+    pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->setThreshold(pOCV->doubleParam["Threshold"].valeur);
+if (pOCV->intParam["image_mask"].valeur == 1)
+    pOCV->detecteur["KAZE"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle(IMAGEINFOCV_KAZE_DES)), *(op[0]->Descripteur(IMAGEINFOCV_KAZE_DES)));
+else
+    pOCV->detecteur["KAZE"]->detectAndCompute(*op[0], Mat(), *(op[0]->PointCle(IMAGEINFOCV_KAZE_DES)), *(op[0]->Descripteur(IMAGEINFOCV_KAZE_DES)));
+
+
+AjoutOpAttribut(pOCV);
+
+r.push_back(this);
+return r;
+}
 
 
 std::vector<ImageInfoCV	*>ImageInfoCV::DetectAkaze(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)

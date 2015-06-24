@@ -30,6 +30,8 @@ typedef short CodeErreur;
 #define IMAGEINFOCV_BRISK_DES 1
 #define IMAGEINFOCV_AKAZE_DES 2
 #define IMAGEINFOCV_BLOB_DES 3
+#define IMAGEINFOCV_KAZE_DES 4
+#define IMAGEINFOCV_AGAST_DES 5
 
 
 class ImageInfoCV : public cv::Mat {
@@ -130,10 +132,12 @@ std::vector<cv::Point2f> *coinRef;	/*<! Les pixels de références de l'image pour
 std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
 std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
 std::vector<cv::KeyPoint> kAkaze;	/*<! Point clef de Akaze */
+std::vector<cv::KeyPoint> kkaze;	/*<! Point clef de kaze */
 std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de blob */
 std::vector<std::vector <cv::Point > > kMser;	/*<! region et point détectés par mser */
 cv::Mat	descORB;				    /*<! Descripteur associé à l'un des points clé ORB*/
 cv::Mat	descAKAZE;				    /*<! Descripteur associé à l'un des points clé AKAZE*/
+cv::Mat	descKAZE;				    /*<! Descripteur associé à l'un des points clé KAZE*/
 cv::Mat	descBRISK;				    /*<! Descripteur associé à l'un des points clé BRISK*/
 std::vector<cv::DMatch> matches;	/*<! Descripteur appariés */
 
@@ -314,9 +318,9 @@ std::vector<ImageInfoCV	*>DetailFeaturesFinder(std::vector< ImageInfoCV *>, Para
 std::vector<ImageInfoCV	*>DetailMatchesInfo(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>LeaveBiggestComponent(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>HomographyBasedEstimator(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
-std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
-std::vector<ImageInfoCV	*> ImageInfoCV::CorrectionExpo(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
-std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> WraperWrap(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> CorrectionExpo(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> PanoComposition(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 
 
 std::vector<ImageInfoCV *>Negation(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
@@ -348,6 +352,9 @@ std::vector<ImageInfoCV	*>DetectCoinHarris(std::vector< ImageInfoCV *>, Parametr
 std::vector<ImageInfoCV	*>DetectOrb(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectBrisk(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectAkaze(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectKaze(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>DetectAgast(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV);
+
 std::vector<ImageInfoCV	*>DetectBlob(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectMser(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>AppariePoint(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);

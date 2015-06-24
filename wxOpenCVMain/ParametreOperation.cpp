@@ -263,6 +263,11 @@ listeParam["ResultImage"].insert(std::pair<string, int>(_("Mask").ToStdString(),
 listeParam["ResultImage"].insert(std::pair<string, int>(_("Background").ToStdString(), 1));
 listeParam["ResultImage"].insert(std::pair<string, int>(_("Foreground").ToStdString(), 2));
 
+listeParam["diffusivity"].insert(std::pair<string, int>(_("DIFF_PM_G1").ToStdString(), 0));
+listeParam["diffusivity"].insert(std::pair<string, int>(_("DIFF_PM_G2").ToStdString(), 1));
+listeParam["diffusivity"].insert(std::pair<string, int>(_("DIFF_WEICKERT").ToStdString(), 2));
+listeParam["diffusivity"].insert(std::pair<string, int>(_("DIFF_CHARBONNIER").ToStdString(), 2));
+
 listeParam["ba_cost_func"].insert(std::pair<string, int>(_("reproj").ToStdString(), 0));
 listeParam["ba_cost_func"].insert(std::pair<string, int>(_("ray").ToStdString(), 1));
 
@@ -616,6 +621,21 @@ if (s == "akazefeatures2d")
     intParam["DescriptorChannels"] = DomaineParametreOp<int>(3, 1, 255, 1);
     intParam["DescriptorSize"] = DomaineParametreOp<int>(0, 0, 100, 1);;
     intParam["DescriptorType"] = DomaineParametreOp<int>(cv::AKAZE::DESCRIPTOR_MLDB, cv::AKAZE::DESCRIPTOR_KAZE_UPRIGHT, cv::AKAZE::DESCRIPTOR_MLDB, 1);
+    intParam["Diffusivity"] = DomaineParametreOp<int>(cv::KAZE::DIFF_PM_G2, cv::KAZE::DIFF_PM_G1, cv::KAZE::DIFF_CHARBONNIER, 1);
+    intParam["NOctaveLayers"] = DomaineParametreOp<int>(4, 1, 128, 1);
+    intParam["NOctaves"] = DomaineParametreOp<int>(4, 1, 200, 2);
+    doubleParam["Threshold"] = DomaineParametreOp<double>(0.001, 0.0001, 10, 0.001);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "kazefeatures2d")
+    {
+    nomOperation = s;
+    nbImageRes = 0;
+    nbOperande = 1;
+    opAttribut = true;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["extended"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["upright "] = DomaineParametreOp<int>(0, 0, 1, 1);;
     intParam["Diffusivity"] = DomaineParametreOp<int>(cv::KAZE::DIFF_PM_G2, cv::KAZE::DIFF_PM_G1, cv::KAZE::DIFF_CHARBONNIER, 1);
     intParam["NOctaveLayers"] = DomaineParametreOp<int>(4, 1, 128, 1);
     intParam["NOctaves"] = DomaineParametreOp<int>(4, 1, 200, 2);
@@ -1309,9 +1329,18 @@ if (s == "akazefeatures2d")
     opAttribut = true;
     nomOperation = s;
     nbOperande = 1;
-    lienHtml = "http://docs.opencv.org/trunk/de/dbf/classcv_1_1BRISK.html#details";
+    lienHtml = "http://docs.opencv.org/3.0-beta/modules/features2d/doc/feature_detection_and_description.html#akaze";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=4418&zoom=70,250,100";
     operateur = &ImageInfoCV::DetectAkaze;
+    }
+if (s == "kazefeatures2d")
+    {
+    opAttribut = true;
+    nomOperation = s;
+    nbOperande = 1;
+    lienHtml = "http://docs.opencv.org/3.0-beta/modules/features2d/doc/feature_detection_and_description.html#kaze";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=4418&zoom=70,250,100";
+    operateur = &ImageInfoCV::DetectKaze;
     }
 if (s == "briskfeatures2d")
     {
