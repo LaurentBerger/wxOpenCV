@@ -125,6 +125,7 @@ Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER
 Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_XML);
 Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
 Bind(wxEVT_COMMAND_COMBOBOX_SELECTED,&FenetreAlgo::ComboBox,this);
+Bind(wxEVT_TEXT_ENTER, &FenetreAlgo::OnTextValider, this);
 SetSizerAndFit( topsizer );
 Show(true);
 }
@@ -328,7 +329,8 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	new wxStaticText(page,indOriCtrl+2*nbParam,its->first+" x",p, s);
 	p += wxPoint(s.GetX(),0);
 //	wxSpinCtrl *spw=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-	wxSpinCtrlDouble *spw=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+	wxSpinCtrlDouble *spw=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
+    spw->SetDigits(5);
 	if(its->second.res)
 		spw->Disable();
 	spw->SetRange(its->second.mini.width, its->second.maxi.width);
@@ -341,6 +343,7 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 //	wxSpinCtrl *sph=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 //	sph->SetRange(0,256); 
 	wxSpinCtrlDouble *sph=new wxSpinCtrlDouble(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS ); 
+    sph->SetDigits(5);
 	if (its->second.res)
 		sph->Disable();
 	sph->SetRange(its->second.mini.height, its->second.maxi.height);
@@ -405,6 +408,7 @@ for (itd = pOCV->doubleParam.begin(); itd != pOCV->doubleParam.end(); itd++)
 	new wxStaticText(page, indOriCtrl + 2 * nbParam, itd->first, p, s);
 	p += wxPoint(s.GetX(), 0);
 	wxSpinCtrlDouble *sp = new wxSpinCtrlDouble(page, indOriCtrl + 2 * nbParam + 1, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
+    sp->SetDigits(5);
 	if (itd->second.res)
 		sp->Disable();
 	sp->SetRange(itd->second.mini, itd->second.maxi);
@@ -427,6 +431,7 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
 	p += wxPoint(s.GetX(), 0);
 	//	wxSpinCtrl *spw=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
 	wxSpinCtrlDouble *spw = new wxSpinCtrlDouble(page, indOriCtrl + 2 * nbParam + 1, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
+    spw->SetDigits(5);
 	if (itp->second.res)
 		spw->Disable();
 	spw->SetRange(itp->second.mini.x, itp->second.maxi.y);
@@ -762,6 +767,7 @@ for (int ii=indEtape;ii<nbEtape;ii++)
                 i++;
             listeOp[i ].first->op[0] = r[0];
 			}
+        f->DynamiqueAffichage();
 
 		f->NouvelleImage();
 		f->MAJNouvelleImage();

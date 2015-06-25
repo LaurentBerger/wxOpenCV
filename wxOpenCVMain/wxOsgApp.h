@@ -42,9 +42,9 @@ wxFileConfig *configApp;					/*!< Fichier de configuration de l'application */
 
 std::vector<ParametreOperation> listeOperation;		/*<! Liste des opérations individuelles */
 std::map <int,std::vector <ParametreOperation > > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
-int	numOpFaite;								/*!< Nombre d'opération faites ou sauvgardées dans le fichier INI */
-int numSeqOpe;								/*!< Nombre de séquence d'opérations faites ou sauvgardées dans le fichier INI */
-
+int 	numOpFaite;								/*!< Nombre d'opération faites ou sauvgardées dans le fichier INI */
+int     numSeqOpe;								/*!< Nombre de séquence d'opérations faites ou sauvgardées dans le fichier INI */
+wxPoint posFenetre;
 char	utilisateurAbsent;
 bool	quitter;
 ServeurScilab		*serveur;

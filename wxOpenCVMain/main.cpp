@@ -4,6 +4,7 @@
 #include "ImageInfo.h"
 #include "wx/wxprec.h"
 #include "wx/splash.h"
+#include <wx/display.h>
 #include "mobile.xpm"
 
 //#include <vld.h>
@@ -456,8 +457,10 @@ if (ouverture.ShowModal()!=wxID_OK)
 	return;
 configApp->Write("/dossier",ouverture.GetDirectory());
 FenetrePrincipale *f = new FenetrePrincipale(NULL, "wxOpenCV",
-    wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
-
+    posFenetre, wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
+posFenetre += wxPoint(20,20);
+posFenetre.x=posFenetre.x%500;
+posFenetre.y=posFenetre.y%500;
 f->DefOSGApp(this);
 #ifdef __WINDOWS__
 wxString s(ouverture.GetDirectory()+"\\"+ouverture.GetFilename ());
@@ -691,6 +694,7 @@ if (pOCV.nbImageRes==0)
     FenetrePrincipale *f = Graphique(pOCV.indOpFenetre[0]);
 	if (f)
 		{
+        f->DynamiqueAffichage();
         f->NouvelleImage();
         f->MAJNouvelleImage();
         wxCommandEvent evt;
@@ -813,11 +817,18 @@ new wxDynamicLibrary(plPlotLibWX);
 new wxDynamicLibrary(wxPlPlotDrv);
 new wxDynamicLibrary(svgPlPlotDrv);
 
+int nbEcran=wxDisplay::GetCount() ;
+wxDisplay ecran(0);
+
+wxRect display;
+display = ecran.GetGeometry();
+display.SetTopRight(display.GetTopRight()-wxPoint(1000,0));
+
 InterfaceAvance *frame = new InterfaceAvance(NULL,
                                  wxID_ANY,
                                  "wxOpenCV",
-                                 wxDefaultPosition,
-                                 wxSize(1000, 800));
+                                 display.GetTopRight(),
+                                 wxSize(1000, 1000));
 
 wxBitmap bitmap;
 bool  m_isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
@@ -932,6 +943,8 @@ if (serveur)
 #else
 serveur =NULL;
 #endif
+posFenetre = wxPoint(20,20);
+
 return true;
 }
 

@@ -313,6 +313,13 @@ listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_VERT").
 listeParam["image_mask"].insert(std::pair<string, int>(_("enable mask").ToStdString(), 1));
 listeParam["image_mask"].insert(std::pair<string, int>(_("disable mask").ToStdString(),0));
 
+listeParam["matrix_type"].insert(std::pair<string, int>(_("unsigned char").ToStdString(), CV_8U));
+listeParam["matrix_type"].insert(std::pair<string, int>(_("char").ToStdString(), CV_8S));
+listeParam["matrix_type"].insert(std::pair<string, int>(_("unsigned short").ToStdString(), CV_16U));
+listeParam["matrix_type"].insert(std::pair<string, int>(_("short").ToStdString(), CV_16S));
+listeParam["matrix_type"].insert(std::pair<string, int>(_("int").ToStdString(), CV_32S));
+listeParam["matrix_type"].insert(std::pair<string, int>(_("float").ToStdString(), CV_32F));
+listeParam["matrix_type"].insert(std::pair<string, int>(_("double").ToStdString(), CV_64F));
 
 }
 
@@ -762,7 +769,9 @@ if (s == "bitwise-not")
 }
 if (s == "convertto")
 	{
-    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+    intParam["matrix_type"] = DomaineParametreOp<int>(CV_32F, -1, CV_32F, 1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(1,0.1,10,0.1);
+	doubleParam["beta"]=DomaineParametreOp<double>(0,0.1,10,0.1);
 	nomOperation = s;
 	nbOperande = 1;
 	nbImageRes = 1;

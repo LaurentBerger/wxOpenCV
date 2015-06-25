@@ -58,13 +58,12 @@ return r;
 std::vector<ImageInfoCV *>ImageInfoCV::ConvertType(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
-if (op.size()<2)
+if (op.size()==0)
     return r;
 ImageInfoCV	*im = new ImageInfoCV;
 
 
-    pOCV->intParam["ddepth"].valeur = CV_32F;
-    op[0]->convertTo( *im, pOCV->intParam["ddepth"].valeur, pOCV->intParam["alpha"].valeur,pOCV->intParam["beta"].valeur);
+    op[0]->convertTo( *im, pOCV->intParam["matrix_type"].valeur, pOCV->doubleParam["alpha"].valeur,pOCV->doubleParam["beta"].valeur);
 r.push_back(im);
 return r;
 }
