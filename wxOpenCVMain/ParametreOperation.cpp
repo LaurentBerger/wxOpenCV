@@ -770,8 +770,8 @@ if (s == "bitwise-not")
 if (s == "convertto")
 	{
     intParam["matrix_type"] = DomaineParametreOp<int>(CV_32F, -1, CV_32F, 1);
-	doubleParam["alpha"]=DomaineParametreOp<double>(1,0.1,10,0.1);
-	doubleParam["beta"]=DomaineParametreOp<double>(0,0.1,10,0.1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(1,0,10,0.1);
+	doubleParam["beta"]=DomaineParametreOp<double>(0,0,10,0.1);
 	nomOperation = s;
 	nbOperande = 1;
 	nbImageRes = 1;
@@ -793,9 +793,9 @@ if (s == "addweighted")
 	nomOperation=s;
 	nbOperande= 2;
     intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
-	doubleParam["alpha"]=DomaineParametreOp<double>(1,0.1,10,0.1);
-	doubleParam["beta"]=DomaineParametreOp<double>(1,0.1,10,0.1);
-	doubleParam["gamma"]=DomaineParametreOp<double>(1,0.1,10,0.1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(1,0,10,0.1);
+	doubleParam["beta"]=DomaineParametreOp<double>(1,0,10,0.1);
+	doubleParam["gamma"]=DomaineParametreOp<double>(1,0,10,0.1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "subtract")
