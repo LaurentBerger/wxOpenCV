@@ -165,6 +165,8 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
 	EVT_MENU(NOIRETBLANC_+7,  FenetrePrincipale::SelectPalette)
 	EVT_MENU(NOIRETBLANC_+8,  FenetrePrincipale::SelectPalette)
 	EVT_MENU(ARCENCIEL_,  FenetrePrincipale::SelectPalette)
+	EVT_MENU(ZOOM1SUR8,  FenetrePrincipale::MAJZoom)
+	EVT_MENU(ZOOM1SUR4,  FenetrePrincipale::MAJZoom)
 	EVT_MENU(ZOOM1SUR2,  FenetrePrincipale::MAJZoom)
 	EVT_MENU(ZOOM1SUR1,  FenetrePrincipale::MAJZoom)
 	EVT_MENU(ZOOM2SUR1,  FenetrePrincipale::MAJZoom)
@@ -481,8 +483,9 @@ f->InitIHM();
 
 void wxOsgApp::InitFenAssociee(FenetrePrincipale *f)
 {
+    wxPoint p=f->GetPosition()+wxPoint(f->GetSize().GetWidth(),0);
 ImageStatistiques *imgStatIm = new ImageStatistiques(NULL, "Image Statistic",
-	wxPoint(530,0), wxSize(430,570),
+	p, wxSize(430,570),
 	wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
 FenetreZoom *fenZoom = new FenetreZoom(f);
 wxString s(f->GetTitle());
@@ -1320,6 +1323,12 @@ void FenetrePrincipale::BasculeZoom()
 void FenetrePrincipale::BasculeStat()
 {
 	tpsPreEvt=-1;
+    if (imgStatIm->JamaisVue())
+    {
+        wxPoint p=GetPosition()+wxPoint(GetSize().GetWidth(),0);
+        imgStatIm->SetPosition(p);
+
+    }
 	if (statActif)
 		statActif=false;
 	else
@@ -1795,8 +1804,25 @@ if (imAffichee)
 imAffichee=NULL;
 if (imAcq->type()==CV_16UC1 && imAcq->MaxIm()[0]<32767.)
 	imAcq->flags=(imAcq->flags&0xFFFFFFF0)|CV_16SC1;
-wxSize	tailleZoneImage;
-tailleZoneImage=GetClientSize();
+int		fZoomNume,fZoomDeno;
+int nbEcran=wxDisplay::GetCount() ;
+wxDisplay ecran(0);
+wxRect display;
+display = ecran.GetGeometry();
+int n=1;
+wxRect r;
+do {
+    n--;
+    feuille->FacteurZoom(n);
+    CalculZoom(fZoomNume,fZoomDeno);
+    r =wxRect(wxSize((imAcq->cols*fZoomNume)/fZoomDeno,(imAcq->rows*fZoomNume)/fZoomDeno)+wxSize(5,5));
+    }
+while (!display.Contains(r) &&n>-3);
+feuille->FacteurZoom(n);
+CalculZoom(fZoomNume,fZoomDeno);
+wxSize sa(wxSize((imAcq->cols*fZoomNume)/fZoomDeno,(imAcq->rows*fZoomNume)/fZoomDeno)+wxSize(5,5));
+SetClientSize(sa);
+feuille->SetVirtualSize(wxSize((imAcq->cols*fZoomNume)/fZoomDeno, (imAcq->rows*fZoomNume)/fZoomDeno));
 
 }
 

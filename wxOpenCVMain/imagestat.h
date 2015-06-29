@@ -42,6 +42,7 @@ std::map <wxString,FenetreRegion*> ongletKeyPt; /*!< Onglet associé aux descript
 wxSlider				**slNivMin;				/*!< Réglage du niveau bas de la palette par canal*/
 wxSlider				**slGain;				/*!< Réglage du niveau haut de la palette par canal*/
 wxSpinCtrl				*spAjustAuto;			/*!< Ajustement auto de la palette avec % de satureation */
+bool                    jamaisVue;              /*!< La fenêtre n'a jamais été montrée sur l'écran*/
 
 void  *osgApp;
 
@@ -103,6 +104,9 @@ wxWindow* OngletCouleur(){return ongletCouleur;};
 wxWindow* OngletHistogramme(){return ongletHistogramme;};
 Tableur *TableurHistogramme(){return ongletHistogramme->Grille();};
 
+void MAJOnglet(int indOnglet);
+		/*!< Mise à jour des onglets lors d'un changement de données */
+
 void MAJValeurPalette();
 		/*!< Mise à jour des valeurs de la palette */
 void MAJMinMaxHisto();
@@ -116,6 +120,7 @@ void MAJInfo(int art,wxString ss);
 void ListerRegion(); 
 void SelectRegion(int w,int plan); 
 void LireNiveau(int *x){}; 
+bool JamaisVue(bool x=true){if (!x) jamaisVue=false;return jamaisVue;};
 
 wxString LireInfo(int art);
 

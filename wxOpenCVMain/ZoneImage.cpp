@@ -40,7 +40,7 @@ Bind(wxEVT_CONTEXT_MENU, &ZoneImage::OnMenuContext,this);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::Vue3D, this, Menu_3D);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::SelectPalette, this, NOIRETBLANC_, NOIRETBLANC_ + 9);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::ModeComplexe,this,M_MODULE_,PHASE_RD);
-Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR2,ZOOM8SUR1);
+Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR8,ZOOM8SUR1);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SequenceOperation,this,SEQ_OPE);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::RazSeqOp, this, STOP_SEQ);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::MenuMasque, this, RECT_DS_MASQUE, RECT_DS_MASQUE + NB_MAX_RECTANGLE);
@@ -576,6 +576,8 @@ wxMenu *ZoneImage::CreateMenuComplex(wxString *title)
 wxMenu *ZoneImage::CreateMenuZoom(wxString *title)
 {
     wxMenu *menu = new wxMenu;
+    menu->Append(ZOOM1SUR8, _T("&Zoom 1/8\tCtrl-F1"));
+    menu->Append(ZOOM1SUR4, _T("&Zoom 1/4\tCtrl-F1"));
     menu->Append(ZOOM1SUR2, _T("&Zoom 1/2\tCtrl-F1"));
     menu->Append(ZOOM1SUR1, _T("&Zoom x1\tCtrl-F2"));
     menu->Append(ZOOM2SUR1, _T("&Zoom x2\tCtrl-F2"));

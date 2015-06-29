@@ -772,7 +772,10 @@ for (int ii=indEtape;ii<nbEtape;ii++)
 		f->NouvelleImage();
 		f->MAJNouvelleImage();
 		if (f->ImgStat())
-			f->ImgStat()->Plot(true);
+        {
+            f->ImgStat()->Plot(true);
+            f->ImgStat()->MAJOnglet(-1);
+        }
 		f->DefHistorique();
 		}
 	}

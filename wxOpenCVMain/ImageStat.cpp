@@ -54,7 +54,7 @@ panneau = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxTAB_TRAVERSAL  | wxNO_BORDER | wxNO_FULL_REPAINT_ON_RESIZE);
 
 m_sizerFrame = new wxBoxSizer(wxVERTICAL);
-
+jamaisVue=true;
 //Centre(wxBOTH);
 listeFenetreOnglet = new wxNotebook(panneau, -1,wxDefaultPosition, wxDefaultSize,wxNB_TOP);
 /*Tableur *infoSequence = new Tableur((wxFrame*)listeFenetreOnglet,200,15); 
@@ -89,16 +89,16 @@ delete wxLog::SetActiveTarget(logWindow);*/
 
 }
 
-void ImageStatistiques::OnActivate(wxActivateEvent& event)
+void ImageStatistiques::MAJOnglet(int indOnglet)
 {
-if (!event.GetActive())
-	return;
-int i=listeFenetreOnglet->GetSelection();
-if (i==4)
+int i=indOnglet;
+if (i==0 || i==-1)
+    OuvertureOngletStatus();
+if (i==4 || i==-1)
 	{
 	DrawPaletteActuelle();
 	}
-if (i==1)
+if (i==1 || i==-1)
 	{
 	if (fenMere->Cam() &&  fenMere->Cam()->IsRunning())
 		{
@@ -108,9 +108,10 @@ if (i==1)
 	else if (ongletHistogramme)
 		ongletHistogramme->Plot(true);
 	}
-if (i == 5)
+if (i == 3 || i==-1)
 {
-    for (int j = 0; j < 3;j++)
+    for (int j = 0; j < 3; j++)
+    {
         if (j >= fenMere->ImAcq()->channels())
         {
             slNivMin[j]->Disable();
@@ -121,7 +122,23 @@ if (i == 5)
             slNivMin[j]->Enable();
             slGain[j]->Enable();
         }
+        wxString s;
+	    s.Printf("%.0lf",fenMere->SeuilNivBas(j));
+	    wxTextCtrl *cb=(wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_LUM_ROUGE+j,this);
+        cb->SetValue(s);
+	    s.Printf("%.1lf",fenMere->CoeffCanal(j));
+        cb=(wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_GAIN_ROUGE+j,this);
+        cb->SetValue(s);
+    }
 }
+
+}
+
+void ImageStatistiques::OnActivate(wxActivateEvent& event)
+{
+if (!event.GetActive())
+	return;
+MAJOnglet(listeFenetreOnglet->GetSelection());
 }
 
 

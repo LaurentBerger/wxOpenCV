@@ -178,15 +178,19 @@ case -1 :
 	break;
 case 0 :
 	nume=1;
+	deno=1;
 	break;
 case 1 :
 	nume=2;
-	break;
+    deno=1;
+    break;
 case 2 :
 	nume=4;
+    deno=1;
 	break;
 case 3 :
 	nume=8;
+    deno=1;
 	break;
 default :
 	deno=1;
