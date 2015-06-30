@@ -321,6 +321,10 @@ listeParam["matrix_type"].insert(std::pair<string, int>(_("int").ToStdString(), 
 listeParam["matrix_type"].insert(std::pair<string, int>(_("float").ToStdString(), CV_32F));
 listeParam["matrix_type"].insert(std::pair<string, int>(_("double").ToStdString(), CV_64F));
 
+listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_PRECISE").ToStdString(), 0));
+listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_3").ToStdString(), 3));
+listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_5").ToStdString(), 5));
+
 }
 
 bool ParametreOperation::InitOperation(string s)
@@ -1060,6 +1064,9 @@ if (s == "distancetransform")
     nbOperande = 1;
     nbImageRes = 1;
 	nomOperation=s;
+	intParam["distance_type"]=DomaineParametreOp<int>(cv::DIST_L1,cv::DIST_L1,cv::DIST_HUBER,1);
+    intParam["maskSize"]=DomaineParametreOp<int>(cv::DIST_MASK_PRECISE ,3,11,2);
+    intParam["labelType"]=DomaineParametreOp<int>(cv::DIST_LABEL_CCOMP,cv::DIST_LABEL_CCOMP,cv::DIST_LABEL_PIXEL ,1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "medianaxis")

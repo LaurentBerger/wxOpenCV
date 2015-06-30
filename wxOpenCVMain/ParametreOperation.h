@@ -24,9 +24,10 @@ TypeValeur valeur;		/*< Valeur actuelle du paramètre*/
 TypeValeur mini,maxi;	/*< Valeur extremum du paramètre */
 TypeValeur pas;		/*< Pas entre deux valeurs */
 bool res;			/*< Vrai si la valeur est un résutat*/
-DomaineParametreOp(TypeValeur a, TypeValeur b, TypeValeur c, TypeValeur d) :valeur(a), mini(b), maxi(c), pas(d), res(false){};
-DomaineParametreOp(TypeValeur a) :valeur(a), mini(a), maxi(a), pas(a), res(false){};
-DomaineParametreOp():valeur(TypeValeur()),mini(TypeValeur()),maxi(TypeValeur()),pas(TypeValeur()),res(false){};
+bool mouseScan;     /*< Vrai si la valeur peut être saisie à la souris (pour cv::Point ou cv::Rect*/
+DomaineParametreOp(TypeValeur a, TypeValeur b, TypeValeur c, TypeValeur d) :valeur(a), mini(b), maxi(c), pas(d), res(false),mouseScan(false){};
+DomaineParametreOp(TypeValeur a) :valeur(a), mini(a), maxi(a), pas(a), res(false),mouseScan(false){};
+DomaineParametreOp():valeur(TypeValeur()),mini(TypeValeur()),maxi(TypeValeur()),pas(TypeValeur()),res(false),mouseScan(false){};
 //DomaineParametre():valeur(cv:Point(0,0)),mini(cv:Point(0,0)),maxi(cv:Point(0,0)),pas(cv:Point(0,0)){};
 };
 

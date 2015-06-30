@@ -948,9 +948,10 @@ return r;
 std::vector<ImageInfoCV		*> ImageInfoCV::DistanceDiscrete (std::vector<ImageInfoCV *>op,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
+
 if (op[0]->channels()==1)
 	{
-	cv::distanceTransform(*op[0], *im, cv::DIST_L1, 3);
+	cv::distanceTransform(*op[0], *im, paramOCV->intParam["distance_type"].valeur, paramOCV->intParam["maskSize"].valeur,paramOCV->intParam["labelType"].valeur);
 	}
 else
 	{
@@ -960,7 +961,7 @@ else
 	cv::split( *op[0], planCouleur );
 	for (int i=0;i<op[0]->channels();i++)
 		{
-		cv::distanceTransform(planCouleur[i], d[i], cv::DIST_L1, 3);
+		cv::distanceTransform(planCouleur[i], d[i], paramOCV->intParam["distance_type"].valeur, paramOCV->intParam["maskSize"].valeur,paramOCV->intParam["labelType"].valeur);
 		}
 	cv::merge((const cv::Mat *)d, op[0]->channels(), *im);
 	delete []d;
