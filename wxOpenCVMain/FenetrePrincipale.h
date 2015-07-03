@@ -85,6 +85,7 @@ int					indRect; /*!< Indice du rectangle actif */
 int					indCoupe; /*!< Indice de la coupe active */
 wxBitmap			*bitmapAffiche;/*!< bitmap de l'image */
 char				modeComplexe;/*!< Type d'affichage pour une image complexe */
+bool                pointCtrl;  /*!< Point de controle de l'alogo affichée sur l'image*/
 
 wxList          m_displayList; // A list of DragShapes
 int             m_dragMode;
@@ -240,6 +241,11 @@ void IndiceRectangleSelec(int i){indRect=i;};
 	 * La fonction fixe le nouveau rectangle sélectionné dans le tableau rectSelect.
 	 * \param i : le i ème rectangle du tableau rectSelect sera le rectangle sélectionné.
 	 */
+bool PtCtrl(){return pointCtrl;}
+   /*!
+     *  \brief PtCtrl
+	 * La fonction indique si les points de controle de l'algo doivent être affichés..
+	 */
 void ModeCoupe(bool t){modeCoupe=t;};
    /*!
      *  \brief ModeCoupe
@@ -334,7 +340,7 @@ wxList& GetDisplayList() { return m_displayList; };
 void	OperationEncours(char b){operationSelectionne=b;};
 void GestionCurseurSourisGlisser(wxMouseEvent &event);
 void OnEraseBackground(wxEraseEvent& event);
-void AjouteForme(wxPoint,int couleur=0,int forme=0,void *fenAlgo=NULL,int indRef=0);
+void AjouteForme(wxPoint,int couleur=0,int forme=0,void *fenAlgo=NULL,int indRef=0,wxString =wxEmptyString);
 
 
 private:
@@ -354,6 +360,8 @@ private:
 	void MAJZoom(wxCommandEvent& event);
     void MenuMasque(wxCommandEvent& event);
 	void SequenceOperation(wxCommandEvent& event);
+    void PointCtrl(wxCommandEvent& event);
+
 
 wxMenu *CreateMenuComplex(wxString *title);
 wxMenu *CreateMenuPalette(wxString *title);
@@ -804,7 +812,7 @@ FenetreZoom *FZoom(){ return fenZoom; };
 *  \brief fonction ZoomActif
 *  Fenêtre zoom de la fenêtre.
 */
-
+FenetreAlgo *FenAlgo(){return fenAlgo;}
 
 void DefPointeurSouris(int type);
 bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
@@ -1136,6 +1144,7 @@ enum
     Menu_Masque,
     Menu_FilMax,
 	Menu_ParAlg,
+    MENU_PTCTRL,
     Menu_ParPano,
 	Menu_Contour,
 	MENU_LIGNEHOUGH,

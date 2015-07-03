@@ -1821,10 +1821,6 @@ wxSize sa(wxSize((imAcq->cols*fZoomNume)/fZoomDeno,(imAcq->rows*fZoomNume)/fZoom
 SetClientSize(sa);
 feuille->SetVirtualSize(wxSize((imAcq->cols*fZoomNume)/fZoomDeno, (imAcq->rows*fZoomNume)/fZoomDeno));
 
-feuille->AjouteForme(wxPoint(50,50),0);
-feuille->AjouteForme(wxPoint(100,50),1);
-feuille->AjouteForme(wxPoint(100,100),2);
-feuille->AjouteForme(wxPoint(100,100),2);
 
 }
 

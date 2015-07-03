@@ -456,7 +456,7 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
         spinSouris.push_back(make_pair(spw,sph));
         paramSouris.push_back(&itp->second);
         ongletSouris.push_back(page);
-        fenMere->Feuille()->AjouteForme(wxPoint(itp->second.valeur.x,itp->second.valeur.y),indCouleur++,0,this,spinSouris.size()-1);
+        fenMere->Feuille()->AjouteForme(wxPoint(itp->second.valeur.x,itp->second.valeur.y),indCouleur++,0,this,spinSouris.size()-1,itp->first);
     }
 
 	nbParam++;

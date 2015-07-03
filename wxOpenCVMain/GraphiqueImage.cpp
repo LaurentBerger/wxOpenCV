@@ -132,6 +132,7 @@ TracerPointKAZE(hdc);
 TracerPointAKAZE(hdc);
 TracerPointAGAST(hdc);
 TracerPointBLOB(hdc);
+if(feuille->PtCtrl())
     feuille->DrawShapes(hdc);
 
 if (cam && cam->IsRunning())

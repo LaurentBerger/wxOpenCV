@@ -72,7 +72,7 @@ void DefOSGApp(void *w){osgApp=w;};
 void DefFenMere(FenetrePrincipale *f){fenMere =f;};
 		/*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
 void ExecuterOperation(int indEtape);/*!<Excute l'opération après modification des paramètres à partir de l'étape indEtape */
-public:
+int NbParamSouris(){ return spinSouris.size();}
 };
 
 #endif

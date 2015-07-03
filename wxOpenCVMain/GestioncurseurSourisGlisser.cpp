@@ -10,7 +10,7 @@ char				ZoneImage::operationSelectionne=0;
 
 
 
-void ZoneImage::AjouteForme(wxPoint ptImg,int couleur,int forme,void *fenAlgo,int indRef)
+void ZoneImage::AjouteForme(wxPoint ptImg,int couleur,int forme,void *fenAlgo,int indRef,wxString s)
 {
 	wxMemoryDC memDC;
     couleur+=11;
@@ -30,7 +30,13 @@ void ZoneImage::AjouteForme(wxPoint ptImg,int couleur,int forme,void *fenAlgo,in
     newShape->SetPosition(ptImg);
     newShape->SetZoneImage(this);
     newShape->SetFenAlgo(fenAlgo,indRef);
-    newShape->SetDragMethod(SHAPE_DRAG_BITMAP);
+    if (s==wxEmptyString)
+        newShape->SetDragMethod(SHAPE_DRAG_BITMAP);
+    else
+    {
+        newShape->SetDragMethod(SHAPE_DRAG_TEXT);
+        newShape->SetString(s);
+    }
     GetDisplayList().Append(newShape);
 }
 
@@ -60,6 +66,7 @@ DragShape::DragShape(const wxBitmap& bitmap)
     m_pos.y = 0;
     m_dragMethod = SHAPE_DRAG_BITMAP;
     m_show = true;
+    chaine =wxEmptyString;
 }
 
 bool DragShape::HitTest(const wxPoint& pt) const
@@ -238,7 +245,7 @@ void ZoneImage::GestionCurseurSourisGlisser(wxMouseEvent &event)
                 }
                 case SHAPE_DRAG_TEXT:
                 {
-                    m_dragImage = new GlisserImage(this, wxString("  Erode this image"), wxCursor(wxCURSOR_HAND));
+                    m_dragImage = new GlisserImage(this, m_draggedShape->GetString(), wxCursor(wxCURSOR_HAND));
                     break;
                 }
                 case SHAPE_DRAG_ICON:

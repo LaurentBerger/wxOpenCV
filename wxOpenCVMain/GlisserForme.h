@@ -56,6 +56,9 @@ public:
     int GetDragMethod() const { return m_dragMethod; }
     void SetDragMethod(int method) { m_dragMethod = method; }
 
+    wxString GetString(){return chaine;}
+    void SetString(wxString s){chaine=s;};
+
    void SetZoneImage(void *f) { zoneImage = f; }
    void SetFenAlgo(void *f, int i){fenAlgo=f;indRef=i;}
 
@@ -70,6 +73,7 @@ protected:
     void        *zoneImage;
     void        *fenAlgo;
     int         indRef;
+    wxString    chaine;
 };
 
 

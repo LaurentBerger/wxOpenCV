@@ -4,6 +4,7 @@
 #include "imagestat.h"
 #include "ControleCamera.h"
 #include "Fenetre3D.h"
+#include "FenetreAlgo.h"
 #include "FenetreSeqOpe.h"
 #include "GlisserForme.h"
 #include <wx/graphics.h>
@@ -23,6 +24,7 @@ m_dragImage=NULL;
 SetBackgroundStyle(wxBG_STYLE_PAINT);
 modeRect=false;
 modeCoupe=false;
+pointCtrl=false;
 facteurZoom=-1;
 osgApp=NULL;
 bitmapAffiche=NULL;
@@ -50,6 +52,7 @@ Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR8,ZOOM8SUR1);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SequenceOperation,this,SEQ_OPE);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::RazSeqOp, this, STOP_SEQ);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::MenuMasque, this, RECT_DS_MASQUE, RECT_DS_MASQUE + NB_MAX_RECTANGLE);
+Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::PointCtrl, this,MENU_PTCTRL);
 
 
 /*Connect(ZOOM1SUR2,ZOOM8SUR1  ,wxCommandEventHandler(ZoneImage::MAJZoom));
@@ -79,6 +82,12 @@ if (f3D)
 	}
 
 }
+
+void ZoneImage::PointCtrl(wxCommandEvent& event)
+{
+    pointCtrl=!pointCtrl;
+}
+
 
 void ZoneImage::MenuMasque(wxCommandEvent& event)
 {
@@ -757,6 +766,13 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 		menu.AppendCheckItem(MENU_POINTAGAST, _T("AGAST"));
 		if (f->TracerPointAGAST())
 			menu.Check(MENU_POINTAGAST, true);
+		menuParametre = true;
+		}
+	if (f->FenAlgo() != NULL && f->FenAlgo()->NbParamSouris()!=0)
+		{
+		menu.AppendCheckItem(MENU_PTCTRL, _T("Control Point"));
+		if (pointCtrl)
+			menu.Check(MENU_PTCTRL, true);
 		menuParametre = true;
 		}
     if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre || f->ImAcq()->EtapeOp()>0)
