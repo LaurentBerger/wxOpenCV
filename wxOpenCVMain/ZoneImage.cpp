@@ -5,6 +5,7 @@
 #include "ControleCamera.h"
 #include "Fenetre3D.h"
 #include "FenetreSeqOpe.h"
+#include "GlisserForme.h"
 #include <wx/graphics.h>
 
 
@@ -14,6 +15,11 @@ ZoneImage::ZoneImage(wxWindow *parent,wxSize w)
     SetVirtualSize( w.x, w.y );
     SetBackgroundColour( *wxWHITE );
 
+m_dragMode = TEST_DRAG_NONE;
+m_draggedShape = (DragShape*) NULL;
+//    m_dragImage = (wxDragImage*) NULL;
+m_currentlyHighlighted = (DragShape*) NULL;
+m_dragImage=NULL;
 SetBackgroundStyle(wxBG_STYLE_PAINT);
 modeRect=false;
 modeCoupe=false;
@@ -44,6 +50,7 @@ Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR8,ZOOM8SUR1);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SequenceOperation,this,SEQ_OPE);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::RazSeqOp, this, STOP_SEQ);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::MenuMasque, this, RECT_DS_MASQUE, RECT_DS_MASQUE + NB_MAX_RECTANGLE);
+
 
 /*Connect(ZOOM1SUR2,ZOOM8SUR1  ,wxCommandEventHandler(ZoneImage::MAJZoom));
 Connect(ZOOM1SUR1,wxEVT_MENU,  wxCommandEventHandler(ZoneImage::MAJZoom));
@@ -135,6 +142,10 @@ osgApp->DefUtilisateurAbsent(0);
 ImageInfoCV *imAcq=f->ImAcq();
 wxPoint point = event.GetPosition();
 wxRect	r(GetClientRect());
+if (    DragMode()!=0)
+    GestionCurseurSourisGlisser(event);
+if (    event.LeftUp())
+    GestionCurseurSourisGlisser(event);
 if (!r.Contains(point) ||  this->f!=osgApp->Graphique())
 	return;
 point=RepereEcranImage(point);
@@ -301,7 +312,8 @@ if (modeCoupe)
 
 void ZoneImage::OnLeftButtonUp(wxMouseEvent &event)
 {
-f->GestionCurseurSouris(event);
+if (DragMode()!=0)
+    GestionCurseurSourisGlisser(event);
 if (!modeRect && !modeCoupe)
 	return;
 if (modeRect)
@@ -381,11 +393,23 @@ if (f->ImAcq() && point.x>=0 && point.x<f->ImAcq()->cols && point.y>=0 && point.
 			}
 		}
 	}
+wxPoint ptImg=event.GetPosition(),ptEcran=RepereEcranImage(ptImg);
 
+DragShape* shape = FindShape(ptEcran);
+if (shape)
+{
+    DragMode(TEST_DRAG_START);
+    FormeGlisser(shape);
+    wxPoint pt=event.GetPosition(),ptImg=f->RepereEcranImage(pt);
+    PosDebutGlisser(ptImg);
+//    Unbind(wxEVT_LEFT_UP, &ZoneImage::OnLeftButtonUp,this);
+}
 if (event.ShiftDown()&&f->ImAcq() && point.x>=0 && point.x<f->ImAcq()->cols && point.y>=0 && point.y<f->ImAcq()->rows )
 	{
-	ShapedFrame *shapedFrame = new ShapedFrame(f,point);
+/*	ShapedFrame *shapedFrame = new ShapedFrame(f,point);
 	shapedFrame->Show(true);
+	PointFrame *pointFrame = new PointFrame(f,point);
+	pointFrame->Show(true);*/
 	}
 
 if (osgApp->ModeSouris()==SELECTION_EN_COURS)
@@ -399,7 +423,7 @@ wxPoint point2 = ScreenToClient(event.GetPosition()); // this is in screen coord
 //point=RepereEcranImage(point);
 if (ModeRectangle())
 	{
-	wxRect r(*RectangleSelec());
+    wxRect r(*RectangleSelec());
 	r.Inflate(2,2);
 	RefreshRect(RepereImageEcran(r),false);
 	RectangleSelec()->SetLeft(point.x);
@@ -440,6 +464,8 @@ wxPoint p1(RepereImageEcran(pTmp));
 ClientToScreen(&p1.x,&p1.y);
 wxBrush	tr=*wxTRANSPARENT_BRUSH;
 dc.SetBrush(tr);
+			dc.SetLogicalFunction(wxXOR);
+			dc.SetPen(wxPen(*wxWHITE, 3));
 int		fZoomNume,fZoomDeno;
 
 f->CalculZoom(fZoomNume,fZoomDeno);
@@ -460,6 +486,8 @@ void ZoneImage::TracerLesRectangles (wxDC &hdc)
 {
 wxBrush wt=*wxTRANSPARENT_BRUSH;
 hdc.SetBrush(wt);
+			hdc.SetLogicalFunction(wxXOR);
+			hdc.SetPen(wxPen(*wxWHITE, 3));
 for (int i=0;i<10;i++)
 	if (Rectangle(i)->GetWidth()!=0 || Rectangle(i)->GetHeight()!=0)
 		{

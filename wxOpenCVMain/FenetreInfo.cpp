@@ -331,3 +331,94 @@ void ShapedFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
     wxPaintDC dc(this);
     dc.DrawBitmap(m_bmp, 0, 0, true);
 }
+
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+// frame constructor
+/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
+PointFrame::PointFrame(wxFrame *parent,wxPoint &pSrc)
+       : wxFrame(parent, wxID_ANY, wxEmptyString,
+                  pSrc, wxSize(100, 100),
+                  0
+                  | wxFRAME_SHAPED
+                  | wxSIMPLE_BORDER
+                  | wxFRAME_NO_TASKBAR
+                  | wxSTAY_ON_TOP
+            )
+{
+	wxMemoryDC memDC;
+
+	wxColor c(*wxRED);
+
+    m_bmp = wxBitmap(16, 16);
+    memDC.SelectObject(m_bmp);
+    memDC.SetBackground(*wxWHITE_BRUSH);
+    memDC.Clear();
+    memDC.SetPen(c);
+    memDC.SetBrush(wxBrush(c));
+
+	memDC.DrawCircle(4,4,4);
+
+    memDC.SelectObject(wxNullBitmap);
+
+    SetSize(wxSize(m_bmp.GetWidth(), m_bmp.GetHeight()));
+    SetToolTip(_("Right-click to close, double click to cycle shape"));
+    SetWindowShape();
+	Bind(wxEVT_MOTION, &PointFrame::OnMouseMove,this);
+	Bind(wxEVT_PAINT,&PointFrame::OnPaint,this);
+	Bind(wxEVT_LEFT_UP, &PointFrame::OnLeftUp,this);
+	Bind(wxEVT_LEFT_DOWN, &PointFrame::OnLeftDown,this);
+	Bind(wxEVT_RIGHT_UP, &PointFrame::OnExit,this);
+	Bind(wxEVT_LEFT_DCLICK, &PointFrame::OnDoubleClick,this);
+}
+
+
+void PointFrame::SetWindowShape()
+{
+    SetShape(wxRegion(m_bmp, *wxWHITE));
+}
+
+void PointFrame::OnDoubleClick(wxMouseEvent& WXUNUSED(evt))
+{
+    SetWindowShape();
+}
+
+void PointFrame::OnLeftDown(wxMouseEvent& evt)
+{
+    CaptureMouse();
+    wxPoint pos = (evt.GetPosition());
+    wxPoint origin = GetPosition();
+    int dx =  pos.x - origin.x;
+    int dy = pos.y - origin.y;
+    m_delta = wxPoint(dx, dy);
+}
+
+void PointFrame::OnLeftUp(wxMouseEvent& WXUNUSED(evt))
+{
+    if (HasCapture())
+    {
+        ReleaseMouse();
+    }
+}
+
+void PointFrame::OnMouseMove(wxMouseEvent& evt)
+{
+    wxPoint pt = evt.GetPosition();
+    if (evt.Dragging() && evt.LeftIsDown())
+    {
+        wxPoint pos = (pt);
+        Move(wxPoint(pos.x - m_delta.x, pos.y - m_delta.y));
+    }
+}
+
+void PointFrame::OnExit(wxMouseEvent& WXUNUSED(evt))
+{
+    Close();
+}
+
+void PointFrame::OnPaint(wxPaintEvent& WXUNUSED(evt))
+{
+    wxPaintDC dc(this);
+    dc.DrawBitmap(m_bmp, 0, 0, true);
+}

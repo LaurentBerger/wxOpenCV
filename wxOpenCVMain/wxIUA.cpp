@@ -303,6 +303,7 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
 
     s = bouton[event.GetId()].chaineOperation.c_str();
     ParametreOperation p(s);
+    p.InitPtrFonction();
     FenetreAlgo *f = new FenetreAlgo(NULL, _("Operation"), wxDefaultPosition, wxDefaultSize, xx.listeOperation[s], wxDEFAULT_FRAME_STYLE);
     f->Show(true);
 }

@@ -435,7 +435,7 @@ if (s == "logPolar")
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
-	pointParam["center"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
+	pointParam["center"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
 	doubleParam["M"] = DomaineParametreOp<double>(1, 0, 10000, 1);
 	intParam["interpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, CV_INTER_LANCZOS4, 1);
     xx.listeOperation.insert(make_pair(s, *this));
@@ -465,13 +465,13 @@ if (s == "wrapAffine") // inclus la différence de deux images successives
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
-	pointParam["src1"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
-	pointParam["src2"] = DomaineParametreOp<cv::Point>(cv::Point(1000, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
-	pointParam["src3"] = DomaineParametreOp<cv::Point>(cv::Point(0, 1000), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
-	pointParam["dst1"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
-	pointParam["dst2"] = DomaineParametreOp<cv::Point>(cv::Point(1000, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
-	pointParam["dst3"] = DomaineParametreOp<cv::Point>(cv::Point(0, 1000), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
-	pointParam["centre"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1));
+	pointParam["src1"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
+	pointParam["src2"] = DomaineParametreOp<cv::Point>(cv::Point(1000, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
+	pointParam["src3"] = DomaineParametreOp<cv::Point>(cv::Point(0, 1000), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
+	pointParam["dst1"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
+	pointParam["dst2"] = DomaineParametreOp<cv::Point>(cv::Point(1000, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
+	pointParam["dst3"] = DomaineParametreOp<cv::Point>(cv::Point(0, 1000), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
+	pointParam["centre"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
 	doubleParam["angle"] = DomaineParametreOp<double>(0, -180, 180, 1);
 	doubleParam["scale"] = DomaineParametreOp<double>(1, 0.0000, 180, 0.1);
 	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
@@ -1214,6 +1214,7 @@ if (s == "panocomposition")
 if (nomOperation == "")
 	return false;
 InitPtrFonction();
+    xx.listeOperation[s].InitPtrFonction();
 return true;
 }
 

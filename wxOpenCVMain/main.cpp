@@ -727,6 +727,8 @@ pOCV.intParam.clear();
 // `Main program' equivalent, creating windows and returning main app frame
 bool wxOsgApp::OnInit()
 {
+
+
 bool b=false;
 //b=wxUnsetEnv("PLPLOT_HOME");
 //b=wxUnsetEnv("PLPLOT_LIB");
@@ -1384,11 +1386,6 @@ fenAlgo=NULL;
 fenPano = NULL;
 idFenetre=-1;
 
-    m_dragMode = TEST_DRAG_NONE;
-    m_draggedShape = (DragShape*) NULL;
-//    m_dragImage = (wxDragImage*) NULL;
-    m_currentlyHighlighted = (DragShape*) NULL;
-	m_dragImage=NULL;
 
 
 
@@ -1823,6 +1820,11 @@ CalculZoom(fZoomNume,fZoomDeno);
 wxSize sa(wxSize((imAcq->cols*fZoomNume)/fZoomDeno,(imAcq->rows*fZoomNume)/fZoomDeno)+wxSize(5,5));
 SetClientSize(sa);
 feuille->SetVirtualSize(wxSize((imAcq->cols*fZoomNume)/fZoomDeno, (imAcq->rows*fZoomNume)/fZoomDeno));
+
+feuille->AjouteForme(wxPoint(50,50),0);
+feuille->AjouteForme(wxPoint(100,50),1);
+feuille->AjouteForme(wxPoint(100,100),2);
+feuille->AjouteForme(wxPoint(100,100),2);
 
 }
 
@@ -2951,37 +2953,22 @@ imQuadrique->DoEnregistrer(t);
 */
 }
 
-// On some platforms, notably Mac OS X with Core Graphics, we can't blit from
-// a window, so we need to draw the background explicitly.
-bool GlisserImage::UpdateBackingFromWindow(wxDC& WXUNUSED(windowDC), wxMemoryDC& destDC, const wxRect& WXUNUSED(sourceRect),
-                    const wxRect& destRect) const
-{
-    destDC.SetClippingRegion(destRect);
-
-    if (m_canvas->ImageAffichee())
-		{
-		wxBitmap b(*m_canvas->ImageAffichee());
-        m_canvas->TileBitmap(destRect, destDC, b);
-		}
-    m_canvas->DrawShapes(destDC);
-    return true;
-}
-
-
 
 bool FenetrePrincipale::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
 {
-	wxPoint p(0,50);
 //	TracerDIB(imAffichee,dc);
-	return true;
     int			w = bitmap.GetWidth();
     int			h = bitmap.GetHeight();
 
     int i, j;
     for (i = rect.x; i < rect.x + rect.width; i += w)
     {
-        for (j = rect.y; j < rect.y + rect.height; j+= h)
-            dc.DrawBitmap(bitmap, i, j+50);
+        for (j = rect.y; j < rect.y + rect.height; j += h)
+        {
+            wxPoint p(i,j),ptEcran=(p);
+            dc.DrawBitmap(bitmap, p.x, p.y);
+
+        }
     }
     return true;
 }

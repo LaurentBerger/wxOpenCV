@@ -174,13 +174,16 @@ long style=wxSL_HORIZONTAL ;
 
 wxString	legende[]={_T("Color Min"),_T("Color Max"),_T("0")};
 ongletCouleur = new wxWindow(listeFenetreOnglet,-1); 
-slNivMin = new wxSlider*[fenMere->ImAcq()->channels()];
-slGain = new wxSlider*[fenMere->ImAcq()->channels()];
+slNivMin = new wxSlider*[max(3,fenMere->ImAcq()->channels())];
+slGain = new wxSlider*[max(3,fenMere->ImAcq()->channels())];
 for (int	i=0,j=0;j<3;j++)
 	{
 	wxString s;
-	s.Printf("%.0lf",fenMere->SeuilNivBas(j));
-	new wxTextCtrl(ongletCouleur,ID_VAL_LUM_ROUGE+j,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
+    if (j < fenMere->ImAcq()->channels())
+	    s.Printf("%.0lf",fenMere->SeuilNivBas(j));
+    else
+        s = "";
+	wxTextCtrl *teMin=new wxTextCtrl(ongletCouleur,ID_VAL_LUM_ROUGE+j,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
 	position[i].y+=taille[1].y;
 	i++;
     double seuilBas, coeff;
@@ -201,14 +204,19 @@ for (int	i=0,j=0;j<3;j++)
 	slGain[j]=new wxSlider(ongletCouleur,ID_ASC_GAIN_ROUGE+j,seuilBas*100, -fenMere->CoeffCanal(j)*1000,coeff*1000 ,position[i], taille[i],style);
 	position[i].y+=taille[1].y;
 	i++;
-	s.Printf("%.1lf",fenMere->CoeffCanal(j));
-	new wxTextCtrl(ongletCouleur,ID_VAL_GAIN_ROUGE+j,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
+    if (j < fenMere->ImAcq()->channels())
+	    s.Printf("%.1lf",fenMere->CoeffCanal(j));
+    else
+        s = "";
+	wxTextCtrl *teMax=new wxTextCtrl(ongletCouleur,ID_VAL_GAIN_ROUGE+j,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
 	position[i].y+=taille[1].y;
 	i++;
     if (j >= fenMere->ImAcq()->channels())
     {
         slNivMin[j]->Disable();
         slGain[j]->Disable();
+        teMax->Disable();
+        teMin->Disable();
     }
 	i=0;
 	}

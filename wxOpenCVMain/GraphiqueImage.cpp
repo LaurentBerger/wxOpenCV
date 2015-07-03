@@ -132,6 +132,8 @@ TracerPointKAZE(hdc);
 TracerPointAKAZE(hdc);
 TracerPointAGAST(hdc);
 TracerPointBLOB(hdc);
+    feuille->DrawShapes(hdc);
+
 if (cam && cam->IsRunning())
 	{
 	wxCriticalSectionLocker enter(travailCam);
@@ -155,6 +157,8 @@ void FenetrePrincipale::DrawRectangles(wxBufferedPaintDC &hdc)
 {
 wxBrush wt=*wxTRANSPARENT_BRUSH;
 hdc.SetBrush(wt);
+hdc.SetLogicalFunction(wxXOR);
+hdc.SetPen(wxPen(*wxWHITE, 3));
 for (int i=0;i<10;i++)
 	if (feuille->Rectangle(i)->GetWidth()!=0 || feuille->Rectangle(i)->GetHeight()!=0)
 		{

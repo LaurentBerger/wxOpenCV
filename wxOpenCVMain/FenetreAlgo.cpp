@@ -308,11 +308,12 @@ while(f && f->OrigineImage()->indOpFenetre.size()>0)
 
 wxWindow *FenetreAlgo::CreerOngletEtape(wxNotebook *classeur,int indOp)
 {
+// nbParamMax  nombre d'article maximum par onglet
 wxWindow *page = new wxWindow(classeur,-1);
 ParametreOperation *pOCV=listeOp[indOp].first;
 int nbParam=1;
 int ligne=50;
-int indOriCtrl=1+indOp*nbParamMax;
+int indOriCtrl=1+indOp*nbParamMax;// Dépend de l'indice de l'opérateur pour éviter le recouvrement des onglets 
 new wxHyperlinkCtrl (page,indOriCtrl," OpenCV Documentation",pOCV->lienHtml,wxPoint(10,10),wxSize(400,20));
 new wxHyperlinkCtrl(page,indOriCtrl+1,"PDF Documentation",pOCV->refPDF,wxPoint(10,30),wxSize(400,20));
 if (tailleMax.x<410)
@@ -421,9 +422,11 @@ for (itd = pOCV->doubleParam.begin(); itd != pOCV->doubleParam.end(); itd++)
 		tailleMax.y = p.y + s.y;
 }
 std::map<std::string, DomaineParametreOp<cv::Point> >::iterator itp;
+int indCouleur=0;
 for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
 {
-	wxString nombre;
+
+    wxString nombre;
 	nombre.Printf("%d", itp->second.valeur.x);
 	wxPoint p(10, ligne);
 	wxSize	s(100, 20);
@@ -448,6 +451,13 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
 		sph->Disable();
 	sph->SetRange(itp->second.mini.y, itp->second.maxi.y);
 	sph->SetIncrement((double)itp->second.pas.y);
+    if (fenMere && itp->second.mouseScan)
+    {
+        spinSouris.push_back(make_pair(spw,sph));
+        paramSouris.push_back(&itp->second);
+        ongletSouris.push_back(page);
+        fenMere->Feuille()->AjouteForme(wxPoint(itp->second.valeur.x,itp->second.valeur.y),indCouleur++,0,this,spinSouris.size()-1);
+    }
 
 	nbParam++;
 	ligne += 20;
@@ -464,7 +474,10 @@ return page;
 FenetreAlgo::~FenetreAlgo()
 {
 if (fenMere)
+{
+    fenMere->Feuille()->ClearShapes();
     fenMere->RAZFenAlgo();
+}
 
 }
 
@@ -783,6 +796,20 @@ for (int ii=indEtape;ii<nbEtape;ii++)
 }
 
 
+void FenetreAlgo::PositionSouris(int ind, wxPoint p)
+{
+    if (ind<0 || ind>=spinSouris.size())
+        return;
+
+    spinSouris[ind].first->SetValue(p.x);
+    spinSouris[ind].first->Refresh();
+    spinSouris[ind].second->SetValue(p.y);
+    spinSouris[ind].second->Refresh();
+    paramSouris[ind]->valeur.x=p.x;
+    paramSouris[ind]->valeur.x=p.y;
+    ExecuterOperation(listeOnglet[ongletSouris[ind]].second);
+
+}
 
 
 

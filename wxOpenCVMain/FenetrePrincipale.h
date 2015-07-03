@@ -32,6 +32,7 @@ class GlisserImage;
 // Constante pour usage de la souris
 #define SOURIS_STD 0
 #define SELECTION_EN_COURS 1
+#define DEPLACEMENT_EN_COURS 2
 
 #ifdef __TOTO__
 /*! \class Operation
@@ -85,6 +86,16 @@ int					indCoupe; /*!< Indice de la coupe active */
 wxBitmap			*bitmapAffiche;/*!< bitmap de l'image */
 char				modeComplexe;/*!< Type d'affichage pour une image complexe */
 
+wxList          m_displayList; // A list of DragShapes
+int             m_dragMode;
+DragShape*      m_draggedShape;
+DragShape*      m_currentlyHighlighted; // The shape that's being highlighted
+wxPoint         m_dragStartPos;
+GlisserImage*   m_dragImage;
+
+static FenetrePrincipale *fenDrag;
+static char		operationSelectionne; // le curseur est un texte
+
 public :
 ZoneImage(wxWindow *parent,wxSize w); 
     /*!
@@ -100,6 +111,14 @@ void DefFenetrePrincipale(FenetrePrincipale *w){f=w;};
      *  \brief DefFenetrePrincipale
      *
      *  Définition de la fenêtre parent
+	 * \param w : fenêtre parent
+	 */
+
+FenetrePrincipale* FenMere(){return f;};
+    /*!
+     *  \brief FenMere
+     *
+     *  
 	 * \param w : fenêtre parent
 	 */
 
@@ -301,6 +320,23 @@ void RazSeqOp(wxCommandEvent &);
      *  annulation de la séquence active.
      */
 
+// Pour les saisies graphiques
+void ArreterDragging(wxMouseEvent &event);
+int  DragMode(int x = -1){ if (x==-1) return m_dragMode;m_dragMode=x;if (x==operationSelectionne) operationSelectionne=1;return m_dragMode;};
+DragShape* FormeGlisser(DragShape* g){m_draggedShape=g;return g;}
+DragShape* FormeGlisser(){return m_draggedShape;};
+DragShape* FindShape(const wxPoint& pt) const; 
+void PosDebutGlisser( wxPoint& pt){m_dragStartPos=pt;}; 
+void DrawShapes(wxDC& dc);
+void EraseShape(DragShape* shape, wxDC& dc);
+void ClearShapes();
+wxList& GetDisplayList() { return m_displayList; };
+void	OperationEncours(char b){operationSelectionne=b;};
+void GestionCurseurSourisGlisser(wxMouseEvent &event);
+void OnEraseBackground(wxEraseEvent& event);
+void AjouteForme(wxPoint,int couleur=0,int forme=0,void *fenAlgo=NULL,int indRef=0);
+
+
 private:
     void OnPaint(wxPaintEvent& WXUNUSED(event));
 	void OnClose(wxWindowDestroyEvent& event);
@@ -465,17 +501,8 @@ bool				zoomActif;
 bool				statActif;
 wxTimer				*detectionUtilisateur;
 
-static FenetrePrincipale *fenDrag;
 
 private : // Gestion du curseur*
-wxList          m_displayList; // A list of DragShapes
-int             m_dragMode;
-DragShape*      m_draggedShape;
-DragShape*      m_currentlyHighlighted; // The shape that's being highlighted
-wxPoint         m_dragStartPos;
-GlisserImage*   m_dragImage;
-
-static char		operationSelectionne; // le curseur est un texte
 
 public:
     /*!
@@ -537,6 +564,16 @@ void ParamPano(wxCommandEvent& event);
 /*!
 *  \brief fonction ParamPano
 *  Accès aux informations du panorama
+*/
+void DrawShapes(wxDC& dc){feuille->DrawShapes(dc);};
+/*!
+*  \brief fonction DrawShapes
+*  Dessine les points de saisie
+*/
+ZoneImage *Feuille(){return feuille;};
+/*!
+*  \brief fonction Feuille
+*  accès à la zone graphique
 */
 
 //void AdjustHV(int orientation);
@@ -770,16 +807,7 @@ FenetreZoom *FZoom(){ return fenZoom; };
 
 
 void DefPointeurSouris(int type);
-void GestionCurseurSouris(wxMouseEvent &event);
-void GestionCurseurSourisGlisser(wxMouseEvent &event);
-void ArreterDragging(FenetrePrincipale* =NULL);
-DragShape* FindShape(const wxPoint& pt) const; 
-void DrawShapes(wxDC& dc);
-void EraseShape(DragShape* shape, wxDC& dc);
-void ClearShapes();
-wxList& GetDisplayList() { return m_displayList; };
 bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
-void	OperationEncours(char b){operationSelectionne=b;};
 void	SourisQuitterFen(wxMouseEvent &event);
 
 

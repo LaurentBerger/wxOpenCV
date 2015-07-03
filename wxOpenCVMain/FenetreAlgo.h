@@ -27,6 +27,9 @@ int								nbEtape;	/*<! Nombre d'étape nécessaire pour effectuer l'opération */
 wxPanel							*panneau;	/*!< Pointeur sur le panneau contenant le classeur */
 wxNotebook						*classeur;	/*!< le classeur avec ses différents onglets*/
 wxSize							tailleMax;	/*!< taille maximale de la fenêtre */
+std::vector<std::pair<wxSpinCtrlDouble*,wxSpinCtrlDouble*> >		spinSouris;	/*<! Spin modifiable par la souris */
+std::vector<DomaineParametreOp<cv::Point>*> 		                paramSouris;	/*<! Spin modifiable par la souris */
+std::vector<wxWindow *> 		                                    ongletSouris;	/*<! Spin modifiable par la souris */
 
 public :
 FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos, 
@@ -61,6 +64,8 @@ void OnKeyDown(wxKeyEvent &);
 
 void OnClose(wxCloseEvent& event);
 		/*!< Fermeture de la fenetre parametrage */
+void  PositionSouris(int ,wxPoint);
+		/*!<Spin modifé à partir de la souris */
 
 
 void DefOSGApp(void *w){osgApp=w;};

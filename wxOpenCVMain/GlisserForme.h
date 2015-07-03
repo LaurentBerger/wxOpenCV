@@ -46,7 +46,7 @@ public:
 //// Accessors
 
     wxPoint GetPosition() const { return m_pos; }
-    void SetPosition(const wxPoint& pos) { m_pos = pos; }
+    void SetPosition(const wxPoint& pos);
 
     wxRect GetRect() const { return wxRect(m_pos.x, m_pos.y, m_bitmap.GetWidth(), m_bitmap.GetHeight()); }
 
@@ -56,6 +56,9 @@ public:
     int GetDragMethod() const { return m_dragMethod; }
     void SetDragMethod(int method) { m_dragMethod = method; }
 
+   void SetZoneImage(void *f) { zoneImage = f; }
+   void SetFenAlgo(void *f, int i){fenAlgo=f;indRef=i;}
+
     bool IsShown() const { return m_show; }
     void SetShow(bool show) { m_show = show; }
 
@@ -64,25 +67,28 @@ protected:
     wxBitmap    m_bitmap;
     int         m_dragMethod;
     bool        m_show;
+    void        *zoneImage;
+    void        *fenAlgo;
+    int         indRef;
 };
 
 
 class GlisserImage: public wxDragImage
 {
 public:
-    GlisserImage(FenetrePrincipale* canvas): m_canvas(canvas) {}
+    GlisserImage(ZoneImage* canvas): m_canvas(canvas) {}
 
-    GlisserImage(FenetrePrincipale* canvas, const wxBitmap& image, const wxCursor& cursor = wxNullCursor):
+    GlisserImage(ZoneImage* canvas, const wxBitmap& image, const wxCursor& cursor = wxNullCursor):
         wxDragImage(image, cursor), m_canvas(canvas)
     {
     }
 
-    GlisserImage(FenetrePrincipale* canvas, const wxIcon& image, const wxCursor& cursor = wxNullCursor):
+    GlisserImage(ZoneImage* canvas, const wxIcon& image, const wxCursor& cursor = wxNullCursor):
         wxDragImage(image, cursor), m_canvas(canvas)
     {
     }
 
-    GlisserImage(FenetrePrincipale* canvas, const wxString& str, const wxCursor& cursor = wxNullCursor):
+    GlisserImage(ZoneImage* canvas, const wxString& str, const wxCursor& cursor = wxNullCursor):
         wxDragImage(str, cursor), m_canvas(canvas)
     {
     }
@@ -94,7 +100,7 @@ public:
 void DefOSGApp(wxOsgApp *w){osgApp=w;};
 
 protected:
-    FenetrePrincipale*   m_canvas;
+    ZoneImage*   m_canvas;
 	wxOsgApp			*osgApp;
 };
 
