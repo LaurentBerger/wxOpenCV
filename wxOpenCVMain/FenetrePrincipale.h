@@ -340,7 +340,7 @@ wxList& GetDisplayList() { return m_displayList; };
 void	OperationEncours(char b){operationSelectionne=b;};
 void GestionCurseurSourisGlisser(wxMouseEvent &event);
 void OnEraseBackground(wxEraseEvent& event);
-void AjouteForme(wxPoint,int couleur=0,int forme=0,void *fenAlgo=NULL,int indRef=0,wxString =wxEmptyString);
+DragShape* AjouteForme(wxPoint,int couleur=0,int forme=0,void *fenAlgo=NULL,int indRef=0,wxString =wxEmptyString);
 
 
 private:

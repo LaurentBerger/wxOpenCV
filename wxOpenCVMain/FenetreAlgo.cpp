@@ -1,6 +1,7 @@
 #include "ParametreOperation.h"
 #include "FenetreAlgo.h"
 #include "imagestat.h"
+#include "GlisserForme.h"
 #include <wx/hyperlink.h>
 
 using namespace std;
@@ -456,7 +457,9 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
         spinSouris.push_back(make_pair(spw,sph));
         paramSouris.push_back(&itp->second);
         ongletSouris.push_back(page);
-        fenMere->Feuille()->AjouteForme(wxPoint(itp->second.valeur.x,itp->second.valeur.y),indCouleur++,0,this,spinSouris.size()-1,itp->first);
+        DragShape *f=fenMere->Feuille()->AjouteForme(wxPoint(itp->second.valeur.x,itp->second.valeur.y),indCouleur++,0,this,spinSouris.size()-1,itp->first);
+        formeSouris[spw]=f;
+        formeSouris[sph]=f;
     }
 
 	nbParam++;
@@ -607,7 +610,7 @@ if (pOCV->sizeParam.find(nom.substr(0, nom.length() - 2)) != pOCV->sizeParam.end
 	}
 }
 if (pOCV->pointParam.find(nom.substr(0,nom.length()-2)) != pOCV->pointParam.end())
-	{
+{
 	if (nom.substr(nom.length()-1, 1)=='x')
 	{
         if (pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.x == (int)x)
@@ -620,6 +623,12 @@ if (pOCV->pointParam.find(nom.substr(0,nom.length()-2)) != pOCV->pointParam.end(
 			return;
         pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.y = (int)x;
 	}
+    if (formeSouris.find((wxSpinCtrlDouble*)w.GetEventObject()) != formeSouris.end())
+    {
+        wxPoint p(pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.x,pOCV->pointParam[nom.substr(0, nom.length() - 2)].valeur.y);
+        formeSouris[(wxSpinCtrlDouble*)w.GetEventObject()]->SetPosition(p,false);
+        fenMere->Feuille()->Update();
+    }
 }
 if (fenMere)
     ExecuterOperation(ind);

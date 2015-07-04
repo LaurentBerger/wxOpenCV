@@ -30,6 +30,7 @@ wxSize							tailleMax;	/*!< taille maximale de la fenêtre */
 std::vector<std::pair<wxSpinCtrlDouble*,wxSpinCtrlDouble*> >		spinSouris;	/*<! Spin modifiable par la souris */
 std::vector<DomaineParametreOp<cv::Point>*> 		                paramSouris;	/*<! Spin modifiable par la souris */
 std::vector<wxWindow *> 		                                    ongletSouris;	/*<! Spin modifiable par la souris */
+std::map<wxSpinCtrlDouble*,DragShape *> 		                    formeSouris;	/*<! Spin modifiable par la souris et forme*/
 
 public :
 FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos, 

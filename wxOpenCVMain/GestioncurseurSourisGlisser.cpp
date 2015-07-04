@@ -10,7 +10,7 @@ char				ZoneImage::operationSelectionne=0;
 
 
 
-void ZoneImage::AjouteForme(wxPoint ptImg,int couleur,int forme,void *fenAlgo,int indRef,wxString s)
+DragShape* ZoneImage::AjouteForme(wxPoint ptImg,int couleur,int forme,void *fenAlgo,int indRef,wxString s)
 {
 	wxMemoryDC memDC;
     couleur+=11;
@@ -38,6 +38,7 @@ void ZoneImage::AjouteForme(wxPoint ptImg,int couleur,int forme,void *fenAlgo,in
         newShape->SetString(s);
     }
     GetDisplayList().Append(newShape);
+    return newShape;
 }
 
 
@@ -101,10 +102,10 @@ bool DragShape::Draw(wxDC& dc, bool highlight)
         return false;
 }
 
-void DragShape::SetPosition(const wxPoint& pos) 
+void DragShape::SetPosition(const wxPoint& pos,bool pasDeMaj) 
 { 
     m_pos = pos;
-    if (fenAlgo != NULL)
+    if (fenAlgo != NULL && pasDeMaj)
     {
         ((FenetreAlgo*)fenAlgo)->PositionSouris(indRef,m_pos);
     }

@@ -46,7 +46,7 @@ public:
 //// Accessors
 
     wxPoint GetPosition() const { return m_pos; }
-    void SetPosition(const wxPoint& pos);
+    void SetPosition(const wxPoint& pos,bool pasDeMaj=true);
 
     wxRect GetRect() const { return wxRect(m_pos.x, m_pos.y, m_bitmap.GetWidth(), m_bitmap.GetHeight()); }
 

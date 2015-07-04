@@ -28,6 +28,7 @@
 #include "GlisserForme.h"
 #include "CameraAndor.h"
 #include "CameraOpenCV.h"
+#include "FenetreAlgo.h"
 
 #include <wx/image.h>
 #include <wx/menu.h>
@@ -2067,7 +2068,8 @@ Close(true);
 
 FenetrePrincipale::~FenetrePrincipale()
 {
-
+    if (fenAlgo)
+        fenAlgo->DefFenMere(NULL);
 }
 
 
@@ -2123,7 +2125,8 @@ if (cam!=NULL )
 		cam->Resume();	
 		}
 }
-
+if (fenAlgo)
+    fenAlgo->DefFenMere(NULL);
 if (osgApp && !osgApp->Quitter())
 	osgApp->RetirerListe(this);
 if (cam)
