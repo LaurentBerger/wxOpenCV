@@ -8,6 +8,26 @@ FenetrePrincipale	*ZoneImage::fenDrag=NULL;
 char				ZoneImage::operationSelectionne=0;
 
 
+bool FenetrePrincipale::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
+{
+//	TracerDIB(imAffichee,dc);
+    int			w = bitmap.GetWidth();
+    int			h = bitmap.GetHeight();
+    wxRect r=rect;
+    int i, j;
+    wxRect rEcran = RepereEcranImage(r);
+    for (i = rEcran.x; i < rEcran.x + rEcran.width; i += w)
+    {
+        for (j = rEcran.y; j < rEcran.y + rEcran.height; j += h)
+        {
+            wxPoint p(i,j),ptEcran=RepereImageEcran(p);
+            dc.DrawBitmap(bitmap, -p.x, -p.y);
+            wxLogWarning(_("TileBitmap (%d,%d)"),p.x,p.y);
+
+        }
+    }
+    return true;
+}
 
 
 DragShape* ZoneImage::AjouteForme(wxPoint ptImg,int couleur,int forme,void *fenAlgo,int indRef,wxString s)

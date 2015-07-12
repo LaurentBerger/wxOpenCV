@@ -400,6 +400,7 @@ bool				correctionTache;	/*!< 1 active correction tache */
 bool				correctionFonction; /*!< 1 active correction fonction fond */
 bool				correctionBiais;	/*!< 1 active correction du biais du CCD */
 bool				tracerContour;		/*!< 1 tracer des contours des régions */
+bool				tracerContourPoly;	/*!< 1 tracer des contours des régions avec approximation polygonale*/
 bool				tracerLigneHough;	/*!< 1 tracer des lignes détectées par hough */
 bool				tracerLigneProbaHough;	/*!< 1 tracer des cercle segments par hough */
 bool				tracerCercleHough;	/*!< 1 tracer des cercle détectés par hough */
@@ -621,6 +622,7 @@ bool TracerPointAGAST(){ return	tracerAGASTPoint; };		/*!< 1 tracer des contours
 bool TracerPointFREAK(){ return	tracerFREAKPoint; };		/*!< 1 tracer des contours des descripteurs des ORB  */
 bool TracerPointMSER(){ return	tracerMSERPoint; };		/*!< 1 tracer des contours des descripteurs des MSER  */
 bool TracerContour(){ return	tracerContour; };		/*!< 1 tracer des contours des régions */
+bool TracerContourPoly(){ return	tracerContourPoly; };		/*!< 1 tracer des contours des régions */
 bool TracerLigneHough(){ return	tracerLigneHough; };	/*!< 1 tracer des lignes détectées par hough */
 bool TracerLigneProbaHough(){return	tracerLigneProbaHough;};	/*!< 1 tracer des cercle segments par hough */
 bool TracerCercleHough(){return	tracerCercleHough;};	/*!< 1 tracer des cercle détectés par hough */
@@ -659,6 +661,11 @@ void TracerContour(wxCommandEvent& event);
     /*!
      *  \brief TracerContour
      *  tracer des contours d'une image
+     */
+void TracerContourPoly(wxCommandEvent& event);
+    /*!
+     *  \brief TracerContourPoly
+     *  tracer des contours après approximation polygonale d'une image
      */
 void TracerLigneHough(wxCommandEvent& event);
     /*!
@@ -743,6 +750,11 @@ void TracerContour(wxBufferedPaintDC &hdc);
     /*!
      *  \brief TracerContour
      *  tracer des contours d'une image
+     */
+void TracerContourPoly(wxBufferedPaintDC &hdc);
+    /*!
+     *  \brief TracerContourPoly
+     *  tracer des contours après approximation polygonale d'une image
      */
 void TracerLigneHough(wxBufferedPaintDC &hdc);
     /*!
@@ -1147,6 +1159,7 @@ enum
     MENU_PTCTRL,
     Menu_ParPano,
 	Menu_Contour,
+	Menu_Contour_Poly,
 	MENU_LIGNEHOUGH,
 	MENU_LIGNEPROBAHOUGH,
 	MENU_CERCLEHOUGH,

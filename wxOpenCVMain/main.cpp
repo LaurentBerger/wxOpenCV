@@ -180,6 +180,7 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
     EVT_MENU(Menu_ParAlg, FenetrePrincipale::ParamAlgo)
     EVT_MENU(Menu_ParPano, FenetrePrincipale::ParamPano)
     EVT_MENU(Menu_Contour, FenetrePrincipale::TracerContour)
+    EVT_MENU(Menu_Contour_Poly, FenetrePrincipale::TracerContourPoly)
 	EVT_MENU(MENU_LIGNEHOUGH,  FenetrePrincipale::TracerLigneHough)
 	EVT_MENU(MENU_LIGNEPROBAHOUGH,  FenetrePrincipale::TracerLigneProbaHough)
 	EVT_MENU(MENU_CERCLEHOUGH,  FenetrePrincipale::TracerCercleHough)
@@ -1375,6 +1376,7 @@ tracerKAZEPoint = false;
 tracerAGASTPoint = false;
 tracerFREAKPoint = false;
 tracerMSERPoint=false;
+tracerContourPoly=false;
 imgStatIm = NULL;
 indEvtCam=0;
 for (int i=0;i<10;i++)
@@ -1644,10 +1646,11 @@ if (s.Find("yml")>=0)
 	{
 	try 
 		{
-		imAcq =new ImageInfoCV();
+		imAcq =new ImageInfoCV(nomFichier);
+/*        imAcq->read()
 		cv::FileStorage fs(nomFichier, cv::FileStorage::READ);
 		fs["Image"]>>*((cv::Mat*)imAcq);
-		fs.release();
+		fs.release();*/
 		}
 	catch(cv::Exception& e)
 		{
@@ -1800,7 +1803,7 @@ if (imAffichee)
 	delete imAffichee;
 	}
 imAffichee=NULL;
-if (imAcq->type()==CV_16UC1 && imAcq->MaxIm()[0]<32767.)
+if (imAcq->type()==CV_16UC1 && (*(imAcq->MaxIm()))[0]<32767.)
 	imAcq->flags=(imAcq->flags&0xFFFFFFF0)|CV_16SC1;
 int		fZoomNume,fZoomDeno;
 int nbEcran=wxDisplay::GetCount() ;
@@ -1886,7 +1889,30 @@ if (!feuille)
 	feuille = new ZoneImage(this,wxSize(imAcq->cols/2,imAcq->rows/2));
 	feuille->DefFenetrePrincipale(this);
 	feuille->DefOSGApp(osgApp);
+    int		fZoomNume,fZoomDeno;
+    int nbEcran=wxDisplay::GetCount() ;
+    wxDisplay ecran(0);
+    wxRect display;
+    display = ecran.GetGeometry();
+    int n=1;
+    wxRect r;
+    do {
+        n--;
+        feuille->FacteurZoom(n);
+        CalculZoom(fZoomNume,fZoomDeno);
+        r =wxRect(wxSize((imAcq->cols*fZoomNume)/fZoomDeno,(imAcq->rows*fZoomNume)/fZoomDeno)+wxSize(5,5));
+        }
+    while (!display.Contains(r) &&n>-3);
+    feuille->FacteurZoom(n);
+    CalculZoom(fZoomNume,fZoomDeno);
+    wxSize sa(wxSize((imAcq->cols*fZoomNume)/fZoomDeno,(imAcq->rows*fZoomNume)/fZoomDeno)+wxSize(5,5));
+    SetClientSize(sa);
+    feuille->SetVirtualSize(wxSize((imAcq->cols*fZoomNume)/fZoomDeno, (imAcq->rows*fZoomNume)/fZoomDeno));
 	}
+
+
+
+
 delete(feuille->BitmapAffichee());
 feuille->BitmapAffichee(NULL);
 feuille->Update();
@@ -1899,8 +1925,12 @@ void FenetrePrincipale::DynamiqueAffichage(char type)
     imAcq->ExtremumLoc();
     for (int i = 0; i < imAcq->channels() && i < 3; i++)
     {
-		seuilNivBas[i]=imAcq->MinIm()[i];
-		coeffCanal[i]=65536/(imAcq->MaxIm()[i]-imAcq->MinIm()[i]);
+		seuilNivBas[i]=(*(imAcq->MinIm()))[i];
+        if ((*(imAcq->MaxIm()))[i]-(*(imAcq->MinIm()))[i]!=0)
+		    coeffCanal[i]=65536/((*(imAcq->MaxIm()))[i]-(*(imAcq->MinIm()))[i]);
+        else
+            coeffCanal[i]=0;
+
     }
 
 
@@ -2953,24 +2983,6 @@ imQuadrique->DoEnregistrer(t);
 }
 
 
-bool FenetrePrincipale::TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap)
-{
-//	TracerDIB(imAffichee,dc);
-    int			w = bitmap.GetWidth();
-    int			h = bitmap.GetHeight();
-
-    int i, j;
-    for (i = rect.x; i < rect.x + rect.width; i += w)
-    {
-        for (j = rect.y; j < rect.y + rect.height; j += h)
-        {
-            wxPoint p(i,j),ptEcran=(p);
-            dc.DrawBitmap(bitmap, p.x, p.y);
-
-        }
-    }
-    return true;
-}
 
 void wxOsgApp::OnUseScreen(wxCommandEvent& WXUNUSED(event))
 {

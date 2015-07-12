@@ -441,10 +441,10 @@ if (!ongletStatus)
 	texte="(";
 	for (int i=0;i<fenMere->ImAcq()->channels()-1;i++)
 		{
-		v.Printf("%f,",fenMere->ImAcq()->MinIm()[i]);
+		v.Printf("%f,",(*(fenMere->ImAcq()->MinIm()))[i]);
 		texte += v;
 		}
-	v.Printf("%f)",fenMere->ImAcq()->MinIm()[fenMere->ImAcq()->channels()-1]);
+	v.Printf("%f)",(*(fenMere->ImAcq()->MinIm()))[fenMere->ImAcq()->channels()-1]);
 	texte += v;
 	new wxStaticText(ongletStatus,300+i+1,texte,position[i+1], taille[i+1]);
 	i+=2;
@@ -452,10 +452,10 @@ if (!ongletStatus)
 	texte="(";
 	for (int i=0;i<fenMere->ImAcq()->channels()-1;i++)
 		{
-		v.Printf("%f,",fenMere->ImAcq()->MaxIm()[i]);
+		v.Printf("%f,",(*(fenMere->ImAcq()->MaxIm()))[i]);
 		texte += v;
 		}
-	v.Printf("%f)",fenMere->ImAcq()->MaxIm()[fenMere->ImAcq()->channels()-1]);
+	v.Printf("%f)",(*(fenMere->ImAcq()->MaxIm()))[fenMere->ImAcq()->channels()-1]);
 	texte += v;
 	new wxStaticText(ongletStatus,300+i+1,texte,position[i+1], taille[i+1]);
 	i+=2;
@@ -503,19 +503,19 @@ else
 	texte = "(";
 	for (int i = 0; i<fenMere->ImAcq()->channels() - 1; i++)
 	{
-		v.Printf("%f,", fenMere->ImAcq()->MinIm()[i]);
+		v.Printf("%f,", (*(fenMere->ImAcq()->MinIm()))[i]);
 		texte += v;
 	}
-	v.Printf("%f)", fenMere->ImAcq()->MinIm()[fenMere->ImAcq()->channels() - 1]);
+	v.Printf("%f)", (*(fenMere->ImAcq()->MinIm()))[fenMere->ImAcq()->channels() - 1]);
 	texte += v;
 	((wxStaticText*)wxWindow::FindWindowById(307, ongletStatus))->SetLabelText(texte);
 	texte = "(";
 	for (int i = 0; i<fenMere->ImAcq()->channels() - 1; i++)
 	{
-		v.Printf("%f,", fenMere->ImAcq()->MaxIm()[i]);
+		v.Printf("%f,", (*(fenMere->ImAcq()->MaxIm()))[i]);
 		texte += v;
 	}
-	v.Printf("%f)", fenMere->ImAcq()->MaxIm()[fenMere->ImAcq()->channels() - 1]);
+	v.Printf("%f)", (*(fenMere->ImAcq()->MaxIm()))[fenMere->ImAcq()->channels() - 1]);
 	texte += v;
 	((wxStaticText*)wxWindow::FindWindowById(309, ongletStatus))->SetLabelText(texte);
 	}
@@ -606,7 +606,7 @@ hdc.SetBrush(tr);
 
 int ind=0,pas=fenMere->NbCouleurPalette()/512;
 int deb=fenMere->SeuilNivBas();
-int fin=(fenMere->ImAcq()->MaxIm()[0]-fenMere->SeuilNivBas(0))*fenMere->CoeffCanal(0);
+int fin=((*(fenMere->ImAcq()->MaxIm()))[0]-fenMere->SeuilNivBas(0))*fenMere->CoeffCanal(0);
 for (int i=0;i<512;i++,ind+=pas)
 	{
 	crayon.SetColour(pCouleur[ind].Red(),pCouleur[ind].Green(),pCouleur[ind].Blue());
@@ -634,7 +634,7 @@ ss.Printf(_T("%lf"),fenMere->SeuilNivBas() );
 wxWindowList ww=(ongletCouleur->GetChildren());
 ((wxTextCtrl*)ww[3])->SetValue(ss);
 
-ss.Printf(_T("%lf"),(fenMere->ImAcq()->MaxIm()[0]-fenMere->SeuilNivBas(0))*fenMere->CoeffCanal(0));
+ss.Printf(_T("%lf"),((*(fenMere->ImAcq()->MaxIm()))[0]-fenMere->SeuilNivBas(0))*fenMere->CoeffCanal(0));
 ww=(ongletCouleur->GetChildren());
 ((wxTextCtrl*)ww[4])->SetValue(ss);
 }

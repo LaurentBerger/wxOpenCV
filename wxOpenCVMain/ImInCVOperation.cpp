@@ -621,6 +621,94 @@ r.push_back(im1);
 return r;
 }
 
+std::vector<ImageInfoCV *>ImageInfoCV::ConvexHull(std::vector< ImageInfoCV *> op, ParametreOperation *pOCV)
+{
+ImageInfoCV *im1=new ImageInfoCV;
+*(cv::Mat*)im1= op[0]->clone();
+std::vector<std::vector<cv::Point> > f;
+if (op[0]->channels()==1)
+	{
+	cv::findContours( *im1,  f,pOCV->intParam["mode"].valeur,pOCV->intParam["method"].valeur);	
+	}
+ else
+	{
+	std::vector<Mat> planCouleur;
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
+		{
+		}
+	cv::merge((const cv::Mat *)d, op[0]->channels(),*im1);
+	}
+
+std::vector<ImageInfoCV	*> r;
+r.push_back(im1);
+return r;
+}
+
+std::vector<ImageInfoCV *>ImageInfoCV::ConvexityDefects(std::vector< ImageInfoCV *> op, ParametreOperation *pOCV)
+{
+ImageInfoCV *im1=new ImageInfoCV;
+*(cv::Mat*)im1= op[0]->clone();
+std::vector<std::vector<cv::Point> > f;
+if (op[0]->channels()==1)
+	{
+	cv::findContours( *im1,  f,pOCV->intParam["mode"].valeur,pOCV->intParam["method"].valeur);	
+	}
+ else
+	{
+	std::vector<Mat> planCouleur;
+	Mat *d=new Mat[op[0]->channels()];
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
+		{
+		}
+	cv::merge((const cv::Mat *)d, op[0]->channels(),*im1);
+	}
+
+std::vector<ImageInfoCV	*> r;
+r.push_back(im1);
+return r;
+}
+
+std::vector<ImageInfoCV *>ImageInfoCV::ApproxPolyDP(std::vector< ImageInfoCV *> op, ParametreOperation *pOCV)
+{
+    if (contours.size()==0)
+	    {
+
+	    throw std::string("You must used connected components first");
+        std::vector<ImageInfoCV	*> r;
+        r.push_back(this);
+	    return r;
+	    }
+    ImageInfoCV *im1=new ImageInfoCV;
+    if (op[0]->channels()==1)
+	    {
+		contoursPoly.resize(op[0]->channels()); 
+        contoursPoly[0].resize(contours[0].size());
+        for( size_t k = 0; k < contoursPoly[0].size(); k++ )
+            approxPolyDP(Mat(contours[0][k]), contoursPoly[0][k], pOCV->doubleParam["epsilon"].valeur, pOCV->intParam["closed"].valeur);
+	    }
+     else
+	    {
+		contoursPoly.resize(op[0]->channels()); 
+        for (int i = 0; i < op[0]->channels(); i++)
+        {
+            contoursPoly[i].resize(contours[i].size());
+            for( size_t k = 0; k < contoursPoly[i].size(); k++ )
+                approxPolyDP(Mat(contours[i][k]), contoursPoly[i][k], pOCV->doubleParam["epsilon"].valeur, pOCV->intParam["closed"].valeur);
+        }
+	    }
+
+    AjoutOpAttribut(pOCV);
+    std::vector<ImageInfoCV	*> r;
+    r.push_back(this);
+    return r;
+}
+
+
+
+
 void ImageInfoCV::Threshold( cv::InputArray _src, cv::OutputArray _dst, double thresh, double maxval, int type )
 {
 }
@@ -861,26 +949,21 @@ return r;
 std::vector<ImageInfoCV *> ImageInfoCV::ComposanteConnexe(std::vector<ImageInfoCV	*>op,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
+if (im->statComposante.size()==0)
+	{
+	im->statComposante.resize(op[0]->channels()); 
+	im->centreGComposante.resize(op[0]->channels()); 
+	im->contours.resize(op[0]->channels()); 
+	im->arbreContour.resize(op[0]->channels()); 
+
+	}
 if (op[0]->channels()==1)
 	{
-	if (im->statComposante==NULL)
-		{
-		im->statComposante = new cv::Mat*[op[0]->channels()]; 
-		im->centreGComposante = new cv::Mat*[op[0]->channels()]; 
-		im->contours = new std::vector<std::vector<cv::Point> >[op[0]->channels()]; 
-		im->arbreContour = new std::vector<cv::Vec4i> [op[0]->channels()]; 
 
-		for (int i=0;i<op[0]->channels();i++)
-			{
-			im->statComposante[i] = new cv::Mat; 
-			im->centreGComposante[i] = new cv::Mat; 
-			}
-		}
-
-	connectedComponentsWithStats(*op[0], *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV->intParam["connectivity"].valeur, CV_32S);
+	connectedComponentsWithStats(*op[0], *im,im->statComposante[0],im->centreGComposante[0], paramOCV->intParam["connectivity"].valeur, CV_32S);
 	ImageInfoCV	imCtr ;
 	im->copyTo(imCtr);
-	findContours(imCtr, *(im->contours),*im->arbreContour, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
+	findContours(imCtr, im->contours[0],im->arbreContour[0], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
 	im->CalcMoment();
 
 	}
@@ -888,23 +971,11 @@ else
 	{
 	std::vector<Mat> planCouleur;
 	Mat *d=new Mat[op[0]->channels()];
-	if (im->statComposante==NULL)
-		{
-		im->statComposante = new cv::Mat*[op[0]->channels()]; 
-		im->centreGComposante = new cv::Mat*[op[0]->channels()]; 
-		im->contours = new std::vector<std::vector<cv::Point> >[op[0]->channels()]; 
-		im->arbreContour = new std::vector<cv::Vec4i> [op[0]->channels()]; 
-		for (int i=0;i<op[0]->channels();i++)
-			{
-			im->statComposante[i] = new cv::Mat; 
-			im->centreGComposante[i] = new cv::Mat; 
-			}
-		}
 		
 	cv::split( *op[0], planCouleur );
 	for (int i=0;i<op[0]->channels();i++)
 		{
-		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV->intParam["connectivity"].valeur, CV_32S);
+		connectedComponentsWithStats(planCouleur[i], d[i],im->statComposante[i],im->centreGComposante[i], paramOCV->intParam["connectivity"].valeur, CV_32S);
 		ImageInfoCV	imCtr ;
 		d[i].copyTo(imCtr);
 		findContours(imCtr, im->contours[i],im->arbreContour[i], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
@@ -979,10 +1050,10 @@ ImageInfoCV	*im =new ImageInfoCV;
 if (op[0]->channels()==1)
 	{
 
-	connectedComponentsWithStats(*op[0], *im,*(im->statComposante[0]),*(im->centreGComposante[0]), paramOCV->intParam["connectivity"].valeur, CV_32S);
+	connectedComponentsWithStats(*op[0], *im,im->statComposante[0],im->centreGComposante[0], paramOCV->intParam["connectivity"].valeur, CV_32S);
 	ImageInfoCV	imCtr ;
 	im->copyTo(imCtr);
-	findContours(imCtr, *(im->contours),*im->arbreContour, cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
+	findContours(imCtr, im->contours[0],im->arbreContour[0], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
 	}
 else
 	{
@@ -992,7 +1063,7 @@ else
 	cv::split( *op[0], planCouleur );
 	for (int i=0;i<op[0]->channels();i++)
 		{
-		connectedComponentsWithStats(planCouleur[i], d[i],*(im->statComposante[i]),*(im->centreGComposante[i]), paramOCV->intParam["connectivity"].valeur, CV_32S);
+		connectedComponentsWithStats(planCouleur[i], d[i],im->statComposante[i],im->centreGComposante[i], paramOCV->intParam["connectivity"].valeur, CV_32S);
 		ImageInfoCV	imCtr ;
 		d[i].copyTo(imCtr);
 		findContours(imCtr, im->contours[i],im->arbreContour[i], cv::RETR_CCOMP, cv::CHAIN_APPROX_NONE, cv::Point(0,0));
@@ -1013,8 +1084,8 @@ std::vector<ImageInfoCV	*> r;
 
 if (op[0]!=this)
 	return r;
-if (ligne==NULL)
-	ligne = new std::vector<cv::Vec2f>[op[0]->channels()];
+if (ligne.size()==0)
+	ligne.resize(op[0]->channels());
 if (op[0]->channels()==1)
 	{
 	cv::HoughLines(*op[0],ligne[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
@@ -1045,8 +1116,8 @@ std::vector<ImageInfoCV	*> r;
 
 if (op[0]!=this)
 	return r;
-if (cercle==NULL)
-	cercle = new std::vector<cv::Vec3f>[op[0]->channels()];
+if (cercle.size()==0)
+	cercle.resize(op[0]->channels());
 if (op[0]->channels()==1)
 	{
 /*   HoughCircles(*imSrc, cercle[0], cv::HOUGH_GRADIENT, 1, 10,
@@ -1081,8 +1152,8 @@ std::vector<ImageInfoCV	*> r;
 
 if (op[0] != this)
 	return r;
-if (ligneP==NULL)
-	ligneP = new std::vector<cv::Vec4i>[op[0]->channels()];
+if (ligneP.size()==0)
+	ligneP.resize(op[0]->channels());
 if (op[0]->channels()==1)
 	{
 	cv::HoughLinesP(*op[0],ligneP[0],pOCV->doubleParam["rho"].valeur,pOCV->doubleParam["theta"].valeur,
@@ -1114,8 +1185,8 @@ std::vector<ImageInfoCV	*> r;
 
 if (op[0]!=this)
 	return r;
-if (boncoin==NULL)
-	boncoin = new std::vector<cv::Point2f>[op[0]->channels()];
+if (boncoin.size()==0)
+	boncoin.resize(op[0]->channels());
 if (op[0]->channels()==1)
 	{
 	cv::goodFeaturesToTrack(*op[0],boncoin[0],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
@@ -1450,7 +1521,7 @@ if (channels()!=op[1]->channels())
 	pOCV->msgErreur="depth images are different";
 	return r;
 	}
-if (boncoin==NULL )
+if (boncoin.size()==0 )
 	{
 	pOCV->opErreur=1;
 	pOCV->msgErreur="No feature to track";
@@ -1483,7 +1554,7 @@ for (int i=0;i<op[0]->channels();i++)
 		{
 		if (status[k] || op[1]==op[0])
 			{
-			op[1]->CoinRef()[i][l]=boncoin[i][k];
+			(*(op[1]->CoinRef()))[i][l]=boncoin[i][k];
 			op[1]->BonCoin()[i][l++]=op[1]->BonCoin()[i][k];
 			}
 		}
@@ -1492,7 +1563,7 @@ for (int i=0;i<op[0]->channels();i++)
 		{
 		if (!status[k])
 			{
-			op[1]->CoinRef()[i][l++]=boncoin[i][k];
+			(*(op[1]->CoinRef()))[i][l++]=boncoin[i][k];
 			}
 		}
 	}

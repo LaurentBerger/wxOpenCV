@@ -201,46 +201,46 @@ if (imAcq==NULL)
 if (nbGraines[0]==-1)
 	{
 
-	if (imAcq->MinIm()==NULL)
+	if ((*(imAcq->MinIm())).size()==0)
 		imAcq->ExtremumLoc();
 	switch(imAcq->depth())
 	{
 	case CV_32S:
-		for (int i=0;i<NB_MAX_CANAUX;i++)
+		for (int i=0;i< (*(imAcq->MinIm())).size() && i<NB_MAX_CANAUX;i++)
 			{
-			minHisto[i]=imAcq->MinIm()[i];
-			maxHisto[i]=imAcq->MaxIm()[i]; 
+			minHisto[i]=(*(imAcq->MinIm()))[i];
+			maxHisto[i]=(*(imAcq->MaxIm()))[i]; 
 			nbGraines[i]=maxHisto[i]-minHisto[i]+1;
 			}
 
 		break;
 	case CV_32F:
-		for (int i=0;i<NB_MAX_CANAUX;i++)
+		for (int i=0;(*(imAcq->MinIm())).size() && i<NB_MAX_CANAUX;i++)
 			{
 			nbGraines[i]=256;
-			minHisto[i]=imAcq->MinIm()[i];
-			maxHisto[i]=imAcq->MaxIm()[i]; 
+			minHisto[i]=(*(imAcq->MinIm()))[i];
+			maxHisto[i]=(*(imAcq->MaxIm()))[i]; 
 			}
 
 		break;
 	case CV_16U:
-		for (int i=0;i<NB_MAX_CANAUX;i++)
+		for (int i=0;(*(imAcq->MinIm())).size() && i<NB_MAX_CANAUX;i++)
 			{
 			nbGraines[i]=65536;
-			minHisto[i]=imAcq->MinIm()[i];
-			maxHisto[i]=imAcq->MaxIm()[i]; 
+			minHisto[i]=(*(imAcq->MinIm()))[i];
+			maxHisto[i]=(*(imAcq->MaxIm()))[i]; 
 			}
 		break;
 	case CV_16S:
-		for (int i=0;i<NB_MAX_CANAUX;i++)
+		for (int i=0;(*(imAcq->MinIm())).size() && i<NB_MAX_CANAUX;i++)
 			{
 			nbGraines[i]=65536;
-			minHisto[i]=imAcq->MinIm()[i];
-			maxHisto[i]=imAcq->MaxIm()[i]; 
+			minHisto[i]=(*(imAcq->MinIm()))[i];
+			maxHisto[i]=(*(imAcq->MaxIm()))[i]; 
 			}
 		break;
 	case CV_8U:
-		for (int i=0;i<NB_MAX_CANAUX;i++)
+		for (int i=0;(*(imAcq->MinIm())).size() && i<NB_MAX_CANAUX;i++)
 			{
 			nbGraines[i]=256;
 			minHisto[i]=0;
@@ -248,7 +248,7 @@ if (nbGraines[0]==-1)
 			}
 		break;
 	case CV_8S:
-		for (int i=0;i<NB_MAX_CANAUX;i++)
+		for (int i=0;(*(imAcq->MinIm())).size() && i<NB_MAX_CANAUX;i++)
 			{
 			nbGraines[i]=256;
 			minHisto[i]=-128;

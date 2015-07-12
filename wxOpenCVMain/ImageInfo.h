@@ -114,21 +114,22 @@ static int typeResultat;	 /*< Type du résultat -1, ou constante OpenCV  p256 ref
 /***********************************************
 ********** INFO IMAGE **************************
 ************************************************/
-double *minIm;			/*< Minimimum pour chaque plan de l'image */
-double *maxIm;			/*< Maximimum pour chaque plan de l'image */
-cv::Point	*locMin;	/*< Position du miminmu pour chaque plan */
-cv::Point	*locMax;	/*< Position du miminmu pour chaque plan */
-cv::Mat		**statComposante; /*< Statistique des composantes de chaque plan http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
-cv::Mat		**centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
-std::vector<std::vector<cv::Point> > *contours; /*< Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
-std::vector<cv::Vec4i> *arbreContour; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
-std::vector<cv::Moments> *moment;	/*<!http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
-std::vector<double> *huMoment;		/*<!http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
-std::vector<cv::Vec3f> *cercle;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles*/
-std::vector<cv::Vec4i> *ligneP;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlinesp */
-std::vector<cv::Vec2f> *ligne;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines */
-std::vector<cv::Point2f> *boncoin;	/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack */
-std::vector<cv::Point2f> *coinRef;	/*<! Les pixels de références de l'image pour calcul du flot optique */
+std::vector<double > minIm;			/*< Minimimum pour chaque plan de l'image */
+std::vector<double > maxIm;			/*< Maximimum pour chaque plan de l'image */
+std::vector<cv::Point>	locMin;	/*< Position du miminmu pour chaque plan */
+std::vector<cv::Point>	locMax;	/*< Position du miminmu pour chaque plan */
+std::vector<cv::Mat>		statComposante; /*< Statistique des composantes de chaque plan http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
+std::vector<cv::Mat>		centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
+std::vector<std::vector<std::vector<cv::Point> > > contours; /*< Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
+std::vector<std::vector<std::vector<cv::Point> > > contoursPoly; /*< Contours polygonaux dans l'image des composantes connexes http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html#approxpolydp */
+std::vector<std::vector<cv::Vec4i> >  arbreContour; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
+std::vector<std::vector<cv::Moments> > moment;	/*<!http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
+std::vector<std::vector<double> > huMoment;		/*<!http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
+std::vector<std::vector<cv::Vec3f> > cercle;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles*/
+std::vector<std::vector<cv::Vec4i> > ligneP;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlinesp */
+std::vector<std::vector<cv::Vec2f> > ligne;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines */
+std::vector<std::vector<cv::Point2f> > boncoin;	/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack */
+std::vector<std::vector<cv::Point2f> > coinRef;	/*<! Les pixels de références de l'image pour calcul du flot optique */
 std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
 std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
 std::vector<cv::KeyPoint> kAkaze;	/*<! Point clef de Akaze */
@@ -332,6 +333,9 @@ std::vector<ImageInfoCV *>ScharrX(std::vector< ImageInfoCV *>, ParametreOperatio
 std::vector<ImageInfoCV *>ScharrY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>ScharrModule(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>Contour(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>ConvexHull(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>ConvexityDefects(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV *>ApproxPolyDP(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV *>Seuillage(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV *>SeuillageAdaptatif(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>LissageMedian(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
@@ -402,7 +406,7 @@ void  SelectionMaxLocaux(ImageInfoCV &);
 ImageInfoCV *Binarisation(float *seuilBin,ImageInfoCV* =NULL);
 ImageInfoCV *NonMaximumSuppression(ImageInfoCV* ,ImageInfoCV*,float);
 ImageInfoCV *SeuilHysteresis(float seuil1,float seuil2,ImageInfoCV* =NULL);
-std::vector<cv::Moments> *CalcMoment();
+std::vector<std::vector<cv::Moments> > *CalcMoment();
 
 
 // Opérateurs Voronoi
@@ -460,8 +464,8 @@ virtual void DiffusionMPI(void);
 // ********* Accès aux membres privés et
 //	Lecture des membres privés
 void MajMasque(bool actif = false, cv::Rect r = cv::Rect());
-double *MinIm(){ if (!minIm) ExtremumLoc(); return minIm; };		/*< Minimum de l'image pour chaque canal */
-double *MaxIm(){if (!maxIm) ExtremumLoc();return maxIm;};		/*< Maximum de l'image pour chaque canal */
+std::vector<double > *MinIm(){ if (minIm.size()==0) ExtremumLoc(); return &minIm; };		/*< Minimum de l'image pour chaque canal */
+std::vector<double > *MaxIm(){if (maxIm.size()==0) ExtremumLoc();return &maxIm;};		/*< Maximum de l'image pour chaque canal */
 char    *LitFctImage(void);
 char    *LitTypeSeuillage(void);
 char    *LitTailleOperateur(void);
@@ -473,21 +477,22 @@ long  	LitNbIterOperateur(void);
 char  	LitConverCplxEnt(void);
 
 cv::Mat *MasqueOperateur(){ return &masqueOperateur; };
-cv::Mat	**StatComposante(){return statComposante;};
-cv::Mat	**CentreGComposante(){return centreGComposante;};
+std::vector<cv::Mat>	*StatComposante(){return &statComposante;};
+std::vector<cv::Mat>	*CentreGComposante(){return &centreGComposante;};
 cv::Mat	*FlotOptique(bool init=false){if (init ) {delete []flotOptique;flotOptique= new cv::Mat[channels()];} return flotOptique;};
 cv::Mat *Ponderation(bool init = false){ if (init) { delete ponderation; ponderation = new cv::Mat();  cv::createHanningWindow(*ponderation, this->size(), CV_64F); } return ponderation; };
 cv::Mat *Silh(bool init = false){ if (init) { delete silh; silh = new cv::Mat(); } return silh; };
 cv::Mat *Descripteur(char =-1);
-std::vector<cv::Moments> *MomentComposante(){ return moment; };
-std::vector<std::vector<cv::Point> > *PtContours(){return contours;};
-std::vector<cv::Vec4i> *ArboContour(){return arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
-std::vector<double> *HuMoment(){return huMoment;};
-std::vector<cv::Vec3f> *HoughCercle(){return cercle;};
-std::vector<cv::Vec4i> *HoughLigneProba(){return ligneP;};
-std::vector<cv::Vec2f> *HoughLigne(){return ligne;};
-std::vector<cv::Point2f> *BonCoin(bool init=false){if (init && boncoin==NULL) boncoin = new std::vector<cv::Point2f>[channels()];return boncoin;};
-std::vector<cv::Point2f> *CoinRef(bool init = false){ if (init && coinRef == NULL) coinRef = new std::vector<cv::Point2f>[channels()]; return coinRef; };
+std::vector<std::vector<cv::Moments>> *MomentComposante(){ return &moment; };
+std::vector<std::vector<std::vector<cv::Point> > > *PtContours(){return &contours;};
+std::vector<std::vector<std::vector<cv::Point> > > *PtContoursPoly(){return &contoursPoly;};
+std::vector<std::vector<cv::Vec4i> > *ArboContour(){return &arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
+std::vector<std::vector<double> > *HuMoment(){return &huMoment;};
+std::vector<std::vector<cv::Vec3f> > *HoughCercle(){return &cercle;};
+std::vector<std::vector<cv::Vec4i> > *HoughLigneProba(){return &ligneP;};
+std::vector<std::vector<cv::Vec2f> > *HoughLigne(){return &ligne;};
+std::vector<std::vector<cv::Point2f> >*BonCoin(bool init=false){if (init && boncoin.size()==0) boncoin.resize(channels());return &boncoin;};
+std::vector<std::vector<cv::Point2f> >*CoinRef(bool init = false){ if (init && coinRef.size() == 0) coinRef.resize(channels()); return &coinRef; };
 std::vector<double> *Angle(){ return &angle; };
 std::vector<cv::Rect> *RegionMvt(){ return &regionsMvt; };
 std::vector<cv::KeyPoint> *PointCle(char type = 0);

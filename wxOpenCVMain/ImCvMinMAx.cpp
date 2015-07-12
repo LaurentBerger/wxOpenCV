@@ -2,19 +2,19 @@
 
 void ImageInfoCV::ExtremumLoc(ImageInfoCV *mask )
 {
-if (minIm==NULL )
+if (minIm.size()==0 )
 	{
-	minIm = new double[channels()];			/*< Minimimum pour chaque plan de l'image */
-	maxIm = new double[channels()];			/*< Maximimum pour chaque plan de l'image */
-	locMin = new cv::Point[channels()]	;	/*< Position du miminmu pour chaque plan */
-	locMax = new cv::Point[channels()]	;	/*< Position du miminmu pour chaque plan */
+	minIm.resize(channels());			/*< Minimimum pour chaque plan de l'image */
+	maxIm.resize(channels());			/*< Maximimum pour chaque plan de l'image */
+	locMin.resize(channels())	;	/*< Position du miminmu pour chaque plan */
+	locMax.resize(channels())	;	/*< Position du miminmu pour chaque plan */
 	}
 if (channels()==1)
 	{
 	if (mask==NULL)
-		minMaxLoc((cv::Mat)*this,minIm,maxIm,locMin,locMax);
+		minMaxLoc((cv::Mat)*this,&minIm[0],&maxIm[0],&locMin[0],&locMax[0]);
 	else
-		minMaxLoc((cv::Mat)*this,minIm,maxIm,locMin,locMax,*mask);
+		minMaxLoc((cv::Mat)*this,&minIm[0],&maxIm[0],&locMin[0],&locMax[0],*mask);
 	}
 else  
 	{

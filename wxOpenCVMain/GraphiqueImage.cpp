@@ -119,6 +119,7 @@ if (feuille->ModeCoupe())
 
 
 TracerContour(hdc);
+TracerContourPoly(hdc);
 TracerLigneHough(hdc);
 TracerLigneProbaHough(hdc);
 TracerCercleHough(hdc);

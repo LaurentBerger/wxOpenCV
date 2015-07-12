@@ -1,4 +1,9 @@
 #ifdef __WXGTK__
+#include "bitmaps/convexhull.xpm"
+#include "bitmaps/convexdefaut.xpm"
+#include "bitmaps/approxpoly.xpm"
+#include "bitmaps/approxchain.xpm"
+
 #include "bitmaps/panofeature.xpm"
 #include "bitmaps/panoresize.xpm"
 #include "bitmaps/panomatch.xpm"
@@ -102,7 +107,10 @@
 #include "bitmaps\panocomposition.xpm"
 #include "bitmaps\panocorrectexpo.xpm"
 
-
+#include "bitmaps\convexhull.xpm"
+#include "bitmaps\convexdefaut.xpm"
+#include "bitmaps\approxpoly.xpm"
+#include "bitmaps\approxchain.xpm"
 
 #include "bitmaps\phasecorrelate.xpm"
 #include "bitmaps\segmentationmotion.xpm"

@@ -399,7 +399,15 @@ void FenetreSequenceOperation::ComboBox(wxCommandEvent &w)
     int opSelec = choixOp->GetSelection();
 
 
-    std::map <int, std::vector <ParametreOperation > >  *t = app->TabSeqOperation();
+    std::map <int, std::vector <ParametreOperation > >  *t ;
+
+    if (((wxCheckBox*)wxWindow::FindWindowById(IND_CONFIG, panneau))->GetValue())
+        t = app->TabSeqOperation();
+    else
+        {
+        t = &seqActive;
+        }
+
     std::map <int, std::vector <ParametreOperation > >::iterator it = (*t).begin();
     for (int i = 0; i<ws->GetValue(); i++, it++);
     wxComboBox *cb = ((wxComboBox*)w.GetEventObject());

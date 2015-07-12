@@ -63,6 +63,10 @@ enum
     ID_VORONOI,
 	ID_CONTOUR,
 	ID_COMPCONNEXE,
+    ID_CONVEX_HULL, ///
+    ID_CONVEX_DEFAUT,////
+    ID_APPROX_POLY,///
+    ID_APPROX_CHAIN,///
 	ID_PARTAGE_EAUX,
     ID_CANNY,
 	ID_CORNERHARRIS,
@@ -240,6 +244,10 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_SQUELETTE, squelette_xpm,_("Skeleton"), "medianaxis", 5);
     CONSTRUCTEUR_CMD(bouton, ID_DISTANCEDISCRETE, distancediscrete_xpm, _("Transform distance"), "distancetransform", 5);
     CONSTRUCTEUR_CMD(bouton, ID_VORONOI, voronoi_xpm,_("Voronoi"), " ", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_CONVEX_HULL, convexhull_xpm,_("Finds the convex hull of a point set."), "convexhull", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_CONVEX_DEFAUT, convexdefaut_xpm,_("Finds the convexity defects of a contour."), "convexitydefects ", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_APPROX_POLY, approxpoly_xpm,_("Approximates a polygonal curve(s)"), "approxpolydp", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_APPROX_CHAIN, approxchain_xpm,_("Approximates Freeman chain(s) with a polygonal curve"), "Approxchains", 5);
 
     CONSTRUCTEUR_CMD(bouton, wxID_OPEN, open_xpm,_("Open"), " ", 6);
     CONSTRUCTEUR_CMD(bouton, wxID_SAVE, save_xpm,_("Save"), " ", 6);
@@ -1098,7 +1106,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
 					  Name("Color").Caption("Color").
-					  ToolbarPane().Top().Row(6));
+					  ToolbarPane().Top().Row(7));
 		break;
 	case 8:
 		m_mgr.AddPane(tb,  wxAuiPaneInfo().
@@ -1118,12 +1126,12 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 	case 11:
 		m_mgr.AddPane(tb, wxAuiPaneInfo().
 					  Name("Feature 2D").Caption("Feature 2D").
-					  ToolbarPane().Top().Row(5));
+					  ToolbarPane().Top().Row(6));
 		break;
 	case 12:
 		m_mgr.AddPane(tb, wxAuiPaneInfo().
 					  Name("Stitching").Caption("Stitching").
-					  ToolbarPane().Top().Row(7));
+					  ToolbarPane().Top().Row(8));
 		break;
 		}
 	    // add the toolbars to the manager

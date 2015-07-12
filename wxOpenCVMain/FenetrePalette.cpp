@@ -89,7 +89,8 @@ hdc.SetBrush(tr);
 wxPen crayon;
 int ind=0,pas=((wxOsgApp*)osgApp)->Graphique()->NbCouleurPalette()/512;
 int deb=((wxOsgApp*)osgApp)->Graphique()->SeuilNivBas();
-int fin=(((wxOsgApp*)osgApp)->Graphique()->ImAcq()->MaxIm()[0]-((wxOsgApp*)osgApp)->Graphique()->SeuilNivBas(0))*fenMere->CoeffCanal(0);
+ImageInfoCV* im=((wxOsgApp*)osgApp)->Graphique()->ImAcq();
+int fin=((*(im->MaxIm()))[0]-((wxOsgApp*)osgApp)->Graphique()->SeuilNivBas(0))*fenMere->CoeffCanal(0);
 
 for (int i=0;i<512;i++,ind+=pas)
 	{

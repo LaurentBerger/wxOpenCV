@@ -188,10 +188,10 @@ osg::Group* Fenetre3D::CreerTriede()
 	double	maxZ=0;
 	for (int i=0;i<((FenetrePrincipale*)fenParent)->ImAcq()->channels();i++)
 		{
-		if (maxZ<fabs(((FenetrePrincipale*)fenParent)->ImAcq()->MaxIm()[i]))
-			maxZ=fabs(((FenetrePrincipale*)fenParent)->ImAcq()->MaxIm()[i]);
-		if (maxZ<fabs(((FenetrePrincipale*)fenParent)->ImAcq()->MinIm()[i]))
-			maxZ=fabs(((FenetrePrincipale*)fenParent)->ImAcq()->MinIm()[i]);
+		if (maxZ<fabs((*(((FenetrePrincipale*)fenParent)->ImAcq()->MaxIm()))[i]))
+			maxZ=fabs((*(((FenetrePrincipale*)fenParent)->ImAcq()->MaxIm()))[i]);
+		if (maxZ<fabs((*(((FenetrePrincipale*)fenParent)->ImAcq()->MinIm()))[i]))
+			maxZ=fabs((*(((FenetrePrincipale*)fenParent)->ImAcq()->MinIm()))[i]);
 		}
 	// create the root node which will hold the model.
     osg::Group* root = new osg::Group();

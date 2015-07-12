@@ -29,16 +29,38 @@ static long tailleOnd[]={4,12,20};
 ImageInfoCV::ImageInfoCV(char *nomDuFichier):cv::Mat()
 {
 eSauver=NULL;
-	{
-	int	nbCar=strlen(nomDuFichier);
-		{
-		InitImageInfo(NULL);
-//		cv::Mat m=cv::imread(nomDuFichier,cv::IMREAD_UNCHANGED);
-		*((Mat *)(this))=cv::imread(nomDuFichier,cv::IMREAD_UNCHANGED);
-//		*((Mat *)(this)) = m.clone();
-		//LectureImageJpeg(nomDuFichier,nbL,nbC,nbP);
-		}
-	}
+InitImageInfo(NULL);
+int nb = strlen(nomDuFichier);
+string ext(nomDuFichier+nb-3);
+std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+if (ext!="yml")
+    *((Mat *)(this))=cv::imread(nomDuFichier,cv::IMREAD_UNCHANGED);
+else
+{
+    cv::FileStorage fs(nomDuFichier, cv::FileStorage::READ);
+    fs["Image"]>>*((cv::Mat*)this);
+    cv::FileNode n=fs["StatComposante0"];
+    if (!n.empty())
+    {
+        statComposante.resize(channels());
+        centreGComposante.resize(channels());
+        for (int i=0;i<channels();i++)
+        {
+            cv::FileNode n=fs["StatComposante"+to_string(i)];
+            if (!n.empty())
+                n >> statComposante[i];
+        }
+        for (int i=0;i<channels();i++)
+        {
+            cv::FileNode n=fs["CentreGComposante"+to_string(i)];
+            if (!n.empty())
+                n >> centreGComposante[i];
+        }
+    }
+    fs.release();
+}
+
+
 }
 
 
@@ -46,26 +68,11 @@ void ImageInfoCV::InitImageInfo(void *eTiff)
 {
 InitOp();
 pano=NULL;
-cercle=NULL;
-ligne=NULL;
-ligneP=NULL;
-boncoin=NULL;
-coinRef=NULL;
 flotOptique=NULL;
 masqueMOG=NULL;
 masqueOperateur = Mat();
 orient=NULL;
 segmvt=NULL;
-minIm = NULL;			/*< Minimimum pour chaque plan de l'image */
-maxIm = NULL;			/*< Maximimum pour chaque plan de l'image */
-locMin = NULL;			/*< Position du miminmu pour chaque plan */
-locMax = NULL;			/*< Position du miminmu pour chaque plan */
-statComposante = NULL; 
-centreGComposante = NULL; 
-contours=NULL;
-moment=NULL;
-huMoment=NULL;
-arbreContour=NULL;
 /*pOCVHoughLigne=NULL;
 pOCVHoughLigneProba=NULL;
 pOCVHoughCercle=NULL;
@@ -177,27 +184,6 @@ natureImage =NULL;				// Méthode de saisie de l'image
 nomImage =NULL;				// Nom de l'image sur le disque
 uniteZ=NULL;
 #endif
-delete []minIm;			/*< Minimimum pour chaque plan de l'image */
-delete []maxIm;			/*< Maximimum pour chaque plan de l'image */
-delete []locMin ;	/*< Position du miminmu pour chaque plan */
-delete []locMax;	/*< Position du miminmu pour chaque plan */
-delete[]contours;
-delete[]arbreContour;
-for (int i = 0; i<channels(); i++)
-	{
-	if (statComposante)
-		delete statComposante[i]; 
-	if (centreGComposante)
-		delete centreGComposante[i]; 
-	}
-delete []statComposante; 
-delete []centreGComposante; 
-delete []moment;
-delete []ligne;
-delete []cercle;
-delete []ligneP;
-delete []boncoin;
-delete []coinRef;
 /*
 delete pOCVHoughLigne;
 delete pOCVHoughLigneProba;
@@ -249,78 +235,77 @@ if (im->RegionMvt()->size() != 0)
 	regionsMvt = *(im->RegionMvt());
 if (im->Angle()->size() != 0)
 	angle = *(im->Angle());
-if (im->PtContours())
+if ((*(im->PtContours())).size()!=0)
 	{
-	if (contours==NULL)
-		contours = new std::vector<std::vector<cv::Point> >[channels()]; 
+	if (contours.size()==0)
+		contours.resize(channels()); 
 	for (int i=0;i<channels()&&i<im->channels();i++)
 		{
 		contours[i].clear();
-		contours[i]=im->PtContours()[i];
+		contours[i]= (*im->PtContours())[i];
 		}
 	}
-if (im->StatComposante())
+if ((*(im->StatComposante())).size()!=0)
 	{
-	if (statComposante==NULL)
+	if (statComposante.size()==0)
 		{
-		statComposante = new cv::Mat*[channels()]; 
-		centreGComposante = new cv::Mat*[channels()]; 
+		statComposante.resize(channels()); 
+		centreGComposante .resize(channels()); 
 		}
 	for (int i=0;i<channels()&&i<im->channels();i++)
 		{
-		statComposante[i]=im->StatComposante()[i];
-		centreGComposante[i]=im->CentreGComposante()[i];
+		statComposante[i] = (*im->StatComposante())[i];
+		centreGComposante[i] = (*im->CentreGComposante())[i];
 		}
 	}
-if (im->MomentComposante())
+if (im->MomentComposante()->size()!=0)
 	{
-	if (moment==NULL)
 		{
-		moment =new std::vector<cv::Moments>[channels()];
-		huMoment=new std::vector<double>[channels()];
+		moment.resize(channels());
+		huMoment.resize(channels());
 		}
 	for (int i=0;i<channels()&&i<im->channels();i++)
 		{
-		moment[i]=im->MomentComposante()[i];
-		huMoment[i]=im->HuMoment()[i];
+		moment[i] = (*im->MomentComposante())[i];
+		huMoment[i] = (*im->HuMoment())[i];
 		}
 
 	}
-if (im->HoughCercle())
+if ((*(im->HoughCercle())).size()!=0)
 	{
-	if (cercle==NULL)
-		cercle = new std::vector<cv::Vec3f>[channels()];
+	if (cercle.size()==0)
+		cercle.resize(channels());
 	for (int i=0;i<channels()&&i<im->channels();i++)
-		cercle[i]=im->HoughCercle()[i];
+		cercle[i] = (*im->HoughCercle())[i];
 
 	}
-if (im->HoughLigne())
+if ((*(im->HoughLigne())).size()!=0)
 	{
-	if (ligne==NULL)
-		ligne = new std::vector<cv::Vec2f>[channels()];
+	if (ligne.size()==0)
+		ligne.resize(channels());
 	for (int i=0;i<channels()&&i<im->channels();i++)
-		ligne[i]=im->HoughLigne()[i];
+		ligne[i] = (*im->HoughLigne())[i];
 	}
-if (im->HoughLigneProba())
+if ((*(im->HoughLigneProba())).size()!=0)
 	{
-	if (ligneP==NULL)
-		ligneP = new std::vector<cv::Vec4i>[channels()];
+	if (ligneP.size()==0)
+		ligneP.resize(channels());
 	for (int i=0;i<channels()&&i<im->channels();i++)
-		ligneP[i]=im->HoughLigneProba()[i];
+		ligneP[i] = (*im->HoughLigneProba())[i];
 	}
-if (im->BonCoin())
+if (im->BonCoin()->size()!=0)
 	{
-	if (boncoin==NULL)
-		boncoin = new std::vector<cv::Point2f>[channels()];
+	if (boncoin.size()==0)
+		boncoin.resize(channels());
 	for (int i=0;i<channels()&&i<im->channels();i++)
-		boncoin[i]=im->BonCoin()[i];
+		boncoin[i] = (*im->BonCoin())[i];
 	}
-if (im->CoinRef())
+if (im->CoinRef()->size()!=0)
 	{
-	if (coinRef==NULL)
-		coinRef = new std::vector<cv::Point2f>[channels()];
+	if (coinRef.size()==0)
+		coinRef.resize(channels());
 	for (int i=0;i<channels()&&i<im->channels();i++)
-		coinRef[i]=im->CoinRef()[i];
+		coinRef[i] = (*im->CoinRef())[i];
 	}
 if (im->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
     kOrb = *im->PointCle(IMAGEINFOCV_ORB_DES);

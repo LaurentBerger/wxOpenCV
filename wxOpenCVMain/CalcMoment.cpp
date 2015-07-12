@@ -2,16 +2,16 @@
 #include <stdexcept>
 
 
-std::vector<cv::Moments> *ImageInfoCV::CalcMoment()
+std::vector<std::vector<cv::Moments>> *ImageInfoCV::CalcMoment()
 {
-std::vector<cv::Moments>  *m=new std::vector<cv::Moments>[channels()];
-huMoment=new std::vector<double>[channels()];
+std::vector<std::vector<cv::Moments>>  m(channels());
+huMoment.resize(channels());
 int nbCanaux=channels();
 
 if (depth()==CV_32F ||  depth()==CV_64F)
 	throw std::logic_error( "Incoherent type" );
 
-if (minIm==NULL)
+if (minIm.size()==0)
 	ExtremumLoc();
 for (int i=0;i<nbCanaux;i++)
 	{
@@ -147,7 +147,7 @@ for (int indCanal=0;indCanal<nbCanaux;indCanal++)
 			}
 
 moment=m;
-return m;
+return &moment;
 }
 
 

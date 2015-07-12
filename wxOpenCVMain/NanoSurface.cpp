@@ -485,10 +485,10 @@ case CV_8U :
 	double maxZ=0;
 	for (int indCanal=0;indCanal<im->channels();indCanal++)
 		{
-		if( maxZ<fabs(im->MaxIm()[indCanal]))
-			maxZ=fabs(im->MaxIm()[indCanal]);
-		if( maxZ<fabs(im->MinIm()[indCanal]))
-			maxZ=fabs(im->MinIm()[indCanal]);
+		if( maxZ<fabs((*(im->MaxIm()))[indCanal]))
+			maxZ=fabs((*(im->MaxIm()))[indCanal]);
+		if( maxZ<fabs((*(im->MinIm()))[indCanal]))
+			maxZ=fabs((*(im->MinIm()))[indCanal]);
 		}
 	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
@@ -520,10 +520,10 @@ case CV_32F :
 	double maxZ=0;
 	for (int indCanal=0;indCanal<im->channels();indCanal++)
 		{
-		if( maxZ<fabs(im->MaxIm()[indCanal]))
-			maxZ=fabs(im->MaxIm()[indCanal]);
-		if( maxZ<fabs(im->MinIm()[indCanal]))
-			maxZ=fabs(im->MinIm()[indCanal]);
+		if( maxZ<fabs((*(im->MaxIm()))[indCanal]))
+			maxZ=fabs((*(im->MaxIm()))[indCanal]);
+		if( maxZ<fabs((*(im->MinIm()))[indCanal]))
+			maxZ=fabs((*(im->MinIm()))[indCanal]);
 		}
 	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
@@ -554,10 +554,10 @@ case CV_16S :
 	double maxZ=0;
 	for (int indCanal=0;indCanal<im->channels();indCanal++)
 		{
-		if( maxZ<fabs(im->MaxIm()[indCanal]))
-			maxZ=fabs(im->MaxIm()[indCanal]);
-		if( maxZ<fabs(im->MinIm()[indCanal]))
-			maxZ=fabs(im->MinIm()[indCanal]);
+		if( maxZ<fabs((*(im->MaxIm()))[indCanal]))
+			maxZ=fabs((*(im->MaxIm()))[indCanal]);
+		if( maxZ<fabs((*(im->MinIm()))[indCanal]))
+			maxZ=fabs((*(im->MinIm()))[indCanal]);
 		}
 	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
@@ -588,10 +588,10 @@ case CV_16U :
 	double maxZ=0;
 	for (int indCanal=0;indCanal<im->channels();indCanal++)
 		{
-		if( maxZ<fabs(im->MaxIm()[indCanal]))
-			maxZ=fabs(im->MaxIm()[indCanal]);
-		if( maxZ<fabs(im->MinIm()[indCanal]))
-			maxZ=fabs(im->MinIm()[indCanal]);
+		if( maxZ<fabs((*(im->MaxIm()))[indCanal]))
+			maxZ=fabs((*(im->MaxIm()))[indCanal]);
+		if( maxZ<fabs((*(im->MinIm()))[indCanal]))
+			maxZ=fabs((*(im->MinIm()))[indCanal]);
 		}
 	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		

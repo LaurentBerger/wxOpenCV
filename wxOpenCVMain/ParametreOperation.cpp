@@ -977,6 +977,32 @@ if (s == "contour")
     xx.listeOperation.insert(make_pair(s, *this));
 }
 
+if (s == "convexhull")
+	{
+	nbImageRes=1;
+    nbOperande = 1;
+    intParam["clockwise"] = DomaineParametreOp<int>(cv::RETR_EXTERNAL, cv::RETR_EXTERNAL, cv::RETR_TREE, 1);
+	intParam["returnpoints"]=DomaineParametreOp<int>(cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_TC89_L1 ,1);
+	nomOperation=s;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "convexitydefects")
+	{
+	nbImageRes=1;
+    nbOperande = 1;
+	nomOperation=s;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "approxpolydp")
+	{
+	nbImageRes=0;
+    nbOperande = 1;
+    doubleParam["epsilon"] = DomaineParametreOp<double>(0, 0, 1000, 1);
+	intParam["closed"]=DomaineParametreOp<int>(0,0,1 ,1);
+	nomOperation=s;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+
 if (s == "cvtcolor")
 	{
 	nbImageRes=1;
@@ -1637,6 +1663,31 @@ if (s=="contour")
 	operateur = &ImageInfoCV::Contour;
 	return true;
 	}
+if (s == "convexhull")
+	{
+	opAttribut=true;
+	lienHtml="http://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga014b28e56cb8854c0de4a211cb2be656";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=316&zoom=70,250,100";
+	operateur = &ImageInfoCV::ConvexHull;
+	return true;
+}
+if (s == "convexitydefects")
+	{
+	opAttribut=true;
+	lienHtml="http://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#gada4437098113fd8683c932e0567f47ba";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=317&zoom=70,250,100";
+	operateur = &ImageInfoCV::ConvexityDefects;
+	return true;
+}
+if (s == "approxpolydp")
+	{
+	opAttribut=true;
+	lienHtml="http://docs.opencv.org/master/d3/dc0/group__imgproc__shape.html#ga0012a5fdaea70b8a9970165d98722b4c";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=313&zoom=70,250,100";
+	operateur = &ImageInfoCV::ApproxPolyDP;
+	return true;
+}
+
 if (s=="FFT")
 	{
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#canny";

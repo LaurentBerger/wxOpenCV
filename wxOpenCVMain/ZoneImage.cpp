@@ -670,6 +670,13 @@ if (osgApp->ModeSouris()==SOURIS_STD)
     menu.AppendCheckItem(Menu_Coupe, _T("Section"));
     menu.Append(Menu_Masque, _T("Mask"),CreateMenuMasque(NULL));
     bool menuParametre = false;
+	if (f->ImAcq()->PtContoursPoly())
+		{
+		menu.AppendCheckItem(Menu_Contour_Poly, _T("Draw Contour poly "));
+		if (f->TracerContourPoly())
+			menu.Check(Menu_Contour_Poly, true);
+		menuParametre=true;
+		}
 	if (f->ImAcq()->PtContours())
 		{
 		menu.AppendCheckItem(Menu_Contour, _T("Draw Contour "));
@@ -1002,6 +1009,12 @@ tracerContour=!tracerContour;
 feuille->Refresh(false);
 }
 
+void FenetrePrincipale::TracerContourPoly(wxCommandEvent& event)
+{
+tracerContourPoly=!tracerContourPoly;
+feuille->Refresh(false);
+}
+
 void FenetrePrincipale::TracerLigneHough(wxCommandEvent& event)
 {
 	tracerLigneHough = !tracerLigneHough;
@@ -1069,7 +1082,7 @@ if (!imAcq->HoughLigne())
 	return;
 	}
 
-std::vector<cv::Vec2f> *ligne=imAcq->HoughLigne();
+std::vector<std::vector<cv::Vec2f > > *ligne=imAcq->HoughLigne();
 wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
 for (int k=0;k<imAcq->channels()&& k<3;k++)
 	{
@@ -1077,7 +1090,7 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 	hdc.SetPen(crayon[k]);
 	for( size_t i = 0; i < ligne[k].size(); i++ )
 		{
-		float rho = ligne[k][i][0], theta = ligne[k][i][1];
+		float rho = (*ligne)[k][i][0], theta = (*ligne)[k][i][1];
 		wxPoint pt1, pt2;
 		double a = cos(theta), b = sin(theta);
 		double x0 = a*rho, y0 = b*rho;
@@ -1101,15 +1114,15 @@ if (!imAcq->HoughLigneProba())
 	tracerLigneProbaHough=false;
 	return;
 	}
-std::vector<cv::Vec4i> *lignep=imAcq->HoughLigneProba();
+std::vector<std::vector<cv::Vec4i> > *lignep=imAcq->HoughLigneProba();
 wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
 for (int k=0;k<imAcq->channels()&& k<3;k++)
 	{
 	crayon[k].SetWidth(3);
 	hdc.SetPen(crayon[k]);
-	for( size_t i = 0; i < lignep[k].size(); i++ )
+	for( size_t i = 0; i < (*lignep)[k].size(); i++ )
 		{
-		wxPoint pt1(lignep[k][i][0], lignep[k][i][1]),pt2(lignep[k][i][2], lignep[k][i][3]);
+		wxPoint pt1((*lignep)[k][i][0], (*lignep)[k][i][1]),pt2((*lignep)[k][i][2], (*lignep)[k][i][3]);
 		wxPoint p1(RepereImageEcran(pt1));
 		wxPoint p2(RepereImageEcran(pt2));
 		hdc.DrawLine(p1,p2);
@@ -1126,7 +1139,7 @@ if (!imAcq->BonCoin())
 	tracerBonCoin=false;
 	return;
 	}
-std::vector<cv::Point2f> *boncoin=imAcq->BonCoin();
+std::vector<std::vector<cv::Point2f> > *boncoin=imAcq->BonCoin();
 wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
 for (int k=0;k<imAcq->channels()&& k<3;k++)
 	{
@@ -1135,23 +1148,23 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 	hdc.SetBrush(*wxTRANSPARENT_BRUSH);
 	for( int i = 0; i < boncoin[k].size(); i++ )
 		{
-		wxPoint p_1(boncoin[k][i].x,boncoin[k][i].y);
+		wxPoint p_1((*boncoin)[k][i].x,(*boncoin)[k][i].y);
 		wxPoint p1(RepereImageEcran(p_1));
 		hdc.DrawCircle(p1,5);
 		}
 	}
 if (imAcq->CoinRef())
 	{
-	std::vector<cv::Point2f> *boncoin=imAcq->CoinRef();
+	std::vector<std::vector<cv::Point2f> > *boncoin=imAcq->CoinRef();
 	for (int k=0;k<imAcq->channels()&& k<3;k++)
 		{
 		crayon[k].SetWidth(2);
 		hdc.SetPen(crayon[(k+1)%3]);
 		hdc.SetBrush(*wxTRANSPARENT_BRUSH);
 		for( int i = 0; i < boncoin[k].size(); i++ )
-			if (boncoin[k][i].x>=0 && boncoin[k][i].y>=0)
+			if ((*boncoin)[k][i].x>=0 && (*boncoin)[k][i].y>=0)
 				{
-				wxPoint p_1(boncoin[k][i].x,boncoin[k][i].y);
+				wxPoint p_1((*boncoin)[k][i].x,(*boncoin)[k][i].y);
 				wxPoint p1(RepereImageEcran(p_1));
 				hdc.DrawRoundedRectangle(p1-wxSize(5,5),wxSize(10,10),2);
 				}
@@ -1168,7 +1181,7 @@ if (!imAcq->HoughCercle())
 	tracerCercleHough=false;
 	return;
 	}
-std::vector<cv::Vec3f> *cercle=imAcq->HoughCercle();
+std::vector<std::vector<cv::Vec3f> > *cercle=imAcq->HoughCercle();
 wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
 int		fZoomNume,fZoomDeno;
 
@@ -1178,11 +1191,11 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 	crayon[k].SetWidth(2);
 	hdc.SetPen(crayon[k]);
 	hdc.SetBrush(*wxTRANSPARENT_BRUSH);
-	for( int i = 0; i < cercle[k].size(); i++ )
+	for( int i = 0; i < (*cercle)[k].size(); i++ )
 		{
-		wxPoint p_1(cercle[k][i][0],cercle[k][i][1]);
+		wxPoint p_1((*cercle)[k][i][0],(*cercle)[k][i][1]);
 		wxPoint p1(RepereImageEcran(p_1));
-		hdc.DrawCircle(p1,(fZoomNume*cercle[k][i][2])/fZoomDeno);
+		hdc.DrawCircle(p1,(fZoomNume*(*cercle)[k][i][2])/fZoomDeno);
 		}
 	}
 }
@@ -1196,18 +1209,49 @@ if (!imAcq->PtContours())
 	tracerContour=false;
 	return;
 	}
-std::vector<std::vector<cv::Point> > *ptCtr=imAcq->PtContours();
-std::vector<cv::Vec4i> *arbre=imAcq->ArboContour();
+std::vector<std::vector<std::vector<cv::Point> > > *ptCtr=imAcq->PtContours();
+std::vector<std::vector<cv::Vec4i> >  *arbre=imAcq->ArboContour();
 wxPen crayon[3]={*wxBLACK_PEN,*wxBLACK_PEN,*wxBLACK_PEN};
 for (int i=0;i<imAcq->channels()&& i<3;i++)
 	{
 	crayon[i].SetWidth(3);
 	hdc.SetPen(crayon[i]);
-	int nbContour=ptCtr[i].size();
+	int nbContour=(*ptCtr)[i].size();
 	for (int j=0;j<nbContour;j++)
-		for (int k=1;k<ptCtr[i][j].size();k++)
+		for (int k=1;k<(*ptCtr)[i][j].size();k++)
 		{
-		wxPoint p_1(ptCtr[i][j][k-1].x,ptCtr[i][j][k-1].y),p_2(ptCtr[i][j][k].x,ptCtr[i][j][k].y);
+		wxPoint p_1((*ptCtr)[i][j][k-1].x,(*ptCtr)[i][j][k-1].y),p_2((*ptCtr)[i][j][k].x,(*ptCtr)[i][j][k].y);
+
+		wxPoint p1(RepereImageEcran(p_1));
+		wxPoint p2(RepereImageEcran(p_2));
+		hdc.DrawLine(p1,p2);
+		}
+	}
+
+
+}
+
+void FenetrePrincipale::TracerContourPoly(wxBufferedPaintDC &hdc)
+{
+if (!tracerContourPoly || !imAcq)
+	return;
+if (!imAcq->PtContoursPoly())
+	{
+	tracerContourPoly=false;
+	return;
+	}
+std::vector<std::vector<std::vector<cv::Point> > > *ptCtr=imAcq->PtContoursPoly();
+std::vector<std::vector<cv::Vec4i> >  *arbre=imAcq->ArboContour();
+wxPen crayon[3]={*wxBLACK_PEN,*wxBLACK_PEN,*wxBLACK_PEN};
+for (int i=0;i<imAcq->channels()&& i<3;i++)
+	{
+	crayon[i].SetWidth(5);
+	hdc.SetPen(crayon[i]);
+	int nbContour=(*ptCtr)[i].size();
+	for (int j=0;j<nbContour;j++)
+		for (int k=1;k<(*ptCtr)[i][j].size();k++)
+		{
+		wxPoint p_1((*ptCtr)[i][j][k-1].x,(*ptCtr)[i][j][k-1].y),p_2((*ptCtr)[i][j][k].x,(*ptCtr)[i][j][k].y);
 
 		wxPoint p1(RepereImageEcran(p_1));
 		wxPoint p2(RepereImageEcran(p_2));
