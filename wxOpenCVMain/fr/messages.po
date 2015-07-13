@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2015-06-24 17:35+0200\n"
-"PO-Revision-Date: 2015-06-24 20:22+0100\n"
+"PO-Revision-Date: 2015-07-13 21:26+0100\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -420,7 +420,7 @@ msgid "Histogram"
 msgstr "histogramme"
 
 msgid "Homography"
-msgstr ""
+msgstr "Homographie"
 
 msgid "Hough circle"
 msgstr "Détection de cercle"
@@ -435,7 +435,7 @@ msgid "Image parameters"
 msgstr "paramètres image"
 
 msgid "Independant motions"
-msgstr ""
+msgstr "Mouvement indépendant"
 
 msgid "Index"
 msgstr "Index"
@@ -588,13 +588,13 @@ msgid "Open"
 msgstr "Ouvrir"
 
 msgid "Open Sequence"
-msgstr ""
+msgstr "Ouvrir Séquence"
 
 msgid "Open Timestamp"
 msgstr ""
 
 msgid "Open video file"
-msgstr ""
+msgstr "Ouvrir une vidéo"
 
 #, c-format
 msgid "OpenCV : Build info %s "
@@ -766,17 +766,17 @@ msgid "Select file to process"
 msgstr "Fichier à traiter"
 
 msgid "Seq"
-msgstr ""
+msgstr "Seq"
 
 msgid "Sequence"
-msgstr ""
+msgstr "Séquence"
 
 msgid "Sequence on "
 msgstr ""
 
 #, c-format
 msgid "Server %s failed to start"
-msgstr "Server %s en échec"
+msgstr "Serveur %s en échec"
 
 msgid "Size"
 msgstr "Taille"

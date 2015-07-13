@@ -513,6 +513,18 @@ if (f->ImAcq() && f->ImAcq()->StatComposante())
 	imgStatIm->ListerRegion();
 	}
 imgStatIm->OuvertureOngletCurseur();
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES)->size()!=0)
+    imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES),_("ORB features"));
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)->size()!=0)
+    imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES),_("BRISK features"));
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES)->size()!=0)
+    imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES),_("BLOB features"));
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES)->size()!=0)
+    imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES),_("AKAZE features"));
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES)->size()!=0)
+    imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES),_("KAZE features"));
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES)->size()!=0)
+    imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES),_("AGAST features"));
 listeFenetre[nbFenetre]=new EnvFenetre(f,fenZoom,imgStatIm);
 indFenetre=nbFenetre;
 f->DefId(nbFenetre++);

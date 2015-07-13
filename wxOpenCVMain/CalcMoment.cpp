@@ -17,99 +17,103 @@ for (int i=0;i<nbCanaux;i++)
 	{
 	m[i].resize(maxIm[i]+1);
 	}
-switch(depth()){
-case CV_32S :
-	for (int i=0;i<rows;i++)
-		{
-		long *d=(long*)ptr(i);
-		for (int j=0;j<cols;j++)
-			{
-			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
-				{
-				if (*d>=0)
-					{
-					m[indCanal][*d].m00++;
-					m[indCanal][*d].m01+=i;
-					m[indCanal][*d].m02+=i*i;
-					m[indCanal][*d].m03+=i*i*i;
-					m[indCanal][*d].m10+=j;
-					m[indCanal][*d].m20+=j*j;
-					m[indCanal][*d].m30+=j*j*j;
-					m[indCanal][*d].m11+=i*j;
-					}
+if (moment.size() == 0)
+{
+    switch(depth()){
+    case CV_32S :
+	    for (int i=0;i<rows;i++)
+		    {
+		    long *d=(long*)ptr(i);
+		    for (int j=0;j<cols;j++)
+			    {
+			    for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
+				    {
+				    if (*d>=0)
+					    {
+					    m[indCanal][*d].m00++;
+					    m[indCanal][*d].m01+=i;
+					    m[indCanal][*d].m02+=i*i;
+					    m[indCanal][*d].m03+=i*i*i;
+					    m[indCanal][*d].m10+=j;
+					    m[indCanal][*d].m20+=j*j;
+					    m[indCanal][*d].m30+=j*j*j;
+					    m[indCanal][*d].m11+=i*j;
+					    }
 
-				}
-			}
-		}
-	break;
-case CV_16U :
-	for (int i=0;i<rows;i++)
-		{
-		unsigned short *d=(unsigned short*)ptr(i);
-		for (int j=0;j<cols;j++)
-			{
-			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
-				{
-					m[indCanal][*d].m00++;
-					m[indCanal][*d].m01+=i;
-					m[indCanal][*d].m02+=i*i;
-					m[indCanal][*d].m03+=i*i*i;
-					m[indCanal][*d].m10+=j;
-					m[indCanal][*d].m20+=j*j;
-					m[indCanal][*d].m30+=j*j*j;
-					m[indCanal][*d].m11+=i*j;
-				}
-			}
-		}
-	break;
-case CV_16S :
-	for (int i=0;i<rows;i++)
-		{
-		short *d=(short*)ptr(i);
-		for (int j=0;j<cols;j++)
-			{
-			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
-				{
-				if (*d>=0)
-					{
-					m[indCanal][*d].m00++;
-					m[indCanal][*d].m01+=i;
-					m[indCanal][*d].m02+=i*i;
-					m[indCanal][*d].m03+=i*i*i;
-					m[indCanal][*d].m10+=j;
-					m[indCanal][*d].m20+=j*j;
-					m[indCanal][*d].m30+=j*j*j;
-					m[indCanal][*d].m11+=i*j;
-					}
-				}
-			}
-		}
-	break;
-case CV_8U :
-	for (int i=0;i<rows;i++)
-		{
-		unsigned char *d=data+i*step[0];
-		float *g=NULL;
-		for (int j=0;j<cols;j++)
-			{
-			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
-				{
-					m[indCanal][*d].m00++;
-					m[indCanal][*d].m01+=i;
-					m[indCanal][*d].m02+=i*i;
-					m[indCanal][*d].m03+=i*i*i;
-					m[indCanal][*d].m10+=j;
-					m[indCanal][*d].m20+=j*j;
-					m[indCanal][*d].m30+=j*j*j;
-					m[indCanal][*d].m11+=i*j;
-				}
-			}
-		}
-	break;
-default :
-	throw ;
-	}
-
+				    }
+			    }
+		    }
+	    break;
+    case CV_16U :
+	    for (int i=0;i<rows;i++)
+		    {
+		    unsigned short *d=(unsigned short*)ptr(i);
+		    for (int j=0;j<cols;j++)
+			    {
+			    for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
+				    {
+					    m[indCanal][*d].m00++;
+					    m[indCanal][*d].m01+=i;
+					    m[indCanal][*d].m02+=i*i;
+					    m[indCanal][*d].m03+=i*i*i;
+					    m[indCanal][*d].m10+=j;
+					    m[indCanal][*d].m20+=j*j;
+					    m[indCanal][*d].m30+=j*j*j;
+					    m[indCanal][*d].m11+=i*j;
+				    }
+			    }
+		    }
+	    break;
+    case CV_16S :
+	    for (int i=0;i<rows;i++)
+		    {
+		    short *d=(short*)ptr(i);
+		    for (int j=0;j<cols;j++)
+			    {
+			    for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
+				    {
+				    if (*d>=0)
+					    {
+					    m[indCanal][*d].m00++;
+					    m[indCanal][*d].m01+=i;
+					    m[indCanal][*d].m02+=i*i;
+					    m[indCanal][*d].m03+=i*i*i;
+					    m[indCanal][*d].m10+=j;
+					    m[indCanal][*d].m20+=j*j;
+					    m[indCanal][*d].m30+=j*j*j;
+					    m[indCanal][*d].m11+=i*j;
+					    }
+				    }
+			    }
+		    }
+	    break;
+    case CV_8U :
+	    for (int i=0;i<rows;i++)
+		    {
+		    unsigned char *d=data+i*step[0];
+		    float *g=NULL;
+		    for (int j=0;j<cols;j++)
+			    {
+			    for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
+				    {
+					    m[indCanal][*d].m00++;
+					    m[indCanal][*d].m01+=i;
+					    m[indCanal][*d].m02+=i*i;
+					    m[indCanal][*d].m03+=i*i*i;
+					    m[indCanal][*d].m10+=j;
+					    m[indCanal][*d].m20+=j*j;
+					    m[indCanal][*d].m30+=j*j*j;
+					    m[indCanal][*d].m11+=i*j;
+				    }
+			    }
+		    }
+	    break;
+    default :
+	    throw ;
+	    }
+}
+else
+    m=moment;
 for (int indCanal=0;indCanal<nbCanaux;indCanal++)
 	for (int k=0;k<=maxIm[indCanal];k++)
 		if (m[indCanal][k].m00>0)

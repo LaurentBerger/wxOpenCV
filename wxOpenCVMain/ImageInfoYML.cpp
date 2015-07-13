@@ -248,7 +248,116 @@ void ImageInfoCV::write(cv::FileStorage& fs) const                        //Writ
 }
  
  
- 
+ ImageInfoCV::ImageInfoCV(char *nomDuFichier):cv::Mat()
+{
+eSauver=NULL;
+InitImageInfo(NULL);
+int nb = strlen(nomDuFichier);
+string ext(nomDuFichier+nb-3);
+std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
+if (ext!="yml")
+    *((Mat *)(this))=cv::imread(nomDuFichier,cv::IMREAD_UNCHANGED);
+else
+{
+    cv::FileStorage fs(nomDuFichier, cv::FileStorage::READ);
+    fs["Image"]>>*((cv::Mat*)this);
+    cv::FileNode n=fs["StatComposante0"];
+    if (!n.empty())
+    {
+        statComposante.resize(channels());
+        centreGComposante.resize(channels());
+        for (int i=0;i<channels();i++)
+        {
+            cv::FileNode n=fs["StatComposante"+to_string(i)];
+            if (!n.empty())
+                n >> statComposante[i];
+        }
+        for (int i=0;i<channels();i++)
+        {
+            cv::FileNode n=fs["CentreGComposante"+to_string(i)];
+            if (!n.empty())
+                n >> centreGComposante[i];
+        }
+    }
+    n=fs["moments0"];
+    if (!n.empty())
+    {
+        moment.resize(channels());
+        for (int i=0;i<channels();i++)
+        {
+            const string ss="moments"+to_string(i);
+            ::read((const FileStorage)fs,ss,moment[i]);
+        }
+        CalcMoment();
+    }    
+    n=fs["Cmp0Ctr0"];
+    if (!n.empty())
+    {
+        contours.resize(channels());
+        int indCtr=0;
+        for (int i=0;i<channels();i++)
+        {
+            n = fs["Cmp" + to_string(i) + "Ctr" + to_string(indCtr++)];
+            
+            while (!n.empty())
+                {
+                std::vector<Point> p;
+                n>>p;
+                contours[i].push_back(p);
+                n = fs["Cmp" + to_string(i) + "Ctr" + to_string(indCtr++)];
+                }
+        }
+    }    
+    n=fs["Cmp0CtrPoly0"];
+    if (!n.empty())
+    {
+        contoursPoly.resize(channels());
+        int indCtr=0;
+        for (int i=0;i<channels();i++)
+        {
+            n = fs["Cmp" + to_string(i) + "CtrPoly" + to_string(indCtr++)];
+            
+            while (!n.empty())
+                {
+                std::vector<Point> p;
+                n>>p;
+                contoursPoly[i].push_back(p);
+                n = fs["Cmp" + to_string(i) + "CtrPoly" + to_string(indCtr++)];
+                }
+        }
+    }    
+    n=fs["ORB"];
+    if (!n.empty())
+    {
+        n>>kOrb;
+    }    
+    n=fs["BRISK"];
+    if (!n.empty())
+    {
+        n>>kBrisk;
+    }    
+    n=fs["AKAZE"];
+    if (!n.empty())
+    {
+        n>>kAkaze;
+    }    
+    n=fs["KAZE"];
+    if (!n.empty())
+    {
+        n>>kKaze;
+    }    
+    n=fs["BLOB"];
+    if (!n.empty())
+    {
+        n>>kBlob;
+    }    
+    fs.release();
+}
+
+
+}
+
+
  
  
  void ImageInfoCV::read(const cv::FileNode& node)                          //Read serialization for this class

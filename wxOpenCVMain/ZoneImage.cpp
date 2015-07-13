@@ -1204,7 +1204,7 @@ void FenetrePrincipale::TracerContour(wxBufferedPaintDC &hdc)
 {
 if (!tracerContour || !imAcq)
 	return;
-if (!imAcq->PtContours())
+if (imAcq->PtContours()->size()==0)
 	{
 	tracerContour=false;
 	return;
@@ -1235,7 +1235,7 @@ void FenetrePrincipale::TracerContourPoly(wxBufferedPaintDC &hdc)
 {
 if (!tracerContourPoly || !imAcq)
 	return;
-if (!imAcq->PtContoursPoly())
+if (imAcq->PtContoursPoly()->size()==0)
 	{
 	tracerContourPoly=false;
 	return;

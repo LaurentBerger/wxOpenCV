@@ -26,43 +26,6 @@ static char *tpCt[]={"brut","seuillé","normalisé"};
 static char *tpOn[]={"daubechie"};
 static long tailleOnd[]={4,12,20};
 
-ImageInfoCV::ImageInfoCV(char *nomDuFichier):cv::Mat()
-{
-eSauver=NULL;
-InitImageInfo(NULL);
-int nb = strlen(nomDuFichier);
-string ext(nomDuFichier+nb-3);
-std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-if (ext!="yml")
-    *((Mat *)(this))=cv::imread(nomDuFichier,cv::IMREAD_UNCHANGED);
-else
-{
-    cv::FileStorage fs(nomDuFichier, cv::FileStorage::READ);
-    fs["Image"]>>*((cv::Mat*)this);
-    cv::FileNode n=fs["StatComposante0"];
-    if (!n.empty())
-    {
-        statComposante.resize(channels());
-        centreGComposante.resize(channels());
-        for (int i=0;i<channels();i++)
-        {
-            cv::FileNode n=fs["StatComposante"+to_string(i)];
-            if (!n.empty())
-                n >> statComposante[i];
-        }
-        for (int i=0;i<channels();i++)
-        {
-            cv::FileNode n=fs["CentreGComposante"+to_string(i)];
-            if (!n.empty())
-                n >> centreGComposante[i];
-        }
-    }
-    fs.release();
-}
-
-
-}
-
 
 void ImageInfoCV::InitImageInfo(void *eTiff)
 {

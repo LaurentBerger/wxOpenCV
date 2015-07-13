@@ -147,7 +147,7 @@ for (int ii=0;ii<(*s)[indPlan].rows;ii++)
 	listeRegion->DefCellule(ii,3,(*s)[indPlan].at<int>(ii,cv::CC_STAT_AREA), "%7d");
 	listeRegion->DefCellule(ii,5,(*g)[indPlan].at<double>(ii,0), "%6.1f");
 	listeRegion->DefCellule(ii,6,(*g)[indPlan].at<double>(ii,1), "%6.1f");
-	if(m->size()>ii && (*m)[indPlan][ii].m00>0)
+	if((*m)[indPlan].size()>ii && (*m)[indPlan][ii].m00>0)
 		{
 		listeRegion->DefCellule(ii,7,2*sqrt((*m)[indPlan][ii].mu20/(*m)[indPlan][ii].m00), "%6.1f");
 		listeRegion->DefCellule(ii,8,2*sqrt((*m)[indPlan][ii].mu02/(*m)[indPlan][ii].m00), "%6.1f");
