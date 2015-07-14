@@ -217,6 +217,10 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 		x=imAcq->at<cv::Vec3b>(point.y,point.x);;
 		barreEtat->UpdateCurseur(point.x,point.y,x[2],x[1],x[0]);
 		break;
+	case CV_8UC4 :
+		xxxx=imAcq->at<cv::Vec4b>(point.y,point.x);;
+		barreEtat->UpdateCurseur(point.x,point.y,xxxx[2],xxxx[1],xxxx[0]);
+		break;
 	case CV_16UC1 :
 		val = imAcq->at<unsigned short>(point.y,point.x);
 		barreEtat->UpdateCurseur(point.x,point.y,val);
