@@ -92,7 +92,8 @@ ostream& operator << (ostream &out, const std::vector<DMatch>& matches) {
 
 void ImageInfoCV::write(cv::FileStorage& fs) const                        //Write serialization for this class
 {
-    fs<<"Image"<<*((cv::Mat*)this);
+    Mat mThis = getMat(cv::ACCESS_READ);
+    fs<<"Image"<<mThis;
     if (statComposante.size()!=0)
         {
         for (int i=0;i<channels();i++)
@@ -248,7 +249,7 @@ void ImageInfoCV::write(cv::FileStorage& fs) const                        //Writ
 }
  
  
- ImageInfoCV::ImageInfoCV(char *nomDuFichier):cv::Mat()
+ ImageInfoCV::ImageInfoCV(char *nomDuFichier):cv::UMat()
 {
 eSauver=NULL;
 InitImageInfo(NULL);
@@ -256,11 +257,12 @@ int nb = strlen(nomDuFichier);
 string ext(nomDuFichier+nb-3);
 std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
 if (ext!="yml")
-    *((Mat *)(this))=cv::imread(nomDuFichier,cv::IMREAD_UNCHANGED);
+    cv::imread(nomDuFichier,cv::IMREAD_UNCHANGED).copyTo(*((UMat *)(this)));
 else
 {
     cv::FileStorage fs(nomDuFichier, cv::FileStorage::READ);
-    fs["Image"]>>*((cv::Mat*)this);
+    Mat mThis = getMat(cv::ACCESS_READ);
+    fs["Image"]>>mThis;
     cv::FileNode n=fs["StatComposante0"];
     if (!n.empty())
     {

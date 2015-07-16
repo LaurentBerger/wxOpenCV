@@ -17,13 +17,14 @@ for (int i=0;i<nbCanaux;i++)
 	{
 	m[i].resize(maxIm[i]+1);
 	}
+cv::Mat mThis = getMat(cv::ACCESS_READ);
 if (moment.size() == 0)
 {
     switch(depth()){
     case CV_32S :
 	    for (int i=0;i<rows;i++)
 		    {
-		    long *d=(long*)ptr(i);
+		    long *d=(long*)mThis.ptr(i);
 		    for (int j=0;j<cols;j++)
 			    {
 			    for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
@@ -47,7 +48,7 @@ if (moment.size() == 0)
     case CV_16U :
 	    for (int i=0;i<rows;i++)
 		    {
-		    unsigned short *d=(unsigned short*)ptr(i);
+		    unsigned short *d=(unsigned short*)mThis.ptr(i);
 		    for (int j=0;j<cols;j++)
 			    {
 			    for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
@@ -67,7 +68,7 @@ if (moment.size() == 0)
     case CV_16S :
 	    for (int i=0;i<rows;i++)
 		    {
-		    short *d=(short*)ptr(i);
+		    short *d=(short*)mThis.ptr(i);
 		    for (int j=0;j<cols;j++)
 			    {
 			    for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
@@ -90,7 +91,7 @@ if (moment.size() == 0)
     case CV_8U :
 	    for (int i=0;i<rows;i++)
 		    {
-		    unsigned char *d=data+i*step[0];
+		    unsigned char *d=mThis.ptr(i);
 		    float *g=NULL;
 		    for (int j=0;j<cols;j++)
 			    {

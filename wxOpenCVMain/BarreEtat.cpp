@@ -317,9 +317,9 @@ if (fen->SequenceEnCours())
 	}
 SetStatusText(s, Champ_Clock);
 int nbCanaux;
-if (fen && fen->ImAcq() ) //Invalid read of size 4 cv::Mat::channels() const (mat.inl.hpp:709)
+if (fen && fen->ImAcq() ) //Invalid read of size 4 cv::UMat::channels() const (mat.inl.hpp:709)
 	 nbCanaux=fen->ImAcq()->channels();
-if (fen && fen->ImAcq() && fen->ImAcq()->channels()>=3) //Invalid read of size 4 cv::Mat::channels() const (mat.inl.hpp:709)
+if (fen && fen->ImAcq() && fen->ImAcq()->channels()>=3) //Invalid read of size 4 cv::UMat::channels() const (mat.inl.hpp:709)
 	{
 	 nbCanaux=fen->ImAcq()->channels();
 	m_planRouge->Show(true);

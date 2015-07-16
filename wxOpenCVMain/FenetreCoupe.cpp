@@ -179,11 +179,11 @@ if (((wxOsgApp*)osgApp)->Graphique()->ModeRectangle())
 
 int nbVal=0;
 
-
+cv::Mat matImAcq = imAcq->getMat(cv::ACCESS_READ);
 //imAcq->CoupeLineaire((float)rCoupe.GetLeft(),(float)rCoupe.GetTop(),(float)rCoupe.GetRight(),(float)rCoupe.GetBottom(),h);
 // grabs pixels along the line (pt1, pt2)
 // from 8-bit 3-channel image to the buffer
-cv::LineIterator it(*imAcq, pt1, pt2, 8);
+cv::LineIterator it(matImAcq, pt1, pt2, 8);
 cv::LineIterator it2 = it;
 const size_t np=16384;
 
@@ -214,7 +214,7 @@ case CV_16U:
 			{
 			x[k][i] =  norm(it.pos()-it2.pos());
 			cv::Point p=it.pos();
-			y[k][i]=((unsigned short*)imAcq->ptr(p.y)+p.x*imAcq->channels())[k];
+			y[k][i]=((unsigned short*)matImAcq.ptr(p.y)+p.x*imAcq->channels())[k];
 
 			}
 		nbVal++;
@@ -227,7 +227,7 @@ case CV_16S:
 			{
 			x[k][i] =  norm(it.pos()-it2.pos());
 			cv::Point p=it.pos();
-			y[k][i]=((short*)imAcq->ptr(p.y)+p.x*imAcq->channels())[k];
+			y[k][i]=((short*)matImAcq.ptr(p.y)+p.x*imAcq->channels())[k];
 			}
 		nbVal++;
 		}
@@ -239,7 +239,7 @@ case CV_32S:
 			{
 			x[k][i] =  norm(it.pos()-it2.pos());
 			cv::Point p=it.pos();
-			y[k][i]=((int*)imAcq->ptr(p.y)+p.x*imAcq->channels())[k];
+			y[k][i]=((int*)matImAcq.ptr(p.y)+p.x*imAcq->channels())[k];
 			}
 		nbVal++;
 		}
@@ -251,7 +251,7 @@ case CV_32F:
 			{
 			x[k][i] =  norm(it.pos()-it2.pos());
 			cv::Point p=it.pos();
-			y[k][i]=((float*)imAcq->ptr(p.y)+p.x*imAcq->channels())[k];
+			y[k][i]=((float*)matImAcq.ptr(p.y)+p.x*imAcq->channels())[k];
 			}
 		nbVal++;
 		}

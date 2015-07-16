@@ -19,6 +19,8 @@
 #include "opencv2/opencv.hpp"
 #include "ImageConstante.h"
 #include "ParametreOperation.h"
+#include "opencv2/core/ocl.hpp"
+
 typedef short CodeErreur;
 #define ERREUR OuiERREUR
 
@@ -34,7 +36,7 @@ typedef short CodeErreur;
 #define IMAGEINFOCV_AGAST_DES 5
 
 
-class ImageInfoCV : public cv::Mat {
+class ImageInfoCV : public cv::UMat {
 // Type pour les images openCV en binaire type()
 // xxxyyy 3 bits de poids faibles pour taille et signe :
 // yyy
@@ -137,21 +139,21 @@ std::vector<cv::KeyPoint> kKaze;	/*<! Point clef de kaze */
 std::vector<cv::KeyPoint> kAgast;	/*<! Point clef de kaze */
 std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de blob */
 std::vector<std::vector <cv::Point > > kMser;	/*<! region et point détectés par mser */
-cv::Mat	descORB;				    /*<! Descripteur associé à l'un des points clé ORB*/
-cv::Mat	descAKAZE;				    /*<! Descripteur associé à l'un des points clé AKAZE*/
-cv::Mat	descKAZE;				    /*<! Descripteur associé à l'un des points clé KAZE*/
-cv::Mat	descAGAST;				    /*<! Descripteur associé à l'un des points clé KAZE*/
-cv::Mat	descBRISK;				    /*<! Descripteur associé à l'un des points clé BRISK*/
+cv::UMat	descORB;				    /*<! Descripteur associé à l'un des points clé ORB*/
+cv::UMat	descAKAZE;				    /*<! Descripteur associé à l'un des points clé AKAZE*/
+cv::UMat	descKAZE;				    /*<! Descripteur associé à l'un des points clé KAZE*/
+cv::UMat	descAGAST;				    /*<! Descripteur associé à l'un des points clé KAZE*/
+cv::UMat	descBRISK;				    /*<! Descripteur associé à l'un des points clé BRISK*/
 std::vector<cv::DMatch> matches;	/*<! Descripteur appariés */
 
-cv::Mat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
-cv::Mat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
-cv::Mat *silh;						/*<! Seuillage de la différence entre deux images pour updateMotion History */
+cv::UMat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
+cv::UMat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
+cv::UMat *silh;						/*<! Seuillage de la différence entre deux images pour updateMotion History */
 
-cv::Mat	masqueOperateur;			/*<! Masque pour les opérations cosntruit à partir des rectangles */
-cv::Mat	*masqueMOG;					/*<! Masque pour calcMotionGradient */
-cv::Mat *orient;					/*<! orientation pour calcMotionGradient*/
-cv::Mat *segmvt;					/*<! segmentation issue de l'analyse du mouvement (segmentMotion)*/
+cv::UMat	masqueOperateur;			/*<! Masque pour les opérations cosntruit à partir des rectangles */
+cv::UMat	*masqueMOG;					/*<! Masque pour calcMotionGradient */
+cv::UMat *orient;					/*<! orientation pour calcMotionGradient*/
+cv::UMat *segmvt;					/*<! segmentation issue de l'analyse du mouvement (segmentMotion)*/
 std::vector<cv::Rect> regionsMvt;	/*<! Regions issues de l'analyse du mouvement (segmentMotion)*/
 std::vector<double> angle;			/*<! Angle issus de l'analyse du mouvement (calcGlobalOrientation)*/
 
@@ -415,11 +417,11 @@ ImageInfoCV 	*Voronoi (ImageInfoCV	&z);
 // Squelette
 ImageInfoCV	*DistObjetFond();
 bool MaxLocal(int c,int i,int j);
-bool TraiterMediane(int c,int &r,int &s,int dr,int ds,int &q,ImageInfoCV &im);
-void SuiviChemin(int c,int i,int j,ImageInfoCV &im);
+bool TraiterMediane(int c,int &r,int &s,int dr,int ds,int &q,cv::Mat &im);
+void SuiviChemin(int c,int i,int j,cv::Mat &im);
 bool MaxLocal(int i,int j);
-bool TraiterMediane(int &r,int &s,int dr,int ds,int &q,ImageInfoCV &im);
-void SuiviChemin(int i,int j,ImageInfoCV &im);
+bool TraiterMediane(int &r,int &s,int dr,int ds,int &q,cv::Mat &im);
+void SuiviChemin(int i,int j,cv::Mat  &im);
 
 // Reconstruction d'image
 ImageInfoCV *Recons2d(long nbPts,long tailleOperateur=0);
@@ -476,13 +478,13 @@ long	LitTailleOndelette(void);
 long  	LitNbIterOperateur(void);
 char  	LitConverCplxEnt(void);
 
-cv::Mat *MasqueOperateur(){ return &masqueOperateur; };
+cv::UMat *MasqueOperateur(){ return &masqueOperateur; };
 std::vector<cv::Mat>	*StatComposante(){return &statComposante;};
 std::vector<cv::Mat>	*CentreGComposante(){return &centreGComposante;};
-cv::Mat	*FlotOptique(bool init=false){if (init ) {delete []flotOptique;flotOptique= new cv::Mat[channels()];} return flotOptique;};
-cv::Mat *Ponderation(bool init = false){ if (init) { delete ponderation; ponderation = new cv::Mat();  cv::createHanningWindow(*ponderation, this->size(), CV_64F); } return ponderation; };
-cv::Mat *Silh(bool init = false){ if (init) { delete silh; silh = new cv::Mat(); } return silh; };
-cv::Mat *Descripteur(char =-1);
+cv::UMat	*FlotOptique(bool init=false){if (init ) {delete []flotOptique;flotOptique= new cv::UMat[channels()];} return flotOptique;};
+cv::UMat *Ponderation(bool init = false){ if (init) { delete ponderation; ponderation = new cv::UMat();  cv::createHanningWindow(*ponderation, this->size(), CV_64F); } return ponderation; };
+cv::UMat *Silh(bool init = false){ if (init) { delete silh; silh = new cv::UMat(); } return silh; };
+cv::UMat *Descripteur(char =-1);
 std::vector<std::vector<cv::Moments>> *MomentComposante(){ return &moment; };
 std::vector<std::vector<std::vector<cv::Point> > > *PtContours(){return &contours;};
 std::vector<std::vector<std::vector<cv::Point> > > *PtContoursPoly(){return &contoursPoly;};

@@ -28,6 +28,7 @@ void *ProcessGestionCamera::AcquisitionCV_32F()
 FenetrePrincipale *parent=(FenetrePrincipale *)cam->parent;
 ImageInfoCV *imAcq =parent->ImGain(); 
 cv::VideoCapture *captureVideo= ((CameraOpenCV*)cam)->CamVideo(); 
+cv::Mat matIm = imAcq->getMat(cv::ACCESS_READ);
 if (captureVideo->isOpened())
 	{
 	cv::Mat frameFlt1;
@@ -55,7 +56,7 @@ if (captureVideo->isOpened())
 
 				for (int i=0;i<frame.rows;i++)
 					{
-					float *val=(float *)imAcq->ptr(i);
+					float *val=(float *)matIm.ptr(i);
 					float *valB1=(float *)frameFlt1.ptr(i);
 					for (int j=0;j<frame.cols;j++)
 						for (int k=0;k<frame.channels();k++,valB1++,val++)
@@ -81,7 +82,7 @@ if (captureVideo->isOpened())
 	cv::Scalar x=cv::mean(*imAcq);
 	for (int i=0;i<frame.rows;i++)
 		{
-		float *val=(float *)imAcq->ptr(i);
+		float *val=(float *)matIm.ptr(i);
 		for (int j=0;j<frame.cols;j++)
 			for (int k=0;k<frame.channels();k++,val++)
 				*val = *val/x[k] ;
@@ -89,6 +90,7 @@ if (captureVideo->isOpened())
 		}
 
 	}
+matIm.copyTo(*imAcq);
 return (wxThread::ExitCode)0;
 }
 

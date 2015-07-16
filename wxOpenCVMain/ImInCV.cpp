@@ -33,7 +33,7 @@ InitOp();
 pano=NULL;
 flotOptique=NULL;
 masqueMOG=NULL;
-masqueOperateur = Mat();
+masqueOperateur = UMat();
 orient=NULL;
 segmvt=NULL;
 /*pOCVHoughLigne=NULL;
@@ -169,12 +169,12 @@ delete segmvt;
 
 void ImageInfoCV::MajMasque(bool actif, cv::Rect r)
 {
-    if (!actif &&r.area() == 0)
-        masqueOperateur = Mat();
+/*    if (!actif &&r.area() == 0)
+        masqueOperateur = UMat();
     else
     {
         if (masqueOperateur.rows == 0)
-            masqueOperateur = Mat::zeros(rows, cols, CV_8UC1);
+            masqueOperateur = UMat::zeros(rows, cols, CV_8UC1);
         for (int i = r.y; i <= r.y + r.height &&i<rows; i++)
         {
             unsigned char *d = (unsigned char*)masqueOperateur.ptr(i)+r.x;
@@ -188,7 +188,8 @@ void ImageInfoCV::MajMasque(bool actif, cv::Rect r)
             }
         }
     }
-}
+    */
+    }
 
 
 
@@ -275,7 +276,7 @@ if (im->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
 if (im->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
     kAkaze = *im->PointCle(IMAGEINFOCV_AKAZE_DES);
 if (im->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
-    kBrisk = *im->Descripteur(IMAGEINFOCV_BRISK_DES);
+    kBrisk = *im->PointCle(IMAGEINFOCV_BRISK_DES);
 if (im->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
     descORB = *im->Descripteur(IMAGEINFOCV_ORB_DES);
 if (im->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
@@ -318,7 +319,7 @@ return m;
 
 
 
-ImageInfoCV::ImageInfoCV(void *r):cv::Mat(1,1,3)	
+ImageInfoCV::ImageInfoCV(void *r):cv::UMat(1,1,3)	
 //			((EnTeteTiff*)r)->LitNbLigne(),
 //			((EnTeteTiff*)r)->LitNbColonne(),
 //			((EnTeteTiff*)r)->LitNbPlan())
@@ -328,7 +329,7 @@ InitImageInfo(r);
 }
 
 
-ImageInfoCV::ImageInfoCV(long nbL,long nbC,int nbP):cv::Mat(nbL, nbC, nbP)
+ImageInfoCV::ImageInfoCV(long nbL,long nbC,int nbP):cv::UMat(nbL, nbC, nbP)
 {
 eSauver=NULL;
 InitImageInfo();
@@ -340,7 +341,7 @@ listeOpAttribut[p->nomOperation]=*p;
 return p;
 }
 
-cv::Mat *ImageInfoCV::Descripteur(char type)
+cv::UMat *ImageInfoCV::Descripteur(char type)
 { 
 switch (type){
 case IMAGEINFOCV_ORB_DES:

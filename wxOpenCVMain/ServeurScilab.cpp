@@ -98,10 +98,10 @@ ConnexionBase::OnRequest(const wxString& topic,
     wxString afterDate;
     if ( item.StartsWith("CLASSE IMAGE", &afterDate) )
 		{
-		ImageInfoCV *im=((FenetrePrincipale*)wRef)->ImAcq();
-		sprintf(tmp,"%d %d",im->rows,im->cols);
+		cv::Mat matIm=((FenetrePrincipale*)wRef)->ImAcq()->getMat(cv::ACCESS_READ);
+		sprintf(tmp,"%d %d",matIm.rows,matIm.cols);
         *size = sizeof(ImageInfoCV);
-		data = (unsigned char*)im;
+		data = (unsigned char*)&matIm;
 		}
     if ( item.StartsWith("Data", &afterDate) )
 		{
@@ -112,9 +112,9 @@ ConnexionBase::OnRequest(const wxString& topic,
 		int nbLigne = 0xFFFF & indLigne;
 		indLigne = (0xFFFF0000 & indLigne)>>16;
 
-		ImageInfoCV *im=((FenetrePrincipale*)wRef)->ImAcq();
-        *size = im->rows*im->cols;
-        data =im->data;
+		cv::Mat matIm=((FenetrePrincipale*)wRef)->ImAcq()->getMat(cv::ACCESS_READ);
+        *size = matIm.rows*matIm.cols;
+        data =matIm.ptr(0);
 
 		}
 

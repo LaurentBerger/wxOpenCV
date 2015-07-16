@@ -112,7 +112,7 @@ else
 
 if(captureVideo->isOpened())  // check if we succeeded
 	{
-	cv::Mat frame;
+	cv::UMat frame;
 	if( indId==-1)
 		fluxOuvert=true;
 /*	for (int i=15;i<NB_TAILLE_VIDEO;i++)
@@ -333,20 +333,20 @@ int	CameraOpenCV::Acquisition(void) /*<! Acquisition d'une image */
 {
 if (typeAcq==CV_32FC3)
 	{
-	Mat frame;
-	Mat frameFlt;
+	UMat frame;
+	UMat frameFlt;
 	while (!captureVideo->retrieve(frame));
 	wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 	frame.convertTo(frameFlt,CV_32FC3);
-	(*((Mat *)imAcq)) =frameFlt; // get a new frame from camera
+	(*((UMat *)imAcq)) =frameFlt; // get a new frame from camera
 	}
 else if (typeAcq==CV_8UC3)
 	{
-	Mat frame;
+	UMat frame;
 	while (!captureVideo->retrieve(frame));
 	wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-	(*((Mat *)imAcq)) =frame; // get a new frame from camera
+	(*((UMat *)imAcq)) =frame; // get a new frame from camera
 	}
 
 return 1;
@@ -447,12 +447,14 @@ if (!captureVideo)
 
 if (captureVideo->isOpened())
 	{
-	Mat frame1;
-	Mat frame2;
-	Mat frame;
+	Mat     frame1;
+	Mat     frame2;
+	Mat     frame;
+    UMat    frameBuffer;
 	int nbPts[100];
 	int nbTour = 0;
 	std::vector<cv::Point2f> repereIni, repere;
+	while (!captureVideo->retrieve(frameBuffer));
 	while (!captureVideo->retrieve(frame2));
 	while (!captureVideo->retrieve(frame1));
 	static bool opActif=false;
@@ -616,7 +618,7 @@ if (captureVideo->isOpened())
 								}
 							imAcq->CloneStat(im[indOp-1][0]);
 							imAcq->DeplacerFlotOptique(im[indOp-1][0]);
-							im[indOp-1][0]->copyTo((*((Mat *)imAcq)));
+							im[indOp-1][0]->copyTo((*((UMat *)imAcq)));
 							frameDejaCopie=true;
 							}
                         std::map<ImageInfoCV*,bool>::iterator it;
@@ -646,8 +648,9 @@ if (captureVideo->isOpened())
 						((FenetrePrincipale*)parent)->ChgtTailleVideo(0);
 						chgtTaille=false;
 						}
-					//frame.copyTo((*((Mat *)imAcq))); // get a new frame from camera
-					swap(frame, (*((Mat *)imAcq)));
+					//frame.copyTo((*((UMat *)imAcq))); // get a new frame from camera
+                    frame.copyTo(frameBuffer);
+					swap(frameBuffer, (*((UMat *)imAcq)));
 					}
                 frameDejaCopie=false;
 
@@ -729,7 +732,7 @@ if (captureVideo->isOpened())
 					{
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 					frame.convertTo(frameFlt,CV_32FC3);
-					(*((Mat *)imAcq)) =frameFlt; // get a new frame from camera
+					(*((UMat *)imAcq)).setTo(frameFlt); // get a new frame from camera
 					}
 				else
 					{
@@ -737,7 +740,7 @@ if (captureVideo->isOpened())
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 					frame.convertTo(frameFlt,CV_32FC3);
 
-					(*((Mat *)imAcq)) =frameFlt; // get a new frame from camera
+					(*((UMat *)imAcq)).setTo(frameFlt); // get a new frame from camera
 					for (int i=0;i<frame.rows;i++)
 						{
 						float *val=(float *)frameFlt.ptr(i);

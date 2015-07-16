@@ -601,7 +601,8 @@ if (itRef!=(*t).end())
 		ww=nom.mb_str ();
 		nomFichier=ww.data() ;
 		cv::FileStorage fs(nomFichier, cv::FileStorage::WRITE);
-		fs<<"Image"<<*((cv::Mat*)r[0]);
+        cv::Mat m = r[0]->getMat(cv::ACCESS_READ);
+		fs<<"Image"<<m;
 		fs.release();
 
 		delete im[0];

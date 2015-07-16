@@ -684,10 +684,10 @@ for (int i=xx.opnn[idFiltre]->cols;i<21;i++)
 	g->HideCol(i);
 	g->HideRow(i);
 	}
-
-	for (int i=0;i<xx.opnn[idFiltre]->rows;i++)
-		for (int j=0;j<xx.opnn[idFiltre]->cols;j++)
-			g->DefCellule(i,j,xx.opnn[idFiltre]->at<float>(i,j));
+cv::Mat m = xx.opnn[idFiltre]->getMat(cv::ACCESS_READ);
+for (int i=0;i<xx.opnn[idFiltre]->rows;i++)
+	for (int j=0;j<xx.opnn[idFiltre]->cols;j++)
+		g->DefCellule(i,j,m.at<float>(i,j));
 if (cb->GetStringSelection().Find(_("user"))!=wxNOT_FOUND)
 	g->EnableEditing (true);
 else
@@ -711,7 +711,9 @@ ImageInfoCV xx;
 double val;
 if (event.GetString().ToDouble(&val))
 	{
-	xx.opnn[idFiltre]->at<float>(l,c)=val;
+    cv::Mat m = xx.opnn[idFiltre]->getMat(cv::ACCESS_RW);
+	m.at<float>(l,c)=val;
+    m.copyTo(*xx.opnn[idFiltre]);
 	((wxOsgApp *)osgApp)->SauverFichierConfig("conv",idFiltre);
 
 	}
@@ -734,9 +736,10 @@ excel->SetDefaultCellBackgroundColour (wxColour(64,64,255));
 excel->SetLabelBackgroundColour(wxColour(128,128,128));
 excel->SetDefaultCellFont  ( wxFont(12,wxFONTFAMILY_DEFAULT,wxFONTSTYLE_NORMAL,wxFONTWEIGHT_BOLD ) ) ;
 indFiltreAffiche=0;
+cv::Mat m = xx.opnn[0]->getMat(cv::ACCESS_READ);
 for (int i=0;i<3;i++)
 	for (int j=0;j<3;j++)
-		excel->DefCellule(i,j,xx.opnn[0]->at<float>(i,j));
+		excel->DefCellule(i,j,m.at<float>(i,j));
 excel->AutoSize();
 for (int i=3;i<21;i++)
 	{
@@ -872,7 +875,7 @@ if (x.opMorph[ind]!=NULL)
 cv::Mat element = cv::getStructuringElement( type,cv::Size( 2*taille + 1, 2*taille+1 ),cv::Point( taille, taille ) );
 
 x.opMorph[ind] = new ImageInfoCV( 2*taille + 1, 2*taille+1,element.type());
-*((cv::Mat *)x.opMorph[ind]) =element;
+element.copyTo(*x.opMorph[ind]);
 AfficheMorpho(ind);
 }
 
@@ -903,10 +906,11 @@ if (ImageInfoCV::opMorph[ind]==NULL)
 	}
 ImageInfoCV::opMorph[ind]->IndOpMorphologie(ind);
 wxImage op(ImageInfoCV::opMorph[ind]->rows,ImageInfoCV::opMorph[ind]->cols);
+cv::Mat m = ImageInfoCV::opMorph[ind]->getMat(cv::ACCESS_READ);
 for (int i=0;i<ImageInfoCV::opMorph[ind]->rows;i++)
 	for (int j=0;j<ImageInfoCV::opMorph[ind]->cols;j++)
 		{
-		unsigned char c=ImageInfoCV::opMorph[ind]->at<unsigned char>(i,j);
+		unsigned char c=m.at<unsigned char>(i,j);
 		op.SetRGB(j,i,255*c,255*c,255*c);
 		}
 wxWindow *cb=(wxWindow*)wxWindow::FindWindowById(ID_OP_MORPH,this);

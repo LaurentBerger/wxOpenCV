@@ -32,7 +32,7 @@ double compose_megapix;
 
 std::vector<int> bijection;
 std::vector<cv::detail::ImageFeatures> features;
-std::vector<cv::Mat> tabImg;
+std::vector<cv::UMat> tabImg;
 std::vector<cv::detail::MatchesInfo> appariement;
 cv::detail::HomographyBasedEstimator estimateur;
 std::vector<cv::detail::CameraParams> cameras;

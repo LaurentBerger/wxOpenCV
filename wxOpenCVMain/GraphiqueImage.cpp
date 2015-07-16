@@ -348,12 +348,12 @@ else
 	}
 }
 /**************************************************************
-Conversion d'une image Mat en DIB wxwidgets pour l'affichage
+Conversion d'une image UMat en DIB wxwidgets pour l'affichage
 **************************************************************/
 
 void FenetrePrincipale::DIBImage(ImageInfoCV *imSrc,int	indPlanTransparent)
 {
-cv::Mat *im=(cv::Mat*)imSrc;
+cv::UMat *im=(cv::UMat*)imSrc;
 /* Les images sont du type CV_8UC1, CV_8UC3, CV_16US */
 // Les images 3D ne sont pas gérées
 if (im->dims>2)
@@ -385,23 +385,30 @@ if (tabRGB==NULL)
 	}
 unsigned char *dMasque;
 bool masqueActif=false;
+cv::Mat matMasque;
+cv::Mat matGain;
+cv::Mat matIm;
+matIm = im->getMat(cv::ACCESS_READ);
 if (imSrc->MasqueOperateur()->rows*imSrc->MasqueOperateur()->cols != 0)
 {
     masqueActif = true;
-    dMasque = imSrc->MasqueOperateur()->ptr(0);
+    matMasque = imSrc->MasqueOperateur()->getMat(cv::ACCESS_READ);
+    dMasque = matMasque.ptr(0);
 }
 int	nbCanaux=im->channels();
+if (correctionGain && imGain)
+    matGain = imGain->getMat(cv::ACCESS_READ);
 switch(im->depth()){
 case CV_32F :
 	for (int i=0;i<im->rows;i++)		
 		if (nbCanaux%2==1)	// Nombre réel
 			{
             if (masqueActif)
-                dMasque = imSrc->MasqueOperateur()->ptr(i);
+                dMasque = matMasque.ptr(i);
             float *g = NULL;
 			if (correctionGain && imGain)
-				g=(float*)imGain->ptr(i);
-			float *d=(float*)im->ptr(i);
+				g=(float*)matGain.ptr(i);
+			float *d=(float*)matIm.ptr(i);
 			unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 			for (int j=0;j<im->cols;j++,debLigne+=3)
 				{
@@ -448,8 +455,8 @@ case CV_32F :
 		else
 			{
             if (masqueActif)
-                dMasque = imSrc->MasqueOperateur()->ptr(i);
-            complex<float> *d = (complex<float>*)im->ptr(i);
+                dMasque = matMasque.ptr(i);
+            complex<float> *d = (complex<float>*)matIm.ptr(i);
 			unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 			for (int j=0;j<im->cols;j++,debLigne+=3)
 				{
@@ -512,12 +519,12 @@ case CV_32S :
 	for (int i=0;i<im->rows;i++)		
 		{
         if (masqueActif)
-            dMasque = imSrc->MasqueOperateur()->ptr(i);
-        long *d = (long*)im->ptr(i);
+            dMasque = matMasque.ptr(i);
+        long *d = (long*)matIm.ptr(i);
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 		float *g=NULL;
 		if (correctionGain && imGain)
-			g=(float*)imGain->ptr(i);
+			g=(float*)matGain.ptr(i);
 		for (int j=0;j<im->cols;j++,debLigne+=3)
 			{
 			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
@@ -564,12 +571,12 @@ case CV_16U :
 	for (int i=0;i<im->rows;i++)		
 		{
         if (masqueActif)
-            dMasque = imSrc->MasqueOperateur()->ptr(i);
-        unsigned short *d = (unsigned short*)im->ptr(i);
+            dMasque = matMasque.ptr(i);
+        unsigned short *d = (unsigned short*)matIm.ptr(i);
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 		float *g=NULL;
 		if (correctionGain && imGain)
-			g=(float*)imGain->ptr(i);
+			g=(float*)matGain.ptr(i);
 		for (int j=0;j<im->cols;j++,debLigne+=3)
 			{
 			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
@@ -616,12 +623,12 @@ case CV_16S :
 	for (int i=0;i<im->rows;i++)		
 		{
         if (masqueActif)
-            dMasque = imSrc->MasqueOperateur()->ptr(i);
-        short *d = (short*)im->ptr(i);
+            dMasque = matMasque.ptr(i);
+        short *d = (short*)matIm.ptr(i);
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 		float *g=NULL;
 		if (correctionGain && imGain)
-			g=(float*)imGain->ptr(i);
+			g=(float*)matGain.ptr(i);
 		for (int j=0;j<im->cols;j++,debLigne+=3)
 			{
 			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
@@ -668,12 +675,12 @@ case CV_8U :
 	for (int i=0;i<im->rows;i++)		
 		{
         if (masqueActif)
-            dMasque = imSrc->MasqueOperateur()->ptr(i);
-        unsigned char *d = im->data + i*im->step[0];
+            dMasque = matMasque.ptr(i);
+        unsigned char *d = matIm.ptr(i);
 		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
 		float *g=NULL;
 		if (correctionGain && imGain)
-			g=(float*)imGain->ptr(i);
+			g=(float*)matGain.ptr(i);
 		for (int j=0;j<im->cols;j++,debLigne+=3)
 			{
 			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)

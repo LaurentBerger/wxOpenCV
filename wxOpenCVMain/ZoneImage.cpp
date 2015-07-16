@@ -173,64 +173,66 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 	std::complex<float> zz[3];
 	int val;
 	double dVal;
+    cv::Mat m =imAcq->getMat(cv::ACCESS_READ);
+
 	switch(imAcq->type()){
 	case CV_32FC1:
-		dVal = imAcq->at<float>(point.y,point.x);
+		dVal = m.at<float>(point.y,point.x);
 		barreEtat->UpdateCurseur(point.x,point.y,dVal);
 		break;
 	case CV_64FC1:
-		dVal = imAcq->at<double>(point.y,point.x);
+		dVal = m.at<double>(point.y,point.x);
 		barreEtat->UpdateCurseur(point.x,point.y,dVal);
 		break;
 	case CV_32FC3:
-		xx = imAcq->at<cv::Vec3f>(point.y, point.x);;
+		xx = m.at<cv::Vec3f>(point.y, point.x);;
 		barreEtat->UpdateCurseur(point.x, point.y, xx[2], xx[1], xx[0]);
 		break;
 	case CV_32FC4:
-		xxxx = imAcq->at<cv::Vec4f>(point.y, point.x);;
+		xxxx = m.at<cv::Vec4f>(point.y, point.x);;
 		barreEtat->UpdateCurseur(point.x, point.y, xxx[2], xxx[1], xxx[0]);
 		break;
 	case CV_32FC(6):
-		xxx=imAcq->at<cv::Vec6f>(point.y,point.x);
+		xxx=m.at<cv::Vec6f>(point.y,point.x);
 		zz[0]=std::complex<float>(xxx[0],xxx[1]);
 		zz[1]=std::complex<float>(xxx[2],xxx[3]);
 		zz[2]=std::complex<float>(xxx[4],xxx[5]);
 		barreEtat->UpdateCurseur(point.x,point.y,zz[2],zz[1],zz[0]);
 		break;
 	case CV_64FC3 :
-		xx=imAcq->at<cv::Vec3d>(point.y,point.x);;
+		xx=m.at<cv::Vec3d>(point.y,point.x);;
 		barreEtat->UpdateCurseur(point.x,point.y,xx[2],xx[1],xx[0]);
 		break;
 	case CV_32SC1:
-		val = imAcq->at<int>(point.y,point.x);
+		val = m.at<int>(point.y,point.x);
 		barreEtat->UpdateCurseur(point.x,point.y,val);
 		break;
 	case CV_32SC3:
-		x=imAcq->at<cv::Vec3i>(point.y,point.x);;
+		x=m.at<cv::Vec3i>(point.y,point.x);;
 		barreEtat->UpdateCurseur(point.x,point.y,x[2],x[1],x[0]);
 		break;
 	case CV_8UC1:
-		val = imAcq->at<unsigned char>(point.y,point.x);
+		val = m.at<unsigned char>(point.y,point.x);
 		barreEtat->UpdateCurseur(point.x,point.y,val);
 		break;
 	case CV_8UC3 :
-		x=imAcq->at<cv::Vec3b>(point.y,point.x);;
+		x=m.at<cv::Vec3b>(point.y,point.x);;
 		barreEtat->UpdateCurseur(point.x,point.y,x[2],x[1],x[0]);
 		break;
 	case CV_8UC4 :
-		xxxx=imAcq->at<cv::Vec4b>(point.y,point.x);;
+		xxxx=m.at<cv::Vec4b>(point.y,point.x);;
 		barreEtat->UpdateCurseur(point.x,point.y,xxxx[2],xxxx[1],xxxx[0]);
 		break;
 	case CV_16UC1 :
-		val = imAcq->at<unsigned short>(point.y,point.x);
+		val = m.at<unsigned short>(point.y,point.x);
 		barreEtat->UpdateCurseur(point.x,point.y,val);
 		break;
 	case CV_16SC1 :
-		val = imAcq->at< short>(point.y,point.x);
+		val = m.at< short>(point.y,point.x);
 		barreEtat->UpdateCurseur(point.x,point.y,val);
 		break;
 	case CV_16SC3 :
-		xx=imAcq->at<cv::Vec3s>(point.y,point.x);;
+		xx=m.at<cv::Vec3s>(point.y,point.x);;
 		barreEtat->UpdateCurseur(point.x,point.y,xx[2],xx[1],xx[0]);
 		break;
 	case CV_16UC(48):
@@ -391,14 +393,16 @@ if (f->ImAcq() && point.x>=0 && point.x<f->ImAcq()->cols && point.y>=0 && point.
 		cv::Vec3f xx;
 		cv::Vec6f xxx;
 		std::complex<float> zz[3];
+        cv::Mat m = f->ImAcq()->getMat(cv::ACCESS_READ);
+
 		switch(f->ImAcq()->type())
 			{
 			case CV_32SC1:
-				x[0] = f->ImAcq()->at<int>(point.y,point.x);
+				x[0] = m.at<int>(point.y,point.x);
 				osgApp->ImgStat()->SelectRegion(x[0],0);
 				break;
 			case CV_32SC3:
-				x=f->ImAcq()->at<cv::Vec3i>(point.y,point.x);
+				x=m.at<cv::Vec3i>(point.y,point.x);
 				osgApp->ImgStat()->SelectRegion(x[0],0);
 				osgApp->ImgStat()->SelectRegion(x[1],1);
 				osgApp->ImgStat()->SelectRegion(x[2],2);
@@ -1288,10 +1292,12 @@ for (int i=0;i<imAcq->channels();i++)
 	if (step==0)
 	step=1;
 	hdc.SetPen(crayon[i]);
+    cv::Mat m = imAcq->FlotOptique()[i].getMat(cv::ACCESS_READ);
+
 	for(int y = 0; y <nbLigne; y += step)
 		for(int x = 0; x < nbColonne; x += step)
 		{
-			const cv::Point2f& fxy = imAcq->FlotOptique()[i].at<cv::Point2f>(y, x);
+			const cv::Point2f& fxy = m.at<cv::Point2f>(y, x);
 			wxPoint p(x,y);
 			wxPoint p1(RepereImageEcran(p));
 			p +=wxPoint(fxy.x,fxy.y);

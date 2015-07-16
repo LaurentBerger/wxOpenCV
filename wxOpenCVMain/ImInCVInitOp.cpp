@@ -59,13 +59,17 @@ long		i;
 float		s=0;
 int			nbLop=nbL,nbCop=nbC;
 int			indOp=0;
+std::vector<cv::Mat> rTmp(NB_OP_CONVOLUTION);
 
 
 if (nbOp!=-1)
 	{
 	r = new ImageInfoCV*[nbOp];
-	for (i=0;i<nbOp;i++)
+    for (i = 0; i < nbOp; i++)
+    {
 		r[i] = new ImageInfoCV(nbLop,nbCop,CV_32F);
+        rTmp[i] = cv::Mat::zeros(nbLop,nbCop,CV_32F);
+    }
 	}
 else
 	{
@@ -75,170 +79,174 @@ else
 if(nbL==3 || nbOp==-1)
 	{
 	if (nbOp==-1)
-		{
+	{
 		nbLop=3;
 		nbCop=3;
-		for (indOp=0;indOp<19;indOp++)
+        for (indOp = 0; indOp < 19; indOp++)
+        {
 			r[indOp] = new ImageInfoCV(nbLop,nbCop,CV_32F);
-		}
-	for (int i=0;i<nbLop;i++)
+            rTmp[indOp] = cv::Mat::zeros(nbLop,nbCop,CV_32F);
+        }
+    }
+    for (int i=0;i<nbLop;i++)
 		for (int j=0;j<nbCop;j++)
-			r[0]->at<float>(i,j)  =(float) 1./9;
+			rTmp[0].at<float>(i,j)  =(float) 1./9;
 // Moyenne pondérée
-	r[1]->at<float>(0,0)=(float)7./78;
-	r[1]->at<float>(0,1)=(float)10./78;
-	r[1]->at<float>(0,2)=(float)7./78;
-	r[1]->at<float>(1,0)=(float)10./78;
-	r[1]->at<float>(1,1)=(float)10./78;
-	r[1]->at<float>(1,2)=(float)10./78;
-	r[1]->at<float>(2,0)=(float)7./78;
-	r[1]->at<float>(2,1)=(float)10./78;
-	r[1]->at<float>(2,2)=(float)7./78;
+	rTmp[1].at<float>(0,0)=(float)7./78;
+	rTmp[1].at<float>(0,1)=(float)10./78;
+	rTmp[1].at<float>(0,2)=(float)7./78;
+	rTmp[1].at<float>(1,0)=(float)10./78;
+	rTmp[1].at<float>(1,1)=(float)10./78;
+	rTmp[1].at<float>(1,2)=(float)10./78;
+	rTmp[1].at<float>(2,0)=(float)7./78;
+	rTmp[1].at<float>(2,1)=(float)10./78;
+	rTmp[1].at<float>(2,2)=(float)7./78;
 // Différence   x
-	r[2]->at<float>(0,0)=0;
-	r[2]->at<float>(0,1)=0;
-	r[2]->at<float>(0,2)=0;
-	r[2]->at<float>(1,0)=(float)-1./2;
-	r[2]->at<float>(1,1)=0;
-	r[2]->at<float>(1,2)=(float)1./2;
-	r[2]->at<float>(2,0)=0;
-	r[2]->at<float>(2,1)=0;
-	r[2]->at<float>(2,2)=0;
+	rTmp[2].at<float>(0,0)=0;
+	rTmp[2].at<float>(0,1)=0;
+	rTmp[2].at<float>(0,2)=0;
+	rTmp[2].at<float>(1,0)=(float)-1./2;
+	rTmp[2].at<float>(1,1)=0;
+	rTmp[2].at<float>(1,2)=(float)1./2;
+	rTmp[2].at<float>(2,0)=0;
+	rTmp[2].at<float>(2,1)=0;
+	rTmp[2].at<float>(2,2)=0;
 // Différence   y
-	r[3]->at<float>(0,0)=0;
-	r[3]->at<float>(0,1)=(float)-1./2;
-	r[3]->at<float>(0,2)=0;
-	r[3]->at<float>(1,0)=0;
-	r[3]->at<float>(1,1)=0;
-	r[3]->at<float>(1,2)=0;
-	r[3]->at<float>(2,0)=0;
-	r[3]->at<float>(2,1)=(float)1./2;
-	r[3]->at<float>(2,2)=0;
+	rTmp[3].at<float>(0,0)=0;
+	rTmp[3].at<float>(0,1)=(float)-1./2;
+	rTmp[3].at<float>(0,2)=0;
+	rTmp[3].at<float>(1,0)=0;
+	rTmp[3].at<float>(1,1)=0;
+	rTmp[3].at<float>(1,2)=0;
+	rTmp[3].at<float>(2,0)=0;
+	rTmp[3].at<float>(2,1)=(float)1./2;
+	rTmp[3].at<float>(2,2)=0;
 // Roberts x
-	r[4]->at<float>(0,0)=1;
-	r[4]->at<float>(0,1)=0;
-	r[4]->at<float>(0,2)=0;
-	r[4]->at<float>(1,0)=0;
-	r[4]->at<float>(1,1)=-1;
-	r[4]->at<float>(1,2)=0;
-	r[4]->at<float>(2,0)=0;
-	r[4]->at<float>(2,1)=0;
-	r[4]->at<float>(2,2)=0;
+	rTmp[4].at<float>(0,0)=1;
+	rTmp[4].at<float>(0,1)=0;
+	rTmp[4].at<float>(0,2)=0;
+	rTmp[4].at<float>(1,0)=0;
+	rTmp[4].at<float>(1,1)=-1;
+	rTmp[4].at<float>(1,2)=0;
+	rTmp[4].at<float>(2,0)=0;
+	rTmp[4].at<float>(2,1)=0;
+	rTmp[4].at<float>(2,2)=0;
 // Roberts y
-	r[5]->at<float>(0,0)=0;
-	r[5]->at<float>(0,1)=-1;
-	r[5]->at<float>(0,2)=0;
-	r[5]->at<float>(1,0)=1;
-	r[5]->at<float>(1,1)=0;
-	r[5]->at<float>(1,2)=0;
-	r[5]->at<float>(2,0)=0;
-	r[5]->at<float>(2,1)=0;
-	r[5]->at<float>(2,2)=0;
+	rTmp[5].at<float>(0,0)=0;
+	rTmp[5].at<float>(0,1)=-1;
+	rTmp[5].at<float>(0,2)=0;
+	rTmp[5].at<float>(1,0)=1;
+	rTmp[5].at<float>(1,1)=0;
+	rTmp[5].at<float>(1,2)=0;
+	rTmp[5].at<float>(2,0)=0;
+	rTmp[5].at<float>(2,1)=0;
+	rTmp[5].at<float>(2,2)=0;
 // Prewitt x
-	r[6]->at<float>(0,0)=(float)-1./6;
-	r[6]->at<float>(0,1)=0;
-	r[6]->at<float>(0,2)=(float)1./6;
-	r[6]->at<float>(1,0)=(float)-1./6;
-	r[6]->at<float>(1,1)=0;
-	r[6]->at<float>(1,2)=(float)1./6;
-	r[6]->at<float>(2,0)=(float)-1./6;
-	r[6]->at<float>(2,1)=0;
-	r[6]->at<float>(2,2)=(float)1./6;
+	rTmp[6].at<float>(0,0)=(float)-1./6;
+	rTmp[6].at<float>(0,1)=0;
+	rTmp[6].at<float>(0,2)=(float)1./6;
+	rTmp[6].at<float>(1,0)=(float)-1./6;
+	rTmp[6].at<float>(1,1)=0;
+	rTmp[6].at<float>(1,2)=(float)1./6;
+	rTmp[6].at<float>(2,0)=(float)-1./6;
+	rTmp[6].at<float>(2,1)=0;
+	rTmp[6].at<float>(2,2)=(float)1./6;
 // Prewitt y
-	r[7]->at<float>(0,0)=(float)-1./6;
-	r[7]->at<float>(0,1)=(float)-1./6;
-	r[7]->at<float>(0,2)=(float)-1./6;
-	r[7]->at<float>(1,0)=0;
-	r[7]->at<float>(1,1)=0;
-	r[7]->at<float>(1,2)=0;
-	r[7]->at<float>(2,0)=(float)1./6;
-	r[7]->at<float>(2,1)=(float)1./6;
-	r[7]->at<float>(2,2)=(float)1./6;
+	rTmp[7].at<float>(0,0)=(float)-1./6;
+	rTmp[7].at<float>(0,1)=(float)-1./6;
+	rTmp[7].at<float>(0,2)=(float)-1./6;
+	rTmp[7].at<float>(1,0)=0;
+	rTmp[7].at<float>(1,1)=0;
+	rTmp[7].at<float>(1,2)=0;
+	rTmp[7].at<float>(2,0)=(float)1./6;
+	rTmp[7].at<float>(2,1)=(float)1./6;
+	rTmp[7].at<float>(2,2)=(float)1./6;
 // Sobel x
-	r[8]->at<float>(0,0)=(float)1./8;
-	r[8]->at<float>(0,1)=0;
-	r[8]->at<float>(0,2)=(float)-1./8;
-	r[8]->at<float>(1,0)=(float)1./4;
-	r[8]->at<float>(1,1)=0;
-	r[8]->at<float>(1,2)=(float)-1./4;
-	r[8]->at<float>(2,0)=(float)1./8;
-	r[8]->at<float>(2,1)=0;
-	r[8]->at<float>(2,2)=(float)-1./8;
+	rTmp[8].at<float>(0,0)=(float)1./8;
+	rTmp[8].at<float>(0,1)=0;
+	rTmp[8].at<float>(0,2)=(float)-1./8;
+	rTmp[8].at<float>(1,0)=(float)1./4;
+	rTmp[8].at<float>(1,1)=0;
+	rTmp[8].at<float>(1,2)=(float)-1./4;
+	rTmp[8].at<float>(2,0)=(float)1./8;
+	rTmp[8].at<float>(2,1)=0;
+	rTmp[8].at<float>(2,2)=(float)-1./8;
 // Sobel y
-	r[9]->at<float>(0,0)=(float)-1./8;
-	r[9]->at<float>(0,1)=(float)-1./4;
-	r[9]->at<float>(0,2)=(float)-1./8;
-	r[9]->at<float>(1,0)=0;
-	r[9]->at<float>(1,1)=0;
-	r[9]->at<float>(1,2)=0;
-	r[9]->at<float>(2,0)=(float)1./8;
-	r[9]->at<float>(2,1)=(float)1./4;
-	r[9]->at<float>(2,2)=(float)1./8;
+	rTmp[9].at<float>(0,0)=(float)-1./8;
+	rTmp[9].at<float>(0,1)=(float)-1./4;
+	rTmp[9].at<float>(0,2)=(float)-1./8;
+	rTmp[9].at<float>(1,0)=0;
+	rTmp[9].at<float>(1,1)=0;
+	rTmp[9].at<float>(1,2)=0;
+	rTmp[9].at<float>(2,0)=(float)1./8;
+	rTmp[9].at<float>(2,1)=(float)1./4;
+	rTmp[9].at<float>(2,2)=(float)1./8;
 // Frei-Chen x
-	r[10]->at<float>(0,0)=(float)10/(20+10*sqrt(2.));
-	r[10]->at<float>(0,1)=0;
-	r[10]->at<float>(0,2)=(float)-10/(20+10*sqrt(2.));
-	r[10]->at<float>(1,0)=(float)14/(20+10*sqrt(2.));
-	r[10]->at<float>(1,1)=0;
-	r[10]->at<float>(1,2)=(float)-14/(20+10*sqrt(2.));
-	r[10]->at<float>(2,0)=(float)10/(20+10*sqrt(2.));
-	r[10]->at<float>(2,1)=0;
-	r[10]->at<float>(2,2)=(float)-10/(20+10*sqrt(2.));
+	rTmp[10].at<float>(0,0)=(float)10/(20+10*sqrt(2.));
+	rTmp[10].at<float>(0,1)=0;
+	rTmp[10].at<float>(0,2)=(float)-10/(20+10*sqrt(2.));
+	rTmp[10].at<float>(1,0)=(float)14/(20+10*sqrt(2.));
+	rTmp[10].at<float>(1,1)=0;
+	rTmp[10].at<float>(1,2)=(float)-14/(20+10*sqrt(2.));
+	rTmp[10].at<float>(2,0)=(float)10/(20+10*sqrt(2.));
+	rTmp[10].at<float>(2,1)=0;
+	rTmp[10].at<float>(2,2)=(float)-10/(20+10*sqrt(2.));
 // Frei-Chen y
-	r[11]->at<float>(0,0)=(float)-10/(20+10*sqrt(2.));
-	r[11]->at<float>(0,1)=(float)-14/(20+10*sqrt(2.));
-	r[11]->at<float>(0,2)=(float)-10/(20+10*sqrt(2.));
-	r[11]->at<float>(1,0)=0;
-	r[11]->at<float>(1,1)=0;
-	r[11]->at<float>(1,2)=0;
-	r[11]->at<float>(2,0)=(float)10/(20+10*sqrt(2.));
-	r[11]->at<float>(2,1)=(float)14/(20+10*sqrt(2.));
-	r[11]->at<float>(2,2)=(float)10/(20+10*sqrt(2.));
+	rTmp[11].at<float>(0,0)=(float)-10/(20+10*sqrt(2.));
+	rTmp[11].at<float>(0,1)=(float)-14/(20+10*sqrt(2.));
+	rTmp[11].at<float>(0,2)=(float)-10/(20+10*sqrt(2.));
+	rTmp[11].at<float>(1,0)=0;
+	rTmp[11].at<float>(1,1)=0;
+	rTmp[11].at<float>(1,2)=0;
+	rTmp[11].at<float>(2,0)=(float)10/(20+10*sqrt(2.));
+	rTmp[11].at<float>(2,1)=(float)14/(20+10*sqrt(2.));
+	rTmp[11].at<float>(2,2)=(float)10/(20+10*sqrt(2.));
 // Laplacien 4
-	r[12]->at<float>(0,0)=0;
-	r[12]->at<float>(0,1)=-1;
-	r[12]->at<float>(0,2)=0;
-	r[12]->at<float>(1,0)=-1;
-	r[12]->at<float>(1,1)=4;
-	r[12]->at<float>(1,2)=-1;
-	r[12]->at<float>(2,0)=0;
-	r[12]->at<float>(2,1)=-1;
-	r[12]->at<float>(2,2)=0;
-	r[13]->at<float>(0,0)=(float)-1./8;
-	r[13]->at<float>(0,1)=(float)-1./8;
-	r[13]->at<float>(0,2)=(float)-1./8;
-	r[13]->at<float>(1,0)=(float)-1./8;
-	r[13]->at<float>(1,1)=1;
-	r[13]->at<float>(1,2)=(float)-1./8;
-	r[13]->at<float>(2,0)=(float)-1./8;
-	r[13]->at<float>(2,1)=(float)-1./8;
-	r[13]->at<float>(2,2)=(float)-1./8;
-	for (int k=14;k<19;k++)
+	rTmp[12].at<float>(0,0)=0;
+	rTmp[12].at<float>(0,1)=-1;
+	rTmp[12].at<float>(0,2)=0;
+	rTmp[12].at<float>(1,0)=-1;
+	rTmp[12].at<float>(1,1)=4;
+	rTmp[12].at<float>(1,2)=-1;
+	rTmp[12].at<float>(2,0)=0;
+	rTmp[12].at<float>(2,1)=-1;
+	rTmp[12].at<float>(2,2)=0;
+	rTmp[13].at<float>(0,0)=(float)-1./8;
+	rTmp[13].at<float>(0,1)=(float)-1./8;
+	rTmp[13].at<float>(0,2)=(float)-1./8;
+	rTmp[13].at<float>(1,0)=(float)-1./8;
+	rTmp[13].at<float>(1,1)=1;
+	rTmp[13].at<float>(1,2)=(float)-1./8;
+	rTmp[13].at<float>(2,0)=(float)-1./8;
+	rTmp[13].at<float>(2,1)=(float)-1./8;
+	rTmp[13].at<float>(2,2)=(float)-1./8;
+	for (int k=0;k<19;k++)
 		{
-		for (int i=0;i<nbLop;i++)
-			for (int j=0;j<nbCop;j++)
-				r[k]->at<float>(i,j) = 0;
+        rTmp[k].copyTo(*(r[k]));
 		}
 	}
 if(nbL==5 || nbOp==-1)
 	{
 	if (nbOp==-1)
-		{
+	{
 		nbLop=5;
 		nbCop=5;
 		for (i=0;i<6;i++)
-			r[indOp+i] = new ImageInfoCV(nbLop,nbCop,CV_32F);
+        {
+            r[indOp+i] = new ImageInfoCV(nbLop,nbCop,CV_32F);
+            rTmp[indOp+i] = cv::Mat::zeros(nbLop,nbCop,CV_32F);
 		}
+    }
 	for (int i=0;i<nbLop;i++)
 		for (int j=0;j<nbCop;j++)
-			r[indOp]->at<float>(i,j)  =(float) 1./(nbL*nbC);
+			rTmp[indOp].at<float>(i,j)  =(float) 1./(nbL*nbC);
 	s=0;
 	for (int i=0;i<nbLop;i++)
 		for (int j=0;j<nbCop;j++)
 			s +=(float) 1./(1+abs(i-2)+abs(j-2));
 	for (int i=0;i<nbLop;i++)
 		for (int j=0;j<nbCop;j++)
-			r[indOp+1]->at<float>(i,j)  =1./(1+abs(i-2)+abs(j-2))/s;
+			rTmp[indOp+1].at<float>(i,j)  =1./(1+abs(i-2)+abs(j-2))/s;
 	
 	s=0;
 	for (int i=0;i<nbLop;i++)
@@ -246,35 +254,36 @@ if(nbL==5 || nbOp==-1)
 			s +=(float) exp(-((i-2)*(i-2)+(j-2)*(j-2)));
 	for (int i=0;i<nbLop;i++)
 		for (int j=0;j<nbCop;j++)
-			r[indOp+2]->at<float>(i,j)  =(float) exp(-((i-2)*(i-2)+(j-2)*(j-2)))/s;
-	for (int jj=3;jj<6;jj++)
+			rTmp[indOp+2].at<float>(i,j)  =(float) exp(-((i-2)*(i-2)+(j-2)*(j-2)))/s;
+	for (int jj=0;jj<6;jj++)
 		{
-		for (int i=0;i<nbLop;i++)
-			for (int j=0;j<nbCop;j++)
-				r[indOp+jj]->at<float>(i,j)  =0;
+        rTmp[indOp + jj].copyTo(*(r[indOp + jj]));
 		}
 	indOp+=6;
 	}
 if ( nbL==7 || nbOp==-1)
-	{
+{
 	if (nbOp==-1)
-		{
+	{
 		nbLop=7;
 		nbCop=7;
 		nbOp=6;
 		for (i=0;i<nbOp;i++)
+        {
 			r[indOp+i] = new ImageInfoCV(nbLop,nbCop,CV_32F);
+            rTmp[indOp+i] = cv::Mat::zeros(nbLop,nbCop,CV_32F);
 		}
+    }
 	for (int i=0;i<nbLop;i++)
 		for (int j=0;j<nbCop;j++)
-			r[indOp]->at<float>(i,j)  =(float) 1./(nbL*nbC);
+			rTmp[indOp].at<float>(i,j)  =(float) 1./(nbL*nbC);
 	s=0;
 	for (int i=0;i<nbLop;i++)
 		for (int j=0;j<nbCop;j++)
 			s +=(float) 1./(1+abs(i-3)+abs(j-3));
 	for (int i=0;i<nbLop;i++)
 		for (int j=0;j<nbCop;j++)
-			r[indOp+1]->at<float>(i,j)  =(float) 1./(1+abs(i-3)+abs(j-3))/s;
+			rTmp[indOp+1].at<float>(i,j)  =(float) 1./(1+abs(i-3)+abs(j-3))/s;
 	
 	s=0;
 	for (int i=0;i<nbLop;i++)
@@ -282,13 +291,11 @@ if ( nbL==7 || nbOp==-1)
 			s +=(float) exp(-((i-3)*(i-3)+(j-3)*(j-3)));
 	for (int i=0;i<nbLop;i++)
 		for (int j=0;j<nbCop;j++)
-			r[indOp+2]->at<float>(i,j)  =(float) exp(-((i-3)*(i-3)+(j-3)*(j-3)))/s;
+			rTmp[indOp+2].at<float>(i,j)  =(float) exp(-((i-3)*(i-3)+(j-3)*(j-3)))/s;
 	for (int jj=3;jj<nbOp;jj++)
 		{
-		for (int i=0;i<nbLop;i++)
-			for (int j=0;j<nbCop;j++)
-				r[indOp+jj]->at<float>(i,j)  =0;
+		rTmp[indOp+jj].copyTo(*(r[indOp + jj]));
 		}
 	}
-return r;
+    return r;
 }

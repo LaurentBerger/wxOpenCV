@@ -347,18 +347,18 @@ gb->setYInterval(echY);
 gridb.push_back(gb);
 unsigned char *data = im->data();
 
-static ImageInfoCV	*imOrig;
+static ImageInfoCV	*imOrigUMat;
 static int			preImage=0;
 int nbBitPixel=im->getPixelSizeInBits();
 int nbPlanCouleur=im->r();
 switch(nbBitPixel){
 case 16:
-	imOrig = new ImageInfoCV(im->t(),im->s(),CV_16UC1); 
+	imOrigUMat = new ImageInfoCV(im->t(),im->s(),CV_16UC1); 
 //	memcpy(imOrig->LitPlan(0),data,im->t()*im->s()*2);
 	break;
 case 24:
 default :
-	imOrig = new ImageInfoCV(im->t(),im->s(),CV_16UC3); 
+	imOrigUMat = new ImageInfoCV(im->t(),im->s(),CV_16UC3); 
 //	imOrig->DefDataRGBVersPlan(data);
 	break;
 	}
@@ -368,14 +368,15 @@ if (preImage  && imageFondPresente==1)
 else if (imageFondPresente==2)
 	imOrig->CorrectionFonctionFond(imOrig,poly,0,0);
 */
-switch(imOrig->type()){
+cv::Mat imOrig = imOrigUMat->getMat(cv::ACCESS_READ);
+switch(imOrig.type()){
 case CV_8U :
 	{
-	for (int i=0;i<imOrig->rows;i++)		
+	for (int i=0;i<imOrig.rows;i++)		
 		{
-		unsigned char *d=imOrig->data+i*imOrig->step[0];
-		for (int j=0;j<imOrig->cols;j++)
-			for (int indCanal=0;indCanal<imOrig->channels();indCanal++,d++)
+		unsigned char *d=imOrig.ptr(i);;
+		for (int j=0;j<imOrig.cols;j++)
+			for (int indCanal=0;indCanal<imOrig.channels();indCanal++,d++)
 				{
 				switch(indCanal){
 				case 0:
@@ -393,11 +394,11 @@ case CV_8U :
 	}
 	break;
 case CV_16U :
-	for (int i=0;i<imOrig->rows;i++)		
+	for (int i=0;i<imOrig.rows;i++)		
 		{
-		unsigned short *d=(unsigned short *)imOrig->data+i*imOrig->step[0];
-		for (int j=0;j<imOrig->cols;j++)
-			for (int indCanal=0;indCanal<imOrig->channels();indCanal++,d++)
+		unsigned short *d=(unsigned short *)imOrig.ptr(i);
+		for (int j=0;j<imOrig.cols;j++)
+			for (int indCanal=0;indCanal<imOrig.channels();indCanal++,d++)
 				{
 				switch(indCanal){
 				case 0:
@@ -414,11 +415,11 @@ case CV_16U :
 		}
 	break;
 case CV_32S :
-	for (int i=0;i<imOrig->rows;i++)		
+	for (int i=0;i<imOrig.rows;i++)		
 		{
-		int *d=(int *)imOrig->data+i*imOrig->step[0];
-		for (int j=0;j<imOrig->cols;j++)
-			for (int indCanal=0;indCanal<imOrig->channels();indCanal++,d++)
+		int *d=(int *)imOrig.ptr(i);
+		for (int j=0;j<imOrig.cols;j++)
+			for (int indCanal=0;indCanal<imOrig.channels();indCanal++,d++)
 				{
 				switch(indCanal){
 				case 0:
@@ -435,11 +436,11 @@ case CV_32S :
 		}
 	break;
 case CV_32F:
-	for (int i=0;i<imOrig->rows;i++)		
+	for (int i=0;i<imOrig.rows;i++)		
 		{
-		float *d=(float *)imOrig->data+i*imOrig->step[0];
-		for (int j=0;j<imOrig->cols;j++)
-			for (int indCanal=0;indCanal<imOrig->channels();indCanal++,d++)
+		float *d=(float *)imOrig.ptr(i);
+		for (int j=0;j<imOrig.cols;j++)
+			for (int indCanal=0;indCanal<imOrig.channels();indCanal++,d++)
 				{
 				switch(indCanal){
 				case 0:
@@ -479,6 +480,7 @@ gb->allocate((nbC+1),(nbL+1));
 gb->setXInterval(echX);
 gb->setYInterval(echY);
 gridb.push_back(gb);
+cv::Mat matIm = im->getMat(cv::ACCESS_READ);
 switch(im->depth()){
 case CV_8U :
 	{
@@ -493,7 +495,7 @@ case CV_8U :
 	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
 		{
-		unsigned char *d=im->data+i*im->step[0];
+		unsigned char *d=matIm.ptr(i);
 		for (int j=0;j<im->cols;j++)
 			{
 			for (int indCanal=0;indCanal<im->channels();indCanal++,d++)
@@ -528,7 +530,7 @@ case CV_32F :
 	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
 		{
-		float *d=(float*)im->ptr(i);
+		float *d=(float*)matIm.ptr(i);
 		for (int j=0;j<im->cols;j++)
 			{
 			for (int indCanal=0;indCanal<im->channels();indCanal++,d++)
@@ -562,7 +564,7 @@ case CV_16S :
 	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
 		{
-		short *d=(short*)im->ptr(i);
+		short *d=(short*)matIm.ptr(i);
 		for (int j=0;j<im->cols;j++)
 			{
 			for (int indCanal=0;indCanal<im->channels();indCanal++,d++)
@@ -596,7 +598,7 @@ case CV_16U :
 	echZ=255.0/maxZ;
 	for (int i=0;i<im->rows;i++)		
 		{
-		unsigned short *d=(unsigned short*)im->ptr(i);
+		unsigned short *d=(unsigned short*)matIm.ptr(i);
 		for (int j=0;j<im->cols;j++)
 			{
 			for (int indCanal=0;indCanal<im->channels();indCanal++,d++)
@@ -628,7 +630,7 @@ if (indPalette==0 || indPalette>=6)
 	kPalette=16384./(finNivPalette-debNivPalette+1);
 else
 	kPalette=256./(finNivPalette-debNivPalette+1);
-
+cv::Mat matIm = im->getMat(cv::ACCESS_READ);
 if (im->depth()==CV_8U)
 	{
 
@@ -645,7 +647,7 @@ if (im->depth()==CV_8U)
 	for (int i=0;i<im->LitNbLigne();i++)
 		{
 		data = iFond->data()+3*i*im->LitNbColonne();
-		dataSrc = im->ptr(im->rows-1-i);
+		dataSrc = matIm.ptr(im->rows-1-i);
 		for (int j=0;j<im->LitNbColonne();j++)
 			{
 			if (im->channels()==3)
@@ -678,7 +680,7 @@ else if (im->depth()==CV_16U)
 	for (int i=0;i<im->LitNbLigne();i++)
 		{
 		data = iFond->data()+3*i*im->LitNbColonne();
-		dataSrc = (unsigned short *)im->ptr(im->rows-1-i);
+		dataSrc = (unsigned short *)matIm.ptr(im->rows-1-i);
 		for (int j=0;j<im->LitNbColonne();j++)
 			{
 			if (im->channels()==3)
@@ -711,7 +713,7 @@ else if (im->depth()==CV_16S)
 	for (int i=0;i<im->LitNbLigne();i++)
 		{
 		data = iFond->data()+3*i*im->LitNbColonne();
-		dataSrc = (short *)im->ptr(im->rows-1-i);
+		dataSrc = (short *)matIm.ptr(im->rows-1-i);
 		for (int j=0;j<im->LitNbColonne();j++)
 			{
 			if (im->channels()==3)
@@ -744,7 +746,7 @@ else if (im->depth()==CV_32F)
 	for (int i=0;i<im->LitNbLigne();i++)
 		{
 		data = iFond->data()+3*i*im->LitNbColonne();
-		dataSrc = (float *)im->ptr(im->rows-1-i);
+		dataSrc = (float *)matIm.ptr(im->rows-1-i);
 		for (int j=0;j<im->LitNbColonne();j++)
 			{
 			if (im->channels()==3)

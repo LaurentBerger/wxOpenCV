@@ -741,7 +741,7 @@ pOCV.intParam.clear();
 // `Main program' equivalent, creating windows and returning main app frame
 bool wxOsgApp::OnInit()
 {
-
+cv::ocl::setUseOpenCL(true);
 
 bool b=false;
 //b=wxUnsetEnv("PLPLOT_HOME");
@@ -1661,7 +1661,7 @@ if (s.Find("yml")>=0)
 		imAcq =new ImageInfoCV(nomFichier);
 /*        imAcq->read()
 		cv::FileStorage fs(nomFichier, cv::FileStorage::READ);
-		fs["Image"]>>*((cv::Mat*)imAcq);
+		fs["Image"]>>*((cv::UMat*)imAcq);
 		fs.release();*/
 		}
 	catch(cv::Exception& e)
@@ -1722,13 +1722,13 @@ else if (s.Find(".is2")>=0 ||s.Find(".IS2")>=0)
 
 	for (int i=0;i<4000;i++)
 		fsr<<t1[i]<<"\t"<<t2[i]<<"\t"<<i1[i]<<"\t"<<i2[i]<<"\n";
-	for (int i=0;i<240;i++)
+    cv::Mat m(240,320,CV_16S);
+    for (int i=0;i<240;i++)
 		for (int j=0;j<320;j++)
 			{
-			imAcq->at< unsigned short >(i,j)=tmp[i*320+j];
+			m.at< unsigned short >(i,j)=tmp[i*320+j];
 			}
-	
-	delete tmp;
+     m.copyTo(*imAcq);
 
 	}
 else if (s.Find(".16b")>=0 ||s.Find(".16B")>=0)
@@ -1761,11 +1761,13 @@ else if (s.Find(".16b")>=0 ||s.Find(".16B")>=0)
 
 	fs.close();
 
+    cv::Mat m(256,256,CV_16S);
 	for (int i=0;i<256;i++)
 		for (int j=0;j<256;j++)
 			{
-			imAcq->at< short >(i,j)=tmp[i*256+j];
+			m.at< short >(i,j)=tmp[i*256+j];
 			}
+     m.copyTo(*imAcq);
 	
 	delete tmp;
 
@@ -2243,7 +2245,7 @@ if (p.GetExt().Cmp("yml")==0)
 	cv::FileStorage fs(nomFichier, cv::FileStorage::WRITE);
 	imAcq->write(fs);
 /*
-	fs<<"Image"<<*((cv::Mat*)imAcq);
+	fs<<"Image"<<*((cv::UMat*)imAcq);
 	if (imAcq->StatComposante())
 	{
 	for (int i=0;i<imAcq->channels();i++)
@@ -2252,7 +2254,7 @@ if (p.GetExt().Cmp("yml")==0)
 		s.Printf("StatComposante%d",i);
 		wxCharBuffer ww=s.mb_str ();
 		char *nomChamp=ww.data() ;
-		fs<<nomChamp<<*((cv::Mat*)(imAcq->StatComposante()[i]));
+		fs<<nomChamp<<*((cv::UMat*)(imAcq->StatComposante()[i]));
 		}
 	}
 	if (imAcq->CentreGComposante())
@@ -2263,7 +2265,7 @@ if (p.GetExt().Cmp("yml")==0)
 			s.Printf("CentreGComposante%d",i);
 			wxCharBuffer ww=s.mb_str ();
 			char *nomChamp=ww.data() ;
-			fs<<nomChamp<<*((cv::Mat*)(imAcq->CentreGComposante()[i]));
+			fs<<nomChamp<<*((cv::UMat*)(imAcq->CentreGComposante()[i]));
 			}
 		}
 	if (imAcq->MomentComposante())
@@ -3035,11 +3037,12 @@ if (s.Cmp("conv")==0)
 		wxString cheminLigne;
 		cheminLigne.Printf("%d",i);
 		configApp->SetPath(cheminLigne);
+        cv::Mat m = xx.opnn[idFiltre]->getMat(cv::ACCESS_READ);
 		for (int j=0;j<xx.opnn[idFiltre]->cols;j++)
 			{
 			wxString cle;
 			cle.Printf("%d",j);
-			configApp->Write(cle,xx.opnn[idFiltre]->at<float>(i,j));
+			configApp->Write(cle,m.at<float>(i,j));
 			}
 		configApp->SetPath(chemin);
 		}
@@ -3084,12 +3087,14 @@ while ( bCont )
 		wxString cle;
 		cle.Printf("%d",i);
 		configApp->SetPath(cle);
+        cv::Mat m = xx.opnn[idFiltre]->getMat(cv::ACCESS_RW);
 		for (int j=0;j<xx.opnn[idFiltre]->cols;j++)
 			{
 			cle.Printf("%d",j);
-			configApp->Read(cle,&xx.opnn[idFiltre]->at<float>(i,j));
+			configApp->Read(cle,&m.at<float>(i,j));
 			}
 		configApp->SetPath(chemin);
+        m.copyTo(*xx.opnn[idFiltre]);
 		}
 	str=tmp1;
 	dummy=tmp2;
@@ -3122,7 +3127,7 @@ while ( bCont )
 			cv::Mat element = cv::getStructuringElement( type,cv::Size( 2*taille + 1, 2*taille+1 ),cv::Point( taille, taille ) );
 
 			xx.opMorph[idFiltre] = new ImageInfoCV( 2*taille + 1, 2*taille+1,element.type());
-			*((cv::Mat *)xx.opMorph[idFiltre]) =element;
+			element.copyTo(*xx.opMorph[idFiltre]);
 			}
 		}
 	configApp->SetPath(chemin);
