@@ -169,15 +169,18 @@ delete segmvt;
 
 void ImageInfoCV::MajMasque(bool actif, cv::Rect r)
 {
-/*    if (!actif &&r.area() == 0)
+    if (!actif &&r.area() == 0)
+    {
+        masqueMat = cv::Mat();
         masqueOperateur = UMat();
+    }
     else
     {
-        if (masqueOperateur.rows == 0)
-            masqueOperateur = UMat::zeros(rows, cols, CV_8UC1);
+        if (masqueMat.rows == 0)
+            masqueMat = cv::Mat::zeros(rows, cols, CV_8UC1);
         for (int i = r.y; i <= r.y + r.height &&i<rows; i++)
         {
-            unsigned char *d = (unsigned char*)masqueOperateur.ptr(i)+r.x;
+            unsigned char *d = (unsigned char*)masqueMat.ptr(i)+r.x;
             for (int j = r.x; j <= r.x + r.width&& j<cols; j++, d++)
             {
 
@@ -187,8 +190,9 @@ void ImageInfoCV::MajMasque(bool actif, cv::Rect r)
                     *d = 0;
             }
         }
+        masqueMat.copyTo(masqueOperateur);
     }
-    */
+    
     }
 
 

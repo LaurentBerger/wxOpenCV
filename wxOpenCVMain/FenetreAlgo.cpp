@@ -772,7 +772,8 @@ for (int ii=indEtape;ii<nbEtape;ii++)
         app->DefOperande2(listeOp[i].first->op[1],indFen2);
     else
         app->DefOperande2(NULL,indFen2);
-	r=app->ExecuterOperation(pOCV);
+//	r=app->ExecuterOperation(pOCV);
+	r=pOCV->ExecuterOperation();
     listeOp[i].first->indEtape = ii;
 	if (r.size()!=0)
 		{

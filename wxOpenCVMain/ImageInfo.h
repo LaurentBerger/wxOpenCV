@@ -150,8 +150,9 @@ cv::UMat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcop
 cv::UMat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
 cv::UMat *silh;						/*<! Seuillage de la différence entre deux images pour updateMotion History */
 
-cv::UMat	masqueOperateur;			/*<! Masque pour les opérations cosntruit à partir des rectangles */
-cv::UMat	*masqueMOG;					/*<! Masque pour calcMotionGradient */
+cv::Mat	masqueMat;			        /*<! Masque pour les opérations cosntruit à partir des rectangles en attendant de savoir comment lire et écrire dans une UMat */
+cv::UMat	masqueOperateur;		/*<! Masque pour les opérations cosntruit à partir des rectangles */
+cv::UMat	*masqueMOG;				/*<! Masque pour calcMotionGradient */
 cv::UMat *orient;					/*<! orientation pour calcMotionGradient*/
 cv::UMat *segmvt;					/*<! segmentation issue de l'analyse du mouvement (segmentMotion)*/
 std::vector<cv::Rect> regionsMvt;	/*<! Regions issues de l'analyse du mouvement (segmentMotion)*/

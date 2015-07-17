@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-24 17:35+0200\n"
-"PO-Revision-Date: 2015-07-13 21:26+0100\n"
+"POT-Creation-Date: 2015-07-17 14:16+0200\n"
+"PO-Revision-Date: 2015-07-17 14:28+0100\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -110,6 +110,9 @@ msgstr "Seuillage adaptatif"
 msgid "Add 2 images"
 msgstr "Ajoute 2 images"
 
+msgid "Add weighted"
+msgstr "Addition pondérée"
+
 msgid "Agatse keypoint"
 msgstr "Point d'intérêt  AGAST"
 
@@ -121,6 +124,12 @@ msgstr "Erreur dans le calcul de l'histogramme"
 
 msgid "An error occured while saving file :"
 msgstr "Erreur pendant la sauvegarde"
+
+msgid "Approximates Freeman chain(s) with a polygonal curve"
+msgstr "Approximation polygônale"
+
+msgid "Approximates a polygonal curve(s)"
+msgstr ""
 
 msgid "Are you sure you want to close/hide page?"
 msgstr "Voulez vous cacher cette page?"
@@ -191,14 +200,17 @@ msgstr ""
 msgid "Calculate optical flow"
 msgstr "Calcul du flot optique"
 
+msgid "Calculate optical flow (LucasKanade)"
+msgstr "Flot optique par point (Lucas Kanade)"
+
 msgid "Calculate optical flow(farnerback)"
 msgstr "Calcul flot optique (Farnerback)"
 
 msgid "Camera "
-msgstr "Camera"
+msgstr "Caméra"
 
 msgid "Camera Control"
-msgstr "Cont\\303\\264le caméra"
+msgstr "Contrôle caméra"
 
 msgid "Camera must be paused first!"
 msgstr "Caméra doit être en pause"
@@ -236,6 +248,9 @@ msgstr "Contour"
 msgid "Contrast"
 msgstr "Contraste"
 
+msgid "Convert type"
+msgstr ""
+
 msgid "Convolution"
 msgstr "Convolution"
 
@@ -265,6 +280,15 @@ msgid "DIFF_PM_G2"
 msgstr ""
 
 msgid "DIFF_WEICKERT"
+msgstr ""
+
+msgid "DIST_MASK_3"
+msgstr ""
+
+msgid "DIST_MASK_5"
+msgstr ""
+
+msgid "DIST_MASK_PRECISE"
 msgstr ""
 
 msgid "Depth of destination"
@@ -352,6 +376,12 @@ msgstr "Fichier ne peut être ouvert"
 
 msgid "Filter name"
 msgstr "Nom du filtre"
+
+msgid "Finds the convex hull of a point set."
+msgstr "Enveloppe convexe"
+
+msgid "Finds the convexity defects of a contour."
+msgstr "Défaut de convexité"
 
 msgid "Foreground"
 msgstr "premier plan"
@@ -852,6 +882,10 @@ msgstr "Seuil"
 msgid "This language is not supported by the system."
 msgstr "This language is not supported by the system."
 
+#, c-format
+msgid "TileBitmap (%d,%d)"
+msgstr ""
+
 msgid "Time Filtering"
 msgstr "Filtrage temporel"
 
@@ -877,10 +911,10 @@ msgid "Undefined operation"
 msgstr "opération indéfinie"
 
 msgid "Update motion history"
-msgstr ""
+msgstr "Mise à jour de l'historique"
 
 msgid "Use File Config"
-msgstr ""
+msgstr "Fichier de config."
 
 msgid "User 1"
 msgstr "Perso 1"
@@ -922,10 +956,10 @@ msgid "User 5"
 msgstr "Perso 5"
 
 msgid "Value out of range"
-msgstr ""
+msgstr "Hors limite"
 
 msgid "Very good features"
-msgstr ""
+msgstr "Points d'intérêt"
 
 msgid "Video RGB 24bits"
 msgstr ""
@@ -937,16 +971,16 @@ msgid "Video Toolbar"
 msgstr "Outils Vidéo"
 
 msgid "Video file"
-msgstr ""
+msgstr "Fichier vidéo"
 
 msgid "Voronoi"
 msgstr "Voronoi"
 
 msgid "WAVE_CORRECT_HORIZ"
-msgstr ""
+msgstr "Correction horizon (horizontal)"
 
 msgid "WAVE_CORRECT_VERT"
-msgstr ""
+msgstr "Correction horizon (vertical)"
 
 msgid "Warning"
 msgstr "Attention"
@@ -978,6 +1012,9 @@ msgstr ""
 msgid "bilinear interpolation"
 msgstr ""
 
+msgid "char"
+msgstr ""
+
 msgid "closing"
 msgstr ""
 
@@ -994,13 +1031,13 @@ msgid "compressedPlanePortraitA2B1"
 msgstr ""
 
 msgid "cylindrical"
-msgstr ""
+msgstr "Cylindrique"
 
 msgid "diameter"
-msgstr ""
+msgstr "Diamètre"
 
 msgid "disable mask"
-msgstr ""
+msgstr "pas de masque"
 
 msgid "double"
 msgstr "réel 8 octets"
@@ -1012,7 +1049,7 @@ msgid "dp_colorgrad"
 msgstr ""
 
 msgid "enable mask"
-msgstr ""
+msgstr "Masque actif"
 
 msgid "equal last pixel"
 msgstr "Egal au dernier pixel"
@@ -1021,16 +1058,19 @@ msgid "euclidean distance"
 msgstr "Distance euclidienne"
 
 msgid "exclusive or"
-msgstr ""
+msgstr "Ou exclusif"
+
+msgid "false"
+msgstr "faux"
 
 msgid "fisheye"
-msgstr ""
+msgstr "grand angle"
 
 msgid "float"
 msgstr "Réel 4 octets"
 
 msgid "focal "
-msgstr ""
+msgstr "Focale"
 
 msgid "gc_color"
 msgstr ""
@@ -1047,6 +1087,9 @@ msgstr ""
 msgid "imaginary part"
 msgstr "Partie imaginaire"
 
+msgid "int"
+msgstr ""
+
 msgid "inverse FFT"
 msgstr "TFR inverse"
 
@@ -1060,10 +1103,10 @@ msgid "knn method"
 msgstr ""
 
 msgid "logical and"
-msgstr ""
+msgstr "Et"
 
 msgid "logical or"
-msgstr ""
+msgstr "Ou"
 
 msgid "mercator"
 msgstr ""
@@ -1075,7 +1118,7 @@ msgid "motion Gradient"
 msgstr ""
 
 msgid "nearest neighbor interpolation"
-msgstr ""
+msgstr "Interpolation plus proche voisin"
 
 msgid "no"
 msgstr ""
@@ -1158,6 +1201,9 @@ msgstr ""
 msgid "settings"
 msgstr "Réglages"
 
+msgid "short"
+msgstr ""
+
 msgid "sift"
 msgstr ""
 
@@ -1188,6 +1234,9 @@ msgstr "Seuillage fonction des voisins pondérées"
 msgid "transverseMercator"
 msgstr ""
 
+msgid "true"
+msgstr ""
+
 msgid "unable to load plplot"
 msgstr "plplot non trouvé"
 
@@ -1199,6 +1248,12 @@ msgstr "wxwidgets non trouvé"
 
 msgid "unknown"
 msgstr "Inconnu"
+
+msgid "unsigned char"
+msgstr ""
+
+msgid "unsigned short"
+msgstr ""
 
 msgid "user"
 msgstr "Utilisateur"

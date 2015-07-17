@@ -325,8 +325,8 @@ listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_PRECISE").ToSt
 listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_3").ToStdString(), 3));
 listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_5").ToStdString(), 5));
 
-listeParam["maskSize"].insert(std::pair<string, int>(_("false").ToStdString(), 0));
-listeParam["maskSize"].insert(std::pair<string, int>(_("true").ToStdString(), 1));
+listeParam["opencl_enable"].insert(std::pair<string, int>(_("false").ToStdString(), 0));
+listeParam["opencl_enable"].insert(std::pair<string, int>(_("true").ToStdString(), 1));
 }
 
 bool ParametreOperation::InitOperation(string s)
