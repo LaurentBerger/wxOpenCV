@@ -272,7 +272,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
 
 
     CONSTRUCTEUR_CMD(bouton, ID_PYRFLOTOPTIQUE, pyrflotoptique_xpm, _("Build pyramid optical flow"), "buildopticalflowpyramid", 9);
-    CONSTRUCTEUR_CMD(bouton, ID_CALCFLOTOPTIQUE, calcflotoptique_xpm ,_("Calculate optical flow"), "calcopticalflowpyrlk", 9);
+    CONSTRUCTEUR_CMD(bouton, ID_CALCFLOTOPTIQUE, calcflotoptique_xpm ,_("Calculate optical flow (LucasKanade)"), "calcopticalflowpyrlk", 9);
     CONSTRUCTEUR_CMD(bouton, ID_CALCFLOTOPTIQUEFARNER, calcflotoptiquefarner_xpm,_("Calculate optical flow(farnerback)"), "calcopticalflowfarneback", 9);
     CONSTRUCTEUR_CMD(bouton, ID_MAJ_MVT, majmvt_xpm,_("Update motion history"), "updatemotionhistory", 9);
     CONSTRUCTEUR_CMD(bouton, ID_GRAD_MVT, motiongradient_xpm,_("motion Gradient"), "calcmotiongradient", 9);

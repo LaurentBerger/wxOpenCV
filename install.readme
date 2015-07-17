@@ -33,6 +33,7 @@ cmake -G "Codeblocks Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
 commande git
 git commit -F commit.txt
 git clone ssh://git@git.renater.fr:2222/wxopencv.git
+git push origin BRANCH 
 
 mettre à jour avec upstream
 git remote add upstream git@github.com:Itseez/opencv.git

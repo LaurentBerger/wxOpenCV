@@ -120,7 +120,7 @@ void ImageInfoCV::write(cv::FileStorage& fs) const                        //Writ
 			    string s("moments");
 			    s=s+to_string(i);
                 const String ss(s);
-			    ::write((const FileStorage)fs,ss,(const vector<Moments>)moment[i]);
+			    ::write(fs,ss,(const vector<Moments>)moment[i]);
 				}    
 			}
 		}
@@ -288,7 +288,7 @@ else
         for (int i=0;i<channels();i++)
         {
             const string ss="moments"+to_string(i);
-            ::read((const FileStorage)fs,ss,moment[i]);
+            ::read(fs,ss,moment[i]);
         }
         CalcMoment();
     }    

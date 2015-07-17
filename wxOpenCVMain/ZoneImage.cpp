@@ -1149,12 +1149,12 @@ if (!imAcq->BonCoin())
 	}
 std::vector<std::vector<cv::Point2f> > *boncoin=imAcq->BonCoin();
 wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
-for (int k=0;k<imAcq->channels()&& k<3;k++)
+for (int k=0;k<imAcq->channels()&& k<3 && k<boncoin->size();k++)
 	{
 	crayon[k].SetWidth(2);
 	hdc.SetPen(crayon[k]);
 	hdc.SetBrush(*wxTRANSPARENT_BRUSH);
-	for( int i = 0; i < boncoin[k].size(); i++ )
+	for( int i = 0; i < (*boncoin)[k].size(); i++ )
 		{
 		wxPoint p_1((*boncoin)[k][i].x,(*boncoin)[k][i].y);
 		wxPoint p1(RepereImageEcran(p_1));
@@ -1164,12 +1164,12 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 if (imAcq->CoinRef())
 	{
 	std::vector<std::vector<cv::Point2f> > *boncoin=imAcq->CoinRef();
-	for (int k=0;k<imAcq->channels()&& k<3;k++)
+	for (int k=0;k<imAcq->channels()&& k<3 && k<boncoin->size();k++)
 		{
 		crayon[k].SetWidth(2);
 		hdc.SetPen(crayon[(k+1)%3]);
 		hdc.SetBrush(*wxTRANSPARENT_BRUSH);
-		for( int i = 0; i < boncoin[k].size(); i++ )
+		for( int i = 0; i < (*boncoin)[k].size(); i++ )
 			if ((*boncoin)[k][i].x>=0 && (*boncoin)[k][i].y>=0)
 				{
 				wxPoint p_1((*boncoin)[k][i].x,(*boncoin)[k][i].y);

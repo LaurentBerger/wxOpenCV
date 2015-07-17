@@ -469,6 +469,10 @@ if (captureVideo->isOpened())
 
 			if (modeMoyenne)	// Filtrage Butterworth
 				{
+                if (frame.size() != frame1.size())
+                    frame.copyTo(frame1);
+                if (frame.size() != frame2.size())
+                    frame.copyTo(frame2);
 				for (int i = 0; i<frame.rows; i++)
 					{
 					unsigned char *val = frame.ptr(i);
@@ -482,7 +486,7 @@ if (captureVideo->isOpened())
 				frame1.copyTo(frame2);
 				frame.copyTo(frame1);
 				}
-
+            
 
 			
 			if (parent)
@@ -558,7 +562,7 @@ if (captureVideo->isOpened())
 							else if (indOp>0)
                                 pOCV.op[0] = im[indOp - 1][0];
 							}
-						if (imPre && imPre->BonCoin() && pOCV.nomOperation == "GoodFeature" && im[indOp - 1].size() && im[indOp - 1][0])
+						if (imPre && (*imPre->BonCoin()).size()!=0 && pOCV.nomOperation == "GoodFeature" && im[indOp - 1].size() && im[indOp - 1][0])
 							{
 							im[indOp].push_back( im[indOp - 1][0]);
 
@@ -618,7 +622,7 @@ if (captureVideo->isOpened())
 								}
 							imAcq->CloneStat(im[indOp-1][0]);
 							imAcq->DeplacerFlotOptique(im[indOp-1][0]);
-							im[indOp-1][0]->copyTo((*((UMat *)imAcq)));
+							im[indOp-1][0]->copyTo(*imAcq);
 							frameDejaCopie=true;
 							}
                         std::map<ImageInfoCV*,bool>::iterator it;

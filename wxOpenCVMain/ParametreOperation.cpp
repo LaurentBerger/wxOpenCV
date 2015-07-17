@@ -325,6 +325,8 @@ listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_PRECISE").ToSt
 listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_3").ToStdString(), 3));
 listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_5").ToStdString(), 5));
 
+listeParam["maskSize"].insert(std::pair<string, int>(_("false").ToStdString(), 0));
+listeParam["maskSize"].insert(std::pair<string, int>(_("true").ToStdString(), 1));
 }
 
 bool ParametreOperation::InitOperation(string s)
@@ -353,6 +355,7 @@ if (xx.listeOperation.size() != 0 && xx.listeOperation.find(s) != xx.listeOperat
 }
 //intParam["Save result"] = DomaineParametreOp<int>(0, 0, 0, 1);
 //intParam["Send packet"] = DomaineParametreOp<int>(0, 0, 0, 1);
+intParam["opencl_enable"]=  DomaineParametreOp<int>(1, 0, 1, 1);
 if (s == "fond_gaussianmixture")
 	{
 	nomOperation = s;
@@ -1902,7 +1905,10 @@ if (operateur)
 	try
 		{
         // 
+        cv::ocl::setUseOpenCL(intParam["opencl_enable"].valeur);
+
 		r =(op[0]->*operateur) (op,this);
+
 		}
 	catch(cv::Exception& e)
 		{

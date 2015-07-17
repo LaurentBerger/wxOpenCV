@@ -1538,20 +1538,20 @@ std::vector<uchar> status;
 std::vector<float> err;
 for (int i=0;i<op[0]->channels();i++)
 	{
-	calcOpticalFlowPyrLK(*op[0],*op[1],op[0]->BonCoin()[i],op[1]->BonCoin()[i],status,err,pOCV->sizeParam["winSize"].valeur,
+	calcOpticalFlowPyrLK(*op[0],*op[1],(*op[0]->BonCoin())[i],(*op[1]->BonCoin())[i],status,err,pOCV->sizeParam["winSize"].valeur,
 		pOCV->intParam["maxLevel"].valeur,critere,pOCV->intParam["flag"].valeur,pOCV->doubleParam["minEigThreshold"].valeur);
 	int k,l;
-	op[1]->CoinRef()[i].resize(op[1]->BonCoin()[i].size());
-	for (k=l=0;k<op[1]->BonCoin()[i].size();k++)
+	(*op[1]->CoinRef())[i].resize((*op[1]->BonCoin())[i].size());
+	for (k=l=0;k<(*op[1]->BonCoin())[i].size();k++)
 		{
 		if (status[k] || op[1]==op[0])
 			{
 			(*(op[1]->CoinRef()))[i][l]=boncoin[i][k];
-			op[1]->BonCoin()[i][l++]=op[1]->BonCoin()[i][k];
+			(*op[1]->BonCoin())[i][l++]=(*op[1]->BonCoin())[i][k];
 			}
 		}
-	op[1]->BonCoin()[i].resize(l);
-	for (k=l=0;k<op[1]->BonCoin()[i].size();k++)
+	(*op[1]->BonCoin())[i].resize(l);
+	for (k=l=0;k<(*op[1]->BonCoin())[i].size();k++)
 		{
 		if (!status[k])
 			{
