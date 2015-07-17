@@ -358,9 +358,8 @@ tailleCapteur[6]=wxSize(544,288);tailleCapteur[7]=wxSize(640,360);tailleCapteur[
 tailleCapteur[9]=wxSize(752,416);tailleCapteur[10]=wxSize(800,448);tailleCapteur[11]=wxSize(800,600);
 tailleCapteur[12]=wxSize(864,480);tailleCapteur[13]=wxSize(960,544);tailleCapteur[14]=wxSize(960,720);
 tailleCapteur[15]=wxSize(1024,576);tailleCapteur[16]=wxSize(1184,656);tailleCapteur[17]=wxSize(1280,720);
-tailleCapteur[16]=wxSize(1280,960);tailleCapteur[17]=wxSize(-1,-1);tailleCapteur[18]=wxSize(-1,-1);
-tailleCapteur[19]=wxSize(-1,-1);
-if (i>=0 &&i<=16 && cam->ReglageTaille())
+tailleCapteur[18]=wxSize(1280,960);tailleCapteur[19]=wxSize(-1,-1);
+if (i>=0 &&i<=18 && cam->ReglageTaille())
 	{
 	cam->DefTailleImage(tailleCapteur[i].x,tailleCapteur[i].y);
 	}
@@ -903,9 +902,13 @@ for (;i<5;i++)
 new wxStaticText(ongletTemporels,-1,legende[j],position[j], taille[j]);
 j++;
 wxArrayString mode;
-mode.Add("160X120");mode.Add("176X144");mode.Add("320X176");mode.Add("320X240");mode.Add("352X288");mode.Add("432X240");
-mode.Add("544X288"); mode.Add("640X360"); mode.Add("640X480"); mode.Add("752X416"); mode.Add("800X448"); mode.Add("800X600"); mode.Add("864X480");
-mode.Add("960X544");mode.Add("960X720");mode.Add("1024X576");mode.Add("1184X656");mode.Add("1280X720");mode.Add("1280X960");
+mode.Add("160X120");mode.Add("176X144");mode.Add("320X176");
+mode.Add("320X240");mode.Add("352X288");mode.Add("432X240");
+mode.Add("544X288"); mode.Add("640X360"); mode.Add("640X480");
+mode.Add("752X416"); mode.Add("800X448"); mode.Add("800X600"); 
+mode.Add("864X480");mode.Add("960X544");mode.Add("960X720");
+mode.Add("1024X576");mode.Add("1184X656");mode.Add("1280X720");
+mode.Add("1280X960");
 
 wxChoice *t=new wxChoice(ongletTemporels,ID_TAILLE_VIDEO,position[j],taille[j], mode);
 t->SetSelection(0);

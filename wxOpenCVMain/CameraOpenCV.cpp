@@ -36,8 +36,8 @@ tailleCapteur[6]=wxSize(544,288);tailleCapteur[7]=wxSize(640,360);tailleCapteur[
 tailleCapteur[9]=wxSize(752,416);tailleCapteur[10]=wxSize(800,448);tailleCapteur[11]=wxSize(800,600);
 tailleCapteur[12]=wxSize(864,480);tailleCapteur[13]=wxSize(960,544);tailleCapteur[14]=wxSize(960,720);
 tailleCapteur[15]=wxSize(1024,576);tailleCapteur[16]=wxSize(1184,656);tailleCapteur[17]=wxSize(1280,720);
-tailleCapteur[16]=wxSize(1280,960);tailleCapteur[17]=wxSize(-1,-1);tailleCapteur[18]=wxSize(-1,-1);
-tailleCapteur[19]=wxSize(-1,-1);
+tailleCapteur[18]=wxSize(1280,960);tailleCapteur[19]=wxSize(-1,-1);tailleCapteur[20]=wxSize(-1,-1);
+tailleCapteur[21]=wxSize(-1,-1);
 /*for (int i=15;i<NB_TAILLE_VIDEO;i++)
 	tailleAutorisee[false];*/
 indFiltreMoyenne=1;
