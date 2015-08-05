@@ -826,7 +826,7 @@ else
 	{
 		char tmp[2] = { char(i + 65), 0 };
 		wxString op = wxString::FromUTF8(tmp);
-		if (osgApp->OpId(i)!=NULL)
+		if (osgApp->OpId(i)!=NULL && osgApp->Fenetre(osgApp->IndOpId(i))!=NULL)
 			{
 			wxString s=osgApp->Fenetre(osgApp->IndOpId(i))->GetTitle();
 			menu.AppendCheckItem(MENU_OP1+i, op+" = "+s);
