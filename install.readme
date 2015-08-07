@@ -16,7 +16,7 @@ wxWin=F:\Lib\wxWidgets-3.0.2
 la variable système plplot_home doit pointer sur c:\program files \plplot
 la variable système libreofficesdk  doit pointer sur D:/lib/LibreOffice_4.3_SDK/sdk/include
 
-construire le projet de opencv avec cmake( cmake flag -D WITH_IPP=OFF http://answers.opencv.org/question/40425/opencv-build-fails-because-i-cannot-download-icv-on-our-build-farm/)
+construire le projet de opencv avec cmake( avec opencv <3.0 cmake flag -D WITH_IPP=OFF http://answers.opencv.org/question/40425/opencv-build-fails-because-i-cannot-download-icv-on-our-build-farm/)
 construire le projet de plplot avec cmake
 
 1 compiler OpenCV 

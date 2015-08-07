@@ -463,7 +463,7 @@ if (!ongletStatus)
 	i++;
 	new wxStaticText(ongletStatus,300+i,legende[i],position[i], taille[i]);
 	i++;
-	listeFenetreOnglet->AddPage(ongletStatus, _T("Informations"));
+	listeFenetreOnglet->AddPage(ongletStatus, _T("Properties"));
 	}
 else
 	{

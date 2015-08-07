@@ -446,7 +446,7 @@ if (x[0]==NULL)
 PLFLT xmin=iMin, xmax=iMax;
 PLFLT ymin=1e30, ymax=-1e30;
 
-wxString titre[]={"Bleu","Vert","Rouge","canal 4","Canal 5"};
+wxString titre[]={_("Blue"),_("Green"),_("Red"),"canal 4","Canal 5"};
 excel->DefTitreLigne(0,"bins");
 excel->DefTitreLigne(1,"minimum");
 excel->DefTitreLigne(2,"maximum");
@@ -549,14 +549,14 @@ if(bgcolor)
 else 
 	{
 	pls->scol0( 15, 255, 255, 255 );
-	pls->scol0( 0, 0, 0, 0 ); 
+	pls->scol0( 2, 0, 0, 0 ); 
 	}
 pls->col0( 1 );
 pls->env( xmin, xmax, ymin*.99, ymax*1.01, 0, 0 );
-pls->col0( 2 );
+pls->col0( 0 );
 pls->lab( "x", "y", "Histogram");
 for (int j=0;j<nbPlan && j<NB_MAX_CANAUX;j++)
-	if(((FenetrePrincipale *)fenMere)->PlanActif(nbPlan-1-j))
+	if(((FenetrePrincipale *)fenMere)->PlanActif(j))
 		{
 		pls->col0( 3+2*j);
 		pls->width( 2.0 );
