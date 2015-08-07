@@ -209,7 +209,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_DIVISION, division_xpm,_("Divide"), "divide", 0);
     CONSTRUCTEUR_CMD(bouton, ID_ET_LOGIQUE, etlogique_xpm,_("logical and"), "bitwise-and", 0);
     CONSTRUCTEUR_CMD(bouton, ID_OU_LOGIQUE, oulogique_xpm,_("logical or"), "bitwise-or", 0);
-    CONSTRUCTEUR_CMD(bouton, ID_OUEXCLU_LOGIQUE, division_xpm, _("exclusive or"), "bitwise-or", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_OUEXCLU_LOGIQUE, division_xpm, _("exclusive or"), "bitwise-xor", 0);
     CONSTRUCTEUR_CMD(bouton, ID_NEGATION, nonlogique_xpm, _("Not"), "bitwise-not", 0);
 
     CONSTRUCTEUR_CMD(bouton, ID_EROSION, erosion_xpm, _("Erode"), "erode", 1);

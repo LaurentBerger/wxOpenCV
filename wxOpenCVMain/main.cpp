@@ -568,6 +568,7 @@ if (pAct->operateur)
 	{
 	try
 		{
+        cv::ocl::setUseOpenCL(pAct->intParam["opencl_enable"].valeur);
 
 		r =((*pAct->op[0]).*pAct->operateur)(pAct->op,pAct);
 		}

@@ -848,6 +848,9 @@ if (s == "dilate")
 	nomOperation=s;
 	nbOperande= 2;
 	intParam["indOpMorphologie"]=DomaineParametreOp<int>(xx.IndOpMorphologie(),0,NB_OP_MORPHOLOGIE,1);
+	intParam["nbIter"]=DomaineParametreOp<int>(1,1,10,1);
+	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "erode")

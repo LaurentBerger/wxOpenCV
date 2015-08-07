@@ -807,6 +807,24 @@ void ImageStatistiques::OuvertureOngletKeyPt(std::vector <cv::KeyPoint> *p, wxSt
     }
 }
 
+void ImageStatistiques::OuvertureOngletContour(std::vector<std::vector<cv::Point> > *p, wxString titre)
+{
+    if (ongletContour.find(titre) != ongletContour.end())
+    {
+        ongletContour.find(titre)->second->ListerPointInteret(p); 
+    }
+    else
+    {
+        FenetreRegion *f=new FenetreRegion((wxFrame*)listeFenetreOnglet,p,titre);
+        f->DefOsgApp(osgApp);
+        f->DefParent(fenMere);
+        f->ListerPointInteret();
+        ongletContour.insert(make_pair(titre, f));
+	    listeFenetreOnglet->AddPage(f, titre);
+        f->Refresh();
+    }
+}
+
 void ImageStatistiques::OuvertureOngletRegion() 
 {
 if (ongletRegionR)
@@ -961,7 +979,7 @@ ongletCoupe = new FenetreCoupe((wxFrame*)listeFenetreOnglet);
 ongletCoupe->DefOsgApp(osgApp);
 ongletCoupe->DefFenetrePrincipale((void*)fenMere);
 ongletCoupe->Plot(true);
-listeFenetreOnglet->AddPage(ongletCoupe, _T("Coupe"));
+listeFenetreOnglet->AddPage(ongletCoupe, _T("Section"));
 ongletCoupe->Refresh();
 }	
 
