@@ -126,7 +126,9 @@ std::vector<std::vector<std::vector<cv::Point> > > contours; /*< Contours dans l
 std::vector<std::vector<std::vector<cv::Point> > > contoursPoly; /*< Contours polygonaux dans l'image des composantes connexes http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html#approxpolydp */
 std::vector<std::vector<cv::Vec4i> >  arbreContour; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 std::vector<std::vector<cv::Moments> > moment;	/*<!http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
-std::vector<std::vector<double> > huMoment;		/*<!http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
+std::vector<std::vector<std::vector<double> > >huMoment;		/*<!http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
+std::vector<std::vector<cv::Moments> > momentCtr;	/*<!http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
+std::vector<std::vector<std::vector<double> > >huMomentCtr;		/*<!http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
 std::vector<std::vector<cv::Vec3f> > cercle;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghcircles*/
 std::vector<std::vector<cv::Vec4i> > ligneP;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlinesp */
 std::vector<std::vector<cv::Vec2f> > ligne;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines */
@@ -487,10 +489,13 @@ cv::UMat *Ponderation(bool init = false){ if (init) { delete ponderation; ponder
 cv::UMat *Silh(bool init = false){ if (init) { delete silh; silh = new cv::UMat(); } return silh; };
 cv::UMat *Descripteur(char =-1);
 std::vector<std::vector<cv::Moments>> *MomentComposante(){ return &moment; };
+std::vector<std::vector<cv::Moments>> *MomentCtr(){ return &momentCtr; };
+
 std::vector<std::vector<std::vector<cv::Point> > > *PtContours(){return &contours;};
 std::vector<std::vector<std::vector<cv::Point> > > *PtContoursPoly(){return &contoursPoly;};
 std::vector<std::vector<cv::Vec4i> > *ArboContour(){return &arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
-std::vector<std::vector<double> > *HuMoment(){return &huMoment;};
+std::vector<std::vector<std::vector<double> > > *HuMoment(){return &huMoment;};
+std::vector<std::vector<std::vector<double> > > *HuMomentCtr(){return &huMomentCtr;};
 std::vector<std::vector<cv::Vec3f> > *HoughCercle(){return &cercle;};
 std::vector<std::vector<cv::Vec4i> > *HoughLigneProba(){return &ligneP;};
 std::vector<std::vector<cv::Vec2f> > *HoughLigne(){return &ligne;};

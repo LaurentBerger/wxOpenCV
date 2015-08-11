@@ -21,6 +21,7 @@ void DefParent(void *w){fenParent=w;};
 
 void ListerRegion(int); 
 void ListerPointInteret(std::vector<cv::KeyPoint> *p=NULL); 
+void ListerContour(std::vector<std::vector<cv::Point> > *p=NULL); 
 void DefRegionSelect(int i,int val){regionSelect[i]=val;};;
 void LireNiveau(int *classe);
 
@@ -47,6 +48,7 @@ long		*cleTri;
 float	*valTri;
 int		nbZoneId;
 std::vector<cv::KeyPoint> *keyPt;
+std::vector<std::vector<cv::Point> > *contour;
 char	gestionControlDown;
     DECLARE_EVENT_TABLE()
 

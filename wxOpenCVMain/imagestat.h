@@ -40,6 +40,7 @@ FenetreRegion			*ongletRegionV; /*!< Pour le regroupement des régions avant rech
 FenetreRegion			*ongletRegionB; /*!< Pour le regroupement des régions avant recherche quadrique */
 std::map <wxString,FenetreRegion*> ongletKeyPt; /*!< Onglets associés aux descripteurs */
 std::map <wxString,FenetreRegion*> ongletContour; /*!< Onglets associés aux contours */
+std::map <wxString,FenetreRegion*> ongletCmpConnexe; /*!< Onglets associés aux composantes connexes */
 wxSlider				**slNivMin;				/*!< Réglage du niveau bas de la palette par canal*/
 wxSlider				**slGain;				/*!< Réglage du niveau haut de la palette par canal*/
 wxSpinCtrl				*spAjustAuto;			/*!< Ajustement auto de la palette avec % de satureation */

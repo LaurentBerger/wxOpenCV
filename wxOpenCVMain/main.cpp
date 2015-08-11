@@ -730,6 +730,15 @@ if (pOCV.nbImageRes==0)
         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES),_("KAZE features"));
     if (pOCV.nomOperation == "agastfeatures2d")
         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES),_("AGAST features"));
+    if (pOCV.nomOperation == "contour" && f->ImAcq()->PtContours()->size() >= 3)
+    {
+         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[0]),_("Blue Contour"));
+         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[1]),_("Green  Contour"));
+         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[2]),_("red Contour"));
+    }
+    else
+         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[0]),_("Contour"));
+
 	}
 pOCV.op.clear();
 pOCV.indOpFenetre.clear();

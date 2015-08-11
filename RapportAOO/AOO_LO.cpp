@@ -593,6 +593,7 @@ void AOO_LO::InsererImage(char *nomFichier,int largeur,int hauteur)
 //
 // Biblio : http://stackoverflow.com/questions/6236515/how-to-insert-an-image-in-to-an-openoffice-writer-document-with-java?rq=1
 //
+#ifdef __TT
 char aStr[1024];
 OUString sGraphicUrl, anOUString; 
     
@@ -657,6 +658,7 @@ xProps->setPropertyValue( "Height", Any((sal_Int32 ) hauteur ) );
 Reference <XTextRange>   xTextRange = contenuTexte->getEnd();
 contenuTexte->insertTextContent(xTextRange, xImage,false);
 xBitmap->removeByName("ID007");
+#endif
 }
 
 
@@ -1019,7 +1021,7 @@ docLO.TableDesMatieres();
 docLO.NumeroterPage();
 docLO.SautDePage();
 docLO.MAJDocument();
-wxString nomAoo("file:///c:/tmp/");
+wxString nomAoo("file:///f:/tmp/");
 nomAoo=nomAoo+argv[1];
 nomAoo.Replace(".xml",".pdf");
 docLO.ExportPDF((char *)(static_cast<const char*>(nomAoo)));

@@ -251,8 +251,23 @@ listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("convert between RG
 listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("BGR to Gray").ToStdString(),cv::COLOR_BGR2GRAY));
 listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("RGB to Gray").ToStdString(),cv::COLOR_RGB2GRAY));
 listeParam["ColorSpaceCode"].insert(std::pair<string,int>(_("Gray to RGB").ToStdString(),cv::COLOR_GRAY2BGR));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Convert BGR to YCrCb").ToStdString(), cv::COLOR_BGR2YCrCb));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Convert RGB  to YCrCb").ToStdString(), cv::COLOR_RGB2YCrCb));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Convert YCrCb  to BGR").ToStdString(), cv::COLOR_YCrCb2BGR));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Convert YCrCb  to RGB").ToStdString(), cv::COLOR_YCrCb2RGB));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to HSV").ToStdString(), cv::COLOR_BGR2HSV));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("RGB to HSV").ToStdString(), cv::COLOR_RGB2HSV));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to Yuv").ToStdString(), cv::COLOR_BGR2YUV));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("RGB to Yuv").ToStdString(), cv::COLOR_RGB2YUV));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to RGB").ToStdString(), cv::COLOR_BGR2HSV));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to BGR").ToStdString(), cv::COLOR_YUV2RGB));
+
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv(422) to RGB").ToStdString(), cv::COLOR_YUV2RGB_UYVY));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv(422) to BGR").ToStdString(), cv::COLOR_YUV2BGR_UYVY));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to RGB (NV12)").ToStdString(), cv::COLOR_YUV2RGB_NV12));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to BGR (NV12)").ToStdString(), cv::COLOR_YUV2BGR_NV12));
+
+
 
 
 listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("nearest neighbor interpolation").ToStdString(), cv::INTER_NEAREST));
@@ -804,7 +819,7 @@ if (s == "addweighted")
     intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
 	doubleParam["alpha"]=DomaineParametreOp<double>(1,0,10,0.1);
 	doubleParam["beta"]=DomaineParametreOp<double>(1,0,10,0.1);
-	doubleParam["gamma"]=DomaineParametreOp<double>(1,0,10,0.1);
+	doubleParam["gamma"]=DomaineParametreOp<double>(1,-65536,65536,1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "subtract")

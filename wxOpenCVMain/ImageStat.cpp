@@ -811,14 +811,14 @@ void ImageStatistiques::OuvertureOngletContour(std::vector<std::vector<cv::Point
 {
     if (ongletContour.find(titre) != ongletContour.end())
     {
-        ongletContour.find(titre)->second->ListerPointInteret(p); 
+        ongletContour.find(titre)->second->ListerContour(p); 
     }
     else
     {
-        FenetreRegion *f=new FenetreRegion((wxFrame*)listeFenetreOnglet,p,titre);
+        FenetreRegion *f=new FenetreRegion((wxFrame*)listeFenetreOnglet);
         f->DefOsgApp(osgApp);
         f->DefParent(fenMere);
-        f->ListerPointInteret();
+        f->ListerContour(p);
         ongletContour.insert(make_pair(titre, f));
 	    listeFenetreOnglet->AddPage(f, titre);
         f->Refresh();
@@ -834,7 +834,7 @@ if (ongletRegionV)
 if (ongletRegionB)
 	return;
 if (!fenMere || !fenMere->ImAcq())
-return;
+    return;
 if (fenMere->ImAcq()->channels()>=3)
 	{
 	ongletRegionR = new FenetreRegion((wxFrame*)listeFenetreOnglet); 

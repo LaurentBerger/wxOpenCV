@@ -56,38 +56,34 @@ regionSelect=NULL;
 cleTri =  NULL;
 valTri = NULL;
 
-listeRegion = new Tableur((wxFrame*)this,0,13); 
+listeRegion = new Tableur((wxFrame*)this,0,20); 
 listeRegion->SetSize(wxSize(800,400));
 //listeRegion->Refresh();
 listeRegion->DefTitreColonne(0, _("Index"));
 listeRegion->DefTitreColonne(1, _("Gray Level"));
 listeRegion->DefTitreColonne(2, _("Gray Level\n(wo gradient)"));
-listeRegion->DefTitreColonne(3, _("Surface"));
+listeRegion->DefTitreColonne(3, _("m00"));
 listeRegion->DefTitreColonne(4, _("Surface\n(wo gradient) "));
 listeRegion->DefTitreColonne(5, "xg");
 listeRegion->DefTitreColonne(6, "yg");
 listeRegion->DefTitreColonne(7, _("semi\nmajor\naxis"));
 listeRegion->DefTitreColonne(8, _("semi\nminor\naxis"));
 listeRegion->DefTitreColonne(9, _("theta"));
-listeRegion->DefTitreColonne(10, _("Level\ndeviation"));
-listeRegion->DefTitreColonne(11, _("Level\ndeviation\n(wo gradient)"));
-listeRegion->DefTitreColonne(12, _("Height\nDifference"));
-listeRegion->DefTitreColonne(13, _("Level\nIndex"));
+listeRegion->DefTitreColonne(10, _("mu30"));
+listeRegion->DefTitreColonne(11, _("mu21"));
+listeRegion->DefTitreColonne(12, _("mu12"));
+listeRegion->DefTitreColonne(13, _("mu03"));
+listeRegion->DefTitreColonne(14, _("hu0"));
+listeRegion->DefTitreColonne(15, _("hu1"));
+listeRegion->DefTitreColonne(16, _("hu2"));
+listeRegion->DefTitreColonne(17, _("hu3"));
+listeRegion->DefTitreColonne(18, _("hu4"));
+listeRegion->DefTitreColonne(19, _("hu5"));
+listeRegion->DefTitreColonne(20, _("hu6"));
 listeRegion->SetColLabelSize(wxGRID_AUTOSIZE );
 listeRegion->SetColSize(0, 40);
-listeRegion->SetColSize(1, 50);
-listeRegion->SetColSize(2, 50);
-listeRegion->SetColSize(3, 50);
-listeRegion->SetColSize(4, 50);
-listeRegion->SetColSize(5, 50);
-listeRegion->SetColSize(6, 50);
-listeRegion->SetColSize(7, 50);
-listeRegion->SetColSize(8, 50);
-listeRegion->SetColSize(9, 50);
-listeRegion->SetColSize(10, 50);
-listeRegion->SetColSize(10, 40);
-listeRegion->SetColSize(10, 40);
-listeRegion->SetColSize(10, 30);
+for (int i=1;i<21;i++)
+    listeRegion->SetColSize(i, 50);
 }
 
 
@@ -116,6 +112,30 @@ for (int ii=0;ii<keyPt->size();ii++)
 	
 }
 
+void FenetreRegion::ListerContour(std::vector<std::vector<cv::Point> >*p) 
+{
+if (!osgApp)
+	return;
+if (!fenParent)
+	return;
+if (!((FenetrePrincipale*)fenParent)->ImAcq())
+	return;
+if (p!=NULL)
+    contour= p;
+for (int ii=0;ii<keyPt->size();ii++)
+	{
+	
+	listeRegion->DefCellule(ii,0,(*keyPt)[ii].pt.x, "%5.1f");
+	listeRegion->DefCellule(ii,1,(*keyPt)[ii].pt.y, "%5.1f");
+	listeRegion->DefCellule(ii,2,(*keyPt)[ii].size, "%5.1f");
+	listeRegion->DefCellule(ii,3,(*keyPt)[ii].angle, "%5.1f");
+	listeRegion->DefCellule(ii,4,(*keyPt)[ii].response, "%5.1f");
+	listeRegion->DefCellule(ii,5,(*keyPt)[ii].octave, "%d");
+	listeRegion->DefCellule(ii,6,(*keyPt)[ii].class_id, "%d");
+	}
+	
+}
+
 
 
 
@@ -130,6 +150,7 @@ if (!((FenetrePrincipale*)fenParent)->ImAcq())
 std::vector<cv::Mat>	*s=((FenetrePrincipale*)fenParent)->ImAcq()->StatComposante();
 std::vector<cv::Mat>	*g=((FenetrePrincipale*)fenParent)->ImAcq()->CentreGComposante();
 std::vector<std::vector<cv::Moments> > *m=((FenetrePrincipale*)fenParent)->ImAcq()->MomentComposante();
+std::vector<std::vector<std::vector<double> >> *hu=((FenetrePrincipale*)fenParent)->ImAcq()->HuMoment();
 if (s->size()==0 || g->size()==0)
 	return;
 int nb=listeRegion->GetNumberRows()-(*s)[indPlan].rows;
@@ -152,8 +173,52 @@ for (int ii=0;ii<(*s)[indPlan].rows;ii++)
 		{
 		listeRegion->DefCellule(ii,7,2*sqrt((*m)[indPlan][ii].mu20/(*m)[indPlan][ii].m00), "%6.1f");
 		listeRegion->DefCellule(ii,8,2*sqrt((*m)[indPlan][ii].mu02/(*m)[indPlan][ii].m00), "%6.1f");
+        double theta;
+        if ((*m)[indPlan][ii].mu20-(*m)[indPlan][ii].mu02!=0)
+            theta=1/2.0*atan(2*(*m)[indPlan][ii].mu11/((*m)[indPlan][ii].mu20-(*m)[indPlan][ii].mu02));
+        else 
+            theta =0;
+		if ((*m)[indPlan][ii].mu20>(*m)[indPlan][ii].mu02)
+			theta  += acos(-1.0)/2;
+		if (theta<0)
+			theta += acos(-1.0);
+		listeRegion->DefCellule(ii,10,(*m)[indPlan][ii].mu30, "%6.1f");
+		listeRegion->DefCellule(ii,11,(*m)[indPlan][ii].mu21, "%6.1f");
+		listeRegion->DefCellule(ii,12,(*m)[indPlan][ii].mu12, "%6.1f");
+		listeRegion->DefCellule(ii,13,(*m)[indPlan][ii].mu03, "%6.1f");
+		listeRegion->DefCellule(ii,9,theta*180/acos(-1.0), "%6.2f");
 		}
-	}
+    if (hu->size() > indPlan )
+    {
+        listeRegion->DefCellule(ii,14,(*hu)[indPlan][ii][0], "%6f");
+        listeRegion->DefCellule(ii,15,(*hu)[indPlan][ii][1], "%6f");
+        listeRegion->DefCellule(ii,16,(*hu)[indPlan][ii][2], "%6f");
+        listeRegion->DefCellule(ii,17,(*hu)[indPlan][ii][3], "%6f");
+        listeRegion->DefCellule(ii,18,(*hu)[indPlan][ii][4], "%6f");
+        listeRegion->DefCellule(ii,19,(*hu)[indPlan][ii][5], "%6f");
+        listeRegion->DefCellule(ii,20,(*hu)[indPlan][ii][6], "%6f");
+
+    }
+
+}
+
+
+//listeRegion->DefTitreColonne(1, _("Gray Level"));
+//listeRegion->DefTitreColonne(2, _("Gray Level\n(wo gradient)"));
+/*//listeRegion->DefTitreColonne(4, _("Surface\n(wo gradient) "));
+listeRegion->DefTitreColonne(9, _("theta"));
+listeRegion->DefTitreColonne(14, _("hu0"));
+listeRegion->DefTitreColonne(15, _("hu1"));
+listeRegion->DefTitreColonne(16, _("hu2"));
+listeRegion->DefTitreColonne(17, _("hu3"));
+listeRegion->DefTitreColonne(18, _("hu4"));
+listeRegion->DefTitreColonne(19, _("hu5"));
+listeRegion->DefTitreColonne(20, _("hu6"));
+
+
+
+
+}
 	
 /*static wxClipboard	*pressePapier=NULL;
 if (!pressePapier)

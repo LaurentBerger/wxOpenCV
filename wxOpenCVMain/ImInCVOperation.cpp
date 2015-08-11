@@ -931,7 +931,8 @@ cv::split( *op[0], planCouleurSrc );
 for (int i=0;i<op[0]->channels();i++)
 	{
 	result[i]=new ImageInfoCV;
-	cv::merge(planCouleurSrc[i], *result[i]);
+    planCouleurSrc[i].copyTo(*result[i]);
+//	cv::merge(planCouleurSrc[i], *result[i]);
 	r.push_back(result[i]);
 	}
 paramOCV->nbImageRes=op[0]->channels();

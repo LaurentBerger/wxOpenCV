@@ -115,8 +115,10 @@ if (moment.size() == 0)
 }
 else
     m=moment;
-for (int indCanal=0;indCanal<nbCanaux;indCanal++)
-	for (int k=0;k<=maxIm[indCanal];k++)
+for (int indCanal = 0; indCanal<nbCanaux; indCanal++)
+{
+    huMoment[indCanal].resize(maxIm[indCanal]+1);
+    for (int k=0;k<=maxIm[indCanal];k++)
 		if (m[indCanal][k].m00>0)
 			{
 			double ybarre=m[indCanal][k].m01/m[indCanal][k].m00,xbarre=m[indCanal][k].m10/m[indCanal][k].m00;
@@ -132,25 +134,25 @@ for (int indCanal=0;indCanal<nbCanaux;indCanal++)
 			m[indCanal][k].nu12=m[indCanal][k].mu12/pow(m[indCanal][k].m00,2.5);
 			m[indCanal][k].nu21=m[indCanal][k].mu21/pow(m[indCanal][k].m00,2.5);
 			m[indCanal][k].nu30=m[indCanal][k].mu30/pow(m[indCanal][k].m00,2.5);
-			huMoment[indCanal].resize(8);
-			huMoment[indCanal][1]=m[indCanal][k].nu20+m[indCanal][k].nu02;
-			huMoment[indCanal][2]=pow(m[indCanal][k].nu20-m[indCanal][k].nu02,2.0)+4*m[indCanal][k].nu11;
-			huMoment[indCanal][3]=pow(m[indCanal][k].nu30-3*m[indCanal][k].nu12,2.0)+pow(3*m[indCanal][k].nu21-m[indCanal][k].nu03,2.0);
-			huMoment[indCanal][4]=pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)+pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0);
-			huMoment[indCanal][5]=	(m[indCanal][k].nu30-3*m[indCanal][k].nu12)*(m[indCanal][k].nu30+m[indCanal][k].nu12)*
+			huMoment[indCanal][k].resize(7);
+			huMoment[indCanal][k][0]=m[indCanal][k].nu20+m[indCanal][k].nu02;
+			huMoment[indCanal][k][1]=pow(m[indCanal][k].nu20-m[indCanal][k].nu02,2.0)+4*m[indCanal][k].nu11;
+			huMoment[indCanal][k][2]=pow(m[indCanal][k].nu30-3*m[indCanal][k].nu12,2.0)+pow(3*m[indCanal][k].nu21-m[indCanal][k].nu03,2.0);
+			huMoment[indCanal][k][3]=pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)+pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0);
+			huMoment[indCanal][k][4]=	(m[indCanal][k].nu30-3*m[indCanal][k].nu12)*(m[indCanal][k].nu30+m[indCanal][k].nu12)*
 									(pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)-3*pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0))+
 									(3*m[indCanal][k].nu21-m[indCanal][k].nu03)*(m[indCanal][k].nu21+m[indCanal][k].nu03)*
 									(3*pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)-pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0));
-			huMoment[indCanal][6]=	(m[indCanal][k].nu20-m[indCanal][k].nu02)*
+			huMoment[indCanal][k][5]=	(m[indCanal][k].nu20-m[indCanal][k].nu02)*
 									(pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)-pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0))+
 									4*m[indCanal][k].nu11*(m[indCanal][k].nu30+m[indCanal][k].nu12)*(m[indCanal][k].nu21+m[indCanal][k].nu03);
-			huMoment[indCanal][7]=	(3*m[indCanal][k].nu21-m[indCanal][k].nu03)*(m[indCanal][k].nu30+m[indCanal][k].nu12)*
+			huMoment[indCanal][k][6]=	(3*m[indCanal][k].nu21-m[indCanal][k].nu03)*(m[indCanal][k].nu30+m[indCanal][k].nu12)*
 									(pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)-3*pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0))-
 									(m[indCanal][k].nu30-3*m[indCanal][k].nu12)*(m[indCanal][k].nu21+m[indCanal][k].nu03)*
 									(3*pow(m[indCanal][k].nu30+m[indCanal][k].nu12,2.0)-pow(m[indCanal][k].nu21+m[indCanal][k].nu03,2.0));
 
 			}
-
+}
 moment=m;
 return &moment;
 }

@@ -795,9 +795,9 @@ wxPanel* InterfaceAvance::OngletMorphologie(wxWindow* parent)
 	flex->Add( lbMorph, 1, wxALL|wxALIGN_CENTRE, 5 );
 	flex->Add( lbNomMorph, 2, wxALL|wxALIGN_CENTRE, 5 );
 
-	flex->Add( new wxStaticText( panneauCtrl, -1, _("Operator size") ), 0, wxALL|wxALIGN_CENTRE, 5 );
-	flex->Add( new wxSpinCtrl( panneauCtrl, ROUETAILLE_MORPH, "2", wxDefaultPosition, wxSize(100,-1),
-			wxSP_ARROW_KEYS, 3, 32, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
+	flex->Add( new wxStaticText( panneauCtrl, -1, _("Operator half-size") ), 0, wxALL|wxALIGN_CENTRE, 5 );
+	flex->Add( new wxSpinCtrl( panneauCtrl, ROUETAILLE_MORPH, "1", wxDefaultPosition, wxSize(100,-1),
+			wxSP_ARROW_KEYS, 1, 32, 5 ), 0, wxALL|wxALIGN_CENTRE, 5 );
 
 	panneauCtrl->SetSizer( flex );
 	box->Add( panneauCtrl, 1, wxALL | wxEXPAND, 10 );
