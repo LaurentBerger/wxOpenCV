@@ -45,7 +45,7 @@ char	*donnees;
 void	*fenetreMere;
 
 public :
-Tableur(wxFrame *,int ,int);
+Tableur(wxFrame *,int ,int,wxSize =wxDefaultSize);
 void	DefFenetreMere(void *w){fenetreMere=w;};
 void	DefCellule(int l,int c, double val,char *format=NULL);
 void	DefCellule(int l,int c, int val,char *format=NULL);

@@ -29,7 +29,7 @@ class FenetreHistogramme : public wxWindow
 {
 Tableur *excel;
 wxPanel* panel;
-wxSizer *box;
+wxFlexGridSizer *box;
 // L'image a au maximum 5 canaux */
 PLFLT	*x[NB_MAX_CANAUX],*y[NB_MAX_CANAUX],*yFiltre[NB_MAX_CANAUX];  /*!< courbe des histogrammes pour les trois plans */
 int		nbGraines[5]; /*!< Nombre de graines pour l'histogramme des canaux */
@@ -52,6 +52,7 @@ cv::Mat*	Histogramme(int i=0){return &(histoImage[i]);};
 Tableur *Grille(){return excel;};
 /*!<Accès à la grille associée à l'histogramme */
 // Evènement
+void OnSize(wxSizeEvent &event);
 void OnKeyDown(wxKeyEvent &event);
 void OnClose(wxCloseEvent& event); 
 void NouvelHistogramme(wxGridEvent& event); /*!< Saisie d'une nouvelle dans le tableur (nombre de grianes) */
@@ -63,7 +64,7 @@ private:
 
 private:
 //  FenetreCourbe* plotwindow;
-  wxPLplotwindow<wxPanel> *courbe;
+  wxPLplotwindow<wxWindow> *courbe;
   bool bgcolor;
   int m_backend;
 

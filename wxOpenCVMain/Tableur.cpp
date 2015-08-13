@@ -26,7 +26,7 @@ void Tableur::OnRangeSelected(wxGridRangeSelectEvent &w)
 
 }
 
-Tableur::Tableur(wxFrame *w,int nbL,int nbC):wxGrid(w,-1,wxPoint( 0, 0 ),wxSize( 250, 200 ))
+Tableur::Tableur(wxFrame *w,int nbL,int nbC,wxSize s):wxGrid(w,-1,wxPoint( 0, 0 ),s)
 {
 
 // Grille de nbLignes par nbColonnes

@@ -735,14 +735,14 @@ if (captureVideo->isOpened())
 				if (!modeMoyenne)	// Pas de filtrage Butterworth
 					{
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
-					frame.convertTo(frameFlt,CV_32FC3);
+					frame.copyTo(frameFlt,CV_32FC3);
 					(*((UMat *)imAcq)).setTo(frameFlt); // get a new frame from camera
 					}
 				else
 					{
 					{
 					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
-					frame.convertTo(frameFlt,CV_32FC3);
+					frame.copyTo(frameFlt,CV_32FC3);
 
 					(*((UMat *)imAcq)).setTo(frameFlt); // get a new frame from camera
 					for (int i=0;i<frame.rows;i++)

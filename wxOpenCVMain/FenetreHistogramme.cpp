@@ -9,6 +9,7 @@ using namespace cv;
 using namespace std;
 
 BEGIN_EVENT_TABLE( FenetreHistogramme, wxWindow )
+	//EVT_SIZE(FenetreHistogramme::OnSize)
 	EVT_KEY_DOWN(FenetreHistogramme::OnKeyDown)
 	EVT_GRID_CELL_CHANGING(FenetreHistogramme::NouvelHistogramme)
 END_EVENT_TABLE()
@@ -32,6 +33,13 @@ int id=((FenetrePrincipale *)fenMere)->IdFenetre();
 event.Skip();
 }
 
+void FenetreHistogramme::OnSize(wxSizeEvent &event)
+{
+ //   courbe->SetSize(event.GetSize());
+    panel->Layout();
+}
+
+
 
 void FenetreCourbe::OnChar( wxKeyEvent& event )
 {
@@ -52,7 +60,7 @@ void FenetreCourbe::OnChar( wxKeyEvent& event )
  *  just to show how it works. wxPLplotwindow takes care of all the setup
  *  for the use of PLplot library.
  */
-FenetreHistogramme::FenetreHistogramme(wxFrame *w  ) : wxWindow(w,-1,wxPoint(0,0),wxSize(400,400))
+FenetreHistogramme::FenetreHistogramme(wxFrame *w  ) : wxWindow(w,-1,wxPoint(0,0),wxDefaultSize)
 {
 	bgcolor=false;
 osgApp=NULL;
@@ -62,28 +70,46 @@ fenMere=NULL;
 
 	// add the wxPLplot
 	wxPoint p(0,0);
-	wxSize s(400,400);
-	panel = new wxPanel( this,wxID_ANY ,p,s);
-
+	wxSize s(1700,1700);
 	x[0]=NULL;
-	excel = new Tableur((wxFrame*)panel,11,4); 
-    box = new wxGridSizer(2,1,0);
-//	plotwindow = new FenetreCourbe( (wxFrame*)panel,(wxFrame*)this,  -1, wxDefaultPosition, wxSize(400,400), wxWANTS_CHARS);
-	courbe =  new wxPLplotwindow<wxPanel>(true);
-	courbe->Create(this,wxID_ANY,wxDefaultPosition, wxSize(400,400));
- 	box->Add( courbe, 1, wxALL | wxEXPAND, 10 );
-  	box->Add( excel, 0, wxALL | wxEXPAND, 10 );
-    panel->SetSizer( box );
-    box->Fit(panel);
-    box->SetSizeHints(panel);
-	SetSize( 640, 500 );  // set frame size
-  SetSizeHints( 220, 150 );  // set minimum frame size
-//histoImage=new long[65536];
+	panel = new wxPanel( this,wxID_ANY ,wxDefaultPosition,wxSize(1000,1000)   );
+	wxWindow *panel2 = new wxScrolledWindow( panel,wxID_ANY ,wxDefaultPosition,wxSize(1000,1000)   );
+
+	excel =new Tableur((wxFrame*)panel,11,4,wxDefaultSize); 
+
+    courbe =  new wxPLplotwindow<wxWindow>(false);
+	courbe->Create(panel2,wxID_ANY,wxDefaultPosition , wxSize(400,400));
+ //   courbe->SetMaxSize(s);
+    if (excel)
+    {
+        box = new wxFlexGridSizer(2,1,1);
+  //      box->SetFlexibleDirection(wxHORIZONTAL);
+        box->Add( courbe,3, wxEXPAND, 0);
+	    box->Add( excel, 0, wxEXPAND, 0);
+         box->AddGrowableCol(0);
+        box->AddGrowableRow(0);
+       panel->SetSizer( box );
+       box->Fit(panel);
+    }
+    else
+    {
+        /*box = new wxFlexGridSizer(1,1,0);
+        box->Add( courbe, 1, wxALL | wxEXPAND, 10 );
+        panel->SetSizer( box );
+        box->Fit(panel);
+        box->SetSizeHints(panel);
+	    SetSize( 640, 500 );  // set frame size
+        panel->SetSizeHints( 220, 150 );  // set minimum frame size*/
+
+    }
+
+        //histoImage=new long[65536];
 
 
   wxString m_title=_T("Histogram");
   //SetTitle( m_title );  
 nbGraines[0]=-1;
+Layout();
 excel->Show();
 courbe->Show();
 	Plot();
@@ -157,7 +183,7 @@ case 0 :
 		event.GetString().ToLong((long*)&nbGraines[c]);
 	break;
 case 1 :
-	if (imAcq && c>=0&& c<imAcq->channels())
+	if (imAcq && c>=0&& c<imAcq->channels()&& excel)
 		{
 		event.GetString().ToDouble(&v);
 		if( v<maxHisto[c])
@@ -169,7 +195,7 @@ case 1 :
 		}
 	break;
 case 2 :
-	if (imAcq && c>=0&& c<imAcq->channels())
+	if (imAcq && c>=0&& c<imAcq->channels()&& excel)
 		{
 		event.GetString().ToDouble(&v);
 		if( v>minHisto[c])
@@ -408,7 +434,7 @@ if ( !((wxOsgApp*)osgApp)->VerifFenetre())
 if (!fenMere)
 	return;
 int id=((FenetrePrincipale *)fenMere)->IdFenetre();
-
+Layout();
 ImageInfoCV			*imAcq;
 CameraVirtuelle *cam=((FenetrePrincipale *)fenMere)->Cam();
 if (((FenetrePrincipale *)fenMere)->ModeImage()!=1)
@@ -427,14 +453,17 @@ if (!fenetreActive)
 wxPLplotstream* pls=courbe->GetStream();
 if (!pls)
 	return;
-wxArrayInt selection=excel->GetSelectedRows();
 int iMin=0,iMax=16383;
+if (excel)
+{
+    wxArrayInt selection=excel->GetSelectedRows();
 
-if (selection.size()!=0)
-	{
-	iMin=selection.Item(0);
-	iMax=selection.Item(selection.size()-1);
-	}
+    if (selection.size()!=0)
+	    {
+	    iMin=selection.Item(0);
+	    iMax=selection.Item(selection.size()-1);
+	    }
+}
 const size_t np=65536;
 if (x[0]==NULL)
 	for (int i=0;i<NB_MAX_CANAUX;i++)	
@@ -447,25 +476,29 @@ PLFLT xmin=iMin, xmax=iMax;
 PLFLT ymin=1e30, ymax=-1e30;
 
 wxString titre[]={_("Blue"),_("Green"),_("Red"),"canal 4","Canal 5"};
-excel->DefTitreLigne(0,"bins");
-excel->DefTitreLigne(1,"minimum");
-excel->DefTitreLigne(2,"maximum");
-excel->DefTitreLigne(3,"mean");
-excel->DefTitreLigne(4,"Std");
-excel->DefTitreLigne(5,"Mode");
-excel->DefTitreLigne(6,"Max");
-excel->DefTitreLigne(7,"Min");
-excel->DefTitreLigne(8,"Kurtosis");
-excel->DefTitreLigne(9,"SeuilKurtosis");
-excel->DefTitreLigne(10,"Asymetrie");
-excel->DefTitreLigne(11,"Seuil");
+if (excel)
+{
+    excel->DefTitreLigne(0,"bins");
+    excel->DefTitreLigne(1,"minimum");
+    excel->DefTitreLigne(2,"maximum");
+    excel->DefTitreLigne(3,"mean");
+    excel->DefTitreLigne(4,"Std");
+    excel->DefTitreLigne(5,"Mode");
+    excel->DefTitreLigne(6,"Max");
+    excel->DefTitreLigne(7,"Min");
+    excel->DefTitreLigne(8,"Kurtosis");
+    excel->DefTitreLigne(9,"SeuilKurtosis");
+    excel->DefTitreLigne(10,"Asymetrie");
+    excel->DefTitreLigne(11,"Seuil");
+}
 for (int j=0;j<nbPlan && j<NB_MAX_CANAUX && histoImage[j].cols;j++)
 	{
 	xmin=minHisto[j];
 	xmax=maxHisto[j];
 	iMin=xmin;
 	iMax=xmax;
-	excel->DefTitreColonne(j,titre[j]);
+	if (excel)
+        excel->DefTitreColonne(j,titre[j]);
 	double moyenneH=0,varianceH=0,cumulH=0;
 	int mode=iMin;
 	for( int i = 0; i<nbGraines[j] ; i++ ) 
@@ -516,21 +549,23 @@ for (int j=0;j<nbPlan && j<NB_MAX_CANAUX && histoImage[j].cols;j++)
 			}
 		yFiltre[j][i]/=nb;
 		}
-
-	excel->DefCellule(0,j,nbGraines[j],"%d");
-	excel->DefCellule(1,j,minHisto[j]);
-	excel->DefCellule(2,j,maxHisto[j]);
-	excel->DefCellule(3,j,moyenneH,"%f");
-	excel->DefCellule(4,j,sqrt(varianceH),"%f");
-	excel->DefCellule(5,j,mode,"%d");
-	excel->DefCellule(6,j,ymax,"%f");
-	excel->DefCellule(7,j,ymin,"%f");
-	excel->DefCellule(8,j,kurto,"%f");
-	excel->DefCellule(9,j,seuilKurto,"%d");
-	excel->DefCellule(10,j,skew,"%f");
-	excel->DefCellule(11,j,seuilSkew,"%d");
-	for (int jj=3;jj<=11;jj++)
-		excel->SetReadOnly(jj,j);
+    if (excel)
+    {
+	    excel->DefCellule(0,j,nbGraines[j],"%d");
+	    excel->DefCellule(1,j,minHisto[j]);
+	    excel->DefCellule(2,j,maxHisto[j]);
+	    excel->DefCellule(3,j,moyenneH,"%f");
+	    excel->DefCellule(4,j,sqrt(varianceH),"%f");
+	    excel->DefCellule(5,j,mode,"%d");
+	    excel->DefCellule(6,j,ymax,"%f");
+	    excel->DefCellule(7,j,ymin,"%f");
+	    excel->DefCellule(8,j,kurto,"%f");
+	    excel->DefCellule(9,j,seuilKurto,"%d");
+	    excel->DefCellule(10,j,skew,"%f");
+	    excel->DefCellule(11,j,seuilSkew,"%d");
+	    for (int jj=3;jj<=11;jj++)
+		    excel->SetReadOnly(jj,j);
+    }
 	}
  
 pls->adv( 0 );
