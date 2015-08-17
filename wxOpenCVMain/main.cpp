@@ -513,17 +513,17 @@ if (f->ImAcq() && f->ImAcq()->StatComposante())
 	imgStatIm->ListerRegion();
 	}
 imgStatIm->OuvertureOngletCurseur();
-if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES)->size()!=0)
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES)->size()!=0)
     imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES),_("ORB features"));
-if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)->size()!=0)
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)->size()!=0)
     imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES),_("BRISK features"));
-if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES)->size()!=0)
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES)->size()!=0)
     imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES),_("BLOB features"));
-if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES)->size()!=0)
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES)->size()!=0)
     imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES),_("AKAZE features"));
-if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES)->size()!=0)
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES)->size()!=0)
     imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES),_("KAZE features"));
-if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES)->size()!=0)
+if (f->ImAcq() && f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES)->size()!=0)
     imgStatIm->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES),_("AGAST features"));
 listeFenetre[nbFenetre]=new EnvFenetre(f,fenZoom,imgStatIm);
 indFenetre=nbFenetre;
@@ -736,7 +736,7 @@ if (pOCV.nbImageRes==0)
          listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[1]),_("Green  Contour"));
          listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[2]),_("red Contour"));
     }
-    else
+    else if (f->ImAcq()->PtContours()->size()!=0)
          listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[0]),_("Contour"));
 
 	}
@@ -764,6 +764,7 @@ bool b=false;
 	serveur = NULL;
 	fSeqOpe=NULL;
 	fenOpe=NULL;
+    ctrlCamera=NULL;
     configApp=new wxFileConfig("wxOpenCV","LB","wxOpenCV.ini",wxEmptyString);
 	LectureFichierConfig();
 #ifndef __MULTILANGUE__
@@ -872,7 +873,7 @@ if (ok)
 {
     new wxSplashScreen(bitmap,
         wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-        6000, frame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+        1000, frame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
         wxSIMPLE_BORDER|wxSTAY_ON_TOP);
 }
 
@@ -1069,7 +1070,8 @@ if (!w.GetActive())
 if (osgApp)
 	{
 	osgApp->IdFenetreActive(idFenetre);
-	if (cam && cam->IsRunning() && osgApp->CtrlCamera())
+    wxCriticalSectionLocker enter(travailCam);
+    if (cam && cam->IsRunning() && osgApp->CtrlCamera())
 		{
 		wxString s= "Control :" +GetTitle();
 		osgApp->CtrlCamera()->SetTitle(s);

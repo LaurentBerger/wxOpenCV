@@ -275,26 +275,28 @@ if (im->CoinRef()->size()!=0)
 	for (int i=0;i<channels()&&i<im->channels();i++)
 		coinRef[i] = (*im->CoinRef())[i];
 	}
-if (im->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
-    kOrb = *im->PointCle(IMAGEINFOCV_ORB_DES);
-if (im->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
-    kAkaze = *im->PointCle(IMAGEINFOCV_AKAZE_DES);
-if (im->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
-    kBrisk = *im->PointCle(IMAGEINFOCV_BRISK_DES);
-if (im->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
-    descORB = *im->Descripteur(IMAGEINFOCV_ORB_DES);
-if (im->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
-    descAKAZE = *im->Descripteur(IMAGEINFOCV_AKAZE_DES);
-if (im->PointCle(IMAGEINFOCV_KAZE_DES)->size() != 0)
-    descAKAZE = *im->Descripteur(IMAGEINFOCV_KAZE_DES);
-if (im->PointCle(IMAGEINFOCV_AGAST_DES)->size() != 0)
-    descAKAZE = *im->Descripteur(IMAGEINFOCV_AGAST_DES);
-if (im->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
-    descBRISK = *im->Descripteur(IMAGEINFOCV_BRISK_DES);
+std::map<int, std::vector<cv::KeyPoint> >::iterator it = im->pointCle.begin();
+pointCle.clear();
+for (; it != im->pointCle.end(); it++)
+    pointCle.insert(make_pair(it->first, it->second));
+
+pointCleApp.clear();
+for (it = im->pointCleApp.begin(); it != im->pointCleApp.end(); it++)
+    pointCleApp.insert(make_pair(it->first, it->second));
+
+descripteur.clear();
+std::map<int, cv::Mat >::iterator itMat = im->descripteur.begin();
+for (itMat = im->descripteur.begin(); itMat != im->descripteur.end(); itMat++)
+    descripteur.insert(make_pair(itMat->first, itMat->second));
+
 if (im->PointCleMSER()->size() != 0)
     kMser = *im->PointCleMSER();
-if (im->Appariement()->size() != 0)
-    matches = *im->Appariement();
+matches.clear();
+std::map<int, std::vector<cv::DMatch > >::iterator itMatch = im->matches.begin();
+for (itMatch = im->matches.begin(); itMatch != im->matches.end(); itMatch++)
+    matches.insert(make_pair(itMatch->first, itMatch->second));
+
+
  }
 
 void ImageInfoCV:: DeplacerFlotOptique(ImageInfoCV *im)/*<! Fonction déplaçant le pointeur flotOptique de im dans this. Celui de im devient nul */ 
@@ -345,57 +347,64 @@ listeOpAttribut[p->nomOperation]=*p;
 return p;
 }
 
-cv::UMat *ImageInfoCV::Descripteur(char type)
+
+std::vector<cv::DMatch> *ImageInfoCV::Appariement(char type)
+{
+if  (type!=-1)
+    if (matches.find(type) != matches.end())
+        return &matches[type];
+    else
+        return NULL;
+else
+{
+    if (matches.begin()!= matches.end())
+        return &matches.begin()->second;
+    }
+return NULL;
+}
+
+cv::Mat *ImageInfoCV::Descripteur(char type)
 { 
-switch (type){
-case IMAGEINFOCV_ORB_DES:
-    return &descORB;
-    break;
-case IMAGEINFOCV_BRISK_DES:
-    return &descBRISK;
-    break;
-case IMAGEINFOCV_AKAZE_DES:
-    return &descAKAZE;
-    break;
-case IMAGEINFOCV_KAZE_DES:
-    return &descKAZE;
-    break;
-case IMAGEINFOCV_AGAST_DES:
-    return &descAGAST;
-    break;
-case -1 :
-    if (descORB.size>0)
-        return &descORB;
-    if (descBRISK.size>0)
-        return &descBRISK;
-    if (descAKAZE.size>0)
-        return &descAKAZE;
+if  (type!=-1)
+    if (descripteur.find(type) != descripteur.end())
+        return &descripteur[type];
+    else
+        return NULL;
+else
+{
+    if (descripteur.begin()!= descripteur.end())
+        return &descripteur.begin()->second;
     }
 return NULL;
 };
 
 std::vector<cv::KeyPoint> *ImageInfoCV::PointCle(char type)
 {
-switch(type){
-case IMAGEINFOCV_ORB_DES :
-	return &kOrb;
-	break;
-case IMAGEINFOCV_BRISK_DES :
-	return &kBrisk;
-	break;
-case IMAGEINFOCV_BLOB_DES:
-	return &kBlob;
-	break;
-case IMAGEINFOCV_AKAZE_DES:
-	return &kAkaze;
-	break;
-case IMAGEINFOCV_KAZE_DES:
-	return &kKaze;
-	break;
-case IMAGEINFOCV_AGAST_DES:
-	return &kAgast;
-	break;
-	}
+if  (type!=-1)
+    if (pointCle.find(type) != pointCle.end())
+        return &pointCle[type];
+    else
+        return NULL;
+else
+{
+    if (pointCle.begin()!= pointCle.end())
+        return &pointCle.begin()->second;
+    }
+return NULL;
+}
+
+std::vector<cv::KeyPoint> *ImageInfoCV::PointCleApp(char type)
+{
+if  (type!=-1)
+    if (pointCleApp.find(type) != pointCleApp.end())
+        return &pointCleApp[type];
+    else
+        return NULL;
+else
+{
+    if (pointCleApp.begin()!= pointCleApp.end())
+        return &pointCleApp.begin()->second;
+    }
 return NULL;
 }
 

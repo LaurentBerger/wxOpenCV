@@ -1247,6 +1247,17 @@ if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("ORB") == pOCV->detecteu
 	b = cv::ORB::create();
 	pOCV->detecteur["ORB"] = b;
 	}
+if (pointCle.find(IMAGEINFOCV_ORB_DES)==pointCle.end())
+{
+    std::vector<cv::KeyPoint> x;
+    pointCle.insert(std::make_pair(IMAGEINFOCV_ORB_DES,x));
+}
+else
+    pointCle[IMAGEINFOCV_ORB_DES].clear();
+if (descripteur.find(IMAGEINFOCV_ORB_DES)==descripteur.end())
+    descripteur.insert(std::make_pair(IMAGEINFOCV_ORB_DES,cv::Mat()));
+else
+    descripteur[IMAGEINFOCV_ORB_DES] =  cv::Mat();
 
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getEdgeThreshold() != pOCV->intParam["EdgeThreshold"].valeur)
 	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setEdgeThreshold(pOCV->intParam["EdgeThreshold"].valeur);
@@ -1268,10 +1279,17 @@ if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getWTA_K() != pOCV->intParam[
 	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setWTA_K(pOCV->intParam["WTA_K"].valeur);
 
 if (pOCV->intParam["image_mask"].valeur == 1)
-    pOCV->detecteur["ORB"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle()), *(op[0]->Descripteur(IMAGEINFOCV_ORB_DES)));
+    pOCV->detecteur["ORB"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle(IMAGEINFOCV_ORB_DES)), *(op[0]->Descripteur(IMAGEINFOCV_ORB_DES)));
 else
-    pOCV->detecteur["ORB"]->detectAndCompute(*op[0], UMat(), *(op[0]->PointCle()), *(op[0]->Descripteur(IMAGEINFOCV_ORB_DES)));
+    pOCV->detecteur["ORB"]->detectAndCompute(*op[0], UMat(), *(op[0]->PointCle(IMAGEINFOCV_ORB_DES)), *(op[0]->Descripteur(IMAGEINFOCV_ORB_DES)));
 
+if (matches.find(IMAGEINFOCV_ORB_DES)!=matches.end())
+    matches[IMAGEINFOCV_ORB_DES].clear();
+    else
+    {
+        std::vector<cv::DMatch>  x;
+        matches.insert(std::make_pair(IMAGEINFOCV_ORB_DES,x));
+    }
 
 AjoutOpAttribut(pOCV);
 
@@ -1342,12 +1360,17 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectBlob(std::vector<ImageInfoCV	*> op,
         cv::Ptr<cv::Feature2D> b;
         b = cv::SimpleBlobDetector::create(pDefaultBLOB);
         pOCV->detecteur["BLOB"] = b;
+        std::vector<cv::KeyPoint> x;
+        if (pointCle.find(IMAGEINFOCV_BLOB_DES)==pointCle.end())
+            pointCle.insert(std::make_pair(IMAGEINFOCV_BLOB_DES,x));
+        else
+            pointCle[IMAGEINFOCV_BLOB_DES].clear();
         }
 
     if (pOCV->intParam["image_mask"].valeur == 1)
-        pOCV->detecteur["BLOB"]->detect(*op[0], kBlob, *op[0]->MasqueOperateur());
+        pOCV->detecteur["BLOB"]->detect(*op[0], pointCle[IMAGEINFOCV_BLOB_DES], *op[0]->MasqueOperateur());
     else
-        pOCV->detecteur["BLOB"]->detect(*op[0], kBlob, UMat());
+        pOCV->detecteur["BLOB"]->detect(*op[0], pointCle[IMAGEINFOCV_BLOB_DES], UMat());
 
 
     AjoutOpAttribut(pOCV);
@@ -1368,7 +1391,16 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(std::vector<ImageInfoCV	*> op
         cv::Ptr<cv::Feature2D> b;
         b = cv::BRISK::create(pOCV->intParam["thresh"].valeur, pOCV->intParam["octaves"].valeur, pOCV->doubleParam["patternScale"].valeur);
         pOCV->detecteur["BRISK"] = b;
-        }
+        std::vector<cv::KeyPoint> x;
+        if (pointCle.find(IMAGEINFOCV_BRISK_DES)==pointCle.end())
+            pointCle.insert(std::make_pair(IMAGEINFOCV_BRISK_DES,x));
+        else
+            pointCle[IMAGEINFOCV_BRISK_DES].clear();
+        if (descripteur.find(IMAGEINFOCV_BRISK_DES)==descripteur.end())
+            descripteur.insert(std::make_pair(IMAGEINFOCV_BRISK_DES,cv::Mat()));
+        else
+            descripteur[IMAGEINFOCV_BRISK_DES] =  cv::Mat();
+       }
 
 
     if (pOCV->intParam["image_mask"].valeur == 1)
@@ -1376,6 +1408,13 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectBrisk(std::vector<ImageInfoCV	*> op
     else
         pOCV->detecteur["BRISK"]->detectAndCompute(*op[0], UMat(), *(op[0]->PointCle(IMAGEINFOCV_BRISK_DES)), *(op[0]->Descripteur(IMAGEINFOCV_BRISK_DES)));
 
+    if (matches.find(IMAGEINFOCV_BRISK_DES)!=matches.end())
+        matches[IMAGEINFOCV_BRISK_DES].clear();
+    else
+    {
+        std::vector<cv::DMatch>  x;
+        matches.insert(std::make_pair(IMAGEINFOCV_BRISK_DES,x));
+    }
 
     AjoutOpAttribut(pOCV);
 
@@ -1394,9 +1433,25 @@ if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("AKAZE") == pOCV->detect
     cv::Ptr<cv::Feature2D> b;
  //   b = cv::AGAST();create();
     pOCV->detecteur["AGAST"] = b;
+    std::vector<cv::KeyPoint> x;
+    if (pointCle.find(IMAGEINFOCV_AGAST_DES)==pointCle.end())
+        pointCle.insert(std::make_pair(IMAGEINFOCV_AGAST_DES,x));
+    else
+        pointCle[IMAGEINFOCV_AGAST_DES].clear();
+    if (descripteur.find(IMAGEINFOCV_AGAST_DES)==descripteur.end())
+        descripteur.insert(std::make_pair(IMAGEINFOCV_AGAST_DES,cv::Mat()));
+    else
+        descripteur[IMAGEINFOCV_AGAST_DES] =  cv::Mat();
     }
 
 
+    if (matches.find(IMAGEINFOCV_AGAST_DES)!=matches.end())
+        matches[IMAGEINFOCV_AGAST_DES].clear();
+    else
+    {
+        std::vector<cv::DMatch>  x;
+        matches.insert(std::make_pair(IMAGEINFOCV_AGAST_DES,x));
+    }
 
 AjoutOpAttribut(pOCV);
 
@@ -1418,6 +1473,15 @@ if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("KAZE") == pOCV->detecte
     cv::Ptr<cv::Feature2D> b;
     b = cv::KAZE::create();
     pOCV->detecteur["KAZE"] = b;
+        std::vector<cv::KeyPoint> x;
+        if (pointCle.find(IMAGEINFOCV_KAZE_DES)==pointCle.end())
+            pointCle.insert(std::make_pair(IMAGEINFOCV_KAZE_DES,x));
+        else
+            pointCle[IMAGEINFOCV_KAZE_DES].clear();
+    if (descripteur.find(IMAGEINFOCV_KAZE_DES)==descripteur.end())
+        descripteur.insert(std::make_pair(IMAGEINFOCV_KAZE_DES,cv::Mat()));
+    else
+        descripteur[IMAGEINFOCV_KAZE_DES] =  cv::Mat();
     }
 
 if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getExtended() != pOCV->intParam["extended"].valeur)
@@ -1437,6 +1501,13 @@ if (pOCV->intParam["image_mask"].valeur == 1)
 else
     pOCV->detecteur["KAZE"]->detectAndCompute(*op[0], UMat(), *(op[0]->PointCle(IMAGEINFOCV_KAZE_DES)), *(op[0]->Descripteur(IMAGEINFOCV_KAZE_DES)));
 
+    if (matches.find(IMAGEINFOCV_KAZE_DES)!=matches.end())
+        matches[IMAGEINFOCV_KAZE_DES].clear();
+    else
+    {
+        std::vector<cv::DMatch>  x;
+        matches.insert(std::make_pair(IMAGEINFOCV_KAZE_DES,x));
+    }
 
 AjoutOpAttribut(pOCV);
 
@@ -1457,7 +1528,16 @@ if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("AKAZE") == pOCV->detect
     cv::Ptr<cv::Feature2D> b;
     b = cv::AKAZE::create();
     pOCV->detecteur["AKAZE"] = b;
-    }
+    std::vector<cv::KeyPoint> x;
+    if (pointCle.find(IMAGEINFOCV_AKAZE_DES)==pointCle.end())
+        pointCle.insert(std::make_pair(IMAGEINFOCV_AKAZE_DES,x));
+    else
+        pointCle[IMAGEINFOCV_AKAZE_DES].clear();
+    if (descripteur.find(IMAGEINFOCV_AKAZE_DES)==descripteur.end())
+        descripteur.insert(std::make_pair(IMAGEINFOCV_AKAZE_DES,cv::Mat()));
+    else
+        descripteur[IMAGEINFOCV_AKAZE_DES] =  cv::Mat();
+   }
 
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getDescriptorChannels() != pOCV->intParam["DescriptorChannels"].valeur)
     pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDescriptorChannels(pOCV->intParam["DescriptorChannels"].valeur);
@@ -1476,8 +1556,14 @@ if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getThreshold() != pOCV->d
 if (pOCV->intParam["image_mask"].valeur == 1)
     pOCV->detecteur["AKAZE"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle(IMAGEINFOCV_AKAZE_DES)), *(op[0]->Descripteur(IMAGEINFOCV_AKAZE_DES)));
 else
-    pOCV->detecteur["AKAZE"]->detectAndCompute(*op[0], UMat(), *(op[0]->PointCle(IMAGEINFOCV_AKAZE_DES)), *(op[0]->Descripteur(IMAGEINFOCV_AKAZE_DES)));
-
+    pOCV->detecteur["AKAZE"]->detectAndCompute(*op[0], cv::noArray(), *(op[0]->PointCle(IMAGEINFOCV_AKAZE_DES)), *(op[0]->Descripteur(IMAGEINFOCV_AKAZE_DES)));
+    if (matches.find(IMAGEINFOCV_AKAZE_DES)!=matches.end())
+        matches[IMAGEINFOCV_AKAZE_DES].clear();
+    else
+    {
+        std::vector<cv::DMatch>  x;
+        matches.insert(std::make_pair(IMAGEINFOCV_AKAZE_DES,x));
+    }
 
 AjoutOpAttribut(pOCV);
 
@@ -1489,8 +1575,17 @@ std::vector<ImageInfoCV	*>ImageInfoCV::AppariePoint(std::vector< ImageInfoCV*> o
 {
 
 cv::Ptr<cv::DescriptorMatcher> descriptorMatcher = cv::DescriptorMatcher::create("BruteForce");
-matches.clear();
-descriptorMatcher->match(*op[0]->Descripteur(), *op[1]->Descripteur(), matches, UMat());
+std::map<int, cv::Mat >::iterator it=descripteur.begin();
+
+for (; it != descripteur.end();it++)
+{
+    if (op[1]->Descripteur(it->first)!=0 && matches.find(it->first)!=matches.end()&& matches[it->first].size()==0)
+    {
+        descriptorMatcher->match(*op[0]->Descripteur(it->first), *op[1]->Descripteur(it->first), matches[it->first], UMat());
+        pointCleApp.insert(make_pair(it->first,*(op[1]->PointCle(it->first))));
+    }
+}
+
 AjoutOpAttribut(pOCV);
 pOCV->imgParam[pOCV->nomOperation + "prec"] = op[1];
 std::vector<ImageInfoCV	*> r;

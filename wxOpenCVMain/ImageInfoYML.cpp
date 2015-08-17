@@ -222,30 +222,30 @@ void ImageInfoCV::write(cv::FileStorage& fs) const                        //Writ
 				}    
 			}
 		}
-	if (kOrb.size()!=0)
-	{
-		fs<<"ORB"<<kOrb;
-	}
-	if (kBrisk.size()!=0)
-	{
-		fs<<"BRISK"<<kBrisk;
-	}
-	if (kAkaze.size()!=0)
-	{
-		fs<<"AKAZE"<<kAkaze;
-	}
-	if (kKaze.size()!=0)
-	{
-		fs<<"KAZE"<<kKaze;
-	}
-	if (kAgast.size()!=0)
-	{
-		fs<<"AGAST"<<kAgast;
-		}    
-	if (kBlob.size()!=0)
-	{
-		fs<<"BLOB"<<kBlob;
-	}
+    auto  it = pointCle.begin();
+    for (; it != pointCle.end(); it++)
+    {
+        switch (it->first){
+        case IMAGEINFOCV_AGAST_DES:
+		    fs<<"AGAST"<<it->second;
+            break;
+        case IMAGEINFOCV_AKAZE_DES:
+		    fs<<"AKAZE"<<it->second;
+            break;
+        case IMAGEINFOCV_BLOB_DES:
+		    fs<<"BLOB"<<it->second;
+            break;
+        case IMAGEINFOCV_BRISK_DES:
+		    fs<<"BRISK"<<it->second;
+            break;
+        case IMAGEINFOCV_KAZE_DES:
+		    fs<<"KAZE"<<it->second;
+            break;
+        case IMAGEINFOCV_ORB_DES:
+		    fs<<"ORB"<<it->second;
+            break;
+        }
+    }
 }
  
  
@@ -329,29 +329,40 @@ else
         }
     }    
     n=fs["ORB"];
+    vector<KeyPoint> cle;
     if (!n.empty())
     {
-        n>>kOrb;
+        n>>cle;
+        pointCle.insert(make_pair(IMAGEINFOCV_ORB_DES,cle));
+        cle.clear();
     }    
     n=fs["BRISK"];
     if (!n.empty())
     {
-        n>>kBrisk;
+        n>>cle;
+        pointCle.insert(make_pair(IMAGEINFOCV_BRISK_DES,cle));
+        cle.clear();
     }    
     n=fs["AKAZE"];
     if (!n.empty())
     {
-        n>>kAkaze;
+        n>>cle;
+        pointCle.insert(make_pair(IMAGEINFOCV_AKAZE_DES,cle));
+        cle.clear();
     }    
     n=fs["KAZE"];
     if (!n.empty())
     {
-        n>>kKaze;
+        n>>cle;
+        pointCle.insert(make_pair(IMAGEINFOCV_KAZE_DES,cle));
+        cle.clear();
     }    
     n=fs["BLOB"];
     if (!n.empty())
     {
-        n>>kBlob;
+        n>>cle;
+        pointCle.insert(make_pair(IMAGEINFOCV_BLOB_DES,cle));
+        cle.clear();
     }    
     fs.release();
 }

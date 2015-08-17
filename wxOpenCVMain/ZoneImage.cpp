@@ -741,42 +741,42 @@ if (osgApp->ModeSouris()==SOURIS_STD)
             menu.Check(MENU_POINTMSER, true);
         menuParametre = true;
         }
-    if (f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
+    if (f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES)->size() != 0)
         {
         menu.AppendCheckItem(MENU_POINTORB, _T("ORB"));
         if (f->TracerPointORB())
             menu.Check(MENU_POINTORB, true);
         menuParametre = true;
         }
-    if (f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
+    if (f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
 		{
 		menu.AppendCheckItem(MENU_POINTBRISK, _T("BRISK"));
 		if (f->TracerPointBRISK())
 			menu.Check(MENU_POINTBRISK, true);
 		menuParametre = true;
 		}
-	if (f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES)->size() != 0)
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_BLOB_DES)->size() != 0)
 		{
 		menu.AppendCheckItem(MENU_POINTBLOB, _T("BLOB"));
 		if (f->TracerPointBLOB())
 			menu.Check(MENU_POINTBLOB, true);
 		menuParametre = true;
 		}
-	if (f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_AKAZE_DES)->size() != 0)
 		{
 		menu.AppendCheckItem(MENU_POINTAKAZE, _T("AKAZE"));
 		if (f->TracerPointAKAZE())
 			menu.Check(MENU_POINTAKAZE, true);
 		menuParametre = true;
 		}
-	if (f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES)->size() != 0)
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES)->size() != 0)
 		{
 		menu.AppendCheckItem(MENU_POINTKAZE, _T("KAZE"));
 		if (f->TracerPointKAZE())
 			menu.Check(MENU_POINTKAZE, true);
 		menuParametre = true;
 		}
-	if (f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES)->size() != 0)
+	if (f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES)->size() != 0)
 		{
 		menu.AppendCheckItem(MENU_POINTAGAST, _T("AGAST"));
 		if (f->TracerPointAGAST())
@@ -1117,7 +1117,7 @@ void FenetrePrincipale::TracerLigneProbaHough(wxBufferedPaintDC &hdc)
 {
 if (!tracerLigneProbaHough || !imAcq)
 	return;
-if (!imAcq->HoughLigneProba())
+if (imAcq->HoughLigneProba()->size()==0)
 	{
 	tracerLigneProbaHough=false;
 	return;
@@ -1142,7 +1142,7 @@ void FenetrePrincipale::TracerBonCoin(wxBufferedPaintDC &hdc)
 {
 if (!tracerBonCoin || !imAcq)
 	return;
-if (!imAcq->BonCoin())
+if (imAcq->BonCoin()->size()==0)
 	{
 	tracerBonCoin=false;
 	return;
@@ -1161,7 +1161,7 @@ for (int k=0;k<imAcq->channels()&& k<3 && k<boncoin->size();k++)
 		hdc.DrawCircle(p1,5);
 		}
 	}
-if (imAcq->CoinRef())
+if (imAcq->CoinRef()->size()!=0)
 	{
 	std::vector<std::vector<cv::Point2f> > *boncoin=imAcq->CoinRef();
 	for (int k=0;k<imAcq->channels()&& k<3 && k<boncoin->size();k++)
@@ -1184,7 +1184,7 @@ void FenetrePrincipale::TracerCercleHough(wxBufferedPaintDC &hdc)
 {
 if (!tracerCercleHough || !imAcq)
 	return;
-if (!imAcq->HoughCercle())
+if (imAcq->HoughCercle()->size()==0)
 	{
 	tracerCercleHough=false;
 	return;
@@ -1537,7 +1537,7 @@ if (!imAcq->PointCle())
 	tracerORBPoint = false;
 	return;
 	}
-std::vector<cv::KeyPoint> *pts = imAcq->PointCle();
+std::vector<cv::KeyPoint> *pts = imAcq->PointCle(IMAGEINFOCV_ORB_DES);
 int fZoomNume, fZoomDeno;
 
 CalculZoom(fZoomNume, fZoomDeno);
@@ -1551,52 +1551,108 @@ for (int i = 0; i < pts->size(); i++)
 	wxPoint p1(RepereImageEcran(p_1));
 	hdc.DrawCircle(p1, 2);
 	}
-
-TracerAppariementPoint(hdc);
+try
+{
+    TracerAppariementPoint(hdc);
+}
+catch (cv::Exception& e)
+		{
+		wxString s(e.msg);
+		}
 }
 
 void FenetrePrincipale::TracerAppariementPoint(wxBufferedPaintDC &hdc)
 {
-if (!tracerORBPoint || !imAcq)
+if ( !imAcq)
 	return;
-if (!imAcq->PointCle() || imAcq->Appariement()->size()==0)
+if (!imAcq->PointCle() ||(imAcq->Appariement()==NULL || imAcq->Appariement()->size()==0))
 	{
 	return;
 	}
 
-std::vector<cv::KeyPoint> *pts1 = imAcq->PointCle();
+std::vector<cv::KeyPoint> *pts1 = imAcq->PointCle(-1);
 std::vector<cv::DMatch> *m = imAcq->Appariement();
 FenetrePrincipale *f;
 ParametreOperation *pOCV;
-if (imAcq->ListeOpAttribut()->find("matchdescriptormatcher") == imAcq->ListeOpAttribut()->end())
-	return;
-pOCV = &imAcq->ListeOpAttribut()->find("matchdescriptormatcher")->second;
-if (pOCV->indOpFenetre.size()>=2)
-    f = osgApp->Fenetre(pOCV->indOpFenetre[1]);
-else
-    f= NULL; 
-if (!f) return;
-std::vector<cv::KeyPoint> *pts2 = f->imAcq->PointCle();
-if (pts2->size()==0)
-	return;
-int fZoomNume, fZoomDeno;
-//wxPoint pos = ClientToScreen(pt);
-CalculZoom(fZoomNume, fZoomDeno);
-wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
-wxScreenDC ecran;
-ecran.StartDrawingOnTop();
-for (int i = 0; i < m->size(); i++)
-	{
-	wxPoint p_1((*pts1)[(*m)[i].queryIdx].pt.x, (*pts1)[(*m)[i].queryIdx].pt.y);
-	wxPoint p1(RepereImageEcran(p_1));
-	wxPoint p_2((*pts2)[(*m)[i].trainIdx].pt.x, (*pts2)[(*m)[i].trainIdx].pt.y);
-	wxPoint p2(f->RepereImageEcran(p_2));
 
-	p1 = ClientToScreen(p1);
-	p2 = f->ClientToScreen(p2);
-	ecran.DrawLine(p1, p2);
-	}
-ecran.EndDrawingOnTop();
+if (m->size()==0)
+    return;
+if (imAcq->ListeOpAttribut()->find("matchdescriptormatcher") == imAcq->ListeOpAttribut()->end())
+{
+    if (imAcq->ListePointCleApp()==NULL)
+        return;
+    std::map<int, std::vector<cv::KeyPoint> >*lApp=imAcq->ListePointCleApp();
+    std::map<int, std::vector<cv::KeyPoint> >::iterator it=imAcq->ListePointCleApp()->begin();
+
+    for (; it != lApp->end();it++)
+    {
+        double max_dist = 0; double min_dist = 100;
+        m = imAcq->Appariement(it->first);
+        wxLogWarning("Match %d ",(int) m->size());
+          //-- Quick calculation of max and min distances between keypoints
+        if (m!=NULL && imAcq->PointCle(it->first) != NULL && imAcq->PointCleApp(it->first) != NULL)
+        {
+            for( int i = 0; i < m->size(); i++ )
+            { 
+                double dist = (*m)[i].distance;
+                if( dist < min_dist ) min_dist = dist;
+                if( dist > max_dist ) max_dist = dist;
+            }
+            pts1 = imAcq->PointCle(it->first);
+            std::vector<cv::KeyPoint> *pts2 = imAcq->PointCleApp(it->first);
+            if (pts2->size()==0)
+	            return;
+            int fZoomNume, fZoomDeno;
+            //wxPoint pos = ClientToScreen(pt);
+            CalculZoom(fZoomNume, fZoomDeno);
+            wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
+            crayon[0].SetWidth(3);
+            hdc.SetPen(crayon[0]);
+            for (int i = 0; i < m->size(); i++)
+                if ((*m)[i].distance<std::max(2*min_dist,(min_dist+max_dist)/3))
+                    {
+	                wxPoint p_1((*pts1)[(*m)[i].queryIdx].pt.x, (*pts1)[(*m)[i].queryIdx].pt.y);
+	                wxPoint p1(RepereImageEcran(p_1));
+	                wxPoint p_2((*pts2)[(*m)[i].trainIdx].pt.x, (*pts2)[(*m)[i].trainIdx].pt.y);
+	                wxPoint p2(RepereImageEcran(p_2));
+
+	                hdc.DrawLine(p1-wxPoint(5,0), p2+wxPoint(5,0));
+	                hdc.DrawLine(p1-wxPoint(0,5), p2+wxPoint(0,5));
+	                }
+        }
+
+    }
+}
+else
+{
+    pOCV = &imAcq->ListeOpAttribut()->find("matchdescriptormatcher")->second;
+    if (pOCV->indOpFenetre.size()>=2)
+        f = osgApp->Fenetre(pOCV->indOpFenetre[1]);
+    else
+        f= NULL; 
+    if (!f) return;
+    std::vector<cv::KeyPoint> *pts2 = f->imAcq->PointCle();
+    if (pts2->size()==0)
+	    return;
+    int fZoomNume, fZoomDeno;
+    //wxPoint pos = ClientToScreen(pt);
+    CalculZoom(fZoomNume, fZoomDeno);
+    wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
+    wxScreenDC ecran;
+    ecran.StartDrawingOnTop();
+    for (int i = 0; i < m->size(); i++)
+	    {
+	    wxPoint p_1((*pts1)[(*m)[i].queryIdx].pt.x, (*pts1)[(*m)[i].queryIdx].pt.y);
+	    wxPoint p1(RepereImageEcran(p_1));
+	    wxPoint p_2((*pts2)[(*m)[i].trainIdx].pt.x, (*pts2)[(*m)[i].trainIdx].pt.y);
+	    wxPoint p2(f->RepereImageEcran(p_2));
+
+	    p1 = ClientToScreen(p1);
+	    p2 = f->ClientToScreen(p2);
+	    ecran.DrawLine(p1, p2);
+	    }
+    ecran.EndDrawingOnTop();
+}
 
 
 }

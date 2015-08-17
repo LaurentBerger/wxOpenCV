@@ -125,13 +125,6 @@ TracerLigneProbaHough(hdc);
 TracerCercleHough(hdc);
 TracerBonCoin(hdc);
 TracerRegionMvt(hdc);
-TracerPointORB(hdc);
-TracerPointORB(hdc);
-TracerPointFREAK(hdc);
-TracerPointBRISK(hdc);
-TracerPointKAZE(hdc);
-TracerPointAKAZE(hdc);
-TracerPointAGAST(hdc);
 TracerPointBLOB(hdc);
 if(feuille->PtCtrl())
     feuille->DrawShapes(hdc);
@@ -140,6 +133,12 @@ if (cam && cam->IsRunning())
 	{
 	wxCriticalSectionLocker enter(travailCam);
 
+    TracerPointORB(hdc);
+    TracerPointFREAK(hdc);
+    TracerPointBRISK(hdc);
+    TracerPointKAZE(hdc);
+    TracerPointAKAZE(hdc);
+    TracerPointAGAST(hdc);
     TracerPointMSER(hdc);
 	TracerFlotOptique(hdc);
     if (statActif)

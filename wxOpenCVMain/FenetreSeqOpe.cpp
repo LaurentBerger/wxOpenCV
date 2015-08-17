@@ -29,7 +29,7 @@ tailleMax=wxSize(0,0);
 panneau = new wxPanel( this,wxID_ANY ,wxPoint(0,0),wxSize(400,400));
 //wxPanel	*panneauCtrl = new wxPanel( panel,  -1, wxDefaultPosition, wxSize(400,400));
 this->osgApp =osg;
-std::map <int,std::vector <ParametreOperation > >  *t=osg->TabSeqOperation();
+seqActif=osg->TabSeqOperation();
 
 new wxStaticText( panneau, -1, _("Sequence"),wxPoint(10,20),wxSize(60,20) );
 new wxButton( panneau,wxID_OK,_("Execute all"),wxPoint(160,20),wxSize(70,20));
@@ -40,20 +40,20 @@ wxButton *b=new wxButton(panneau, IND_FICHIERS , _("Load"), wxPoint(10, 40), wxS
 wxCheckBox *c=new wxCheckBox(panneau, IND_CONFIG, _("Use File Config"), wxPoint(80, 40), wxSize(160, 20));
 c->SetValue(true);
 b->Disable();
-spw->SetRange(0,t->size()-1);
+spw->SetRange(0,seqActif->size()-1);
 spw->SetValue(0);
 nbEtape=100;
-int n=(*t).begin()->first;
-if (nbEtape<(*t)[n].size())
-	nbEtape=(*t)[n].size();
+int n=(*seqActif).begin()->first;
+if (nbEtape<(*seqActif)[n].size())
+	nbEtape=(*seqActif)[n].size();
 nomEtape=new wxString[nbEtape];
 int i=0;
 
-for (std::vector <ParametreOperation >::iterator it = (*t)[n].begin() ; it != (*t)[n].end(); ++it,++i)
+for (std::vector <ParametreOperation >::iterator it = (*seqActif)[n].begin() ; it != (*seqActif)[n].end(); ++it,++i)
     nomEtape[i]=(*it).nomOperation;
-choixOp=new wxListBox( panneau,LISTE_OP_SEQ,wxPoint(80,60),wxSize(150,-1),(*t)[n].size(),nomEtape);
+choixOp=new wxListBox( panneau,LISTE_OP_SEQ,wxPoint(80,60),wxSize(150,-1),(*seqActif)[n].size(),nomEtape);
 choixOp->SetSelection(0);
-InsererCtrlEtape(&((*t)[n][0]));
+InsererCtrlEtape(&((*seqActif)[n][0]));
 Bind(wxEVT_SPINCTRL, &FenetreSequenceOperation::OnSpinEntier,this);
 Bind(wxEVT_SPINCTRLDOUBLE, &FenetreSequenceOperation::OnSpinReel,this);
 Bind(wxEVT_COMMAND_LISTBOX_SELECTED, &FenetreSequenceOperation::OnOpeSelec,this);
@@ -63,6 +63,29 @@ Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreSequenceOperation::OuvrirSequence, th
 Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreSequenceOperation::ComboBox, this);
 Bind(wxEVT_COMMAND_CHECKBOX_CLICKED, &FenetreSequenceOperation::BasculeConfig, this, IND_CONFIG);
     }
+
+
+
+bool FenetreSequenceOperation::IndiceSequence(int &ind)
+{
+    wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
+
+    if (ws==NULL)
+    {
+        ind=-1;
+        return false;
+    }
+    ind = ws->GetValue();
+    return true;
+ }
+    /*!< Indice de la séquence choisie par l'utilisateur*/
+bool FenetreSequenceOperation::IndiceOperation(int &ind)
+{
+   ind=choixOp->GetSelection();
+
+   return true;
+}
+
 
 void FenetreSequenceOperation::InsererCtrlEtape(ParametreOperation *op)
 {
@@ -168,14 +191,17 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 
     if (ParametreOperation::listeParam.find(iti->first) != ParametreOperation::listeParam.end())
         {
-        int nbChaine = pOCV->listeParam[iti->first].size();
+        int nbChaine = pOCV->listeParam[iti->first].size(),valDefaut;
         wxString *choix = new wxString[nbChaine], choixDefaut;
         int i = 0;
         for (std::map <string, int >::iterator iter = pOCV->listeParam[iti->first].begin(); iter != pOCV->listeParam[iti->first].end(); ++iter, ++i)
             {
             choix[i] = iter->first;
             if (iter->second == iti->second.valeur)
+            {
                 choixDefaut = iter->first;
+                valDefaut=i;
+            }
             }
         wxComboBox *cb;
         if ((cb = (wxComboBox*)panneau->FindWindowById(indCombo, panneau)) == NULL)
@@ -187,7 +213,7 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
             {
             cb->Clear();
             cb->Insert(nbChaine, choix, 0);
-            cb->SetSelection(0);
+            cb->SetSelection(valDefaut);
             cb->Move(p);
             cb->Show(true);
             lienCombo.insert(make_pair(indCombo, iti->first));
@@ -362,19 +388,12 @@ wxOsgApp *app=(wxOsgApp *)osgApp;
 if (!osgApp)
 	return;
 int opSelec=w.GetValue();
-std::map <int, std::vector <ParametreOperation > >  *t;
-if (((wxCheckBox*)wxWindow::FindWindowById(IND_CONFIG, panneau))->GetValue())
-    t = app->TabSeqOperation();
-else
-    {
-    t = &seqActive;
-    }
-std::map <int, std::vector <ParametreOperation > >::iterator it = (*t).begin();
-for (int i=0;i<opSelec&& it!=(*t).end();i++,it++);
+std::map <int, std::vector <ParametreOperation > >::iterator it = (*seqActif).begin();
+for (int i=0;i<opSelec&& it!=(*seqActif).end();i++,it++);
 choixOp->Clear();
 if (nbEtape<it->second.size())
 	{
-	nbEtape=(*t)[opSelec].size();
+	nbEtape=(*seqActif)[opSelec].size();
 	delete nomEtape;
 	nomEtape=new wxString[nbEtape];
 	}
@@ -392,52 +411,46 @@ void FenetreSequenceOperation::ComboBox(wxCommandEvent &w)
     wxOsgApp *app = (wxOsgApp *)osgApp;
     if (!osgApp)
         return;
-    wxSpinCtrl *ws = (wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE, panneau);
-    if (ws == NULL)
+    int indSeq;
+    int opSelec;
+    if (!IndiceOperation(opSelec))
+        return;
+    if (!IndiceSequence(indSeq))
         return;
     string nom;
-    int opSelec = choixOp->GetSelection();
 
 
-    std::map <int, std::vector <ParametreOperation > >  *t ;
-
-    if (((wxCheckBox*)wxWindow::FindWindowById(IND_CONFIG, panneau))->GetValue())
-        t = app->TabSeqOperation();
-    else
-        {
-        t = &seqActive;
-        }
-
-    std::map <int, std::vector <ParametreOperation > >::iterator it = (*t).begin();
-    for (int i = 0; i<ws->GetValue(); i++, it++);
     wxComboBox *cb = ((wxComboBox*)w.GetEventObject());
-    ParametreOperation p = it->second[opSelec];
+    ParametreOperation p = (*seqActif)[indSeq][opSelec];
     wxStaticText *st = (wxStaticText*)wxWindow::FindWindowById(w.GetId() - 150, this);
     if (!st)
         throw("wxStaticText undefined");
     if (lienCombo.find(w.GetId()) != lienCombo.end())
         nom = lienCombo[w.GetId()];
-    if (it->second[opSelec].intParam.find(nom) != it->second[opSelec].intParam.end())
+    if (p.intParam.find(nom) != p.intParam.end())
         {
 
         if (ParametreOperation::listeParam.find(nom) != ParametreOperation::listeParam.end())
             {
             int nb = ((wxComboBox*)(w.GetEventObject()))->GetCurrentSelection();
             int i = 0;
-            std::map <string, int  >::iterator iter = it->second[opSelec].listeParam[nom].begin();
-            for (; iter != it->second[opSelec].listeParam[nom].end() && i != nb; ++iter, ++i);
+            std::map <string, int  >::iterator iter = p.listeParam[nom].begin();
+            for (; iter != p.listeParam[nom].end() && i != nb; ++iter, ++i);
             if (i == nb)
-                it->second[opSelec].intParam[nom].valeur = iter->second;
+            {
+                (*seqActif)[indSeq][opSelec].intParam[nom].valeur = iter->second;
+            }
             }
         else
             {
-            if (it->second[opSelec].intParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+            if (p.intParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
                 return;
-            it->second[opSelec].intParam[nom].valeur = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+            (*seqActif)[indSeq][opSelec].intParam[nom].valeur = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+
             }
         }
-    if (OperandePresent(&(it->second)))
-        ExecuterSequence(&(it->second));
+    if (OperandePresent(&((*seqActif)[indSeq])))
+        ExecuterSequence(&((*seqActif)[indSeq]));
 
 }
 
@@ -447,69 +460,62 @@ void FenetreSequenceOperation::OnSpinReel(wxSpinDoubleEvent &w)
 wxOsgApp *app=(wxOsgApp *)osgApp;
 if (!osgApp)
 	return;
-wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
-if (ws==NULL)
-	return;
+int indSeq;
+if (!IndiceSequence(indSeq))
+    return;
+int indOpe;
+if (!IndiceOperation(indOpe))
+    return;
 string nom;
-int opSelec=choixOp->GetSelection();
 
 
-std::map <int, std::vector <ParametreOperation > >  *t;
-if (((wxCheckBox*)wxWindow::FindWindowById(IND_CONFIG, panneau))->GetValue())
-    t = app->TabSeqOperation();
-else
-    {
-    t = &seqActive;
-    }
-std::map <int, std::vector <ParametreOperation > >::iterator it = (*t).begin();
-for (int i=0;i<ws->GetValue();i++,it++);
 
 nom=((wxWindow*)w.GetEventObject())->GetName();
-ParametreOperation p=it->second[opSelec];
+ParametreOperation p=(*seqActif)[indSeq][indOpe];
 wxStaticText *st = (wxStaticText*)wxWindow::FindWindowById(w.GetId() - 100, this);
 if (!st)
 	throw("wxStaticText undefined");
-//nom = st->GetLabel();
-if (it->second[opSelec].doubleParam.find(nom) != it->second[opSelec].doubleParam.end())
+nom = st->GetLabel();
+if (p.doubleParam.find(nom) != p.doubleParam.end())
 {
-	if (it->second[opSelec].doubleParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+	if (p.doubleParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
 		return;
-	it->second[opSelec].doubleParam[nom].valeur = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+	(*seqActif)[indSeq][indOpe].doubleParam[nom].valeur = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
 }
-if (it->second[opSelec].intParam.find(nom) != it->second[opSelec].intParam.end())
+if (p.intParam.find(nom) !=p.intParam.end())
 {
-if (it->second[opSelec].intParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+if (p.intParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
 		return;
-	it->second[opSelec].intParam[nom].valeur = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+	(*seqActif)[indSeq][indOpe].intParam[nom].valeur = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
 }
-if (it->second[opSelec].sizeParam.find(nom.substr(0, nom.length() - 2)) != it->second[opSelec].sizeParam.end())
+if (p.sizeParam.find(nom.substr(0, nom.length() - 2)) != p.sizeParam.end())
 {
 	if ((w.GetId()) % 4 == 0)
 	{
-		if (it->second[opSelec].sizeParam[nom.substr(0, nom.length() - 2)].valeur.width == ((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
+		if (p.sizeParam[nom.substr(0, nom.length() - 2)].valeur.width == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
 			return;
-		it->second[opSelec].sizeParam[nom.substr(0, nom.length() - 2)].valeur.width = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		(*seqActif)[indSeq][indOpe].sizeParam[nom.substr(0, nom.length() - 2)].valeur.width = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
 	}
 	else
 	{
-		if (it->second[opSelec].sizeParam[nom.substr(0, nom.length() - 2)].valeur.height == ((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
+		if (p.sizeParam[nom.substr(0, nom.length() - 2)].valeur.height == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
 			return;
-		it->second[opSelec].sizeParam[nom.substr(0, nom.length() - 2)].valeur.height = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		(*seqActif)[indSeq][indOpe].sizeParam[nom.substr(0, nom.length() - 2)].valeur.height = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
 	}
 }
-if (it->second[opSelec].pointParam.find(nom.substr(0, nom.length() - 2)) != it->second[opSelec].pointParam.end())
+if (p.pointParam.find(nom.substr(0, nom.length() - 2)) != p.pointParam.end())
 {
 	if (nom.substr(nom.length() - 1, 1) == 'x')
 	{
-		if (it->second[opSelec].pointParam[nom.substr(0, nom.length() - 2)].valeur.x == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+		if (p.pointParam[nom.substr(0, nom.length() - 2)].valeur.x == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
 			return;
-		it->second[opSelec].pointParam[nom.substr(0, nom.length() - 2)].valeur.x = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		(*seqActif)[indSeq][indOpe].pointParam[nom.substr(0, nom.length() - 2)].valeur.x = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
 	}
 	else
 	{
-		if (it->second[opSelec].pointParam[nom.substr(0, nom.length() - 2)].valeur.y == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+		if (p.pointParam[nom.substr(0, nom.length() - 2)].valeur.y == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
 			return;
-		it->second[opSelec].pointParam[nom.substr(0, nom.length() - 2)].valeur.y = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		(*seqActif)[indSeq][indOpe].pointParam[nom.substr(0, nom.length() - 2)].valeur.y = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
 	}
 }
 
@@ -517,34 +523,23 @@ if (it->second[opSelec].pointParam.find(nom.substr(0, nom.length() - 2)) != it->
 
 
 
-if (OperandePresent(&(it->second)))
-	ExecuterSequence(&(it->second));
+if (OperandePresent(&((*seqActif)[indSeq])))
+	ExecuterSequence(&((*seqActif)[indSeq]));
 }
 
 
 void FenetreSequenceOperation::OnOpeSelec(wxCommandEvent& event)
 {
-int opSelec;
-wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
-if (ws==NULL)
-	return;
+int indSeq;
+if (!IndiceSequence(indSeq))
+    return;
 if (!osgApp)
 	return;
 wxOsgApp *app=(wxOsgApp *)osgApp;
-std::map <int,std::vector <ParametreOperation > >  *t;
-if (((wxCheckBox*)wxWindow::FindWindowById(IND_CONFIG, panneau))->GetValue())
-    t= app->TabSeqOperation();
-else
-    {
-    t=&seqActive;
-    }
-opSelec=ws->GetValue();
-std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
-for (int i=0;i<opSelec&& it!=(*t).end();i++,it++);
 int indOpe=event.GetInt();
-if (indOpe<0 || indOpe>=it->second.size())
+if (indOpe<0 || indOpe>=(*seqActif)[indSeq].size())
 	return;
-InsererCtrlEtape(&(it->second[indOpe]));
+InsererCtrlEtape(&((*seqActif)[indSeq][indOpe]));
 
 
 }
@@ -559,16 +554,13 @@ wxFileDialog ouverture(NULL, "Ouvrir ", wxEmptyString, wxEmptyString, "*.tif;*.j
 if (ouverture.ShowModal()!=wxID_OK)
 	return;
 ouverture.GetPaths( fichierSelectionnes);
-std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
 int opSelec;
-wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
-if (ws==NULL)
-	return;
-opSelec=ws->GetValue();
-std::map <int,std::vector <ParametreOperation > >::iterator itRef=(*t).begin();
-for (int i=0;i<opSelec && itRef!=(*t).end();i++,itRef++);
+if (!IndiceOperation(opSelec))
+    return;
+std::map <int,std::vector <ParametreOperation > >::iterator itRef=(*seqActif).begin();
+for (int i=0;i<opSelec && itRef!=(*seqActif).end();i++,itRef++);
 
-if (itRef!=(*t).end())
+if (itRef!=(*seqActif).end())
 	for (int i=0;i<fichierSelectionnes.size();i++)
 		{
 		vector<ImageInfoCV*> r;
@@ -641,20 +633,14 @@ wxFrame::OnCloseWindow(event);
 void FenetreSequenceOperation::Executer(wxCommandEvent& event)
 {
 int opSelec;
-wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
-if (ws==NULL)
-	return;
+if (!IndiceSequence(opSelec))
+    return;
 if (!osgApp)
 	return;
 wxOsgApp *app=(wxOsgApp *)osgApp;
-std::map <int,std::vector <ParametreOperation > >  *t=app->TabSeqOperation();
-opSelec=ws->GetValue();
-std::map <int,std::vector <ParametreOperation > >::iterator it=(*t).begin();
-for (int i=0;i<opSelec&& it!=(*t).end();i++,it++);
-if (((wxCheckBox*)wxWindow::FindWindowById(IND_CONFIG, panneau))->GetValue())
-    ExecuterSequence(&(it->second));
-else
-    ExecuterSequence(&seqActive[0]);
+std::map <int,std::vector <ParametreOperation > >::iterator it=(*seqActif).begin();
+for (int i=0;i<opSelec&& it!=(*seqActif).end();i++,it++);
+ExecuterSequence(&(it->second));
 
 }
 
@@ -714,13 +700,11 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 	}
 if (r.size()!=0)
 	{
-	wxSpinCtrl *ws=(wxSpinCtrl *)wxWindow::FindWindowById(IND_OPE,panneau);
-	wxCheckBox *wb=(wxCheckBox *)wxWindow::FindWindowById(IND_HYPER-2,panneau);
 	int opSelec;
-	if (ws)
-		opSelec=ws->GetValue();
-	else
-		opSelec=9999;
+    if (!IndiceOperation(opSelec))
+        opSelec=9999;
+	wxCheckBox *wb=(wxCheckBox *)wxWindow::FindWindowById(IND_HYPER-2,panneau);
+		
 	FenetrePrincipale *f;
 	if (wb->GetValue() && idFenetre.find(opSelec)!=idFenetre.end() && app->Graphique(idFenetre[opSelec].second) )
 		{
@@ -826,7 +810,7 @@ if (!fs.isOpened())
     return;
 }
 int indEtape=0;
-seqActive.clear();
+seqFichier.clear();
 string s("Operation");
 do
 {
@@ -837,14 +821,14 @@ do
     {
         p.read(fs[s]);
         p.InitPtrFonction();
-        seqActive[0].push_back(p);
+        seqFichier[0].push_back(p);
     }
     indEtape++;
 }
 while (!fs[s].empty());
-InsererCtrlEtape(&(seqActive[0][0]));
+seqActif = &seqFichier;
+InsererCtrlEtape(&(seqFichier[0][0]));
 wxSpinCtrl *spw = (wxSpinCtrl*) wxWindow::FindWindowById(IND_OPE, panneau);
-wxWindow::FindWindowById(IND_OPE, panneau);
 wxSpinEvent evt;
 evt.SetEventObject(spw);
 spw->SetRange(0, 0);
@@ -867,8 +851,8 @@ else
     b->Disable();
     wxOsgApp *app = (wxOsgApp *)osgApp;
 
-    std::map <int, std::vector <ParametreOperation > >  *t = app->TabSeqOperation();
-    InsererCtrlEtape(&((*t)[0][0]));
+    seqActif = app->TabSeqOperation();
+    InsererCtrlEtape(&((*seqActif)[0][0]));
     wxSpinCtrl *spw = (wxSpinCtrl*)wxWindow::FindWindowById(IND_OPE, panneau);
     wxWindow::FindWindowById(IND_OPE, panneau);
     wxSpinEvent evt;

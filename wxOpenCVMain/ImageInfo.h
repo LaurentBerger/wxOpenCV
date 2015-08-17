@@ -34,6 +34,7 @@ typedef short CodeErreur;
 #define IMAGEINFOCV_BLOB_DES 3
 #define IMAGEINFOCV_KAZE_DES 4
 #define IMAGEINFOCV_AGAST_DES 5
+#define IMAGEINFOCV_PRECEDENT_DES 6
 
 
 class ImageInfoCV : public cv::UMat {
@@ -134,19 +135,11 @@ std::vector<std::vector<cv::Vec4i> > ligneP;		/*<! http://docs.opencv.org/module
 std::vector<std::vector<cv::Vec2f> > ligne;		/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#houghlines */
 std::vector<std::vector<cv::Point2f> > boncoin;	/*<! http://docs.opencv.org/modules/imgproc/doc/feature_detection.html#goodfeaturestotrack */
 std::vector<std::vector<cv::Point2f> > coinRef;	/*<! Les pixels de références de l'image pour calcul du flot optique */
-std::vector<cv::KeyPoint> kOrb;		/*<! Point clef de ORB */
-std::vector<cv::KeyPoint> kBrisk;	/*<! Point clef de BRISK */
-std::vector<cv::KeyPoint> kAkaze;	/*<! Point clef de Akaze */
-std::vector<cv::KeyPoint> kKaze;	/*<! Point clef de kaze */
-std::vector<cv::KeyPoint> kAgast;	/*<! Point clef de kaze */
-std::vector<cv::KeyPoint> kBlob;	/*<! Point clef de blob */
+std::map<int,std::vector<cv::KeyPoint> > pointCle;		/*<! map des Points clef avec comme entree IMAGEINFOCV_xxxxxx_DES */
+std::map<int,std::vector<cv::KeyPoint> > pointCleApp;		/*<! map des Points clef appariés (video ou stereo) avec comme entree IMAGEINFOCV_xxxxxx_DES */
 std::vector<std::vector <cv::Point > > kMser;	/*<! region et point détectés par mser */
-cv::UMat	descORB;				    /*<! Descripteur associé à l'un des points clé ORB*/
-cv::UMat	descAKAZE;				    /*<! Descripteur associé à l'un des points clé AKAZE*/
-cv::UMat	descKAZE;				    /*<! Descripteur associé à l'un des points clé KAZE*/
-cv::UMat	descAGAST;				    /*<! Descripteur associé à l'un des points clé KAZE*/
-cv::UMat	descBRISK;				    /*<! Descripteur associé à l'un des points clé BRISK*/
-std::vector<cv::DMatch> matches;	/*<! Descripteur appariés */
+std::map<int,cv::Mat	 > descripteur;		/*<! map des descripteurs avec comme entree IMAGEINFOCV_xxxxxx_DES */
+std::map <int,std::vector<cv::DMatch> > matches;	    /*<! map Descripteur appariés avec entrée IMAGEINFOCV_xxxxxx_DES */
 
 cv::UMat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcopticalFlowFarnerBack*/
 cv::UMat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
@@ -487,7 +480,7 @@ std::vector<cv::Mat>	*CentreGComposante(){return &centreGComposante;};
 cv::UMat	*FlotOptique(bool init=false){if (init ) {delete []flotOptique;flotOptique= new cv::UMat[channels()];} return flotOptique;};
 cv::UMat *Ponderation(bool init = false){ if (init) { delete ponderation; ponderation = new cv::UMat();  cv::createHanningWindow(*ponderation, this->size(), CV_64F); } return ponderation; };
 cv::UMat *Silh(bool init = false){ if (init) { delete silh; silh = new cv::UMat(); } return silh; };
-cv::UMat *Descripteur(char =-1);
+cv::Mat *Descripteur(char =-1);
 std::vector<std::vector<cv::Moments>> *MomentComposante(){ return &moment; };
 std::vector<std::vector<cv::Moments>> *MomentCtr(){ return &momentCtr; };
 
@@ -504,8 +497,12 @@ std::vector<std::vector<cv::Point2f> >*CoinRef(bool init = false){ if (init && c
 std::vector<double> *Angle(){ return &angle; };
 std::vector<cv::Rect> *RegionMvt(){ return &regionsMvt; };
 std::vector<cv::KeyPoint> *PointCle(char type = 0);
+std::vector<cv::KeyPoint> *PointCleApp(char type = 0);
 std::vector<std::vector<cv::Point> > *PointCleMSER(){return &kMser;};
-std::vector<cv::DMatch> *Appariement(){ return &matches; };
+std::map<int,std::vector<cv::DMatch>> *ListeAppariement(){return &matches;};
+std::map<int,std::vector<cv::KeyPoint>> *ListePointCle(){return &pointCle;};
+std::map<int,std::vector<cv::KeyPoint>> *ListePointCleApp(){return &pointCleApp;};
+std::vector<cv::DMatch> *Appariement(char =-1);
 ParametreOperation *ParamOCVUpdateMotionHistory(ParametreOperation *p = NULL);
 ParametreOperation *AjoutOpAttribut(ParametreOperation *p);
 std::map<std::string,ParametreOperation> *ListeOpAttribut(){return &listeOpAttribut;};

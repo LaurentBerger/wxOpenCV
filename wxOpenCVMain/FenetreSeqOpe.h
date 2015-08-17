@@ -19,11 +19,12 @@ class FenetreSequenceOperation : public  wxFrame
 private :
 FenetrePrincipale				*fenMere;
 void							*osgApp;
+std::map <int,std::vector <ParametreOperation > >  *seqActif;
 std::map<wxWindow*,std::pair<wxString,int> >	    listeOnglet;/*<! Onglet associé à chaque opération */
 std::vector<std::pair<Operation*,int> >			    listeOp;	/*<! Onglet associé à chaque opération */
 std::map<int, std::pair< FenetrePrincipale* ,int> >	idFenetre;	/*<! fenetre crée par l'éxécution de la séquence*/
-std::map <int, std::vector <ParametreOperation > >  seqActive;
-std::map<int, wxString>                              lienCombo; /*<! Lien entre numéro combo et nom de la proriété de l'opération*/
+std::map <int, std::vector <ParametreOperation > >  seqFichier;
+std::map<int, wxString>                             lienCombo; /*<! Lien entre numéro combo et nom de la proriété de l'opération*/
 
 wxPanel							*panneau;	/*!< Pointeur sur le panneau contenant le classeur */
 wxNotebook						*classeur;	/*!< le classeur avec ses différents onglets*/
@@ -55,9 +56,13 @@ void  OnSpinMoins(wxSpinEvent& event);
 void  OnSpinPlus(wxSpinEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 void ComboBox(wxCommandEvent &evt);
-/*!<Sélection d'un parametre à l'aide de sa description */
+    /*!<Sélection d'un parametre à l'aide de sa description */
 void  OnOpeSelec(wxCommandEvent& event);
 	/*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
+bool IndiceSequence(int &ind);
+    /*!< Indice de la séquence choisie par l'utilisateur*/
+bool IndiceOperation(int &ind);
+    /*!< Indice de lpération choisie par l'utilisateur dans la séquence*/
 void  SelectionFichier(wxCommandEvent& event);
 /*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
 void  OuvrirSequence(wxCommandEvent& event);
