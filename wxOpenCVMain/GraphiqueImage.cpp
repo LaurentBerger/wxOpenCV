@@ -147,6 +147,13 @@ if (cam && cam->IsRunning())
 else
     {
 
+    TracerPointORB(hdc);
+    TracerPointFREAK(hdc);
+    TracerPointBRISK(hdc);
+    TracerPointKAZE(hdc);
+    TracerPointAKAZE(hdc);
+    TracerPointAGAST(hdc);
+    TracerPointMSER(hdc);
     if (statActif)
         imgStatIm->Plot(modeCamera);
     TracerPointMSER(hdc);

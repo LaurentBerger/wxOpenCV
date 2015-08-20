@@ -221,6 +221,14 @@ listeParam["distance_type"].insert(std::pair<string,int>("distance = c^2(|x|/c-l
 listeParam["distance_type"].insert(std::pair<string,int>("distance = c^2/2(1-exp(-(x/c)^2)), c = 2.9846",cv::DIST_WELSCH));
 listeParam["distance_type"].insert(std::pair<string,int>("distance = |x|<c ? x^2/2 : c(|x|-c/2), c=1.345",cv::DIST_HUBER));
 
+listeParam["normType"].insert(std::pair<string,int>(_("L1 Distance").ToStdString(),cv::NORM_L1));
+listeParam["normType"].insert(std::pair<string,int>(_("L2 Distance").ToStdString(),cv::NORM_L2));
+listeParam["normType"].insert(std::pair<string,int>(_("Hamming distance").ToStdString(),cv::NORM_HAMMING));
+listeParam["normType"].insert(std::pair<string,int>(_("Hamming 2 distance").ToStdString(),cv::NORM_HAMMING2));
+listeParam["normType"].insert(std::pair<string,int>(_("auto").ToStdString(),-1));
+
+
+
 listeParam["connectivity"].insert(std::pair<string,int>(_("4-connex").ToStdString(),4));
 listeParam["connectivity"].insert(std::pair<string,int>(_("8-connex").ToStdString(),8));
 
@@ -568,6 +576,10 @@ if (s == "cornerharris")
 if (s == "matchdescriptormatcher")
 	{
     intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["normType"] = DomaineParametreOp<int>(4, 0, 1, 1);
+
+    intParam["crossCheck"] = DomaineParametreOp<int>(0, 0, 1, 1);
+//    intParam["Matcher"] = DomaineParametreOp<int>(0, 0, 1, 1);
     opAttribut = true;
 	opVideo = true;
 	nomOperation = s;

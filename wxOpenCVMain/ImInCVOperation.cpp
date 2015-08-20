@@ -1574,15 +1574,53 @@ return r;
 std::vector<ImageInfoCV	*>ImageInfoCV::AppariePoint(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 
-cv::Ptr<cv::DescriptorMatcher> descriptorMatcher = cv::DescriptorMatcher::create("BruteForce");
+cv::Ptr<cv::DescriptorMatcher> descriptorMatcher; // brute force
+
 std::map<int, cv::Mat >::iterator it=descripteur.begin();
 
 for (; it != descripteur.end();it++)
 {
     if (op[1]->Descripteur(it->first)!=0 && matches.find(it->first)!=matches.end()&& matches[it->first].size()==0)
     {
-        descriptorMatcher->match(*op[0]->Descripteur(it->first), *op[1]->Descripteur(it->first), matches[it->first], UMat());
-        pointCleApp.insert(make_pair(it->first,*(op[1]->PointCle(it->first))));
+        if (pOCV->intParam["normType"].valeur == -1)
+
+            switch (it->first){
+            case IMAGEINFOCV_ORB_DES:
+                if (listeOpAttribut.find("orbfeatures2d") != listeOpAttribut.end())
+                {
+                    if (listeOpAttribut["orbfeatures2d"].intParam["WTA_K"].valeur==3 || listeOpAttribut["orbfeatures2d"].intParam["WTA_K"].valeur==4)
+                        descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming(2)");
+                    else
+                        descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+                }
+                else
+                        descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+                break;
+            case IMAGEINFOCV_AKAZE_DES:
+                if (listeOpAttribut.find("akazefeatures2d") != listeOpAttribut.end())
+                {
+                    descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+                }
+                else
+                    descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+                break;
+            case IMAGEINFOCV_AGAST_DES:
+                break;
+            case IMAGEINFOCV_BLOB_DES:
+                break;
+            case IMAGEINFOCV_BRISK_DES:
+                descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+                break;
+            case IMAGEINFOCV_KAZE_DES:
+                descriptorMatcher = cv::DescriptorMatcher::create("BruteForce");
+                break;
+            }
+        else 
+            descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+
+    descriptorMatcher->match(*op[0]->Descripteur(it->first), *op[1]->Descripteur(it->first), matches[it->first], UMat());
+
+    pointCleApp.insert(make_pair(it->first,*(op[1]->PointCle(it->first))));
     }
 }
 
