@@ -1,3 +1,4 @@
+#include "dragicon.xpm"
 #include "FenetrePrincipale.h"
 #include "imagestat.h"
 //#include "OutilsImage.h"
@@ -105,7 +106,7 @@ bool DragShape::Draw(wxDC& dc, bool highlight)
         wxPoint ptImg(m_pos.x, m_pos.y),pt;
         //((ZoneImage*)zoneImage)->PrepareDC(dc);
         pt=((ZoneImage*)zoneImage)->FenMere()->RepereImageEcran(ptImg);
-        
+
         dc.Blit(pt.x, pt.y, m_bitmap.GetWidth(), m_bitmap.GetHeight(),
             & memDC, 0, 0, wxCOPY, true);
 
@@ -122,8 +123,8 @@ bool DragShape::Draw(wxDC& dc, bool highlight)
         return false;
 }
 
-void DragShape::SetPosition(const wxPoint& pos,bool pasDeMaj) 
-{ 
+void DragShape::SetPosition(const wxPoint& pos,bool pasDeMaj)
+{
     m_pos = pos;
     if (fenAlgo != NULL && pasDeMaj)
     {
@@ -230,7 +231,7 @@ void ZoneImage::GestionCurseurSourisGlisser(wxMouseEvent &event)
         // Finish dragging
 		ArreterDragging(event);
     }
-    else if (event.Dragging() && m_dragMode != TEST_DRAG_NONE)    
+    else if (event.Dragging() && m_dragMode != TEST_DRAG_NONE)
     {
         if (m_dragMode == TEST_DRAG_START)
         {
