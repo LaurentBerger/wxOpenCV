@@ -164,6 +164,30 @@ BarreEtat.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.s
 .PHONY : BarreEtat.cpp.s
 
+CalcMoment.o: CalcMoment.cpp.o
+.PHONY : CalcMoment.o
+
+# target to build an object file
+CalcMoment.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o
+.PHONY : CalcMoment.cpp.o
+
+CalcMoment.i: CalcMoment.cpp.i
+.PHONY : CalcMoment.i
+
+# target to preprocess a source file
+CalcMoment.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.i
+.PHONY : CalcMoment.cpp.i
+
+CalcMoment.s: CalcMoment.cpp.s
+.PHONY : CalcMoment.s
+
+# target to generate assembly for a file
+CalcMoment.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.s
+.PHONY : CalcMoment.cpp.s
+
 CameraAndor.o: CameraAndor.cpp.o
 .PHONY : CameraAndor.o
 
@@ -452,6 +476,30 @@ FenetreInfo.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreInfo.cpp.s
 .PHONY : FenetreInfo.cpp.s
 
+FenetreOperande.o: FenetreOperande.cpp.o
+.PHONY : FenetreOperande.o
+
+# target to build an object file
+FenetreOperande.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o
+.PHONY : FenetreOperande.cpp.o
+
+FenetreOperande.i: FenetreOperande.cpp.i
+.PHONY : FenetreOperande.i
+
+# target to preprocess a source file
+FenetreOperande.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.i
+.PHONY : FenetreOperande.cpp.i
+
+FenetreOperande.s: FenetreOperande.cpp.s
+.PHONY : FenetreOperande.s
+
+# target to generate assembly for a file
+FenetreOperande.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.s
+.PHONY : FenetreOperande.cpp.s
+
 FenetrePalette.o: FenetrePalette.cpp.o
 .PHONY : FenetrePalette.o
 
@@ -475,6 +523,30 @@ FenetrePalette.s: FenetrePalette.cpp.s
 FenetrePalette.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePalette.cpp.s
 .PHONY : FenetrePalette.cpp.s
+
+FenetrePano.o: FenetrePano.cpp.o
+.PHONY : FenetrePano.o
+
+# target to build an object file
+FenetrePano.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o
+.PHONY : FenetrePano.cpp.o
+
+FenetrePano.i: FenetrePano.cpp.i
+.PHONY : FenetrePano.i
+
+# target to preprocess a source file
+FenetrePano.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.i
+.PHONY : FenetrePano.cpp.i
+
+FenetrePano.s: FenetrePano.cpp.s
+.PHONY : FenetrePano.s
+
+# target to generate assembly for a file
+FenetrePano.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.s
+.PHONY : FenetrePano.cpp.s
 
 FenetrePrincipaleClavier.o: FenetrePrincipaleClavier.cpp.o
 .PHONY : FenetrePrincipaleClavier.o
@@ -523,6 +595,30 @@ FenetreRegion.s: FenetreRegion.cpp.s
 FenetreRegion.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreRegion.cpp.s
 .PHONY : FenetreRegion.cpp.s
+
+FenetreSeqOpe.o: FenetreSeqOpe.cpp.o
+.PHONY : FenetreSeqOpe.o
+
+# target to build an object file
+FenetreSeqOpe.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o
+.PHONY : FenetreSeqOpe.cpp.o
+
+FenetreSeqOpe.i: FenetreSeqOpe.cpp.i
+.PHONY : FenetreSeqOpe.i
+
+# target to preprocess a source file
+FenetreSeqOpe.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.i
+.PHONY : FenetreSeqOpe.cpp.i
+
+FenetreSeqOpe.s: FenetreSeqOpe.cpp.s
+.PHONY : FenetreSeqOpe.s
+
+# target to generate assembly for a file
+FenetreSeqOpe.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.s
+.PHONY : FenetreSeqOpe.cpp.s
 
 FenetreZoom.o: FenetreZoom.cpp.o
 .PHONY : FenetreZoom.o
@@ -764,6 +860,30 @@ ImInCVOperation.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVOperation.cpp.s
 .PHONY : ImInCVOperation.cpp.s
 
+ImageInfoYML.o: ImageInfoYML.cpp.o
+.PHONY : ImageInfoYML.o
+
+# target to build an object file
+ImageInfoYML.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o
+.PHONY : ImageInfoYML.cpp.o
+
+ImageInfoYML.i: ImageInfoYML.cpp.i
+.PHONY : ImageInfoYML.i
+
+# target to preprocess a source file
+ImageInfoYML.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.i
+.PHONY : ImageInfoYML.cpp.i
+
+ImageInfoYML.s: ImageInfoYML.cpp.s
+.PHONY : ImageInfoYML.s
+
+# target to generate assembly for a file
+ImageInfoYML.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.s
+.PHONY : ImageInfoYML.cpp.s
+
 ImageStat.o: ImageStat.cpp.o
 .PHONY : ImageStat.o
 
@@ -812,6 +932,30 @@ InterfaceQuadriqueMulti.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.s
 .PHONY : InterfaceQuadriqueMulti.cpp.s
 
+LigneMediane.o: LigneMediane.cpp.o
+.PHONY : LigneMediane.o
+
+# target to build an object file
+LigneMediane.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o
+.PHONY : LigneMediane.cpp.o
+
+LigneMediane.i: LigneMediane.cpp.i
+.PHONY : LigneMediane.i
+
+# target to preprocess a source file
+LigneMediane.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.i
+.PHONY : LigneMediane.cpp.i
+
+LigneMediane.s: LigneMediane.cpp.s
+.PHONY : LigneMediane.s
+
+# target to generate assembly for a file
+LigneMediane.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.s
+.PHONY : LigneMediane.cpp.s
+
 NanoSurface.o: NanoSurface.cpp.o
 .PHONY : NanoSurface.o
 
@@ -835,6 +979,30 @@ NanoSurface.s: NanoSurface.cpp.s
 NanoSurface.cpp.s:
 	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.s
 .PHONY : NanoSurface.cpp.s
+
+ParametreOperation.o: ParametreOperation.cpp.o
+.PHONY : ParametreOperation.o
+
+# target to build an object file
+ParametreOperation.cpp.o:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o
+.PHONY : ParametreOperation.cpp.o
+
+ParametreOperation.i: ParametreOperation.cpp.i
+.PHONY : ParametreOperation.i
+
+# target to preprocess a source file
+ParametreOperation.cpp.i:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.i
+.PHONY : ParametreOperation.cpp.i
+
+ParametreOperation.s: ParametreOperation.cpp.s
+.PHONY : ParametreOperation.s
+
+# target to generate assembly for a file
+ParametreOperation.cpp.s:
+	cd /home/lb/Documents/wxopencv && $(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.s
+.PHONY : ParametreOperation.cpp.s
 
 PlanReference.o: PlanReference.cpp.o
 .PHONY : PlanReference.o
@@ -1067,6 +1235,9 @@ help:
 	@echo "... BarreEtat.o"
 	@echo "... BarreEtat.i"
 	@echo "... BarreEtat.s"
+	@echo "... CalcMoment.o"
+	@echo "... CalcMoment.i"
+	@echo "... CalcMoment.s"
 	@echo "... CameraAndor.o"
 	@echo "... CameraAndor.i"
 	@echo "... CameraAndor.s"
@@ -1103,15 +1274,24 @@ help:
 	@echo "... FenetreInfo.o"
 	@echo "... FenetreInfo.i"
 	@echo "... FenetreInfo.s"
+	@echo "... FenetreOperande.o"
+	@echo "... FenetreOperande.i"
+	@echo "... FenetreOperande.s"
 	@echo "... FenetrePalette.o"
 	@echo "... FenetrePalette.i"
 	@echo "... FenetrePalette.s"
+	@echo "... FenetrePano.o"
+	@echo "... FenetrePano.i"
+	@echo "... FenetrePano.s"
 	@echo "... FenetrePrincipaleClavier.o"
 	@echo "... FenetrePrincipaleClavier.i"
 	@echo "... FenetrePrincipaleClavier.s"
 	@echo "... FenetreRegion.o"
 	@echo "... FenetreRegion.i"
 	@echo "... FenetreRegion.s"
+	@echo "... FenetreSeqOpe.o"
+	@echo "... FenetreSeqOpe.i"
+	@echo "... FenetreSeqOpe.s"
 	@echo "... FenetreZoom.o"
 	@echo "... FenetreZoom.i"
 	@echo "... FenetreZoom.s"
@@ -1142,15 +1322,24 @@ help:
 	@echo "... ImInCVOperation.o"
 	@echo "... ImInCVOperation.i"
 	@echo "... ImInCVOperation.s"
+	@echo "... ImageInfoYML.o"
+	@echo "... ImageInfoYML.i"
+	@echo "... ImageInfoYML.s"
 	@echo "... ImageStat.o"
 	@echo "... ImageStat.i"
 	@echo "... ImageStat.s"
 	@echo "... InterfaceQuadriqueMulti.o"
 	@echo "... InterfaceQuadriqueMulti.i"
 	@echo "... InterfaceQuadriqueMulti.s"
+	@echo "... LigneMediane.o"
+	@echo "... LigneMediane.i"
+	@echo "... LigneMediane.s"
 	@echo "... NanoSurface.o"
 	@echo "... NanoSurface.i"
 	@echo "... NanoSurface.s"
+	@echo "... ParametreOperation.o"
+	@echo "... ParametreOperation.i"
+	@echo "... ParametreOperation.s"
 	@echo "... PlanReference.o"
 	@echo "... PlanReference.i"
 	@echo "... PlanReference.s"

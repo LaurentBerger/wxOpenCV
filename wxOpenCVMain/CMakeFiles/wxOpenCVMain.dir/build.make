@@ -72,9 +72,32 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Fenetre3D.cpp.o.provides: wxOpenCVMain/
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Fenetre3D.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Fenetre3D.cpp.o
 
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o: wxOpenCVMain/FenetreSeqOpe.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_2)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreSeqOpe.cpp
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.i"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreSeqOpe.cpp > CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.i
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.s"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreSeqOpe.cpp -o CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.s
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o.requires:
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o.requires
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o.provides: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o.requires
+	$(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o.provides.build
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o.provides
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o
+
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o: wxOpenCVMain/CameraOpenCV.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_2)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_3)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/CameraOpenCV.cpp
 
@@ -95,9 +118,55 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o.provides: wxOpenCVMa
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o
 
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o: wxOpenCVMain/ParametreOperation.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_4)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ParametreOperation.cpp
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.i"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/lb/Documents/wxopencv/wxOpenCVMain/ParametreOperation.cpp > CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.i
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.s"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/lb/Documents/wxopencv/wxOpenCVMain/ParametreOperation.cpp -o CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.s
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o.requires:
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o.requires
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o.provides: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o.requires
+	$(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o.provides.build
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o.provides
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o: wxOpenCVMain/FenetreOperande.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_5)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreOperande.cpp
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.i"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreOperande.cpp > CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.i
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.s"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreOperande.cpp -o CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.s
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o.requires:
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o.requires
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o.provides: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o.requires
+	$(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o.provides.build
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o.provides
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o
+
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ZoneImage.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ZoneImage.cpp.o: wxOpenCVMain/ZoneImage.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_3)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_6)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ZoneImage.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ZoneImage.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ZoneImage.cpp
 
@@ -120,7 +189,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ZoneImage.cpp.o.provides.build: wxOpenC
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.o: wxOpenCVMain/FenetreFocus.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_4)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_7)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreFocus.cpp
 
@@ -143,7 +212,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.o.provides.build: wxOp
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreInfo.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreInfo.cpp.o: wxOpenCVMain/FenetreInfo.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_5)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_8)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreInfo.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreInfo.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreInfo.cpp
 
@@ -166,7 +235,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreInfo.cpp.o.provides.build: wxOpe
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Tableur.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Tableur.cpp.o: wxOpenCVMain/Tableur.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_6)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_9)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Tableur.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/Tableur.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/Tableur.cpp
 
@@ -189,7 +258,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Tableur.cpp.o.provides.build: wxOpenCVM
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreCoupe.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreCoupe.cpp.o: wxOpenCVMain/FenetreCoupe.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_7)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_10)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreCoupe.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreCoupe.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreCoupe.cpp
 
@@ -212,7 +281,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreCoupe.cpp.o.provides.build: wxOp
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraAndor.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraAndor.cpp.o: wxOpenCVMain/CameraAndor.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_8)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_11)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraAndor.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/CameraAndor.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/CameraAndor.cpp
 
@@ -235,7 +304,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraAndor.cpp.o.provides.build: wxOpe
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCV.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCV.cpp.o: wxOpenCVMain/ImInCV.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_9)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_12)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCV.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ImInCV.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ImInCV.cpp
 
@@ -258,7 +327,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCV.cpp.o.provides.build: wxOpenCVMa
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o: wxOpenCVMain/BarreEtat.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_10)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_13)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/BarreEtat.cpp
 
@@ -279,9 +348,32 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o.provides: wxOpenCVMain/
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o
 
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o: wxOpenCVMain/LigneMediane.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_14)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/LigneMediane.cpp
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.i"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/lb/Documents/wxopencv/wxOpenCVMain/LigneMediane.cpp > CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.i
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.s"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/lb/Documents/wxopencv/wxOpenCVMain/LigneMediane.cpp -o CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.s
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o.requires:
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o.requires
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o.provides: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o.requires
+	$(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o.provides.build
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o.provides
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o
+
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVOperation.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVOperation.cpp.o: wxOpenCVMain/ImInCVOperation.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_11)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_15)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVOperation.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ImInCVOperation.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ImInCVOperation.cpp
 
@@ -304,7 +396,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVOperation.cpp.o.provides.build: w
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ControleCamera.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ControleCamera.cpp.o: wxOpenCVMain/ControleCamera.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_12)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_16)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ControleCamera.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ControleCamera.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ControleCamera.cpp
 
@@ -327,7 +419,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ControleCamera.cpp.o.provides.build: wx
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageStat.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageStat.cpp.o: wxOpenCVMain/ImageStat.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_13)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_17)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageStat.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ImageStat.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ImageStat.cpp
 
@@ -350,7 +442,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageStat.cpp.o.provides.build: wxOpenC
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/HorodatageSequence.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/HorodatageSequence.cpp.o: wxOpenCVMain/HorodatageSequence.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_14)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_18)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/HorodatageSequence.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/HorodatageSequence.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/HorodatageSequence.cpp
 
@@ -373,7 +465,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/HorodatageSequence.cpp.o.provides.build
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GestioncurseurSourisGlisser.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GestioncurseurSourisGlisser.cpp.o: wxOpenCVMain/GestioncurseurSourisGlisser.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_15)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_19)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GestioncurseurSourisGlisser.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/GestioncurseurSourisGlisser.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/GestioncurseurSourisGlisser.cpp
 
@@ -396,7 +488,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GestioncurseurSourisGlisser.cpp.o.provi
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePalette.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePalette.cpp.o: wxOpenCVMain/FenetrePalette.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_16)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_20)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePalette.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetrePalette.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetrePalette.cpp
 
@@ -419,7 +511,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePalette.cpp.o.provides.build: wx
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/IMulti.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/IMulti.cpp.o: wxOpenCVMain/IMulti.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_17)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_21)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/IMulti.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/IMulti.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/IMulti.cpp
 
@@ -442,7 +534,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/IMulti.cpp.o.provides.build: wxOpenCVMa
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.o: wxOpenCVMain/osgviewerWX.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_18)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_22)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/osgviewerWX.cpp
 
@@ -465,7 +557,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.o.provides.build: wxOpe
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o: wxOpenCVMain/ImCvMinMAx.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_19)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_23)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ImCvMinMAx.cpp
 
@@ -486,9 +578,32 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o.provides: wxOpenCVMain
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o
 
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o: wxOpenCVMain/ImageInfoYML.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_24)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ImageInfoYML.cpp
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.i"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/lb/Documents/wxopencv/wxOpenCVMain/ImageInfoYML.cpp > CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.i
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.s"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/lb/Documents/wxopencv/wxOpenCVMain/ImageInfoYML.cpp -o CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.s
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o.requires:
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o.requires
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o.provides: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o.requires
+	$(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o.provides.build
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o.provides
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o
+
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.o: wxOpenCVMain/InterfaceQuadriqueMulti.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_20)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_25)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/InterfaceQuadriqueMulti.cpp
 
@@ -511,7 +626,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.o.provides.
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.o: wxOpenCVMain/NanoSurface.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_21)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_26)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/NanoSurface.cpp
 
@@ -534,7 +649,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.o.provides.build: wxOpe
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GestionZone.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GestionZone.cpp.o: wxOpenCVMain/GestionZone.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_22)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_27)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GestionZone.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/GestionZone.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/GestionZone.cpp
 
@@ -557,7 +672,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GestionZone.cpp.o.provides.build: wxOpe
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CaptureInfo3D.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CaptureInfo3D.cpp.o: wxOpenCVMain/CaptureInfo3D.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_23)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_28)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CaptureInfo3D.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/CaptureInfo3D.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/CaptureInfo3D.cpp
 
@@ -580,7 +695,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CaptureInfo3D.cpp.o.provides.build: wxO
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/wxIUA.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/wxIUA.cpp.o: wxOpenCVMain/wxIUA.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_24)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_29)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/wxIUA.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/wxIUA.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/wxIUA.cpp
 
@@ -603,7 +718,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/wxIUA.cpp.o.provides.build: wxOpenCVMai
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/RapportAOO_LO.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/RapportAOO_LO.cpp.o: wxOpenCVMain/RapportAOO_LO.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_25)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_30)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/RapportAOO_LO.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/RapportAOO_LO.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/RapportAOO_LO.cpp
 
@@ -626,7 +741,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/RapportAOO_LO.cpp.o.provides.build: wxO
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/AffichageNouvelleImage.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/AffichageNouvelleImage.cpp.o: wxOpenCVMain/AffichageNouvelleImage.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_26)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_31)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/AffichageNouvelleImage.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/AffichageNouvelleImage.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/AffichageNouvelleImage.cpp
 
@@ -649,7 +764,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/AffichageNouvelleImage.cpp.o.provides.b
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/main.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/main.cpp.o: wxOpenCVMain/main.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_27)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_32)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/main.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/main.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/main.cpp
 
@@ -670,9 +785,32 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/main.cpp.o.provides: wxOpenCVMain/CMake
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/main.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/main.cpp.o
 
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o: wxOpenCVMain/CalcMoment.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_33)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/CalcMoment.cpp
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.i"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/lb/Documents/wxopencv/wxOpenCVMain/CalcMoment.cpp > CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.i
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.s"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/lb/Documents/wxopencv/wxOpenCVMain/CalcMoment.cpp -o CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.s
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o.requires:
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o.requires
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o.provides: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o.requires
+	$(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o.provides.build
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o.provides
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o
+
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreRegion.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreRegion.cpp.o: wxOpenCVMain/FenetreRegion.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_28)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_34)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreRegion.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreRegion.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreRegion.cpp
 
@@ -695,7 +833,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreRegion.cpp.o.provides.build: wxO
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreHistogramme.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreHistogramme.cpp.o: wxOpenCVMain/FenetreHistogramme.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_29)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_35)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreHistogramme.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreHistogramme.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreHistogramme.cpp
 
@@ -718,7 +856,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreHistogramme.cpp.o.provides.build
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreZoom.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreZoom.cpp.o: wxOpenCVMain/FenetreZoom.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_30)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_36)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreZoom.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreZoom.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreZoom.cpp
 
@@ -741,7 +879,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreZoom.cpp.o.provides.build: wxOpe
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreDistribradiale.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreDistribradiale.cpp.o: wxOpenCVMain/FenetreDistribradiale.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_31)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_37)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreDistribradiale.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreDistribradiale.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreDistribradiale.cpp
 
@@ -764,7 +902,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreDistribradiale.cpp.o.provides.bu
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ServeurScilab.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ServeurScilab.cpp.o: wxOpenCVMain/ServeurScilab.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_32)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_38)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ServeurScilab.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ServeurScilab.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ServeurScilab.cpp
 
@@ -787,7 +925,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ServeurScilab.cpp.o.provides.build: wxO
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreAlgo.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreAlgo.cpp.o: wxOpenCVMain/FenetreAlgo.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_33)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_39)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreAlgo.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreAlgo.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreAlgo.cpp
 
@@ -810,7 +948,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreAlgo.cpp.o.provides.build: wxOpe
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ThreadEventCamera.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ThreadEventCamera.cpp.o: wxOpenCVMain/ThreadEventCamera.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_34)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_40)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ThreadEventCamera.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ThreadEventCamera.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ThreadEventCamera.cpp
 
@@ -833,7 +971,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ThreadEventCamera.cpp.o.provides.build:
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GraphiqueImage.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GraphiqueImage.cpp.o: wxOpenCVMain/GraphiqueImage.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_35)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_41)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GraphiqueImage.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/GraphiqueImage.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/GraphiqueImage.cpp
 
@@ -856,7 +994,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GraphiqueImage.cpp.o.provides.build: wx
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVInitOp.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVInitOp.cpp.o: wxOpenCVMain/ImInCVInitOp.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_36)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_42)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVInitOp.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/ImInCVInitOp.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/ImInCVInitOp.cpp
 
@@ -879,7 +1017,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVInitOp.cpp.o.provides.build: wxOp
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o: wxOpenCVMain/PlanReference.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_37)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_43)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/PlanReference.cpp
 
@@ -900,9 +1038,32 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o.provides: wxOpenCVM
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o
 
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o: wxOpenCVMain/FenetrePano.cpp
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_44)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetrePano.cpp
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.i"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -E /home/lb/Documents/wxopencv/wxOpenCVMain/FenetrePano.cpp > CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.i
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.s"
+	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++  $(CXX_DEFINES) $(CXX_FLAGS) -S /home/lb/Documents/wxopencv/wxOpenCVMain/FenetrePano.cpp -o CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.s
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o.requires:
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o.requires
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o.provides: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o.requires
+	$(MAKE) -f wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o.provides.build
+.PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o.provides
+
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o.provides.build: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o
+
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePrincipaleClavier.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePrincipaleClavier.cpp.o: wxOpenCVMain/FenetrePrincipaleClavier.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_38)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_45)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePrincipaleClavier.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetrePrincipaleClavier.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetrePrincipaleClavier.cpp
 
@@ -925,7 +1086,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePrincipaleClavier.cpp.o.provides
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.o: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/flags.make
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.o: wxOpenCVMain/FenetreGraphiqueWX.cpp
-	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_39)
+	$(CMAKE_COMMAND) -E cmake_progress_report /home/lb/Documents/wxopencv/CMakeFiles $(CMAKE_PROGRESS_46)
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Building CXX object wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.o"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && /usr/bin/c++   $(CXX_DEFINES) $(CXX_FLAGS) -o CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.o -c /home/lb/Documents/wxopencv/wxOpenCVMain/FenetreGraphiqueWX.cpp
 
@@ -949,7 +1110,10 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.o.provides.build
 # Object files for target wxOpenCVMain
 wxOpenCVMain_OBJECTS = \
 "CMakeFiles/wxOpenCVMain.dir/Fenetre3D.cpp.o" \
+"CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o" \
+"CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o" \
+"CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/ZoneImage.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/FenetreInfo.cpp.o" \
@@ -958,6 +1122,7 @@ wxOpenCVMain_OBJECTS = \
 "CMakeFiles/wxOpenCVMain.dir/CameraAndor.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/ImInCV.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o" \
+"CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/ImInCVOperation.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/ControleCamera.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/ImageStat.cpp.o" \
@@ -967,6 +1132,7 @@ wxOpenCVMain_OBJECTS = \
 "CMakeFiles/wxOpenCVMain.dir/IMulti.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o" \
+"CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/GestionZone.cpp.o" \
@@ -975,6 +1141,7 @@ wxOpenCVMain_OBJECTS = \
 "CMakeFiles/wxOpenCVMain.dir/RapportAOO_LO.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/AffichageNouvelleImage.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/main.cpp.o" \
+"CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/FenetreRegion.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/FenetreHistogramme.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/FenetreZoom.cpp.o" \
@@ -985,6 +1152,7 @@ wxOpenCVMain_OBJECTS = \
 "CMakeFiles/wxOpenCVMain.dir/GraphiqueImage.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/ImInCVInitOp.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o" \
+"CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/FenetrePrincipaleClavier.cpp.o" \
 "CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.o"
 
@@ -992,7 +1160,10 @@ wxOpenCVMain_OBJECTS = \
 wxOpenCVMain_EXTERNAL_OBJECTS =
 
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Fenetre3D.cpp.o
+wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o
+wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o
+wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ZoneImage.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreInfo.cpp.o
@@ -1001,6 +1172,7 @@ wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreCoupe
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraAndor.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCV.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o
+wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVOperation.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ControleCamera.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageStat.cpp.o
@@ -1010,6 +1182,7 @@ wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePalet
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/IMulti.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o
+wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GestionZone.cpp.o
@@ -1018,6 +1191,7 @@ wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/wxIUA.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/RapportAOO_LO.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/AffichageNouvelleImage.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/main.cpp.o
+wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreRegion.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreHistogramme.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreZoom.cpp.o
@@ -1028,6 +1202,7 @@ wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ThreadEventC
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GraphiqueImage.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVInitOp.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o
+wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePrincipaleClavier.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.o
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build.make
@@ -1039,35 +1214,65 @@ wxOpenCVMain/wxOpenCVMain: /usr/local/lib64/libosgText.so
 wxOpenCVMain/wxOpenCVMain: /usr/local/lib64/libosgSim.so
 wxOpenCVMain/wxOpenCVMain: /usr/local/lib64/libosg.so
 wxOpenCVMain/wxOpenCVMain: /usr/local/lib64/libOpenThreads.so
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_videostab.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_videoio.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_video.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_ts.a
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_superres.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_stitching.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_shape.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_photo.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_objdetect.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_ml.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_imgproc.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_imgcodecs.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_highgui.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_flann.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_features2d.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_core.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_calib3d.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_xphoto.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_xobjdetect.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_ximgproc.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_xfeatures2d.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_tracking.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_text.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_surface_matching.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_stereo.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_saliency.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_rgbd.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_reg.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_optflow.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_line_descriptor.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_latentsvm.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_face.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_datasets.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_ccalib.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_bioinspired.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_bgsegm.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_videostab.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_videoio.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_video.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_superres.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_stitching.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_shape.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_photo.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_objdetect.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_ml.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_imgproc.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_imgcodecs.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_highgui.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_hal.a
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_flann.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_features2d.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_core.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_calib3d.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libplplotwxwidgets.so
+wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libplplot.so
+wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libplplotcxx.so
+wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libplplotwxwidgets.so
+wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libplplot.so
 wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libplplotwxwidgets.so
 wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libplplotcxx.so
-wxOpenCVMain/wxOpenCVMain: /usr/local/share/OpenCV/3rdparty/lib/libippicv.a
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_features2d.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_ml.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_highgui.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_videoio.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_imgcodecs.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_flann.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_video.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_imgproc.so.3.0.0
-wxOpenCVMain/wxOpenCVMain: /usr/local/lib/libopencv_core.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_text.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_face.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_xfeatures2d.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_shape.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_video.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_calib3d.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_features2d.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_ml.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_highgui.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_videoio.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_imgcodecs.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_imgproc.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_flann.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_core.so.3.0.0
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/lib/libopencv_hal.a
+wxOpenCVMain/wxOpenCVMain: /usr/share/opencv/3rdparty/ippicv/unpack/ippicv_lnx/lib/intel64/libippicv.a
 wxOpenCVMain/wxOpenCVMain: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/link.txt
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --red --bold "Linking CXX executable wxOpenCVMain"
 	cd /home/lb/Documents/wxopencv/wxOpenCVMain && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/wxOpenCVMain.dir/link.txt --verbose=$(VERBOSE)
@@ -1077,7 +1282,10 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build: wxOpenCVMain/wxOpenCVMain
 .PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/build
 
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/Fenetre3D.cpp.o.requires
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreSeqOpe.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraOpenCV.cpp.o.requires
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ParametreOperation.cpp.o.requires
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreOperande.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ZoneImage.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreFocus.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreInfo.cpp.o.requires
@@ -1086,6 +1294,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpe
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CameraAndor.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCV.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/BarreEtat.cpp.o.requires
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/LigneMediane.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVOperation.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ControleCamera.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageStat.cpp.o.requires
@@ -1095,6 +1304,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpe
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/IMulti.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/osgviewerWX.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImCvMinMAx.cpp.o.requires
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImageInfoYML.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/InterfaceQuadriqueMulti.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/NanoSurface.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GestionZone.cpp.o.requires
@@ -1103,6 +1313,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpe
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/RapportAOO_LO.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/AffichageNouvelleImage.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/main.cpp.o.requires
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/CalcMoment.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreRegion.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreHistogramme.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreZoom.cpp.o.requires
@@ -1113,6 +1324,7 @@ wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpe
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/GraphiqueImage.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/ImInCVInitOp.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/PlanReference.cpp.o.requires
+wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePano.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetrePrincipaleClavier.cpp.o.requires
 wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires: wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/FenetreGraphiqueWX.cpp.o.requires
 .PHONY : wxOpenCVMain/CMakeFiles/wxOpenCVMain.dir/requires

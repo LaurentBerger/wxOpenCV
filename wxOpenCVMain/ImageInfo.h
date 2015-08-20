@@ -481,8 +481,8 @@ cv::UMat	*FlotOptique(bool init=false){if (init ) {delete []flotOptique;flotOpti
 cv::UMat *Ponderation(bool init = false){ if (init) { delete ponderation; ponderation = new cv::UMat();  cv::createHanningWindow(*ponderation, this->size(), CV_64F); } return ponderation; };
 cv::UMat *Silh(bool init = false){ if (init) { delete silh; silh = new cv::UMat(); } return silh; };
 cv::Mat *Descripteur(char =-1);
-std::vector<std::vector<cv::Moments>> *MomentComposante(){ return &moment; };
-std::vector<std::vector<cv::Moments>> *MomentCtr(){ return &momentCtr; };
+std::vector<std::vector<cv::Moments> > *MomentComposante(){ return &moment; };
+std::vector<std::vector<cv::Moments> > *MomentCtr(){ return &momentCtr; };
 
 std::vector<std::vector<std::vector<cv::Point> > > *PtContours(){return &contours;};
 std::vector<std::vector<std::vector<cv::Point> > > *PtContoursPoly(){return &contoursPoly;};
@@ -499,9 +499,9 @@ std::vector<cv::Rect> *RegionMvt(){ return &regionsMvt; };
 std::vector<cv::KeyPoint> *PointCle(char type = 0);
 std::vector<cv::KeyPoint> *PointCleApp(char type = 0);
 std::vector<std::vector<cv::Point> > *PointCleMSER(){return &kMser;};
-std::map<int,std::vector<cv::DMatch>> *ListeAppariement(){return &matches;};
-std::map<int,std::vector<cv::KeyPoint>> *ListePointCle(){return &pointCle;};
-std::map<int,std::vector<cv::KeyPoint>> *ListePointCleApp(){return &pointCleApp;};
+std::map<int,std::vector<cv::DMatch> > *ListeAppariement(){return &matches;};
+std::map<int,std::vector<cv::KeyPoint> > *ListePointCle(){return &pointCle;};
+std::map<int,std::vector<cv::KeyPoint> > *ListePointCleApp(){return &pointCleApp;};
 std::vector<cv::DMatch> *Appariement(char =-1);
 ParametreOperation *ParamOCVUpdateMotionHistory(ParametreOperation *p = NULL);
 ParametreOperation *AjoutOpAttribut(ParametreOperation *p);

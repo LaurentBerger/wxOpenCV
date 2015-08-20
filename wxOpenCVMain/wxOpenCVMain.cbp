@@ -5,7 +5,7 @@
       <Option title="wxOpenCVMain" />
       <Option makefile_is_custom="1" />
       <Option compiler="gcc" />
-      <Option virtualFolders="CMake Files\;CMake Files\wxOpenCVMain\;CMake Files\RapportAOO\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\local\;CMake Files\..\..\..\..\usr\local\share\;CMake Files\..\..\..\..\usr\local\share\OpenCV\;CMake Files\CMake\;" />
+      <Option virtualFolders="CMake Files\;CMake Files\wxOpenCVMain\;CMake Files\RapportAOO\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\usr\;CMake Files\..\..\..\..\usr\share\;CMake Files\..\..\..\..\usr\share\opencv\;CMake Files\CMake\;" />
       <Build>
       <Target title="all">
          <Option working_dir="/home/lb/Documents/wxopencv/wxOpenCVMain" />
@@ -33,10 +33,49 @@
             <Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.6/include" />
             <Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.6/include-fixed" />
             <Add directory="/usr/local/include" />
-            <Add directory="/usr/local/include/opencv" />
-            <Add directory="/usr/local/include/plplot/../../include/plplot" />
+            <Add directory="/usr/local/include/plplot" />
             <Add directory="/usr/local/include/wx-3.0" />
             <Add directory="/usr/local/lib/wx/include/gtk2-unicode-3.0" />
+            <Add directory="/usr/share/opencv" />
+            <Add directory="/usr/share/opencv/include" />
+            <Add directory="/usr/share/opencv/include/opencv" />
+            <Add directory="/usr/share/opencv/modules/calib3d/include" />
+            <Add directory="/usr/share/opencv/modules/core/include" />
+            <Add directory="/usr/share/opencv/modules/features2d/include" />
+            <Add directory="/usr/share/opencv/modules/flann/include" />
+            <Add directory="/usr/share/opencv/modules/hal/include" />
+            <Add directory="/usr/share/opencv/modules/highgui/include" />
+            <Add directory="/usr/share/opencv/modules/imgcodecs/include" />
+            <Add directory="/usr/share/opencv/modules/imgproc/include" />
+            <Add directory="/usr/share/opencv/modules/ml/include" />
+            <Add directory="/usr/share/opencv/modules/objdetect/include" />
+            <Add directory="/usr/share/opencv/modules/photo/include" />
+            <Add directory="/usr/share/opencv/modules/shape/include" />
+            <Add directory="/usr/share/opencv/modules/stitching/include" />
+            <Add directory="/usr/share/opencv/modules/superres/include" />
+            <Add directory="/usr/share/opencv/modules/ts/include" />
+            <Add directory="/usr/share/opencv/modules/video/include" />
+            <Add directory="/usr/share/opencv/modules/videoio/include" />
+            <Add directory="/usr/share/opencv/modules/videostab/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/bgsegm/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/bioinspired/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/ccalib/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/datasets/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/face/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/latentsvm/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/line_descriptor/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/optflow/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/reg/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/rgbd/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/saliency/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/stereo/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/surface_matching/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/text/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/tracking/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/xfeatures2d/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/ximgproc/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/xobjdetect/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/xphoto/include" />
          </Compiler>
          <MakeCommands>
             <Build command="/usr/bin/make -f &quot;/home/lb/Documents/wxopencv/wxOpenCVMain/Makefile&quot;  VERBOSE=1 wxOpenCVMain" />
@@ -61,10 +100,49 @@
             <Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.6/include" />
             <Add directory="/usr/lib/gcc/x86_64-linux-gnu/4.6/include-fixed" />
             <Add directory="/usr/local/include" />
-            <Add directory="/usr/local/include/opencv" />
-            <Add directory="/usr/local/include/plplot/../../include/plplot" />
+            <Add directory="/usr/local/include/plplot" />
             <Add directory="/usr/local/include/wx-3.0" />
             <Add directory="/usr/local/lib/wx/include/gtk2-unicode-3.0" />
+            <Add directory="/usr/share/opencv" />
+            <Add directory="/usr/share/opencv/include" />
+            <Add directory="/usr/share/opencv/include/opencv" />
+            <Add directory="/usr/share/opencv/modules/calib3d/include" />
+            <Add directory="/usr/share/opencv/modules/core/include" />
+            <Add directory="/usr/share/opencv/modules/features2d/include" />
+            <Add directory="/usr/share/opencv/modules/flann/include" />
+            <Add directory="/usr/share/opencv/modules/hal/include" />
+            <Add directory="/usr/share/opencv/modules/highgui/include" />
+            <Add directory="/usr/share/opencv/modules/imgcodecs/include" />
+            <Add directory="/usr/share/opencv/modules/imgproc/include" />
+            <Add directory="/usr/share/opencv/modules/ml/include" />
+            <Add directory="/usr/share/opencv/modules/objdetect/include" />
+            <Add directory="/usr/share/opencv/modules/photo/include" />
+            <Add directory="/usr/share/opencv/modules/shape/include" />
+            <Add directory="/usr/share/opencv/modules/stitching/include" />
+            <Add directory="/usr/share/opencv/modules/superres/include" />
+            <Add directory="/usr/share/opencv/modules/ts/include" />
+            <Add directory="/usr/share/opencv/modules/video/include" />
+            <Add directory="/usr/share/opencv/modules/videoio/include" />
+            <Add directory="/usr/share/opencv/modules/videostab/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/bgsegm/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/bioinspired/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/ccalib/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/datasets/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/face/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/latentsvm/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/line_descriptor/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/optflow/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/reg/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/rgbd/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/saliency/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/stereo/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/surface_matching/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/text/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/tracking/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/xfeatures2d/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/ximgproc/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/xobjdetect/include" />
+            <Add directory="/usr/share/opencv_contrib-master/modules/xphoto/include" />
          </Compiler>
          <MakeCommands>
             <Build command="/usr/bin/make -f &quot;/home/lb/Documents/wxopencv/wxOpenCVMain/Makefile&quot;  VERBOSE=1 wxOpenCVMain/fast" />
@@ -77,6 +155,8 @@
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/AffichageNouvelleImage.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/BarreEtat.cpp">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/CalcMoment.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/CameraAndor.cpp">
       </Unit>
@@ -102,11 +182,17 @@
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreInfo.cpp">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreOperande.cpp">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetrePalette.cpp">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetrePano.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetrePrincipaleClavier.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreRegion.cpp">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreSeqOpe.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreZoom.cpp">
       </Unit>
@@ -128,11 +214,17 @@
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/ImInCVOperation.cpp">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/ImageInfoYML.cpp">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/ImageStat.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/InterfaceQuadriqueMulti.cpp">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/LigneMediane.cpp">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/NanoSurface.cpp">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/ParametreOperation.cpp">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/PlanReference.cpp">
       </Unit>
@@ -176,9 +268,17 @@
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreInfo.h">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreOperande.h">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetrePano.h">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetrePrincipale.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreRegion.h">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FenetreSeqOpe.h">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/FichierIcon.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/GlisserForme.h">
       </Unit>
@@ -192,6 +292,10 @@
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/NanoSurface.h">
       </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/Panoramique.h">
+      </Unit>
+      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/ParametreOperation.h">
+      </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/PlanReference.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/TableauBord.h">
@@ -203,8 +307,6 @@
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/imagestat.h">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/resource.h">
-      </Unit>
-      <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/toolbar.rc">
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/wxOpenCVMain/wxOpenCVConfig.h">
       </Unit>
@@ -231,17 +333,11 @@
       <Unit filename="/home/lb/Documents/wxopencv/RapportAOO/CMakeLists.txt">
           <Option virtualFolder="CMake Files\RapportAOO\" />
       </Unit>
-      <Unit filename="/home/lb/Documents/wxopencv/../../../../usr/local/share/OpenCV/OpenCVConfig-version.cmake">
-          <Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\OpenCV\" />
+      <Unit filename="/home/lb/Documents/wxopencv/../../../../usr/share/opencv/opencvConfig.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\usr\share\opencv\" />
       </Unit>
-      <Unit filename="/home/lb/Documents/wxopencv/../../../../usr/local/share/OpenCV/OpenCVConfig.cmake">
-          <Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\OpenCV\" />
-      </Unit>
-      <Unit filename="/home/lb/Documents/wxopencv/../../../../usr/local/share/OpenCV/OpenCVModules.cmake">
-          <Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\OpenCV\" />
-      </Unit>
-      <Unit filename="/home/lb/Documents/wxopencv/../../../../usr/local/share/OpenCV/OpenCVModules-release.cmake">
-          <Option virtualFolder="CMake Files\..\..\..\..\usr\local\share\OpenCV\" />
+      <Unit filename="/home/lb/Documents/wxopencv/../../../../usr/share/opencv/OpenCVModules.cmake">
+          <Option virtualFolder="CMake Files\..\..\..\..\usr\share\opencv\" />
       </Unit>
       <Unit filename="/home/lb/Documents/wxopencv/CMake/FindPLplot.cmake">
           <Option virtualFolder="CMake Files\CMake\" />
