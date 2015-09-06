@@ -191,7 +191,7 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 
     if (ParametreOperation::listeParam.find(iti->first) != ParametreOperation::listeParam.end())
         {
-        int nbChaine = pOCV->listeParam[iti->first].size(),valDefaut;
+        int nbChaine = pOCV->listeParam[iti->first].size(),valDefaut=0;
         wxString *choix = new wxString[nbChaine], choixDefaut;
         int i = 0;
         for (std::map <string, int >::iterator iter = pOCV->listeParam[iti->first].begin(); iter != pOCV->listeParam[iti->first].end(); ++iter, ++i)

@@ -206,22 +206,6 @@ void ImageInfoCV::write(cv::FileStorage& fs) const                        //Writ
 				}    
 			}
 		}
-	if (boncoin.size()!=0)
-		{
-		for (int i=0;i<channels()&& i<3;i++)
-			{
-			int indCtr=0;
-			for (int j=0;j<boncoin[i].size();j++)
-				{
-				stringstream nombre;
-				nombre<<"Cmp"<<i<<"boncoin"<<j;
-				string s(nombre.str());
-
-				fs<<s<<boncoin[i][j];
-				indCtr++;
-				}    
-			}
-		}
     auto  it = pointCle.begin();
     for (; it != pointCle.end(); it++)
     {
@@ -243,6 +227,15 @@ void ImageInfoCV::write(cv::FileStorage& fs) const                        //Writ
             break;
         case IMAGEINFOCV_ORB_DES:
 		    fs<<"ORB"<<it->second;
+            break;
+        case IMAGEINFOCV_GFTT_GRAY_DES:
+		    fs<<"GFTT0"<<it->second;
+            break;
+        case IMAGEINFOCV_GFTT_GREEN_DES:
+		    fs<<"GFTT1"<<it->second;
+            break;
+        case IMAGEINFOCV_GFTT_RED_DES:
+		    fs<<"GFTT2"<<it->second;
             break;
         }
     }

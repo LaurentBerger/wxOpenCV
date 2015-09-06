@@ -1155,7 +1155,7 @@ if (s == "calcopticalflowpyrlk")
 	doubleParam["epsilonCriteria"] = DomaineParametreOp<double>(0.0001, 0.0000001, 255.0, 0.001);
 	intParam["maxLevel"] = DomaineParametreOp<int>(3, 0, 8, 1);
 	sizeParam["winSize"] = DomaineParametreOp<cv::Size>(cv::Size(21, 21), cv::Size(3, 3), cv::Size(255, 255), cv::Size(2, 2));
-	intParam["flag"] = DomaineParametreOp<int>(0, cv::OPTFLOW_USE_INITIAL_FLOW, cv::OPTFLOW_LK_GET_MIN_EIGENVALS, 1);
+	intParam["flag"] = DomaineParametreOp<int>(0, cv::OPTFLOW_USE_INITIAL_FLOW, cv::OPTFLOW_LK_GET_MIN_EIGENVALS+cv::OPTFLOW_USE_INITIAL_FLOW, 4);
 	doubleParam["minEigThreshold"] = DomaineParametreOp<double>(0.001, 0.0000001, 100.0, 0.001);
     xx.listeOperation.insert(make_pair(s, *this));
 

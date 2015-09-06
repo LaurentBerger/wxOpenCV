@@ -1176,6 +1176,12 @@ std::vector<ImageInfoCV *>ImageInfoCV::BonAttributs(std::vector< ImageInfoCV*> o
 {
 std::vector<ImageInfoCV	*> r;
 
+if (pOCV->imgParam.find("calcopticalflowpyrlkprec")!=pOCV->imgParam.end() )
+{
+    AjoutOpAttribut(pOCV);
+    r.push_back(this);
+    return r;
+}
 
 if (op[0]!=this)
 	return r;
@@ -1202,6 +1208,35 @@ else
 AjoutOpAttribut(pOCV);
 r.push_back(this);
 return r;
+
+/*{
+
+if (op[0]!=this)
+	return r;
+if (boncoin.size()==0)
+	boncoin.resize(op[0]->channels());
+if (op[0]->channels()==1)
+	{
+	cv::goodFeaturesToTrack(*op[0],boncoin[0],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
+		pOCV->doubleParam["minDistance"].valeur,cv::noArray(),pOCV->intParam["blockSize"].valeur,
+		pOCV->intParam["useHarrisDetector"].valeur,pOCV->doubleParam["k"].valeur);
+	}
+else
+	{
+	std::vector<UMat> planCouleur;
+	cv::split( *op[0], planCouleur );
+	for (int i=0;i<op[0]->channels();i++)
+		{
+		cv::goodFeaturesToTrack(planCouleur[i],boncoin[i],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
+			pOCV->doubleParam["minDistance"].valeur,UMat(),pOCV->intParam["blockSize"].valeur,
+			pOCV->intParam["useHarrisDetector"].valeur,pOCV->doubleParam["k"].valeur);
+
+		}
+	}
+AjoutOpAttribut(pOCV);
+r.push_back(this);
+return r;
+}*/
 }
 
 std::vector<ImageInfoCV *>ImageInfoCV::DetectCoinHarris(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
@@ -1641,6 +1676,15 @@ std::vector<ImageInfoCV	*> r;
 
 if (op.size()<2 || op[0]==NULL || op[1]==NULL)
 	return r;
+if (op[1]==op[0])
+{
+    AjoutOpAttribut(pOCV);
+    pOCV->imgParam[pOCV->nomOperation + "prec"] = op[1];
+
+    r.push_back(op[1]);
+    return r;
+}
+
 if (channels()!=op[1]->channels())
 	{
 	pOCV->opErreur=3;
@@ -1667,12 +1711,16 @@ if (op[1]->CoinRef(true)==NULL)
 	}
 	
 cv::TermCriteria critere(pOCV->intParam["typeCriteria"].valeur,pOCV->intParam["maxCountCriteria"].valeur,pOCV->doubleParam["epsilonCriteria"].valeur);
+cv::TermCriteria critere2(cv::TermCriteria::COUNT|cv::TermCriteria::EPS,20,0.03);
 
 std::vector<uchar> status;
 std::vector<float> err;
 for (int i=0;i<op[0]->channels();i++)
 	{
-	calcOpticalFlowPyrLK(*op[0],*op[1],(*op[0]->BonCoin())[i],(*op[1]->BonCoin())[i],status,err,pOCV->sizeParam["winSize"].valeur,
+    std::vector<cv::Point2f> p1=(*op[0]->BonCoin())[i];
+//	calcOpticalFlowPyrLK(*op[0],*op[1],p1,(*op[1]->BonCoin())[i],status,err,cv::Size(10,10),
+	//	3,critere2,0,0.0001);
+	calcOpticalFlowPyrLK(*op[0],*op[1],p1,(*op[1]->BonCoin())[i],status,err,pOCV->sizeParam["winSize"].valeur,
 		pOCV->intParam["maxLevel"].valeur,critere,pOCV->intParam["flag"].valeur,pOCV->doubleParam["minEigThreshold"].valeur);
 	int k,l;
 	(*op[1]->CoinRef())[i].resize((*op[1]->BonCoin())[i].size());

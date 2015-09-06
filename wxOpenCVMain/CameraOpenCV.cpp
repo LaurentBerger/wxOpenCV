@@ -562,12 +562,6 @@ if (captureVideo->isOpened())
 							else if (indOp>0)
                                 pOCV.op[0] = im[indOp - 1][0];
 							}
-						if (imPre && (*imPre->BonCoin()).size()!=0 && pOCV.nomOperation == "GoodFeature" && im[indOp - 1].size() && im[indOp - 1][0])
-							{
-							im[indOp].push_back( im[indOp - 1][0]);
-
-							}
-						else
 							{
 							if (imgParam.size() != 0)
 								pOCV.imgParam = imgParam;

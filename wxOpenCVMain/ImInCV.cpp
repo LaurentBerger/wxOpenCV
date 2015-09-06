@@ -261,20 +261,6 @@ if ((*(im->HoughLigneProba())).size()!=0)
 	for (int i=0;i<channels()&&i<im->channels();i++)
 		ligneP[i] = (*im->HoughLigneProba())[i];
 	}
-if (im->BonCoin()->size()!=0)
-	{
-	if (boncoin.size()==0)
-		boncoin.resize(channels());
-	for (int i=0;i<channels()&&i<im->channels();i++)
-		boncoin[i] = (*im->BonCoin())[i];
-	}
-if (im->CoinRef()->size()!=0)
-	{
-	if (coinRef.size()==0)
-		coinRef.resize(channels());
-	for (int i=0;i<channels()&&i<im->channels();i++)
-		coinRef[i] = (*im->CoinRef())[i];
-	}
 std::map<int, std::vector<cv::KeyPoint> >::iterator it = im->pointCle.begin();
 pointCle.clear();
 for (; it != im->pointCle.end(); it++)
@@ -295,6 +281,20 @@ matches.clear();
 std::map<int, std::vector<cv::DMatch > >::iterator itMatch = im->matches.begin();
 for (itMatch = im->matches.begin(); itMatch != im->matches.end(); itMatch++)
     matches.insert(make_pair(itMatch->first, itMatch->second));
+if (im->BonCoin()->size()!=0)
+	{
+	if (boncoin.size()==0)
+		boncoin.resize(channels());
+	for (int i=0;i<channels()&&i<im->channels();i++)
+		boncoin[i] = (*im->BonCoin())[i];
+	}
+if (im->CoinRef()->size()!=0)
+	{
+	if (coinRef.size()==0)
+		coinRef.resize(channels());
+	for (int i=0;i<channels()&&i<im->channels();i++)
+		coinRef[i] = (*im->CoinRef())[i];
+	}
 
 
  }

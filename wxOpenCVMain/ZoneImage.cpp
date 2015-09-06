@@ -678,48 +678,49 @@ if (osgApp->ModeSouris()==SOURIS_STD)
     menu.AppendCheckItem(Menu_Coupe, _T("Section"));
     menu.Append(Menu_Masque, _T("Mask"),CreateMenuMasque(NULL));
     bool menuParametre = false;
-	if (f->ImAcq()->PtContoursPoly())
+	if (f->ImAcq()->PtContoursPoly()->size()!=0)
 		{
 		menu.AppendCheckItem(Menu_Contour_Poly, _T("Draw Contour poly "));
 		if (f->TracerContourPoly())
 			menu.Check(Menu_Contour_Poly, true);
 		menuParametre=true;
 		}
-	if (f->ImAcq()->PtContours())
+	if (f->ImAcq()->PtContours()->size()!=0)
 		{
 		menu.AppendCheckItem(Menu_Contour, _T("Draw Contour "));
 		if (f->TracerContour())
 			menu.Check(Menu_Contour, true);
 		menuParametre=true;
 		}
-	if (f->ImAcq()->HoughLigne())
+	if (f->ImAcq()->HoughLigne()->size()!=0)
 		{
 		menu.AppendCheckItem(MENU_LIGNEHOUGH, _T("Hough (line) "));
 		if (f->TracerLigneHough())
 			menu.Check(MENU_LIGNEHOUGH, true);
 		menuParametre=true;
 		}
-	if (f->ImAcq()->HoughLigneProba())
+	if (f->ImAcq()->HoughLigneProba()->size()!=0)
 		{
 		menu.AppendCheckItem(MENU_LIGNEPROBAHOUGH, _T("Hough (line proba.) "));
-		if (f->TracerLigneProbaHough())
+		if (f->TracerLigneProbaHough()!=0)
 			menu.Check(MENU_LIGNEPROBAHOUGH, true);
 		menuParametre=true;
 		}
-	if (f->ImAcq()->HoughCercle())
+	if (f->ImAcq()->HoughCercle()->size()!=0)
 		{
 		menu.AppendCheckItem(MENU_CERCLEHOUGH, _T("Hough (circle) "));
 		if (f->TracerCercleHough())
 			menu.Check(MENU_CERCLEHOUGH, true);
 		menuParametre=true;
 		}
-	if (f->ImAcq()->BonCoin())
-		{
-		menu.AppendCheckItem(MENU_BONCOIN, _T("Good features "));
-		if (f->TracerBonCoin())
-			menu.Check(MENU_BONCOIN, true);
-		menuParametre=true;
-		}
+    if ((f->ImAcq()->PointCle(IMAGEINFOCV_GFTT_GRAY_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_GFTT_GRAY_DES)->size() != 0)||
+        (f->ImAcq()->BonCoin()->size()!=0 && (*f->ImAcq()->BonCoin())[0].size()!=0))
+        {
+        menu.AppendCheckItem(MENU_BONCOIN, _T("Good features "));
+        if (f->TracerBonCoin())
+            menu.Check(MENU_BONCOIN, true);
+        menuParametre = true;
+        }
 	if (f->ImAcq()->FlotOptique())
 	{
 		menu.AppendCheckItem(MENU_FLOTOPTIQUE, _T("Optical Flow "));
@@ -1142,42 +1143,58 @@ void FenetrePrincipale::TracerBonCoin(wxBufferedPaintDC &hdc)
 {
 if (!tracerBonCoin || !imAcq)
 	return;
-if (imAcq->BonCoin()->size()==0)
+if (!imAcq->PointCle(IMAGEINFOCV_GFTT_GRAY_DES) && !(imAcq->BonCoin()!=NULL && (*imAcq->BonCoin())[0].size()!=0))
 	{
-	tracerBonCoin=false;
+	tracerBonCoin = false;
 	return;
 	}
-std::vector<std::vector<cv::Point2f> > *boncoin=imAcq->BonCoin();
-wxPen crayon[3]={wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
-for (int k=0;k<imAcq->channels()&& k<3 && k<boncoin->size();k++)
-	{
-	crayon[k].SetWidth(2);
-	hdc.SetPen(crayon[k]);
-	hdc.SetBrush(*wxTRANSPARENT_BRUSH);
-	for( int i = 0; i < (*boncoin)[k].size(); i++ )
-		{
-		wxPoint p_1((*boncoin)[k][i].x,(*boncoin)[k][i].y);
-		wxPoint p1(RepereImageEcran(p_1));
-		hdc.DrawCircle(p1,5);
-		}
-	}
-if (imAcq->CoinRef()->size()!=0)
-	{
-	std::vector<std::vector<cv::Point2f> > *boncoin=imAcq->CoinRef();
-	for (int k=0;k<imAcq->channels()&& k<3 && k<boncoin->size();k++)
-		{
-		crayon[k].SetWidth(2);
-		hdc.SetPen(crayon[(k+1)%3]);
-		hdc.SetBrush(*wxTRANSPARENT_BRUSH);
-		for( int i = 0; i < (*boncoin)[k].size(); i++ )
-			if ((*boncoin)[k][i].x>=0 && (*boncoin)[k][i].y>=0)
-				{
-				wxPoint p_1((*boncoin)[k][i].x,(*boncoin)[k][i].y);
-				wxPoint p1(RepereImageEcran(p_1));
-				hdc.DrawRoundedRectangle(p1-wxSize(5,5),wxSize(10,10),2);
-				}
-		}
-	}
+if (imAcq->PointCle(IMAGEINFOCV_GFTT_GRAY_DES))
+{
+    for (int k = 0; k < imAcq->channels(); k++)
+    {
+        std::vector<cv::KeyPoint> *pts = imAcq->PointCle(IMAGEINFOCV_GFTT_GRAY_DES+k);
+        int fZoomNume, fZoomDeno;
+
+        CalculZoom(fZoomNume, fZoomDeno);
+        wxPen crayon[3] = { wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
+        wxBrush brosse(wxColour(0, 128, 0, 128));
+        hdc.SetPen(crayon[k]);
+        hdc.SetBrush(brosse);
+        for (int i = 0;pts && i < pts->size(); i++)
+            {
+            wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+            wxPoint p1(RepereImageEcran(p_1));
+            wxPoint p(p1-wxPoint(2,2));
+            wxSize w(5,5);
+            hdc.DrawRectangle(p, w);
+            }
+
+    }
+}
+else
+{
+    for (int k = 0; k < imAcq->channels(); k++)
+    {
+        std::vector<cv::Point2f> *pts = &(*imAcq->BonCoin())[k];
+        int fZoomNume, fZoomDeno;
+
+        CalculZoom(fZoomNume, fZoomDeno);
+        wxPen crayon[3] = { wxPen(wxColour(255,255,0)),wxPen(wxColour(255,0,255)),wxPen(wxColour(0,255,255))};
+        wxBrush brosse(wxColour(0, 128, 0, 128));
+        hdc.SetPen(crayon[k]);
+        hdc.SetBrush(brosse);
+        for (int i = 0;pts && i < pts->size(); i++)
+            {
+            wxPoint p_1((*pts)[i].x, (*pts)[i].y);
+            wxPoint p1(RepereImageEcran(p_1));
+            wxPoint p(p1-wxPoint(2,2));
+            wxSize w(5,5);
+            hdc.DrawRectangle(p, w);
+            }
+
+    }
+}
+TracerAppariementPoint(hdc);
 }
 
 void FenetrePrincipale::TracerCercleHough(wxBufferedPaintDC &hdc)
@@ -1495,7 +1512,7 @@ for (int i = 0; i < pts->size(); i++)
     }
 
 TracerAppariementPoint(hdc);
-   }
+}
 
 void FenetrePrincipale::TracerPointAGAST(wxBufferedPaintDC &hdc)
 {
