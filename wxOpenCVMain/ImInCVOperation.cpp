@@ -1652,11 +1652,14 @@ for (; it != descripteur.end();it++)
             }
         else 
             descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
-
+    }
+    if (descriptorMatcher.dynamicCast<cv::BFMatcher>()!=NULL)
+    {
+       // cv::BFMatcher::cr
+    }
     descriptorMatcher->match(*op[0]->Descripteur(it->first), *op[1]->Descripteur(it->first), matches[it->first], UMat());
 
     pointCleApp.insert(make_pair(it->first,*(op[1]->PointCle(it->first))));
-    }
 }
 
 AjoutOpAttribut(pOCV);

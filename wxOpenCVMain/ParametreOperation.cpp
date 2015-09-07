@@ -576,9 +576,10 @@ if (s == "cornerharris")
 if (s == "matchdescriptormatcher")
 	{
     intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
-    intParam["normType"] = DomaineParametreOp<int>(4, 0, 1, 1);
+    intParam["normType"] = DomaineParametreOp<int>(-1, 0, 1, 1);
 
     intParam["crossCheck"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["keepBest"] = DomaineParametreOp<int>(-1, -1, 10000, 1);
 //    intParam["Matcher"] = DomaineParametreOp<int>(0, 0, 1, 1);
     opAttribut = true;
 	opVideo = true;
