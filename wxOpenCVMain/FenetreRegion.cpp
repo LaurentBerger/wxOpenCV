@@ -26,7 +26,7 @@ keyPt=NULL;
 if (!p)
     return;
 keyPt=p;
-listeRegion = new Tableur((wxFrame*)this,keyPt->size(),7); 
+listeRegion = new Tableur((wxFrame*)this,keyPt->size(),7);
 listeRegion->SetSize(wxSize(800,400));
 //listeRegion->Refresh();
 listeRegion->DefTitreColonne(0, _("x"));
@@ -56,7 +56,7 @@ regionSelect=NULL;
 cleTri =  NULL;
 valTri = NULL;
 
-listeRegion = new Tableur((wxFrame*)this,0,20); 
+listeRegion = new Tableur((wxFrame*)this,0,20);
 listeRegion->SetSize(wxSize(800,400));
 //listeRegion->Refresh();
 listeRegion->DefTitreColonne(0, _("Index"));
@@ -88,7 +88,7 @@ for (int i=1;i<21;i++)
 
 
 
-void FenetreRegion::ListerPointInteret(std::vector<cv::KeyPoint> *p) 
+void FenetreRegion::ListerPointInteret(std::vector<cv::KeyPoint> *p)
 {
 if (!osgApp)
 	return;
@@ -100,7 +100,7 @@ if (p!=NULL)
     keyPt= p;
 for (int ii=0;ii<keyPt->size();ii++)
 	{
-	
+
 	listeRegion->DefCellule(ii,0,(*keyPt)[ii].pt.x, "%5.1f");
 	listeRegion->DefCellule(ii,1,(*keyPt)[ii].pt.y, "%5.1f");
 	listeRegion->DefCellule(ii,2,(*keyPt)[ii].size, "%5.1f");
@@ -109,10 +109,10 @@ for (int ii=0;ii<keyPt->size();ii++)
 	listeRegion->DefCellule(ii,5,(*keyPt)[ii].octave, "%d");
 	listeRegion->DefCellule(ii,6,(*keyPt)[ii].class_id, "%d");
 	}
-	
+
 }
 
-void FenetreRegion::ListerContour(std::vector<std::vector<cv::Point> >*p) 
+void FenetreRegion::ListerContour(std::vector<std::vector<cv::Point> >*p)
 {
 if (!osgApp)
 	return;
@@ -124,7 +124,7 @@ if (p!=NULL)
     contour= p;
 for (int ii=0;ii<keyPt->size();ii++)
 	{
-	
+
 	listeRegion->DefCellule(ii,0,(*keyPt)[ii].pt.x, "%5.1f");
 	listeRegion->DefCellule(ii,1,(*keyPt)[ii].pt.y, "%5.1f");
 	listeRegion->DefCellule(ii,2,(*keyPt)[ii].size, "%5.1f");
@@ -133,13 +133,13 @@ for (int ii=0;ii<keyPt->size();ii++)
 	listeRegion->DefCellule(ii,5,(*keyPt)[ii].octave, "%d");
 	listeRegion->DefCellule(ii,6,(*keyPt)[ii].class_id, "%d");
 	}
-	
+
 }
 
 
 
 
-void FenetreRegion::ListerRegion(int indPlan) 
+void FenetreRegion::ListerRegion(int indPlan)
 {
 if (!osgApp)
 	return;
@@ -150,21 +150,21 @@ if (!((FenetrePrincipale*)fenParent)->ImAcq())
 std::vector<cv::Mat>	*s=((FenetrePrincipale*)fenParent)->ImAcq()->StatComposante();
 std::vector<cv::Mat>	*g=((FenetrePrincipale*)fenParent)->ImAcq()->CentreGComposante();
 std::vector<std::vector<cv::Moments> > *m=((FenetrePrincipale*)fenParent)->ImAcq()->MomentComposante();
-std::vector<std::vector<std::vector<double> >> *hu=((FenetrePrincipale*)fenParent)->ImAcq()->HuMoment();
+std::vector<std::vector<std::vector<double> > > *hu=((FenetrePrincipale*)fenParent)->ImAcq()->HuMoment();
 if (s->size()==0 || g->size()==0)
 	return;
 int nb=listeRegion->GetNumberRows()-(*s)[indPlan].rows;
-if (nb>0) 
+if (nb>0)
 	{
 	listeRegion->EffaceLigne(nb);
-	
+
 	}
 else if (nb<0)
 	listeRegion->AjouteLigne(-nb);
 
 for (int ii=0;ii<(*s)[indPlan].rows;ii++)
 	{
-	
+
 	listeRegion->DefCellule(ii,0,ii, "%5d");
 	listeRegion->DefCellule(ii,3,(*s)[indPlan].at<int>(ii,cv::CC_STAT_AREA), "%7d");
 	listeRegion->DefCellule(ii,5,(*g)[indPlan].at<double>(ii,0), "%6.1f");
@@ -176,7 +176,7 @@ for (int ii=0;ii<(*s)[indPlan].rows;ii++)
         double theta;
         if ((*m)[indPlan][ii].mu20-(*m)[indPlan][ii].mu02!=0)
             theta=1/2.0*atan(2*(*m)[indPlan][ii].mu11/((*m)[indPlan][ii].mu20-(*m)[indPlan][ii].mu02));
-        else 
+        else
             theta =0;
 		if ((*m)[indPlan][ii].mu20>(*m)[indPlan][ii].mu02)
 			theta  += acos(-1.0)/2;
@@ -219,7 +219,7 @@ listeRegion->DefTitreColonne(20, _("hu6"));
 
 
 }
-	
+
 /*static wxClipboard	*pressePapier=NULL;
 if (!pressePapier)
 	pressePapier =new wxClipboard;
@@ -227,21 +227,21 @@ pressePapier->SetData((wxTextDataObject *)listeRegion->GetTable());*/
 }
 
 
-void ImageStatistiques::ListerRegion() 
+void ImageStatistiques::ListerRegion()
 {
 
 
 if (ongletRegionB && fenMere->ImAcq()->channels()>=1)
 	{
-	ongletRegionB->ListerRegion(0);	
+	ongletRegionB->ListerRegion(0);
 	}
 if (ongletRegionV && fenMere->ImAcq()->channels()>=2)
 	{
-	ongletRegionV->ListerRegion(1);	
+	ongletRegionV->ListerRegion(1);
 	}
 if (ongletRegionR && fenMere->ImAcq()->channels()>=3)
 	{
-	ongletRegionR->ListerRegion(2);	
+	ongletRegionR->ListerRegion(2);
 	}
 }
 
@@ -266,14 +266,14 @@ if ( ev.Selecting() )
     for (int i=ev.GetTopRow();i<=ev.GetBottomRow() && i<grapheRegion->nbSommets;i++)
 		ongletRegion->DefRegionSelect(i,1);
 	((wxOsgApp*)osgApp)->Graphique()->TracerCercle(ongletRegion->RegionSelect());
-	}	
+	}
 else
     {
     for (int i=0;i<grapheRegion->nbSommets;i++)
 		ongletRegion->DefRegionSelect(i,0);
 	((wxOsgApp*)osgApp)->Graphique()->MAJNouvelleImage();
 
-	}	
+	}
 */
 }
 
@@ -284,15 +284,15 @@ switch(plan){
 case 0:
 	if (ongletRegionB)
 		ongletRegionB->SelectRegion(w);
-	break;	
+	break;
 case 1:
 	if (ongletRegionV)
 		ongletRegionV->SelectRegion(w);
-	break;	
+	break;
 case 2:
 	if (ongletRegionR)
 		ongletRegionR->SelectRegion(w);
-	break;	
+	break;
 	}
 }
 
@@ -324,15 +324,15 @@ if (!gestionControlDown)
 					regionSelect[cleTri[i]]=1;
 		((wxOsgApp*)osgApp)->Graphique()->MAJNouvelleImage();
 		((wxOsgApp*)osgApp)->Graphique()->TracerCercle(regionSelect);
-		}	
+		}
 	else
 		{
 		for (int i=0;i<grapheRegion->nbSommets;i++)
 			regionSelect[cleTri[i]]=0;
 		((wxOsgApp*)osgApp)->Graphique()->MAJNouvelleImage();
 
-		}	
-	ev.Skip(); 
+		}
+	ev.Skip();
 	}
 */
 }
@@ -379,7 +379,7 @@ ShowContextMenu(point);
 for (int i=0;i<grapheRegion->nbSommets;i++)
 	if(regionSelect[cleTri[i]])
 		listeRegion->DefCellule(i,9,nbZoneId, "%5d");*/
-}		
+}
 
 void FenetreRegion::FusionNiveau(wxCommandEvent &w)
 {
@@ -408,7 +408,7 @@ for (int i=0;i<grapheRegion->nbSommets;i++)
 		listeRegion->DefCellule(i,10,minNiveau,"%4d");
 	}
 */
-}		
+}
 
 void FenetreRegion::RAZNiveau(wxCommandEvent &w)
 {
@@ -426,7 +426,7 @@ for (int i=0;i<grapheRegion->nbSommets;i++)
 		listeRegion->DefCellule(i,13,0,"%4d");
 	}
 */
-}		
+}
 
 void FenetreRegion::DefinirNiveau(wxCommandEvent &w)
 {
@@ -453,7 +453,7 @@ for (int i=0;i<grapheRegion->nbSommets;i++)
 		listeRegion->DefCellule(i,13,minNiveau,"%4d");
 	}
 */
-}		
+}
 
 
 void FenetreRegion::LireNiveau(int *classe)
@@ -476,9 +476,9 @@ for (int i=0;i<grapheRegion->nbSommets;i++)
 		classe[cleTri[i]]=0;
 	}
 */
-}		
+}
 
-		
+
 void FenetreRegion::OterSelection(wxGridEvent &w)
 {
 if (!osgApp)
@@ -492,12 +492,12 @@ if (grapheRegion->nbSommets==0)
 if (w.ControlDown())
 	{
 	gestionControlDown=1;
-	
+
 	regionSelect[cleTri[w.GetRow()]]=1-regionSelect[cleTri[w.GetRow()]];
 	if (regionSelect[cleTri[w.GetRow()]]==0)
 		{
 		listeRegion->ClearSelection();
-		
+
 		for (int i=0;i<grapheRegion->nbSommets;i++)
 			if (regionSelect[cleTri[i]])
 				listeRegion->SelectRow(i,true);
@@ -512,6 +512,6 @@ if (w.ControlDown())
 else
 	w.Skip();
 */
-}		
+}
 
-		
+
