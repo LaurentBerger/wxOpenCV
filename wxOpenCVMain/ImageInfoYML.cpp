@@ -206,6 +206,7 @@ void ImageInfoCV::write(cv::FileStorage& fs) const                        //Writ
 				}    
 			}
 		}
+#ifdef WIN32
     auto  it = pointCle.begin();
     for (; it != pointCle.end(); it++)
     {
@@ -239,6 +240,7 @@ void ImageInfoCV::write(cv::FileStorage& fs) const                        //Writ
             break;
         }
     }
+#endif
 }
  
  

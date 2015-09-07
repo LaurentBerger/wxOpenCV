@@ -2,9 +2,9 @@
 #include <stdexcept>
 
 
-std::vector<std::vector<cv::Moments>> *ImageInfoCV::CalcMoment()
+std::vector<std::vector<cv::Moments> > *ImageInfoCV::CalcMoment()
 {
-std::vector<std::vector<cv::Moments>>  m(channels());
+std::vector<std::vector<cv::Moments> >  m(channels());
 huMoment.resize(channels());
 int nbCanaux=channels();
 
