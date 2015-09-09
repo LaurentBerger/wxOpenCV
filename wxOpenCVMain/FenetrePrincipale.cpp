@@ -19,6 +19,162 @@
 using namespace std;
 
 
+/* My frame constructor */
+FenetrePrincipale::FenetrePrincipale(wxFrame *frame, const wxString& title, const wxPoint& pos,
+    const wxSize& size, long style)
+    : wxFrame(frame, wxID_ANY, title , pos, size, style/*|wxVSCROLL |wxHSCROLL*/)
+{
+tpsPreEvt=-1;
+nbImageCam=0;
+FenetrePrincipale::nbObjetFenetrePrincipale++;
+imGain=NULL;
+correctionGain=false;
+tracerContour=false;
+tracerLigneHough=false;
+tracerLigneProbaHough=false;
+tracerCercleHough=false;
+tracerBonCoin=false;
+tracerORBPoint = false;
+tracerBRISKPoint = false;
+tracerBLOBPoint = false;
+tracerKAZEPoint = false;
+tracerAKAZEPoint = false;
+tracerKAZEPoint = false;
+tracerAGASTPoint = false;
+tracerFREAKPoint = false;
+tracerMSERPoint=false;
+tracerContourPoly=false;
+imgStatIm = NULL;
+indEvtCam=0;
+for (int i=0;i<10;i++)
+	planActif[i]=true;
+osgApp=NULL;
+zoomActif=false;
+statActif=false;
+fenetreSauvee =0;
+fenAlgo=NULL;
+fenPano = NULL;
+idFenetre=-1;
+
+
+
+
+//detectionUtilisateur =  new wxTimer(this,2);
+detectionUtilisateur=NULL;
+repertoireDuDocument=".";
+nomDuDocument=wxEmptyString;
+modeImage = 0;
+modeFiltre =0;
+fondDejaDefini=0;
+modeTransparence=0;
+cTransparence[0]=100;
+cTransparence[1]=0;
+cTransparence[2]=0;
+cTransparence[3]=0;
+modeCamera=false;
+imageTraitee=true;
+interdireAffichage=false;
+typeAcqImage =0;
+indFiltreMoyenne=0;
+indSeqTabApp=-1;
+pCouleur=NULL;
+horlogeSeq=NULL;
+imAcq = NULL;
+poly=NULL;
+dateSeq=NULL;
+correctionFonction=0;
+correctionTache=0;
+correctionBiais=0;
+nbImageTache=0;
+SetBackgroundColour(*wxWHITE);
+// Association barre des menus avec la trame
+
+SetIcon(wxIcon("wxocv.bmp",wxBITMAP_TYPE_ICO ));
+DefCurseur(5);
+
+cam=NULL;
+
+tabRGB=NULL;
+tabRGBTransparence=NULL;
+imAcq=NULL;
+imAffichee=NULL;
+imAcq = NULL;
+indPalette=0;
+nbImageBiais=0;
+nbImageTache=0;
+nbImageFonction=0;
+dImageBiais=0;
+dImageTache=0;
+
+seuilNivBas=NULL;
+coeffCanal=NULL;
+alphad=1;
+alpham=1;
+seuilModuleHaut = 7.5*7.5;
+seuilModuleBas = 40;
+seuilSurface = 1000;
+diffHauteur= 40;
+nbMarcheFit=0;
+
+SetClientSize(size.x, size.y);
+feuille=NULL;
+CreateStatusBar(2);
+wxStatusBar *statbarOld = GetStatusBar();
+statbarOld->Hide();
+barreEtat = new BarreInfo(this);
+if (barreEtat)
+	SetStatusBar(barreEtat);
+wxSize tailleUtile;
+GetClientSize(&tailleUtile.x, &tailleUtile.y);
+GetStatusBar()->Show();
+PositionStatusBar();
+if (detectionUtilisateur)
+	detectionUtilisateur->Start(TPSMISEENVEILLECOURBE,true);
+}
+
+
+
+ImageInfoCV *FenetrePrincipale::ImageOp1pre()
+{
+FenetrePrincipale *f = osgApp->Fenetre(origineImage.indOpFenetre[0]);
+if (f)
+	return f->ImAcq();
+return NULL;
+
+}
+
+ImageInfoCV *FenetrePrincipale::ImageOp2pre()
+{
+FenetrePrincipale *f = osgApp->Fenetre(origineImage.indOpFenetre[0]);
+if (f)
+	return f->ImAcq();
+return NULL;
+
+}
+
+
+int FenetrePrincipale::IdFenetreOp1pre()
+{ 
+if (origineImage.op.size()>=1)
+    return origineImage.indOpFenetre[0];
+return -1;
+};
+
+
+void	FenetrePrincipale::DefPointeurSouris(int type)
+{
+switch(type){
+case 0:
+	SetCursor (wxStockCursor (wxCURSOR_ARROW ));
+	break;
+case 1:
+	SetCursor (wxStockCursor (wxCURSOR_HAND ));
+	break;
+	}
+}
+
+
+
 void FenetrePrincipale::DefCurseur(int r,int xc,int yc)
 {
    static char down_bits[128];
@@ -310,118 +466,6 @@ char FenetrePrincipale::UtilisateurAbsent()
 if (osgApp)
 	return osgApp->UtilisateurAbsent();
 return 0;
-}
-
-/* My frame constructor */
-FenetrePrincipale::FenetrePrincipale(wxFrame *frame, const wxString& title, const wxPoint& pos,
-    const wxSize& size, long style)
-    : wxFrame(frame, wxID_ANY, title , pos, size, style/*|wxVSCROLL |wxHSCROLL*/)
-{
-tpsPreEvt=-1;
-nbImageCam=0;
-FenetrePrincipale::nbObjetFenetrePrincipale++;
-imGain=NULL;
-correctionGain=false;
-tracerContour=false;
-tracerLigneHough=false;
-tracerLigneProbaHough=false;
-tracerCercleHough=false;
-tracerBonCoin=false;
-tracerORBPoint = false;
-tracerBRISKPoint = false;
-tracerBLOBPoint = false;
-tracerKAZEPoint = false;
-tracerAKAZEPoint = false;
-tracerKAZEPoint = false;
-tracerAGASTPoint = false;
-tracerFREAKPoint = false;
-tracerMSERPoint=false;
-tracerContourPoly=false;
-imgStatIm = NULL;
-indEvtCam=0;
-for (int i=0;i<10;i++)
-	planActif[i]=true;
-osgApp=NULL;
-zoomActif=false;
-statActif=false;
-fenetreSauvee =0;
-fenAlgo=NULL;
-fenPano = NULL;
-idFenetre=-1;
-
-
-
-
-//detectionUtilisateur =  new wxTimer(this,2);
-detectionUtilisateur=NULL;
-repertoireDuDocument=".";
-nomDuDocument=wxEmptyString;
-modeImage = 0;
-modeFiltre =0;
-fondDejaDefini=0;
-modeTransparence=0;
-cTransparence[0]=100;
-cTransparence[1]=0;
-cTransparence[2]=0;
-cTransparence[3]=0;
-modeCamera=false;
-imageTraitee=true;
-interdireAffichage=false;
-typeAcqImage =0;
-indFiltreMoyenne=0;
-pCouleur=NULL;
-horlogeSeq=NULL;
-imAcq = NULL;
-poly=NULL;
-dateSeq=NULL;
-correctionFonction=0;
-correctionTache=0;
-correctionBiais=0;
-nbImageTache=0;
-SetBackgroundColour(*wxWHITE);
-// Association barre des menus avec la trame
-
-SetIcon(wxIcon("wxocv.bmp",wxBITMAP_TYPE_ICO ));
-DefCurseur(5);
-
-cam=NULL;
-
-tabRGB=NULL;
-tabRGBTransparence=NULL;
-imAcq=NULL;
-imAffichee=NULL;
-imAcq = NULL;
-indPalette=0;
-nbImageBiais=0;
-nbImageTache=0;
-nbImageFonction=0;
-dImageBiais=0;
-dImageTache=0;
-
-seuilNivBas=NULL;
-coeffCanal=NULL;
-alphad=1;
-alpham=1;
-seuilModuleHaut = 7.5*7.5;
-seuilModuleBas = 40;
-seuilSurface = 1000;
-diffHauteur= 40;
-nbMarcheFit=0;
-
-SetClientSize(size.x, size.y);
-feuille=NULL;
-CreateStatusBar(2);
-wxStatusBar *statbarOld = GetStatusBar();
-statbarOld->Hide();
-barreEtat = new BarreInfo(this);
-if (barreEtat)
-	SetStatusBar(barreEtat);
-wxSize tailleUtile;
-GetClientSize(&tailleUtile.x, &tailleUtile.y);
-GetStatusBar()->Show();
-PositionStatusBar();
-if (detectionUtilisateur)
-	detectionUtilisateur->Start(TPSMISEENVEILLECOURBE,true);
 }
 
 void FenetrePrincipale::InitImageFenetre()
@@ -1332,10 +1376,20 @@ case MENU_EXEC_OP:
 	{
     if (Cam() && Cam()->IsRunning())
 	{
+        int indEtape=max(origineImage.indEtape,imAcq->EtapeOp());
+	    osgApp->DefEtapeOperation(indEtape+1);
+        std::map <int,std::vector <ParametreOperation > >  *p=osgApp->TabSeqOperation();
+        if (indSeqTabApp==-1)
+        {
+            indSeqTabApp=p->size();
+            p->insert(make_pair(indSeqTabApp,seqOp));
+        }
+        seqOp.push_back(*osgApp->Operation());
+        (*p)[indSeqTabApp].push_back(*osgApp->Operation());
 	    wxCriticalSectionLocker enter(paramCam);
-
 	    DefSeqCamera(&seqOp);
-	    return;
+        osgApp->RAZOp();
+        osgApp->DefPointeurSouris(0,0);
 	}
     else
     {

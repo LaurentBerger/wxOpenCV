@@ -121,7 +121,8 @@ void DefOperande2(ImageInfoCV* im,int i=-1);
 void DefOperande3(ImageInfoCV* im,int i=-1);
 void DefOperandeN(ImageInfoCV* im,int i=-1);
 void SupOperandeN(ImageInfoCV* im,int i=-1);
-
+ParametreOperation *Operation(){return &pOCV;};
+void RAZOp(){pOCV.op.clear();pOCV.indOpFenetre.clear();pOCV.doubleParam.clear();pOCV.intParam.clear();};
 void DefParametreOCV(ParametreOperation &x){pOCV=x;};
 bool Operateur(){return pOCV.operateur;} /*!< Vrai si opération unaire sélectionnée */
 ImageInfoCV *Op1(){return OpId(0);};

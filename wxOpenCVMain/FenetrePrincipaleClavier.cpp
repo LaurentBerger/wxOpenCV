@@ -1,6 +1,28 @@
 #include "FenetrePrincipale.h"
 #include "imagestat.h"
+#include "ControleCamera.h"
 //#include "outilsImage.h"
+
+
+void FenetrePrincipale::OnActivate(wxActivateEvent &w)
+{
+if (!w.GetActive())
+	return;
+if (osgApp)
+	{
+	osgApp->IdFenetreActive(idFenetre);
+    wxCriticalSectionLocker enter(travailCam);
+    if (cam && cam->IsRunning() && osgApp->CtrlCamera())
+		{
+		wxString s= "Control :" +GetTitle();
+		osgApp->CtrlCamera()->SetTitle(s);
+		osgApp->CtrlCamera()->DefCamera(cam);
+		osgApp->CtrlCamera()->Show(true);
+		osgApp->CtrlCamera()->DefParent(this);
+		}
+	}
+}
+
 
 void FenetrePrincipale::TraitementClavier(wxKeyEvent &event)
 {

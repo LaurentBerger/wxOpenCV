@@ -28,6 +28,7 @@ class GlisserImage;
 
 
 #define NBFILTRE 11
+#define TPSMISEENVEILLECOURBE	6000
 
 // Constante pour usage de la souris
 #define SOURIS_STD 0
@@ -391,6 +392,7 @@ wxString			nomImageQuadrique;/*!< Nom de l'image du fond (une fois les tâches e
 ParametreOperation	origineImage;	/*!< Opération appliquée à une fenêtre pour obtenir l'image en cours */
 std::vector <ParametreOperation> seqOp;	/*!<  Séquence d'opération appliquée à une image pour obtenir l'image en cours. Les résulats intermédiaires 
 										ne sont pas dans des fenêtres. La première opération peut être associée à une fenêtre mais ce n'est pas obligatoire */
+int indSeqTabApp;   /*!< indice de séquence dans la table de application*/
 
 bool				modeCamera;			/*!< 1 affichage de l'image capturée */
 bool				imageTraitee;		/*!< 1 si traitement de l'image captureée est terminé  */	

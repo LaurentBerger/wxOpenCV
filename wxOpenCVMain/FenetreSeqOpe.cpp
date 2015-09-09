@@ -10,7 +10,7 @@ using namespace std;
 #define IND_HYPER 10 // hyperlien
 #define IND_STATIC 200 // champ static
 #define IND_SPIN 300 // bouton spin
-#define IND_COMBO 350 // combobox pour choix
+#define IND_COMBO 500 // combobox pour choix
 #define IND_SELECMULTIPLE IND_HYPER-1 // Selection de fichier
 #define IND_FENETREUNIQUE IND_HYPER-2 // Selection de fichier
 #define IND_FICHIERS IND_HYPER-3 // Selection de fichier
@@ -122,15 +122,14 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	nombre.Printf("%d",its->second.valeur.width);
 	wxPoint p(10,ligne);
 	wxSize	s(100,20);
-	if ((wst=(wxStaticText*)panneau->FindWindowById(indStatic,panneau))!=NULL)
+	if ((wst=(wxStaticText*)panneau->FindWindowById(indSpin-100,panneau))!=NULL)
 		{
 		wst->SetLabel(its->first + " x");
 		wst->Move(p);
 		}
 	else
-		wst = new wxStaticText(panneau, indStatic, its->first + " x", p, s);
+		wst = new wxStaticText(panneau, indSpin-100, its->first + " x", p, s);
 	wst->Show(true);
-	indStatic++;
 	p += wxPoint(s.GetX(),0);
 	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
 		wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
@@ -140,17 +139,17 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	wsd->SetRange(its->second.mini.width, its->second.maxi.width);
 	wsd->SetValue(its->second.valeur.width);
 	wsd->Show(true);
+	indStatic++;
 	indSpin++;
 	p += wxPoint(s.GetX(),0);
-	if ((wst=(wxStaticText*)panneau->FindWindowById(indStatic,panneau))!=NULL)
+	if ((wst=(wxStaticText*)panneau->FindWindowById(indSpin-100,panneau))!=NULL)
 		{
 		wst->SetLabel(its->first + " y");
 		wst->Move(p);
 		}
 	else
-		wst = new wxStaticText(panneau, indStatic, its->first + " y", p, s);
+		wst = new wxStaticText(panneau, indSpin-100, its->first + " y", p, s);
 	wst->Show(true);
-	indStatic++;
 	p += wxPoint(s.GetX(),0);
 	nombre.Printf("%d",its->second.valeur.height);
 	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
@@ -163,6 +162,7 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 	wsd->SetIncrement((double)its->second.pas.height);
 	wsd->SetValue(its->second.valeur.height);
 	wsd->Show(true);
+	indStatic++;
 	indSpin++;
 	if (tailleMax.x<p.x+s.x)
 		tailleMax.x= p.x+s.x;
@@ -173,24 +173,154 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 std::map<std::string,DomaineParametreOp<int> >::iterator iti;
 for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
 	{
+    if (ParametreOperation::listeParam.find(iti->first) == ParametreOperation::listeParam.end())
+        {
+	    wxString nombre;
+	    nombre.Printf("%d",iti->second.valeur);
+	    wxPoint p(10,ligne);
+	    wxSize	s(100,20);
+	    if ((wst=(wxStaticText*)panneau->FindWindowById(indSpin-100,panneau))!=NULL)
+		    {
+		    wst->SetLabel(iti->first);
+		    wst->Move(p);
+		    }
+	    else
+		    wst = new wxStaticText(panneau,indSpin-100,iti->first,p, s);
+	    wst->Show(true);
+	    p += wxPoint(s.GetX(),0);
+
+
+        if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
+		    wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
+	    else
+		    wsd->Move(p);
+	    wsd->SetRange(iti->second.mini,iti->second.maxi);
+	    wsd->SetName(iti->first);
+	    wsd->SetValue(iti->second.valeur);
+	    wsd->SetIncrement(iti->second.pas);
+	    wsd->Show(true);
+	    indSpin++;
+        /*wxSpinCtrlDouble *sp = new wxSpinCtrlDouble(page, indOriCtrl + 2 * nbParam + 1, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
+        sp->SetRange(iti->second.mini, iti->second.maxi);
+        sp->SetIncrement(iti->second.pas);
+        if (iti->second.res)
+            sp->Disable();*/
+	    if (tailleMax.x<p.x+s.x)
+		    tailleMax.x= p.x+s.x;
+	    if (tailleMax.y<p.y+s.y)
+		    tailleMax.y= p.y+s.y;
+	    ligne+=20;
+        }
+	}
+std::map<std::string,DomaineParametreOp<double> >::iterator itd;
+for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
+	{
 	wxString nombre;
-	nombre.Printf("%d",iti->second.valeur);
+	nombre.Printf("%f",itd->second.valeur);
 	wxPoint p(10,ligne);
 	wxSize	s(100,20);
-	if ((wst=(wxStaticText*)panneau->FindWindowById(indStatic,panneau))!=NULL)
+	if ((wst=(wxStaticText*)panneau->FindWindowById(indSpin-100,panneau))!=NULL)
 		{
-		wst->SetLabel(iti->first);
+		wst->SetLabel(itd->first);
 		wst->Move(p);
 		}
 	else
-		wst = new wxStaticText(panneau,indStatic,iti->first,p, s);
+		wst = new wxStaticText(panneau,indSpin-100,itd->first,p, s);
 	wst->Show(true);
-	indStatic++;
 	p += wxPoint(s.GetX(),0);
+	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
+		wsd=new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
+	else
+		wsd->Move(p);
+	wsd->SetRange(itd->second.mini,itd->second.maxi);
+	wsd->SetName(itd->first);
+	wsd->SetIncrement(itd->second.pas);
+	wsd->SetValue(itd->second.valeur);
+	wsd->Show(true);
+	indSpin++;
+	if (tailleMax.x<p.x+s.x)
+		tailleMax.x= p.x+s.x;
+	if (tailleMax.y<p.y+s.y)
+		tailleMax.y= p.y+s.y;
+	ligne+=20;
+	}
+std::map<std::string, DomaineParametreOp<cv::Point> >::iterator itp;
+for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
+{
+	wxString nombre;
+	nombre.Printf("%d", itp->second.valeur.x);
+	wxPoint p(10, ligne);
+	wxSize	s(100, 20);
+	if ((wst = (wxStaticText*)panneau->FindWindowById(indSpin-100, panneau)) != NULL)
+	{
+		wst->SetLabel(itp->first + " x");
+		wst->Move(p);
+	}
+	else
+		wst = new wxStaticText(panneau, indSpin-100, itp->first + " x", p, s);
+	wst->Show(true);
+	p += wxPoint(s.GetX(), 0);
+	//	wxSpinCtrl *spw=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
+	if ((wsd = (wxSpinCtrlDouble*)panneau->FindWindowById(indSpin, panneau)) == NULL)
+		wsd = new wxSpinCtrlDouble(panneau, indSpin, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
+	else
+		wsd->Move(p);
+	wsd->SetRange(0, 256);
+	wsd->SetIncrement((double)itp->second.pas.x);
+	wsd->SetRange(itp->second.mini.y, itp->second.maxi.y);
+	wsd->SetValue(itp->second.valeur.x);
+	wsd->Show(true);
+	indSpin++;
+	p += wxPoint(s.GetX(), 0);
+	if ((wst = (wxStaticText*)panneau->FindWindowById(indSpin-100, panneau)) != NULL)
+	{
+		wst->SetLabel(itp->first + " y");
+		wst->Move(p);
+	}
+	else
+		wst = new wxStaticText(panneau, indSpin-100, itp->first + " y", p, s);
+	wst->Show(true);
+	p += wxPoint(s.GetX(), 0);
+	nombre.Printf("%d", itp->second.valeur.y);
+	//	wxSpinCtrl *sph=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
+	//	sph->SetRange(0,256);
+	if ((wsd = (wxSpinCtrlDouble*)panneau->FindWindowById(indSpin, panneau)) == NULL)
+		wsd = new wxSpinCtrlDouble(panneau, indSpin, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
+	else
+		wsd->Move(p);
 
+	wsd->SetName(itp->first);
+	wsd->SetRange(itp->second.mini.y, itp->second.maxi.y);
+	wsd->SetIncrement((double)itp->second.pas.y);
+	wsd->SetValue(itp->second.valeur.y);
+	wsd->Show(true);
+	indSpin++;
+	if (tailleMax.x<p.x + s.x)
+		tailleMax.x = p.x + s.x;
+	if (tailleMax.y<p.y + s.y)
+		tailleMax.y = p.y + s.y;
+	ligne += 20;
+}
 
+for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
+	{
     if (ParametreOperation::listeParam.find(iti->first) != ParametreOperation::listeParam.end())
         {
+	    wxString nombre;
+	    nombre.Printf("%d",iti->second.valeur);
+	    wxPoint p(10,ligne);
+	    wxSize	s(100,20);
+	    if ((wst=(wxStaticText*)panneau->FindWindowById(indCombo-100,panneau))!=NULL)
+		    {
+		    wst->SetLabel(iti->first);
+		    wst->Move(p);
+		    }
+	    else
+		    wst = new wxStaticText(panneau,indCombo-100,iti->first,p, s);
+	    wst->Show(true);
+	    p += wxPoint(s.GetX(),0);
+
+
         int nbChaine = pOCV->listeParam[iti->first].size(),valDefaut=0;
         wxString *choix = new wxString[nbChaine], choixDefaut;
         int i = 0;
@@ -221,142 +351,25 @@ for (iti=pOCV->intParam.begin();iti!=pOCV->intParam.end();iti++)
         if (iti->second.res)
             cb->Disable();
         indCombo++;
-        }
-    else
-        {
-        if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
-		    wsd =new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-	    else
-		    wsd->Move(p);
-	    wsd->SetRange(iti->second.mini,iti->second.maxi);
-	    wsd->SetName(iti->first);
-	    wsd->SetValue(iti->second.valeur);
-	    wsd->SetIncrement(iti->second.pas);
-	    wsd->Show(true);
-	    indSpin++;
-        /*wxSpinCtrlDouble *sp = new wxSpinCtrlDouble(page, indOriCtrl + 2 * nbParam + 1, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
-        sp->SetRange(iti->second.mini, iti->second.maxi);
-        sp->SetIncrement(iti->second.pas);
-        if (iti->second.res)
-            sp->Disable();*/
-        }
+ 	    if (tailleMax.x<p.x + s.x)
+		    tailleMax.x = p.x + s.x;
+	    if (tailleMax.y<p.y + s.y)
+		    tailleMax.y = p.y + s.y;
+	    ligne += 20;
+       }
+    }
 
-
-
-
-	if (tailleMax.x<p.x+s.x)
-		tailleMax.x= p.x+s.x;
-	if (tailleMax.y<p.y+s.y)
-		tailleMax.y= p.y+s.y;
-	ligne+=20;
-	}
-std::map<std::string,DomaineParametreOp<double> >::iterator itd;
-for (itd=pOCV->doubleParam.begin();itd!=pOCV->doubleParam.end();itd++)
-	{
-	wxString nombre;
-	nombre.Printf("%f",itd->second.valeur);
-	wxPoint p(10,ligne);
-	wxSize	s(100,20);
-	if ((wst=(wxStaticText*)panneau->FindWindowById(indStatic,panneau))!=NULL)
-		{
-		wst->SetLabel(itd->first);
-		wst->Move(p);
-		}
-	else
-		wst = new wxStaticText(panneau,indStatic,itd->first,p, s);
-	wst->Show(true);
-	indStatic++;
-	p += wxPoint(s.GetX(),0);
-	if ((wsd=(wxSpinCtrlDouble*)panneau->FindWindowById(indSpin,panneau))==NULL)
-		wsd=new wxSpinCtrlDouble(panneau,indSpin,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-	else
-		wsd->Move(p);
-	wsd->SetRange(itd->second.mini,itd->second.maxi);
-	wsd->SetName(itd->first);
-	wsd->SetIncrement(itd->second.pas);
-	wsd->SetValue(itd->second.valeur);
-	wsd->Show(true);
-	indSpin++;
-	if (tailleMax.x<p.x+s.x)
-		tailleMax.x= p.x+s.x;
-	if (tailleMax.y<p.y+s.y)
-		tailleMax.y= p.y+s.y;
-	ligne+=20;
-	}
-std::map<std::string, DomaineParametreOp<cv::Point> >::iterator itp;
-for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
-{
-	wxString nombre;
-	nombre.Printf("%d", itp->second.valeur.x);
-	wxPoint p(10, ligne);
-	wxSize	s(100, 20);
-	if ((wst = (wxStaticText*)panneau->FindWindowById(indStatic, panneau)) != NULL)
-	{
-		wst->SetLabel(itp->first + " x");
-		wst->Move(p);
-	}
-	else
-		wst = new wxStaticText(panneau, indStatic, itp->first + " x", p, s);
-	wst->Show(true);
-	indStatic++;
-	p += wxPoint(s.GetX(), 0);
-	//	wxSpinCtrl *spw=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-	if ((wsd = (wxSpinCtrlDouble*)panneau->FindWindowById(indSpin, panneau)) == NULL)
-		wsd = new wxSpinCtrlDouble(panneau, indSpin, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
-	else
-		wsd->Move(p);
-	wsd->SetRange(0, 256);
-	wsd->SetIncrement((double)itp->second.pas.x);
-	wsd->SetRange(itp->second.mini.y, itp->second.maxi.y);
-	wsd->SetValue(itp->second.valeur.x);
-	wsd->Show(true);
-	indSpin++;
-	p += wxPoint(s.GetX(), 0);
-	if ((wst = (wxStaticText*)panneau->FindWindowById(indStatic, panneau)) != NULL)
-	{
-		wst->SetLabel(itp->first + " y");
-		wst->Move(p);
-	}
-	else
-		wst = new wxStaticText(panneau, indStatic, itp->first + " y", p, s);
-	wst->Show(true);
-	indStatic++;
-	p += wxPoint(s.GetX(), 0);
-	nombre.Printf("%d", itp->second.valeur.y);
-	//	wxSpinCtrl *sph=new wxSpinCtrl(page,indOriCtrl+2*nbParam+1,nombre,p,s,wxSP_WRAP|wxSP_ARROW_KEYS );
-	//	sph->SetRange(0,256);
-	if ((wsd = (wxSpinCtrlDouble*)panneau->FindWindowById(indSpin, panneau)) == NULL)
-		wsd = new wxSpinCtrlDouble(panneau, indSpin, nombre, p, s, wxSP_WRAP | wxSP_ARROW_KEYS);
-	else
-		wsd->Move(p);
-
-	wsd->SetName(itp->first);
-	wsd->SetRange(itp->second.mini.y, itp->second.maxi.y);
-	wsd->SetIncrement((double)itp->second.pas.y);
-	wsd->SetValue(itp->second.valeur.y);
-	wsd->Show(true);
-	indSpin++;
-	if (tailleMax.x<p.x + s.x)
-		tailleMax.x = p.x + s.x;
-	if (tailleMax.y<p.y + s.y)
-		tailleMax.y = p.y + s.y;
-	ligne += 20;
-}
-int i = indStatic;
-while (panneau->FindWindowById(i,panneau)&& i<IND_SPIN)
-	{
-	panneau->FindWindowById(i,panneau)->Show(false);
-	i++;
-	}
-i = indSpin;
+int i = indSpin;
 while (panneau->FindWindowById(i, panneau))
     {
+	panneau->FindWindowById(i-100,panneau)->Show(false);
     panneau->FindWindowById(i, panneau)->Show(false);
     i++;
     }
 i = indCombo;
 while (panneau->FindWindowById(i, panneau))
     {
+ 	panneau->FindWindowById(i-100,panneau)->Show(false);
     panneau->FindWindowById(i, panneau)->Show(false);
     i++;
     }
@@ -422,7 +435,7 @@ void FenetreSequenceOperation::ComboBox(wxCommandEvent &w)
 
     wxComboBox *cb = ((wxComboBox*)w.GetEventObject());
     ParametreOperation p = (*seqActif)[indSeq][opSelec];
-    wxStaticText *st = (wxStaticText*)wxWindow::FindWindowById(w.GetId() - 150, this);
+    wxStaticText *st = (wxStaticText*)wxWindow::FindWindowById(w.GetId() - 100, this);
     if (!st)
         throw("wxStaticText undefined");
     if (lienCombo.find(w.GetId()) != lienCombo.end())
