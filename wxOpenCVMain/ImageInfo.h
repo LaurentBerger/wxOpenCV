@@ -128,6 +128,8 @@ std::vector<cv::Mat>		statComposante; /*< Statistique des composantes de chaque 
 std::vector<cv::Mat>		centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
 std::vector<std::vector<std::vector<cv::Point> > > contours; /*< Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 std::vector<std::vector<std::vector<cv::Point> > > contoursPoly; /*< Contours polygonaux dans l'image des composantes connexes http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html#approxpolydp */
+std::vector<std::vector<std::vector<int> > > contoursHull; /*< Contours convexe dans l'image des composantes connexes http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html#approxpolydp */
+std::vector<std::vector<std::vector<cv::Vec4i> > > defautConvexite; /*< Défaut de convexité http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=convexitydefect#convexitydefects */
 std::vector<std::vector<cv::Vec4i> >  arbreContour; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
 std::vector<std::vector<cv::Moments> > moment;	/*<!http://docs.opencv.org/doc/tutorials/imgproc/shapedescriptors/moments/moments.html*/
 std::vector<std::vector<std::vector<double> > >huMoment;		/*<!http://docs.opencv.org/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=moments#humoments*/
@@ -487,6 +489,8 @@ cv::Mat *Descripteur(char =-1);
 std::vector<std::vector<cv::Moments> > *MomentComposante(){ return &moment; };
 std::vector<std::vector<cv::Moments> > *MomentCtr(){ return &momentCtr; };
 
+std::vector<std::vector<std::vector<cv::Vec4i> > >*PtDefautConvexite(){return &defautConvexite;};
+std::vector<std::vector<std::vector<int> > > *PtContoursHull(){return &contoursHull;};
 std::vector<std::vector<std::vector<cv::Point> > > *PtContours(){return &contours;};
 std::vector<std::vector<std::vector<cv::Point> > > *PtContoursPoly(){return &contoursPoly;};
 std::vector<std::vector<cv::Vec4i> > *ArboContour(){return &arbreContour;}; /*< Arborescence des Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */

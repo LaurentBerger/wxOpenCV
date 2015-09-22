@@ -1005,7 +1005,7 @@ if (s == "canny")
 }
 if (s == "contour")
 	{
-	nbImageRes=1;
+	nbImageRes=0;
     nbOperande = 1;
     intParam["mode"] = DomaineParametreOp<int>(cv::RETR_EXTERNAL, cv::RETR_EXTERNAL, cv::RETR_TREE, 1);
 	intParam["method"]=DomaineParametreOp<int>(cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_TC89_L1 ,1);
@@ -1015,7 +1015,7 @@ if (s == "contour")
 
 if (s == "convexhull")
 	{
-	nbImageRes=1;
+	nbImageRes=0;
     nbOperande = 1;
     intParam["clockwise"] = DomaineParametreOp<int>(cv::RETR_EXTERNAL, cv::RETR_EXTERNAL, cv::RETR_TREE, 1);
 	intParam["returnpoints"]=DomaineParametreOp<int>(cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_NONE,cv::CHAIN_APPROX_TC89_L1 ,1);
@@ -1024,7 +1024,7 @@ if (s == "convexhull")
 }
 if (s == "convexitydefects")
 	{
-	nbImageRes=1;
+	nbImageRes=0;
     nbOperande = 1;
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));

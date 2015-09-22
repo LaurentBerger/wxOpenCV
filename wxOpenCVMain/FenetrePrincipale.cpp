@@ -30,6 +30,8 @@ FenetrePrincipale::nbObjetFenetrePrincipale++;
 imGain=NULL;
 correctionGain=false;
 tracerContour=false;
+tracerEnveloppe=false;
+tracerDefautEnveloppe=false;
 tracerLigneHough=false;
 tracerLigneProbaHough=false;
 tracerCercleHough=false;

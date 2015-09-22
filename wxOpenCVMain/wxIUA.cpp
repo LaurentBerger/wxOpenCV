@@ -245,7 +245,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_DISTANCEDISCRETE, distancediscrete_xpm, _("Transform distance"), "distancetransform", 5);
     CONSTRUCTEUR_CMD(bouton, ID_VORONOI, voronoi_xpm,_("Voronoi"), " ", 5);
     CONSTRUCTEUR_CMD(bouton, ID_CONVEX_HULL, convexhull_xpm,_("Finds the convex hull of a point set."), "convexhull", 5);
-    CONSTRUCTEUR_CMD(bouton, ID_CONVEX_DEFAUT, convexdefaut_xpm,_("Finds the convexity defects of a contour."), "convexitydefects ", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_CONVEX_DEFAUT, convexdefaut_xpm,_("Finds the convexity defects of a contour."), "convexitydefects", 5);
     CONSTRUCTEUR_CMD(bouton, ID_APPROX_POLY, approxpoly_xpm,_("Approximates a polygonal curve(s)"), "approxpolydp", 5);
     CONSTRUCTEUR_CMD(bouton, ID_APPROX_CHAIN, approxchain_xpm,_("Approximates Freeman chain(s) with a polygonal curve"), "Approxchains", 5);
 

@@ -122,16 +122,10 @@ if (!((FenetrePrincipale*)fenParent)->ImAcq())
 	return;
 if (p!=NULL)
     contour= p;
-for (int ii=0;ii<keyPt->size();ii++)
+for (int ii=0;ii<contour->size();ii++)
 	{
 
-	listeRegion->DefCellule(ii,0,(*keyPt)[ii].pt.x, "%5.1f");
-	listeRegion->DefCellule(ii,1,(*keyPt)[ii].pt.y, "%5.1f");
-	listeRegion->DefCellule(ii,2,(*keyPt)[ii].size, "%5.1f");
-	listeRegion->DefCellule(ii,3,(*keyPt)[ii].angle, "%5.1f");
-	listeRegion->DefCellule(ii,4,(*keyPt)[ii].response, "%5.1f");
-	listeRegion->DefCellule(ii,5,(*keyPt)[ii].octave, "%d");
-	listeRegion->DefCellule(ii,6,(*keyPt)[ii].class_id, "%d");
+	listeRegion->DefCellule(ii,0,static_cast<int>((*contour)[ii].size()), "%d");
 	}
 
 }

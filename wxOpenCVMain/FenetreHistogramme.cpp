@@ -345,7 +345,7 @@ try
 		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
 			etendu[0]=minHisto[i];
-			etendu[1]=maxHisto[i];
+			etendu[1]=maxHisto[i]+1;
 			calcHist(&planCouleur[i],1,nbCanaux,masque, histoImage[i], 1, &nbGraines[i], listeEtendu,
 						 true, 
 						 false);
@@ -356,7 +356,7 @@ try
 		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
 			etendu[0]=minHisto[i];
-			etendu[1]=maxHisto[i];
+			etendu[1]=maxHisto[i]+1;
 			calcHist(&planCouleur[i],1,nbCanaux,masque, histoImage[i], 1, &nbGraines[i], listeEtendu,
 						 true, 
 						 false);
@@ -368,7 +368,7 @@ try
 			{
 			Mat imSrc;
 			etendu[0]=minHisto[i];
-			etendu[1]=maxHisto[i];
+			etendu[1]=maxHisto[i]+1;
 			planCouleur[i].convertTo(imSrc, CV_32FC1);
 
 			calcHist(&imSrc,1,nbCanaux,masque, histoImage[i], 1, &nbGraines[i], listeEtendu,
@@ -381,7 +381,7 @@ try
 		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
 			etendu[0]=minHisto[i];
-			etendu[1]=maxHisto[i];
+			etendu[1]=maxHisto[i]+1;
 			Mat imF;
 			planCouleur[i].convertTo(imF, CV_32F);
 
@@ -395,7 +395,7 @@ try
 		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
 			etendu[0]=minHisto[i];
-			etendu[1]=maxHisto[i];
+			etendu[1]=maxHisto[i]+1;
 			calcHist(&planCouleur[i],1,nbCanaux,masque, histoImage[i], 1, &nbGraines[i], listeEtendu,
 						 true, 
 						 false);
@@ -406,7 +406,7 @@ try
 		for (int i=0;i<imAcq->channels()&&i<NB_MAX_CANAUX;i++)
 			{
 			etendu[0]=minHisto[i];
-			etendu[1]=maxHisto[i];
+			etendu[1]=maxHisto[i]+1;
 			Mat imF;
 			planCouleur[i].convertTo(imF, CV_32F);
 

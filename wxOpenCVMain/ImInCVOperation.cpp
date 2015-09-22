@@ -583,7 +583,7 @@ else
 	cv::split( *op[0], planCouleur );
 	for (int i=0;i<op[0]->channels();i++)
 		{
-	cv::adaptiveThreshold( planCouleur[i], d[i], pOCV->doubleParam["maxValue"].valeur,pOCV->intParam["adaptiveMethod"].valeur,
+    	cv::adaptiveThreshold( planCouleur[i], d[i], pOCV->doubleParam["maxValue"].valeur,pOCV->intParam["adaptiveMethod"].valeur,
 		pOCV->intParam["thresholdType"].valeur,pOCV->intParam["blockSize"].valeur,pOCV->doubleParam["C"].valeur);
 		}
 	cv::merge(d, *im);
@@ -594,79 +594,98 @@ r.push_back(im);
 return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::Contour(std::vector<ImageInfoCV	*>op,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *> ImageInfoCV::Contour(std::vector<ImageInfoCV	*>op,ParametreOperation *pOCV)
 {
-ImageInfoCV *im1=new ImageInfoCV;
-*(cv::UMat*)im1= op[0]->clone();
-std::vector<std::vector<cv::Point> > f;
-if (op[0]->channels()==1)
-	{
-	cv::findContours( *im1,  f,pOCV->intParam["mode"].valeur,pOCV->intParam["method"].valeur);	
-	}
- else
-	{
-	std::vector<UMat> planCouleur;
-	std::vector<UMat> d(op[0]->channels());
-	cv::split( *op[0], planCouleur );
-	for (int i=0;i<op[0]->channels();i++)
-		{
-		}
-	cv::merge(d,*im1);
-	}
+    std::vector<ImageInfoCV	*> r;
+    if (op[0]!=this)
+    {
+        return r;
 
-std::vector<ImageInfoCV	*> r;
-r.push_back(im1);
-return r;
+    }
+    contours.resize(op[0]->channels());
+
+    UMat im=op[0]->clone();
+    std::vector<std::vector<cv::Point> > f;
+    if (op[0]->channels()==1)
+	    {
+	    cv::findContours( im,  contours[0],pOCV->intParam["mode"].valeur,pOCV->intParam["method"].valeur);	
+	    }
+     else
+	    {
+	    std::vector<UMat> planCouleur;
+	    cv::split( im, planCouleur );
+        contours.resize(op[0]->channels());
+	    for (int i=0;i<op[0]->channels();i++)
+		    {
+    	    cv::findContours( planCouleur[i],  contours[i],pOCV->intParam["mode"].valeur,pOCV->intParam["method"].valeur);	
+		    }
+	    }
+
+    AjoutOpAttribut(pOCV);
+    r.push_back(this);
+    return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::ConvexHull(std::vector< ImageInfoCV *> op, ParametreOperation *pOCV)
+std::vector<ImageInfoCV *> ImageInfoCV::ConvexHull(std::vector< ImageInfoCV *> op, ParametreOperation *pOCV)
 {
-ImageInfoCV *im1=new ImageInfoCV;
-*(cv::UMat*)im1= op[0]->clone();
-std::vector<std::vector<cv::Point> > f;
-if (op[0]->channels()==1)
-	{
-	cv::findContours( *im1,  f,pOCV->intParam["mode"].valeur,pOCV->intParam["method"].valeur);	
-	}
- else
-	{
-	std::vector<UMat> planCouleur;
-	std::vector<UMat> d(op[0]->channels());
-	cv::split( *op[0], planCouleur );
-	for (int i=0;i<op[0]->channels();i++)
-		{
-		}
-	cv::merge(d,*im1);
-	}
+    std::vector<ImageInfoCV	*> r;
+    ImageInfoCV *im1=new ImageInfoCV;
+    if (op[0]!=this)
+    {
+        return r;
 
-std::vector<ImageInfoCV	*> r;
-r.push_back(im1);
-return r;
+    }
+
+
+    contoursHull.resize(channels());
+    for (int i=0;i<channels();i++)
+	    {
+        contoursHull[i].resize(contours[i].size());
+        for (int j = 0; j<contours[i].size();j++)
+            convexHull(contours[i][j],contoursHull[i][j]);
+	    }
+
+    AjoutOpAttribut(pOCV);
+    r.push_back(this);
+    return r;
 }
 
-std::vector<ImageInfoCV *>ImageInfoCV::ConvexityDefects(std::vector< ImageInfoCV *> op, ParametreOperation *pOCV)
+std::vector<ImageInfoCV *> ImageInfoCV::ConvexityDefects(std::vector< ImageInfoCV *> op, ParametreOperation *pOCV)
 {
-ImageInfoCV *im1=new ImageInfoCV;
-*(cv::UMat*)im1= op[0]->clone();
-std::vector<std::vector<cv::Point> > f;
-if (op[0]->channels()==1)
-	{
-	cv::findContours( *im1,  f,pOCV->intParam["mode"].valeur,pOCV->intParam["method"].valeur);	
-	}
- else
-	{
-	std::vector<UMat> planCouleur;
-	std::vector<UMat> d(op[0]->channels());
-	cv::split( *op[0], planCouleur );
-	for (int i=0;i<op[0]->channels();i++)
-		{
-		}
-	cv::merge(d,*im1);
-	}
+    std::vector<ImageInfoCV	*> r;
+    ImageInfoCV *im1=new ImageInfoCV;
+    if (op[0]!=this || contours.size()==0 || contoursHull.size()==0 || contours.size()!=contoursHull.size() )
+    {
+        return r;
 
-std::vector<ImageInfoCV	*> r;
-r.push_back(im1);
-return r;
+    }
+
+
+    defautConvexite.resize(channels());
+    for (int i=0;i<channels();i++)
+	{
+        defautConvexite[i].resize(contours[i].size());
+        for (int j = 0; j<contours[i].size();j++)
+        {
+            defautConvexite[i][j].clear();
+            //if (contoursHull[i][j].size()!=0)
+            try
+            {
+                convexityDefects(contours[i][j],contoursHull[i][j],defautConvexite[i][j]);
+            }
+            catch(cv::Exception& e)
+            {
+                defautConvexite[i][j].clear();
+            }
+		    {
+		    }
+            
+	    }
+    }
+
+    AjoutOpAttribut(pOCV);
+    r.push_back(this);
+    return r;
 }
 
 std::vector<ImageInfoCV *>ImageInfoCV::ApproxPolyDP(std::vector< ImageInfoCV *> op, ParametreOperation *pOCV)
@@ -676,7 +695,6 @@ std::vector<ImageInfoCV *>ImageInfoCV::ApproxPolyDP(std::vector< ImageInfoCV *> 
 
 	    throw std::string("You must used connected components first");
         std::vector<ImageInfoCV	*> r;
-        r.push_back(this);
 	    return r;
 	    }
     ImageInfoCV *im1=new ImageInfoCV;
@@ -685,7 +703,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::ApproxPolyDP(std::vector< ImageInfoCV *> 
 		contoursPoly.resize(op[0]->channels()); 
         contoursPoly[0].resize(contours[0].size());
         for( size_t k = 0; k < contoursPoly[0].size(); k++ )
-            approxPolyDP(UMat(contours[0][k]), contoursPoly[0][k], pOCV->doubleParam["epsilon"].valeur, pOCV->intParam["closed"].valeur);
+            approxPolyDP(contours[0][k], contoursPoly[0][k], pOCV->doubleParam["epsilon"].valeur, pOCV->intParam["closed"].valeur);
 	    }
      else
 	    {
@@ -694,7 +712,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::ApproxPolyDP(std::vector< ImageInfoCV *> 
         {
             contoursPoly[i].resize(contours[i].size());
             for( size_t k = 0; k < contoursPoly[i].size(); k++ )
-                approxPolyDP(UMat(contours[i][k]), contoursPoly[i][k], pOCV->doubleParam["epsilon"].valeur, pOCV->intParam["closed"].valeur);
+                approxPolyDP(contours[i][k], contoursPoly[i][k], pOCV->doubleParam["epsilon"].valeur, pOCV->intParam["closed"].valeur);
         }
 	    }
 

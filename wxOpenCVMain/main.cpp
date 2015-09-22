@@ -179,6 +179,8 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
     EVT_MENU(Menu_ParAlg, FenetrePrincipale::ParamAlgo)
     EVT_MENU(Menu_ParPano, FenetrePrincipale::ParamPano)
     EVT_MENU(Menu_Contour, FenetrePrincipale::TracerContour)
+    EVT_MENU(Menu_Contour_Hull, FenetrePrincipale::TracerEnveloppe)
+    EVT_MENU(Menu_Defaut_Hull, FenetrePrincipale::TracerDefautEnveloppe)
     EVT_MENU(Menu_Contour_Poly, FenetrePrincipale::TracerContourPoly)
 	EVT_MENU(MENU_LIGNEHOUGH,  FenetrePrincipale::TracerLigneHough)
 	EVT_MENU(MENU_LIGNEPROBAHOUGH,  FenetrePrincipale::TracerLigneProbaHough)
@@ -704,16 +706,17 @@ if (pOCV.nbImageRes==0)
         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_KAZE_DES),_("KAZE features"));
     if (pOCV.nomOperation == "agastfeatures2d")
         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_AGAST_DES),_("AGAST features"));
-    if (pOCV.nomOperation == "contour" && f->ImAcq()->PtContours()->size() >= 3)
+    if (f->ImAcq()->PtContours()->size() >= 1)
     {
-         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[0]),_("Blue Contour"));
-         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[1]),_("Green  Contour"));
-         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[2]),_("red Contour"));
-    }
-    else if (f->ImAcq()->PtContours()->size()!=0)
-         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[0]),_("Contour"));
+         for (int i=0;i<f->ImAcq()->channels();i++)
+         {
+             wxString s;
+             s.Format("Contour plane %d",i);
+             listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletContour((&(*f->ImAcq()->PtContours())[i]),s);
+         }
 
 	}
+}
 pOCV.op.clear();
 pOCV.indOpFenetre.clear();
 pOCV.doubleParam.clear();
