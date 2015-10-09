@@ -256,8 +256,11 @@ if (ext!="yml")
 else
 {
     cv::FileStorage fs(nomDuFichier, cv::FileStorage::READ);
-    Mat mThis = getMat(cv::ACCESS_READ);
+    Mat mThis;
+
     fs["Image"]>>mThis;
+    mThis.copyTo(*this);
+
     cv::FileNode n=fs["StatComposante0"];
     if (!n.empty())
     {
