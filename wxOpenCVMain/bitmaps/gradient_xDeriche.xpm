@@ -1,0 +1,30 @@
+/* XPM */
+static const char *gradient_xDeriche_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"60 20 4 1",
+"o c Black",
+"  c #FFFFFF",
+"X c #808080",
+". c #C0C0C0",
+/* pixels */
+"                                                            ",
+"                                                            ",
+"           ..............                   XX              ",
+"           XooooooooooooX                  .oX              ",
+"            oo         X                   XoX              ",
+"            .o.       ..                  X.oo              ",
+"             oo       X                   X Xo              ",
+"             .oX     X.                  X  Xo              ",
+"              oo     X                  ..  Xo              ",
+"              .oX   X.                  X...Xo.             ",
+"               Xo   X                  X....Xo.             ",
+"               .oX X.       .. ..     ..    .oX             ",
+"                Xo.X       X XX.o     X      oX             ",
+"                 oo       .  XX .   .oX.   .XoX..           ",
+"                 XX          o.    .....   ......           ",
+"                          ...o  X                           ",
+"                          XXXX.X.                           ",
+"                          XoXXoX                            ",
+"                                                            ",
+"                                                            "
+};

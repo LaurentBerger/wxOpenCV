@@ -947,6 +947,34 @@ if (s == "morph_gradient")
 	pointParam["anchor"]=DomaineParametreOp<cv::Point>(cv::Point(-1,-1),cv::Point(0,0),cv::Point(255,255),cv::Point(1,1));
     xx.listeOperation.insert(make_pair(s, *this));
 }
+if (s == "deriche_mod")
+	{
+	nbImageRes=1;
+    nbOperande = 1;
+    nomOperation = s;
+	doubleParam["alphaDerive"]=DomaineParametreOp<double>(0.75,0.01,1000,0.01);
+	doubleParam["alphaMoyenne"]=DomaineParametreOp<double>(0.25,0.0,1000,0.01);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "deriche_x")
+	{
+	nbImageRes=1;
+    nbOperande = 1;
+	doubleParam["alphaDerive"]=DomaineParametreOp<double>(0.75,0.01,10,0.1);
+	doubleParam["alphaMoyenne"]=DomaineParametreOp<double>(0.25,0.0,1000,0.1);
+	nomOperation=s;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "deriche_y")
+	{
+	nbImageRes=1;
+    nbOperande = 1;
+	doubleParam["alphaDerive"]=DomaineParametreOp<double>(0.75,0.01,10,0.1);
+	doubleParam["alphaMoyenne"]=DomaineParametreOp<double>(0.25,0.0,1000,0.1);
+	nomOperation=s;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+
 if (s == "scharr_mod")
 	{
 	nbImageRes=1;
@@ -1674,6 +1702,27 @@ if (s=="scharr_x")
 if (s=="scharr_y")
 	{
 	operateur = &ImageInfoCV::ScharrY;
+	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+	return true;
+	}
+if (s=="deriche_mod")
+	{
+	operateur = &ImageInfoCV::ModuleGradientDeriche;
+	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+	return true;
+	}
+if (s=="deriche_x")
+	{
+	operateur = &ImageInfoCV::GradientDericheX;
+	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+	return true;
+	}
+if (s=="deriche_y")
+	{
+	operateur = &ImageInfoCV::GradientDericheY;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
 	return true;

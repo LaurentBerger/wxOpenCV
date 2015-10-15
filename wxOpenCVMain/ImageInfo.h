@@ -443,16 +443,16 @@ ImageInfoCV *TransformationGeometrique(double **t, char =0);
 void DefDataRGBVersPlan(unsigned char *d);	//Conversion de plan RGB vers Plan R plan G plan B
 
 // Filtrage de deriche et shen
-ImageInfoCV *GradientDericheX(double alphaDerive=0.75,double alphaMoyenne=0.25);
-ImageInfoCV *GradientDericheY(double alphaDerive=0.75,double alphaMoyenne=0.25);
+std::vector<ImageInfoCV	*> GradientDericheX(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> GradientDericheY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 // Filtrage image bruitée Paillou
-ImageInfoCV *PaillouX(double w=50,double a=51);
-ImageInfoCV *PaillouY(double w=50,double a=51);
-ImageInfoCV *ModuleGradientPaillou(double w=50,double a=51,ImageInfoCV * = NULL);
+std::vector<ImageInfoCV	*> PaillouX(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);//double w=50,double a=51);
+std::vector<ImageInfoCV	*> PaillouY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);//double w=50,double a=51);
+std::vector<ImageInfoCV	*> ModuleGradientPaillou(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);//double w=50,double a=51,ImageInfoCV * = NULL);
 
 // Module du gradient
-ImageInfoCV *ModuleGradient(ImageInfoCV &,ImageInfoCV &);
-ImageInfoCV *ModuleGradientDeriche(double alphaDerive=0.75,double alphaMoyenne=0.25,ImageInfoCV * = NULL,char quadrant=0);
+std::vector<ImageInfoCV	*> ModuleGradient(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> ModuleGradientDeriche(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);//double alphaDerive=0.75,double alphaMoyenne=0.25,ImageInfoCV * = NULL,char quadrant=0);
 
 // Statistique nanoraptor
 ImageInfoCV* ConversionCouleurEnEntier(float );

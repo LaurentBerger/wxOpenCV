@@ -476,6 +476,32 @@ r.push_back(im);
 return r;
 }
 
+
+/**
+ * @function ModuleGradientDeriche
+ * @brief Module du gradient deriche
+ */
+std::vector<ImageInfoCV *>ImageInfoCV::ModuleGradientDeriche(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+UMat	imx ;
+UMat	imy;
+UMat	imAbsx;
+UMat	imAbsy;
+
+    std::vector<ImageInfoCV	*> r;
+std::vector<ImageInfoCV *> r1=GradientDericheX( op, pOCV);
+std::vector<ImageInfoCV *> r2=GradientDericheY( op, pOCV);
+if (r1.size() == 1 && r2.size()==1)
+{
+    absdiff((UMat)(*r1[0]), cv::Scalar::all(0), imAbsx);
+    absdiff((UMat)(*r2[0]), cv::Scalar::all(0), imAbsy);
+    addWeighted(imAbsx, 0.5, imAbsy, 0.5, 0, *im);
+    r.push_back(im);
+}
+return r;
+}
+
 /**
  * @function ScharrModule
  * @brief Module du gradient Scharr d'une image im1 

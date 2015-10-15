@@ -1,0 +1,31 @@
+/* XPM */
+static const char *gradient_modDeriche_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"60 20 5 1",
+"X c Black",
+"  c #FFFFFF",
+". c #808080",
+"o c #C0C0C0",
+"O c #800080",
+/* pixels */
+"                        .X         .                        ",
+"XXXXXXXXXXXX            .X         .   XXXXXXXXXXXXXo       ",
+"X...........            .X         .   .X...........        ",
+"X.        .o            .X         .    X.        oo        ",
+".Xo       .             .X         .    .Xo       .         ",
+" X.      .o             .X     O   .     X.      oo         ",
+" .Xo     .              .X     O   .     .Xo     .          ",
+"  X.    .o              .X     O   .      X.    oo          ",
+"  .Xo   .               .X oXXXXXXX.      .Xo   .           ",
+"   X.  .o               .X     O   .       X.  oo           ",
+"   .Xo .        o  o    .X     O   .       .Xo .       o    ",
+"    X..o      ooo.o.o   .X     O   .        X.oo      .o.  .",
+"    .X.       . oX o    .X         .        .X.      ooo.  X",
+"     Xo         ..      .X         .         Xo        .o oX",
+"                .o o    .X         .         o         X  ..",
+"             oX Xo .    .X         .                   X  Xo",
+"              ..o..     .X         .                   o..X ",
+"                        .X         .                  .o o. ",
+"                        .X         o                  ....  ",
+"                                                      oXX   "
+};
