@@ -96,6 +96,7 @@ enum
     ID_CONVERTTYPE,
 	ID_ROTATION_AFFINE,
 	ID_NOUVELLE_DIMENSION,
+	ID_WHITTAKER,
 	ID_LOGPOLAR,
 	ID_UNDISTORT,
 
@@ -265,6 +266,8 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_CONVERTTYPE, converttype_xpm,_("Convert type"), "convertto", 7);
 	CONSTRUCTEUR_CMD(bouton, ID_ROTATION_AFFINE,wrapaffine_xpm, _("Transform affine-rotation"), "wrapAffine", 7);
 	CONSTRUCTEUR_CMD(bouton, ID_NOUVELLE_DIMENSION, resize_xpm,_("Resize"), "resize", 7);
+	CONSTRUCTEUR_CMD(bouton, ID_WHITTAKER, recons_xpm,_("Zoom"), "recons", 7);
+    
 	CONSTRUCTEUR_CMD(bouton, ID_LOGPOLAR, logpolar_xpm,_("Log polar"), "logPolar", 7);
 	CONSTRUCTEUR_CMD(bouton, ID_UNDISTORT, undistort_xpm,_("Compensate for lens distortion"), "undistort", 7);
 

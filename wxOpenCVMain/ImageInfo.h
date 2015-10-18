@@ -424,9 +424,6 @@ bool MaxLocal(int i,int j);
 bool TraiterMediane(int &r,int &s,int dr,int ds,int &q,cv::Mat &im);
 void SuiviChemin(int i,int j,cv::Mat  &im);
 
-// Reconstruction d'image
-ImageInfoCV *Recons2d(long nbPts,long tailleOperateur=0);
-ImageInfoCV *ZoomImage(long =64,long =64);
 
 // Histogramme
 ImageInfoCV *EgalisationHistogramme (void);
@@ -445,6 +442,10 @@ void DefDataRGBVersPlan(unsigned char *d);	//Conversion de plan RGB vers Plan R 
 // Filtrage de deriche et shen
 std::vector<ImageInfoCV	*> GradientDericheX(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*> GradientDericheY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+// Reconstruction à partir de la formule de Shannon
+std::vector<ImageInfoCV	*> ImageInfoCV::Recons2d(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> ImageInfoCV::SincXY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+
 // Filtrage image bruitée Paillou
 std::vector<ImageInfoCV	*> PaillouX(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);//double w=50,double a=51);
 std::vector<ImageInfoCV	*> PaillouY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);//double w=50,double a=51);

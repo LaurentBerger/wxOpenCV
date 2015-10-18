@@ -1,0 +1,213 @@
+#include "ImageInfo.h"
+
+using namespace cv;
+
+std::vector<ImageInfoCV	*> ImageInfoCV::SincXY(std::vector< ImageInfoCV *> op, ParametreOperation *pOCV)//(long x,long y,long nbPts)
+{
+int x = pOCV->intParam["x"].valeur;
+int y = pOCV->intParam["y"].valeur;
+int nbPts = pOCV->intParam["nbPts"].valeur;
+cv::Mat mThis = getMat(cv::ACCESS_RW);
+
+int	i,j; 
+double	lx=x/double(nbPts),ly=y/double(nbPts),pi=acos(-1.);
+double	w,s=0;
+
+if (type()==CV_32F)	
+	{
+	for (int i=1;i<rows-1;i++)
+    {
+	    float	*dDst=(float *)mThis.ptr(i);
+		for (j=1,dDst++;j<cols-1;j++,dDst++)
+			{
+			w = pi*(ly+(i-rows/2)); 
+			if (w!=0)
+				*dDst = float(sin(w)/w);
+			else
+				*dDst = float(1);
+			w = pi*(lx+(j-cols/2));
+			if (w!=0)
+				*dDst = *dDst * float(sin(w)/w);
+			s += *dDst;
+			}
+	}
+    }
+if (type()==CV_64F)	
+	{
+	double	h;
+	for (i=0,s=0;i<rows;i++)
+    {
+        double	*dDst = (double *)mThis.ptr(i);
+		for (j=0;j<cols;j++,dDst++)
+			*dDst = 0;
+    }
+	for (i=0,s=0;i<rows;i++)
+    {
+        double	*dDst = (double *)mThis.ptr(i);
+		for (j=0;j<cols;j++,dDst++)
+			{
+			h =0.54+0.46*cos(2*pi*(i-rows/2)/rows);
+			w = pi*(ly-(i-rows/2)); 
+			if (w!=0)
+				*dDst = float(sin(w)/w)*h;
+			else
+				*dDst = float(1)*h;
+			h =0.54+0.46*cos(2*pi*(j-cols/2)/cols);
+			w = pi*(lx-(j-cols/2));
+			if (w!=0)
+				*dDst = *dDst * float(sin(w)/w)*h;
+			s += *dDst;
+			}
+    }
+    }
+mThis /=  s;
+std::vector<ImageInfoCV	*>  r;
+r.push_back(this);
+return r;
+}
+
+std::vector<ImageInfoCV	*> ImageInfoCV::Recons2d(std::vector< ImageInfoCV *> op, ParametreOperation *pOCV)//(long nbPts,long tailleOperateur)
+{
+cv::Mat mThis = getMat(cv::ACCESS_RW);
+    int nbPts = pOCV->intParam["nbPts"].valeur;
+    int tailleOperateur = pOCV->intParam["tailleOperateur"].valeur;
+ImageInfoCV 	*imRecons=new ImageInfoCV((1+nbPts)* op[0]->rows,(1+nbPts)* op[0]->cols,CV_8UC(op[0]->channels()));
+ImageInfoCV     filtre(2*tailleOperateur+1,2*tailleOperateur+1,CV_64FC1);
+unsigned char	*dSrc;
+unsigned char	*dDst;
+long	i,j,k,l,m,n;
+long	nbTour=0;
+ParametreOperation pSinc;
+
+std::vector<Mat> plan;
+std::vector<Mat> planRecons;
+cv::Mat mRecons = imRecons->getMat(cv::ACCESS_RW);
+
+split(mThis,plan);
+split(mRecons,planRecons);
+
+for (long nb=0;nb<plan.size();nb++)
+	{
+	for (i=0;i<nbPts+1;i++)
+		for (j=0;j<nbPts+1;j++)
+			{
+			long	dx=0,dy=0;
+			if (i>(nbPts+1)/2)
+				dx = 1;
+			if (j>(nbPts+1)/2)
+				dy = 1;
+            pSinc.intParam["x"].valeur=i-(nbPts+1)/2;
+            pSinc.intParam["y"].valeur=j-(nbPts+1)/2;
+            pSinc.intParam["nbPts"].valeur=nbPts+1;
+            std::vector<ImageInfoCV*> pp;
+            pp.push_back(&filtre);
+            filtre.SincXY(pp,&pSinc);
+            cv::Mat mFiltre = filtre.getMat(cv::ACCESS_RW);
+
+			dSrc = (unsigned char	*)plan[nb].ptr(0);
+ 			for (l=0;l<tailleOperateur;l++,dDst += (nbPts)*mRecons.cols)
+ 				{
+			    double *ff=(double*)(mFiltre.ptr(l));
+       		    dDst = (unsigned char	*)planRecons[nb].ptr(j+l) +i;
+
+				for (k=0;k<cols;k++,dDst += nbPts+1,dSrc++)
+ 					{
+ 					double	s=0;
+ 					long	t=tailleOperateur;
+                    double	*fil=(double *)mFiltre.ptr(0);
+ 					for (m=-t;m<=t;m++)
+                    {
+
+ 						for (n=-t;n<=t;n++,fil++)
+                            if (l+m>=0 && l+m<rows && k+n>=0 && k+n<cols)
+                                s += plan[nb].at<uchar>(l+m,k+n) * *fil;
+                    }
+					if (s<0)
+ 						*dDst = 0;
+ 					else if (s<255)
+ 						*dDst = (unsigned char)s;
+ 					else
+ 						*dDst = 255;
+ 					}
+				}
+ 			for (l=tailleOperateur;l<rows-tailleOperateur;l++,dDst += nbPts*mRecons.cols)
+ 			{
+       		    //dDst = (unsigned char	*)planRecons[nb].ptr(j+l) +i;
+ 				for (k=0;k<tailleOperateur;k++,dDst += nbPts+1,dSrc++)
+ 					{
+ 					double	s=0;
+ 					double	*fil=(double *)mFiltre.ptr(0);
+ 					long	t=tailleOperateur;
+ 					for (m=-t;m<=t;m++)
+ 						for (n=-t;n<=t;n++,fil++)
+                            if (l+m>=0 && l+m<rows && k+n>=0 && k+n<cols)
+                                s += plan[nb].at<uchar>(l+m,k+n) * *fil;
+					if (s<0)
+ 						*dDst = 0;
+ 					else if (s<255)
+ 						*dDst = (unsigned char)s;
+ 					else
+ 						*dDst = 255;
+ 					}
+ 			    for (k=tailleOperateur;k<cols-tailleOperateur;k++,dDst += nbPts+1,dSrc++)
+ 				    {
+				    double	s=0;
+ 				    double	*fil=(double *)mFiltre.ptr(0);
+ 				    long	t=tailleOperateur;
+ 				    for (m=-t;m<=t;m++)
+ 					    for (n=-t;n<=t;n++,fil++)
+							    //s += LitPixelEntier(l,k,n,m) * filtre->LitPixelReel(t,t,n,m);
+ 						    s += dSrc[(m)*cols+n] * *fil;
+				    if (s<0)
+ 					    *dDst = 0;
+ 				    else if (s<255)
+ 					    *dDst = (unsigned char)s;
+ 				    else
+ 					    *dDst = 255;
+ 				    }
+ 				for (k=cols-tailleOperateur;k<cols;k++,dDst += nbPts+1,dSrc++)
+ 					{
+ 					double	s=0;
+ 					double	*fil=(double *)mFiltre.ptr(0);
+ 					long	t=tailleOperateur;
+ 					for (m=-t;m<=t;m++)
+ 						for (n=-t;n<=t;n++,fil++)
+                            if (l+m>=0 && l+m<rows && k+n>=0 && k+n<cols)
+                                s += plan[nb].at<uchar>(l+m,k+n) * *fil;
+					if (s<0)
+ 						*dDst = 0;
+ 					else if (s<255)
+ 						*dDst = (unsigned char)s;
+ 					else
+ 						*dDst = 255;
+ 					}
+ 				}
+ 			for (l=rows-tailleOperateur;l<rows;l++,dDst += nbPts*imRecons->cols)
+ 				{
+       		    //dDst = (unsigned char	*)planRecons[nb].ptr(l) +i;
+ 				for (k=0;k<cols;k++,dDst += nbPts+1,dSrc++)
+ 					{
+ 					double	s=0;
+ 					double	*fil=(double *)mFiltre.ptr(0);
+ 					long	t=tailleOperateur;
+ 					for (m=-t;m<=t;m++)
+ 						for (n=-t;n<=t;n++,fil++)
+                            if (l+m>=0 && l+m<rows && k+n>=0 && k+n<cols)
+                                s += plan[nb].at<uchar>(l+m,k+n) * *fil;
+					if (s<0)
+ 						*dDst = 0;
+ 					else if (s<255)
+ 						*dDst = (unsigned char)s;
+ 					else
+ 						*dDst = 255;
+ 					}
+ 				}
+ 			}
+	}
+cv::merge(planRecons,mRecons);
+
+std::vector<ImageInfoCV	*>  r;
+r.push_back(imRecons);
+return r;
+}
+

@@ -120,6 +120,7 @@
 
 #include "bitmaps\logpolar.xpm"
 #include "bitmaps\resize.xpm"
+#include "bitmaps\recons.xpm"
 #include "bitmaps\wrapaffine.xpm"
 #include "bitmaps\addition.xpm"
 #include "bitmaps\additionponderee.xpm"

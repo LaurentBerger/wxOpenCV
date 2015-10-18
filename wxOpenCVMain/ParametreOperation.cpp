@@ -508,6 +508,15 @@ if (s == "wrapAffine") // inclus la différence de deux images successives
 	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
+ if (s == "recons")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+    intParam["nbPts"] = DomaineParametreOp<int>(5, 2, 10000, 1);;
+    intParam["tailleOperateur"] = DomaineParametreOp<int>(10, 2, 10000, 1);;
+	xx.listeOperation.insert(make_pair(s, *this));
+	}
 if (s == "resize") // inclus la différence de deux images successives
 	{
 	nomOperation = s;
@@ -1856,6 +1865,13 @@ if (s == "resize")
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#resize";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
 	operateur = &ImageInfoCV::Dimension;
+	return true;
+	}
+if (s == "recons")
+	{
+	lienHtml = "";
+	refPDF = "";
+	operateur = &ImageInfoCV::Recons2d;
 	return true;
 	}
 if (s == "logPolar")
