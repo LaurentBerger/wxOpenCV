@@ -465,7 +465,7 @@ if (s == "logPolar")
 	nbOperande = 1;
 	pointParam["center"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
 	doubleParam["M"] = DomaineParametreOp<double>(1, 0, 10000, 1);
-	intParam["interpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, CV_INTER_LANCZOS4, 1);
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, CV_INTER_LANCZOS4, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "undistort")
