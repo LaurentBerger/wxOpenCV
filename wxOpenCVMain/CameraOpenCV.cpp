@@ -97,7 +97,7 @@ else
 	for (indId=0;indId<NBCAMERA ;indId++)
 		if (indIdVideo[indId]==0)
 			{
-			captureVideo = new cv::VideoCapture(indId); 
+			captureVideo = new cv::VideoCapture(indId+ CAP_DSHOW); 
 			if(captureVideo && captureVideo->isOpened())
 				break;
 			if(captureVideo)
@@ -809,7 +809,11 @@ if (cam && (cam->IsRunning() || cam->IsPaused()))
 	delete feuille->BitmapAffichee();
 	feuille->BitmapAffichee(NULL);
     DIB(imAcq);
-
+    if (video.isOpened())
+    {
+        Mat matIm = imAcq->getMat(cv::ACCESS_READ);
+        video << matIm;
+    }
     imageTraitee = false;
 	feuille->Refresh(false);
 	}

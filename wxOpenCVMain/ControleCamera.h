@@ -22,6 +22,7 @@ wxWindow		*ongletStatus;		/*!< Pointeur pour accès informations sur l'echelle de
 wxWindow		*ongletGeometries;	/*!< Pointeur pour réglages de la geométrie de l'acquisition */
 wxWindow		*ongletTemporels;	/*!< Pointeur pour réglages des temps d'acquisitions */
 wxWindow		*ongletFond;		/*!< Pointeur pour gestion du fond */
+wxWindow		*ongletMagneto;		/*!< Pointeur pour gestion du fond */
 wxWindow		*ongletQuadrique;		/*!< Pointeur pour gestion de l'estimation d'une quadrique définie par zones pour un seul niveau*/
 wxWindow		*ongletQuadriqueMulti;	/*!< Pointeur pour  l'estimation d'une quadrique définie par zones pour plusieurs niveaux*/
 wxWindow		*ongletMoyenne;			/*!< Pointeur pour gestion du moyennage image */
@@ -64,6 +65,12 @@ void ExpositionAutomatique(wxCommandEvent&);
 		/*! Détermination d'un temps de pose maximisant la fonction contraste xxx */
 void ModeMoyenne(wxCommandEvent &w);
 		/*! Activation du filtre de butterworth */
+void Play(wxCommandEvent&);
+		/*! Jouer la vidéo */
+void Record(wxCommandEvent&);
+		/*! Enregistrer */
+void Pause(wxCommandEvent&);
+		/*! pause */
 void DebutAcquisition(void);
 		/*!< Debut de l'acquisition video */
 void FinAcquisition(void);
@@ -83,6 +90,7 @@ void OuvertureOngletStatus();
 void OuvertureOngletFond();
 void OuvertureOngletParametresTemporels();
 void OuvertureOngletParametresGeometries();
+void OuvertureOngletMagneto();
 void OuvertureOngletMoyenne();
 void OuvertureOngletEMCCD();
 

@@ -436,6 +436,7 @@ double				**poly;				/*!< Coefficient de la quadrique pour la correction du fond
 
 ImageInfoCV			*imAcq;				/*!< Dernière image calculée incluant les corrections */
 ImageInfoCV			*imGain;			/*!< Image (type CV_32F)du gain appliqué pour chaque pixel.*/
+cv::VideoWriter     video;
 #ifdef __OBSOLETE__
 ImageInfoCV			*nivBiais;			/*!< image du niveau zéro*/
 ImageInfoCV			*imAcqBrutFilMax;	/*!< résultat de la moyenne glissante avec filtrage maximum imAcqBrutFil = b(imAcqBrut1+imAcqBrut2)-a imAcqBrutFil */
@@ -903,6 +904,7 @@ int FacteurZoom(){return feuille->FacteurZoom();};
 //ImageInfoCV	*	ImAcq(void){if (modeFiltre) return imAcq2;return imAcq;};
 ImageInfoCV	*	ImAcq(void){return imAcq;};
 ImageInfoCV	*	ImGain(void){return imGain;};
+cv::VideoWriter *Video(){return &video;};
 
 void DefinitionFondMicro();
 void DefinitionFondQuadrique(wxCommandEvent& event);

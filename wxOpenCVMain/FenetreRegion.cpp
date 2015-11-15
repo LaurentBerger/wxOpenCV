@@ -130,6 +130,7 @@ for (int ii=0;ii<contour->size();ii++)
 
 }
 
+    int sign(double x){ if (x<0)return -1; else return 1; };
 
 
 
@@ -168,14 +169,18 @@ for (int ii=0;ii<(*s)[indPlan].rows;ii++)
 		listeRegion->DefCellule(ii,7,2*sqrt((*m)[indPlan][ii].mu20/(*m)[indPlan][ii].m00), "%6.1f");
 		listeRegion->DefCellule(ii,8,2*sqrt((*m)[indPlan][ii].mu02/(*m)[indPlan][ii].m00), "%6.1f");
         double theta;
-        if ((*m)[indPlan][ii].mu20-(*m)[indPlan][ii].mu02!=0)
+        if ((*m)[indPlan][ii].mu20 - (*m)[indPlan][ii].mu02 != 0)
+        {
             theta=1/2.0*atan(2*(*m)[indPlan][ii].mu11/((*m)[indPlan][ii].mu20-(*m)[indPlan][ii].mu02));
+            int s = (1 - sign((*m)[indPlan][ii].mu20 - (*m)[indPlan][ii].mu02))*sign((*m)[indPlan][ii].mu11);
+			theta  += s*acos(-1.0)/4;
+        }
+        else if ((*m)[indPlan][ii].mu11>0)
+            theta =acos(-1.0)/4;
         else
-            theta =0;
-		if ((*m)[indPlan][ii].mu20>(*m)[indPlan][ii].mu02)
-			theta  += acos(-1.0)/2;
+            theta =-acos(-1.0)/4;
 		if (theta<0)
-			theta += acos(-1.0);
+			theta += 2*acos(-1.0);
 		listeRegion->DefCellule(ii,10,(*m)[indPlan][ii].mu30, "%6.1f");
 		listeRegion->DefCellule(ii,11,(*m)[indPlan][ii].mu21, "%6.1f");
 		listeRegion->DefCellule(ii,12,(*m)[indPlan][ii].mu12, "%6.1f");

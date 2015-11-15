@@ -173,6 +173,7 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 	std::complex<float> zz[3];
 	int val;
 	double dVal;
+    wxCriticalSectionLocker enter(f->travailCam);
     cv::Mat m =imAcq->getMat(cv::ACCESS_READ);
 
 	switch(imAcq->type()){

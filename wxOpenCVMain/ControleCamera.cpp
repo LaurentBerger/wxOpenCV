@@ -8,6 +8,18 @@
 #include "CameraAndor.h"
 #include "CameraOpenCV.h"
 
+#ifdef __WXGTK__
+#include "bitmaps/Pause.xpm"
+#include "bitmaps/Play.xpm"
+#include "bitmaps/Record.xpm"
+#else
+#include "bitmaps\Pause.xpm"
+#include "bitmaps\Play.xpm"
+#include "bitmaps\Record.xpm"
+
+#endif
+
+
 
 #define ID_CORRECTION_GAIN 201 // Estimation Bruit additif
 #define ID_DEB_ESTIM_FOND 204 // Estimation Bruit additif
@@ -24,6 +36,9 @@ BEGIN_EVENT_TABLE(ControleCamera, wxFrame)
     EVT_CHOICE(wxID_ANY, ControleCamera::OnChoice)  
     EVT_TEXT_ENTER(wxID_ANY, ControleCamera::OnTextValider) 
     EVT_BUTTON(220, ControleCamera::ExpositionAutomatique)
+    EVT_BUTTON(320, ControleCamera::Play)
+    EVT_BUTTON(321, ControleCamera::Record)
+    EVT_BUTTON(322, ControleCamera::Pause)
     EVT_BUTTON(ID_DEB_ESTIM_GAIN, ControleCamera::EstimationGain)
     EVT_BUTTON(ID_FIN_ESTIM_GAIN, ControleCamera::EstimationGain)
 	EVT_CHECKBOX(211,ControleCamera::ModeMoyenne)
@@ -75,7 +90,7 @@ if (cam && !strcmp(cam->NomCamera(),"ANDOR"))
 	{
 	//OuvertureOngletEMCCD();
 	}
-//OuvertureOngletParametresGeometries();
+OuvertureOngletMagneto();
 OuvertureOngletFond();
 OuvertureOngletMoyenne();
 
@@ -1129,4 +1144,92 @@ cam->DefTempsExposition(tpsMin);
 		((wxTextCtrl*)w[7])->SetValue(ss);
 commEvt=1;
 }
+
+void ControleCamera::Play(wxCommandEvent& c)
+{
+if (!cam)
+	return;
+if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+	return;
+
+}
+
+void ControleCamera::Record(wxCommandEvent& c)
+{
+if (!cam)
+	return;
+if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+	return;
+if (!parent)
+    return;
+cv::VideoWriter *v = ((FenetrePrincipale*)parent)->Video();
+if (v->isOpened())
+    v->release();
+wxDateTime	m;
+wxString nom;
+
+m=m.Now();
+nom.Printf("%d",m.GetYear());
+if (m.GetMonth()+1<10)
+	nom.Printf("%s0%d", nom, m.GetMonth()+1);
+else
+	nom.Printf("%s%d", nom, m.GetMonth()+1);
+if (m.GetDay()<10)
+	nom.Printf("%s0%d", nom, m.GetDay());
+else
+	nom.Printf("%s%d", nom, m.GetDay());
+if (m.GetHour()<10)
+	nom.Printf("%s0%d", nom, m.GetHour());
+else
+	nom.Printf("%s%d", nom, m.GetHour());
+if (m.GetMinute()<10)
+	nom.Printf("%s0%d", nom, m.GetMinute());
+else
+	nom.Printf("%s%d", nom, m.GetMinute());
+if (m.GetSecond()<10)
+	nom.Printf("%s0%d", nom, m.GetSecond());
+else
+	nom.Printf("%s%d.avi", nom, m.GetSecond());
+v->open(static_cast<const char*>(nom),CV_FOURCC('P','I','M','1'),20,((FenetrePrincipale*)parent)->ImAcq()->size());
+if (!v->isOpened())
+    wxMessageBox(_("Error openning video for writting"));
+}
+
+void ControleCamera::Pause(wxCommandEvent& c)
+{
+if (!cam)
+	return;
+if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+	return;
+if (!parent)
+    return;
+cv::VideoWriter *v = ((FenetrePrincipale*)parent)->Video();
+if (v->isOpened())
+    v->release();
+}
+
+
+void ControleCamera::OuvertureOngletMagneto()
+{
+wxPoint	position[]={
+// Texte		Réglette
+    wxPoint(10,10),wxPoint(170,10),wxPoint(280,10)};
+wxSize	taille[]={
+// Texte		Réglette
+    wxSize(50,50),wxSize(50,50),wxSize(50,50)};
+long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
+
+wxString	legende[]={_T("Play"),_T("record"),_T("pause")};
+ongletMagneto = new wxWindow(listeFenetreOnglet,-1); 
+int i=0;
+
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Play),position[i], taille[i]);//start 204 
+i++;
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Record),position[i], taille[i]);// reset 205 
+i++;
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Pause),position[i], taille[i]);// load 206 
+i++;
+listeFenetreOnglet->AddPage(ongletMagneto, _T("Recorder"));
+ongletMagneto->Refresh();
+}	
 

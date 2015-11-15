@@ -566,9 +566,16 @@ return r;
 std::vector<ImageInfoCV *>ImageInfoCV::Canny(std::vector<ImageInfoCV *> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
+double otsu=-1;
 
 if (op[0]->channels()==1)
 	{
+    if (pOCV->doubleParam["Otsu threshold"].valeur==1)
+    {
+        otsu = threshold(*op[0], *im, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+        pOCV->doubleParam["threshold1"].valeur = otsu;
+        pOCV->doubleParam["threshold1"].valeur = otsu/2;
+    }
 	cv::Canny(	*op[0], *im, pOCV->doubleParam["threshold1"].valeur,
 				pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
 	}
@@ -579,6 +586,12 @@ else
 	cv::split( *op[0], planCouleur );
 	for (int i=0;i<op[0]->channels();i++)
 		{
+        if (pOCV->doubleParam["Otsu threshold"].valeur==1)
+        {
+            otsu = threshold(planCouleur[i], d[i], 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+            pOCV->doubleParam["threshold1"].valeur = otsu;
+            pOCV->doubleParam["threshold1"].valeur = otsu/2;
+        }
 		cv::Canny( planCouleur[i], d[i], pOCV->doubleParam["threshold1"].valeur,
 					pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
 		}
@@ -1702,7 +1715,17 @@ for (; it != descripteur.end();it++)
        // cv::BFMatcher::cr
     }
     descriptorMatcher->match(*op[0]->Descripteur(it->first), *op[1]->Descripteur(it->first), matches[it->first], UMat());
+    if (pOCV->intParam["crossCheck"].valeur == 1)
+    {
+        std::vector<cv::DMatch> matches10;
+        descriptorMatcher->match(*op[1]->Descripteur(it->first), *op[0]->Descripteur(it->first),matches10, UMat());
+        for (int i=0;i<matches10.size();i++)
+        {
+            int idx1 = matches10[i].queryIdx;
+            int idx2 = matches10[i].trainIdx;
+        }
 
+    }
     pointCleApp.insert(make_pair(it->first,*(op[1]->PointCle(it->first))));
 }
 

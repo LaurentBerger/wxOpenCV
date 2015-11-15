@@ -337,6 +337,7 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 		spw->Disable();
 	spw->SetRange(its->second.mini.width, its->second.maxi.width);
 	spw->SetIncrement((double)its->second.pas.width); 
+	spw->SetValue(its->second.valeur.width);
 	p += wxPoint(s.GetX(),0);
 	nbParam++;
 	new wxStaticText(page,indOriCtrl+2*nbParam,its->first+" y",p, s);
@@ -350,6 +351,7 @@ for (its=pOCV->sizeParam.begin();its!=pOCV->sizeParam.end();its++)
 		sph->Disable();
 	sph->SetRange(its->second.mini.height, its->second.maxi.height);
 	sph->SetIncrement((double)its->second.pas.height); 
+	sph->SetValue(its->second.valeur.height);
 		
 	nbParam++;
 	ligne+=20;

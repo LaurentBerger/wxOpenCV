@@ -55,7 +55,14 @@ if (type()==CV_64F)
         double	*dDst = (double *)mThis.ptr(i);
 		for (j=0;j<cols;j++,dDst++)
 			{
-			h =0.54+0.46*cos(2*pi*(i-(rows-1)/2.)/rows);
+			if (i!=(rows-1)/2)
+                h=sin(i-(rows-1)/2)/(i-(rows-1)/2);
+            else
+                h=1;
+			if (j!=(cols-1)/2)
+                h=h*sin(j-(cols-1)/2)/(j-(cols-1)/2);
+            else
+                h=1*h;
 			w = pi*(ly-(i-(rows-1)/2.)); 
 			if (w!=0)
 				*dDst = double(sin(w)/w)*h;
@@ -64,7 +71,7 @@ if (type()==CV_64F)
 			h =0.54+0.46*cos(2*pi*(j-(cols-1)/2.)/cols);
 			w = pi*(lx-(j-(cols-1)/2));
 			if (w!=0)
-				*dDst = *dDst * double(sin(w)/w)*h;
+				*dDst = *dDst * double(sin(w)/w);
 			s += *dDst;
 			}
     }

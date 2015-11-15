@@ -816,8 +816,8 @@ if (s == "bitwise-not")
 if (s == "convertto")
 	{
     intParam["matrix_type"] = DomaineParametreOp<int>(CV_32F, -1, CV_32F, 1);
-	doubleParam["alpha"]=DomaineParametreOp<double>(1,0,10,0.1);
-	doubleParam["beta"]=DomaineParametreOp<double>(0,0,10,0.1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(1,-1000,1000,0.1);
+	doubleParam["beta"]=DomaineParametreOp<double>(0,-10000,10000,1);
 	nomOperation = s;
 	nbOperande = 1;
 	nbImageRes = 1;
@@ -1033,6 +1033,7 @@ if (s == "canny")
 	{
 	nbImageRes=1;
     nbOperande = 1;
+    intParam["Otsu threshold"]=DomaineParametreOp<int>(0,0,1 ,1);
     doubleParam["threshold1"] = DomaineParametreOp<double>(50., 0.0, 255.0, 1.0);
 	doubleParam["threshold2"]=DomaineParametreOp<double>(100,0.0,255.0,1.0);
 	intParam["aperture_size"]=DomaineParametreOp<int>((int)3,(int)1,(int)255,(int)2);
