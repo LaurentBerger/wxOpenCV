@@ -385,6 +385,7 @@ wxRect	r(GetClientRect());
 if (!r.Contains(point) ||  this->f!=osgApp->Graphique())
 	return;
 point=RepereEcranImage(point);
+wxCriticalSectionLocker enter(f->travailCam);
 
 if (f->ImAcq() && point.x>=0 && point.x<f->ImAcq()->cols && point.y>=0 && point.y<f->ImAcq()->rows && f->ImAcq()->StatComposante())
 	{

@@ -71,6 +71,14 @@ void Record(wxCommandEvent&);
 		/*! Enregistrer */
 void Pause(wxCommandEvent&);
 		/*! pause */
+void Debut(wxCommandEvent&);
+		/*! pause */
+void Fin(wxCommandEvent&);
+		/*! pause */
+void Suivante(wxCommandEvent&);
+		/*! pause */
+void Precedente(wxCommandEvent&);
+		/*! pause */
 void DebutAcquisition(void);
 		/*!< Debut de l'acquisition video */
 void FinAcquisition(void);

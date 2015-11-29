@@ -5,6 +5,7 @@
 #include "ImageInfo.h"
 #include "CameraVirtuelle.h"
 #include "HorodatageSequence.h"
+
 #include "wx/timer.h"
 #include <wx/dynlib.h>
 #include <wx/fileconf.h>
@@ -19,6 +20,7 @@
 class ControleCamera;
 class ImageStatistiques;
 class FenetreAlgo;
+class FenetreCourbe;
 class FenetrePano;
 class OutilsImage;
 class BarreInfo;
@@ -499,6 +501,7 @@ FenetreZoom			*fenZoom;
 ImageStatistiques	*imgStatIm;
 FenetreAlgo			*fenAlgo;
 FenetrePano			*fenPano;
+FenetreCourbe       *courbeVideo;
 HorodatageSequence  *dateSeq;
 wxTimer				*horlogeSeq;
 BarreInfo			*barreEtat;
@@ -569,11 +572,27 @@ void RAZFenAlgo(){ fenAlgo = NULL; };
 *  \brief fonction RAZFenAlgo
 *  Appelée lors de la fermeture de la fenêtre algorithme.
 */
+void RAZCourbeVideo(){ courbeVideo = NULL; };
+/*!
+*  \brief fonction RAZCourbeVideo
+*  Appelée lors de la fermeture de la fenêtre courbeVideo.
+*/
 void RAZFenParam(){ fenPano = NULL; };
 /*!
 *  \brief fonction RAZFenParam
 *  Appelée lors de la fermeture de la fenêtre algorithme.
 */
+void AjoutPointCourbeVideo(int i,double x,double y);
+    /*!
+     *  \brief fonction AjoutPointCourbeVideo
+     *
+     * Ajout d'un point sur la courbeVideo
+     *
+     *  \param i : indice de la courbe (plan couleur)
+	 *  \param x : abscisse du point
+	 *  \param y : ordonnée du point
+     */
+
 void ParamPano(wxCommandEvent& event);
 /*!
 *  \brief fonction ParamPano
@@ -852,6 +871,7 @@ FenetreZoom *FZoom(){ return fenZoom; };
 *  Fenêtre zoom de la fenêtre.
 */
 FenetreAlgo *FenAlgo(){return fenAlgo;}
+FenetreCourbe *FenCourbeVideo(){return courbeVideo;}
 
 void DefPointeurSouris(int type);
 bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);

@@ -1,6 +1,7 @@
 #include "ImageInfo.h"
 #include "CameraOpenCV.h"
 #include "EvenementCamera.h"
+#include "VideoCourbe.h"
 //#include <fstream>
 #include <wx/time.h> 
 
@@ -22,6 +23,25 @@ EvtPointSuivis::EvtPointSuivis(wxEventType commandType , int id):wxCommandEvent(
 		indEvt=0;
     }
 
+int CameraOpenCV::PositionVideo(int pos )
+{
+    if (pos>=0)
+        captureVideo->set(CAP_PROP_POS_FRAMES,0);
+    return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+};
+
+int CameraOpenCV::PositionDebutVideo()
+{
+    
+    return PositionVideo(0);
+};
+
+int CameraOpenCV::PositionFinVideo()
+{
+    double x=captureVideo->get(CAP_PROP_FRAME_COUNT);
+    captureVideo->set(CAP_PROP_POS_FRAMES,x-1);
+    return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+};
 
 
 CameraOpenCV::CameraOpenCV(wxString nomFlux):CameraVirtuelle()
@@ -40,6 +60,8 @@ tailleCapteur[18]=wxSize(1280,960);tailleCapteur[19]=wxSize(-1,-1);tailleCapteur
 tailleCapteur[21]=wxSize(-1,-1);
 /*for (int i=15;i<NB_TAILLE_VIDEO;i++)
 	tailleAutorisee[false];*/
+modeAcqContinu=1;
+acqArretee=0;
 indFiltreMoyenne=1;
 tpsInactif =30;
 fluxOuvert=false;
@@ -70,6 +92,8 @@ bbButter[10]=0.5;
 parent=NULL;
 captureVideo=NULL;
 imAcq=NULL;
+modeAcqContinu=1;
+acqArretee=0;
 long indFlux;
 
 // Appel de VideoCapture pour récupérer la taille de la vidéo
@@ -85,12 +109,16 @@ if (nomFlux!=wxEmptyString)
 		{
 		
 		captureVideo = new cv::VideoCapture(); 
-		captureVideo->set(CAP_PROP_FOURCC,'MJPG');
+//		captureVideo->set(CAP_PROP_FOURCC,'MJPG');
 		captureVideo->open(nomFlux.ToStdString());
-
+        PositionDebutVideo();
+        modeAcqContinu=0;
 		//captureVideo = new cv::VideoCapture(nomFlux.ToStdString()); 
 		indId=-1;
 		}
+    double x = captureVideo->get(CAP_PROP_FOURCC);
+    int fourcc = captureVideo->get(CAP_PROP_FOURCC);
+    string fourcc_str = format("%c%c%c%c", fourcc & 255, (fourcc >> 8) & 255, (fourcc >> 16) & 255, (fourcc >> 24) & 255);
 	}
 else
 	{
@@ -177,6 +205,10 @@ x=captureVideo->get(CAP_PROP_FRAME_WIDTH);
 reglageTaille=captureVideo->set(CAP_PROP_FRAME_WIDTH,x);
 x=captureVideo->get(CAP_PROP_CONTRAST);
 reglageContraste=captureVideo->set(CAP_PROP_CONTRAST,x);
+x = captureVideo->get(CAP_PROP_FOURCC);
+int fourcc = captureVideo->get(CAP_PROP_FOURCC);
+string fourcc_str = format("%c%c%c%c", fourcc & 255, (fourcc >> 8) & 255, (fourcc >> 16) & 255, (fourcc >> 24) & 255);
+
 if(!erreurFct)
 	AjouteMsgErreur("SetExposureTime Error\n");
 //captureVideo->getMinMax(CV_CAP_PROP_GAIN,&gainMin,&gainMax);
@@ -457,24 +489,29 @@ if (captureVideo->isOpened())
 	while (!captureVideo->retrieve(frameBuffer));
 	while (!captureVideo->retrieve(frame2));
 	while (!captureVideo->retrieve(frame1));
+    initDate = getTickCount()/getTickFrequency();
 	static bool opActif=false;
 	ImageInfoCV *imIni=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
 	ImageInfoCV *imPre=NULL;
 	bool	frameDejaCopie=false;
 	for(;true;)
+	{
+        int x= PositionVideo();
+		if (!acqArretee &&  captureVideo->grab()) // get a new frame from camera
 		{
-		if (captureVideo->grab()) // get a new frame from camera
-			{
 			captureVideo->retrieve(frame);
-
+            frameDate = getTickCount()/getTickFrequency();
+            x = PositionVideo();
+            if (!modeAcqContinu)
+                acqArretee=1;
 			if (modeMoyenne)	// Filtrage Butterworth
-				{
+			{
                 if (frame.size() != frame1.size())
                     frame.copyTo(frame1);
                 if (frame.size() != frame2.size())
                     frame.copyTo(frame2);
 				for (int i = 0; i<frame.rows; i++)
-					{
+				{
 					unsigned char *val = frame.ptr(i);
 					unsigned char *valB1 = frame1.ptr(i);
 					unsigned char *valB2 = frame2.ptr(i);
@@ -482,25 +519,23 @@ if (captureVideo->isOpened())
 						for (int k = 0; k<frame.channels(); k++, valB1++, valB2++, val++)
 							*val = bbButter[indFiltreMoyenne] * (*valB1 + *valB2) - aaButter[indFiltreMoyenne] * *val;
 
-					}
+				}
 				frame1.copyTo(frame2);
 				frame.copyTo(frame1);
-				}
-            
-
+			}
 			
 			if (parent)
-				{
+			{
 				if (seqOp.size()!=0)
-					{
+				{
 					bool memoriseImage=false;
 					opActif =true;
 					if (chgtTaille)
-						{
+					{
 						delete imPre;
 						delete imIni;
 						imIni=new ImageInfoCV(frame.rows,frame.cols,frame.flags);
-						}
+					}
 					frame.copyTo(*imIni);
 					vector< vector<ImageInfoCV*> > im;
 					im.resize(seqOp.size());
@@ -508,61 +543,60 @@ if (captureVideo->isOpened())
 						break;
 					int indOp=0;
 					{
-					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->paramCam);
+					    wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->paramCam);
 
-					if (seqActualisee)
-						{
-						seqActualisee=false;
-						delete imPre;
-						imPre=NULL;
-						std::map<ImageInfoCV*, bool>::iterator it;
-						for (it = effaceImage.begin(); it != effaceImage.end(); it++)
-							if (imIni!=it->first)
-								delete it->first;
-						effaceImage.clear();
-						imgParam.clear();
-						//fond.clear();
-					}
-					for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
-						{
-						ParametreOperation pOCV=*it;
-						pOCV.indOpFenetre[0]=-1;
-						if (pOCV.indOpFenetre.size()>=2)
-							pOCV.indOpFenetre[1] = -1;
-						if (pOCV.nbOperande==1) // op1 est initialisé
-                            {
-                            if (indOp>0) // Si une opération a déjà été effectuée l'image précédente est retenue comme paramètre
-							    pOCV.op[0]=im[indOp-1][0];
-						    else // sinon image initiale
-							    {
-                                pOCV.op[0] = imIni;
-                                effaceImage[imIni]=false;
+					    if (seqActualisee)
+					    {
+						    seqActualisee=false;
+						    delete imPre;
+						    imPre=NULL;
+						    std::map<ImageInfoCV*, bool>::iterator it;
+						    for (it = effaceImage.begin(); it != effaceImage.end(); it++)
+							    if (imIni!=it->first)
+								    delete it->first;
+						    effaceImage.clear();
+						    imgParam.clear();
+						    //fond.clear();
+					    }
+					    for (std::vector <ParametreOperation > ::iterator it=seqOp.begin();it!=seqOp.end();it++)
+						    {
+						    ParametreOperation pOCV=*it;
+						    pOCV.indOpFenetre[0]=-1;
+						    if (pOCV.indOpFenetre.size()>=2)
+							    pOCV.indOpFenetre[1] = -1;
+						    if (pOCV.nbOperande==1) // op1 est initialisé
+                                {
+                                if (indOp>0) // Si une opération a déjà été effectuée l'image précédente est retenue comme paramètre
+							        pOCV.op[0]=im[indOp-1][0];
+						        else // sinon image initiale
+							        {
+                                    pOCV.op[0] = imIni;
+                                    effaceImage[imIni]=false;
+                                    }
                                 }
-                            }
-                        else if (pOCV.nbOperande==2 ) // initialisation op2
+                            else if (pOCV.nbOperande==2 ) // initialisation op2
                             {
-							if (pOCV.opVideo)
-								{
-								if (indOp>0 ) // Si une opération a déjà été effectuée
-									if (im[indOp-1].size()==0)
-                                        pOCV.op[1] = NULL;
-									else
-                                        pOCV.op[1] = im[indOp - 1][0];
-								else
-                                    pOCV.op[1] = imIni;
+							    if (pOCV.opVideo)
+							    {
+								    if (indOp>0 ) // Si une opération a déjà été effectuée
+									    if (im[indOp-1].size()==0)
+                                            pOCV.op[1] = NULL;
+									    else
+                                            pOCV.op[1] = im[indOp - 1][0];
+								    else
+                                        pOCV.op[1] = imIni;
 								
-								if (imgParam.find(pOCV.nomOperation+"prec")!=imgParam.end())
-									{
-                                    pOCV.op[0] = imgParam[pOCV.nomOperation + "prec"];
-									effaceImage[imgParam[pOCV.nomOperation + "prec"]]=false;
-									}
-								else
-                                    pOCV.op[0] = pOCV.op[1];
-								}
-							else if (indOp>0)
-                                pOCV.op[0] = im[indOp - 1][0];
+								    if (imgParam.find(pOCV.nomOperation+"prec")!=imgParam.end())
+								    {
+                                        pOCV.op[0] = imgParam[pOCV.nomOperation + "prec"];
+									    effaceImage[imgParam[pOCV.nomOperation + "prec"]]=false;
+								    }
+								    else
+                                        pOCV.op[0] = pOCV.op[1];
+							    }
+							    else if (indOp>0)
+                                    pOCV.op[0] = im[indOp - 1][0];
 							}
-							{
 							if (imgParam.size() != 0)
 								pOCV.imgParam = imgParam;
 							if (fond.size() != 0)
@@ -580,83 +614,84 @@ if (captureVideo->isOpened())
                                 }
 							if (pOCV.ecartFond.size() != 0)
 								fond = pOCV.ecartFond;
-						}
-						if (pOCV.opErreur != 0) // Arret de la séquence d'opération retour à acquistion vidéo simple
-						{
-							seqOp.clear();
-							effaceImage[imPre] = true;
-							effaceImage.erase(imIni);
-							std::map<ImageInfoCV*, bool>::iterator it;
-							for (it = effaceImage.begin(); it != effaceImage.end(); it++)
-								delete it->first;
-							effaceImage.clear();
-							imPre = NULL;
-							break;
-						}
+						    if (pOCV.opErreur != 0) // Arret de la séquence d'opération retour à acquistion vidéo simple
+						    {
+							    seqOp.clear();
+							    effaceImage[imPre] = true;
+							    effaceImage.erase(imIni);
+							    std::map<ImageInfoCV*, bool>::iterator it;
+							    for (it = effaceImage.begin(); it != effaceImage.end(); it++)
+								    delete it->first;
+							    effaceImage.clear();
+							    imPre = NULL;
+							    break;
+						    }
 
-						if (im[indOp].size()!=0) // Si l'opérateur donne un résultat non nul
-							effaceImage[im[indOp][0]]=false;
-						if (pOCV.nbOperande==2 && pOCV.opVideo) // Pour les opérateurs binaires spécifiques à la vidéo
-							memoriseImage=true;
-                        indOp++;							
+						    if (im[indOp].size()!=0) // Si l'opérateur donne un résultat non nul
+							    effaceImage[im[indOp][0]]=false;
+						    if (pOCV.nbOperande==2 && pOCV.opVideo) // Pour les opérateurs binaires spécifiques à la vidéo
+							    memoriseImage=true;
+                            indOp++;							
 						}
 					}
 					if (indOp>0 && seqOp.size()>0)
-						{
+					{
 						if (!parent)
 							break;
 						wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
                         if (im[indOp-1].size() )
-							{
+						{
 							if (chgtTaille)
-								{
+							{
 								((FenetrePrincipale*)parent)->ChgtTailleVideo(0);
 								chgtTaille=false;
-								}
+							}
 							imAcq->CloneStat(im[indOp-1][0]);
 							imAcq->DeplacerFlotOptique(im[indOp-1][0]);
 							im[indOp-1][0]->copyTo(*imAcq);
 							frameDejaCopie=true;
-							}
+						}
                         std::map<ImageInfoCV*,bool>::iterator it;
 						vector<ImageInfoCV*> elt;
 						for (it = effaceImage.begin(); it != effaceImage.end(); it++)
 							if (it->second)
-								{
+							{
 								delete it->first;
 								elt.push_back(it->first);
-								}
+							}
 							else
 								it->second=true;
 
 						for (int ii=0;ii<elt.size();ii++)
 							effaceImage.erase(elt[ii]);
-					}
-					}
+				    }
+				}
 				{
-				if (!parent)
-					break;
-				wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+    			    if (!parent)
+					    break;
+				    wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
 
-				if (!frameDejaCopie)
+				    if (!frameDejaCopie)
 					{
-					if (chgtTaille)
-						{
-						((FenetrePrincipale*)parent)->ChgtTailleVideo(0);
-						chgtTaille=false;
-						}
-					//frame.copyTo((*((UMat *)imAcq))); // get a new frame from camera
-                    frame.copyTo(frameBuffer);
-					swap(frameBuffer, (*((UMat *)imAcq)));
+					    if (chgtTaille)
+					    {
+						    ((FenetrePrincipale*)parent)->ChgtTailleVideo(0);
+						    chgtTaille=false;
+					    }
+					    //frame.copyTo((*((UMat *)imAcq))); // get a new frame from camera
+                        frame.copyTo(frameBuffer);
+					    swap(frameBuffer, (*((UMat *)imAcq)));
 					}
-                frameDejaCopie=false;
+                    frameDejaCopie=false;
 
 				}
 
-				}
+			}
+            else
+                wxMilliSleep(50);
 			if (parent)
-				{
+			{
 				EvtPointSuivis *x= new EvtPointSuivis(VAL_EVT_PTS_SUIVIS);
 				x->ptId=repereIni;
 				x->ptApp=repere;
@@ -668,7 +703,7 @@ if (captureVideo->isOpened())
 				bool attendre=true;
 				int nbBoucle=0;
 				while(attendre && nbBoucle<10)
-					{
+				{
 					{
 					if (!parent)
 						break;
@@ -681,14 +716,16 @@ if (captureVideo->isOpened())
 					}
 					nbBoucle++;
 					this->Sleep(1);
-					}
 				}
+			}
 			else
 				break;
 			if (TestDestroy())
 				break;
-			}
 		}
+	if (TestDestroy())
+		break;
+	}
 	delete captureVideo;
     delete imIni;
     delete imPre;

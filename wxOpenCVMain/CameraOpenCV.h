@@ -21,6 +21,8 @@ bool		chgtTaille;/*<! Vrai lorque la taille de l'acquisition vient d'être modiié
 long		expoMin,expoMax;
 long		gainMin,gainMax;
 
+
+
 public : 
 ImageInfoCV			*imAcq;
 
@@ -102,6 +104,10 @@ virtual double Contraste(double =DBL_MAX);
 virtual double Luminosite(double =DBL_MAX);
 virtual double Saturation(double =DBL_MAX);
 virtual bool DefTailleImage(int largeur,int hauteur);
+
+virtual int PositionVideo(int pos = -1);
+virtual int PositionDebutVideo();
+virtual int PositionFinVideo();
 
 
 

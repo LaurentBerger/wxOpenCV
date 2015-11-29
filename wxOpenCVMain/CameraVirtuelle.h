@@ -58,6 +58,8 @@ std::map<std::string, ImageInfoCV* > imgParam;	/*<! Rôle des images dans la séqu
 std::map<std::string, cv::Ptr<cv::BackgroundSubtractor> > fond;	/*<! classe backgroundSubtractor */
 std::map<ImageInfoCV*, bool> effaceImage;			/*<! toutes les images marquées true doivent être effacées et les autres non */
 std::vector<cv::Point2f> coinRef;
+double                   initDate;
+double                   frameDate;
 
 protected :
 virtual wxThread::ExitCode Entry(){return 0;};
@@ -88,6 +90,10 @@ bool		reglageContraste;
 bool		reglageLuminosite;
 bool		reglageSaturation;
 bool		reglageTpsExpo;
+
+char        modeAcqContinu; // 1 acquisition continue,0 une seule image
+char        acqArretee;     // 1 acquisition arrêtée
+int         indexImage;     // Index de l'image 0 première image
 	
 
 public :
@@ -160,6 +166,12 @@ virtual double Contraste(double =DBL_MAX){return DBL_MAX;};
 virtual double Luminosite(double =DBL_MAX){return DBL_MAX;};
 virtual double Saturation(double =DBL_MAX){return DBL_MAX;};
 virtual bool DefTailleImage(int largeur,int hauteur){return false;};
+virtual int ModeAcqContinu(int i = -1){if (i>=0) modeAcqContinu=i;acqArretee=0;return modeAcqContinu;};
+virtual int AcqArretee(){return acqArretee;};
+virtual int PositionVideo(int pos = -1){return indexImage;};
+virtual int PositionDebutVideo(){return indexImage;};
+virtual int PositionFinVideo(){return indexImage;};
+
 
 };
 

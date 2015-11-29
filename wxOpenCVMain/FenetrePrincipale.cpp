@@ -15,6 +15,7 @@
 #include <iostream>
 #include <math.h>
 #include "wxOpenCVConfig.h"
+#include "VideoCourbe.h"
 
 using namespace std;
 
@@ -56,6 +57,7 @@ statActif=false;
 fenetreSauvee =0;
 fenAlgo=NULL;
 fenPano = NULL;
+courbeVideo=NULL;
 idFenetre=-1;
 
 
@@ -539,6 +541,8 @@ if (!cam->Connectee())
 	wxMessageBox(_("Error : stream cannot be opened"));
 	return;
 	}
+courbeVideo = new FenetreCourbe(this);
+
 barreEtat->ActiveVideo();
 correctionGain=false;
 fenetreSauvee=1;
@@ -1108,6 +1112,8 @@ FenetrePrincipale::~FenetrePrincipale()
 {
     if (fenAlgo)
         fenAlgo->DefFenMere(NULL);
+    if (courbeVideo)
+        courbeVideo->DefFenMere(NULL);
 }
 
 
@@ -1165,6 +1171,8 @@ if (cam!=NULL )
 }
 if (fenAlgo)
     fenAlgo->DefFenMere(NULL);
+if (courbeVideo)
+    courbeVideo->DefFenMere(NULL);
 if (osgApp && !osgApp->Quitter())
 	osgApp->RetirerListe(this);
 if (cam)
@@ -2008,4 +2016,12 @@ t[0]=nomFichier;
 strcpy(t[0],nomImageQuadrique.ToAscii());
 imQuadrique->DoEnregistrer(t);
 */
+}
+
+
+void FenetrePrincipale::AjoutPointCourbeVideo(int c,double x, double y)
+{
+    if (!courbeVideo || cam==NULL)
+        return;
+    courbeVideo->Ajoute(c,x,y);
 }

@@ -16,6 +16,10 @@
 #include "bitmaps\Pause.xpm"
 #include "bitmaps\Play.xpm"
 #include "bitmaps\Record.xpm"
+#include "bitmaps\Avance.xpm"
+#include "bitmaps\AvanceFin.xpm"
+#include "bitmaps\Retour.xpm"
+#include "bitmaps\retourDebut.xpm"
 
 #endif
 
@@ -39,6 +43,10 @@ BEGIN_EVENT_TABLE(ControleCamera, wxFrame)
     EVT_BUTTON(320, ControleCamera::Play)
     EVT_BUTTON(321, ControleCamera::Record)
     EVT_BUTTON(322, ControleCamera::Pause)
+    EVT_BUTTON(323, ControleCamera::Debut)
+    EVT_BUTTON(324, ControleCamera::Fin)
+    EVT_BUTTON(325, ControleCamera::Suivante)
+    EVT_BUTTON(326, ControleCamera::Precedente)
     EVT_BUTTON(ID_DEB_ESTIM_GAIN, ControleCamera::EstimationGain)
     EVT_BUTTON(ID_FIN_ESTIM_GAIN, ControleCamera::EstimationGain)
 	EVT_CHECKBOX(211,ControleCamera::ModeMoyenne)
@@ -1151,6 +1159,7 @@ if (!cam)
 	return;
 if ( !((wxOsgApp*)osgApp)->VerifFenetre())
 	return;
+    cam->ModeAcqContinu(1);
 
 }
 
@@ -1203,9 +1212,72 @@ if ( !((wxOsgApp*)osgApp)->VerifFenetre())
 	return;
 if (!parent)
     return;
+if (cam)
+{
+    cam->ModeAcqContinu(0);
+}
 cv::VideoWriter *v = ((FenetrePrincipale*)parent)->Video();
 if (v->isOpened())
     v->release();
+}
+
+void ControleCamera::Debut(wxCommandEvent& c)
+{
+if (!cam)
+	return;
+if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+	return;
+if (!parent)
+    return;
+if (cam)
+{
+    int x= cam->PositionVideo(0);
+    cam->ModeAcqContinu(0);
+}
+}
+
+void ControleCamera::Suivante(wxCommandEvent& c)
+{
+if (!cam)
+	return;
+if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+	return;
+if (!parent)
+    return;
+if (cam)
+{
+    cam->ModeAcqContinu(0);
+}
+}  
+
+void ControleCamera::Precedente(wxCommandEvent& c)
+{
+if (!cam)
+	return;
+if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+	return;
+if (!parent)
+    return;
+if (cam)
+{
+    cam->PositionVideo(cam->PositionVideo()-1);
+    cam->ModeAcqContinu(0);
+}
+}
+
+void ControleCamera::Fin(wxCommandEvent& c)
+{
+if (!cam)
+	return;
+if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+	return;
+if (!parent)
+    return;
+if (cam)
+{
+    cam->PositionFinVideo();
+    cam->ModeAcqContinu(0);
+}
 }
 
 
@@ -1213,10 +1285,10 @@ void ControleCamera::OuvertureOngletMagneto()
 {
 wxPoint	position[]={
 // Texte		Réglette
-    wxPoint(10,10),wxPoint(170,10),wxPoint(280,10)};
+    wxPoint(50,10),wxPoint(100,10),wxPoint(150,10),wxPoint(200,10),wxPoint(250,10),wxPoint(300,10),wxPoint(350,10)};
 wxSize	taille[]={
 // Texte		Réglette
-    wxSize(50,50),wxSize(50,50),wxSize(50,50)};
+    wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50)};
 long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
 
 wxString	legende[]={_T("Play"),_T("record"),_T("pause")};
@@ -1228,6 +1300,14 @@ i++;
 new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Record),position[i], taille[i]);// reset 205 
 i++;
 new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Pause),position[i], taille[i]);// load 206 
+i++;
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Avance),position[i], taille[i]);// load 206 
+i++;
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::AvanceFin),position[i], taille[i]);// load 206 
+i++;
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Retour),position[i], taille[i]);// load 206 
+i++;
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::RetourDebut),position[i], taille[i]);// load 206 
 i++;
 listeFenetreOnglet->AddPage(ongletMagneto, _T("Recorder"));
 ongletMagneto->Refresh();

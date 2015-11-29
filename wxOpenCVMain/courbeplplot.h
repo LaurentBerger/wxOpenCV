@@ -11,18 +11,6 @@
 
 
 
-class FenetreCourbe : public wxPLplotwindow<wxFrame>
-{
-public:
-  FenetreCourbe( wxFrame* frame, wxWindow* parent, wxWindowID id=-1, const wxPoint& pos = wxDefaultPosition,
-                const wxSize& size = wxDefaultSize, long style = 0,
-                int pl_style = wxPLPLOT_NONE );
-
-  void OnChar( wxKeyEvent& event );  
-private:
-  wxFrame	*mframe;
-};
-
 #define NB_MAX_CANAUX 5
 // Define a new frame type: this is going to be our main frame
 class FenetreHistogramme : public wxWindow

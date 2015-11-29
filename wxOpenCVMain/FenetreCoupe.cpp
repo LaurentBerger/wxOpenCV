@@ -270,7 +270,6 @@ PLFLT ymin=1e30, ymax=-1e30;
 int nbPlan=1;
 if (imAcq->type()==CV_8UC3)
 	nbPlan=3;
-
 for (int j=0;j<nbPlan;j++)
 	{
 	double moyenneH=0,varianceH=0,cumulH=0;
@@ -334,7 +333,14 @@ for (int j=0;j<nbPlan;j++)
 	pls->line( nbVal, x[0], y[j] );
 	pls->col0( 4+2*j );
 	pls->line( nbVal, x[0], yFiltre[j] );
+    CameraVirtuelle *cam=((FenetrePrincipale *)fenMere)->Cam();
+    if (cam && cam->IsRunning())
+        ((FenetrePrincipale *)fenMere)->AjoutPointCourbeVideo(j,cam->frameDate-cam->initDate,y[j][0]);
+    if (((FenetrePrincipale *)fenMere)->Cam() && ((FenetrePrincipale *)fenMere)->Cam()->IsRunning())
+        ((FenetrePrincipale *)fenMere)->AjoutPointCourbeVideo(j+3,cam->frameDate-cam->initDate,y[j][nbVal-1]);
+
 	}
+((FenetrePrincipale *)fenMere)->AjoutPointCourbeVideo(-1,0,0);
 courbe->RenewPlot();
 if (((wxOsgApp*)osgApp)->Graphique()->ModeCoupe())
 	CoordonneeGraphique();
