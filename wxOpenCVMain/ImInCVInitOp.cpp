@@ -70,6 +70,11 @@ if (nbOp!=-1)
 		r[i] = new ImageInfoCV(nbLop,nbCop,CV_32F);
         rTmp[i] = cv::Mat::zeros(nbLop,nbCop,CV_32F);
     }
+    cv::Mat m=cv::Mat::zeros(nbLop,nbCop,CV_32FC1);
+    ImageInfoCV imcv(nbLop,nbCop,CV_32F);
+    cv::UMat um(nbLop,nbCop,CV_32FC1);
+   m.copyTo(um );
+   m.copyTo(((cv::UMat) imcv ));
 	}
 else
 	{
@@ -222,7 +227,7 @@ if(nbL==3 || nbOp==-1)
 	rTmp[13].at<float>(2,2)=(float)-1./8;
 	for (int k=0;k<19;k++)
 		{
-        rTmp[k].copyTo(*(r[k]));
+        rTmp[k].copyTo(*((cv::UMat*) r[k] ));
 		}
 	}
 if(nbL==5 || nbOp==-1)

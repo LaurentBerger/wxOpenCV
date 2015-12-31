@@ -20,6 +20,13 @@ find_package(wxWidgets COMPONENTS core base net adv aui html  qa richtext stc ri
 find_package(PLplot  REQUIRED)
 option(BUILD_SHARED_LIBS "Build shared library" ON)
 
+if (BUILD_SHARED_LIBS)
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+else (BUILD_SHARED_LIBS)
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /MD")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /MDd")
+endif (BUILD_SHARED_LIBS)
 
 FOREACH( mesdossiers 
         wxOpenCVMain
