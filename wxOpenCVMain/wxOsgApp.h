@@ -32,6 +32,35 @@ EnvFenetre(FenetrePrincipale *ff,FenetreZoom *ffz,ImageStatistiques *fs){fPrin=f
 };
 
 
+/*! \class EvtCalculFini
+   * \brief la classe définit  les caractéristiques d'un évènement
+   *
+   *  La classe EvtCalculFini définit un nouveau type d'évènement utilisé pour informer la fenêtre qu'un 
+   * calcul est terminé. L'évènement est envoyé à la classe wxOSgApp .
+   */
+class EvtCalculFini : public wxCommandEvent
+{
+public:
+    EvtCalculFini(wxEventType commandType, int id = 0);
+    EvtCalculFini(const EvtCalculFini &evt):wxCommandEvent(evt)
+	{
+		m_Expediteur = evt.m_Expediteur;
+		m_sortie = evt.m_sortie;
+		m_travailEchoue = evt.m_travailEchoue;
+	}
+
+    virtual wxEvent* Clone() const
+    {
+        return new EvtCalculFini(*this);
+    }
+
+	std::vector<ImageInfoCV*> r;
+	void*					m_Expediteur;
+    bool					m_sortie;
+    bool					m_travailEchoue;
+	int						indEvt;		/*!< Nombre d'évènement envoyé */
+};
+
 /* Define a new application type */
 class wxOsgApp : public wxApp
 {
@@ -208,6 +237,7 @@ void	LectureFichierConfig();
      *
      *  Lecture des paramètres contenus dans le fichier de configuration
      */
+void CalculFini(EvtCalculFini &w);
 
 // Gestion  du curseur souris
 void	DefPointeurSouris(int modeSouris=0,int typeSouris=0);
@@ -266,5 +296,14 @@ void TracerZoom(wxPoint p);
 
 int FilterEvent(wxEvent& event);
 };
+
+
+
+
+typedef void (wxEvtHandler::*EvtCalculFiniFonction)(EvtCalculFini&);
+#define GstEvtCalculFini(func) wxEVENT_HANDLER_CAST(EvtCalculFiniFonction, func)   
+
+
+
 
 #endif

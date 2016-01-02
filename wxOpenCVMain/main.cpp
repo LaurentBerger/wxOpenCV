@@ -146,6 +146,25 @@ wxDEFINE_EVENT(VAL_EVT_PTS_SUIVIS, EvtPointSuivis);
 #define EVT_PTS_SUIVIS(id, func) \
  	wx__DECLARE_EVT1(VAL_EVT_PTS_SUIVIS, id, GstEvtPointSuivis(func))
 
+wxDECLARE_EVENT(VAL_EVT_CALCUL_FINI, EvtCalculFini);
+wxDEFINE_EVENT(VAL_EVT_CALCUL_FINI, EvtCalculFini);
+
+#define VAL_EVT_CALCUL_FINI(id, func) \
+ 	wx__DECLARE_EVT1(VAL_EVT_CALCUL_FINI, id, GstEvtCalculFini(func))
+
+
+
+EvtCalculFini::EvtCalculFini(wxEventType commandType , int id):wxCommandEvent(m_sortie,id)
+    {
+        SetId(id);
+        SetEventType(commandType);
+        m_Expediteur = 0;
+        m_sortie = false;
+        m_travailEchoue = false;
+		indEvt=0;
+    }
+
+
 BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
     EVT_IDLE(FenetrePrincipale::OnIdle)
 // EVENEMENT MENU
@@ -547,6 +566,13 @@ if (pAct->operateur)
         cv::ocl::setUseOpenCL(pAct->intParam["opencl_enable"].valeur);
 
 		r =((*pAct->op[0]).*pAct->operateur)(pAct->op,pAct);
+
+		EvtCalculFini *x= new EvtCalculFini(VAL_EVT_CALCUL_FINI);
+		x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
+        x->r=r;
+		wxQueueEvent(this, x);
+
+
 		}
 	catch(cv::Exception& e)
 		{
@@ -568,6 +594,247 @@ if (pOCV.operateur==NULL  || pOCV.op.size()==0)
 	return;
 
 vector<ImageInfoCV*> r=ExecuterOperation();
+return;
+}
+
+
+
+// `Main program' equivalent, creating windows and returning main app frame
+bool wxOsgApp::OnInit()
+{
+cv::ocl::setUseOpenCL(true);
+
+bool b=false;
+//b=wxUnsetEnv("PLPLOT_HOME");
+//b=wxUnsetEnv("PLPLOT_LIB");
+//b=wxUnsetEnv("PLPLOT_DRV_DIR");
+//	osg::Image *im=osgDB::readImageFile("F:\\Lib\\OpenSceneGraph-Data-3.0.0\\Images\\reflect.rgb");
+	numOpFaite=0;
+	numSeqOpe=0;
+	quitter=false;
+	serveur = NULL;
+	fSeqOpe=NULL;
+	fenOpe=NULL;
+    ctrlCamera=NULL;
+    configApp=new wxFileConfig("wxOpenCV","LB","wxOpenCV.ini",wxEmptyString);
+	LectureFichierConfig();
+#ifndef __MULTILANGUE__
+	langue=(wxLanguage)configApp->Read("/langue",langue);
+//gestion du langage
+    if ( langue == wxLANGUAGE_UNKNOWN )
+    {
+        int lng = wxGetSingleChoiceIndex
+                  (
+                    _("Please choose language:"),
+                    _("Language"),
+                    WXSIZEOF(langNames),
+                    langNames
+                  );
+        langue = lng == -1 ? wxLANGUAGE_DEFAULT : langIds[lng];
+    }
+
+    // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
+    // false just because it failed to load wxstd catalog
+    if ( !locale.Init(langue, wxLOCALE_DONT_LOAD_DEFAULT) )
+    {
+        wxLogWarning(_("This language is not supported by the system."));
+
+        // continue nevertheless
+    }
+
+    // normally this wouldn't be necessary as the catalog files would be found
+    // in the default locations, but when the program is not installed the
+    // catalogs are in the build directory where we wouldn't find them by
+    // default
+    wxLocale::AddCatalogLookupPathPrefix("../lang");
+
+    // Initialize the catalogs we'll be using
+    const wxLanguageInfo* pInfo = wxLocale::GetLanguageInfo(langue);
+    if (!locale.AddCatalog("messages"))
+    {
+        wxLogError(_("Couldn't find/load the 'main' catalog for locale '%s'."),
+                   pInfo ? pInfo->GetLocaleName() : _("unknown"));
+    }
+ /*   if (!locale.AddCatalog("wxIUA"))
+    {
+        wxLogError(_("Couldn't find/load the 'main' catalog for locale '%s'."),
+                   pInfo ? pInfo->GetLocaleName() : _("unknown"));
+    }*/
+    // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
+    // a localized error message:
+    locale.AddCatalog("wxstd");
+        // NOTE: it's not an error if we couldn't find it!
+
+    // this catalog is installed in standard location on Linux systems and
+    // shows that you may make use of the standard message catalogs as well
+    //
+    // if it's not installed on your system, it is just silently ignored
+#ifdef __LINUX__
+    {
+        wxLogNull noLog;
+        locale.AddCatalog("fileutils");
+    }
+#endif
+#endif
+configApp->Write("/langue",(long)langue);
+configApp->Flush();
+
+
+wxInitAllImageHandlers();
+
+wxString	cheminPlplot(CHEMIN_PLPLOT_WX);
+wxString	cheminPlplotDrv(CHEMIN_PLPLOT_DRV);
+wxString	plPlotLibWX(cheminPlplot+"/plplotwxwidgetsd");
+wxString	svgPlPlotDrv(cheminPlplotDrv+"/svg");
+wxString	wxPlPlotDrv(cheminPlplotDrv+"/wxwidgets");
+
+
+#ifndef ___AUI__
+
+
+
+
+new wxDynamicLibrary(plPlotLibWX);
+new wxDynamicLibrary(wxPlPlotDrv);
+new wxDynamicLibrary(svgPlPlotDrv);
+
+int nbEcran=wxDisplay::GetCount() ;
+wxDisplay ecran(0);
+
+wxRect display;
+display = ecran.GetGeometry();
+display.SetTopRight(display.GetTopRight()-wxPoint(1000,0));
+
+InterfaceAvance *frame = new InterfaceAvance(NULL,
+                                 wxID_ANY,
+                                 "wxOpenCV",
+                                 display.GetTopRight(),
+                                 wxSize(1000, 1000));
+
+wxBitmap bitmap;
+bool  m_isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
+if (m_isPda)
+    bitmap = wxBitmap(mobile_xpm);
+
+bool ok = m_isPda
+        ? bitmap.IsOk()
+        : bitmap.LoadFile("splash.png", wxBITMAP_TYPE_PNG);
+
+if (ok)
+{
+    new wxSplashScreen(bitmap,
+        wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
+        1000, frame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
+        wxSIMPLE_BORDER|wxSTAY_ON_TOP);
+}
+
+#if !defined(__WXGTK20__)
+    // we don't need it at least on wxGTK with GTK+ 2.12.9
+    wxYield();
+#endif
+
+
+Bind(VAL_EVT_CALCUL_FINI, &wxOsgApp::CalculFini,this,wxID_ANY);
+
+frame->DefOSGApp(this);
+   frame->Show();
+#else
+dllplplot=NULL;
+dllWXplplotdrv=NULL;
+dllSVGplplotdrv=NULL;
+
+class FenetreTest : public wxFrame
+{
+public :
+wxOsgApp *osgApp;
+FenetreTest(wxFrame *frame, const wxString& title, const wxPoint& pos, 
+    const wxSize& size, long style = wxDEFAULT_FRAME_STYLE): wxFrame(frame, wxID_ANY, title , pos, size, style)
+{
+    EVT_CLOSE(InterfaceAvance::OnClose)
+Bind(wxEVT_CLOSE_WINDOW, &FenetreTest::OnClose,this);
+
+};
+void FenetreTest::OnClose(wxCloseEvent& event)
+{
+wxFrame::OnCloseWindow(event);
+((wxOsgApp*)osgApp)->Quitter(NULL);
+}
+
+
+};
+
+
+FenetreTest *frame=new FenetreTest(NULL,"TEST",wxDefaultPosition,wxSize(800, 600));
+    frame->Show();
+	frame->osgApp = this;
+#endif
+
+camAndor=0;
+CameraOpenCV *cam=new CameraOpenCV();
+if (cam->TestDriver())
+	{
+	camOpenCV=1;
+	wxLogWarning(_("OpenCV compatible camera detected (%dX%d : %d)"),cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
+	}
+else
+	{
+	camOpenCV=0;
+	wxLogWarning(_("OpenCV compatible camera not detected"));
+	}
+
+delete cam;
+wxLogWarning(_("OpenCV : Build info %s "), cv::getBuildInformation().c_str());
+#ifdef _DLL_DETECTION__
+if (!dllplplot || !dllplplot->IsLoaded())
+	wxLogWarning(_("unable to load plplot"));
+if (!dllplplot || !dllWXplplotdrv->IsLoaded())
+	wxLogWarning(_("unable to load wxwidgets"));
+if (!dllplplot || !dllSVGplplotdrv->IsLoaded())
+	wxLogWarning(_("unable to load svg"));
+#endif
+
+nbFenetre=0;
+indFenetre=-1;
+modeSouris = SOURIS_STD;
+indPointeurSouris=0;
+
+ctrlCamera=NULL;
+utilisateurAbsent=0;
+#ifndef ___AUI__
+if (serveur)
+	{
+	serveur = new ServeurScilab;
+	wxString nomServeur=_T("4242");
+	if (serveur->Create(nomServeur))
+		{
+		wxLogWarning("Server %s started", nomServeur);
+	#if wxUSE_DDE_FOR_IPC
+		wxLogWarning("Server uses DDE");
+	#else // !wxUSE_DDE_FOR_IPC
+		wxLogWarning("Server uses TCP");
+	#endif // wxUSE_DDE_FOR_IPC/!wxUSE_DDE_FOR_IPC
+		}
+	else
+		{
+		wxLogWarning(_("Server %s failed to start"), nomServeur);
+		delete serveur;
+		serveur = NULL;
+		}
+	serveur->DefFentrePrincipale(this);
+	}
+#else
+serveur =NULL;
+#endif
+posFenetre = wxPoint(20,20);
+
+return true;
+}
+
+
+void wxOsgApp::CalculFini(EvtCalculFini &w)
+{
+
+vector<ImageInfoCV*> r=w.r;
 if (r.size()==NULL)
 	{
 	wxLogWarning("Resultat de l'opération vide");
@@ -721,238 +988,8 @@ pOCV.op.clear();
 pOCV.indOpFenetre.clear();
 pOCV.doubleParam.clear();
 pOCV.intParam.clear();
-}
 
-
-
-// `Main program' equivalent, creating windows and returning main app frame
-bool wxOsgApp::OnInit()
-{
-cv::ocl::setUseOpenCL(true);
-
-bool b=false;
-//b=wxUnsetEnv("PLPLOT_HOME");
-//b=wxUnsetEnv("PLPLOT_LIB");
-//b=wxUnsetEnv("PLPLOT_DRV_DIR");
-//	osg::Image *im=osgDB::readImageFile("F:\\Lib\\OpenSceneGraph-Data-3.0.0\\Images\\reflect.rgb");
-	numOpFaite=0;
-	numSeqOpe=0;
-	quitter=false;
-	serveur = NULL;
-	fSeqOpe=NULL;
-	fenOpe=NULL;
-    ctrlCamera=NULL;
-    configApp=new wxFileConfig("wxOpenCV","LB","wxOpenCV.ini",wxEmptyString);
-	LectureFichierConfig();
-#ifndef __MULTILANGUE__
-	langue=(wxLanguage)configApp->Read("/langue",langue);
-//gestion du langage
-    if ( langue == wxLANGUAGE_UNKNOWN )
-    {
-        int lng = wxGetSingleChoiceIndex
-                  (
-                    _("Please choose language:"),
-                    _("Language"),
-                    WXSIZEOF(langNames),
-                    langNames
-                  );
-        langue = lng == -1 ? wxLANGUAGE_DEFAULT : langIds[lng];
-    }
-
-    // don't use wxLOCALE_LOAD_DEFAULT flag so that Init() doesn't return
-    // false just because it failed to load wxstd catalog
-    if ( !locale.Init(langue, wxLOCALE_DONT_LOAD_DEFAULT) )
-    {
-        wxLogWarning(_("This language is not supported by the system."));
-
-        // continue nevertheless
-    }
-
-    // normally this wouldn't be necessary as the catalog files would be found
-    // in the default locations, but when the program is not installed the
-    // catalogs are in the build directory where we wouldn't find them by
-    // default
-    wxLocale::AddCatalogLookupPathPrefix("../lang");
-
-    // Initialize the catalogs we'll be using
-    const wxLanguageInfo* pInfo = wxLocale::GetLanguageInfo(langue);
-    if (!locale.AddCatalog("messages"))
-    {
-        wxLogError(_("Couldn't find/load the 'main' catalog for locale '%s'."),
-                   pInfo ? pInfo->GetLocaleName() : _("unknown"));
-    }
- /*   if (!locale.AddCatalog("wxIUA"))
-    {
-        wxLogError(_("Couldn't find/load the 'main' catalog for locale '%s'."),
-                   pInfo ? pInfo->GetLocaleName() : _("unknown"));
-    }*/
-    // Now try to add wxstd.mo so that loading "NOTEXIST.ING" file will produce
-    // a localized error message:
-    locale.AddCatalog("wxstd");
-        // NOTE: it's not an error if we couldn't find it!
-
-    // this catalog is installed in standard location on Linux systems and
-    // shows that you may make use of the standard message catalogs as well
-    //
-    // if it's not installed on your system, it is just silently ignored
-#ifdef __LINUX__
-    {
-        wxLogNull noLog;
-        locale.AddCatalog("fileutils");
-    }
-#endif
-#endif
-configApp->Write("/langue",(long)langue);
-configApp->Flush();
-
-
-wxInitAllImageHandlers();
-
-wxString	cheminPlplot(CHEMIN_PLPLOT_WX);
-wxString	cheminPlplotDrv(CHEMIN_PLPLOT_DRV);
-wxString	plPlotLibWX(cheminPlplot+"/plplotwxwidgetsd");
-wxString	svgPlPlotDrv(cheminPlplotDrv+"/svg");
-wxString	wxPlPlotDrv(cheminPlplotDrv+"/wxwidgets");
-
-
-#ifndef ___AUI__
-
-
-
-
-new wxDynamicLibrary(plPlotLibWX);
-new wxDynamicLibrary(wxPlPlotDrv);
-new wxDynamicLibrary(svgPlPlotDrv);
-
-int nbEcran=wxDisplay::GetCount() ;
-wxDisplay ecran(0);
-
-wxRect display;
-display = ecran.GetGeometry();
-display.SetTopRight(display.GetTopRight()-wxPoint(1000,0));
-
-InterfaceAvance *frame = new InterfaceAvance(NULL,
-                                 wxID_ANY,
-                                 "wxOpenCV",
-                                 display.GetTopRight(),
-                                 wxSize(1000, 1000));
-
-wxBitmap bitmap;
-bool  m_isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
-if (m_isPda)
-    bitmap = wxBitmap(mobile_xpm);
-
-bool ok = m_isPda
-        ? bitmap.IsOk()
-        : bitmap.LoadFile("splash.png", wxBITMAP_TYPE_PNG);
-
-if (ok)
-{
-    new wxSplashScreen(bitmap,
-        wxSPLASH_CENTRE_ON_SCREEN|wxSPLASH_TIMEOUT,
-        1000, frame, wxID_ANY, wxDefaultPosition, wxDefaultSize,
-        wxSIMPLE_BORDER|wxSTAY_ON_TOP);
-}
-
-#if !defined(__WXGTK20__)
-    // we don't need it at least on wxGTK with GTK+ 2.12.9
-    wxYield();
-#endif
-
-
-
-frame->DefOSGApp(this);
-   frame->Show();
-#else
-dllplplot=NULL;
-dllWXplplotdrv=NULL;
-dllSVGplplotdrv=NULL;
-
-class FenetreTest : public wxFrame
-{
-public :
-wxOsgApp *osgApp;
-FenetreTest(wxFrame *frame, const wxString& title, const wxPoint& pos, 
-    const wxSize& size, long style = wxDEFAULT_FRAME_STYLE): wxFrame(frame, wxID_ANY, title , pos, size, style)
-{
-    EVT_CLOSE(InterfaceAvance::OnClose)
-Bind(wxEVT_CLOSE_WINDOW, &FenetreTest::OnClose,this);
-
-};
-void FenetreTest::OnClose(wxCloseEvent& event)
-{
-wxFrame::OnCloseWindow(event);
-((wxOsgApp*)osgApp)->Quitter(NULL);
-}
-
-
-};
-
-
-FenetreTest *frame=new FenetreTest(NULL,"TEST",wxDefaultPosition,wxSize(800, 600));
-    frame->Show();
-	frame->osgApp = this;
-#endif
-
-camAndor=0;
-CameraOpenCV *cam=new CameraOpenCV();
-if (cam->TestDriver())
-	{
-	camOpenCV=1;
-	wxLogWarning(_("OpenCV compatible camera detected (%dX%d : %d)"),cam->NbLigne(),cam->NbColonne(),cam->NbCanaux());
-	}
-else
-	{
-	camOpenCV=0;
-	wxLogWarning(_("OpenCV compatible camera not detected"));
-	}
-
-delete cam;
-wxLogWarning(_("OpenCV : Build info %s "), cv::getBuildInformation().c_str());
-#ifdef _DLL_DETECTION__
-if (!dllplplot || !dllplplot->IsLoaded())
-	wxLogWarning(_("unable to load plplot"));
-if (!dllplplot || !dllWXplplotdrv->IsLoaded())
-	wxLogWarning(_("unable to load wxwidgets"));
-if (!dllplplot || !dllSVGplplotdrv->IsLoaded())
-	wxLogWarning(_("unable to load svg"));
-#endif
-
-nbFenetre=0;
-indFenetre=-1;
-modeSouris = SOURIS_STD;
-indPointeurSouris=0;
-
-ctrlCamera=NULL;
-utilisateurAbsent=0;
-#ifndef ___AUI__
-if (serveur)
-	{
-	serveur = new ServeurScilab;
-	wxString nomServeur=_T("4242");
-	if (serveur->Create(nomServeur))
-		{
-		wxLogWarning("Server %s started", nomServeur);
-	#if wxUSE_DDE_FOR_IPC
-		wxLogWarning("Server uses DDE");
-	#else // !wxUSE_DDE_FOR_IPC
-		wxLogWarning("Server uses TCP");
-	#endif // wxUSE_DDE_FOR_IPC/!wxUSE_DDE_FOR_IPC
-		}
-	else
-		{
-		wxLogWarning(_("Server %s failed to start"), nomServeur);
-		delete serveur;
-		serveur = NULL;
-		}
-	serveur->DefFentrePrincipale(this);
-	}
-#else
-serveur =NULL;
-#endif
-posFenetre = wxPoint(20,20);
-
-return true;
+    return;
 }
 
 void wxOsgApp::AnnuleOp()

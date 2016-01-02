@@ -570,7 +570,7 @@ double otsu=-1;
 
 if (op[0]->channels()==1)
 	{
-    if (pOCV->doubleParam["Otsu threshold"].valeur==1)
+    if (pOCV->intParam["Otsu threshold"].valeur==1)
     {
         otsu = threshold(*op[0], *im, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
         pOCV->doubleParam["threshold1"].valeur = otsu;
@@ -586,7 +586,7 @@ else
 	cv::split( *op[0], planCouleur );
 	for (int i=0;i<op[0]->channels();i++)
 		{
-        if (pOCV->doubleParam["Otsu threshold"].valeur==1)
+        if (pOCV->intParam["Otsu threshold"].valeur==1)
         {
             otsu = threshold(planCouleur[i], d[i], 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
             pOCV->doubleParam["threshold1"].valeur = otsu;

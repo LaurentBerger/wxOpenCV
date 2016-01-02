@@ -1394,11 +1394,15 @@ for (int i=0;i<imAcq->channels()&& i<3;i++)
 	    {
             int ind0=(*ptDft)[i][j][k][0];
             int ind1=(*ptDft)[i][j][k][1];
+            int ind2=(*ptDft)[i][j][k][2];
 		    wxPoint p_1((*ptCtr)[i][j][ind0].x,(*ptCtr)[i][j][ind0].y),p_2((*ptCtr)[i][j][ind1].x,(*ptCtr)[i][j][ind1].y);
+		    wxPoint p_3((*ptCtr)[i][j][ind2].x,(*ptCtr)[i][j][ind2].y);
 
 		    wxPoint p1(RepereImageEcran(p_1));
 		    wxPoint p2(RepereImageEcran(p_2));
-		    hdc.DrawLine(p1,p2);
+		    wxPoint p3(RepereImageEcran(p_3));
+		    hdc.DrawLine(p1,p3);
+		    hdc.DrawLine(p3,p2);
 	    }
         if (nbDefaut >= 2)
         {

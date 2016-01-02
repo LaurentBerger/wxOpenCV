@@ -1037,7 +1037,6 @@ if (s == "canny")
     doubleParam["threshold1"] = DomaineParametreOp<double>(50., 0.0, 255.0, 1.0);
 	doubleParam["threshold2"]=DomaineParametreOp<double>(100,0.0,255.0,1.0);
 	intParam["aperture_size"]=DomaineParametreOp<int>((int)3,(int)1,(int)255,(int)2);
-	intParam["kernel_size"]=DomaineParametreOp<int>(3,1,255,2);
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));
 }
