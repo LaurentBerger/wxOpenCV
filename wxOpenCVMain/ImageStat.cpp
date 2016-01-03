@@ -201,7 +201,10 @@ for (int	i=0,j=0;j<3;j++)
 	slNivMin[j]->SetForegroundColour(wxColour(255,0,0));
 	position[i].y+=taille[1].y;
 	i++;
-	slGain[j]=new wxSlider(ongletCouleur,ID_ASC_GAIN_ROUGE+j,seuilBas*100, -fenMere->CoeffCanal(j)*1000,coeff*1000 ,position[i], taille[i],style);
+    int minGain=-fenMere->CoeffCanal(j)*1000,maxGain=coeff*1000;
+    if (maxGain==minGain)
+        maxGain++;
+	slGain[j]=new wxSlider(ongletCouleur,ID_ASC_GAIN_ROUGE+j,seuilBas*100, minGain,maxGain ,position[i], taille[i],style);
 	position[i].y+=taille[1].y;
 	i++;
     if (j < fenMere->ImAcq()->channels())

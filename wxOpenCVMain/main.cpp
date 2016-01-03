@@ -46,6 +46,11 @@
 #include <math.h>
 #include "wxOpenCVConfig.h"
 
+
+#include <thread>        
+#include <mutex>          
+
+
 using namespace std;
 
 
@@ -242,6 +247,9 @@ END_EVENT_TABLE()
 
 
 using namespace std;
+
+
+
 
 
 
@@ -550,10 +558,59 @@ if (!pOCV.InitOperation((string)s))
 }
 
 
-vector<ImageInfoCV*> wxOsgApp::ExecuterOperation(ParametreOperation *pOCVNouveau)
+
+
+
+void ExecuterOperation(wxOsgApp *app,ParametreOperation *pOCVNouveau)
 {
 ParametreOperation *pAct;
 vector<ImageInfoCV*>	r;
+
+if (pOCVNouveau==NULL)
+	pAct=app->Operation();
+else
+	pAct=pOCVNouveau;
+if (pAct->operateur)
+	{
+	try
+		{
+        cv::ocl::setUseOpenCL(pAct->intParam["opencl_enable"].valeur);
+
+		r =((*pAct->op[0]).*pAct->operateur)(pAct->op,pAct);
+
+		EvtCalculFini *x= new EvtCalculFini(VAL_EVT_CALCUL_FINI);
+		x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
+        x->r=r;
+		wxQueueEvent(app, x);
+
+
+		}
+	catch(cv::Exception& e)
+		{
+		wxString s(e.msg);
+
+		wxMessageBox("An error occured in surjection operator :"+s);
+		}
+//	app->DefPointeurSouris(0,0);
+
+	}
+
+return ; // Le pointeur imTab n'est pas libéré
+}
+
+
+vector<ImageInfoCV*> wxOsgApp::ExecuterOperation(ParametreOperation *pOCVNouveau)
+{
+ vector<ImageInfoCV*>	r;
+       thread *thOperation= new thread(::ExecuterOperation,this,pOCVNouveau);
+
+    thOperation->detach();
+    	DefPointeurSouris(0,0);
+
+
+    return r;
+
+    ParametreOperation *pAct;
 
 if (pOCVNouveau==NULL)
 	pAct=&pOCV;
