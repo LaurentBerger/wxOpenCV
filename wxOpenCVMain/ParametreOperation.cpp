@@ -1,7 +1,9 @@
 #include "ParametreOperation.h"
 #include "ImageInfo.h"
 #include <map>
+#ifndef __SCILABOPENCV__
 #include <wx/translation.h>
+#endif
 
 
 using namespace std;
@@ -212,7 +214,7 @@ void ParametreOperation::read(const cv::FileNode& node)                         
 
 void ParametreOperation::InitParamType()
 {
-
+#ifndef __SCILABOPENCV__
 listeParam["distance_type"].insert(std::pair<string,int>("|x1-x2| + |y1-y2|",cv::DIST_L1));
 listeParam["distance_type"].insert(std::pair<string,int>(_("euclidean distance").ToStdString(),cv::DIST_L2));
 listeParam["distance_type"].insert(std::pair<string,int>("max(|x1-x2|,|y1-y2|)",cv::DIST_C));
@@ -352,6 +354,7 @@ listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_5").ToStdStrin
 
 listeParam["opencl_enable"].insert(std::pair<string, int>(_("false").ToStdString(), 0));
 listeParam["opencl_enable"].insert(std::pair<string, int>(_("true").ToStdString(), 1));
+#endif
 }
 
 bool ParametreOperation::InitOperation(string s)
@@ -1337,7 +1340,7 @@ InitOperation(s);
 bool ParametreOperation::InitPtrFonction()
 {
 opAttribut=false;
-wxString s(nomOperation);
+string s(nomOperation);
 
 if (s == "fond_gaussianmixture2")
 	{
@@ -2010,7 +2013,7 @@ if (operateur)
 		}
 	catch(cv::Exception& e)
 		{
-		wxString s(e.msg);
+		string s(e.msg);
 		}
 
 	}

@@ -31,6 +31,7 @@ endif (BUILD_SHARED_LIBS)
 FOREACH( mesdossiers 
         wxOpenCVMain
         RapportAOO
+		ScilabOpenCV
     )
 
     ADD_SUBDIRECTORY(${mesdossiers})

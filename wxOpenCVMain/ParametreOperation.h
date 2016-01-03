@@ -1,6 +1,6 @@
 #ifndef __PARAMETREOPERATION__
 #define __PARAMETREOPERATION__
-#include <wx/string.h>
+//#include <wx/string.h>
 #include <map>
 #include <string>
 #include <iostream>
