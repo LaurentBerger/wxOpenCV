@@ -659,7 +659,7 @@ return;
 // `Main program' equivalent, creating windows and returning main app frame
 bool wxOsgApp::OnInit()
 {
-cv::ocl::setUseOpenCL(true);
+cv::ocl::setUseOpenCL(false);
 
 bool b=false;
 //b=wxUnsetEnv("PLPLOT_HOME");

@@ -25,8 +25,9 @@ EvtPointSuivis::EvtPointSuivis(wxEventType commandType , int id):wxCommandEvent(
 
 int CameraOpenCV::PositionVideo(int pos )
 {
-    if (pos>=0)
-        captureVideo->set(CAP_PROP_POS_FRAMES,0);
+	double x = captureVideo->get(CAP_PROP_FRAME_COUNT);
+	if (pos>=0 && pos<static_cast<int>(x))
+        captureVideo->set(CAP_PROP_POS_FRAMES,pos);
     return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
 };
 
@@ -190,8 +191,6 @@ ligneFin=nbLignePhys;
 nbScanParAccumulation=1;
 periodeAccumulation=1;	// en seconde
 modeDeclenchement=0;			// Mode de déclenchement de l'acquisition p45 SDK Andor
-
-erreurFct=captureVideo->set(CAP_PROP_EXPOSURE,tempsExposition);
 double x;
 x=captureVideo->get(CAP_PROP_EXPOSURE);
 reglageTpsExpo=captureVideo->set(CAP_PROP_EXPOSURE,x);

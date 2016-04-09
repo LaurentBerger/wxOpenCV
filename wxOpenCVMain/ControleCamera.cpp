@@ -1246,7 +1246,8 @@ if (!parent)
     return;
 if (cam)
 {
-    cam->ModeAcqContinu(0);
+	cam->PositionVideo(cam->PositionVideo() + 1);
+	cam->ModeAcqContinu(0);
 }
 }  
 
@@ -1260,7 +1261,7 @@ if (!parent)
     return;
 if (cam)
 {
-    cam->PositionVideo(cam->PositionVideo()-1);
+    cam->PositionVideo(cam->PositionVideo()-2);
     cam->ModeAcqContinu(0);
 }
 }
