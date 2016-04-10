@@ -54,6 +54,7 @@ return r;
 
 ImageInfoCV **OperateurConv(long nbOp,long nbL,long nbC)
 {
+    cv::ocl::setUseOpenCL(false);
 ImageInfoCV 	**r;
 long		i;
 float		s=0;

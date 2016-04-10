@@ -27,7 +27,7 @@ int CameraOpenCV::PositionVideo(int pos )
 {
 	double x = captureVideo->get(CAP_PROP_FRAME_COUNT);
 	if (pos>=0 && pos<static_cast<int>(x))
-        captureVideo->set(CAP_PROP_POS_FRAMES,pos);
+        captureVideo->set(CAP_PROP_POS_FRAMES,static_cast<double>(pos));
     return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
 };
 
@@ -40,8 +40,14 @@ int CameraOpenCV::PositionDebutVideo()
 int CameraOpenCV::PositionFinVideo()
 {
     double x=captureVideo->get(CAP_PROP_FRAME_COUNT);
-    captureVideo->set(CAP_PROP_POS_FRAMES,x-1);
+    captureVideo->set(CAP_PROP_POS_FRAMES,x-2);
     return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+};
+
+int CameraOpenCV::NbImageVideo()
+{
+    double x=captureVideo->get(CAP_PROP_FRAME_COUNT);
+    return static_cast<int>(x);
 };
 
 
@@ -722,6 +728,7 @@ if (captureVideo->isOpened())
 			if (TestDestroy())
 				break;
 		}
+
 	if (TestDestroy())
 		break;
 	}

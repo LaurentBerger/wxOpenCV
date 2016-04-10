@@ -269,7 +269,7 @@ listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to HSV").ToStd
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("RGB to HSV").ToStdString(), cv::COLOR_RGB2HSV));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to Yuv").ToStdString(), cv::COLOR_BGR2YUV));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("RGB to Yuv").ToStdString(), cv::COLOR_RGB2YUV));
-listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to RGB").ToStdString(), cv::COLOR_BGR2HSV));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to RGB").ToStdString(), cv::COLOR_YUV2BGR));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to BGR").ToStdString(), cv::COLOR_YUV2RGB));
 
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv(422) to RGB").ToStdString(), cv::COLOR_YUV2RGB_UYVY));

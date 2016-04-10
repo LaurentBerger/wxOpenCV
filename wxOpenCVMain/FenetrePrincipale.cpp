@@ -651,7 +651,7 @@ wxFileName p(s);
 
 wxCharBuffer ww=s.mb_str ();
 char *nomFichier=ww.data() ;
-wxImage im(s);
+//wxImage im(s);
 if (s.Find("yml")>=0)
 	{
 	try 

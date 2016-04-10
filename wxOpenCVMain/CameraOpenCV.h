@@ -108,6 +108,7 @@ virtual bool DefTailleImage(int largeur,int hauteur);
 virtual int PositionVideo(int pos = -1);
 virtual int PositionDebutVideo();
 virtual int PositionFinVideo();
+virtual int NbImageVideo();
 
 
 

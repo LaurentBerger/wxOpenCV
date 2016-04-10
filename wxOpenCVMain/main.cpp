@@ -751,9 +751,9 @@ wxString	wxPlPlotDrv(cheminPlplotDrv+"/wxwidgets");
 
 
 
-new wxDynamicLibrary(plPlotLibWX);
-new wxDynamicLibrary(wxPlPlotDrv);
-new wxDynamicLibrary(svgPlPlotDrv);
+//new wxDynamicLibrary(plPlotLibWX);
+//new wxDynamicLibrary(wxPlPlotDrv);
+//new wxDynamicLibrary(svgPlPlotDrv);
 
 int nbEcran=wxDisplay::GetCount() ;
 wxDisplay ecran(0);
@@ -766,7 +766,7 @@ InterfaceAvance *frame = new InterfaceAvance(NULL,
                                  wxID_ANY,
                                  "wxOpenCV",
                                  display.GetTopRight(),
-                                 wxSize(1000, 1000));
+                                 wxSize(800, 800));
 
 wxBitmap bitmap;
 bool  m_isPda = (wxSystemSettings::GetScreenType() <= wxSYS_SCREEN_PDA);
@@ -794,7 +794,9 @@ if (ok)
 Bind(VAL_EVT_CALCUL_FINI, &wxOsgApp::CalculFini,this,wxID_ANY);
 
 frame->DefOSGApp(this);
-   frame->Show();
+frame->SetSize(wxSize(800,800));
+
+frame->Show();
 #else
 dllplplot=NULL;
 dllWXplplotdrv=NULL;

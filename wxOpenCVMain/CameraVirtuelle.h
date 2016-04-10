@@ -171,6 +171,7 @@ virtual int AcqArretee(){return acqArretee;};
 virtual int PositionVideo(int pos = -1){return indexImage;};
 virtual int PositionDebutVideo(){return indexImage;};
 virtual int PositionFinVideo(){return indexImage;};
+virtual int NbImageVideo(){return indexImage;};
 
 
 };
