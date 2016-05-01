@@ -243,6 +243,9 @@ listeParam["threshold_type"].insert(std::pair<string,int>(_("A(x,y)>thresh thres
 listeParam["threshold_type"].insert(std::pair<string,int>(_("A(x,y)>threshold 0 else A(x,y)").ToStdString(),cv::THRESH_TOZERO_INV));
 listeParam["threshold_type"].insert(std::pair<string,int>(_("A(x,y)<threshold 0 else A(x,y)").ToStdString(),cv::THRESH_TOZERO));
 
+listeParam["OTSU"].insert(std::pair<string,int>(_("manual threshold").ToStdString(),0));
+listeParam["OTSU"].insert(std::pair<string,int>(_("Automatic threshold").ToStdString(),1));
+
 listeParam["borderType"].insert(std::pair<string,int>(_("Replicate border aa|abcde|ee").ToStdString(),cv::BORDER_REPLICATE));
 listeParam["borderType"].insert(std::pair<string,int>(_("Reflect border   ba|abcde|ed").ToStdString(),cv::BORDER_REFLECT));
 listeParam["borderType"].insert(std::pair<string,int>(_("Reflect border   cb|abcde|dc").ToStdString(),cv::BORDER_REFLECT_101));
@@ -550,6 +553,7 @@ if (s == "updatemotionhistory") // inclus la différence de deux images successiv
 	doubleParam["thresh"] = DomaineParametreOp<double>(50., 0.0, 255.0, 1.0);
 	doubleParam["maxval"] = DomaineParametreOp<double>(255., 0.0, 255.0, 1.0);
 	intParam["threshold_type"] = DomaineParametreOp<int>(cv::THRESH_BINARY, cv::THRESH_BINARY, cv::THRESH_TOZERO_INV, 1);
+
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "calcmotiongradient") // inclus la différence de deux images successives
@@ -1108,6 +1112,8 @@ if (s == "threshold")
 	doubleParam["thresh"]=DomaineParametreOp<double>(50.,0.0,255.0,1.0);
 	doubleParam["maxval"]=DomaineParametreOp<double>(255.,0.0,255.0,1.0);
 	intParam["threshold_type"]=DomaineParametreOp<int>(cv::THRESH_BINARY,cv::THRESH_BINARY,cv::THRESH_TOZERO_INV,1);
+    intParam["OTSU"] = DomaineParametreOp<int>(0, 0, 1, 1);
+
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));
 }

@@ -771,6 +771,9 @@ void ImageInfoCV::Threshold( cv::InputArray _src, cv::OutputArray _dst, double t
 std::vector<ImageInfoCV *>ImageInfoCV::Seuillage(std::vector<ImageInfoCV	*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
+int otsu=0;
+if (pOCV->intParam["OTSU"].valeur==1)
+    otsu=cv::THRESH_OTSU;
 if (op[0]->depth()==CV_16S)
 	{
 	pOCV->doubleParam["thresh"].maxi=32767; 
@@ -779,7 +782,7 @@ if (op[0]->channels()==1)
 	{
 	
 	threshold( *op[0], *im, pOCV->doubleParam["thresh"].valeur,pOCV->doubleParam["maxval"].valeur,
-		pOCV->intParam["threshold_type"].valeur);
+		pOCV->intParam["threshold_type"].valeur|otsu);
 	}
 else
 	{
@@ -789,7 +792,7 @@ else
 	for (int i=0;i<op[0]->channels();i++)
 		{
 		cv::threshold(	planCouleur[i], d[i], pOCV->doubleParam["thresh"].valeur,
-						pOCV->doubleParam["maxval"].valeur,pOCV->intParam["threshold_type"].valeur);
+						pOCV->doubleParam["maxval"].valeur,pOCV->intParam["threshold_type"].valeur|otsu);
 		}
 	cv::merge(d, *im);
 	}
