@@ -302,7 +302,7 @@ listeParam["ba_cost_func"].insert(std::pair<string, int>(_("reproj").ToStdString
 listeParam["ba_cost_func"].insert(std::pair<string, int>(_("ray").ToStdString(), 1));
 
 listeParam["Stitch_descriptor"].insert(std::pair<string, int>(_("orb").ToStdString(), 0));
-listeParam["Stitch_descriptor"].insert(std::pair<string, int>(_("sift").ToStdString(), 1));
+listeParam["Stitch_descriptor"].insert(std::pair<string, int>(_("surf").ToStdString(), 1));
 
 listeParam["warp_type"].insert(std::pair<string, int>(_("plane").ToStdString(), 0));
 listeParam["warp_type"].insert(std::pair<string, int>(_("cylindrical").ToStdString(), 1));
