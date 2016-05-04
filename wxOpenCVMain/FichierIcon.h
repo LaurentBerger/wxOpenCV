@@ -118,6 +118,7 @@
 #include "bitmaps\motiongradient.xpm"
 #include "bitmaps\undistort.xpm"
 
+#include "bitmaps\linearpolar.xpm"
 #include "bitmaps\logpolar.xpm"
 #include "bitmaps\resize.xpm"
 #include "bitmaps\recons.xpm"

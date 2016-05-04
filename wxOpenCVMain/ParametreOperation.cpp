@@ -474,6 +474,16 @@ if (s == "logPolar")
 	intParam["InterpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, CV_INTER_LANCZOS4, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
+if (s == "linearPolar")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	pointParam["center"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
+	doubleParam["M"] = DomaineParametreOp<double>(1, 0, 10000, 1);
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, CV_INTER_LANCZOS4, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "undistort")
 	{
 	doubleParam["fx"] = DomaineParametreOp<double>(1000, 00, 10000, 1);
@@ -1888,6 +1898,13 @@ if (s == "logPolar")
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#logpolar";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
 	operateur = &ImageInfoCV::LogPolar;
+	return true;
+	}
+if (s == "linearPolar")
+	{
+	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#linearpolar";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
+	operateur = &ImageInfoCV::LinearPolar;
 	return true;
 	}
 if (s == "undistort")

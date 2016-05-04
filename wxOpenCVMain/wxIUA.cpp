@@ -98,6 +98,7 @@ enum
 	ID_NOUVELLE_DIMENSION,
 	ID_WHITTAKER,
 	ID_LOGPOLAR,
+	ID_LINEARPOLAR,
 	ID_UNDISTORT,
 
 	ID_FOND_MOG,
@@ -269,6 +270,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
 	CONSTRUCTEUR_CMD(bouton, ID_WHITTAKER, recons_xpm,_("Zoom"), "recons", 7);
     
 	CONSTRUCTEUR_CMD(bouton, ID_LOGPOLAR, logpolar_xpm,_("Log polar"), "logPolar", 7);
+	CONSTRUCTEUR_CMD(bouton, ID_LINEARPOLAR, linearpolar_xpm,_("Linear polar"), "linearPolar", 7);
 	CONSTRUCTEUR_CMD(bouton, ID_UNDISTORT, undistort_xpm,_("Compensate for lens distortion"), "undistort", 7);
 
 

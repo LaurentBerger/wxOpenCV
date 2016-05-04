@@ -376,6 +376,7 @@ std::vector<ImageInfoCV	*>TransPerspective(std::vector< ImageInfoCV *>, Parametr
 std::vector<ImageInfoCV	*> Dimension(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>CorrigeAberation(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>LogPolar(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*>LinearPolar(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 
 
 void ExtremumLoc(ImageInfoCV *mask=NULL );
