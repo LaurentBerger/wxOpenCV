@@ -557,6 +557,52 @@ r.push_back(im);
 return r;
 }
 
+/**
+ * @function Inpaint
+ * @brief inpaint d'une image im1 
+ */
+std::vector<ImageInfoCV *>ImageInfoCV::Inpaint(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+
+cv::inpaint( *op[0],masqueMat, *im, pOCV->intParam["radius"].valeur,pOCV->intParam["flags"].valeur );
+
+std::vector<ImageInfoCV	*> r;
+r.push_back(im);
+return r;
+}
+
+std::vector<ImageInfoCV		*>ImageInfoCV::Clahe(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
+{
+ImageInfoCV *imDst = new ImageInfoCV();
+
+cv::Ptr<cv::CLAHE> c = cv::createCLAHE();
+c->setClipLimit(pOCV->doubleParam["clipLimit"].valeur);
+c->setClipLimit(pOCV->doubleParam["tilesGridSize"].valeur);
+if (op[0]->channels()==1)
+{
+    c->apply(*op[0],*imDst);
+}
+else
+{
+    cv::Mat dst;
+    cv::cvtColor(*op[0],dst,pOCV->intParam["ColorSpaceCode"].valeur);
+    std::vector<cv::Mat> x;
+    cv::split(dst,x);
+    c->apply(x[0],x[0]);
+    cv::merge(x,dst);
+    cv::cvtColor(dst,*imDst,cv::COLOR_Lab2BGR);
+}
+
+
+
+
+op[0]->AjoutOpAttribut(pOCV);
+std::vector<ImageInfoCV	*> r;
+r.push_back(imDst);
+return r;
+}
+
 
 
 /**
@@ -1675,60 +1721,49 @@ std::map<int, cv::Mat >::iterator it=descripteur.begin();
 
 for (; it != descripteur.end();it++)
 {
-    if (op[1]->Descripteur(it->first)!=0 && matches.find(it->first)!=matches.end()&& matches[it->first].size()==0)
+    if (pOCV->intParam["matcher"].valeur==0) // Brute force matcher
     {
         if (pOCV->intParam["normType"].valeur == -1)
-
             switch (it->first){
             case IMAGEINFOCV_ORB_DES:
                 if (listeOpAttribut.find("orbfeatures2d") != listeOpAttribut.end())
                 {
                     if (listeOpAttribut["orbfeatures2d"].intParam["WTA_K"].valeur==3 || listeOpAttribut["orbfeatures2d"].intParam["WTA_K"].valeur==4)
-                        descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming(2)");
+                        descriptorMatcher = cv::BFMatcher(cv::NORM_HAMMING2,pOCV->intParam["crossCheck"].valeur).clone();
                     else
-                        descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+                        descriptorMatcher = cv::BFMatcher(cv::NORM_HAMMING,pOCV->intParam["crossCheck"].valeur).clone();
                 }
                 else
-                        descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+                        descriptorMatcher = cv::BFMatcher(cv::NORM_HAMMING,pOCV->intParam["crossCheck"].valeur).clone();
                 break;
             case IMAGEINFOCV_AKAZE_DES:
                 if (listeOpAttribut.find("akazefeatures2d") != listeOpAttribut.end())
                 {
-                    descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+                    descriptorMatcher = cv::BFMatcher(cv::NORM_HAMMING,pOCV->intParam["crossCheck"].valeur).clone();
                 }
                 else
-                    descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+                    descriptorMatcher = cv::BFMatcher(cv::NORM_HAMMING,pOCV->intParam["crossCheck"].valeur).clone();
                 break;
             case IMAGEINFOCV_AGAST_DES:
                 break;
             case IMAGEINFOCV_BLOB_DES:
                 break;
             case IMAGEINFOCV_BRISK_DES:
-                descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
+                descriptorMatcher = cv::BFMatcher(cv::NORM_HAMMING,pOCV->intParam["crossCheck"].valeur).clone();
                 break;
             case IMAGEINFOCV_KAZE_DES:
-                descriptorMatcher = cv::DescriptorMatcher::create("BruteForce");
+                descriptorMatcher = cv::BFMatcher(cv::NORM_HAMMING,pOCV->intParam["crossCheck"].valeur).clone();
                 break;
             }
         else 
             descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
     }
-    if (descriptorMatcher.dynamicCast<cv::BFMatcher>()!=NULL)
+    else // FLANN matcher
     {
-       // cv::BFMatcher::cr
-    }
-    descriptorMatcher->match(*op[0]->Descripteur(it->first), *op[1]->Descripteur(it->first), matches[it->first], UMat());
-    if (pOCV->intParam["crossCheck"].valeur == 1)
-    {
-        std::vector<cv::DMatch> matches10;
-        descriptorMatcher->match(*op[1]->Descripteur(it->first), *op[0]->Descripteur(it->first),matches10, UMat());
-        for (int i=0;i<matches10.size();i++)
-        {
-            int idx1 = matches10[i].queryIdx;
-            int idx2 = matches10[i].trainIdx;
-        }
 
     }
+
+    descriptorMatcher->match(*op[0]->Descripteur(it->first), *op[1]->Descripteur(it->first), matches[it->first], UMat());
     pointCleApp.insert(make_pair(it->first,*(op[1]->PointCle(it->first))));
 }
 
@@ -1739,6 +1774,56 @@ r.push_back(op[0]);
 return r;
 }
 
+std::vector<ImageInfoCV	*>ImageInfoCV::FindHomography(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
+{
+    if (pointCleApp.size()==0 || op[0]!=this || ListePointCleApp()==NULL)
+    {
+        std::vector<ImageInfoCV	*> r;
+        return r;
+    }
+    std::vector<cv::KeyPoint> *pts1 = PointCle(-1);
+
+
+    std::map<int, std::vector<cv::KeyPoint> >*lApp=ListePointCleApp();
+    std::map<int, std::vector<cv::KeyPoint> >::iterator it=ListePointCleApp()->begin();
+    std::vector<cv::Point2f> src,dst;
+    for (;it!=ListePointCleApp()->end();it++)
+    {
+        double max_dist = 0; double min_dist = 100;
+        std::vector<cv::DMatch> *m = Appariement(it->first);
+          //-- Quick calculation of max and min distances between keypoints
+        if (m!=NULL && PointCle(it->first) != NULL && PointCleApp(it->first) != NULL)
+        {
+            for( int i = 0; i < m->size(); i++ )
+            { 
+                double dist = (*m)[i].distance;
+                if( dist < min_dist ) min_dist = dist;
+                if( dist > max_dist ) max_dist = dist;
+            }
+            pts1 = PointCle(it->first);
+            std::vector<cv::KeyPoint> *pts2 = PointCleApp(it->first);
+            if (pts2->size()==0)
+	            break;
+            int fZoomNume, fZoomDeno;
+            //wxPoint pos = ClientToScreen(pt);
+            for (int i = 0; i < m->size(); i++)
+                if ((*m)[i].distance<std::max(2*min_dist,(min_dist+max_dist)/3))
+                    {
+	                src.push_back((*pts1)[(*m)[i].queryIdx].pt);
+	                dst.push_back((*pts2)[(*m)[i].trainIdx].pt);
+	                }
+        }
+
+
+    }
+    homography =cv::findHomography(src,dst,pOCV->intParam["method"].valeur,pOCV->doubleParam["ransacReprojThreshold"].valeur);
+
+
+    AjoutOpAttribut(pOCV);
+    std::vector<ImageInfoCV	*> r;
+    r.push_back(op[0]);
+return r;
+}
 
 
 //std::vector<ImageInfoCV *>ImageInfoCV::FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
@@ -2002,31 +2087,34 @@ return r;
 std::vector<ImageInfoCV		*>ImageInfoCV::TransAffine(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 ImageInfoCV *imDst = new ImageInfoCV();
-cv::Mat			inter;
-cv::Point2f srcTri[3];
-cv::Point2f dstTri[3];
+if (homography.empty())
+{
+    cv::Mat			inter;
+    cv::Point2f srcTri[3];
+    cv::Point2f dstTri[3];
 
-cv::Mat rotation(2, 3, CV_32FC1);
-cv::Mat affinite(2, 3, CV_32FC1);
+    cv::Mat rotation(2, 3, CV_32FC1);
+    cv::Mat affinite(2, 3, CV_32FC1);
 
-srcTri[0] = pOCV->pointParam["src1"].valeur;
-srcTri[1] = pOCV->pointParam["src2"].valeur;
-srcTri[2] = pOCV->pointParam["src3"].valeur;
+    srcTri[0] = pOCV->pointParam["src1"].valeur;
+    srcTri[1] = pOCV->pointParam["src2"].valeur;
+    srcTri[2] = pOCV->pointParam["src3"].valeur;
 
-dstTri[0] = pOCV->pointParam["dst1"].valeur;
-dstTri[1] = pOCV->pointParam["dst2"].valeur;
-dstTri[2] = pOCV->pointParam["dst3"].valeur;
+    dstTri[0] = pOCV->pointParam["dst1"].valeur;
+    dstTri[1] = pOCV->pointParam["dst2"].valeur;
+    dstTri[2] = pOCV->pointParam["dst3"].valeur;
 
-affinite = getAffineTransform(srcTri, dstTri);
-cv::warpAffine(*op[0], inter, affinite, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
+    affinite = getAffineTransform(srcTri, dstTri);
+    cv::warpAffine(*op[0], inter, affinite, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
 
-/** Rotating the image after Warp */
+    /** Rotating the image after Warp */
 
-/// Compute a rotation matrix with respect to the center of the image
+    /// Compute a rotation matrix with respect to the center of the image
 
-/// Get the rotation matrix with the specifications above
-rotation = getRotationMatrix2D(pOCV->pointParam["centre"].valeur, pOCV->doubleParam["angle"].valeur, pOCV->doubleParam["scale"].valeur);
-warpAffine(inter, *imDst, rotation, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
+    /// Get the rotation matrix with the specifications above
+    rotation = getRotationMatrix2D(pOCV->pointParam["centre"].valeur, pOCV->doubleParam["angle"].valeur, pOCV->doubleParam["scale"].valeur);
+    warpAffine(inter, *imDst, rotation, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
+}
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(imDst);
@@ -2035,18 +2123,13 @@ return r;
 
 std::vector<ImageInfoCV		*>ImageInfoCV::TransPerspective(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
 {
-if (op[0]->depth() != CV_32FC1)
-	throw std::string("CalcOrientationMvt :image must be single channel floating-point");
-if (masqueMOG)
-delete masqueMOG;
-if (orient)
-	delete orient;
-masqueMOG = new UMat();
-orient = new UMat();	// calculate motion gradient orientation and valid orientation mask
-cv::motempl::calcMotionGradient(*op[0], *masqueMOG, *orient, pOCV->doubleParam["delta1"].valeur, pOCV->doubleParam["delta2"].valeur, pOCV->intParam["aperture_size"].valeur);
+if (homography.empty())
+	throw std::string("You must match and findhomography first");
+ImageInfoCV *imDst = new ImageInfoCV();
+warpPerspective(*op[0], *imDst,homography, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
 op[0]->AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
-r.push_back(this);
+r.push_back(imDst);
 return r;
 }
 

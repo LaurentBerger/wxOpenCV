@@ -157,6 +157,7 @@ cv::UMat *orient;					/*<! orientation pour calcMotionGradient*/
 cv::UMat *segmvt;					/*<! segmentation issue de l'analyse du mouvement (segmentMotion)*/
 std::vector<cv::Rect> regionsMvt;	/*<! Regions issues de l'analyse du mouvement (segmentMotion)*/
 std::vector<double> angle;			/*<! Angle issus de l'analyse du mouvement (calcGlobalOrientation)*/
+cv::Mat homography;                 /*<! Homgraphie calulée à partir des points appariés*/
 
 Panoramique         *pano;          /*<! Panoramique construit avec cette image en premier argument  */
 
@@ -314,6 +315,8 @@ std::vector<ImageInfoCV *>FlotOptiqueLucasKanadePyramide(std::vector< ImageInfoC
 std::vector<ImageInfoCV *>FlotOptiqueFarnerback(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV	*>PhaseCorrelate(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>MAJHistoriqueMvt(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>Clahe(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>Inpaint(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV);
 
 std::vector<ImageInfoCV	*>Fond_MOG(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>Fond_MOG2(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
@@ -368,6 +371,8 @@ std::vector<ImageInfoCV	*>DetectAgast(std::vector<ImageInfoCV	*> op, ParametreOp
 std::vector<ImageInfoCV	*>DetectBlob(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectMser(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>AppariePoint(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>FindHomography(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV);
+
 std::vector<ImageInfoCV	*>SeparationPlan(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>CalcOrientationMvt(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>SegmenteMvt(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);

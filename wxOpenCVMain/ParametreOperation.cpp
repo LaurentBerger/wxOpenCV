@@ -1,4 +1,6 @@
 #include "ParametreOperation.h"
+#include "opencv2/xphoto/inpainting.hpp"
+
 #include "ImageInfo.h"
 #include <map>
 #ifndef __SCILABOPENCV__
@@ -233,6 +235,9 @@ listeParam["normType"].insert(std::pair<string,int>(_("auto").ToStdString(),-1))
 
 listeParam["connectivity"].insert(std::pair<string,int>(_("4-connex").ToStdString(),4));
 listeParam["connectivity"].insert(std::pair<string,int>(_("8-connex").ToStdString(),8));
+listeParam["inpaint method"].insert(std::pair<string,int>(_("Navier stokes").ToStdString(),cv::INPAINT_NS));
+listeParam["inpaint method"].insert(std::pair<string,int>(_("Alexandru Telea").ToStdString(),cv::INPAINT_TELEA));
+listeParam["inpaint method"].insert(std::pair<string,int>(_("INPAINT SHIFTMAP").ToStdString(),cv::xphoto::INPAINT_SHIFTMAP));
 
 listeParam["adaptiveMethod"].insert(std::pair<string,int>(_("threshold  mean of neighbourhood").ToStdString(),cv::ADAPTIVE_THRESH_MEAN_C ));
 listeParam["adaptiveMethod"].insert(std::pair<string,int>(_("threshold weighted sum of neighbourhood").ToStdString(),cv::ADAPTIVE_THRESH_GAUSSIAN_C));
@@ -279,6 +284,8 @@ listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv(422) to RGB").
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv(422) to BGR").ToStdString(), cv::COLOR_YUV2BGR_UYVY));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to RGB (NV12)").ToStdString(), cv::COLOR_YUV2RGB_NV12));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to BGR (NV12)").ToStdString(), cv::COLOR_YUV2BGR_NV12));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to Lab").ToStdString(), cv::COLOR_BGR2Lab));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Lab to BGR").ToStdString(), cv::COLOR_Lab2BGR));
 
 
 
@@ -335,6 +342,9 @@ listeParam["expos_comp_type"].insert(std::pair<string, int>(_("NO").ToStdString(
 listeParam["expos_comp_type"].insert(std::pair<string, int>(_("GAIN").ToStdString(), cv::detail::ExposureCompensator::GAIN));
 listeParam["expos_comp_type"].insert(std::pair<string, int>(_("GAIN_BLOCKS").ToStdString(), cv::detail::ExposureCompensator::GAIN_BLOCKS));
  
+listeParam["matcher"].insert(std::pair<string, int>(_("Brute force matcher").ToStdString(), 0));
+listeParam["matcher"].insert(std::pair<string, int>(_("FlannBasedMatcher").ToStdString(), 1));
+
 
 
 listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_HORIZ").ToStdString(), cv::detail::WAVE_CORRECT_HORIZ));
@@ -357,6 +367,11 @@ listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_5").ToStdStrin
 
 listeParam["opencl_enable"].insert(std::pair<string, int>(_("false").ToStdString(), 0));
 listeParam["opencl_enable"].insert(std::pair<string, int>(_("true").ToStdString(), 1));
+
+listeParam["method"].insert(std::pair<string, int>(_("regular method using all the points").ToStdString(), 0));
+listeParam["method"].insert(std::pair<string, int>(_("RANSAC-based robust method").ToStdString(), CV_RANSAC));
+listeParam["method"].insert(std::pair<string, int>(_("Least-Median robust method").ToStdString(), CV_LMEDS));
+listeParam["method"].insert(std::pair<string, int>(_("PROSAC-based robust method").ToStdString(), cv::RHO));
 #endif
 }
 
@@ -464,6 +479,28 @@ if (s == "fond_gmg")
 }
 
 
+if (s == "inpaint")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	doubleParam["radius"] = DomaineParametreOp<double>(0, 0, 10000, 1);
+	doubleParam["tilesGridSize"] = DomaineParametreOp<double>(0, 0, 10000, 1);
+    intParam["Inpaint method"] = DomaineParametreOp<int>(cv::COLOR_BGR2Lab, cv::COLOR_BGR2GRAY, cv::COLOR_RGB2GRAY, 1);
+
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "clahe")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	doubleParam["clipLimit"] = DomaineParametreOp<double>(0, 0, 10000, 1);
+	doubleParam["tilesGridSize"] = DomaineParametreOp<double>(0, 0, 10000, 1);
+    intParam["ColorSpaceCode"] = DomaineParametreOp<int>(cv::COLOR_BGR2Lab, cv::COLOR_BGR2GRAY, cv::COLOR_RGB2GRAY, 1);
+
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "logPolar")
 	{
 	nomOperation = s;
@@ -524,6 +561,17 @@ if (s == "wrapAffine") // inclus la différence de deux images successives
 	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
+if (s == "warpperspective") // inclus la différence de deux images successives
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_LINEAR, CV_INTER_LANCZOS4, 1);
+	intParam["borderMode"] = DomaineParametreOp<int>(IPL_BORDER_CONSTANT, IPL_BORDER_CONSTANT, IPL_BORDER_WRAP, 1);
+	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
  if (s == "recons")
 	{
 	nomOperation = s;
@@ -542,13 +590,6 @@ if (s == "resize") // inclus la différence de deux images successives
 	doubleParam["fy"] = DomaineParametreOp<double>(0, 0.0000, 10000,1);
 	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
 	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_NN, CV_INTER_LANCZOS4, 1);
-    xx.listeOperation.insert(make_pair(s, *this));
-}
-if (s == "wrapPerspective") // inclus la différence de deux images successives
-	{
-	nomOperation = s;
-	nbImageRes = 1;
-	nbOperande = 1;
     xx.listeOperation.insert(make_pair(s, *this));
 }
 
@@ -604,6 +645,7 @@ if (s == "matchdescriptormatcher")
     intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["normType"] = DomaineParametreOp<int>(-1, 0, 1, 1);
 
+    intParam["Matcher"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["crossCheck"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["keepBest"] = DomaineParametreOp<int>(-1, -1, 10000, 1);
 //    intParam["Matcher"] = DomaineParametreOp<int>(0, 0, 1, 1);
@@ -613,6 +655,23 @@ if (s == "matchdescriptormatcher")
 	nbImageRes = 0;
 	nbOperande = 2;
 	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#match";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "findhomography")
+	{
+    intParam["method"] = DomaineParametreOp<int>(0, 0, 3, 1);
+    doubleParam["ransacReprojThreshold"] = DomaineParametreOp<double>(3, 0.1, 10, .1);
+
+    intParam["maxIters"] = DomaineParametreOp<int>(2000, 1, 20000, 100);
+    doubleParam["confidence"] = DomaineParametreOp<double>(0.995, 0, 1, 0.01);
+//    intParam["Matcher"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    opAttribut = true;
+	opVideo = true;
+	nomOperation = s;
+	nbImageRes = 0;
+	nbOperande = 2;
+	lienHtml = "http://docs.opencv.org/master/d9/d0c/group__calib3d.html#ga4abc2ece9fab9398f2e560d53c8c9780";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
     xx.listeOperation.insert(make_pair(s, *this));
 }
@@ -1495,7 +1554,17 @@ if (s == "briskfeatures2d")
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
     operateur = &ImageInfoCV::DetectBrisk;
     }
-
+ if (s == "findhomography")
+	{
+    opAttribut = true;
+	opVideo = true;
+	nomOperation = s;
+	nbImageRes = 0;
+	nbOperande = 2;
+	lienHtml = "http://docs.opencv.org/master/d9/d0c/group__calib3d.html#ga4abc2ece9fab9398f2e560d53c8c9780";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
+	operateur = &ImageInfoCV::FindHomography;
+    }
 if (s == "matchdescriptormatcher")
 	{
 	opAttribut = true;
@@ -1544,12 +1613,28 @@ if(	s=="houghlinesp")
 	}
 if (s=="cvtcolor")
 	{
-	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#cvtcolor";
+	lienHtml="http://docs.opencv.org/master/d7/d1b/group__imgproc__misc.html#ga397ae87e1288a81d2363b61574eb8cab";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
     nbOperande = 1;
     nomOperation = s;
 	operateur = &ImageInfoCV::RGB_L;
 	}
+if (s == "clahe")
+{
+	lienHtml = "http://docs.opencv.org/master/d6/db6/classcv_1_1CLAHE.html";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
+	nbOperande = 1;
+	nomOperation = s;
+	operateur = &ImageInfoCV::Clahe;
+}
+if (s == "inpaint")
+{
+	lienHtml = "http://docs.opencv.org/master/d6/db6/classcv_1_1CLAHE.html";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
+	nbOperande = 1;
+	nomOperation = s;
+	operateur = &ImageInfoCV::Inpaint;
+}
 if (s=="watershed")
 	{
 	operateur = &ImageInfoCV::PartageEaux;
@@ -1877,6 +1962,13 @@ if (s == "wrapAffine")
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#warpaffine";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
 	operateur = &ImageInfoCV::TransAffine;
+	return true;
+	}
+if (s == "warpperspective")
+	{
+	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#warpaffine";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
+	operateur = &ImageInfoCV::TransPerspective;
 	return true;
 	}
 if (s == "resize")

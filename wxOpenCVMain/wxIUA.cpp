@@ -58,9 +58,11 @@ enum
 	ID_LAPLACIEN,
  	ID_LISMOY,
 	ID_LISGAU,
+    ID_INPAINT,
 	ID_LISMED,
 	ID_THRESHOLD,
 	ID_ADATHRESHOLD,
+    ID_CLAHE,
     ID_DISTANCEDISCRETE,
     ID_SQUELETTE,
     ID_VORONOI,
@@ -113,7 +115,8 @@ enum
     ID_DES_MSER,
     ID_DES_BLOB,
 	ID_DES_MATCH,
-	ID_DES_KNNMATCH,
+	ID_HOMOGRAPHY,
+    ID_WARPPERPESCTIVE,
 
     ID_DES_PANOFEATURE,
     ID_DES_PANORESIZE,
@@ -239,6 +242,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_LISMOY, LisMoy_xpm, _("Blur (mean)"), "blur", 3);
     CONSTRUCTEUR_CMD(bouton, ID_LISMED, LisMed_xpm, _("Blur (median filter)"), "medianblur", 3);
     CONSTRUCTEUR_CMD(bouton, ID_LISGAU, LisGau_xpm,_("Blur (gaussian)"), "gaussianblur", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_INPAINT, inpaint_xpm,_("Inpaint"), "inpaint", 3);
 
     CONSTRUCTEUR_CMD(bouton, ID_VIDEO_8_UC3, camera_xpm, _("Video RGB 24bits"), " ", 4);
     CONSTRUCTEUR_CMD(bouton, ID_VIDEO_32_FC3, camerafloat_xpm, _("Video RGB float"), " ", 4);
@@ -246,6 +250,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
 
     CONSTRUCTEUR_CMD(bouton, ID_THRESHOLD, seuillage_xpm, _("Thereshold"), "threshold", 5);
     CONSTRUCTEUR_CMD(bouton, ID_ADATHRESHOLD, seuillageada_xpm, _("Adaptive Thereshold"), "adaptivethreshold", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_CLAHE, clahe_xpm, _("Clahe"), "clahe", 5);
     CONSTRUCTEUR_CMD(bouton, ID_PARTAGE_EAUX, statconnexe_xpm, _("Watershed"), "watershed", 5);
     CONSTRUCTEUR_CMD(bouton, ID_COMPCONNEXE, cmpconnexe_xpm,_("Connected component"), "connectedcomponents", 5);
     CONSTRUCTEUR_CMD(bouton, ID_CONTOUR, contour_xpm,_("Contour"), "contour", 5);
@@ -303,7 +308,9 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_DES_BLOB, blob_xpm,_("BLOB keypoint"), "blobfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_MSER, mser_xpm,_("MSER region"), "mserfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_MATCH, Match_xpm, _("Match"), "matchdescriptormatcher", 11);
-    CONSTRUCTEUR_CMD(bouton, ID_DES_KNNMATCH, knnMatch_xpm,_("knn Match"), "kbbmatchdescriptormatcher", 11); 
+    CONSTRUCTEUR_CMD(bouton, ID_HOMOGRAPHY, homography_xpm,_("Homography"), "findhomography", 11); 
+    CONSTRUCTEUR_CMD(bouton, ID_WARPPERPESCTIVE, warpperspective_xpm,_("warpPerspective"), "warpperspective", 11); 
+    
 
     CONSTRUCTEUR_CMD(bouton, ID_DES_PANOFEATURE, panofeature_xpm,_("Stitching feature"), "detailfeaturesfinder", 12);
     CONSTRUCTEUR_CMD(bouton, ID_DES_PANOMATCH, panomatch_xpm,_("Stitching feature"), "detailmatchesinfo", 12);
