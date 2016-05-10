@@ -1715,20 +1715,9 @@ for (; it != descripteur.end();it++)
     }
     if (descriptorMatcher.dynamicCast<cv::BFMatcher>()!=NULL)
     {
-       // cv::BFMatcher::cr
+        
     }
     descriptorMatcher->match(*op[0]->Descripteur(it->first), *op[1]->Descripteur(it->first), matches[it->first], UMat());
-    if (pOCV->intParam["crossCheck"].valeur == 1)
-    {
-        std::vector<cv::DMatch> matches10;
-        descriptorMatcher->match(*op[1]->Descripteur(it->first), *op[0]->Descripteur(it->first),matches10, UMat());
-        for (int i=0;i<matches10.size();i++)
-        {
-            int idx1 = matches10[i].queryIdx;
-            int idx2 = matches10[i].trainIdx;
-        }
-
-    }
     pointCleApp.insert(make_pair(it->first,*(op[1]->PointCle(it->first))));
 }
 
@@ -1739,6 +1728,26 @@ r.push_back(op[0]);
 return r;
 }
 
+std::vector<ImageInfoCV	*>ImageInfoCV::FindHomography(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
+{
+    if (pointCleApp.size()<=3)
+    {
+        std::vector<ImageInfoCV	*> r;
+        return r;
+    }
+/*    std::vector<cv::Point2f> src,dst;
+    for (int i=0;i<pointCleApp.size();i++)
+    {
+        src.push_back(PointCleApp)
+
+    homography =cv::findHomography(src,dst,pOCV->intParam["method"].valeur,pOCV->doubleParam["ransacReprojThreshold"].valeur);*/
+
+
+    AjoutOpAttribut(pOCV);
+    std::vector<ImageInfoCV	*> r;
+    r.push_back(op[0]);
+return r;
+}
 
 
 //std::vector<ImageInfoCV *>ImageInfoCV::FlotOptiqueLucasKanadePyramide(ImageInfoCV	*imPrec,ImageInfoCV	*imSuiv,ParametreOperation *pOCV)
