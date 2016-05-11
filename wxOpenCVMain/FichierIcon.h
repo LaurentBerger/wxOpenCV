@@ -170,6 +170,7 @@
 #include "bitmaps\ifft.xpm"
 #include "bitmaps\KNN.xpm"
 #include "bitmaps\knnMatch.xpm"
+#include "bitmaps\homography.xpm"
 #include "bitmaps\laplacien.xpm"
 #include "bitmaps\LisGau.xpm"
 #include "bitmaps\LisMed.xpm"

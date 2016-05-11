@@ -114,6 +114,7 @@ enum
     ID_DES_BLOB,
 	ID_DES_MATCH,
 	ID_DES_KNNMATCH,
+	ID_HOMOGRAPHY,
 
     ID_DES_PANOFEATURE,
     ID_DES_PANORESIZE,
@@ -304,6 +305,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_DES_MSER, mser_xpm,_("MSER region"), "mserfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_MATCH, Match_xpm, _("Match"), "matchdescriptormatcher", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_KNNMATCH, knnMatch_xpm,_("knn Match"), "kbbmatchdescriptormatcher", 11); 
+    CONSTRUCTEUR_CMD(bouton, ID_HOMOGRAPHY, homography_xpm,_("Homography"), "homography", 11); 
 
     CONSTRUCTEUR_CMD(bouton, ID_DES_PANOFEATURE, panofeature_xpm,_("Stitching feature"), "detailfeaturesfinder", 12);
     CONSTRUCTEUR_CMD(bouton, ID_DES_PANOMATCH, panomatch_xpm,_("Stitching feature"), "detailmatchesinfo", 12);

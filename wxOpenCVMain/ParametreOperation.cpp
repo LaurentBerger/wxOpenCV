@@ -356,7 +356,12 @@ listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_3").ToStdStrin
 listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_5").ToStdString(), 5));
 
 listeParam["opencl_enable"].insert(std::pair<string, int>(_("false").ToStdString(), 0));
-listeParam["opencl_enable"].insert(std::pair<string, int>(_("true").ToStdString(), 1));
+listeParam["opencl_enable"].insert(std::pair<string, int>(_("true").ToStdString(), CV));
+
+listeParam["method"].insert(std::pair<string, int>(_("regular method using all the points").ToStdString(), 0));
+listeParam["method"].insert(std::pair<string, int>(_("RANSAC-based robust method").ToStdString(), CV_RANSAC));
+listeParam["method"].insert(std::pair<string, int>(_("Least-Median robust method").ToStdString(), CV_LMEDS));
+listeParam["method"].insert(std::pair<string, int>(_("PROSAC-based robust method").ToStdString(), cv::RHO));
 #endif
 }
 
@@ -613,6 +618,23 @@ if (s == "matchdescriptormatcher")
 	nbImageRes = 0;
 	nbOperande = 2;
 	lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#match";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "findhomography")
+	{
+    intParam["method"] = DomaineParametreOp<int>(0, 0, 3, 1);
+    doubleParam["ransacReprojThreshold"] = DomaineParametreOp<double>(3, 0.1, 10, .1);
+
+    intParam["maxIters"] = DomaineParametreOp<int>(2000, 1, 20000, 100);
+    doubleParam["confidence"] = DomaineParametreOp<double>(0.995, 0, 1, 0.01);
+//    intParam["Matcher"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    opAttribut = true;
+	opVideo = true;
+	nomOperation = s;
+	nbImageRes = 0;
+	nbOperande = 2;
+	lienHtml = "http://docs.opencv.org/master/d9/d0c/group__calib3d.html#ga4abc2ece9fab9398f2e560d53c8c9780";
 	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
     xx.listeOperation.insert(make_pair(s, *this));
 }
