@@ -356,7 +356,7 @@ listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_3").ToStdStrin
 listeParam["maskSize"].insert(std::pair<string, int>(_("DIST_MASK_5").ToStdString(), 5));
 
 listeParam["opencl_enable"].insert(std::pair<string, int>(_("false").ToStdString(), 0));
-listeParam["opencl_enable"].insert(std::pair<string, int>(_("true").ToStdString(), CV));
+listeParam["opencl_enable"].insert(std::pair<string, int>(_("true").ToStdString(), 1));
 
 listeParam["method"].insert(std::pair<string, int>(_("regular method using all the points").ToStdString(), 0));
 listeParam["method"].insert(std::pair<string, int>(_("RANSAC-based robust method").ToStdString(), CV_RANSAC));
