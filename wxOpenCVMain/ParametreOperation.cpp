@@ -335,6 +335,8 @@ listeParam["expos_comp_type"].insert(std::pair<string, int>(_("NO").ToStdString(
 listeParam["expos_comp_type"].insert(std::pair<string, int>(_("GAIN").ToStdString(), cv::detail::ExposureCompensator::GAIN));
 listeParam["expos_comp_type"].insert(std::pair<string, int>(_("GAIN_BLOCKS").ToStdString(), cv::detail::ExposureCompensator::GAIN_BLOCKS));
  
+listeParam["matcher"].insert(std::pair<string, int>(_("Brute force matcher").ToStdString(), 0));
+listeParam["matcher"].insert(std::pair<string, int>(_("FlannBasedMatcher").ToStdString(), 1));
 
 
 listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_HORIZ").ToStdString(), cv::detail::WAVE_CORRECT_HORIZ));
@@ -609,6 +611,7 @@ if (s == "matchdescriptormatcher")
     intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["normType"] = DomaineParametreOp<int>(-1, 0, 1, 1);
 
+    intParam["Matcher"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["crossCheck"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["keepBest"] = DomaineParametreOp<int>(-1, -1, 10000, 1);
 //    intParam["Matcher"] = DomaineParametreOp<int>(0, 0, 1, 1);
@@ -1517,7 +1520,17 @@ if (s == "briskfeatures2d")
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
     operateur = &ImageInfoCV::DetectBrisk;
     }
-
+ if (s == "findhomography")
+	{
+    opAttribut = true;
+	opVideo = true;
+	nomOperation = s;
+	nbImageRes = 0;
+	nbOperande = 2;
+	lienHtml = "http://docs.opencv.org/master/d9/d0c/group__calib3d.html#ga4abc2ece9fab9398f2e560d53c8c9780";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=436&zoom=70,250,100";
+	operateur = &ImageInfoCV::FindHomography;
+    }
 if (s == "matchdescriptormatcher")
 	{
 	opAttribut = true;
