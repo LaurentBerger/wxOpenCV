@@ -531,6 +531,17 @@ if (s == "wrapAffine") // inclus la différence de deux images successives
 	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
+if (s == "warpperspective") // inclus la différence de deux images successives
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_LINEAR, CV_INTER_LANCZOS4, 1);
+	intParam["borderMode"] = DomaineParametreOp<int>(IPL_BORDER_CONSTANT, IPL_BORDER_CONSTANT, IPL_BORDER_WRAP, 1);
+	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
  if (s == "recons")
 	{
 	nomOperation = s;
@@ -1912,6 +1923,13 @@ if (s == "wrapAffine")
 	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#warpaffine";
 	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
 	operateur = &ImageInfoCV::TransAffine;
+	return true;
+	}
+if (s == "warpperspective")
+	{
+	lienHtml = "http://docs.opencv.org/modules/imgproc/doc/geometric_transformations.html#warpaffine";
+	refPDF = "http://docs.opencv.org/opencv3refman.pdf#page=277&zoom=70,250,100";
+	operateur = &ImageInfoCV::TransPerspective;
 	return true;
 	}
 if (s == "resize")

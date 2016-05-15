@@ -2080,10 +2080,10 @@ std::vector<ImageInfoCV		*>ImageInfoCV::TransPerspective(std::vector<ImageInfoCV
 if (homography.empty())
 	throw std::string("You must match and findhomography first");
 ImageInfoCV *imDst = new ImageInfoCV();
-warpPerspective(*op[0], *imDst,homography, cv::Size(op[0]->size().width*2,op[0]->size().height*2));
+warpPerspective(*op[0], *imDst,homography, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
 op[0]->AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
-r.push_back(this);
+r.push_back(imDst);
 return r;
 }
 

@@ -1,5 +1,5 @@
 /* XPM */
-static const char *knnMatch_xpm[] = {
+static const char *warpperspective_xpm[] = {
 /* columns rows colors chars-per-pixel */
 "48 48 2 1",
 ". c Black",
