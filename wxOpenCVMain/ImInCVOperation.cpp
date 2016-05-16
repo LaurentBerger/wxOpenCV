@@ -557,6 +557,37 @@ r.push_back(im);
 return r;
 }
 
+std::vector<ImageInfoCV		*>ImageInfoCV::Clahe(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
+{
+ImageInfoCV *imDst = new ImageInfoCV();
+
+cv::Ptr<cv::CLAHE> c = cv::createCLAHE();
+c->setClipLimit(pOCV->doubleParam["clipLimit"].valeur);
+c->setClipLimit(pOCV->doubleParam["tilesGridSize"].valeur);
+if (op[0]->channels()==1)
+{
+    c->apply(*op[0],*imDst);
+}
+else
+{
+    cv::Mat dst;
+    cv::cvtColor(*op[0],dst,pOCV->intParam["ColorSpaceCode"].valeur);
+    std::vector<cv::Mat> x;
+    cv::split(dst,x);
+    c->apply(x[0],x[0]);
+    cv::merge(x,dst);
+    cv::cvtColor(dst,*imDst,cv::COLOR_Lab2BGR);
+}
+
+
+
+
+op[0]->AjoutOpAttribut(pOCV);
+std::vector<ImageInfoCV	*> r;
+r.push_back(imDst);
+return r;
+}
+
 
 
 /**

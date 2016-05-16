@@ -279,6 +279,8 @@ listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv(422) to RGB").
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv(422) to BGR").ToStdString(), cv::COLOR_YUV2BGR_UYVY));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to RGB (NV12)").ToStdString(), cv::COLOR_YUV2RGB_NV12));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to BGR (NV12)").ToStdString(), cv::COLOR_YUV2BGR_NV12));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to Lab").ToStdString(), cv::COLOR_BGR2Lab));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Lab to BGR").ToStdString(), cv::COLOR_Lab2BGR));
 
 
 
@@ -337,6 +339,7 @@ listeParam["expos_comp_type"].insert(std::pair<string, int>(_("GAIN_BLOCKS").ToS
  
 listeParam["matcher"].insert(std::pair<string, int>(_("Brute force matcher").ToStdString(), 0));
 listeParam["matcher"].insert(std::pair<string, int>(_("FlannBasedMatcher").ToStdString(), 1));
+
 
 
 listeParam["wave_correct"].insert(std::pair<string, int>(_("WAVE_CORRECT_HORIZ").ToStdString(), cv::detail::WAVE_CORRECT_HORIZ));
@@ -471,6 +474,17 @@ if (s == "fond_gmg")
 }
 
 
+if (s == "clahe")
+	{
+	nomOperation = s;
+	nbImageRes = 1;
+	nbOperande = 1;
+	doubleParam["clipLimit"] = DomaineParametreOp<double>(0, 0, 10000, 1);
+	doubleParam["tilesGridSize"] = DomaineParametreOp<double>(0, 0, 10000, 1);
+    intParam["ColorSpaceCode"] = DomaineParametreOp<int>(cv::COLOR_BGR2Lab, cv::COLOR_BGR2GRAY, cv::COLOR_RGB2GRAY, 1);
+
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "logPolar")
 	{
 	nomOperation = s;
@@ -560,13 +574,6 @@ if (s == "resize") // inclus la différence de deux images successives
 	doubleParam["fy"] = DomaineParametreOp<double>(0, 0.0000, 10000,1);
 	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
 	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_NN, CV_INTER_LANCZOS4, 1);
-    xx.listeOperation.insert(make_pair(s, *this));
-}
-if (s == "wrapPerspective") // inclus la différence de deux images successives
-	{
-	nomOperation = s;
-	nbImageRes = 1;
-	nbOperande = 1;
     xx.listeOperation.insert(make_pair(s, *this));
 }
 
@@ -1590,11 +1597,19 @@ if(	s=="houghlinesp")
 	}
 if (s=="cvtcolor")
 	{
-	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#cvtcolor";
+	lienHtml="http://docs.opencv.org/master/d7/d1b/group__imgproc__misc.html#ga397ae87e1288a81d2363b61574eb8cab";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
     nbOperande = 1;
     nomOperation = s;
 	operateur = &ImageInfoCV::RGB_L;
+	}
+if (s=="clahe")
+	{
+	lienHtml="http://docs.opencv.org/master/d6/db6/classcv_1_1CLAHE.html";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
+    nbOperande = 1;
+    nomOperation = s;
+	operateur = &ImageInfoCV::Clahe;
 	}
 if (s=="watershed")
 	{

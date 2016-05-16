@@ -199,6 +199,7 @@
 #include "bitmaps\converttype.xpm"
 #include "bitmaps\seuillage.xpm"
 #include "bitmaps\seuillageada.xpm"
+#include "bitmaps\clahe.xpm"
 #include "bitmaps\soustraction.xpm"
 #include "bitmaps\squelette.xpm"
 #include "bitmaps\statconnexe.xpm"

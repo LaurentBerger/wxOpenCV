@@ -61,6 +61,7 @@ enum
 	ID_LISMED,
 	ID_THRESHOLD,
 	ID_ADATHRESHOLD,
+    ID_CLAHE,
     ID_DISTANCEDISCRETE,
     ID_SQUELETTE,
     ID_VORONOI,
@@ -247,6 +248,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
 
     CONSTRUCTEUR_CMD(bouton, ID_THRESHOLD, seuillage_xpm, _("Thereshold"), "threshold", 5);
     CONSTRUCTEUR_CMD(bouton, ID_ADATHRESHOLD, seuillageada_xpm, _("Adaptive Thereshold"), "adaptivethreshold", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_CLAHE, clahe_xpm, _("Clahe"), "clahe", 5);
     CONSTRUCTEUR_CMD(bouton, ID_PARTAGE_EAUX, statconnexe_xpm, _("Watershed"), "watershed", 5);
     CONSTRUCTEUR_CMD(bouton, ID_COMPCONNEXE, cmpconnexe_xpm,_("Connected component"), "connectedcomponents", 5);
     CONSTRUCTEUR_CMD(bouton, ID_CONTOUR, contour_xpm,_("Contour"), "contour", 5);
