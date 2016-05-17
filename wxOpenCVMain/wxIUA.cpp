@@ -58,6 +58,7 @@ enum
 	ID_LAPLACIEN,
  	ID_LISMOY,
 	ID_LISGAU,
+    ID_INPAINT,
 	ID_LISMED,
 	ID_THRESHOLD,
 	ID_ADATHRESHOLD,
@@ -241,6 +242,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_LISMOY, LisMoy_xpm, _("Blur (mean)"), "blur", 3);
     CONSTRUCTEUR_CMD(bouton, ID_LISMED, LisMed_xpm, _("Blur (median filter)"), "medianblur", 3);
     CONSTRUCTEUR_CMD(bouton, ID_LISGAU, LisGau_xpm,_("Blur (gaussian)"), "gaussianblur", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_INPAINT, inpaint_xpm,_("Inpaint"), "inpaint", 3);
 
     CONSTRUCTEUR_CMD(bouton, ID_VIDEO_8_UC3, camera_xpm, _("Video RGB 24bits"), " ", 4);
     CONSTRUCTEUR_CMD(bouton, ID_VIDEO_32_FC3, camerafloat_xpm, _("Video RGB float"), " ", 4);

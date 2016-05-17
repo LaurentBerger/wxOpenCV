@@ -1,0 +1,23 @@
+/* XPM */
+static const char *inpaint_xpm[] = {
+/* columns rows colors chars-per-pixel */
+"16 15 2 1",
+". c Black",
+"  c #C0E000",
+/* pixels */
+"                ",
+"                ",
+"                ",
+"        .       ",
+"        .       ",
+"        .       ",
+"     .......    ",
+"        .       ",
+"        .       ",
+"        .       ",
+"                ",
+"                ",
+"                ",
+"                ",
+"                "
+};

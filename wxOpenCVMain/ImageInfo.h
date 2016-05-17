@@ -316,6 +316,7 @@ std::vector<ImageInfoCV *>FlotOptiqueFarnerback(std::vector< ImageInfoCV *>, Par
 std::vector<ImageInfoCV	*>PhaseCorrelate(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>MAJHistoriqueMvt(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>Clahe(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>Inpaint(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV);
 
 std::vector<ImageInfoCV	*>Fond_MOG(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>Fond_MOG2(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);

@@ -557,6 +557,22 @@ r.push_back(im);
 return r;
 }
 
+/**
+ * @function Inpaint
+ * @brief inpaint d'une image im1 
+ */
+std::vector<ImageInfoCV *>ImageInfoCV::Inpaint(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+
+cv::Scharr( *op[0], *im, pOCV->intParam["ddepth"].valeur,0,1,
+	pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
+
+std::vector<ImageInfoCV	*> r;
+r.push_back(im);
+return r;
+}
+
 std::vector<ImageInfoCV		*>ImageInfoCV::Clahe(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
 {
 ImageInfoCV *imDst = new ImageInfoCV();

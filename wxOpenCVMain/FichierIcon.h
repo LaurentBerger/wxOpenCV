@@ -175,6 +175,7 @@
 #include "bitmaps\LisGau.xpm"
 #include "bitmaps\LisMed.xpm"
 #include "bitmaps\LisMoy.xpm"
+#include "bitmaps\inpaint.xpm"
 #include "bitmaps\majmvt.xpm"
 #include "bitmaps\Match.xpm"
 #include "bitmaps\MOG.xpm"
