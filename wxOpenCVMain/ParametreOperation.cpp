@@ -235,9 +235,9 @@ listeParam["normType"].insert(std::pair<string,int>(_("auto").ToStdString(),-1))
 
 listeParam["connectivity"].insert(std::pair<string,int>(_("4-connex").ToStdString(),4));
 listeParam["connectivity"].insert(std::pair<string,int>(_("8-connex").ToStdString(),8));
-listeParam["inpaint method"].insert(std::pair<string,int>(_("Navier stokes").ToStdString(),cv::INPAINT_NS));
-listeParam["inpaint method"].insert(std::pair<string,int>(_("Alexandru Telea").ToStdString(),cv::INPAINT_TELEA));
-listeParam["inpaint method"].insert(std::pair<string,int>(_("INPAINT SHIFTMAP").ToStdString(),cv::xphoto::INPAINT_SHIFTMAP));
+listeParam["Inpaint method"].insert(std::pair<string,int>(_("Navier stokes").ToStdString(),cv::INPAINT_NS));
+listeParam["Inpaint method"].insert(std::pair<string,int>(_("Alexandru Telea").ToStdString(),cv::INPAINT_TELEA));
+listeParam["Inpaint method"].insert(std::pair<string,int>(_("INPAINT SHIFTMAP").ToStdString(),cv::xphoto::INPAINT_SHIFTMAP));
 
 listeParam["adaptiveMethod"].insert(std::pair<string,int>(_("threshold  mean of neighbourhood").ToStdString(),cv::ADAPTIVE_THRESH_MEAN_C ));
 listeParam["adaptiveMethod"].insert(std::pair<string,int>(_("threshold weighted sum of neighbourhood").ToStdString(),cv::ADAPTIVE_THRESH_GAUSSIAN_C));
@@ -484,9 +484,8 @@ if (s == "inpaint")
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
-	doubleParam["radius"] = DomaineParametreOp<double>(0, 0, 10000, 1);
-	doubleParam["tilesGridSize"] = DomaineParametreOp<double>(0, 0, 10000, 1);
-    intParam["Inpaint method"] = DomaineParametreOp<int>(cv::COLOR_BGR2Lab, cv::COLOR_BGR2GRAY, cv::COLOR_RGB2GRAY, 1);
+	doubleParam["radius"] = DomaineParametreOp<double>(1, 0, 10000, 1);
+    intParam["Inpaint method"] = DomaineParametreOp<int>(cv::INPAINT_NS, cv::INPAINT_NS, cv::INPAINT_TELEA, 1);
 
     xx.listeOperation.insert(make_pair(s, *this));
 }

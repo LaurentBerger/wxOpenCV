@@ -565,7 +565,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::Inpaint(std::vector< ImageInfoCV*> op,Par
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::inpaint( *op[0],masqueMat, *im, pOCV->intParam["radius"].valeur,pOCV->intParam["flags"].valeur );
+cv::inpaint( *op[0],masqueMat, *im, pOCV->doubleParam["radius"].valeur,pOCV->intParam["Inpaint method"].valeur );
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
