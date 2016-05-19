@@ -565,8 +565,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::Inpaint(std::vector< ImageInfoCV*> op,Par
 {
 ImageInfoCV	*im =new ImageInfoCV;
 
-cv::Scharr( *op[0], *im, pOCV->intParam["ddepth"].valeur,0,1,
-	pOCV->doubleParam["scale"].valeur,pOCV->doubleParam["delta"].valeur,pOCV->intParam["borderType"].valeur );
+cv::inpaint( *op[0],masqueMat, *im, pOCV->intParam["radius"].valeur,pOCV->intParam["flags"].valeur );
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);

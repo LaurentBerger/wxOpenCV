@@ -1619,14 +1619,22 @@ if (s=="cvtcolor")
     nomOperation = s;
 	operateur = &ImageInfoCV::RGB_L;
 	}
-if (s=="clahe")
-	{
-	lienHtml="http://docs.opencv.org/master/d6/db6/classcv_1_1CLAHE.html";
-	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
-    nbOperande = 1;
-    nomOperation = s;
+if (s == "clahe")
+{
+	lienHtml = "http://docs.opencv.org/master/d6/db6/classcv_1_1CLAHE.html";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
+	nbOperande = 1;
+	nomOperation = s;
 	operateur = &ImageInfoCV::Clahe;
-	}
+}
+if (s == "inpaint")
+{
+	lienHtml = "http://docs.opencv.org/master/d6/db6/classcv_1_1CLAHE.html";
+	refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=283&zoom=70,250,100";
+	nbOperande = 1;
+	nomOperation = s;
+	operateur = &ImageInfoCV::Inpaint;
+}
 if (s=="watershed")
 	{
 	operateur = &ImageInfoCV::PartageEaux;
