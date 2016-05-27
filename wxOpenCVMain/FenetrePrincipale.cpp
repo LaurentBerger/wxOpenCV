@@ -158,7 +158,7 @@ return NULL;
 
 
 int FenetrePrincipale::IdFenetreOp1pre()
-{ 
+{
 if (origineImage.op.size()>=1)
     return origineImage.indOpFenetre[0];
 return -1;
@@ -183,15 +183,18 @@ void FenetrePrincipale::DefCurseur(int r,int xc,int yc)
 {
    static char down_bits[128];
 
-    static char down_mask[128] = { 240, 1, 0, 0, 240, 1,
-        0, 0, 240, 1, 0, 0, 240, 1, 0, 0, 240, 1, 0, 0, 240, 1,
-        0, 0, 240, 1, 0, 0, 240, 1, 0, 0, 255, 31, 0, 0, 255,
-        31, 0, 0, 254, 15, 0, 0, 252, 7, 0, 0, 248, 3, 0, 0,
-        240, 1, 0, 0, 224, 0, 0, 0, 64, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-        0, 0, 0, 0, 0 };
+    static char down_mask[128] = { char(240), char(1), char(0), char(0), char(240), char(1),
+        char(0), char(0), char(240), char( 1), char(0), char(0), char(240), char(1), char(0), char(0),
+        char(240), char( 1), char( 0), char( 0), char( 240), char(1),
+        char(0), char(0), char(240), char(1), char(0),
+        char(0), char(240), char(1), char(0), char(0), char(255), char(31), char(0), char(0), char(255),
+        char(31), char(0), char(0), char(254), char(15), char(0), char(0), char(252), char(7),
+        char( 0), char(0), char(248), char(3), char(0), char(0),
+        char(240), char(1), char(0), char(0), char(224), 0, 0, 0, char(64), 0, 0, 0, 0, 0, 0, 0, char(0),
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, char(0),
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, char(0),
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, char(0),
+        0, 0, 0, 0, char(0) };
 	for (int i=0;i<128;i++)
 		{
 		down_bits[i]=0;
@@ -654,7 +657,7 @@ char *nomFichier=ww.data() ;
 //wxImage im(s);
 if (s.Find("yml")>=0)
 	{
-	try 
+	try
 		{
 		imAcq =new ImageInfoCV(nomFichier);
 /*        imAcq->read()
@@ -766,7 +769,7 @@ else if (s.Find(".16b")>=0 ||s.Find(".16B")>=0)
 			m.at< short >(i,j)=tmp[i*256+j];
 			}
      m.copyTo(*imAcq);
-	
+
 	delete tmp;
 
 	}
@@ -1166,7 +1169,7 @@ if (cam!=NULL )
 	if (cam->IsPaused())
 		{
 		cam->parent=NULL;
-		cam->Resume();	
+		cam->Resume();
 		}
 }
 if (fenAlgo)
@@ -1297,7 +1300,7 @@ if (p.GetExt().Cmp("yml")==0)
 
 				fs<<s<<*itCtr;
 				indCtr++;
-				}    
+				}
 			}
 
 		}*/
