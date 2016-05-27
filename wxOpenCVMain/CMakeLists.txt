@@ -87,6 +87,7 @@ IF(WIN32) # Check if we are on Windows
 	endif()
 else()
 	if(UNIX)
+		set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "-std=c++0x")
 		set_target_properties(wxOpenCVMain PROPERTIES  COMPILE_DEFINITIONS "__WXGTK__")
 		target_link_libraries(wxOpenCVMain  release ${PLplot_LIBRARY} ${PLplot_CXX_LIBRARY} ${PLplot_wxwidgets_LIBRARY})	
 	else()
