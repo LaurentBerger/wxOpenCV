@@ -449,8 +449,8 @@ void DefDataRGBVersPlan(unsigned char *d);	//Conversion de plan RGB vers Plan R 
 std::vector<ImageInfoCV	*> GradientDericheX(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*> GradientDericheY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 // Reconstruction à partir de la formule de Shannon
-std::vector<ImageInfoCV	*> ImageInfoCV::Recons2d(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
-std::vector<ImageInfoCV	*> ImageInfoCV::SincXY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> Recons2d(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV	*> SincXY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 
 // Filtrage image bruitée Paillou
 std::vector<ImageInfoCV	*> PaillouX(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);//double w=50,double a=51);

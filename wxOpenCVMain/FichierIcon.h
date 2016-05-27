@@ -65,7 +65,6 @@
 #include "bitmaps/houghlinep.xpm"
 #include "bitmaps/ifft.xpm"
 #include "bitmaps/KNN.xpm"
-#include "bitmaps/knnMatch.xpm"
 #include "bitmaps/laplacien.xpm"
 #include "bitmaps/LisGau.xpm"
 #include "bitmaps/LisMed.xpm"
@@ -97,6 +96,17 @@
 #include "bitmaps/squelette.xpm"
 #include "bitmaps/statconnexe.xpm"
 #include "bitmaps/voronoi.xpm"
+
+#include "bitmaps/gradient_modDeriche.xpm"
+#include "bitmaps/gradient_xDeriche.xpm"
+#include "bitmaps/gradient_yDeriche.xpm"
+#include "bitmaps/inpaint.xpm"
+#include "bitmaps/homography.xpm"
+#include "bitmaps/recons.xpm"
+#include "bitmaps/linearpolar.xpm"
+#include "bitmaps/clahe.xpm"
+#include "bitmaps/warpperspective.xpm"
+
 #else
 #include "bitmaps\panofeature.xpm"
 #include "bitmaps\panoresize.xpm"

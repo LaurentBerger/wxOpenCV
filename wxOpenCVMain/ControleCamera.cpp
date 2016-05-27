@@ -12,6 +12,10 @@
 #include "bitmaps/Pause.xpm"
 #include "bitmaps/Play.xpm"
 #include "bitmaps/Record.xpm"
+#include "bitmaps/Avance.xpm"
+#include "bitmaps/AvanceFin.xpm"
+#include "bitmaps/Retour.xpm"
+#include "bitmaps/RetourDebut.xpm"
 #else
 #include "bitmaps\Pause.xpm"
 #include "bitmaps\Play.xpm"
@@ -19,7 +23,7 @@
 #include "bitmaps\Avance.xpm"
 #include "bitmaps\AvanceFin.xpm"
 #include "bitmaps\Retour.xpm"
-#include "bitmaps\retourDebut.xpm"
+#include "bitmaps\RetourDebut.xpm"
 
 #endif
 
@@ -37,8 +41,8 @@
 BEGIN_EVENT_TABLE(ControleCamera, wxFrame)
     EVT_CLOSE(ControleCamera::OnClose)
     EVT_SCROLL(ControleCamera::OnSlider)
-    EVT_CHOICE(wxID_ANY, ControleCamera::OnChoice)  
-    EVT_TEXT_ENTER(wxID_ANY, ControleCamera::OnTextValider) 
+    EVT_CHOICE(wxID_ANY, ControleCamera::OnChoice)
+    EVT_TEXT_ENTER(wxID_ANY, ControleCamera::OnTextValider)
     EVT_BUTTON(220, ControleCamera::ExpositionAutomatique)
     EVT_BUTTON(320, ControleCamera::Play)
     EVT_BUTTON(321, ControleCamera::Record)
@@ -88,7 +92,7 @@ m_sizerFrame = new wxBoxSizer(wxVERTICAL);
 
 //Centre(wxBOTH);
 listeFenetreOnglet = new wxNotebook(panneau, -1,wxDefaultPosition, wxDefaultSize,wxNB_TOP);
-/*Tableur *infoSequence = new Tableur((wxFrame*)listeFenetreOnglet,200,15); 
+/*Tableur *infoSequence = new Tableur((wxFrame*)listeFenetreOnglet,200,15);
 listeFenetreOnglet->AddPage(infoSequence, "Cloud Image");            */
 
 panneau->SetSizer(m_sizerFrame);
@@ -104,9 +108,9 @@ OuvertureOngletMoyenne();
 
 //m_sizerFrame->Fit(this);
 //m_sizerFrame->SetSizeHints(this);
-m_sizerFrame->Insert(0, listeFenetreOnglet, 5, wxEXPAND | wxALL, 4);                 
-m_sizerFrame->Hide(listeFenetreOnglet);                                                   
-m_sizerFrame->Show(listeFenetreOnglet);                                                                           
+m_sizerFrame->Insert(0, listeFenetreOnglet, 5, wxEXPAND | wxALL, 4);
+m_sizerFrame->Hide(listeFenetreOnglet);
+m_sizerFrame->Show(listeFenetreOnglet);
 Show(false);
 
 }
@@ -213,7 +217,7 @@ if (!cam)
 	return;
 cam->DefModeGain(x);
 
-}	
+}
 
 void ControleCamera::OnSlider(wxScrollEvent &w)
 {
@@ -234,8 +238,8 @@ if (w.GetEventObject()==cbContrast)
 		cbContrast->SetValue(w.GetInt());
 		wxString s;
 		s.Printf("%d",w.GetInt());
-		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST,ongletTemporels))->SetLabelText(s);	
-		}	
+		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST,ongletTemporels))->SetLabelText(s);
+		}
 	else
 		wxMessageBox(_("Value out of range"));
 	}
@@ -246,8 +250,8 @@ else if (w.GetEventObject()==cbGain)
 		cbGain->SetValue(w.GetInt());
 		wxString s;
 		s.Printf("%d",w.GetInt());
-		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+1,ongletTemporels))->SetLabelText(s);	
-		}	
+		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+1,ongletTemporels))->SetLabelText(s);
+		}
 	else
 		wxMessageBox(_("Value out of range"));
 }
@@ -258,8 +262,8 @@ else if (w.GetEventObject()==cbLum)
 		cbLum->SetValue(w.GetInt());
 		wxString s;
 		s.Printf("%d",w.GetInt());
-		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+2,ongletTemporels))->SetLabelText(s);	
-		}	
+		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+2,ongletTemporels))->SetLabelText(s);
+		}
 	else
 		wxMessageBox(_("Value out of range"));
 }
@@ -270,8 +274,8 @@ else if (w.GetEventObject()==cbSat)
 		cbSat->SetValue(w.GetInt());
 		wxString s;
 		s.Printf("%d",w.GetInt());
-		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+3,ongletTemporels))->SetLabelText(s);	
-		}	
+		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+3,ongletTemporels))->SetLabelText(s);
+		}
 	else
 		wxMessageBox(_("Value out of range"));
 }
@@ -330,7 +334,7 @@ if (!cam)
 	return;
 wxString s=((wxTextCtrl*)w.GetEventObject())->GetValue();
 long	valEntiere;
-double	valFlottante;	
+double	valFlottante;
 
 s.ToLong(&valEntiere);
 s.ToDouble(&valFlottante);
@@ -364,7 +368,7 @@ case 212 :
 	cam->DefFrequenceCinetique(valFlottante);
 	break;
 	}
-}	
+}
 
 
 void ControleCamera::OnChoice( wxCommandEvent& event )
@@ -402,14 +406,14 @@ wxSize	taille[]={
 wxSize(160,30),wxSize(110,30),wxSize(110,30),
 wxSize(160,30),wxSize(110,30),wxSize(110,30),wxSize(110,30),
 wxSize(160,30),wxSize(110,30),wxSize(110,30),wxSize(110,30)};
-long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
+long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ;
 
 wxString	legende[]={_T("Enable bias correction"),_T("Enable background correction "),_T("Enable function correction"),
 _T("Cumulate Bias Image"),_T("Start"),_T("Reset Dark Image"),_T("Load Dark Image"),
 _T("Cumulate Background Image (gain)"),_T("Start"),_T("Reset Background"),_T("Load Background"),
 _T("Cumulate Zero level Function "),_T("Start"),_T("Reset Function")
 };
-ongletFond = new wxWindow(listeFenetreOnglet,-1); 
+ongletFond = new wxWindow(listeFenetreOnglet,-1);
 int i=0;
 wxCheckBox *t=new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]); //bias 200
 i++;
@@ -421,15 +425,15 @@ if (osgApp)
 i++;
 new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]);// function 202
 i++;
-new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]);// cumul biais 203 
+new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]);// cumul biais 203
 i++;
-new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);//start 204 
+new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);//start 204
 i++;
-new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// reset 205 
+new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// reset 205
 i++;
-new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// load 206 
+new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// load 206
 i++;
-new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]);// cumul fond 207 
+new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]);// cumul fond 207
 i++;
 new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// start 208
 i++;
@@ -439,7 +443,7 @@ new wxButton(ongletFond,200+i,legende[i],position[i], taille[i]);// load 210
 i++;
 listeFenetreOnglet->AddPage(ongletFond, _T("Background Settings"));
 ongletFond->Refresh();
-}	
+}
 
 void ControleCamera::OuvertureOngletMoyenne()
 {
@@ -450,10 +454,10 @@ wxPoint(10,40),wxPoint(110,40)};
 wxSize	taille[]={
 // Texte		Réglette
 wxSize(100,30),wxSize(100,30),wxSize(100,30),wxSize(150,50)};
-long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
+long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ;
 
 wxString	legende[]={_("Mean Mode"),wxEmptyString,_("Frequency cut off ([0. 1.0] "),wxEmptyString};
-ongletMoyenne = new wxWindow(listeFenetreOnglet,-1); 
+ongletMoyenne = new wxWindow(listeFenetreOnglet,-1);
 int i=0;
 new wxStaticText(ongletMoyenne,-1,legende[i],position[i], taille[i]);
 i++;
@@ -466,13 +470,13 @@ slIndFiltre->SetLabel(legende[i]);
 i++;
 listeFenetreOnglet->AddPage(ongletMoyenne, _("Time Filtering"));
 ongletMoyenne->Refresh();
-}	
+}
 
 
 
 void ControleCamera::OuvertureOngletStatus()
 {
-ongletStatus = new wxWindow(listeFenetreOnglet,-1); 
+ongletStatus = new wxWindow(listeFenetreOnglet,-1);
 
 // Texte		Réglette
 wxString	legende[]={_T("Camera model"),_T(" "),_T("CCD size"),_T(" ")};
@@ -489,7 +493,7 @@ for (int i=0;i<4;i++)
 listeFenetreOnglet->AddPage(ongletStatus, _T("Informations"));
 DrawOngletStatus();
 ongletStatus->Refresh();
-}	
+}
 
 void	ControleCamera::DefCamera(CameraVirtuelle *c)
 {
@@ -504,7 +508,7 @@ if (cam==NULL && c)
 cam=c;
 
 DrawOngletStatus();
-wxCheckBox *cb=(wxCheckBox*)wxWindow::FindWindowById(211,ongletMoyenne);	
+wxCheckBox *cb=(wxCheckBox*)wxWindow::FindWindowById(211,ongletMoyenne);
 if (cam->ModeMoyenne())
 	cb->SetValue(true);
 else
@@ -517,7 +521,7 @@ if (!ongletTemporels || !wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporel
 if (cam->ReglageContraste() )
 	{
 	double v,min=0,max=100;
-	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->Enable();	
+	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->Enable();
 	if (cam && cam->ReglageContraste())
 		{
 		v=cam->Contraste();
@@ -536,25 +540,25 @@ if (cam->ReglageContraste() )
 			s.Printf("%d",int(v));
 		else
 			s.Printf("Error");
-		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST,ongletTemporels))->SetLabelText(s);	
-		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->SetMax(int(max));	
-		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->SetMin(int(min));	
+		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST,ongletTemporels))->SetLabelText(s);
+		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->SetMax(int(max));
+		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->SetMin(int(min));
 		if (v!=DBL_MAX)
 			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST, ongletTemporels))->SetValue(int(v));
 		else
 			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST, ongletTemporels))->Disable();
 	}
-	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST,ongletTemporels))->Enable();	
+	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST,ongletTemporels))->Enable();
 
 	}
 else
 	{
-	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->Disable();	
-	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST,ongletTemporels))->Disable();	
+	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST,ongletTemporels))->Disable();
+	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST,ongletTemporels))->Disable();
 	}
 if (cam->ReglageGain())
 	{
-	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->Enable();	
+	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->Enable();
 	double v,min=0,max=100;
 	if (cam && cam->ReglageGain())
 		{
@@ -574,24 +578,24 @@ if (cam->ReglageGain())
 			s.Printf("%d",int(v));
 		else
 			s.Printf("Error");
-		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+1,ongletTemporels))->SetLabelText(s);	
-		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->SetMax(int(max));	
-		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->SetMin(int(min));	
+		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+1,ongletTemporels))->SetLabelText(s);
+		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->SetMax(int(max));
+		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->SetMin(int(min));
 		if (v!=DBL_MAX)
-			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->SetValue(int(v));	
+			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->SetValue(int(v));
 		else
 			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1, ongletTemporels))->Disable();
 	}
-	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+1,ongletTemporels))->Enable();	
+	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+1,ongletTemporels))->Enable();
 	}
 else
 	{
-	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->Disable();	
-	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+1,ongletTemporels))->Disable();	
+	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+1,ongletTemporels))->Disable();
+	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+1,ongletTemporels))->Disable();
 	}
 if (cam->ReglageLuminosite())
 	{
-	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->Enable();	
+	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->Enable();
 	double v,min=0,max=100;
 	if (cam && cam->ReglageLuminosite())
 		{
@@ -611,24 +615,24 @@ if (cam->ReglageLuminosite())
 			s.Printf("%d",int(v));
 		else
 			s.Printf("Error");
-		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+2,ongletTemporels))->SetLabelText(s);	
-		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->SetMax(int(max));	
-		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->SetMin(int(min));	
+		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+2,ongletTemporels))->SetLabelText(s);
+		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->SetMax(int(max));
+		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->SetMin(int(min));
 		if (v!=DBL_MAX)
-			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->SetValue(int(v));	
+			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->SetValue(int(v));
 		else
 			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2, ongletTemporels))->Disable();
 	}
-	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+2,ongletTemporels))->Enable();	
+	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+2,ongletTemporels))->Enable();
 	}
 else
 	{
-	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->Disable();	
-	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+2,ongletTemporels))->Disable();	
+	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemporels))->Disable();
+	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+2,ongletTemporels))->Disable();
 	}
 if (cam->ReglageSaturation())
 	{
-	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->Enable();	
+	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->Enable();
 	double v,min=0,max=100;
 	if (cam && cam->ReglageSaturation())
 		{
@@ -648,24 +652,24 @@ if (cam->ReglageSaturation())
 			s.Printf("%d",int(v));
 		else
 			s.Printf("Error");
-		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+3,ongletTemporels))->SetLabelText(s);	
-		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->SetMax(int(max));	
-		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->SetMin(int(min));	
+		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+3,ongletTemporels))->SetLabelText(s);
+		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->SetMax(int(max));
+		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->SetMin(int(min));
 		if (v!=DBL_MAX)
-			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->SetValue(int(v));	
+			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->SetValue(int(v));
 		else
 			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3, ongletTemporels))->Disable();
 	}
-	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+3,ongletTemporels))->Enable();	
+	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+3,ongletTemporels))->Enable();
 	}
 else
 	{
-	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->Disable();	
-	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+3,ongletTemporels))->Disable();	
+	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels))->Disable();
+	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+3,ongletTemporels))->Disable();
 	}
 if (cam->ReglageTpsExpo())
 	{
-	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->Enable();	
+	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->Enable();
 	double v,min=0,max=100;
 	if (cam && cam->ReglageTpsExpo())
 		{
@@ -685,20 +689,20 @@ if (cam->ReglageTpsExpo())
 			s.Printf("%d",int(v));
 		else
 			s.Printf("Error");
-		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+4,ongletTemporels))->SetLabelText(s);	
-		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->SetMax(int(max));	
-		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->SetMin(int(min));	
+		((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+4,ongletTemporels))->SetLabelText(s);
+		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->SetMax(int(max));
+		((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->SetMin(int(min));
 		if (v!=DBL_MAX)
-			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->SetValue(int(v));	
+			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->SetValue(int(v));
 		else
 			((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4, ongletTemporels))->Disable();
 	}
-	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+4,ongletTemporels))->Enable();	
+	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+4,ongletTemporels))->Enable();
 	}
 else
 	{
-	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->Disable();	
-	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+4,ongletTemporels))->Disable();	
+	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->Disable();
+	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+4,ongletTemporels))->Disable();
 	}
 };
 
@@ -719,7 +723,7 @@ w[3]->SetLabel(s);
 
 void ControleCamera::OuvertureOngletParametresGeometries()
 {
-ongletGeometries = new wxWindow(listeFenetreOnglet,-1); 
+ongletGeometries = new wxWindow(listeFenetreOnglet,-1);
 wxPoint	position[]={
 wxPoint(10,10),wxPoint(110,10),
 wxPoint(10,140),wxPoint(110,140),
@@ -792,13 +796,13 @@ for (int j=4;j<=11;j++)
 listeFenetreOnglet->AddPage(ongletGeometries, _T("Geometry Settings"));
 */
 ongletGeometries->Refresh();
-}	
+}
 
 void ControleCamera::OuvertureOngletParametresTemporels()
 {
 if (ongletTemporels)
 	return;
-ongletTemporels = new wxWindow(listeFenetreOnglet,-1); 
+ongletTemporels = new wxWindow(listeFenetreOnglet,-1);
 
 wxPoint	position[]={
 wxPoint(10,10),wxPoint(110,10),wxPoint(260,10), // Contrast
@@ -928,7 +932,7 @@ wxArrayString mode;
 mode.Add("160X120");mode.Add("176X144");mode.Add("320X176");
 mode.Add("320X240");mode.Add("352X288");mode.Add("432X240");
 mode.Add("544X288"); mode.Add("640X360"); mode.Add("640X480");
-mode.Add("752X416"); mode.Add("800X448"); mode.Add("800X600"); 
+mode.Add("752X416"); mode.Add("800X448"); mode.Add("800X600");
 mode.Add("864X480");mode.Add("960X544");mode.Add("960X720");
 mode.Add("1024X576");mode.Add("1184X656");mode.Add("1280X720");
 mode.Add("1280X960");
@@ -940,7 +944,7 @@ t->SetSelection(0);
 
 listeFenetreOnglet->AddPage(ongletTemporels, _T("Time Settings"));
 ongletTemporels->Refresh();
-}	
+}
 
 char			ControleCamera::ImagePrete(void)
 {
@@ -969,10 +973,10 @@ void ControleCamera::OuvertureOngletEMCCD()
 if (!cam)
 	return;
 /*if (strcmp(cam->NomCamera(),"Luca")!=0)
-	return; 
+	return;
 */
 
-ongletEMCCD = new wxWindow(listeFenetreOnglet,-1); 
+ongletEMCCD = new wxWindow(listeFenetreOnglet,-1);
 int	minGain=0,maxGain=255;
 //GetEMGainRange(&minGain,&maxGain);
 // Texte		Réglette
@@ -984,7 +988,7 @@ wxSize	taille[]={
 // Texte		Réglette
 wxSize(90,40),wxSize(200,40),
 wxSize(90,40),wxSize(200,40)};
-long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
+long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ;
 
 int	i=0;
 wxArrayString modeGainEM;
@@ -1035,7 +1039,7 @@ if (nbMode==0)
 listeFenetreOnglet->AddPage(ongletEMCCD, _T("EMCCD"));
 DrawOngletStatus();
 ongletStatus->Refresh();
-}	
+}
 
 
 void ControleCamera::ExpositionAutomatique(wxCommandEvent& c)
@@ -1145,7 +1149,7 @@ for (int j=0;j<10;j++,tpsMin+=pas)
 		sMax=s;
 		}
 	}
-tpsMin =tpsMax;	
+tpsMin =tpsMax;
 cam->DefTempsExposition(tpsMin);
 		wxString ss;
 		ss.Printf(_T("%.3f"),tpsMin);
@@ -1252,7 +1256,7 @@ if (cam)
 	    cam->ModeAcqContinu(0);
     }
 }
-}  
+}
 
 void ControleCamera::Precedente(wxCommandEvent& c)
 {
@@ -1297,27 +1301,27 @@ wxPoint	position[]={
 wxSize	taille[]={
 // Texte		Réglette
     wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50)};
-long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ; 
+long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ;
 
 wxString	legende[]={_T("Play"),_T("record"),_T("pause")};
-ongletMagneto = new wxWindow(listeFenetreOnglet,-1); 
+ongletMagneto = new wxWindow(listeFenetreOnglet,-1);
 int i=0;
 
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Play),position[i], taille[i]);//start 204 
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Play),position[i], taille[i]);//start 204
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Record),position[i], taille[i]);// reset 205 
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Record),position[i], taille[i]);// reset 205
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Pause),position[i], taille[i]);// load 206 
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Pause),position[i], taille[i]);// load 206
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Avance),position[i], taille[i]);// load 206 
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Avance),position[i], taille[i]);// load 206
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::AvanceFin),position[i], taille[i]);// load 206 
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::AvanceFin),position[i], taille[i]);// load 206
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Retour),position[i], taille[i]);// load 206 
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Retour),position[i], taille[i]);// load 206
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::RetourDebut),position[i], taille[i]);// load 206 
+new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::RetourDebut),position[i], taille[i]);// load 206
 i++;
 listeFenetreOnglet->AddPage(ongletMagneto, _T("Recorder"));
 ongletMagneto->Refresh();
-}	
+}
 
