@@ -1,4 +1,4 @@
-#include "ImageInfo.h"
+#include "../wxOpenCVMain/ImageInfo.h"
 
 int main(int argc, char*argv)
 {

@@ -9,6 +9,8 @@ file(GLOB ScilabOpenCV_SRCS
 	../wxOpenCVMain/DericheShen.cpp
 	../wxOpenCVMain/ImInCV.cpp
 	../wxOpenCVMain/ImCvMinMAx.cpp
+	../wxOpenCVMain/ImCvMinMAx.cpp
+	../wxOpenCVMain/ImageInfoYML.cpp
 	../wxOpenCVMain/ImInCVInitOp.cpp
 	../wxOpenCVMain/ImInCVOperation.cpp
 	../wxOpenCVMain/LigneMediane.cpp
