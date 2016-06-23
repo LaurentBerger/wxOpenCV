@@ -22,7 +22,7 @@ file(GLOB ScilabOpenCV_SRCS
 	../wxOpenCVMain/Panoramique.h
 	../wxOpenCVMain/ParametreOperation.h
     )
-ADD_EXECUTABLE (ScilabOpenCV ${ScilabOpenCV_SRCS})
+ADD_LIBRARY (ScilabOpenCV SHARED ${ScilabOpenCV_SRCS})
 message("OPENCV = ${OpenCV_INCLUDE_DIRS}")
 if (OpenCV_FOUND)
 	include_directories( ${OpenCV_INCLUDE_DIRS} )
@@ -33,5 +33,5 @@ else (OpenCV_FOUND)
 	target_link_libraries( ScilabOpenCV ${OpenCV_LIBS} )
 message("SCILABOPENCV PB->OPENCV = ${OpenCV_INCLUDE_DIRS}")
 endif (OpenCV_FOUND)
-			set_target_properties(ScilabOpenCV PROPERTIES  COMPILE_DEFINITIONS "__SCILABOPENCV__")
+			set_target_properties(ScilabOpenCV PROPERTIES  COMPILE_DEFINITIONS "__SCILABOPENCV__;_USRDLL")
 
