@@ -672,13 +672,17 @@ double otsu=-1;
 
 if (op[0]->channels()==1)
 	{
-    if (pOCV->intParam["Otsu threshold"].valeur==1)
+    if (pOCV->intParam["OTSU"].valeur==1)
     {
         otsu = threshold(*op[0], *im, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
         pOCV->doubleParam["threshold1"].valeur = otsu;
         pOCV->doubleParam["threshold1"].valeur = otsu/2;
     }
-	cv::Canny(	*op[0], *im, pOCV->doubleParam["threshold1"].valeur,
+    if (op[1]->empty())
+	    cv::Canny(	*op[0], *im, pOCV->doubleParam["threshold1"].valeur,
+				pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
+	else
+        cv::Canny(	*op[0],*op[1], *im, pOCV->doubleParam["threshold1"].valeur,
 				pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
 	}
 else
@@ -1075,8 +1079,20 @@ return r;
 std::vector<ImageInfoCV *> ImageInfoCV::RGB_L(std::vector<ImageInfoCV	*>op,ParametreOperation *paramOCV)
 {
 ImageInfoCV	*result=new ImageInfoCV;
- 
-cv::cvtColor( *op[0], *result,paramOCV->intParam["ColorSpaceCode"].valeur );
+if (paramOCV->intParam["ColorSpaceCode"].valeur<cv::COLOR_COLORCVT_MAX)
+    cv::cvtColor( *op[0], *result,paramOCV->intParam["ColorSpaceCode"].valeur );
+else
+{
+    // Conversion avec pca
+    cv::Mat v = op[0]->getMat(cv::ACCESS_READ).reshape(1, op[0]->rows*op[0]->cols);
+    cv::PCA pca(v, cv::Mat(),cv::PCA::DATA_AS_ROW);
+    cv::Mat vv = pca.project(v);
+    cv::Mat vvv=vv.reshape(op[0]->channels(), op[0]->rows);
+    std::vector<cv::Mat> plan;
+    split(vvv,plan);
+    plan[0].copyTo(*((UMat *)result));
+}
+
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(result);

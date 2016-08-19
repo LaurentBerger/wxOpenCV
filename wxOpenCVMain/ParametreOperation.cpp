@@ -279,6 +279,7 @@ listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to Yuv").ToStd
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("RGB to Yuv").ToStdString(), cv::COLOR_RGB2YUV));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to RGB").ToStdString(), cv::COLOR_YUV2BGR));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to BGR").ToStdString(), cv::COLOR_YUV2RGB));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR using PCA").ToStdString(), 2*cv::COLOR_COLORCVT_MAX));
 
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv(422) to RGB").ToStdString(), cv::COLOR_YUV2RGB_UYVY));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv(422) to BGR").ToStdString(), cv::COLOR_YUV2BGR_UYVY));
@@ -1138,8 +1139,8 @@ if (s == "laplacian")
 if (s == "canny")
 	{
 	nbImageRes=1;
-    nbOperande = 1;
-    intParam["Otsu threshold"]=DomaineParametreOp<int>(0,0,1 ,1);
+    nbOperande = 2;
+    intParam["OTSU"]=DomaineParametreOp<int>(0,0,1 ,1);
     doubleParam["threshold1"] = DomaineParametreOp<double>(50., 0.0, 255.0, 1.0);
 	doubleParam["threshold2"]=DomaineParametreOp<double>(100,0.0,255.0,1.0);
 	intParam["aperture_size"]=DomaineParametreOp<int>((int)3,(int)1,(int)255,(int)2);
@@ -1186,7 +1187,7 @@ if (s == "cvtcolor")
 	{
 	nbImageRes=1;
     nbOperande = 1;
-    intParam["ColorSpaceCode"] = DomaineParametreOp<int>(cv::COLOR_BGR2GRAY, cv::COLOR_BGR2GRAY, cv::COLOR_RGB2GRAY, 1);
+    intParam["ColorSpaceCode"] = DomaineParametreOp<int>(cv::COLOR_BGR2GRAY, cv::COLOR_BGR2GRAY, 2*cv::COLOR_COLORCVT_MAX, 1);
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));
 }
