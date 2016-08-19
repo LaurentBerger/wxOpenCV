@@ -295,6 +295,8 @@ listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("bilinear inter
 listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("bicubic interpolation").ToStdString(), cv::INTER_CUBIC));
 listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("resampling using pixel area relation").ToStdString(), cv::INTER_AREA));
 listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("Lanczos interpolation over 8x8 neighborhood").ToStdString(), CV_INTER_LANCZOS4));
+listeParam["InverseTransform"].insert(std::pair<string, int>(_("inverse transform").ToStdString(), cv::WARP_INVERSE_MAP));
+listeParam["InverseTransform"].insert(std::pair<string, int>(_("direct transform").ToStdString(), 0));
 
 listeParam["ResultImage"].insert(std::pair<string, int>(_("Mask").ToStdString(), 0));
 listeParam["ResultImage"].insert(std::pair<string, int>(_("Background").ToStdString(), 1));
@@ -392,6 +394,7 @@ indRes=-1;
 refPDF="";
 lienHtml="";
 opVideo=false;
+opAttribut=false;
 opErreur=0;
 if (xx.listeOperation.size() != 0 && xx.listeOperation.find(s) != xx.listeOperation.end())
 {
@@ -545,13 +548,13 @@ if (s == "wrapAffine") // inclus la différence de deux images successives
 	nomOperation = s;
 	nbImageRes = 1;
 	nbOperande = 1;
-	pointParam["src1"] = DomaineParametreOp<cv::Point>(cv::Point(10, 10), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
-	pointParam["src2"] = DomaineParametreOp<cv::Point>(cv::Point(100, 10), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
-	pointParam["src3"] = DomaineParametreOp<cv::Point>(cv::Point(10, 100), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
-	pointParam["dst1"] = DomaineParametreOp<cv::Point>(cv::Point(10,10), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
-	pointParam["dst2"] = DomaineParametreOp<cv::Point>(cv::Point(100, 10), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
-	pointParam["dst3"] = DomaineParametreOp<cv::Point>(cv::Point(10, 100), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
-	pointParam["centre"] = DomaineParametreOp<cv::Point>(cv::Point(50, 50), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
+	pointParam["src1"] = DomaineParametreOp<cv::Point>(cv::Point(10, 10), cv::Point(-10000, -100000), cv::Point(10000, 10000), cv::Point(1, 1),true);
+	pointParam["src2"] = DomaineParametreOp<cv::Point>(cv::Point(100, 10), cv::Point(-10000, -10000), cv::Point(1000, 10000), cv::Point(1, 1),true);
+	pointParam["src3"] = DomaineParametreOp<cv::Point>(cv::Point(10, 100), cv::Point(-10000, -10000), cv::Point(1000, 10000), cv::Point(1, 1),true);
+	pointParam["dst1"] = DomaineParametreOp<cv::Point>(cv::Point(10,10), cv::Point(-10000, -10000), cv::Point(1000, 10000), cv::Point(1, 1),true);
+	pointParam["dst2"] = DomaineParametreOp<cv::Point>(cv::Point(100, 10), cv::Point(-10000, -10000), cv::Point(1000, 10000), cv::Point(1, 1),true);
+	pointParam["dst3"] = DomaineParametreOp<cv::Point>(cv::Point(10, 100), cv::Point(-10000, -10000), cv::Point(1000, 10000), cv::Point(1, 1),true);
+	pointParam["centre"] = DomaineParametreOp<cv::Point>(cv::Point(50, 50), cv::Point(-10000, -10000), cv::Point(1000, 10000), cv::Point(1, 1),true);
 	doubleParam["angle"] = DomaineParametreOp<double>(0, -180, 180, 1);
 	doubleParam["scale"] = DomaineParametreOp<double>(1, 0.0000, 180, 0.1);
 	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
@@ -568,6 +571,7 @@ if (s == "warpperspective") // inclus la différence de deux images successives
 	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
 	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_LINEAR, CV_INTER_LANCZOS4, 1);
 	intParam["borderMode"] = DomaineParametreOp<int>(IPL_BORDER_CONSTANT, IPL_BORDER_CONSTANT, IPL_BORDER_WRAP, 1);
+    intParam["InverseTransform"] = DomaineParametreOp<int>(0, 0, 1, 1);
 	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
@@ -729,7 +733,7 @@ if (s == "orbfeatures2d")
     opAttribut = true;
     intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
-    doubleParam["FastThreshold"] = DomaineParametreOp<double>(20, 1, 100, 1);;
+    intParam["FastThreshold"] = DomaineParametreOp<int>(20, 1, 100, 1);;
     intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128, 1);
     intParam["MaxFeatures"] = DomaineParametreOp<int>(500, 1, 10000, 1);
     intParam["NLevels"] = DomaineParametreOp<int>(8, 1, 128, 1);
@@ -1055,6 +1059,33 @@ if (s == "deriche_y")
     nbOperande = 1;
 	doubleParam["alphaDerive"]=DomaineParametreOp<double>(0.75,0.01,10,0.1);
 	doubleParam["alphaMoyenne"]=DomaineParametreOp<double>(0.25,0.0,1000,0.1);
+	nomOperation=s;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "paillou_mod")
+	{
+	nbImageRes=1;
+    nbOperande = 1;
+    nomOperation = s;
+	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,1000,0.01);
+	doubleParam["omega"]=DomaineParametreOp<double>(0.25,0.0,1000,0.01);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "paillou_x")
+	{
+	nbImageRes=1;
+    nbOperande = 1;
+	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,10,0.1);
+	doubleParam["omega"]=DomaineParametreOp<double>(0.25,0.0,1000,0.1);
+	nomOperation=s;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "paillou_y")
+	{
+	nbImageRes=1;
+    nbOperande = 1;
+	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,10,0.1);
+	doubleParam["omega"]=DomaineParametreOp<double>(0.25,0.0,1000,0.1);
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));
 }
@@ -1835,6 +1866,27 @@ if (s=="deriche_x")
 if (s=="deriche_y")
 	{
 	operateur = &ImageInfoCV::GradientDericheY;
+	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+	return true;
+	}
+if (s=="paillou_mod")
+	{
+	operateur = &ImageInfoCV::ModuleGradientPaillou;
+	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+	return true;
+	}
+if (s=="paillou_x")
+	{
+	operateur = &ImageInfoCV::GradientPaillouX;
+	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+	return true;
+	}
+if (s=="paillou_y")
+	{
+	operateur = &ImageInfoCV::GradientPaillouY;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
 	return true;

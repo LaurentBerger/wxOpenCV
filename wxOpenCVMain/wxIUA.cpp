@@ -55,6 +55,9 @@ enum
     ID_GRADIENT_DERICHE_MOD,
     ID_GRADIENT_DERICHE_X,
     ID_GRADIENT_DERICHE_Y,
+    ID_GRADIENT_PAILLOU_MOD,
+    ID_GRADIENT_PAILLOU_X,
+    ID_GRADIENT_PAILLOU_Y,
 	ID_LAPLACIEN,
  	ID_LISMOY,
 	ID_LISGAU,
@@ -235,9 +238,9 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_MOD, gradient_mod_xpm,_("Gradient modulus"), "scharr_mod", 3);
     CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_X, gradient_x_xpm, _("Gradient X"), "scharr_x", 3);
     CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_Y, gradient_y_xpm, _("Gradient Y"), "scharr_y", 3);
-    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_DERICHE_MOD, gradient_modDeriche_xpm,_("Gradient modulus(deriche)"), "deriche_mod", 3);
-    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_DERICHE_X, gradient_xDeriche_xpm, _("Gradient X(deriche)"), "deriche_x", 3);
-    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_DERICHE_Y, gradient_yDeriche_xpm, _("Gradient Y(deriche)"), "deriche_y", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_PAILLOU_MOD, gradient_modDeriche_xpm,_("Gradient modulus(PAILLOU)"), "paillou_mod", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_PAILLOU_X, gradient_xDeriche_xpm, _("Gradient X(PAILLOU)"), "paillou_x", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_PAILLOU_Y, gradient_yDeriche_xpm, _("Gradient Y(PAILLOU)"), "paillou_y", 3);
     CONSTRUCTEUR_CMD(bouton, ID_LAPLACIEN, laplacien_xpm, _("Laplacian"), "laplacian", 3);
     CONSTRUCTEUR_CMD(bouton, ID_LISMOY, LisMoy_xpm, _("Blur (mean)"), "blur", 3);
     CONSTRUCTEUR_CMD(bouton, ID_LISMED, LisMed_xpm, _("Blur (median filter)"), "medianblur", 3);

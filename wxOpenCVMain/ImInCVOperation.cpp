@@ -1,6 +1,7 @@
 #include "ImageInfo.h"
 #include <vector>
 #include "opencv2/optflow.hpp"
+#include "opencv2/ximgproc.hpp"
 #include "Panoramique.h"
 
 /**
@@ -558,6 +559,61 @@ return r;
 }
 
 /**
+ * @function ScharrModule
+ * @brief Module du gradient Scharr d'une image im1 
+ */
+std::vector<ImageInfoCV *>ImageInfoCV::ModuleGradientPaillou(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+UMat	imx ;
+UMat	imy;
+UMat	imAbsx;
+UMat	imAbsy;
+
+cv::ximgproc::GradientPaillouX(*op[0],imx,pOCV->doubleParam["alpha"].valeur,pOCV->doubleParam["omega"].valeur);
+cv::ximgproc::GradientPaillouY(*op[0],imy,pOCV->doubleParam["alpha"].valeur,pOCV->doubleParam["omega"].valeur);
+absdiff(imx, cv::Scalar::all(0), imAbsx);
+absdiff(imy, cv::Scalar::all(0), imAbsy);
+addWeighted(imAbsx, 0.5, imAbsy, 0.5, 0, *im);
+
+std::vector<ImageInfoCV	*> r;
+r.push_back(im);
+return r;
+}
+
+/**
+ * @function ScharrX
+ * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
+ */
+std::vector<ImageInfoCV *>ImageInfoCV::GradientPaillouX(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+
+cv::ximgproc::GradientPaillouX(*op[0],*im,pOCV->doubleParam["alpha"].valeur,pOCV->doubleParam["omega"].valeur);
+
+std::vector<ImageInfoCV	*> r;
+r.push_back(im);
+return r;
+}
+
+
+/**
+ * @function ScharrY
+ * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
+ */
+std::vector<ImageInfoCV *>ImageInfoCV::GradientPaillouY(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
+{
+ImageInfoCV	*im =new ImageInfoCV;
+
+cv::ximgproc::GradientPaillouY(*op[0],*im,pOCV->doubleParam["alpha"].valeur,pOCV->doubleParam["omega"].valeur);
+
+std::vector<ImageInfoCV	*> r;
+r.push_back(im);
+return r;
+}
+
+
+/**
  * @function Inpaint
  * @brief inpaint d'une image im1 
  */
@@ -788,7 +844,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::ApproxPolyDP(std::vector< ImageInfoCV *> 
 		contoursPoly.resize(op[0]->channels()); 
         contoursPoly[0].resize(contours[0].size());
         for( size_t k = 0; k < contoursPoly[0].size(); k++ )
-            approxPolyDP(contours[0][k], contoursPoly[0][k], pOCV->doubleParam["epsilon"].valeur, pOCV->intParam["closed"].valeur);
+            approxPolyDP(contours[0][k], contoursPoly[0][k], pOCV->doubleParam["epsilon"].valeur, static_cast<bool>(pOCV->intParam["closed"].valeur));
 	    }
      else
 	    {
@@ -797,7 +853,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::ApproxPolyDP(std::vector< ImageInfoCV *> 
         {
             contoursPoly[i].resize(contours[i].size());
             for( size_t k = 0; k < contoursPoly[i].size(); k++ )
-                approxPolyDP(contours[i][k], contoursPoly[i][k], pOCV->doubleParam["epsilon"].valeur, pOCV->intParam["closed"].valeur);
+                approxPolyDP(contours[i][k], contoursPoly[i][k], pOCV->doubleParam["epsilon"].valeur, static_cast<bool>(pOCV->intParam["closed"].valeur));
         }
 	    }
 
@@ -1235,9 +1291,9 @@ else
 	cv::split( *op[0], planCouleur );
 	for (int i=0;i<op[0]->channels();i++)
 		{
-		cv::HoughCircles(d[i],cercle[i],pOCV->doubleParam["method"].valeur,pOCV->doubleParam["dp"].valeur,
+		cv::HoughCircles(d[i],cercle[i],pOCV->intParam["method"].valeur,pOCV->doubleParam["dp"].valeur,
 			pOCV->intParam["minDistance"].valeur,pOCV->doubleParam["param1"].valeur,pOCV->doubleParam["param2"].valeur,
-			pOCV->doubleParam["min_radius"].valeur,pOCV->doubleParam["max_radius"].valeur);
+			static_cast<int>(pOCV->doubleParam["min_radius"].valeur),static_cast<int>(pOCV->doubleParam["max_radius"].valeur));
 		}
 	delete []d;
 	}
@@ -1297,7 +1353,7 @@ if (op[0]->channels()==1)
 	{
 	cv::goodFeaturesToTrack(*op[0],boncoin[0],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
 		pOCV->doubleParam["minDistance"].valeur,cv::noArray(),pOCV->intParam["blockSize"].valeur,
-		pOCV->intParam["useHarrisDetector"].valeur,pOCV->doubleParam["k"].valeur);
+		static_cast<bool>(pOCV->intParam["useHarrisDetector"].valeur),pOCV->doubleParam["k"].valeur);
 	}
 else
 	{
@@ -1307,7 +1363,7 @@ else
 		{
 		cv::goodFeaturesToTrack(planCouleur[i],boncoin[i],pOCV->intParam["maxCorners"].valeur,pOCV->doubleParam["qualityLevel"].valeur,
 			pOCV->doubleParam["minDistance"].valeur,UMat(),pOCV->intParam["blockSize"].valeur,
-			pOCV->intParam["useHarrisDetector"].valeur,pOCV->doubleParam["k"].valeur);
+			static_cast<bool>(pOCV->intParam["useHarrisDetector"].valeur),pOCV->doubleParam["k"].valeur);
 
 		}
 	}
@@ -1402,8 +1458,8 @@ else
 
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getEdgeThreshold() != pOCV->intParam["EdgeThreshold"].valeur)
 	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setEdgeThreshold(pOCV->intParam["EdgeThreshold"].valeur);
-if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getFastThreshold() != pOCV->doubleParam["FastThreshold"].valeur)
-	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setFastThreshold(pOCV->doubleParam["FastThreshold"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getFastThreshold() != pOCV->intParam["FastThreshold"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setFastThreshold(pOCV->intParam["FastThreshold"].valeur);
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getFirstLevel() != pOCV->intParam["FirstLevel"].valeur)
 	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setFirstLevel(pOCV->intParam["FirstLevel"].valeur);
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getMaxFeatures() != pOCV->intParam["MaxFeatures"].valeur)
@@ -2124,9 +2180,13 @@ return r;
 std::vector<ImageInfoCV		*>ImageInfoCV::TransPerspective(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
 {
 if (homography.empty())
-	throw std::string("You must match and findhomography first");
+{
+    std::vector<ImageInfoCV	*> r;
+    throw std::string("You must match and findhomography first");
+    return r;
+}
 ImageInfoCV *imDst = new ImageInfoCV();
-warpPerspective(*op[0], *imDst,homography, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
+warpPerspective(*op[0], *imDst,homography, pOCV->sizeParam["dsize"].valeur, pOCV->intParam["flags"].valeur+ pOCV->intParam["InverseTransform"].valeur, pOCV->intParam["borderMode"].valeur, pOCV->doubleParam["borderValue"].valeur);
 op[0]->AjoutOpAttribut(pOCV);
 std::vector<ImageInfoCV	*> r;
 r.push_back(imDst);
@@ -2881,7 +2941,7 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
         pOCV->intParam["blend_type"].valeur = 0;
 	for (int img_idx = 0; img_idx < pano->op.size(); ++img_idx)
 	{
-		LOGLN("Compositing image #" << indices[img_idx] + 1);
+//		LOGLN("Compositing image #" << indices[img_idx] + 1);
 
 		// Read image and resize it if necessary
 		if (!pano->is_compose_scale_set)
@@ -2963,13 +3023,13 @@ std::vector<ImageInfoCV	*> ImageInfoCV::PanoComposition(std::vector< ImageInfoCV
 			{
 				cv::detail::MultiBandBlender* mb = dynamic_cast<cv::detail::MultiBandBlender*>(blender.get());
 				mb->setNumBands(static_cast<int>(ceil(log(blend_width) / log(2.)) - 1.));
-				LOGLN("Multi-band blender, number of bands: " << mb->numBands());
+//				LOGLN("Multi-band blender, number of bands: " << mb->numBands());
 			}
 			else if (pOCV->intParam["blend_type"].valeur == cv::detail::Blender::FEATHER)
 			{
 				cv::detail::FeatherBlender* fb = dynamic_cast<cv::detail::FeatherBlender*>(blender.get());
 				fb->setSharpness(1.f / blend_width);
-				LOGLN("Feather blender, sharpness: " << fb->sharpness());
+//				LOGLN("Feather blender, sharpness: " << fb->sharpness());
 			}
 			blender->prepare(pano->cornersPano, pano->sizes);
 		}

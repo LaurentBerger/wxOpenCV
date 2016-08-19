@@ -790,7 +790,8 @@ for (int ii=indEtape;ii<nbEtape;ii++)
             int i = 0;
             while (i<listeOp.size() && listeOp[i].first->indEtape != ii+1)
                 i++;
-            listeOp[i ].first->op[0] = r[0];
+            if (i<listeOp.size())
+                listeOp[i ].first->op[0] = r[0];
 			}
         f->DynamiqueAffichage();
 
