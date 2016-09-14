@@ -2,6 +2,7 @@
 #include <vector>
 #include "opencv2/optflow.hpp"
 #include "opencv2/ximgproc.hpp"
+#include "opencv2/xfeatures2d.hpp"
 #include "Panoramique.h"
 
 /**
@@ -1509,6 +1510,116 @@ AjoutOpAttribut(pOCV);
 r.push_back(this);
 return r;
 }
+
+std::vector<ImageInfoCV	*> ImageInfoCV::DetectSift(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+if (op[0] != this)
+	return r;
+
+
+if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("SIFT") == pOCV->detecteur.end())
+	{
+	cv::Ptr<cv::xfeatures2d::SIFT> b;
+	b = cv::xfeatures2d::SIFT::create();
+	pOCV->detecteur["SIFT"] = b;
+	}
+if (pointCle.find(IMAGEINFOCV_SIFT_DES)==pointCle.end())
+{
+    std::vector<cv::KeyPoint> x;
+    pointCle.insert(std::make_pair(IMAGEINFOCV_SIFT_DES,x));
+}
+else
+    pointCle[IMAGEINFOCV_SIFT_DES].clear();
+if (descripteur.find(IMAGEINFOCV_SIFT_DES)==descripteur.end())
+    descripteur.insert(std::make_pair(IMAGEINFOCV_SIFT_DES,cv::Mat()));
+else
+    descripteur[IMAGEINFOCV_SIFT_DES] =  cv::Mat();
+
+
+if (pOCV->intParam["image_mask"].valeur == 1)
+    pOCV->detecteur["SIFT"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle(IMAGEINFOCV_SIFT_DES)), *(op[0]->Descripteur(IMAGEINFOCV_SIFT_DES)));
+else
+    pOCV->detecteur["SIFT"]->detectAndCompute(*op[0], UMat(), *(op[0]->PointCle(IMAGEINFOCV_SIFT_DES)), *(op[0]->Descripteur(IMAGEINFOCV_SIFT_DES)));
+
+if (matches.find(IMAGEINFOCV_SIFT_DES)!=matches.end())
+    matches[IMAGEINFOCV_SIFT_DES].clear();
+    else
+    {
+        std::vector<cv::DMatch>  x;
+        matches.insert(std::make_pair(IMAGEINFOCV_SIFT_DES,x));
+    }
+
+AjoutOpAttribut(pOCV);
+
+r.push_back(this);
+return r;
+}
+
+std::vector<ImageInfoCV	*> ImageInfoCV::DetectSurf(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+if (op[0] != this)
+	return r;
+
+
+if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("ORB") == pOCV->detecteur.end())
+	{
+	cv::Ptr<cv::Feature2D> b;
+	b = cv::ORB::create();
+	pOCV->detecteur["ORB"] = b;
+	}
+if (pointCle.find(IMAGEINFOCV_ORB_DES)==pointCle.end())
+{
+    std::vector<cv::KeyPoint> x;
+    pointCle.insert(std::make_pair(IMAGEINFOCV_ORB_DES,x));
+}
+else
+    pointCle[IMAGEINFOCV_ORB_DES].clear();
+if (descripteur.find(IMAGEINFOCV_ORB_DES)==descripteur.end())
+    descripteur.insert(std::make_pair(IMAGEINFOCV_ORB_DES,cv::Mat()));
+else
+    descripteur[IMAGEINFOCV_ORB_DES] =  cv::Mat();
+
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getEdgeThreshold() != pOCV->intParam["EdgeThreshold"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setEdgeThreshold(pOCV->intParam["EdgeThreshold"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getFastThreshold() != pOCV->intParam["FastThreshold"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setFastThreshold(pOCV->intParam["FastThreshold"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getFirstLevel() != pOCV->intParam["FirstLevel"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setFirstLevel(pOCV->intParam["FirstLevel"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getMaxFeatures() != pOCV->intParam["MaxFeatures"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setMaxFeatures(pOCV->intParam["MaxFeatures"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getNLevels() != pOCV->intParam["NLevels"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setNLevels(pOCV->intParam["NLevels"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getPatchSize() != pOCV->intParam["PatchSize"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setPatchSize(pOCV->intParam["PatchSize"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getScaleFactor() != pOCV->doubleParam["ScaleFactor"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setScaleFactor(pOCV->doubleParam["ScaleFactor"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getScoreType() != pOCV->intParam["ScoreType"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setScoreType(pOCV->intParam["ScoreType"].valeur);
+if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getWTA_K() != pOCV->intParam["WTA_K"].valeur)
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setWTA_K(pOCV->intParam["WTA_K"].valeur);
+
+if (pOCV->intParam["image_mask"].valeur == 1)
+    pOCV->detecteur["ORB"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle(IMAGEINFOCV_ORB_DES)), *(op[0]->Descripteur(IMAGEINFOCV_ORB_DES)));
+else
+    pOCV->detecteur["ORB"]->detectAndCompute(*op[0], UMat(), *(op[0]->PointCle(IMAGEINFOCV_ORB_DES)), *(op[0]->Descripteur(IMAGEINFOCV_ORB_DES)));
+
+if (matches.find(IMAGEINFOCV_ORB_DES)!=matches.end())
+    matches[IMAGEINFOCV_ORB_DES].clear();
+    else
+    {
+        std::vector<cv::DMatch>  x;
+        matches.insert(std::make_pair(IMAGEINFOCV_ORB_DES,x));
+    }
+
+AjoutOpAttribut(pOCV);
+
+r.push_back(this);
+return r;
+}
+
+
 
 std::vector<ImageInfoCV	*>ImageInfoCV::DetectMser(std::vector<ImageInfoCV	*>op , ParametreOperation *pOCV)
     {

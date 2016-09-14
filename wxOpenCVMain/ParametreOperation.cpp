@@ -726,6 +726,43 @@ if (s == "blobfeatures2d")
     doubleParam["maxConvexity"] = DomaineParametreOp<double>(10000,0,10000,0.1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
+if (s == "surffeatures2d")
+    {
+    nomOperation = s;
+    nbImageRes = 0;
+    nbOperande = 1;
+    opAttribut = true;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
+    intParam["FastThreshold"] = DomaineParametreOp<int>(20, 1, 100, 1);;
+    intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128, 1);
+    intParam["MaxFeatures"] = DomaineParametreOp<int>(500, 1, 10000, 1);
+    intParam["NLevels"] = DomaineParametreOp<int>(8, 1, 128, 1);
+    intParam["PatchSize"] = DomaineParametreOp<int>(31, 1, 200, 2);
+    doubleParam["ScaleFactor"] = DomaineParametreOp<double>(1.2, 1, 10, 0.1);
+    intParam["ScoreType"] = DomaineParametreOp<int>(cv::ORB::HARRIS_SCORE, cv::ORB::HARRIS_SCORE, cv::ORB::FAST_SCORE, 1);
+    intParam["WTA_K"] = DomaineParametreOp<int>(2, 2, 4, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "siftfeatures2d")
+    {
+    nomOperation = s;
+    nbImageRes = 0;
+    nbOperande = 1;
+    opAttribut = true;
+    intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
+    intParam["FastThreshold"] = DomaineParametreOp<int>(20, 1, 100, 1);;
+    intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128, 1);
+    intParam["MaxFeatures"] = DomaineParametreOp<int>(500, 1, 10000, 1);
+    intParam["NLevels"] = DomaineParametreOp<int>(8, 1, 128, 1);
+    intParam["PatchSize"] = DomaineParametreOp<int>(31, 1, 200, 2);
+    doubleParam["ScaleFactor"] = DomaineParametreOp<double>(1.2, 1, 10, 0.1);
+    intParam["ScoreType"] = DomaineParametreOp<int>(cv::ORB::HARRIS_SCORE, cv::ORB::HARRIS_SCORE, cv::ORB::FAST_SCORE, 1);
+    intParam["WTA_K"] = DomaineParametreOp<int>(2, 2, 4, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+
 if (s == "orbfeatures2d")
     {
     nomOperation = s;
@@ -1557,6 +1594,24 @@ if (s == "orbfeatures2d")
     lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#orb";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
     operateur = &ImageInfoCV::DetectOrb;
+    }
+if (s == "siftfeatures2d")
+    {
+    opAttribut = true;
+    nomOperation = s;
+    nbOperande = 1;
+    lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#orb";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
+    operateur = &ImageInfoCV::DetectSift;
+    }
+if (s == "surffeatures2d")
+    {
+    opAttribut = true;
+    nomOperation = s;
+    nbOperande = 1;
+    lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#orb";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
+    operateur = &ImageInfoCV::DetectSurf;
     }
 if (s == "akazefeatures2d")
     {
