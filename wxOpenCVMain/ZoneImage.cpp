@@ -642,7 +642,7 @@ wxMenu *ZoneImage::CreateMenuMasque(wxString *title)
         wxString s;
         s.Printf("Rectangle %d", i);
         menu->AppendCheckItem(RECT_DS_MASQUE + i, s);
-       if (rectDsMasque[i])
+        if (rectDsMasque[i])
             menu->Check(RECT_DS_MASQUE + i, true);
         else
             menu->Check(RECT_DS_MASQUE + i, false);
@@ -765,6 +765,20 @@ if (osgApp->ModeSouris()==SOURIS_STD)
             menu.Check(MENU_POINTORB, true);
         menuParametre = true;
         }
+    if (f->ImAcq()->PointCle(IMAGEINFOCV_SIFT_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_SIFT_DES)->size() != 0)
+        {
+        menu.AppendCheckItem(MENU_POINTSIFT, _T("SIFT"));
+        if (f->TracerPointSIFT())
+            menu.Check(MENU_POINTSIFT, true);
+        menuParametre = true;
+        }
+    if (f->ImAcq()->PointCle(IMAGEINFOCV_SURF_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_SURF_DES)->size() != 0)
+        {
+        menu.AppendCheckItem(MENU_POINTSURF, _T("SURF"));
+        if (f->TracerPointSURF())
+            menu.Check(MENU_POINTSURF, true);
+        menuParametre = true;
+        }
     if (f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)!=NULL && f->ImAcq()->PointCle(IMAGEINFOCV_BRISK_DES)->size() != 0)
 		{
 		menu.AppendCheckItem(MENU_POINTBRISK, _T("BRISK"));
@@ -828,6 +842,11 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.AppendSeparator();
 	menu.Append(ENREGISTRER_FICHIER, _T("Save"));
 	menu.Append(ENREGISTRERSOUS_FICHIER, _T("Save As"));
+	menu.Append(COPIER_SELECT, _T("Copy selection"));
+	menu.Append(COLLER_IMAGE_CADRER, _T("crop and paste:selection"));
+	menu.Append(COLLER, _T("paste"));
+	menu.Append(COLLER_IMAGE, _T("paste as new image"));
+	menu.Append(EFFACER_SELECT, _T("clear select"));
 	menu.Append(CREER_RAPPORT, _T("Create a report"));
 	menu.Append(QUITTER_, _T("Close"));
 	if (ModeRectangle())
@@ -1004,6 +1023,12 @@ void FenetrePrincipale::TracerDescripteur(wxCommandEvent& evt)
 switch (evt.GetId()){
 case MENU_POINTORB:
 	tracerORBPoint = !tracerORBPoint;
+	break;
+case MENU_POINTSIFT:
+	tracerSIFTPoint = !tracerSIFTPoint;
+	break;
+case MENU_POINTSURF:
+	tracerSURFPoint = !tracerSURFPoint;
 	break;
 case MENU_POINTKAZE:
     tracerKAZEPoint = !tracerKAZEPoint;
@@ -1674,6 +1699,64 @@ for (int i = 0; i < pts->size(); i++)
 
 TracerAppariementPoint(hdc);
    }
+
+void FenetrePrincipale::TracerPointSIFT(wxBufferedPaintDC &hdc)
+{
+    if (!tracerSIFTPoint || !imAcq)
+	    return;
+    if (!imAcq->PointCle(IMAGEINFOCV_SIFT_DES))
+	    {
+	    tracerSIFTPoint = false;
+	    return;
+	    }
+    std::vector<cv::KeyPoint> *pts = imAcq->PointCle(IMAGEINFOCV_SIFT_DES);
+    int fZoomNume, fZoomDeno;
+
+    CalculZoom(fZoomNume, fZoomDeno);
+    wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
+    wxBrush brosse(wxColour(0, 128, 0, 128));
+    hdc.SetPen(crayon[0]);
+    hdc.SetBrush(brosse);
+    for (int i = 0; i < pts->size(); i++)
+        {
+        wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+        wxPoint p1(RepereImageEcran(p_1));
+        wxPoint p(p1-wxPoint(2,2));
+        wxSize w(5,5);
+        hdc.DrawRectangle(p, w);
+        }
+
+    TracerAppariementPoint(hdc);
+}
+
+void FenetrePrincipale::TracerPointSURF(wxBufferedPaintDC &hdc)
+{
+    if (!tracerSURFPoint || !imAcq)
+	    return;
+    if (!imAcq->PointCle(IMAGEINFOCV_SURF_DES))
+	    {
+	    tracerSURFPoint = false;
+	    return;
+	    }
+    std::vector<cv::KeyPoint> *pts = imAcq->PointCle(IMAGEINFOCV_SURF_DES);
+    int fZoomNume, fZoomDeno;
+
+    CalculZoom(fZoomNume, fZoomDeno);
+    wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
+    wxBrush brosse(wxColour(0, 128, 0, 128));
+    hdc.SetPen(crayon[0]);
+    hdc.SetBrush(brosse);
+    for (int i = 0; i < pts->size(); i++)
+        {
+        wxPoint p_1((*pts)[i].pt.x, (*pts)[i].pt.y);
+        wxPoint p1(RepereImageEcran(p_1));
+        wxPoint p(p1-wxPoint(2,2));
+        wxSize w(5,5);
+        hdc.DrawRectangle(p, w);
+        }
+
+    TracerAppariementPoint(hdc);
+}
 
 
 

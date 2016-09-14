@@ -79,9 +79,6 @@ wxOsgApp			*osgApp;		/*!< lien sur l'application */
 wxBitmap            mBuffer;       /*!< Double buffering */
 void				*f3D;			/*!< lien sur la fenetre 3D représentant l'image */
 int					facteurZoom;	/*!< zoom=2^facteurZoom*/
-wxRect				rectSelect[NB_MAX_RECTANGLE]; /*!< zone rectangulaire sélectionnée*/
-bool                rectDsMasque[NB_MAX_RECTANGLE]; /*!< Rectangle i dans le masque */
-wxRect				rectCoupe[NB_MAX_RECTANGLE]; /*!< diagonale d'un rectangle associée à une coupe*/
 bool				modeRect;	/*!< Sélection des rectangles actives */
 bool				modeCoupe; /*!< Sélection des coupes actives */
 int					indRect; /*!< Indice du rectangle actif */
@@ -89,6 +86,10 @@ int					indCoupe; /*!< Indice de la coupe active */
 wxBitmap			*bitmapAffiche;/*!< bitmap de l'image */
 char				modeComplexe;/*!< Type d'affichage pour une image complexe */
 bool                pointCtrl;  /*!< Point de controle de l'alogo affichée sur l'image*/
+public:
+wxRect				rectSelect[NB_MAX_RECTANGLE]; /*!< zone rectangulaire sélectionnée*/
+bool                rectDsMasque[NB_MAX_RECTANGLE]; /*!< Rectangle i dans le masque */
+wxRect				rectCoupe[NB_MAX_RECTANGLE]; /*!< diagonale d'un rectangle associée à une coupe*/
 
 wxList          m_displayList; // A list of DragShapes
 int             m_dragMode;
@@ -421,6 +422,8 @@ bool				tracerAKAZEPoint;	/*!< 1 Tracer des descripteurs AKAZE */
 bool				tracerAGASTPoint;	/*!< 1 Tracer des descripteurs AGAST */
 bool				tracerMSERPoint;	/*!< 1 Tracer des descripteurs MSER */
 bool				tracerORBPoint;		/*!< 1 Tracer des descripteurs ORB */
+bool				tracerSURFPoint;    /*!< 1 Tracer des descripteurs SURF */
+bool				tracerSIFTPoint;	/*!< 1 Tracer des descripteurs SIFT */
 bool				tracerAppariementPoint; /*!< 1 Tracerdes relations des points clés de deux images */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
 char				modeFiltre;			/*!< 0 image standard, image filtrée avec passe bas le + fort */
@@ -438,6 +441,7 @@ double				**poly;				/*!< Coefficient de la quadrique pour la correction du fond
 
 ImageInfoCV			*imAcq;				/*!< Dernière image calculée incluant les corrections */
 ImageInfoCV			*imGain;			/*!< Image (type CV_32F)du gain appliqué pour chaque pixel.*/
+cv::Mat             imClipBoard;        /*! clipbaord image */
 cv::VideoWriter     video;
 #ifdef __OBSOLETE__
 ImageInfoCV			*nivBiais;			/*!< image du niveau zéro*/
@@ -638,6 +642,8 @@ void Enregistrer(wxCommandEvent& event);
 void EnregistrerSous(wxCommandEvent& event);
 
 bool TracerPointORB(){ return	tracerORBPoint; };		/*!< 1 tracer des descripteurs des ORB */
+bool TracerPointSURF(){ return	tracerSURFPoint; };		/*!< 1 tracer des descripteurs des ORB */
+bool TracerPointSIFT(){ return	tracerSIFTPoint; };		/*!< 1 tracer des descripteurs des ORB */
 bool TracerPointBRISK(){ return	tracerBRISKPoint; };		/*!< 1 tracer des descripteurs des BRISK */
 bool TracerPointBLOB(){ return	tracerBLOBPoint; };		/*!< 1 tracer des contours des descripteurs des BLOB  */
 bool TracerPointKAZE(){ return	tracerKAZEPoint; };		/*!< 1 tracer des contours des descripteurs des KAZE  */
@@ -656,6 +662,11 @@ bool TracerBonCoin(){return	tracerBonCoin;};		/*!< 1 Tracer des coins fort de l'
 bool TracerFlotOptique(){ return	tracerFlotOptique; };		/*!< 1 Tracer des coins fort de l'image */
 bool TracerRegionMvt(){ return	tracerRegionMvt; };		/*!< 1 Tracer des coins fort de l'image */
 bool TracerAppaiementPoint(){return tracerAppariementPoint;};
+void CopierSelect(wxCommandEvent& event);
+void CollerImage(wxCommandEvent& event);
+void CollerImageCadrer(wxCommandEvent& event);
+void Coller(wxCommandEvent& event);
+void EffacerSelect(wxCommandEvent& event);
 void CreerRapport(wxCommandEvent& event);
     /*!
      *  \brief CreerRapport
@@ -742,6 +753,16 @@ void TracerPointORB(wxBufferedPaintDC &hdc);
 	/*!
 	*  \brief TracerPointOrb
 	*  tracer des points ORB d'une image
+	*/
+void TracerPointSURF(wxBufferedPaintDC &hdc);
+	/*!
+	*  \brief TracerPointSURF
+	*  tracer des points SURF d'une image
+	*/
+void TracerPointSIFT(wxBufferedPaintDC &hdc);
+	/*!
+	*  \brief TracerPointSIFT
+	*  tracer des points SIFT d'une image
 	*/
 void TracerPointMSER(wxBufferedPaintDC &hdc);
 	/*!
@@ -1177,6 +1198,11 @@ enum
     OUVRIR_FICHIER =1,
     ENREGISTRER_FICHIER,
     ENREGISTRERSOUS_FICHIER,
+    COLLER,
+    COLLER_IMAGE,
+    COLLER_IMAGE_CADRER,
+    COPIER_SELECT,
+    EFFACER_SELECT,
 	CREER_RAPPORT,
     OUVRIR_FICHIER_HORODATAGE,
     QUITTER_ ,
@@ -1217,6 +1243,8 @@ enum
 	MENU_FLOTOPTIQUE,
 	MENU_REGIONMVT,
 	MENU_POINTORB,
+	MENU_POINTSURF,
+	MENU_POINTSIFT,
 	MENU_POINTMSER,
 	MENU_POINTBRISK,
 	MENU_POINTBLOB,

@@ -2,6 +2,7 @@
 #include <vector>
 #include "opencv2/optflow.hpp"
 #include "opencv2/ximgproc.hpp"
+#include "opencv2/xfeatures2d.hpp"
 #include "Panoramique.h"
 
 /**
@@ -1509,6 +1510,108 @@ AjoutOpAttribut(pOCV);
 r.push_back(this);
 return r;
 }
+
+std::vector<ImageInfoCV	*> ImageInfoCV::DetectSift(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+if (op[0] != this)
+	return r;
+
+
+if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("SIFT") == pOCV->detecteur.end())
+	{
+	cv::Ptr<cv::xfeatures2d::SIFT> b;
+	b = cv::xfeatures2d::SIFT::create();
+	pOCV->detecteur["SIFT"] = b;
+	}
+if (pointCle.find(IMAGEINFOCV_SIFT_DES)==pointCle.end())
+{
+    std::vector<cv::KeyPoint> x;
+    pointCle.insert(std::make_pair(IMAGEINFOCV_SIFT_DES,x));
+}
+else
+    pointCle[IMAGEINFOCV_SIFT_DES].clear();
+if (descripteur.find(IMAGEINFOCV_SIFT_DES)==descripteur.end())
+    descripteur.insert(std::make_pair(IMAGEINFOCV_SIFT_DES,cv::Mat()));
+else
+    descripteur[IMAGEINFOCV_SIFT_DES] =  cv::Mat();
+
+
+if (pOCV->intParam["image_mask"].valeur == 1)
+    pOCV->detecteur["SIFT"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle(IMAGEINFOCV_SIFT_DES)), *(op[0]->Descripteur(IMAGEINFOCV_SIFT_DES)));
+else
+    pOCV->detecteur["SIFT"]->detectAndCompute(*op[0], UMat(), *(op[0]->PointCle(IMAGEINFOCV_SIFT_DES)), *(op[0]->Descripteur(IMAGEINFOCV_SIFT_DES)));
+
+if (matches.find(IMAGEINFOCV_SIFT_DES)!=matches.end())
+    matches[IMAGEINFOCV_SIFT_DES].clear();
+    else
+    {
+        std::vector<cv::DMatch>  x;
+        matches.insert(std::make_pair(IMAGEINFOCV_SIFT_DES,x));
+    }
+
+AjoutOpAttribut(pOCV);
+
+r.push_back(this);
+return r;
+}
+
+std::vector<ImageInfoCV	*> ImageInfoCV::DetectSurf(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV)
+{
+std::vector<ImageInfoCV	*> r;
+if (op[0] != this)
+	return r;
+
+
+if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("SURF") == pOCV->detecteur.end())
+	{
+	cv::Ptr<cv::Feature2D> b;
+	b = cv::xfeatures2d::SURF::create();
+	pOCV->detecteur["SURF"] = b;
+	}
+if (pointCle.find(IMAGEINFOCV_SURF_DES)==pointCle.end())
+{
+    std::vector<cv::KeyPoint> x;
+    pointCle.insert(std::make_pair(IMAGEINFOCV_SURF_DES,x));
+}
+else
+    pointCle[IMAGEINFOCV_SURF_DES].clear();
+if (descripteur.find(IMAGEINFOCV_SURF_DES)==descripteur.end())
+    descripteur.insert(std::make_pair(IMAGEINFOCV_SURF_DES,cv::Mat()));
+else
+    descripteur[IMAGEINFOCV_SURF_DES] =  cv::Mat();
+
+if (pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->getHessianThreshold() != pOCV->doubleParam["hessianThreshold"].valeur)
+	pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->setHessianThreshold(pOCV->doubleParam["hessianThreshold"].valeur);
+if (pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->getNOctaveLayers() != pOCV->intParam["nOctaveLayers"].valeur)
+	pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->setNOctaveLayers(pOCV->intParam["nOctaveLayers"].valeur);
+if (pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->getNOctaves() != pOCV->intParam["nOctaves"].valeur)
+	pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->setNOctaves(pOCV->intParam["nOctaves"].valeur);
+if (pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->getUpright() != pOCV->intParam["upright"].valeur)
+	pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->setUpright(pOCV->intParam["upright"].valeur);
+if (pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->getExtended() != pOCV->intParam["extended"].valeur)
+	pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->setExtended(pOCV->intParam["extended"].valeur);
+
+if (pOCV->intParam["image_mask"].valeur == 1)
+    pOCV->detecteur["SURF"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle(IMAGEINFOCV_SURF_DES)), *(op[0]->Descripteur(IMAGEINFOCV_SURF_DES)));
+else
+    pOCV->detecteur["SURF"]->detectAndCompute(*op[0], UMat(), *(op[0]->PointCle(IMAGEINFOCV_SURF_DES)), *(op[0]->Descripteur(IMAGEINFOCV_SURF_DES)));
+
+if (matches.find(IMAGEINFOCV_SURF_DES)!=matches.end())
+    matches[IMAGEINFOCV_SURF_DES].clear();
+    else
+    {
+        std::vector<cv::DMatch>  x;
+        matches.insert(std::make_pair(IMAGEINFOCV_SURF_DES,x));
+    }
+
+AjoutOpAttribut(pOCV);
+
+r.push_back(this);
+return r;
+}
+
+
 
 std::vector<ImageInfoCV	*>ImageInfoCV::DetectMser(std::vector<ImageInfoCV	*>op , ParametreOperation *pOCV)
     {

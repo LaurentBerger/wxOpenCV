@@ -117,6 +117,8 @@ enum
     ID_DES_AGAST,
     ID_DES_MSER,
     ID_DES_BLOB,
+    ID_DES_SIFT,
+    ID_DES_SURF,
 	ID_DES_MATCH,
 	ID_HOMOGRAPHY,
     ID_WARPPERPESCTIVE,
@@ -307,6 +309,8 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_DES_BRISK, BRISK_xpm, _("BRISK keypoint"), "briskfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_AKAZE, AKAZE_xpm,_("Akaze keypoint"), "akazefeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_KAZE, KAZE_xpm,_("kaze keypoint"), "kazefeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_SIFT, Sift_xpm,_("Sift keypoint"), "siftfeatures2d", 11);
+    CONSTRUCTEUR_CMD(bouton, ID_DES_SURF, Surf_xpm,_("Surf keypoint"), "surffeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_AGAST, Agast_xpm,_("Agatse keypoint"), "agastfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_BLOB, blob_xpm,_("BLOB keypoint"), "blobfeatures2d", 11);
     CONSTRUCTEUR_CMD(bouton, ID_DES_MSER, mser_xpm,_("MSER region"), "mserfeatures2d", 11);

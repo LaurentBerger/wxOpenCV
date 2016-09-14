@@ -37,7 +37,9 @@ typedef short CodeErreur;
 #define IMAGEINFOCV_GFTT_GRAY_DES 6 // IMAGEINFOCV_GFTT_BLUE_DES
 #define IMAGEINFOCV_GFTT_GREEN_DES 7
 #define IMAGEINFOCV_GFTT_RED_DES 8
-#define IMAGEINFOCV_PRECEDENT_DES 9
+#define IMAGEINFOCV_SIFT_DES 10
+#define IMAGEINFOCV_SURF_DES 11
+#define IMAGEINFOCV_PRECEDENT_DES 12
 
 
 class ImageInfoCV : public cv::UMat {
@@ -363,6 +365,8 @@ std::vector<ImageInfoCV	*>HoughLigneProba(std::vector< ImageInfoCV *>, Parametre
 std::vector<ImageInfoCV	*>BonAttributs(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectCoinHarris(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectOrb(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectSift(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
+std::vector<ImageInfoCV	*>DetectSurf(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectBrisk(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectAkaze(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV	*>DetectKaze(std::vector<ImageInfoCV	*> op, ParametreOperation *pOCV);

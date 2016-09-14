@@ -137,6 +137,8 @@
 #include "bitmaps\additionponderee.xpm"
 #include "bitmaps\AKAZE.xpm"
 #include "bitmaps\KAZE.xpm"
+#include "bitmaps\Sift.xpm"
+#include "bitmaps\Surf.xpm"
 #include "bitmaps\Agast.xpm"
 #include "bitmaps\blob.xpm"
 #include "bitmaps\BRISK.xpm"
