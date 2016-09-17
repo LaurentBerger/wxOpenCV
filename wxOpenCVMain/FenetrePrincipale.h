@@ -421,6 +421,8 @@ bool				tracerAKAZEPoint;	/*!< 1 Tracer des descripteurs AKAZE */
 bool				tracerAGASTPoint;	/*!< 1 Tracer des descripteurs AGAST */
 bool				tracerMSERPoint;	/*!< 1 Tracer des descripteurs MSER */
 bool				tracerORBPoint;		/*!< 1 Tracer des descripteurs ORB */
+bool				tracerSURFPoint;    /*!< 1 Tracer des descripteurs SURF */
+bool				tracerSIFTPoint;	/*!< 1 Tracer des descripteurs SIFT */
 bool				tracerAppariementPoint; /*!< 1 Tracerdes relations des points clés de deux images */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
 char				modeFiltre;			/*!< 0 image standard, image filtrée avec passe bas le + fort */
@@ -638,6 +640,8 @@ void Enregistrer(wxCommandEvent& event);
 void EnregistrerSous(wxCommandEvent& event);
 
 bool TracerPointORB(){ return	tracerORBPoint; };		/*!< 1 tracer des descripteurs des ORB */
+bool TracerPointSURF(){ return	tracerSURFPoint; };		/*!< 1 tracer des descripteurs des ORB */
+bool TracerPointSIFT(){ return	tracerSIFTPoint; };		/*!< 1 tracer des descripteurs des ORB */
 bool TracerPointBRISK(){ return	tracerBRISKPoint; };		/*!< 1 tracer des descripteurs des BRISK */
 bool TracerPointBLOB(){ return	tracerBLOBPoint; };		/*!< 1 tracer des contours des descripteurs des BLOB  */
 bool TracerPointKAZE(){ return	tracerKAZEPoint; };		/*!< 1 tracer des contours des descripteurs des KAZE  */
@@ -742,6 +746,16 @@ void TracerPointORB(wxBufferedPaintDC &hdc);
 	/*!
 	*  \brief TracerPointOrb
 	*  tracer des points ORB d'une image
+	*/
+void TracerPointSURF(wxBufferedPaintDC &hdc);
+	/*!
+	*  \brief TracerPointSURF
+	*  tracer des points SURF d'une image
+	*/
+void TracerPointSIFT(wxBufferedPaintDC &hdc);
+	/*!
+	*  \brief TracerPointSIFT
+	*  tracer des points SIFT d'une image
 	*/
 void TracerPointMSER(wxBufferedPaintDC &hdc);
 	/*!
@@ -1217,6 +1231,8 @@ enum
 	MENU_FLOTOPTIQUE,
 	MENU_REGIONMVT,
 	MENU_POINTORB,
+	MENU_POINTSURF,
+	MENU_POINTSIFT,
 	MENU_POINTMSER,
 	MENU_POINTBRISK,
 	MENU_POINTBLOB,

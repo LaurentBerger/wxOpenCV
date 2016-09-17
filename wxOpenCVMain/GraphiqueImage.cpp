@@ -136,6 +136,8 @@ if (cam && cam->IsRunning())
 	wxCriticalSectionLocker enter(travailCam);
 
     TracerPointORB(hdc);
+    TracerPointSIFT(hdc);
+    TracerPointSURF(hdc);
     TracerPointFREAK(hdc);
     TracerPointBRISK(hdc);
     TracerPointKAZE(hdc);
@@ -150,6 +152,8 @@ else
     {
 
     TracerPointORB(hdc);
+    TracerPointSIFT(hdc);
+    TracerPointSURF(hdc);
     TracerPointFREAK(hdc);
     TracerPointBRISK(hdc);
     TracerPointKAZE(hdc);

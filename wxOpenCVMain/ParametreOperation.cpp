@@ -733,15 +733,11 @@ if (s == "surffeatures2d")
     nbOperande = 1;
     opAttribut = true;
     intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
-    intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
-    intParam["FastThreshold"] = DomaineParametreOp<int>(20, 1, 100, 1);;
-    intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128, 1);
-    intParam["MaxFeatures"] = DomaineParametreOp<int>(500, 1, 10000, 1);
-    intParam["NLevels"] = DomaineParametreOp<int>(8, 1, 128, 1);
-    intParam["PatchSize"] = DomaineParametreOp<int>(31, 1, 200, 2);
-    doubleParam["ScaleFactor"] = DomaineParametreOp<double>(1.2, 1, 10, 0.1);
-    intParam["ScoreType"] = DomaineParametreOp<int>(cv::ORB::HARRIS_SCORE, cv::ORB::HARRIS_SCORE, cv::ORB::FAST_SCORE, 1);
-    intParam["WTA_K"] = DomaineParametreOp<int>(2, 2, 4, 1);
+    intParam["nOctaves"] = DomaineParametreOp<int>(4, 1, 128, 1);
+    intParam["nOctaveLayers"] = DomaineParametreOp<int>(3, 1, 200, 1);
+    doubleParam["hessianThreshold"] = DomaineParametreOp<double>(100, 1, 10000, 1);
+    intParam["extended"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["upright"] = DomaineParametreOp<int>(0, 0, 1, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "siftfeatures2d")
@@ -751,15 +747,10 @@ if (s == "siftfeatures2d")
     nbOperande = 1;
     opAttribut = true;
     intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
-    intParam["EdgeThreshold"] = DomaineParametreOp<int>(31, 1, 255, 1);
-    intParam["FastThreshold"] = DomaineParametreOp<int>(20, 1, 100, 1);;
-    intParam["FirstLevel"] = DomaineParametreOp<int>(0, 0, 128, 1);
-    intParam["MaxFeatures"] = DomaineParametreOp<int>(500, 1, 10000, 1);
-    intParam["NLevels"] = DomaineParametreOp<int>(8, 1, 128, 1);
-    intParam["PatchSize"] = DomaineParametreOp<int>(31, 1, 200, 2);
-    doubleParam["ScaleFactor"] = DomaineParametreOp<double>(1.2, 1, 10, 0.1);
-    intParam["ScoreType"] = DomaineParametreOp<int>(cv::ORB::HARRIS_SCORE, cv::ORB::HARRIS_SCORE, cv::ORB::FAST_SCORE, 1);
-    intParam["WTA_K"] = DomaineParametreOp<int>(2, 2, 4, 1);
+    intParam["nfeatures"] = DomaineParametreOp<int>(3, 1, 255, 1);
+    intParam["nOctaveLayers"] = DomaineParametreOp<int>(20, 1, 100, 1);;
+    doubleParam["contrastThreshold"] = DomaineParametreOp<double>(010, 0, 1000, 0.1);
+    doubleParam["sigma"] = DomaineParametreOp<double>(1.6, 1, 0, 0.1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 
@@ -1600,7 +1591,7 @@ if (s == "siftfeatures2d")
     opAttribut = true;
     nomOperation = s;
     nbOperande = 1;
-    lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#orb";
+    lienHtml = "http://docs.opencv.org/trunk/d5/d3c/classcv_1_1xfeatures2d_1_1SIFT.html";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
     operateur = &ImageInfoCV::DetectSift;
     }
@@ -1609,7 +1600,7 @@ if (s == "surffeatures2d")
     opAttribut = true;
     nomOperation = s;
     nbOperande = 1;
-    lienHtml = "http://docs.opencv.org/modules/features2d/doc/feature_detection_and_description.html#orb";
+    lienHtml = "http://docs.opencv.org/master/d5/df7/classcv_1_1xfeatures2d_1_1SURF.html";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=422&zoom=70,250,100";
     operateur = &ImageInfoCV::DetectSurf;
     }
