@@ -642,7 +642,7 @@ wxMenu *ZoneImage::CreateMenuMasque(wxString *title)
         wxString s;
         s.Printf("Rectangle %d", i);
         menu->AppendCheckItem(RECT_DS_MASQUE + i, s);
-       if (rectDsMasque[i])
+        if (rectDsMasque[i])
             menu->Check(RECT_DS_MASQUE + i, true);
         else
             menu->Check(RECT_DS_MASQUE + i, false);
@@ -842,6 +842,11 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.AppendSeparator();
 	menu.Append(ENREGISTRER_FICHIER, _T("Save"));
 	menu.Append(ENREGISTRERSOUS_FICHIER, _T("Save As"));
+	menu.Append(COPIER_SELECT, _T("Copy selection"));
+	menu.Append(COLLER_IMAGE_CADRER, _T("crop and Copy selection"));
+	menu.Append(COLLER, _T("paste"));
+	menu.Append(COLLER_IMAGE, _T("paste as new image"));
+	menu.Append(EFFACER_SELECT, _T("clear select"));
 	menu.Append(CREER_RAPPORT, _T("Create a report"));
 	menu.Append(QUITTER_, _T("Close"));
 	if (ModeRectangle())

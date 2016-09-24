@@ -2030,3 +2030,96 @@ void FenetrePrincipale::AjoutPointCourbeVideo(int c,double x, double y)
         return;
     courbeVideo->Ajoute(c,x,y);
 }
+
+
+void FenetrePrincipale::CopierSelect(wxCommandEvent& evt)
+{
+    cv::Mat masque = cv::Mat::zeros(imAcq->size(),CV_8UC1);
+    for (int i = 0; i < NB_MAX_RECTANGLE;i++)
+        if (feuille->rectDsMasque[i] )
+        {
+            masque(cv::Rect(feuille->rectSelect[i].x,feuille->rectSelect[i].y,feuille->rectSelect[i].GetWidth(),feuille->rectSelect[i].GetHeight()))=1;
+        }
+    (*imAcq).copyTo(imClipBoard,masque);
+}
+
+void FenetrePrincipale::CollerImage(wxCommandEvent& evt)
+{
+if (imClipBoard.empty())
+	{
+	wxMessageBox("Clipboard is empty", "Clipboard is empty", wxOK );
+	return;
+	}
+		FenetrePrincipale *f = new FenetrePrincipale(NULL, "wxOpenCV",
+		wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
+		wxString s;
+		s.Printf("%d : %s( %d) of image %d ",osgApp->NbFenetre(),_("Copy of "),IdFenetre());
+		f->SetTitle(s);
+		f->DefOSGApp(osgApp);
+        ImageInfoCV	*im = new ImageInfoCV;
+        imClipBoard.copyTo(*im);
+		f->AssosierImage(im);
+		osgApp->InitFenAssociee(f);
+		f->InitIHM();
+}
+
+void FenetrePrincipale::CollerImageCadrer(wxCommandEvent& evt)
+{
+    if (imClipBoard.empty())
+	    {
+	    wxMessageBox("Clipboard is empty", "Clipboard is empty", wxOK );
+	    return;
+	    }
+    cv::Mat masque = cv::Mat::zeros(imAcq->size(),CV_8UC1);
+    for (int i = 0; i < NB_MAX_RECTANGLE;i++)
+        if (feuille->rectDsMasque[i] )
+        {
+            masque(cv::Rect(feuille->rectSelect[i].x,feuille->rectSelect[i].y,feuille->rectSelect[i].GetWidth(),feuille->rectSelect[i].GetHeight()))=1;
+        }
+    (*imAcq).copyTo(imClipBoard,masque);
+    int xMin=imAcq->cols,yMin=imAcq->rows;
+    int xMax=0,yMax=0;
+    for (int i = 0; i < NB_MAX_RECTANGLE;i++)
+        if (feuille->rectDsMasque[i] )
+        {
+            if (xMin>feuille->rectSelect[i].GetTopLeft().x)
+                xMin = feuille->rectSelect[i].GetTopLeft().x;
+            if (yMin>feuille->rectSelect[i].GetTopLeft().y)
+                yMin = feuille->rectSelect[i].GetTopLeft().y;
+            if (xMax<feuille->rectSelect[i].GetRightBottom().x)
+                xMax = feuille->rectSelect[i].GetRightBottom().x;
+            if (yMax<feuille->rectSelect[i].GetLeftBottom().y)
+                yMax = feuille->rectSelect[i].GetLeftBottom().y;
+        }
+    imClipBoard(cv::Rect(xMin,yMin,xMax-xMin+1,yMax-yMin+1)).copyTo(imClipBoard);
+
+	FenetrePrincipale *f = new FenetrePrincipale(NULL, "wxOpenCV",
+	wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
+	wxString s;
+	s.Printf("%d : %s( %d) of image %d ",osgApp->NbFenetre(),_("Copy of "),IdFenetre());
+	f->SetTitle(s);
+	f->DefOSGApp(osgApp);
+    ImageInfoCV	*im = new ImageInfoCV;
+    imClipBoard.copyTo(*im);
+	f->AssosierImage(im);
+	osgApp->InitFenAssociee(f);
+	f->InitIHM();
+}
+
+void FenetrePrincipale::Coller(wxCommandEvent& evt)
+{
+if (imAcq==NULL)
+	{
+	wxMessageBox(_T("Error CreerRapport"), _T("Document is empty"), wxOK );
+	return;
+	}
+}
+
+void FenetrePrincipale::EffacerSelect(wxCommandEvent& evt)
+{
+if (imAcq==NULL)
+	{
+	wxMessageBox(_T("Error CreerRapport"), _T("Document is empty"), wxOK );
+	return;
+	}
+}

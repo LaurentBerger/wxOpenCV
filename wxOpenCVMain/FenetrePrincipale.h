@@ -79,9 +79,6 @@ wxOsgApp			*osgApp;		/*!< lien sur l'application */
 wxBitmap            mBuffer;       /*!< Double buffering */
 void				*f3D;			/*!< lien sur la fenetre 3D représentant l'image */
 int					facteurZoom;	/*!< zoom=2^facteurZoom*/
-wxRect				rectSelect[NB_MAX_RECTANGLE]; /*!< zone rectangulaire sélectionnée*/
-bool                rectDsMasque[NB_MAX_RECTANGLE]; /*!< Rectangle i dans le masque */
-wxRect				rectCoupe[NB_MAX_RECTANGLE]; /*!< diagonale d'un rectangle associée à une coupe*/
 bool				modeRect;	/*!< Sélection des rectangles actives */
 bool				modeCoupe; /*!< Sélection des coupes actives */
 int					indRect; /*!< Indice du rectangle actif */
@@ -89,6 +86,10 @@ int					indCoupe; /*!< Indice de la coupe active */
 wxBitmap			*bitmapAffiche;/*!< bitmap de l'image */
 char				modeComplexe;/*!< Type d'affichage pour une image complexe */
 bool                pointCtrl;  /*!< Point de controle de l'alogo affichée sur l'image*/
+public:
+wxRect				rectSelect[NB_MAX_RECTANGLE]; /*!< zone rectangulaire sélectionnée*/
+bool                rectDsMasque[NB_MAX_RECTANGLE]; /*!< Rectangle i dans le masque */
+wxRect				rectCoupe[NB_MAX_RECTANGLE]; /*!< diagonale d'un rectangle associée à une coupe*/
 
 wxList          m_displayList; // A list of DragShapes
 int             m_dragMode;
@@ -440,6 +441,7 @@ double				**poly;				/*!< Coefficient de la quadrique pour la correction du fond
 
 ImageInfoCV			*imAcq;				/*!< Dernière image calculée incluant les corrections */
 ImageInfoCV			*imGain;			/*!< Image (type CV_32F)du gain appliqué pour chaque pixel.*/
+cv::Mat             imClipBoard;        /*! clipbaord image */
 cv::VideoWriter     video;
 #ifdef __OBSOLETE__
 ImageInfoCV			*nivBiais;			/*!< image du niveau zéro*/
@@ -660,6 +662,11 @@ bool TracerBonCoin(){return	tracerBonCoin;};		/*!< 1 Tracer des coins fort de l'
 bool TracerFlotOptique(){ return	tracerFlotOptique; };		/*!< 1 Tracer des coins fort de l'image */
 bool TracerRegionMvt(){ return	tracerRegionMvt; };		/*!< 1 Tracer des coins fort de l'image */
 bool TracerAppaiementPoint(){return tracerAppariementPoint;};
+void CopierSelect(wxCommandEvent& event);
+void CollerImage(wxCommandEvent& event);
+void CollerImageCadrer(wxCommandEvent& event);
+void Coller(wxCommandEvent& event);
+void EffacerSelect(wxCommandEvent& event);
 void CreerRapport(wxCommandEvent& event);
     /*!
      *  \brief CreerRapport
@@ -1191,6 +1198,11 @@ enum
     OUVRIR_FICHIER =1,
     ENREGISTRER_FICHIER,
     ENREGISTRERSOUS_FICHIER,
+    COLLER,
+    COLLER_IMAGE,
+    COLLER_IMAGE_CADRER,
+    COPIER_SELECT,
+    EFFACER_SELECT,
 	CREER_RAPPORT,
     OUVRIR_FICHIER_HORODATAGE,
     QUITTER_ ,
