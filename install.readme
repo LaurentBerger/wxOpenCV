@@ -9,14 +9,14 @@ PLPLOT_DRV_DIR=C:\Program Files\plplot\lib\plplot5.10.0\driversd
 PLPLOT_HOME=C:\Program Files\plplot
 PLPLOT_INCLUDE=C:\Program Files\plplot\include
 PLPLOT_LIB=C:\Program Files\plplot\lib
-PLPLOT_SRC=F:\Lib\plplot-5.9.10
-wxDir=F:\Lib\wxWidgets-3.0.2
-wxWin=F:\Lib\wxWidgets-3.0.2
+PLPLOT_SRC=F:\Lib\plplot-5.9.11
+wxDir=F:\Lib\wxWidgets-3.1.0
+wxWin=F:\Lib\wxWidgets-3.1.0
 
 la variable système plplot_home doit pointer sur c:\program files \plplot
 la variable système libreofficesdk  doit pointer sur D:/lib/LibreOffice_4.3_SDK/sdk/include
 
-construire le projet de opencv avec cmake( avec opencv <3.0 cmake flag -D WITH_IPP=OFF http://answers.opencv.org/question/40425/opencv-build-fails-because-i-cannot-download-icv-on-our-build-farm/)
+construire le projet de opencv avec cmake( avec opencv >3.1 cmake flag -D WITH_IPP=OFF http://answers.opencv.org/question/40425/opencv-build-fails-because-i-cannot-download-icv-on-our-build-farm/)
 construire le projet de plplot avec cmake
 
 1 compiler OpenCV 
