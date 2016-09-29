@@ -843,7 +843,7 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.Append(ENREGISTRER_FICHIER, _T("Save"));
 	menu.Append(ENREGISTRERSOUS_FICHIER, _T("Save As"));
 	menu.Append(COPIER_SELECT, _T("Copy selection"));
-	menu.Append(COLLER_IMAGE_CADRER, _T("crop and Copy selection"));
+	menu.Append(COLLER_IMAGE_CADRER, _T("crop and paste:selection"));
 	menu.Append(COLLER, _T("paste"));
 	menu.Append(COLLER_IMAGE, _T("paste as new image"));
 	menu.Append(EFFACER_SELECT, _T("clear select"));
