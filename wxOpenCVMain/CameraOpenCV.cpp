@@ -697,31 +697,33 @@ if (captureVideo->isOpened())
                 wxMilliSleep(50);
 			if (parent)
 			{
-				EvtPointSuivis *x= new EvtPointSuivis(VAL_EVT_PTS_SUIVIS);
-				x->ptId=repereIni;
-				x->ptApp=repere;
-				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
-				x->indEvt=indEvt++;
 				//wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
 				if (!parent)
 					break;
 				bool attendre=true;
 				int nbBoucle=0;
-				while(attendre && nbBoucle<10)
+				while(attendre && nbBoucle<100)
 				{
-					{
 					if (!parent)
 						break;
-					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
-					if (((FenetrePrincipale*)parent)->IndEvtCam()+1==indEvt || nbBoucle==9)
-						{
-						wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
-						attendre=false;
-						}
+                    {
+                        wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+					    if (indEvt==0 || ((FenetrePrincipale*)parent)->IndEvtCam()==indEvt-1 /*|| nbBoucle==99*/)
+						    {
+                            EvtPointSuivis *x = new EvtPointSuivis(VAL_EVT_PTS_SUIVIS);
+                            x->ptId = repereIni;
+                            x->ptApp = repere;
+                            x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
+                            x->indEvt = indEvt;
+                            indEvt++;
+                            wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
+						    attendre=false;
+						    }
 					}
 					nbBoucle++;
-					this->Sleep(1);
+					if (attendre)this->Sleep(1);
 				}
+                
 			}
 			else
 				break;
@@ -870,7 +872,9 @@ if (cam && (cam->IsRunning() || cam->IsPaused()))
 		
 		osgApp->CtrlCamera()->DrawOngletStatus();
 		}
-	}
+    long dt= wxGetUTCTimeMillis().GetLo()-x;
+    dt=dt+1;
+    }
 return;
 }
 
