@@ -604,16 +604,16 @@ return ; // Le pointeur imTab n'est pas libéré
 }
 
 
-vector<ImageInfoCV*> wxOsgApp::ExecuterOperation(ParametreOperation *pOCVNouveau)
-{
- vector<ImageInfoCV*>	r;
+vector<ImageInfoCV*> wxOsgApp::ExecuterOperation(ParametreOperation *pOCVNouveau, bool noEvt)
+{vector<ImageInfoCV*>	r;
+ /*
        thread *thOperation= new thread(::ExecuterOperation,this,pOCVNouveau);
 
     thOperation->detach();
     	DefPointeurSouris(0,0);
 
 
-    return r;
+    return r;*/
 
     ParametreOperation *pAct;
 
@@ -629,10 +629,14 @@ if (pAct->operateur)
 
 		r =((*pAct->op[0]).*pAct->operateur)(pAct->op,pAct);
 
-		EvtCalculFini *x= new EvtCalculFini(VAL_EVT_CALCUL_FINI);
-		x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
-        x->r=r;
-		wxQueueEvent(this, x);
+        if (!noEvt)
+        {
+            EvtCalculFini *x= new EvtCalculFini(VAL_EVT_CALCUL_FINI);
+		    x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
+            x->r=r;
+		    wxQueueEvent(this, x);
+
+        }
 
 
 		}

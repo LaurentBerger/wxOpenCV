@@ -167,9 +167,9 @@ delete segmvt;
 
 }
 
-void ImageInfoCV::MajMasque(bool actif, cv::Rect r)
+void ImageInfoCV::MajMasque(bool actif, cv::Rect r,int ind)
 {
-    if (!actif &&r.area() == 0)
+    if (!actif && r.area() == 0)
     {
         masqueMat = cv::Mat();
         masqueOperateur = UMat();
@@ -185,7 +185,7 @@ void ImageInfoCV::MajMasque(bool actif, cv::Rect r)
             {
 
                 if (actif)
-                    *d = 255;
+                    *d = ind;
                 else
                     *d = 0;
             }
@@ -195,6 +195,25 @@ void ImageInfoCV::MajMasque(bool actif, cv::Rect r)
     
     }
 
+void ImageInfoCV::MajMasque(bool actif, cv::Point p, int ind)
+{
+    if (!actif)
+    {
+        masqueMat = cv::Mat();
+        masqueOperateur = UMat();
+    }
+    else
+    {
+        if (masqueMat.rows == 0)
+            masqueMat = cv::Mat::zeros(rows, cols, CV_8UC1);
+            if (actif)
+                masqueMat.at<uchar>(p)=ind;
+            else
+                masqueMat.at<uchar>(p) = 0;
+        masqueMat.copyTo(masqueOperateur);
+    }
+
+}
 
 
 void ImageInfoCV::CloneStat(ImageInfoCV *im)

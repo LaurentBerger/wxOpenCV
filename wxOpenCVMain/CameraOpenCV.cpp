@@ -1,6 +1,7 @@
 #include "ImageInfo.h"
 #include "CameraOpenCV.h"
 #include "EvenementCamera.h"
+#include "i3ThermalSystem.hpp"
 #include "VideoCourbe.h"
 //#include <fstream>
 #include <wx/time.h> 
@@ -25,10 +26,20 @@ EvtPointSuivis::EvtPointSuivis(wxEventType commandType , int id):wxCommandEvent(
 
 int CameraOpenCV::PositionVideo(int pos )
 {
-	double x = captureVideo->get(CAP_PROP_FRAME_COUNT);
-	if (pos>=0 && pos<static_cast<int>(x))
-        captureVideo->set(CAP_PROP_POS_FRAMES,static_cast<double>(pos));
-    return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+    if (parent)
+    {
+        //wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+	    if (pos>=0 && pos<nbImageVideo)
+            captureVideo->set(CAP_PROP_POS_FRAMES,static_cast<double>(pos));
+        return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+    }
+    else
+    {
+        double x = captureVideo->get(CAP_PROP_FRAME_COUNT);
+        if (pos >= 0 && pos<nbImageVideo)
+            captureVideo->set(CAP_PROP_POS_FRAMES, static_cast<double>(pos));
+        return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+    }
 };
 
 int CameraOpenCV::PositionDebutVideo()
@@ -39,14 +50,35 @@ int CameraOpenCV::PositionDebutVideo()
 
 int CameraOpenCV::PositionFinVideo()
 {
-    double x=captureVideo->get(CAP_PROP_FRAME_COUNT);
-    captureVideo->set(CAP_PROP_POS_FRAMES,x-2);
-    return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+
+    if (parent)
+    {
+        //wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+
+        captureVideo->set(CAP_PROP_POS_FRAMES,nbImageVideo-2);
+        return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+    }
+    else
+    {
+
+        captureVideo->set(CAP_PROP_POS_FRAMES, nbImageVideo - 2);
+        return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+    }
+
 };
 
 int CameraOpenCV::NbImageVideo()
 {
-    double x=captureVideo->get(CAP_PROP_FRAME_COUNT);
+    if (parent)
+    {
+        //wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+        double x=captureVideo->get(CAP_PROP_FRAME_COUNT);
+        nbImageVideo=x;
+        return static_cast<int>(x);
+    }
+
+    double x = captureVideo->get(CAP_PROP_FRAME_COUNT);
+    nbImageVideo=x;
     return static_cast<int>(x);
 };
 
@@ -112,8 +144,16 @@ if (nomFlux!=wxEmptyString)
 		captureVideo = new cv::VideoCapture(indFlux); 
 		indId=indFlux;
 		}
-	else
-		{
+	else if (nomFlux.SubString(0,4)=="pipe:")
+    {
+        captureVideo = new I3ThermalSystem("\\\\.\\pipe\\thermalExpert");
+        indId = -1;
+        fluxVideo = true;
+        nomFluxVideo = nomFlux;
+    }
+    else
+
+	{
 		
 		captureVideo = new cv::VideoCapture(); 
 //		captureVideo->set(CAP_PROP_FOURCC,'MJPG');
@@ -122,7 +162,9 @@ if (nomFlux!=wxEmptyString)
         modeAcqContinu=0;
 		//captureVideo = new cv::VideoCapture(nomFlux.ToStdString()); 
 		indId=-1;
-		}
+        fluxVideo = true;
+        nomFluxVideo= nomFlux;
+	}
     double x = captureVideo->get(CAP_PROP_FOURCC);
     int fourcc = captureVideo->get(CAP_PROP_FOURCC);
     string fourcc_str = format("%c%c%c%c", fourcc & 255, (fourcc >> 8) & 255, (fourcc >> 16) & 255, (fourcc >> 24) & 255);
@@ -147,7 +189,7 @@ else
 
 if(captureVideo->isOpened())  // check if we succeeded
 	{
-	cv::UMat frame;
+	cv::Mat frame;
 	if( indId==-1)
 		fluxOuvert=true;
 /*	for (int i=15;i<NB_TAILLE_VIDEO;i++)
@@ -501,12 +543,12 @@ if (captureVideo->isOpened())
 	bool	frameDejaCopie=false;
 	for(;true;)
 	{
-        int x= PositionVideo();
+//        int x= PositionVideo();
 		if (!acqArretee &&  captureVideo->grab()) // get a new frame from camera
 		{
 			captureVideo->retrieve(frame);
             frameDate = getTickCount()/getTickFrequency();
-            x = PositionVideo();
+//            x = PositionVideo();
             if (!modeAcqContinu)
                 acqArretee=1;
 			if (modeMoyenne)	// Filtrage Butterworth
@@ -685,8 +727,9 @@ if (captureVideo->isOpened())
 						    chgtTaille=false;
 					    }
 					    //frame.copyTo((*((UMat *)imAcq))); // get a new frame from camera
-                        frame.copyTo(frameBuffer);
-					    swap(frameBuffer, (*((UMat *)imAcq)));
+                        Mat x=imAcq->getMat(ACCESS_WRITE);
+                        frame.copyTo(x);
+					    //swap(frameBuffer, (*((UMat *)imAcq)));
 					}
                     frameDejaCopie=false;
 
@@ -697,31 +740,33 @@ if (captureVideo->isOpened())
                 wxMilliSleep(50);
 			if (parent)
 			{
-				EvtPointSuivis *x= new EvtPointSuivis(VAL_EVT_PTS_SUIVIS);
-				x->ptId=repereIni;
-				x->ptApp=repere;
-				x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
-				x->indEvt=indEvt++;
 				//wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
 				if (!parent)
 					break;
 				bool attendre=true;
 				int nbBoucle=0;
-				while(attendre && nbBoucle<10)
+				while(attendre && nbBoucle<100)
 				{
-					{
 					if (!parent)
 						break;
-					wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
-					if (((FenetrePrincipale*)parent)->IndEvtCam()+1==indEvt || nbBoucle==9)
-						{
-						wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
-						attendre=false;
-						}
+                    {
+                        wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+					    if (indEvt==0 || ((FenetrePrincipale*)parent)->IndEvtCam()==indEvt-1 /*|| nbBoucle==99*/)
+						    {
+                            EvtPointSuivis *x = new EvtPointSuivis(VAL_EVT_PTS_SUIVIS);
+                            x->ptId = repereIni;
+                            x->ptApp = repere;
+                            x->SetTimestamp(wxGetUTCTimeMillis().GetLo());
+                            x->indEvt = indEvt;
+                            indEvt++;
+                            wxQueueEvent( ((FenetrePrincipale*)parent)->GetEventHandler(), x);
+						    attendre=false;
+						    }
 					}
 					nbBoucle++;
-					this->Sleep(1);
+					if (attendre)this->Sleep(1);
 				}
+                
 			}
 			else
 				break;
@@ -870,7 +915,9 @@ if (cam && (cam->IsRunning() || cam->IsPaused()))
 		
 		osgApp->CtrlCamera()->DrawOngletStatus();
 		}
-	}
+    long dt= wxGetUTCTimeMillis().GetLo()-x;
+    dt=dt+1;
+    }
 return;
 }
 

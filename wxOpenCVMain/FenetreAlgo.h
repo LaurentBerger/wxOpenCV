@@ -43,6 +43,8 @@ FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
         /*!< destructeur de la fenetre parametrage */
 wxWindow *CreerOngletEtape(wxNotebook *,int);
         /*!< Création d'un onglet pour une étape */
+void FenetreAlgo::MAJOngletEtape(int indOp);
+/*!< Mise à jour de l'onglet après l'opération */
 // Gestion des évènements
 void OnActivate(wxActivateEvent& event);
 		/*!< Gestion pour maj palette */

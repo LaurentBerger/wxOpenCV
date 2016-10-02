@@ -24,6 +24,7 @@ m_dragImage=NULL;
 SetBackgroundStyle(wxBG_STYLE_PAINT);
 modeRect=false;
 modeCoupe=false;
+modeMasque=false;
 pointCtrl=false;
 facteurZoom=-1;
 osgApp=NULL;
@@ -51,7 +52,8 @@ Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::ModeComplexe,this,M_MODULE_,PHASE_R
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR8,ZOOM8SUR1);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SequenceOperation,this,SEQ_OPE);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::RazSeqOp, this, STOP_SEQ);
-Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::MenuMasque, this, RECT_DS_MASQUE, RECT_DS_MASQUE + NB_MAX_RECTANGLE);
+Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::MenuRectMasque, this, RECT_DS_MASQUE, RECT_DS_MASQUE + NB_MAX_RECTANGLE);
+Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::MenuMasque, this, Mode_Masque);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::PointCtrl, this,MENU_PTCTRL);
 
 
@@ -88,8 +90,15 @@ void ZoneImage::PointCtrl(wxCommandEvent& event)
     pointCtrl=!pointCtrl;
 }
 
-
 void ZoneImage::MenuMasque(wxCommandEvent& event)
+{
+    modeMasque = !modeMasque;
+    f->NouvelleImage();
+    f->MAJNouvelleImage();
+}
+
+
+void ZoneImage::MenuRectMasque(wxCommandEvent& event)
 {
     int ind = event.GetId() - RECT_DS_MASQUE;
     
@@ -265,7 +274,14 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 		break;
 		}
 	 }
-if (event.ShiftDown())
+if (event.ControlDown() && event.LeftIsDown() && f->ImAcq() && point.x >= 0 && point.x<f->ImAcq()->cols && point.y >= 0 && point.y<f->ImAcq()->rows)
+{
+    bool tmp= modeRect;
+    modeRect=true;
+    f->ImAcq()->MajMasque(true, cv::Rect(point.x, point.y,4,4),IndiceRectangleSelec());
+    modeRect = tmp;
+}
+    if (event.ShiftDown())
 	{
 	ImageInfoCV *t=NULL;
 	switch(f->ModeImage()){
@@ -423,13 +439,13 @@ if (shape)
     PosDebutGlisser(ptImg);
 //    Unbind(wxEVT_LEFT_UP, &ZoneImage::OnLeftButtonUp,this);
 }
-if (event.ShiftDown()&&f->ImAcq() && point.x>=0 && point.x<f->ImAcq()->cols && point.y>=0 && point.y<f->ImAcq()->rows )
-	{
-/*	ShapedFrame *shapedFrame = new ShapedFrame(f,point);
-	shapedFrame->Show(true);
-	PointFrame *pointFrame = new PointFrame(f,point);
-	pointFrame->Show(true);*/
-	}
+if (event.ShiftDown() && f->ImAcq() && point.x >= 0 && point.x<f->ImAcq()->cols && point.y >= 0 && point.y<f->ImAcq()->rows)
+{
+    ShapedFrame *shapedFrame = new ShapedFrame(f, point);
+    shapedFrame->Show(true);
+    PointFrame *pointFrame = new PointFrame(f, point);
+    pointFrame->Show(true);
+}
 
 if (osgApp->ModeSouris()==SELECTION_EN_COURS)
 	{
@@ -678,6 +694,7 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	menu.Append(Menu_Popup_Zoom, _T("&Zoom"), CreateMenuZoom(NULL));
 	menu.AppendCheckItem(Menu_Rectangle, _T("Stat Rectangle"));
     menu.AppendCheckItem(Menu_Coupe, _T("Section"));
+    menu.AppendCheckItem(Mode_Masque, _T("Masque"));
     menu.Append(Menu_Masque, _T("Mask"),CreateMenuMasque(NULL));
     bool menuParametre = false;
 	if (f->ImAcq()->PtContoursPoly()->size()!=0)
@@ -853,8 +870,8 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 		menu.Check(Menu_Rectangle, true);
 	if (ModeCoupe())
 		menu.Check(Menu_Coupe, true);
-/*	if (f->mmodeFiltre)
-		menu.Check(Menu_FilMax, true);*/
+	if (modeMasque)
+		menu.Check(Mode_Masque, true);
 	}
 else
 	{

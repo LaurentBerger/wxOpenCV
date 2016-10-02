@@ -41,6 +41,8 @@ ControleCamera(wxFrame *frame, const wxString& title, const wxPoint& pos,
         const wxSize& size, long style = wxDEFAULT_FRAME_STYLE);
         /*!< Constructeur de la fenetre parametrage */
 // Gestion des évènements
+void ControleCamera::AllerA(wxCommandEvent& event);
+        /*!< Positonnement dans la vidéo */
 void OnSlider(wxScrollEvent &w);
 		/*!< Gestion des glissieres */
 void OnSpinUp(wxScrollEvent &w);
@@ -103,6 +105,7 @@ void OuvertureOngletMoyenne();
 void OuvertureOngletEMCCD();
 
 void	DrawOngletStatus();
+void    DefPositionGlissiere();
 
 CameraVirtuelle	*Camera(){return cam;};
 void	DefCamera(CameraVirtuelle *c);

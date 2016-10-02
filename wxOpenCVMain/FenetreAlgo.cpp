@@ -440,9 +440,10 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
     spw->SetDigits(5);
 	if (itp->second.res)
 		spw->Disable();
-	spw->SetRange(itp->second.mini.x, itp->second.maxi.y);
+	spw->SetRange(itp->second.mini.x, itp->second.maxi.x);
 	spw->SetIncrement((double)itp->second.pas.x);
-	p += wxPoint(s.GetX(), 0);
+    spw->SetValue(itp->second.valeur.x);
+    p += wxPoint(s.GetX(), 0);
 	nbParam++;
 	new wxStaticText(page, indOriCtrl + 2 * nbParam, itp->first + " y", p, s);
 	p += wxPoint(s.GetX(), 0);
@@ -454,6 +455,7 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
 		sph->Disable();
 	sph->SetRange(itp->second.mini.y, itp->second.maxi.y);
 	sph->SetIncrement((double)itp->second.pas.y);
+    sph->SetValue(itp->second.valeur.y);
     if (fenMere && itp->second.mouseScan)
     {
         spinSouris.push_back(make_pair(spw,sph));
@@ -473,6 +475,61 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
 }
 //page->SetClientSize(tailleMax+wxSize(20,40));
 return page;
+}
+
+void FenetreAlgo::MAJOngletEtape(int indOp)
+{
+    // nbParamMax  nombre d'article maximum par onglet
+    wxWindow *page = new wxWindow(classeur, -1);
+    ParametreOperation *pOCV = listeOp[indOp].first;
+    std::map<std::string, DomaineParametreOp<cv::Size> >::iterator its;
+    int nbParam = 1;
+    int indOriCtrl = 1 + indOp*nbParamMax;// Dépend de l'indice de l'opérateur pour éviter le recouvrement des onglets 
+    for (its = pOCV->sizeParam.begin(); its != pOCV->sizeParam.end(); its++)
+    {
+        wxSpinCtrlDouble *spw = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
+        spw->SetValue(its->second.valeur.width);
+        nbParam++;
+        
+        spw = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
+        spw->SetValue(its->second.valeur.height);
+
+        nbParam++;
+    }
+    std::map<std::string, DomaineParametreOp<int> >::iterator iti;
+    for (iti = pOCV->intParam.begin(); iti != pOCV->intParam.end(); iti++)
+    {
+        if (ParametreOperation::listeParam.find(iti->first) != ParametreOperation::listeParam.end())
+        {
+
+        }
+        else
+        {
+            wxSpinCtrlDouble *sp = (wxSpinCtrlDouble *)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
+            sp->SetValue(iti->second.valeur);
+        }
+        nbParam++;
+    }
+    std::map<std::string, DomaineParametreOp<double> >::iterator itd;
+    for (itd = pOCV->doubleParam.begin(); itd != pOCV->doubleParam.end(); itd++)
+    {
+        wxSpinCtrlDouble *sp = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this); 
+        sp->SetValue(itd->second.valeur);
+        nbParam++;
+    }
+    std::map<std::string, DomaineParametreOp<cv::Point> >::iterator itp;
+    int indCouleur = 0;
+    for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
+    {
+
+        wxSpinCtrlDouble *spw = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
+        spw->SetValue(itp->second.valeur.x);
+        nbParam++;
+        wxSpinCtrlDouble *sph = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
+        sph->SetValue(itp->second.valeur.y);
+        nbParam++;
+    }
+    return ;
 }
 
 
@@ -776,6 +833,7 @@ for (int ii=indEtape;ii<nbEtape;ii++)
         app->DefOperande2(NULL,indFen2);
 //	r=app->ExecuterOperation(pOCV);
 	r=pOCV->ExecuterOperation();
+    MAJOngletEtape(ii);
     listeOp[i].first->indEtape = ii;
 	if (r.size()!=0)
 		{

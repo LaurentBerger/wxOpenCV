@@ -51,6 +51,11 @@ typedef void (wxEvtHandler::*EvtPointSuivisFonction)(EvtPointSuivis&);
    */
 
 class CameraVirtuelle : public wxThread{
+protected :
+bool fluxVideo;
+std::string nomFluxVideo;
+int nbImageVideo;
+
 public:
 std::vector <ParametreOperation> seqOp;
 bool		seqActualisee;/*<!Vrai lorsque les paramètres de la séquence sont modifiés*/
@@ -105,14 +110,17 @@ wxImage				*image;			/*!< Image contenant la vidéo*/
 
 public :
 CameraVirtuelle(void): wxThread(wxTHREAD_DETACHED){testDriver=0;drapeauErreur=0;reglageTaille=false;reglageTpsExpo=false;
-reglageGain=false;reglageContraste=false;reglageLuminosite=false;reglageSaturation=false;modeMoyenne=false;};
+reglageGain=false;reglageContraste=false;reglageLuminosite=false;reglageSaturation=false;modeMoyenne=false;
+fluxVideo=false;nomFluxVideo=""; nbImageVideo=-1;
+};
 
 void AjouteMsgErreur(char *msg){chaineErreur+=msg;drapeauErreur+=1;};
 void AjouteMsgErreur(char *msg,unsigned int x){chaineErreur+=msg;drapeauErreur+=1;};
 
 virtual wxSize* LitTailleCapteur(){return tailleCapteur;};
 virtual bool*	LitTailleAutorisee(){return tailleAutorisee;};
-virtual bool Connectee(){return 0;};
+virtual bool Connectee() { return 0; };
+virtual bool FluxVideo() { return fluxVideo; };
 virtual	char TestDriver(void){return testDriver;};
 virtual int Acquisition(void){return 0;};
 virtual char* NomCamera(){return nomCamera;};

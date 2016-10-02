@@ -1,5 +1,6 @@
 #include "ParametreOperation.h"
 #include "opencv2/xphoto/inpainting.hpp"
+#include "opencv2/ximgproc.hpp"
 
 #include "ImageInfo.h"
 #include <map>
@@ -231,6 +232,8 @@ listeParam["normType"].insert(std::pair<string,int>(_("Hamming distance").ToStdS
 listeParam["normType"].insert(std::pair<string,int>(_("Hamming 2 distance").ToStdString(),cv::NORM_HAMMING2));
 listeParam["normType"].insert(std::pair<string,int>(_("auto").ToStdString(),-1));
 
+listeParam["algorithmSLIC"].insert(std::pair<string, int>(_("SLIC").ToStdString(), cv::ximgproc::SLIC));
+listeParam["algorithmSLIC"].insert(std::pair<string, int>(_("SLICO").ToStdString(), cv::ximgproc::SLICO));
 
 
 listeParam["connectivity"].insert(std::pair<string,int>(_("4-connex").ToStdString(),4));
@@ -592,7 +595,7 @@ if (s == "resize") // inclus la différence de deux images successives
 	nbOperande = 1;
 	doubleParam["fx"] = DomaineParametreOp<double>(0, 0, 10000, 1);
 	doubleParam["fy"] = DomaineParametreOp<double>(0, 0.0000, 10000,1);
-	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
+	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(0, 0), cv::Size(10000, 10000), cv::Size(1, 1));
 	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_NN, CV_INTER_LANCZOS4, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
@@ -868,11 +871,80 @@ if (s == "houghlinesp")
 	doubleParam["maxLineGap"]=DomaineParametreOp<double>(0.0,1,1000,1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
+if (s == "grabcut")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    intParam["iterCount"] = DomaineParametreOp<int>(1, 1, 1000, 1);
+    intParam["possibleForeground"] = DomaineParametreOp<int>(1, 0, 1, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "kmeans")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    intParam["iterCount"] = DomaineParametreOp<int>(1, 1, 1000, 1);
+    intParam["possibleForeground"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "SuperpixelSLC")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    intParam["iterCount"] = DomaineParametreOp<int>(1, 1, 1000, 1);
+    intParam["possibleForeground"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "SuperpixelSEEDS")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    intParam["num_superpixels"]=DomaineParametreOp<int>(400, 1, 100000, 1);
+    intParam["num_levels"] = DomaineParametreOp<int>(4, 1, 10000, 1);
+    intParam["prior"] = DomaineParametreOp<int>(2, 0, 5, 1);
+    intParam["num_histogram_bins"]= DomaineParametreOp<int>(5, 1, 256, 1);
+    intParam["double_step"]= DomaineParametreOp<int>(0, 0, 1, 1);
+
+
+    intParam["num_iterations"] = DomaineParametreOp<int>(4, 1, 1000, 1);
+
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "SuperpixelSLIC")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    intParam["algorithmSLIC"]= DomaineParametreOp<int>(cv::ximgproc::SLIC, cv::ximgproc::SLIC, cv::ximgproc::SLICO, cv::ximgproc::SLICO- cv::ximgproc::SLIC);
+    intParam["region_size"]= DomaineParametreOp<int>(50, 1, 1000, 1);
+    doubleParam["ruler"]= DomaineParametreOp<double>(10, 1, 1000, 1);
+    intParam["num_iterations"] = DomaineParametreOp<int>(3, 1, 1000, 1);
+    intParam["min_element_size"] = DomaineParametreOp<int>(50, 0, 100, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "calcbackproject")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    doubleParam["maxValue"] = DomaineParametreOp<double>(256, 2, 65536, 1);
+    doubleParam["minValue"] = DomaineParametreOp<double>(0, 0, 65536, 1);
+    intParam["bins"] = DomaineParametreOp<int>(64, 1, 65536, 1);;
+    intParam["firstPlan"]= DomaineParametreOp<int>(0, -1, 2, 1);
+    intParam["secondPlan"]= DomaineParametreOp<int>(-1, -1,2, 1);
+    intParam["thirdPlan"]= DomaineParametreOp<int>(-1, -1, 2, 1);
+
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "watershed")
-	{
-	nomOperation=s;
-	nbOperande= 1;
-	nbImageRes=1;
+{
+    nomOperation = s;
+    nbOperande = 1;
+    nbImageRes = 1;
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "split")
@@ -924,8 +996,8 @@ if (s == "bitwise-not")
 if (s == "convertto")
 	{
     intParam["matrix_type"] = DomaineParametreOp<int>(CV_32F, -1, CV_32F, 1);
-	doubleParam["alpha"]=DomaineParametreOp<double>(1,-1000,1000,0.1);
-	doubleParam["beta"]=DomaineParametreOp<double>(0,-10000,10000,1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(1,-100000,100000,1);
+	doubleParam["beta"]=DomaineParametreOp<double>(0, -100000,100000,1);
 	nomOperation = s;
 	nbOperande = 1;
 	nbImageRes = 1;
@@ -1104,7 +1176,7 @@ if (s == "paillou_x")
 	{
 	nbImageRes=1;
     nbOperande = 1;
-	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,10,0.1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,1000,0.1);
 	doubleParam["omega"]=DomaineParametreOp<double>(0.25,0.0,1000,0.1);
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));
@@ -1113,7 +1185,7 @@ if (s == "paillou_y")
 	{
 	nbImageRes=1;
     nbOperande = 1;
-	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,10,0.1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,1000,0.1);
 	doubleParam["omega"]=DomaineParametreOp<double>(0.25,0.0,1000,0.1);
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));
@@ -1169,8 +1241,8 @@ if (s == "canny")
 	nbImageRes=1;
     nbOperande = 2;
     intParam["OTSU"]=DomaineParametreOp<int>(0,0,1 ,1);
-    doubleParam["threshold1"] = DomaineParametreOp<double>(50., 0.0, 255.0, 1.0);
-	doubleParam["threshold2"]=DomaineParametreOp<double>(100,0.0,255.0,1.0);
+    doubleParam["threshold1"] = DomaineParametreOp<double>(50., 0.0, 16384.0, 1.0);
+	doubleParam["threshold2"]=DomaineParametreOp<double>(100,0.0,16384.0,1.0);
 	intParam["aperture_size"]=DomaineParametreOp<int>((int)3,(int)1,(int)255,(int)2);
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));
@@ -1712,14 +1784,62 @@ if (s == "inpaint")
 	nomOperation = s;
 	operateur = &ImageInfoCV::Inpaint;
 }
-if (s=="watershed")
-	{
-	operateur = &ImageInfoCV::PartageEaux;
-	nbOperande= 1;
-	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#watershed";
-	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
-	return true;
-	}
+if (s == "grabcut")
+{
+    operateur = &ImageInfoCV::GrabCut;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/master/d7/d1b/group__imgproc__misc.html#ga909c1dda50efcbeaa3ce126be862b37f";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "kmeans")
+{
+    operateur = &ImageInfoCV::KMeans;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/trunk/d5/d38/group__core__cluster.html#ga9a34dc06c6ec9460e90860f15bcd2f88";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "SuperpixelSLC")
+{
+    operateur = &ImageInfoCV::SuperpixelLSC;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/trunk/d5/da0/classcv_1_1ximgproc_1_1SuperpixelLSC.html";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "SuperpixelSEEDS")
+{
+    operateur = &ImageInfoCV::SuperpixelSEEDS;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/trunk/df/d6c/group__ximgproc__superpixel.html#gabda19d839f775cbb527fffec133bc4ea";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "SuperpixelSLIC")
+{
+    operateur = &ImageInfoCV::SuperpixelSLIC;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/trunk/d3/da9/classcv_1_1ximgproc_1_1SuperpixelSLIC.html";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "calcbackproject")
+{
+    operateur = &ImageInfoCV::CalcBackProject;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/master/d7/d1b/group__imgproc__misc.html#ga909c1dda50efcbeaa3ce126be862b37f";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "watershed")
+{
+    operateur = &ImageInfoCV::PartageEaux;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#watershed";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
 if (s=="split")
 	{
 	operateur = &ImageInfoCV::SeparationPlan;

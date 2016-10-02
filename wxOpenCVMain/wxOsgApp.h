@@ -167,7 +167,7 @@ int NbOperande(){ return pOCV.nbOperande; };
 int NumSeqOpe(int *x=NULL){if (x!=NULL) numSeqOpe=*x;return numSeqOpe;};
 void AnnuleOp();
 std::map <int,std::vector <ParametreOperation > >  *TabSeqOperation(){return &tabOperation;}
-std::vector<ImageInfoCV*> ExecuterOperation(ParametreOperation * = NULL);
+std::vector<ImageInfoCV*> ExecuterOperation(ParametreOperation * = NULL, bool noEvt = false);
     /*!
      *  \brief Fonction ExecuterOperation
      *
