@@ -924,8 +924,8 @@ if (s == "bitwise-not")
 if (s == "convertto")
 	{
     intParam["matrix_type"] = DomaineParametreOp<int>(CV_32F, -1, CV_32F, 1);
-	doubleParam["alpha"]=DomaineParametreOp<double>(1,-1000,1000,0.1);
-	doubleParam["beta"]=DomaineParametreOp<double>(0,-10000,10000,1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(1,-100000,100000,1);
+	doubleParam["beta"]=DomaineParametreOp<double>(0, -100000,100000,1);
 	nomOperation = s;
 	nbOperande = 1;
 	nbImageRes = 1;
@@ -1104,7 +1104,7 @@ if (s == "paillou_x")
 	{
 	nbImageRes=1;
     nbOperande = 1;
-	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,10,0.1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,1000,0.1);
 	doubleParam["omega"]=DomaineParametreOp<double>(0.25,0.0,1000,0.1);
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));
@@ -1113,7 +1113,7 @@ if (s == "paillou_y")
 	{
 	nbImageRes=1;
     nbOperande = 1;
-	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,10,0.1);
+	doubleParam["alpha"]=DomaineParametreOp<double>(0.75,0.01,1000,0.1);
 	doubleParam["omega"]=DomaineParametreOp<double>(0.25,0.0,1000,0.1);
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));

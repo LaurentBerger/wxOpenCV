@@ -671,39 +671,41 @@ std::vector<ImageInfoCV *>ImageInfoCV::Canny(std::vector<ImageInfoCV *> op,Param
 ImageInfoCV	*im =new ImageInfoCV;
 double otsu=-1;
 
-if (op[0]->channels()==1)
-	{
-    if (pOCV->intParam["OTSU"].valeur==1)
-    {
-        otsu = threshold(*op[0], *im, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
-        pOCV->doubleParam["threshold1"].valeur = otsu;
-        pOCV->doubleParam["threshold1"].valeur = otsu/2;
-    }
-    if (op[1]->empty())
-	    cv::Canny(	*op[0], *im, pOCV->doubleParam["threshold1"].valeur,
-				pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
-	else
-        cv::Canny(	*op[0],*op[1], *im, pOCV->doubleParam["threshold1"].valeur,
-				pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
-	}
-else
-	{
-	std::vector<UMat> planCouleur;
-	std::vector<UMat> d(op[0]->channels());
-	cv::split( *op[0], planCouleur );
-	for (int i=0;i<op[0]->channels();i++)
-		{
-        if (pOCV->intParam["Otsu threshold"].valeur==1)
+{
+    if (op[0]->channels()==1)
+	    {
+        if (pOCV->intParam["OTSU"].valeur==1)
         {
-            otsu = threshold(planCouleur[i], d[i], 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+            otsu = threshold(*op[0], *im, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
             pOCV->doubleParam["threshold1"].valeur = otsu;
             pOCV->doubleParam["threshold1"].valeur = otsu/2;
         }
-		cv::Canny( planCouleur[i], d[i], pOCV->doubleParam["threshold1"].valeur,
-					pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
-		}
-	cv::merge(d, *im);
-	}
+        if (op[1]->empty())
+	        cv::Canny(	*op[0], *im, pOCV->doubleParam["threshold1"].valeur,
+				    pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
+	    else
+            cv::Canny(	*op[0],*op[1], *im, pOCV->doubleParam["threshold1"].valeur,
+				    pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
+	    }
+    else
+	    {
+	    std::vector<UMat> planCouleur;
+	    std::vector<UMat> d(op[0]->channels());
+	    cv::split( *op[0], planCouleur );
+	    for (int i=0;i<op[0]->channels();i++)
+		    {
+            if (pOCV->intParam["Otsu threshold"].valeur==1)
+            {
+                otsu = threshold(planCouleur[i], d[i], 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+                pOCV->doubleParam["threshold1"].valeur = otsu;
+                pOCV->doubleParam["threshold1"].valeur = otsu/2;
+            }
+		    cv::Canny( planCouleur[i], d[i], pOCV->doubleParam["threshold1"].valeur,
+					    pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
+		    }
+	    cv::merge(d, *im);
+	    }
+}
 
 std::vector<ImageInfoCV	*> r;
 r.push_back(im);
