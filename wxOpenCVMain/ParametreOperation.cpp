@@ -592,7 +592,7 @@ if (s == "resize") // inclus la différence de deux images successives
 	nbOperande = 1;
 	doubleParam["fx"] = DomaineParametreOp<double>(0, 0, 10000, 1);
 	doubleParam["fy"] = DomaineParametreOp<double>(0, 0.0000, 10000,1);
-	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
+	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(0, 0), cv::Size(10000, 10000), cv::Size(1, 1));
 	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_NN, CV_INTER_LANCZOS4, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }

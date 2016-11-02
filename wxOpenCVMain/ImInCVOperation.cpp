@@ -2317,7 +2317,10 @@ return r;
 std::vector<ImageInfoCV		*>ImageInfoCV::Dimension(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
 	ImageInfoCV *imDst = new ImageInfoCV();
-	cv::resize(*op[0], *imDst, pOCV->sizeParam["dsize"].valeur, pOCV->doubleParam["fx"].valeur, pOCV->doubleParam["fy"].valeur, pOCV->intParam["InterpolationFlags"].valeur);
+    if (pOCV->sizeParam["dsize"].valeur.area()==0 )
+        cv::resize(*op[0], *imDst, cv::Size(), pOCV->doubleParam["fx"].valeur, pOCV->doubleParam["fy"].valeur, pOCV->intParam["InterpolationFlags"].valeur);
+    else
+        cv::resize(*op[0], *imDst, pOCV->sizeParam["dsize"].valeur, pOCV->doubleParam["fx"].valeur, pOCV->doubleParam["fy"].valeur, pOCV->intParam["InterpolationFlags"].valeur);
 
 	std::vector<ImageInfoCV	*> r;
 	r.push_back(imDst);
