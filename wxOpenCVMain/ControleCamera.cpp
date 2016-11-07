@@ -37,6 +37,7 @@
 #define ID_ASC_CONTRAST 100
 #define ID_VAL_ASC_CONTRAST 200
 #define ID_TAILLE_VIDEO 300
+#define ID_BOUTON_MAGNETO 320
 
 BEGIN_EVENT_TABLE(ControleCamera, wxFrame)
     EVT_CLOSE(ControleCamera::OnClose)
@@ -51,6 +52,7 @@ BEGIN_EVENT_TABLE(ControleCamera, wxFrame)
     EVT_BUTTON(324, ControleCamera::Fin)
     EVT_BUTTON(325, ControleCamera::Suivante)
     EVT_BUTTON(326, ControleCamera::Precedente)
+    EVT_SLIDER(327, ControleCamera::AllerA)
     EVT_BUTTON(ID_DEB_ESTIM_GAIN, ControleCamera::EstimationGain)
     EVT_BUTTON(ID_FIN_ESTIM_GAIN, ControleCamera::EstimationGain)
 	EVT_CHECKBOX(211,ControleCamera::ModeMoyenne)
@@ -218,6 +220,13 @@ if (!cam)
 cam->DefModeGain(x);
 
 }
+
+void ControleCamera::AllerA(wxCommandEvent& event)
+{
+    DefPositionGlissiere();
+}
+
+
 
 void ControleCamera::OnSlider(wxScrollEvent &w)
 {
@@ -704,7 +713,27 @@ else
 	((wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+4,ongletTemporels))->Disable();
 	((wxTextCtrl*)wxWindow::FindWindowById(ID_VAL_ASC_CONTRAST+4,ongletTemporels))->Disable();
 	}
+if (c->FluxVideo())
+    DefPositionGlissiere();
 };
+
+void ControleCamera::DefPositionGlissiere()
+{
+    if (cam && cam->FluxVideo())
+    {
+        wxSlider *w = ((wxSlider*)wxWindow::FindWindowById(ID_BOUTON_MAGNETO + 7, ongletMagneto));
+        if (w)
+        {
+            w->SetMin(0);
+            w->SetMax(cam->NbImageVideo() - 1);
+            w->SetValue(cam->PositionVideo());
+            w->Enable();
+        }
+
+
+    }
+
+}
 
 
 void ControleCamera::DrawOngletStatus()
@@ -1237,6 +1266,7 @@ if (cam)
 {
     int x= cam->PositionVideo(0);
     cam->ModeAcqContinu(0);
+    DefPositionGlissiere();
 }
 }
 
@@ -1254,6 +1284,7 @@ if (cam)
     {
         cam->PositionVideo(cam->PositionVideo() );
 	    cam->ModeAcqContinu(0);
+        DefPositionGlissiere();
     }
 }
 }
@@ -1272,6 +1303,7 @@ if (cam)
     {
         cam->PositionVideo(cam->PositionVideo()-2);
         cam->ModeAcqContinu(0);
+        DefPositionGlissiere();
 
     }
 }
@@ -1289,6 +1321,7 @@ if (cam)
 {
     cam->PositionFinVideo();
     cam->ModeAcqContinu(0);
+    DefPositionGlissiere();
 }
 }
 
@@ -1297,30 +1330,34 @@ void ControleCamera::OuvertureOngletMagneto()
 {
 wxPoint	position[]={
 // Texte		Réglette
-    wxPoint(50,10),wxPoint(100,10),wxPoint(150,10),wxPoint(200,10),wxPoint(250,10),wxPoint(300,10),wxPoint(350,10)};
+    wxPoint(50,10),wxPoint(100,10),wxPoint(150,10),wxPoint(200,10),wxPoint(250,10),wxPoint(300,10),wxPoint(350,10),wxPoint(50,60) };
 wxSize	taille[]={
 // Texte		Réglette
-    wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50)};
+    wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(50,50),wxSize(350,50) };
 long style=wxSL_HORIZONTAL|wxSL_AUTOTICKS|wxSL_LABELS ;
 
 wxString	legende[]={_T("Play"),_T("record"),_T("pause")};
 ongletMagneto = new wxWindow(listeFenetreOnglet,-1);
 int i=0;
 
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Play),position[i], taille[i]);//start 204
+new wxBitmapButton(ongletMagneto, ID_BOUTON_MAGNETO +i,wxBitmap(::Play),position[i], taille[i]);//start 204
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Record),position[i], taille[i]);// reset 205
+new wxBitmapButton(ongletMagneto, ID_BOUTON_MAGNETO +i,wxBitmap(::Record),position[i], taille[i]);// reset 205
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Pause),position[i], taille[i]);// load 206
+new wxBitmapButton(ongletMagneto, ID_BOUTON_MAGNETO +i,wxBitmap(::Pause),position[i], taille[i]);// load 206
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Avance),position[i], taille[i]);// load 206
+new wxBitmapButton(ongletMagneto, ID_BOUTON_MAGNETO +i,wxBitmap(::RetourDebut),position[i], taille[i]);// load 206
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::AvanceFin),position[i], taille[i]);// load 206
+new wxBitmapButton(ongletMagneto, ID_BOUTON_MAGNETO +i,wxBitmap(::AvanceFin),position[i], taille[i]);// load 206
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::Retour),position[i], taille[i]);// load 206
+new wxBitmapButton(ongletMagneto, ID_BOUTON_MAGNETO +i,wxBitmap(::Avance),position[i], taille[i]);// load 206
 i++;
-new wxBitmapButton(ongletMagneto,320+i,wxBitmap(::RetourDebut),position[i], taille[i]);// load 206
+new wxBitmapButton(ongletMagneto, ID_BOUTON_MAGNETO + i, wxBitmap(::Retour), position[i], taille[i]);// load 206
 i++;
+wxSlider *w=new wxSlider(ongletMagneto, ID_BOUTON_MAGNETO + i, 0,0,1,position[i], taille[i]);// load 206
+w->Disable();
+i++;
+
 listeFenetreOnglet->AddPage(ongletMagneto, _T("Recorder"));
 ongletMagneto->Refresh();
 }

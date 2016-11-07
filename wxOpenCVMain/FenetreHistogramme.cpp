@@ -303,7 +303,8 @@ if (ligDeb<0  || colDeb<0 || nbLig<0 || nbCol<0)
 	return;
 	}
 UMat masque = UMat::zeros(imAcq->size(), CV_8U);  // type of mask is CV_8U
-masque(zoneTraitee) = 255;
+if (zoneTraitee.area()>0)
+    masque(zoneTraitee) = 255;
 
 int *nbCanaux={0}; 
 int hbins = 30, sbins = 32;

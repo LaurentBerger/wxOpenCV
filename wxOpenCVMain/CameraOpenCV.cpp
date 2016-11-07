@@ -25,10 +25,20 @@ EvtPointSuivis::EvtPointSuivis(wxEventType commandType , int id):wxCommandEvent(
 
 int CameraOpenCV::PositionVideo(int pos )
 {
-	double x = captureVideo->get(CAP_PROP_FRAME_COUNT);
-	if (pos>=0 && pos<static_cast<int>(x))
-        captureVideo->set(CAP_PROP_POS_FRAMES,static_cast<double>(pos));
-    return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+    if (parent)
+    {
+        //wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+	    if (pos>=0 && pos<nbImageVideo)
+            captureVideo->set(CAP_PROP_POS_FRAMES,static_cast<double>(pos));
+        return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+    }
+    else
+    {
+        double x = captureVideo->get(CAP_PROP_FRAME_COUNT);
+        if (pos >= 0 && pos<nbImageVideo)
+            captureVideo->set(CAP_PROP_POS_FRAMES, static_cast<double>(pos));
+        return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+    }
 };
 
 int CameraOpenCV::PositionDebutVideo()
@@ -39,14 +49,35 @@ int CameraOpenCV::PositionDebutVideo()
 
 int CameraOpenCV::PositionFinVideo()
 {
-    double x=captureVideo->get(CAP_PROP_FRAME_COUNT);
-    captureVideo->set(CAP_PROP_POS_FRAMES,x-2);
-    return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+
+    if (parent)
+    {
+        //wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+
+        captureVideo->set(CAP_PROP_POS_FRAMES,nbImageVideo-2);
+        return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+    }
+    else
+    {
+
+        captureVideo->set(CAP_PROP_POS_FRAMES, nbImageVideo - 2);
+        return static_cast<int>(captureVideo->get(CAP_PROP_POS_FRAMES));
+    }
+
 };
 
 int CameraOpenCV::NbImageVideo()
 {
-    double x=captureVideo->get(CAP_PROP_FRAME_COUNT);
+    if (parent)
+    {
+        //wxCriticalSectionLocker enter(((FenetrePrincipale*)parent)->travailCam);
+        double x=captureVideo->get(CAP_PROP_FRAME_COUNT);
+        nbImageVideo=x;
+        return static_cast<int>(x);
+    }
+
+    double x = captureVideo->get(CAP_PROP_FRAME_COUNT);
+    nbImageVideo=x;
     return static_cast<int>(x);
 };
 
@@ -122,6 +153,8 @@ if (nomFlux!=wxEmptyString)
         modeAcqContinu=0;
 		//captureVideo = new cv::VideoCapture(nomFlux.ToStdString()); 
 		indId=-1;
+        fluxVideo = true;
+        nomFluxVideo= nomFlux;
 		}
     double x = captureVideo->get(CAP_PROP_FOURCC);
     int fourcc = captureVideo->get(CAP_PROP_FOURCC);
@@ -501,12 +534,12 @@ if (captureVideo->isOpened())
 	bool	frameDejaCopie=false;
 	for(;true;)
 	{
-        int x= PositionVideo();
+//        int x= PositionVideo();
 		if (!acqArretee &&  captureVideo->grab()) // get a new frame from camera
 		{
 			captureVideo->retrieve(frame);
             frameDate = getTickCount()/getTickFrequency();
-            x = PositionVideo();
+//            x = PositionVideo();
             if (!modeAcqContinu)
                 acqArretee=1;
 			if (modeMoyenne)	// Filtrage Butterworth
