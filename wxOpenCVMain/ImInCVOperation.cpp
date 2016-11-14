@@ -680,7 +680,7 @@ double otsu=-1;
             pOCV->doubleParam["threshold1"].valeur = otsu;
             pOCV->doubleParam["threshold1"].valeur = otsu/2;
         }
-        if (op[1]->empty())
+        if (op.size()<=1 || op[1]->empty())
 	        cv::Canny(	*op[0], *im, pOCV->doubleParam["threshold1"].valeur,
 				    pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
 	    else

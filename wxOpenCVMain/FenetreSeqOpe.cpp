@@ -709,7 +709,11 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		pOCV.op[1]=app->Graphique(indFen2)->ImAcq();
 		}
 //	if (pOCV.intParam.find(
-	r=app->ExecuterOperation(&pOCV);
+    if (it+1 == sq->end())
+        r=app->ExecuterOperation(&pOCV,false);
+    else
+        r = app->ExecuterOperation(&pOCV);
+
 	}
 if (r.size()!=0)
 	{
