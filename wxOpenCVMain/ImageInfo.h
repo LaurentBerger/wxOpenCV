@@ -124,8 +124,8 @@ static int typeResultat;	 /*< Type du résultat -1, ou constante OpenCV  p256 ref
 ************************************************/
 std::vector<double > minIm;			/*< Minimimum pour chaque plan de l'image */
 std::vector<double > maxIm;			/*< Maximimum pour chaque plan de l'image */
-std::vector<cv::Point>	locMin;	/*< Position du miminmu pour chaque plan */
-std::vector<cv::Point>	locMax;	/*< Position du miminmu pour chaque plan */
+std::vector<cv::Point>	locMin;	/*< Position du miminmum pour chaque plan */
+std::vector<cv::Point>	locMax;	/*< Position du miminmum pour chaque plan */
 std::vector<cv::Mat>		statComposante; /*< Statistique des composantes de chaque plan http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
 std::vector<cv::Mat>		centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
 std::vector<std::vector<std::vector<cv::Point> > > contours; /*< Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
@@ -152,8 +152,8 @@ cv::UMat	*flotOptique;				/*<! Flot optique associé à l'image calculé par calcop
 cv::UMat	*ponderation;				/*<! Fenetre de ponderation associée à l'image*/
 cv::UMat *silh;						/*<! Seuillage de la différence entre deux images pour updateMotion History */
 
-cv::Mat	masqueMat;			        /*<! Masque pour les opérations cosntruit à partir des rectangles en attendant de savoir comment lire et écrire dans une UMat */
-cv::UMat	masqueOperateur;		/*<! Masque pour les opérations cosntruit à partir des rectangles */
+cv::Mat	    masqueMat;			    /*<! Masque pour les opérations construit à partir des rectangles en attendant de savoir comment lire et écrire dans une UMat */
+cv::UMat	masqueOperateur;		/*<! Masque pour les opérations construit à partir des rectangles */
 cv::UMat	*masqueMOG;				/*<! Masque pour calcMotionGradient */
 cv::UMat *orient;					/*<! orientation pour calcMotionGradient*/
 cv::UMat *segmvt;					/*<! segmentation issue de l'analyse du mouvement (segmentMotion)*/
@@ -313,6 +313,9 @@ std::vector<ImageInfoCV *>ChapeauBas(std::vector< ImageInfoCV *>, ParametreOpera
 std::vector<ImageInfoCV *>GradMorph(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>Convolution(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV	*>PartageEaux(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV	*>KMeans(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV	*>GrabCut(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV	*>CalcBackProject(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>FlotOptiqueLucasKanadePyramide(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>FlotOptiqueFarnerback(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV	*>PhaseCorrelate(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
@@ -390,12 +393,6 @@ std::vector<ImageInfoCV	*>LinearPolar(std::vector< ImageInfoCV *>, ParametreOper
 
 void ExtremumLoc(ImageInfoCV *mask=NULL );
 
-// Transformée de fourier
-ImageInfoCV	*Fft (char dimension=0 );
-ImageInfoCV   *IFft (char dimension=0);
-
-// Corrélation et intercorrélation
-ImageInfoCV 	*Correlation (ImageInfoCV	&z);
 
 // Deconvolution itérative et de wiener
 ImageInfoCV 	*Deconvolution (ImageInfoCV	&z);
@@ -477,7 +474,8 @@ virtual void DiffusionMPI(void);
 
 // ********* Accès aux membres privés et
 //	Lecture des membres privés
-void MajMasque(bool actif = false, cv::Rect r = cv::Rect());
+void MajMasque(bool actif = false, cv::Rect r = cv::Rect(), int ind=255);
+void MajMasque(bool actif, cv::Point r, int ind=255);
 std::vector<double > *MinIm(){ if (minIm.size()==0) ExtremumLoc(); return &minIm; };		/*< Minimum de l'image pour chaque canal */
 std::vector<double > *MaxIm(){if (maxIm.size()==0) ExtremumLoc();return &maxIm;};		/*< Maximum de l'image pour chaque canal */
 char    *LitFctImage(void);

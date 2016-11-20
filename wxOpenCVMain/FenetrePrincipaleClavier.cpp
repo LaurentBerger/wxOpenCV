@@ -111,7 +111,7 @@ if (key==WXK_F9)
 	ind=8;
 if (key==WXK_F10)
 	ind=9;
-if (feuille->ModeCoupe() && ind>=0)
+if ((feuille->ModeCoupe() || feuille->ModeMasque()) && ind>=0)
 	{
 	int indPre=feuille->IndiceCoupeSelec();
 	feuille->IndiceCoupeSelec(ind);
@@ -127,7 +127,7 @@ if (feuille->ModeCoupe() && ind>=0)
 	feuille->RefreshRect(rTmp2, false);
 	//feuille->Refresh();
 }
-if (feuille->ModeRectangle() && ind>=0)
+if ((feuille->ModeRectangle() || feuille->ModeMasque()) && ind>=0)
 	{
 	feuille->IndiceRectangleSelec(ind);
 	osgApp->ImgStat()->Plot(true);

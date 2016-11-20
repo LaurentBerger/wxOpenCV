@@ -75,7 +75,12 @@ enum
     ID_CONVEX_DEFAUT,////
     ID_APPROX_POLY,///
     ID_APPROX_CHAIN,///
-	ID_PARTAGE_EAUX,
+
+    ID_PARTAGE_EAUX,
+    ID_GRABCUT,
+    ID_CALCBACKPROJECT,
+    ID_KMEANS,
+    
     ID_CANNY,
 	ID_CORNERHARRIS,
 	ID_GOODFEATURE,
@@ -256,7 +261,12 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_THRESHOLD, seuillage_xpm, _("Thereshold"), "threshold", 5);
     CONSTRUCTEUR_CMD(bouton, ID_ADATHRESHOLD, seuillageada_xpm, _("Adaptive Thereshold"), "adaptivethreshold", 5);
     CONSTRUCTEUR_CMD(bouton, ID_CLAHE, clahe_xpm, _("Clahe"), "clahe", 5);
-    CONSTRUCTEUR_CMD(bouton, ID_PARTAGE_EAUX, statconnexe_xpm, _("Watershed"), "watershed", 5);
+
+    CONSTRUCTEUR_CMD(bouton, ID_PARTAGE_EAUX, watershed_xpm, _("Watershed"), "watershed", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_GRABCUT, grabcut_xpm, _("Grabcut"), "grabcut", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_CALCBACKPROJECT, backproject_xpm, _("Calcbackproject"), "calcbackproject", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_KMEANS, kmeans_xpm, _("K-Means"), "kmean", 5);
+
     CONSTRUCTEUR_CMD(bouton, ID_COMPCONNEXE, cmpconnexe_xpm,_("Connected component"), "connectedcomponents", 5);
     CONSTRUCTEUR_CMD(bouton, ID_CONTOUR, contour_xpm,_("Contour"), "contour", 5);
     CONSTRUCTEUR_CMD(bouton, ID_SQUELETTE, squelette_xpm,_("Skeleton"), "medianaxis", 5);

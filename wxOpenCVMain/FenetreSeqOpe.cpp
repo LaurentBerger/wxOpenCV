@@ -710,9 +710,9 @@ for (std::vector <ParametreOperation > ::iterator it=sq->begin();it!=sq->end();i
 		}
 //	if (pOCV.intParam.find(
     if (it+1 == sq->end())
-        r=app->ExecuterOperation(&pOCV,false);
+        r=app->ExecuterOperation(&pOCV,true);
     else
-        r = app->ExecuterOperation(&pOCV);
+        r = app->ExecuterOperation(&pOCV, true);
 
 	}
 if (r.size()!=0)

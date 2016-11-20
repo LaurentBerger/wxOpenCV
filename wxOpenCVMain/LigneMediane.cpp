@@ -1,11 +1,15 @@
 #include "ImageInfo.h"
-
+#include <opencv2/ximgproc.hpp>
 cv::Mat mThis;
 
 std::vector<ImageInfoCV		*>ImageInfoCV::LigneMediane (std::vector<ImageInfoCV *> op,ParametreOperation *paramOCV)
 {
 std::vector<ImageInfoCV	*> r;
 
+ImageInfoCV *rt = new ImageInfoCV();
+cv::ximgproc::thinning(*op[0],*rt);
+r.push_back(rt);
+return r;
 if (depth()!=CV_32F && depth()!=CV_8U)
 	{
 	return r;

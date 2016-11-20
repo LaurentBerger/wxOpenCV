@@ -678,9 +678,9 @@ double otsu=-1;
         {
             otsu = threshold(*op[0], *im, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
             pOCV->doubleParam["threshold1"].valeur = otsu;
-            pOCV->doubleParam["threshold1"].valeur = otsu/2;
+            pOCV->doubleParam["threshold2"].valeur = otsu/2;
         }
-        if (op.size()<=1 || op[1]->empty())
+        if (op.size()<=1 || op[1]==NULL || op[1]->empty())
 	        cv::Canny(	*op[0], *im, pOCV->doubleParam["threshold1"].valeur,
 				    pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
 	    else
@@ -1184,13 +1184,83 @@ std::vector<ImageInfoCV *> ImageInfoCV::PartageEaux (std::vector< ImageInfoCV*> 
 {
 std::vector<ImageInfoCV	*> r;
 ImageInfoCV	*im =new ImageInfoCV;
-if (op.size()!=2)
-	return r;
-op[1]->convertTo(*op[0], CV_32S);
+if (op.size()==2 && op[1]->rows== op[0]->rows && op[1]->cols == op[0]->cols)
+{
+    op[1]->convertTo(*im, CV_32S);
+}
+else
+    op[0]->MasqueOperateur()->convertTo(*im,CV_32S);
 watershed(*op[0], *im);
+
 
 r.push_back(im);
 return r;
+}
+
+std::vector<ImageInfoCV*> ImageInfoCV::KMeans(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)
+{
+    std::vector<ImageInfoCV	*> r;
+
+    return std::vector<ImageInfoCV*>();
+}
+
+std::vector<ImageInfoCV*> ImageInfoCV::GrabCut(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)
+{
+    std::vector<ImageInfoCV	*> r;
+    cv::Mat bgdModel, fgdModel;
+    cv::Rect rz;
+    cv::Mat mask(op[0]->MasqueOperateur()->size(), CV_8UC1, cv::Scalar::all(cv::GC_PR_BGD));// op[0]->MasqueOperateur()->getMat(cv::ACCESS_RW);
+    if (op.size()==1 || (op.size()>1 && op[1]==NULL))
+        mask.setTo(cv::GC_FGD, *op[0]->MasqueOperateur());
+    else if (op[1]->rows== op[0]->rows && op[1]->cols == op[0]->cols)
+        mask.setTo(cv::GC_FGD, *op[1]);
+    cv::grabCut(*op[0], mask, rz, bgdModel, fgdModel, pOCV->intParam["iterCount"].valeur);
+
+    cv::Mat1b mask_fgpf;
+    if (pOCV->intParam["possibleForeground"].valeur)
+        mask_fgpf = (mask == cv::GC_FGD) | (mask == cv::GC_PR_FGD);
+    else
+        mask_fgpf = (mask == cv::GC_FGD);
+    ImageInfoCV *im=new ImageInfoCV((*op[0]).rows, (*op[0]).cols, (*op[0]).type());
+    (*op[0]).copyTo(*im, mask_fgpf);
+    r.push_back(im);
+    return r;
+}
+
+std::vector<ImageInfoCV*> ImageInfoCV::CalcBackProject(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)
+{
+    std::vector<ImageInfoCV	*> r;
+    cv::Mat bgdModel, fgdModel;
+    cv::Rect rz;
+    cv::Mat mask(op[0]->MasqueOperateur()->size(), CV_8UC1, cv::Scalar::all(0));// op[0]->MasqueOperateur()->getMat(cv::ACCESS_RW);
+    if (op.size() == 1 || (op.size()>1 && op[1] == NULL))
+        mask.setTo(255, *op[0]->MasqueOperateur());
+    else if (op[1]->rows == op[0]->rows && op[1]->cols == op[0]->cols)
+        mask.setTo(255, *op[1]);
+    float h_range[] = { pOCV->doubleParam["minValue"].valeur, pOCV->doubleParam["maxValue"].valeur };
+    const float* ranges[] = { h_range, h_range,h_range };
+    int hBins = pOCV->intParam["bins"].valeur; 
+    int histSize[] = { hBins, hBins, hBins };
+    int nbChannels=0;
+    if (pOCV->intParam["firstPlan"].valeur >= 0 && pOCV->intParam["firstPlan"].valeur<op[0]->channels())
+        nbChannels++;
+    if (pOCV->intParam["secondPlan"].valeur >= 0 && pOCV->intParam["secondPlan"].valeur<op[0]->channels())
+        nbChannels++;
+    if (pOCV->intParam["thirdPlan"].valeur >= 0 && pOCV->intParam["thirdPlan"].valeur<op[0]->channels())
+        nbChannels++;
+    int channels[] = { pOCV->intParam["firstPlan"].valeur, pOCV->intParam["secondPlan"].valeur,pOCV->intParam["thirdPlan"].valeur };
+    cv::Mat histogramme;
+    cv::Mat plan=op[0]->getMat(cv::ACCESS_READ);
+    cv::calcHist(&plan, 1, channels, mask, histogramme, nbChannels, histSize, ranges, true, false);
+    cv::Mat backproj;
+
+    if (nbChannels<3)
+        normalize(histogramme, histogramme, 0, 255, cv::NormTypes::NORM_MINMAX, -1, cv::Mat());
+    ImageInfoCV *im = new ImageInfoCV();
+    cv::calcBackProject(&plan, 1,channels, histogramme, *im,ranges,1,true);
+
+    r.push_back(im);
+    return r;
 }
 
 std::vector<ImageInfoCV		*> ImageInfoCV::DistanceDiscrete (std::vector<ImageInfoCV *>op,ParametreOperation *paramOCV)
