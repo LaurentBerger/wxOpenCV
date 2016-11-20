@@ -117,6 +117,7 @@
 #include "bitmaps\panocomposition.xpm"
 #include "bitmaps\panocorrectexpo.xpm"
 
+#include "bitmaps\backproject.xpm"
 #include "bitmaps\convexhull.xpm"
 #include "bitmaps\convexdefaut.xpm"
 #include "bitmaps\approxpoly.xpm"
@@ -168,6 +169,7 @@
 #include "bitmaps\fusionplan.xpm"
 #include "bitmaps\GMG.xpm"
 #include "bitmaps\goodfeature.xpm"
+#include "bitmaps\grabcut.xpm"
 #include "bitmaps\gradient_mod.xpm"
 #include "bitmaps\gradient_x.xpm"
 #include "bitmaps\gradient_y.xpm"
@@ -181,6 +183,7 @@
 #include "bitmaps\houghlinep.xpm"
 #include "bitmaps\ifft.xpm"
 #include "bitmaps\warpperspective.xpm"
+#include "bitmaps\kmeans.xpm"
 #include "bitmaps\KNN.xpm"
 #include "bitmaps\homography.xpm"
 #include "bitmaps\laplacien.xpm"
@@ -217,5 +220,6 @@
 #include "bitmaps\squelette.xpm"
 #include "bitmaps\statconnexe.xpm"
 #include "bitmaps\voronoi.xpm"
+#include "bitmaps\watershed.xpm"
 
 #endif

@@ -678,9 +678,9 @@ double otsu=-1;
         {
             otsu = threshold(*op[0], *im, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
             pOCV->doubleParam["threshold1"].valeur = otsu;
-            pOCV->doubleParam["threshold1"].valeur = otsu/2;
+            pOCV->doubleParam["threshold2"].valeur = otsu/2;
         }
-        if (op.size()<=1 || op[1]->empty())
+        if (op.size()<=1 || op[1]==NULL || op[1]->empty())
 	        cv::Canny(	*op[0], *im, pOCV->doubleParam["threshold1"].valeur,
 				    pOCV->doubleParam["threshold2"].valeur,pOCV->intParam["aperture_size"].valeur);
 	    else
