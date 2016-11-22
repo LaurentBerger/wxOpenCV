@@ -124,8 +124,8 @@ static int typeResultat;	 /*< Type du résultat -1, ou constante OpenCV  p256 ref
 ************************************************/
 std::vector<double > minIm;			/*< Minimimum pour chaque plan de l'image */
 std::vector<double > maxIm;			/*< Maximimum pour chaque plan de l'image */
-std::vector<cv::Point>	locMin;	/*< Position du miminmu pour chaque plan */
-std::vector<cv::Point>	locMax;	/*< Position du miminmu pour chaque plan */
+std::vector<cv::Point>	locMin;	/*< Position du miminmum pour chaque plan */
+std::vector<cv::Point>	locMax;	/*< Position du miminmum pour chaque plan */
 std::vector<cv::Mat>		statComposante; /*< Statistique des composantes de chaque plan http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
 std::vector<cv::Mat>		centreGComposante; /*< Centre de gravite http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html */
 std::vector<std::vector<std::vector<cv::Point> > > contours; /*< Contours dans l'image des composantes connexes http://docs.opencv.org/trunk/modules/imgproc/doc/structural_analysis_and_shape_descriptors.html?highlight=connectedcomponents#findcontours */
@@ -313,6 +313,9 @@ std::vector<ImageInfoCV *>ChapeauBas(std::vector< ImageInfoCV *>, ParametreOpera
 std::vector<ImageInfoCV *>GradMorph(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>Convolution(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV	*>PartageEaux(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV	*>KMeans(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV	*>GrabCut(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV	*>CalcBackProject(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>FlotOptiqueLucasKanadePyramide(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>FlotOptiqueFarnerback(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV	*>PhaseCorrelate(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);

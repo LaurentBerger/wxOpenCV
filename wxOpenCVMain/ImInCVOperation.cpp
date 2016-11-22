@@ -1184,13 +1184,34 @@ std::vector<ImageInfoCV *> ImageInfoCV::PartageEaux (std::vector< ImageInfoCV*> 
 {
 std::vector<ImageInfoCV	*> r;
 ImageInfoCV	*im =new ImageInfoCV;
-if (op.size()!=2)
+if (op.size()!=1)
 	return r;
-op[1]->convertTo(*op[0], CV_32S);
-watershed(*op[0], *im);
+op[0]->MasqueOperateur()->convertTo(*im,CV_32S);
+*((cv::Mat *)im) = cv::Mat::zeros(im->size(),im->type());
+cv::Mat m2 = im->getMat(cv::ACCESS_RW);
+
+m2.at<int>(cv::Point(680,256))=255;
+
+watershed(*op[0], m2);
+
 
 r.push_back(im);
 return r;
+}
+
+std::vector<ImageInfoCV*> ImageInfoCV::KMeans(std::vector<ImageInfoCV*>, ParametreOperation * pOCV)
+{
+    return std::vector<ImageInfoCV*>();
+}
+
+std::vector<ImageInfoCV*> ImageInfoCV::GrabCut(std::vector<ImageInfoCV*>, ParametreOperation * pOCV)
+{
+    return std::vector<ImageInfoCV*>();
+}
+
+std::vector<ImageInfoCV*> ImageInfoCV::CalcBackProject(std::vector<ImageInfoCV*>, ParametreOperation * pOCV)
+{
+    return std::vector<ImageInfoCV*>();
 }
 
 std::vector<ImageInfoCV		*> ImageInfoCV::DistanceDiscrete (std::vector<ImageInfoCV *>op,ParametreOperation *paramOCV)
