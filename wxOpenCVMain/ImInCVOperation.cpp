@@ -1184,15 +1184,13 @@ std::vector<ImageInfoCV *> ImageInfoCV::PartageEaux (std::vector< ImageInfoCV*> 
 {
 std::vector<ImageInfoCV	*> r;
 ImageInfoCV	*im =new ImageInfoCV;
-if (op.size()!=1)
-	return r;
-op[0]->MasqueOperateur()->convertTo(*im,CV_32S);
-*((cv::Mat *)im) = cv::Mat::zeros(im->size(),im->type());
-cv::Mat m2 = im->getMat(cv::ACCESS_RW);
-
-m2.at<int>(cv::Point(680,256))=255;
-
-watershed(*op[0], m2);
+if (op.size()==2 && op[1]->rows== op[0]->rows && op[1]->cols == op[0]->cols)
+{
+    op[1]->convertTo(*im, CV_32S);
+}
+else
+    op[0]->MasqueOperateur()->convertTo(*im,CV_32S);
+watershed(*op[0], *im);
 
 
 r.push_back(im);

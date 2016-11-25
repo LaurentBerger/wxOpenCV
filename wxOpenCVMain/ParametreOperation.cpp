@@ -1715,7 +1715,7 @@ if (s == "inpaint")
 if (s=="watershed")
 	{
 	operateur = &ImageInfoCV::PartageEaux;
-	nbOperande= 1;
+	nbOperande= 2;
 	lienHtml="http://docs.opencv.org/modules/imgproc/doc/miscellaneous_transformations.html#watershed";
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
 	return true;

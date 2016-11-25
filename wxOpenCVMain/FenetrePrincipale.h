@@ -81,6 +81,7 @@ void				*f3D;			/*!< lien sur la fenetre 3D représentant l'image */
 int					facteurZoom;	/*!< zoom=2^facteurZoom*/
 bool				modeRect;	/*!< Sélection des rectangles actives */
 bool				modeCoupe; /*!< Sélection des coupes actives */
+bool				modeMasque; /*!< Sélection des coupes actives */
 int					indRect; /*!< Indice du rectangle actif */
 int					indCoupe; /*!< Indice de la coupe active */
 wxBitmap			*bitmapAffiche;/*!< bitmap de l'image */
@@ -213,6 +214,13 @@ void ModeRectangle(bool t){modeRect=t;};
 	 * L'histogramme est calculé à partir des points images inclus dans le rectangle.
 	 * \param t : vrai pour activer le mode rectangle
 	 */
+bool ModeMasque() { return modeMasque; };
+    /*!
+    *  \brief ModeMasque
+    *
+    * Indique si le mode masque est actif.
+    * \return vrai si le mode masque est actif
+    */
 bool ModeRectangle(){return modeRect;};
    /*!
      *  \brief ModeRectangle
@@ -363,8 +371,10 @@ private:
 	void ModeComplexe(wxCommandEvent& event);
 	void MAJZoom(wxCommandEvent& event);
     void MenuMasque(wxCommandEvent& event);
-	void SequenceOperation(wxCommandEvent& event);
+    void MenuRectMasque(wxCommandEvent& event);
+    void SequenceOperation(wxCommandEvent& event);
     void PointCtrl(wxCommandEvent& event);
+
 
 
 wxMenu *CreateMenuComplex(wxString *title);
@@ -1228,6 +1238,7 @@ enum
     Menu_Rectangle,
     Menu_Coupe,
     Menu_Masque,
+    Mode_Masque,
     Menu_FilMax,
 	Menu_ParAlg,
     MENU_PTCTRL,
