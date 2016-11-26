@@ -1197,14 +1197,31 @@ r.push_back(im);
 return r;
 }
 
-std::vector<ImageInfoCV*> ImageInfoCV::KMeans(std::vector<ImageInfoCV*>, ParametreOperation * pOCV)
+std::vector<ImageInfoCV*> ImageInfoCV::KMeans(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)
 {
+    std::vector<ImageInfoCV	*> r;
+
     return std::vector<ImageInfoCV*>();
 }
 
-std::vector<ImageInfoCV*> ImageInfoCV::GrabCut(std::vector<ImageInfoCV*>, ParametreOperation * pOCV)
+std::vector<ImageInfoCV*> ImageInfoCV::GrabCut(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)
 {
-    return std::vector<ImageInfoCV*>();
+    std::vector<ImageInfoCV	*> r;
+    cv::Mat bgdModel, fgdModel;
+    cv::Rect rz;
+    cv::Mat mask(op[0]->MasqueOperateur()->size(), CV_8UC1, cv::Scalar::all(cv::GC_PR_BGD));// op[0]->MasqueOperateur()->getMat(cv::ACCESS_RW);
+    mask.setTo(cv::GC_FGD,*op[0]->MasqueOperateur());
+    cv::grabCut(*op[0], mask, rz, bgdModel, fgdModel, pOCV->intParam["iterCount"].valeur);
+
+    cv::Mat1b mask_fgpf;
+    if (pOCV->intParam["possibleForeground"].valeur)
+        mask_fgpf = (mask == cv::GC_FGD) | (mask == cv::GC_PR_FGD);
+    else
+        mask_fgpf = (mask == cv::GC_FGD);
+    ImageInfoCV *im=new ImageInfoCV((*op[0]).rows, (*op[0]).cols, (*op[0]).type());
+    (*op[0]).copyTo(*im, mask_fgpf);
+    r.push_back(im);
+    return r;
 }
 
 std::vector<ImageInfoCV*> ImageInfoCV::CalcBackProject(std::vector<ImageInfoCV*>, ParametreOperation * pOCV)
