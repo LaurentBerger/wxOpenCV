@@ -80,7 +80,11 @@ enum
     ID_GRABCUT,
     ID_CALCBACKPROJECT,
     ID_KMEANS,
-    
+
+    ID_SUPERPIXELLSC,
+    ID_SUPERPIXELSEEDS,
+    ID_SUPERPIXELSLIC,
+
     ID_CANNY,
 	ID_CORNERHARRIS,
 	ID_GOODFEATURE,
@@ -266,6 +270,11 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_GRABCUT, grabcut_xpm, _("Grabcut"), "grabcut", 5);
     CONSTRUCTEUR_CMD(bouton, ID_CALCBACKPROJECT, backproject_xpm, _("Calcbackproject"), "calcbackproject", 5);
     CONSTRUCTEUR_CMD(bouton, ID_KMEANS, kmeans_xpm, _("K-Means"), "kmean", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_SUPERPIXELLSC, superpixelslc_xpm, _("SuperpixelLSC"), "SuperpixelLSC", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_SUPERPIXELSEEDS, superpixelseeds_xpm, _("SuperpixelSEEDS"), "SuperpixelSEEDS", 5);
+    CONSTRUCTEUR_CMD(bouton, ID_SUPERPIXELSLIC, superpixelslic_xpm, _("SuperpixelSLIC"), "SuperpixelSLIC", 5);
+
+
 
     CONSTRUCTEUR_CMD(bouton, ID_COMPCONNEXE, cmpconnexe_xpm,_("Connected component"), "connectedcomponents", 5);
     CONSTRUCTEUR_CMD(bouton, ID_CONTOUR, contour_xpm,_("Contour"), "contour", 5);

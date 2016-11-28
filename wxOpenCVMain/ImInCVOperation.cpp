@@ -1204,6 +1204,39 @@ std::vector<ImageInfoCV*> ImageInfoCV::KMeans(std::vector<ImageInfoCV*> op, Para
     return std::vector<ImageInfoCV*>();
 }
 
+std::vector<ImageInfoCV*> ImageInfoCV::SuperpixelLSC(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)
+{
+    std::vector<ImageInfoCV	*> r;
+
+    return std::vector<ImageInfoCV*>();
+}
+
+std::vector<ImageInfoCV*> ImageInfoCV::SuperpixelSLIC(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)
+{
+    std::vector<ImageInfoCV	*> r;
+
+    return std::vector<ImageInfoCV*>();
+}
+
+std::vector<ImageInfoCV*> ImageInfoCV::SuperpixelSEEDS(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)
+{
+    std::vector<ImageInfoCV	*> r;
+    cv::Ptr<cv::ximgproc::SuperpixelSEEDS> seeds;
+    seeds = cv::ximgproc::createSuperpixelSEEDS(op[0]->cols, op[0]->rows, op[0]->channels(), pOCV->intParam["num_superpixels"].valeur,
+        pOCV->intParam["num_levels"].valeur, pOCV->intParam["prior"].valeur, pOCV->intParam["num_histogram_bins"].valeur, pOCV->intParam["double_step"].valeur);
+    cv::Mat hsv;
+    cvtColor(*op[0], hsv, cv::COLOR_BGR2HSV);
+
+
+    ImageInfoCV	*im = new ImageInfoCV;
+    seeds->iterate(hsv, pOCV->intParam["num_iterations"].valeur);
+    seeds->getLabels(*im);
+    r.push_back(im);
+    return r;
+}
+
+
+
 std::vector<ImageInfoCV*> ImageInfoCV::GrabCut(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)
 {
     std::vector<ImageInfoCV	*> r;

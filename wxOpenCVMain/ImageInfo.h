@@ -314,6 +314,9 @@ std::vector<ImageInfoCV *>GradMorph(std::vector< ImageInfoCV *>, ParametreOperat
 std::vector<ImageInfoCV *>Convolution(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV	*>PartageEaux(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV	*>KMeans(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV*> SuperpixelLSC(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV);
+std::vector<ImageInfoCV*> SuperpixelSLIC(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV);
+std::vector<ImageInfoCV*> SuperpixelSEEDS(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV);
 std::vector<ImageInfoCV	*>GrabCut(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV	*>CalcBackProject(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>FlotOptiqueLucasKanadePyramide(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);

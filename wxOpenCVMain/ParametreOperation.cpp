@@ -874,6 +874,49 @@ if (s == "grabcut")
     nbOperande = 2;
     nbImageRes = 1;
     intParam["iterCount"] = DomaineParametreOp<int>(1, 1, 1000, 1);
+    intParam["possibleForeground"] = DomaineParametreOp<int>(1, 0, 1, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "kmeans")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    intParam["iterCount"] = DomaineParametreOp<int>(1, 1, 1000, 1);
+    intParam["possibleForeground"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "SuperpixelSLC")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    intParam["iterCount"] = DomaineParametreOp<int>(1, 1, 1000, 1);
+    intParam["possibleForeground"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "SuperpixelSEEDS")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    intParam["num_superpixels"]=DomaineParametreOp<int>(400, 1, 100000, 1);
+    intParam["num_levels"] = DomaineParametreOp<int>(4, 1, 10000, 1);
+    intParam["prior"] = DomaineParametreOp<int>(2, 0, 5, 1);
+    intParam["num_histogram_bins"]= DomaineParametreOp<int>(5, 1, 256, 1);
+    intParam["double_step"]= DomaineParametreOp<int>(0, 0, 1, 1);
+
+
+    intParam["num_iterations"] = DomaineParametreOp<int>(4, 1, 1000, 1);
+
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "SuperpixelSLIC")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    intParam["iterCount"] = DomaineParametreOp<int>(1, 1, 1000, 1);
     intParam["possibleForeground"] = DomaineParametreOp<int>(0, 0, 1, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
@@ -1740,6 +1783,38 @@ if (s == "grabcut")
     operateur = &ImageInfoCV::GrabCut;
     nbOperande = 2;
     lienHtml = "http://docs.opencv.org/master/d7/d1b/group__imgproc__misc.html#ga909c1dda50efcbeaa3ce126be862b37f";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "kmeans")
+{
+    operateur = &ImageInfoCV::KMeans;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/trunk/d5/d38/group__core__cluster.html#ga9a34dc06c6ec9460e90860f15bcd2f88";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "SuperpixelSLC")
+{
+    operateur = &ImageInfoCV::SuperpixelLSC;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/trunk/d5/da0/classcv_1_1ximgproc_1_1SuperpixelLSC.html";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "SuperpixelSEEDS")
+{
+    operateur = &ImageInfoCV::SuperpixelSEEDS;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/trunk/df/d6c/group__ximgproc__superpixel.html#gabda19d839f775cbb527fffec133bc4ea";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "SuperpixelSLIC")
+{
+    operateur = &ImageInfoCV::SuperpixelSLIC;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/trunk/d3/da9/classcv_1_1ximgproc_1_1SuperpixelSLIC.html";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
     return true;
 }

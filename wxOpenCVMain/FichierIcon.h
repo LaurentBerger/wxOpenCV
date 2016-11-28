@@ -221,5 +221,8 @@
 #include "bitmaps\statconnexe.xpm"
 #include "bitmaps\voronoi.xpm"
 #include "bitmaps\watershed.xpm"
+#include "bitmaps\superpixelseeds.xpm"
+#include "bitmaps\superpixelslc.xpm"
+#include "bitmaps\superpixelslic.xpm"
 
 #endif
