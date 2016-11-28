@@ -877,6 +877,20 @@ if (s == "grabcut")
     intParam["possibleForeground"] = DomaineParametreOp<int>(0, 0, 1, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
+if (s == "calcbackproject")
+{
+    nomOperation = s;
+    nbOperande = 2;
+    nbImageRes = 1;
+    doubleParam["maxValue"] = DomaineParametreOp<double>(256, 2, 65536, 1);
+    doubleParam["minValue"] = DomaineParametreOp<double>(0, 0, 65536, 1);
+    intParam["bins"] = DomaineParametreOp<int>(64, 1, 65536, 1);;
+    intParam["firstPlan"]= DomaineParametreOp<int>(0, -1, 2, 1);
+    intParam["secondPlan"]= DomaineParametreOp<int>(-1, -1,2, 1);
+    intParam["thirdPlan"]= DomaineParametreOp<int>(-1, -1, 2, 1);
+
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "watershed")
 {
     nomOperation = s;
@@ -1724,6 +1738,14 @@ if (s == "inpaint")
 if (s == "grabcut")
 {
     operateur = &ImageInfoCV::GrabCut;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/master/d7/d1b/group__imgproc__misc.html#ga909c1dda50efcbeaa3ce126be862b37f";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
+    return true;
+}
+if (s == "calcbackproject")
+{
+    operateur = &ImageInfoCV::CalcBackProject;
     nbOperande = 2;
     lienHtml = "http://docs.opencv.org/master/d7/d1b/group__imgproc__misc.html#ga909c1dda50efcbeaa3ce126be862b37f";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=294&zoom=70,250,100";
