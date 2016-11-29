@@ -1208,14 +1208,23 @@ std::vector<ImageInfoCV*> ImageInfoCV::SuperpixelLSC(std::vector<ImageInfoCV*> o
 {
     std::vector<ImageInfoCV	*> r;
 
-    return std::vector<ImageInfoCV*>();
+    return r;
 }
 
 std::vector<ImageInfoCV*> ImageInfoCV::SuperpixelSLIC(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)
 {
     std::vector<ImageInfoCV	*> r;
 
-    return std::vector<ImageInfoCV*>();
+    cv::Mat hsv;
+    cvtColor(*op[0], hsv, cv::COLOR_BGR2HSV);
+    cv::Ptr<cv::ximgproc::SuperpixelSLIC> slic = cv::ximgproc::createSuperpixelSLIC(hsv, pOCV->intParam["algorithmSLIC"].valeur , pOCV->intParam["region_size"].valeur, pOCV->doubleParam["ruler"].valeur);
+    ImageInfoCV	*im = new ImageInfoCV;
+    slic->iterate(pOCV->intParam["num_iterations"].valeur);
+    if (pOCV->intParam["min_element_size"].valeur>0)
+        slic->enforceLabelConnectivity(pOCV->intParam["min_element_size"].valeur);
+    slic->getLabels(*im);
+    r.push_back(im);
+    return r;
 }
 
 std::vector<ImageInfoCV*> ImageInfoCV::SuperpixelSEEDS(std::vector<ImageInfoCV*> op, ParametreOperation * pOCV)

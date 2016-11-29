@@ -1,5 +1,6 @@
 #include "ParametreOperation.h"
 #include "opencv2/xphoto/inpainting.hpp"
+#include "opencv2/ximgproc.hpp"
 
 #include "ImageInfo.h"
 #include <map>
@@ -231,6 +232,8 @@ listeParam["normType"].insert(std::pair<string,int>(_("Hamming distance").ToStdS
 listeParam["normType"].insert(std::pair<string,int>(_("Hamming 2 distance").ToStdString(),cv::NORM_HAMMING2));
 listeParam["normType"].insert(std::pair<string,int>(_("auto").ToStdString(),-1));
 
+listeParam["algorithmSLIC"].insert(std::pair<string, int>(_("SLIC").ToStdString(), cv::ximgproc::SLIC));
+listeParam["algorithmSLIC"].insert(std::pair<string, int>(_("SLICO").ToStdString(), cv::ximgproc::SLICO));
 
 
 listeParam["connectivity"].insert(std::pair<string,int>(_("4-connex").ToStdString(),4));
@@ -916,8 +919,11 @@ if (s == "SuperpixelSLIC")
     nomOperation = s;
     nbOperande = 2;
     nbImageRes = 1;
-    intParam["iterCount"] = DomaineParametreOp<int>(1, 1, 1000, 1);
-    intParam["possibleForeground"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["algorithmSLIC"]= DomaineParametreOp<int>(cv::ximgproc::SLIC, cv::ximgproc::SLIC, cv::ximgproc::SLICO, cv::ximgproc::SLICO- cv::ximgproc::SLIC);
+    intParam["region_size"]= DomaineParametreOp<int>(50, 1, 1000, 1);
+    doubleParam["ruler"]= DomaineParametreOp<double>(10, 1, 1000, 1);
+    intParam["num_iterations"] = DomaineParametreOp<int>(3, 1, 1000, 1);
+    intParam["min_element_size"] = DomaineParametreOp<int>(50, 0, 100, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "calcbackproject")
