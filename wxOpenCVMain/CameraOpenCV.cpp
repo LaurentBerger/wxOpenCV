@@ -1,6 +1,7 @@
 #include "ImageInfo.h"
 #include "CameraOpenCV.h"
 #include "EvenementCamera.h"
+#include "i3ThermalSystem.hpp"
 #include "VideoCourbe.h"
 //#include <fstream>
 #include <wx/time.h> 
@@ -143,8 +144,16 @@ if (nomFlux!=wxEmptyString)
 		captureVideo = new cv::VideoCapture(indFlux); 
 		indId=indFlux;
 		}
-	else
-		{
+	else if (nomFlux.SubString(0,4)=="pipe:")
+    {
+        captureVideo = new I3ThermalSystem("\\\\.\\pipe\\thermalExpert");
+        indId = -1;
+        fluxVideo = true;
+        nomFluxVideo = nomFlux;
+    }
+    else
+
+	{
 		
 		captureVideo = new cv::VideoCapture(); 
 //		captureVideo->set(CAP_PROP_FOURCC,'MJPG');
@@ -155,7 +164,7 @@ if (nomFlux!=wxEmptyString)
 		indId=-1;
         fluxVideo = true;
         nomFluxVideo= nomFlux;
-		}
+	}
     double x = captureVideo->get(CAP_PROP_FOURCC);
     int fourcc = captureVideo->get(CAP_PROP_FOURCC);
     string fourcc_str = format("%c%c%c%c", fourcc & 255, (fourcc >> 8) & 255, (fourcc >> 16) & 255, (fourcc >> 24) & 255);
