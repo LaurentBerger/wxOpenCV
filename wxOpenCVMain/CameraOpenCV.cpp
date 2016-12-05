@@ -189,7 +189,7 @@ else
 
 if(captureVideo->isOpened())  // check if we succeeded
 	{
-	cv::UMat frame;
+	cv::Mat frame;
 	if( indId==-1)
 		fluxOuvert=true;
 /*	for (int i=15;i<NB_TAILLE_VIDEO;i++)
@@ -727,8 +727,9 @@ if (captureVideo->isOpened())
 						    chgtTaille=false;
 					    }
 					    //frame.copyTo((*((UMat *)imAcq))); // get a new frame from camera
-                        frame.copyTo(frameBuffer);
-					    swap(frameBuffer, (*((UMat *)imAcq)));
+                        Mat x=imAcq->getMat(ACCESS_WRITE);
+                        frame.copyTo(x);
+					    //swap(frameBuffer, (*((UMat *)imAcq)));
 					}
                     frameDejaCopie=false;
 
