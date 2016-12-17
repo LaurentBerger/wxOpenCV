@@ -440,9 +440,10 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
     spw->SetDigits(5);
 	if (itp->second.res)
 		spw->Disable();
-	spw->SetRange(itp->second.mini.x, itp->second.maxi.y);
+	spw->SetRange(itp->second.mini.x, itp->second.maxi.x);
 	spw->SetIncrement((double)itp->second.pas.x);
-	p += wxPoint(s.GetX(), 0);
+    spw->SetValue(itp->second.valeur.x);
+    p += wxPoint(s.GetX(), 0);
 	nbParam++;
 	new wxStaticText(page, indOriCtrl + 2 * nbParam, itp->first + " y", p, s);
 	p += wxPoint(s.GetX(), 0);
@@ -454,6 +455,7 @@ for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
 		sph->Disable();
 	sph->SetRange(itp->second.mini.y, itp->second.maxi.y);
 	sph->SetIncrement((double)itp->second.pas.y);
+    sph->SetValue(itp->second.valeur.y);
     if (fenMere && itp->second.mouseScan)
     {
         spinSouris.push_back(make_pair(spw,sph));
@@ -524,7 +526,7 @@ void FenetreAlgo::MAJOngletEtape(int indOp)
         spw->SetValue(itp->second.valeur.x);
         nbParam++;
         wxSpinCtrlDouble *sph = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
-        spw->SetValue(itp->second.valeur.y);
+        sph->SetValue(itp->second.valeur.y);
         nbParam++;
     }
     return ;

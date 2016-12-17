@@ -1241,8 +1241,8 @@ if (s == "canny")
 	nbImageRes=1;
     nbOperande = 2;
     intParam["OTSU"]=DomaineParametreOp<int>(0,0,1 ,1);
-    doubleParam["threshold1"] = DomaineParametreOp<double>(50., 0.0, 255.0, 1.0);
-	doubleParam["threshold2"]=DomaineParametreOp<double>(100,0.0,255.0,1.0);
+    doubleParam["threshold1"] = DomaineParametreOp<double>(50., 0.0, 16384.0, 1.0);
+	doubleParam["threshold2"]=DomaineParametreOp<double>(100,0.0,16384.0,1.0);
 	intParam["aperture_size"]=DomaineParametreOp<int>((int)3,(int)1,(int)255,(int)2);
 	nomOperation=s;
     xx.listeOperation.insert(make_pair(s, *this));
