@@ -277,6 +277,7 @@ listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Convert RGB  to YC
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Convert YCrCb  to BGR").ToStdString(), cv::COLOR_YCrCb2BGR));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Convert YCrCb  to RGB").ToStdString(), cv::COLOR_YCrCb2RGB));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to HSV").ToStdString(), cv::COLOR_BGR2HSV));
+listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("HSV to BGR").ToStdString(), cv::COLOR_HSV2BGR));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("RGB to HSV").ToStdString(), cv::COLOR_RGB2HSV));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to Yuv").ToStdString(), cv::COLOR_BGR2YUV));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("RGB to Yuv").ToStdString(), cv::COLOR_RGB2YUV));
@@ -1038,7 +1039,8 @@ if (s == "multiply")
 	nbImageRes=1;
 	nomOperation=s;
     intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
-	doubleParam["scale"]=DomaineParametreOp<double>(1,0.1,10,0.1);
+    doubleParam["gain"] = DomaineParametreOp<double>(1, -1e6, 1e6, 1);
+    doubleParam["scale"]=DomaineParametreOp<double>(1,0.1,10,0.1);
 	nbOperande= 2;
     xx.listeOperation.insert(make_pair(s, *this));
 }
@@ -1048,7 +1050,8 @@ if (s == "divide")
 	nomOperation=s;
 	nbOperande= 2;
     intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
-	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
+    doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
+    doubleParam["denominator"] = DomaineParametreOp<double>(1, -1e6, 1e6, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "filter2d")

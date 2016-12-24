@@ -135,10 +135,15 @@ ImageInfoCV	*im = new ImageInfoCV;
 
 if (pOCV)
 	{
-    if (op[0]->depth() != op[1]->depth())
-        pOCV->intParam["ddepth"].valeur = CV_32F;
-    cv::multiply(*op[0], *op[1], *im, pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
-	}
+        if (op[1] != NULL)
+        {
+            if (op[0]->depth() != op[1]->depth())
+                pOCV->intParam["ddepth"].valeur = CV_32F;
+            cv::multiply(*op[0], *op[1], *im, pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
+	    }
+        else
+            cv::divide(*op[0], pOCV->doubleParam["denominator"].valeur, *im, pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
+    }
 else
     cv::multiply(*op[0], *op[1], *im, 1, typeResultat);
 r.push_back(im);
@@ -158,10 +163,15 @@ ImageInfoCV	*im = new ImageInfoCV;
 
 if (pOCV)
 	{
-    if (op[0]->depth() != op[1]->depth())
-        pOCV->intParam["ddepth"].valeur = CV_32F;
-    cv::divide(*op[0], *op[1], *im, pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
-	}
+    if (op[1]!=NULL)
+    {
+        if (op[0]->depth() != op[1]->depth())
+            pOCV->intParam["ddepth"].valeur = CV_32F;
+        cv::divide(*op[0], *op[1], *im, pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
+    }
+    else 
+        cv::divide(*op[0], pOCV->doubleParam["denominator"].valeur, *im, pOCV->doubleParam["scale"].valeur, pOCV->intParam["ddepth"].valeur);
+}
 else
     cv::divide(*op[0], *op[1], *im, 1, typeResultat);
 r.push_back(im);
@@ -1649,7 +1659,6 @@ if (descripteur.find(IMAGEINFOCV_SIFT_DES)==descripteur.end())
     descripteur.insert(std::make_pair(IMAGEINFOCV_SIFT_DES,cv::Mat()));
 else
     descripteur[IMAGEINFOCV_SIFT_DES] =  cv::Mat();
-
 
 if (pOCV->intParam["image_mask"].valeur == 1)
     pOCV->detecteur["SIFT"]->detectAndCompute(*op[0], *op[0]->MasqueOperateur(), *(op[0]->PointCle(IMAGEINFOCV_SIFT_DES)), *(op[0]->Descripteur(IMAGEINFOCV_SIFT_DES)));
