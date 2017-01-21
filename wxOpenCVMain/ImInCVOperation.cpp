@@ -1703,7 +1703,6 @@ if (descripteur.find(IMAGEINFOCV_SURF_DES)==descripteur.end())
     descripteur.insert(std::make_pair(IMAGEINFOCV_SURF_DES,cv::Mat()));
 else
     descripteur[IMAGEINFOCV_SURF_DES] =  cv::Mat();
-
 if (pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->getHessianThreshold() != pOCV->doubleParam["hessianThreshold"].valeur)
 	pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->setHessianThreshold(pOCV->doubleParam["hessianThreshold"].valeur);
 if (pOCV->detecteur["SURF"].dynamicCast<cv::xfeatures2d::SURF>()->getNOctaveLayers() != pOCV->intParam["nOctaveLayers"].valeur)
