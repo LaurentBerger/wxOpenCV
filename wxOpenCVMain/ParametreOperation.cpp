@@ -431,9 +431,9 @@ if (s == "fond_gaussianmixture2")
 	nbImageRes = 1;
 	nbOperande = 1;
 	opVideo = true;
-	intParam["History"] = DomaineParametreOp<int>(500, 2, 10000, 1);
+	intParam["History"] = DomaineParametreOp<int>(500, -1, 10000, 1);
 	intParam["mixtures"] = DomaineParametreOp<int>(5, 1, 255, 1);
-	doubleParam["VarThreshold"] = DomaineParametreOp<double>(16, 0.01, 100, 0.01);
+	doubleParam["VarThreshold"] = DomaineParametreOp<double>(16, 0.01, 1000, 0.01);
 	doubleParam["BackgroundRatio"] = DomaineParametreOp<double>(0.9, 0.01, 100, 0.01);
 	doubleParam["VarThresholdGen"] = DomaineParametreOp<double>(9, 0, 100, 1);
 	doubleParam["VarInit"] = DomaineParametreOp<double>(15, 0, 100, 1);
@@ -751,10 +751,11 @@ if (s == "siftfeatures2d")
     nbOperande = 1;
     opAttribut = true;
     intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
-    intParam["nfeatures"] = DomaineParametreOp<int>(3, 1, 255, 1);
-    intParam["nOctaveLayers"] = DomaineParametreOp<int>(20, 1, 100, 1);;
-    doubleParam["contrastThreshold"] = DomaineParametreOp<double>(010, 0, 1000, 0.1);
-    doubleParam["sigma"] = DomaineParametreOp<double>(1.6, 1, 0, 0.1);
+    intParam["nfeatures"] = DomaineParametreOp<int>(0, 0, 255, 1);
+    intParam["nOctaveLayers"] = DomaineParametreOp<int>(3, 1, 100, 1);;
+    doubleParam["contrastThreshold"] = DomaineParametreOp<double>(0.04, 0, 1000, 0.1);
+    doubleParam["edgeThreshold"] = DomaineParametreOp<double>(10, 0, 1000, 0.1);
+    doubleParam["sigma"] = DomaineParametreOp<double>(1.6, 0, 1000, 0.1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 

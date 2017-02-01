@@ -1642,10 +1642,11 @@ if (op[0] != this)
 	return r;
 
 
-if (pOCV->detecteur.size() == 0 || pOCV->detecteur.find("SIFT") == pOCV->detecteur.end())
+//if (pOCV->detecteur.size() == 0 )
 	{
 	cv::Ptr<cv::xfeatures2d::SIFT> b;
-	b = cv::xfeatures2d::SIFT::create();
+	b = cv::xfeatures2d::SIFT::create(pOCV->intParam["nfeatures"].valeur, pOCV->intParam["nOctaveLayers"].valeur,
+        pOCV->doubleParam["contrastThreshold"].valeur, pOCV->doubleParam["edgeThreshold"].valeur, pOCV->doubleParam["sigma"].valeur);
 	pOCV->detecteur["SIFT"] = b;
 	}
 if (pointCle.find(IMAGEINFOCV_SIFT_DES)==pointCle.end())
