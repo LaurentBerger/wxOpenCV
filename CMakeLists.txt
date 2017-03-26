@@ -14,8 +14,11 @@ FIND_PATH(
 
 
 
-find_package(glog)
-find_package(ceres)
+find_package(glog QUIET OPTIONAL_COMPONENTS)
+find_package(ceres QUIET OPTIONAL_COMPONENTS)
+find_package(VTK  OPTIONAL_COMPONENTS)
+
+
 find_package(OpenSceneGraph  REQUIRED osgDB osgUtil osgGA osgViewer osgText osgSim)
 find_package(OpenCV  REQUIRED)
 find_package(wxWidgets COMPONENTS core base net adv aui html  qa richtext stc ribbon xml gl REQUIRED)
