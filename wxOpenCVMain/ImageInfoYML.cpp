@@ -1,4 +1,5 @@
 #include "ImageInfo.h"
+#include "wx/string.h"
 
 using namespace std;
 using namespace cv;
@@ -251,8 +252,49 @@ InitImageInfo(NULL);
 int nb = strlen(nomDuFichier);
 string ext(nomDuFichier+nb-3);
 std::transform(ext.begin(), ext.end(), ext.begin(), ::tolower);
-if (ext!="yml")
-    cv::imread(nomDuFichier,cv::IMREAD_UNCHANGED).copyTo(*((UMat *)(this)));
+if (ext != "yml" && ext != "csv")
+cv::imread(nomDuFichier, cv::IMREAD_UNCHANGED).copyTo(*((UMat *)(this)));
+else if (ext == "csv")
+{
+    fstream fs;
+    fs.open(nomDuFichier, std::fstream::in);
+    if (fs.is_open())
+    {
+        Mat x(1,0,CV_32F);
+        char tmp[10000];
+        int nbLigne=0;
+        do
+        {
+            fs.getline(tmp, 10000);
+            if (fs.good())
+            {
+                wxString s(tmp);
+                s.Replace("\"","");
+                s.Replace(",", ".");
+                vector<float> ligne;
+                int pos=0;
+                do
+                {
+                    pos=s.Find("\t");
+                    if (pos != wxNOT_FOUND)
+                    {
+                        double w;
+                        s.SubString(0,pos).ToCDouble(&w);
+                        ligne.push_back(w);
+                        s = s.Remove(0,pos+1);
+                    }
+
+                }
+                while (pos!= wxNOT_FOUND);
+                Mat lig(ligne);
+                x.push_back(lig.t());
+            }
+        }
+        while (fs.good());
+        x.copyTo(*((UMat *)(this)));
+    }
+
+}
 else
 {
     cv::FileStorage fs(nomDuFichier, cv::FileStorage::READ);

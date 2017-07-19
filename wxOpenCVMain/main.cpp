@@ -464,7 +464,7 @@ void wxOsgApp::Ouvrir(wxCommandEvent &w)
 wxString dossier;
 configApp->Read("/dossier",&dossier,wxEmptyString);
 
-wxFileDialog ouverture(NULL, "Ouvrir ", dossier, wxEmptyString, "*.tif;*.jpg;*.bmp;*.png;*.yml;*.gz;*.is2");
+wxFileDialog ouverture(NULL, "Ouvrir ", dossier, wxEmptyString, "*.tif;*.jpg;*.bmp;*.png;*.yml;*.gz;*.is2;*.csv");
 if (ouverture.ShowModal()!=wxID_OK)
 	return;
 configApp->Write("/dossier",ouverture.GetDirectory());
