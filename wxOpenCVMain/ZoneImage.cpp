@@ -1504,7 +1504,7 @@ void FenetrePrincipale::TracerPointMSER(wxBufferedPaintDC &hdc)
 {
 if (!tracerMSERPoint || !imAcq)
 	return;
-if (!imAcq->PointCle())
+if (!imAcq->PointCleMSER())
 	{
 	tracerMSERPoint = false;
 	return;

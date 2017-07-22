@@ -1744,6 +1744,13 @@ std::vector<ImageInfoCV	*>ImageInfoCV::DetectMser(std::vector<ImageInfoCV	*>op ,
     if (op[0] != this)
         return r;
 
+    if (pointCle.find(IMAGEINFOCV_SURF_DES) == pointCle.end())
+    {
+        std::vector<cv::KeyPoint> x;
+        pointCle.insert(std::make_pair(IMAGEINFOCV_SURF_DES, x));
+    }
+    else
+        pointCle[IMAGEINFOCV_SURF_DES].clear();
 
         {
         cv::Ptr<cv::Feature2D> b;
