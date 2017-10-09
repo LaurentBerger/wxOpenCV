@@ -301,6 +301,7 @@ std::vector<ImageInfoCV *>OuLogique(std::vector< ImageInfoCV *>, ParametreOperat
 std::vector<ImageInfoCV *>OuExcluLogique(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>Add(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>AddPonderee(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
+std::vector<ImageInfoCV *>AbsDiff(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>Sub(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>Mul(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);
 std::vector<ImageInfoCV *>Div(std::vector< ImageInfoCV *>, ParametreOperation *pOCV = NULL);

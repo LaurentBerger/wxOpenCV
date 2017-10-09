@@ -135,6 +135,7 @@
 #include "bitmaps\recons.xpm"
 #include "bitmaps\wrapaffine.xpm"
 #include "bitmaps\addition.xpm"
+#include "bitmaps\absdiff.xpm"
 #include "bitmaps\additionponderee.xpm"
 #include "bitmaps\AKAZE.xpm"
 #include "bitmaps\KAZE.xpm"

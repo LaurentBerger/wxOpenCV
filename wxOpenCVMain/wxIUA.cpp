@@ -34,6 +34,7 @@ enum
     // menu items
     ID_ADDITION =1,
     ID_SOUSTRACTION,
+    ID_ABSSOUSTRACTION,
     ID_DIVISION,
 	ID_MULTIPLICATION,
     ID_ADDITION_PONDEREE,
@@ -226,6 +227,7 @@ void InterfaceAvance::InitCommande()
 bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "add", 0);
     CONSTRUCTEUR_CMD(bouton, ID_ADDITION,addition_xpm, _("Add 2 images"), "add", 0);
     CONSTRUCTEUR_CMD(bouton, ID_SOUSTRACTION, soustraction_xpm, _("Difference between 2 images"), "subtract", 0);
+    CONSTRUCTEUR_CMD(bouton, ID_ABSSOUSTRACTION, absdiff_xpm, _("Absoulte Difference of 2 images"), "absdiff", 0);
     CONSTRUCTEUR_CMD(bouton, ID_MULTIPLICATION, multiplication_xpm,_("product"), "multiply", 0);
     CONSTRUCTEUR_CMD(bouton, ID_ADDITION_PONDEREE, additionponderee_xpm,_("Add weighted"), "addweighted", 0);
     CONSTRUCTEUR_CMD(bouton, ID_DIVISION, division_xpm,_("Divide"), "divide", 0);
@@ -1082,7 +1084,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
    // create some toolbars
 	enum
 		{
-			Tool_bidon,Tool_addition,Tool_soustraction,Tool_multiplication,Tool_division,Tool_oulogique,Tool_etlogique,Tool_ouexclulogique,Tool_negationlogique,
+			Tool_bidon,Tool_addition,Tool_soustraction,Tool_absdiff,Tool_multiplication,Tool_division,Tool_oulogique,Tool_etlogique,Tool_ouexclulogique,Tool_negationlogique,
 			Tool_erosion,Tool_dilatation,Tool_ouverture,Tool_fermeture,Tool_gradmorph,Tool_chaphautblanc,Tool_chaphautnoir,
 			Tool_gradient_mod,Tool_gradient_x,Tool_gradient_y,Tool_laplacien,
 			Tool_canny,Tool_cornerharris,Tool_goodfeature,Tool_houghcircle,Tool_houghline,Tool_houghlinep,

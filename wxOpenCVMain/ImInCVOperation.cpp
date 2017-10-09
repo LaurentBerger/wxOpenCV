@@ -94,7 +94,37 @@ return r;
 }
 
 /**
- * @function Add
+* @function AbsDiff
+* @brief valeur absolue de ma Différence de deux images
+*/
+std::vector<ImageInfoCV *>ImageInfoCV::AbsDiff(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
+{
+    std::vector<ImageInfoCV	*> r;
+    if (op.size()<2)
+        return r;
+    ImageInfoCV	*im = new ImageInfoCV;
+
+    if (pOCV)
+    {
+        if (op[0]->depth() != op[1]->depth())
+            pOCV->intParam["ddepth"].valeur = CV_32F;
+        if (pOCV->intParam["image_mask"].valeur == 1)
+            cv::absdiff(*op[0], *op[1], *im);
+        else
+            cv::absdiff(*op[0], *op[1], *im);
+    }
+    else
+        if (pOCV->intParam["image_mask"].valeur == 1)
+            cv::absdiff(*op[0], *op[1], *im);
+        else
+            cv::absdiff(*op[0], *op[1], *im);
+    r.push_back(im);
+    return r;
+}
+
+
+/**
+ * @function Sub
  * @brief Différence de deux images
  */
 std::vector<ImageInfoCV *>ImageInfoCV::Sub(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)

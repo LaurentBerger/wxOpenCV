@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 
 PROJECT (wxopencv)
 set(CMAKE_MODULE_PATH "${wxopencv_SOURCE_DIR}/CMake")
-set(plplot $ENV{PLPLOT_HOME})
+#set(plplot $ENV{PLPLOT_HOME})
 set(LOSDK $ENV{LibreOfficeSDK})
 
 FIND_PATH(
@@ -44,8 +44,8 @@ endif (WIN32)
 
 FOREACH( mesdossiers 
         wxOpenCVMain
-        RapportAOO
-		ScilabOpenCV
+#       RapportAOO
+#		ScilabOpenCV
     )
 
     ADD_SUBDIRECTORY(${mesdossiers})

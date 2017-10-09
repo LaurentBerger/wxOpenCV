@@ -1027,12 +1027,19 @@ if (s == "addweighted")
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "subtract")
-	{
-	nbImageRes=1;
-	nomOperation=s;
+{
+    nbImageRes = 1;
+    nomOperation = s;
     intParam["image_mask"] = DomaineParametreOp<int>(0, 0, 1, 1);
     intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
-	nbOperande= 2;
+    nbOperande = 2;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "absdiff")
+{
+    nbImageRes = 1;
+    nomOperation = s;
+    nbOperande = 2;
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "multiply")
@@ -1917,14 +1924,22 @@ if (s == "addweighted")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=121&zoom=70,250,100";
 	return true;
 }
-if (s=="subtract")
-	{
-	operateur = &ImageInfoCV::Sub;
-	nbOperande= 2;
-	lienHtml="http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#subtract";
-	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=172&zoom=70,250,100";
-	return true;
-	}
+if (s == "subtract")
+{
+    operateur = &ImageInfoCV::Sub;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#subtract";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=172&zoom=70,250,100";
+    return true;
+}
+if (s == "absdiff")
+{
+    operateur = &ImageInfoCV::AbsDiff;
+    nbOperande = 2;
+    lienHtml = "http://docs.opencv.org/modules/core/doc/operations_on_arrays.html#absdiff";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=172&zoom=70,250,100";
+    return true;
+}
 if (s=="multiply")
 	{
 	operateur = &ImageInfoCV::Mul;
