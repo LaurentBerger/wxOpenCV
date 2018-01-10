@@ -1243,7 +1243,7 @@ string	nomFichier;
 wxString s=repertoireDuDocument+_T("\\")+nomDuDocument;
 wxFileName p(s);
 
-nomFichier = s;
+nomFichier = s.c_str();
 
 vector<int> compression_params;
 
@@ -1442,7 +1442,7 @@ if (ind1!=-1)
 		origineImage.op[1] = osgApp->Fenetre(ind2)->ImAcq();
 	if (ind3>=0)
 		origineImage.op[2] = osgApp->Fenetre(ind3)->ImAcq();
-	origineImage.nomOperation=nomF;
+	origineImage.nomOperation=nomF.c_str();
 	}
 }
 

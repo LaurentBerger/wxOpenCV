@@ -184,7 +184,7 @@ nomImage.SplitPath(NomImage(),&nomVolume,&nomRep,&nomFic,&extension);
 nom=nomVolume+nomImage.GetVolumeSeparator()+nomRep+nomImage.GetPathSeparator();
 nomImage.SplitPath(nomSequence,&nomVolume,&nomRep,&nomFic,&extension);
 nom = nom + nomFic+_T(".txt");
-nomFichierRapport = nom;
+nomFichierRapport = nom.c_str();
 }
 
 int		HorodatageSequence::TpsProchaineImage()

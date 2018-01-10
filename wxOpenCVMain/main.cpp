@@ -557,7 +557,7 @@ pOCV.doubleParam.clear();
 pOCV.intParam.clear();
 pOCV.sizeParam.clear();
 pOCV.pointParam.clear();
-if (!pOCV.InitOperation((string)s))
+if (!pOCV.InitOperation((string)s.c_str()))
 	wxMessageBox(_("Undefined operation"));
 
 }
@@ -1297,7 +1297,7 @@ while ( bCont )
 	wxString valCleChaine;
 	if (configApp->Read("nomSequence",&valCleChaine))
 		{
-		listeOperation[nbOperation].nomSequence=valCleChaine;
+		listeOperation[nbOperation].nomSequence=valCleChaine.c_str();
 		}
 	wxString	cleIndEtape;
 	bool bSeqOp;
@@ -1319,7 +1319,7 @@ while ( bCont )
         if (opValide && !configApp->Read("op", &valCleChaine))
             opValide = false;
         else
-            listeOperation[nbOperation].nomOperation = valCleChaine;
+            listeOperation[nbOperation].nomOperation = valCleChaine.c_str();
         if (opValide && !configApp->Read("nbOperande", &val))
             {
 			opValide = false;

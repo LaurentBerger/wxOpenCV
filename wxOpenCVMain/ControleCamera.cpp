@@ -1232,7 +1232,7 @@ if (m.GetSecond()<10)
 	nom.Printf("%s0%d", nom, m.GetSecond());
 else
 	nom.Printf("%s%d.avi", nom, m.GetSecond());
-v->open(static_cast<const char*>(nom),CV_FOURCC('P','I','M','1'),20,((FenetrePrincipale*)parent)->ImAcq()->size());
+v->open(static_cast<const char*>(nom.c_str()),CV_FOURCC('P','I','M','1'),20,((FenetrePrincipale*)parent)->ImAcq()->size());
 if (!v->isOpened())
     wxMessageBox(_("Error openning video for writting"));
 }

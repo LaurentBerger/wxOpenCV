@@ -149,7 +149,7 @@ if (nomFlux!=wxEmptyString)
         captureVideo = new I3ThermalSystem("\\\\.\\pipe\\thermalExpert");
         indId = -1;
         fluxVideo = true;
-        nomFluxVideo = nomFlux;
+        nomFluxVideo = nomFlux.c_str();
     }
     else
 
@@ -163,7 +163,7 @@ if (nomFlux!=wxEmptyString)
 		//captureVideo = new cv::VideoCapture(nomFlux.ToStdString()); 
 		indId=-1;
         fluxVideo = true;
-        nomFluxVideo= nomFlux;
+        nomFluxVideo= nomFlux.c_str();
 	}
     double x = captureVideo->get(CAP_PROP_FOURCC);
     int fourcc = captureVideo->get(CAP_PROP_FOURCC);

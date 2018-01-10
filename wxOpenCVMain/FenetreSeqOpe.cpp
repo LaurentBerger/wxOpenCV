@@ -439,7 +439,7 @@ void FenetreSequenceOperation::ComboBox(wxCommandEvent &w)
     if (!st)
         throw("wxStaticText undefined");
     if (lienCombo.find(w.GetId()) != lienCombo.end())
-        nom = lienCombo[w.GetId()];
+        nom = lienCombo[w.GetId()].c_str();
     if (p.intParam.find(nom) != p.intParam.end())
         {
 
@@ -483,12 +483,12 @@ string nom;
 
 
 
-nom=((wxWindow*)w.GetEventObject())->GetName();
+nom=((wxWindow*)w.GetEventObject())->GetName().c_str();
 ParametreOperation p=(*seqActif)[indSeq][indOpe];
 wxStaticText *st = (wxStaticText*)wxWindow::FindWindowById(w.GetId() - 100, this);
 if (!st)
 	throw("wxStaticText undefined");
-nom = st->GetLabel();
+nom = st->GetLabel().c_str();
 if (p.doubleParam.find(nom) != p.doubleParam.end())
 {
 	if (p.doubleParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
@@ -820,7 +820,7 @@ wxString nom(ouverture.GetDirectory() + "\\" + ouverture.GetFilename());
 wxString nom(ouverture.GetDirectory() + "/" + ouverture.GetFilename());
 #endif
 
-cv::FileStorage fs((string)nom, cv::FileStorage::READ);
+cv::FileStorage fs((string)nom.c_str(), cv::FileStorage::READ);
 if (!fs.isOpened())
 {
     wxMessageBox(_("File cannot be opened"),_("Error"));

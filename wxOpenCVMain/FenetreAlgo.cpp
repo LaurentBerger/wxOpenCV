@@ -181,7 +181,7 @@ int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
-nom=st->GetLabel();
+nom=st->GetLabel().c_str();
 if (pOCV->doubleParam.find(nom)!=pOCV->doubleParam.end())
 	{
 	if (pOCV->doubleParam[nom].valeur==((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
@@ -248,15 +248,15 @@ nomFic.Replace(" ","_");
 cv::FileStorage fsy;
 if (evt.GetId() == ID_SAUVER_SEQ_XML)
     {
-    fsx.open((string)nomFic+".xml", cv::FileStorage::WRITE);
-    fsy.open((string)nomFic+".yml", cv::FileStorage::WRITE);
+    fsx.open((string)nomFic.c_str() +".xml", cv::FileStorage::WRITE);
+    fsy.open((string)nomFic.c_str() +".yml", cv::FileStorage::WRITE);
     }
 for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
 	{
 	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
 	if (listeOp[nb].first->indEtape==-1)
 		listeOp[nb].first->indEtape=nb;
-	listeOp[nb].first->nomSequence=w->GetValue();
+	listeOp[nb].first->nomSequence=w->GetValue().c_str();
 	ParametreOperation p;
 	p=*(listeOp[nb].first);
     if (evt.GetId() == ID_SAUVER_SEQ_CONFIG)
@@ -281,7 +281,7 @@ while(f && f->OrigineImage()->indOpFenetre.size()>0)
 		if (listeOp[nb].first->indEtape==-1)
 			listeOp[nb].first->indEtape=nb;
 		wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
-		listeOp[nb].first->nomSequence=w->GetValue();
+		listeOp[nb].first->nomSequence=w->GetValue().c_str();
 		ParametreOperation p;
 		p=*(listeOp[nb].first);
         if (evt.GetId() == ID_SAUVER_SEQ_CONFIG)
@@ -561,7 +561,7 @@ int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
-nom=st->GetLabel();
+nom=st->GetLabel().c_str();
 if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
 	{
 	int ds=pOCV->intParam[nom].valeur-((wxSpinCtrl*)(w.GetEventObject()))->GetValue();
@@ -639,7 +639,7 @@ int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
-nom=st->GetLabel();
+nom=st->GetLabel().c_str();
 double x = w.GetValue();
 if (pOCV->doubleParam.find(nom) != pOCV->doubleParam.end())
 	{
@@ -708,7 +708,7 @@ int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
-nom=st->GetLabel();
+nom=st->GetLabel().c_str();
 if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
 	{
 	int ds=pOCV->intParam[nom].valeur-((wxSpinCtrl*)(w.GetEventObject()))->GetValue();

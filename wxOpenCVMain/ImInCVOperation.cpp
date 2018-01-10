@@ -2917,11 +2917,19 @@ std::vector<ImageInfoCV	*> r;
 r.push_back(this);
 if (pano==NULL)
     return r;
-cv::detail::BestOf2NearestMatcher matcher(pOCV->intParam["try_use_gpu"].valeur, pOCV->doubleParam["match_conf"].valeur,
-    pOCV->intParam["num_matches_thresh1"].valeur,pOCV->intParam["num_matches_thresh2"].valeur);
+cv::Ptr<cv::detail::FeaturesMatcher> matcher;
+if (pOCV->intParam["panoMatcher"].valeur == 2)
+    matcher = cv::makePtr<cv::detail::AffineBestOf2NearestMatcher>(false, pOCV->intParam["try_use_gpu"].valeur, 
+        pOCV->doubleParam["match_conf"].valeur);
+else if (pOCV->intParam["panoMatcher"].valeur == 0)
+    matcher = cv::makePtr<cv::detail::BestOf2NearestMatcher>(pOCV->intParam["try_use_gpu"].valeur, pOCV->doubleParam["match_conf"].valeur,
+        pOCV->intParam["num_matches_thresh1"].valeur, pOCV->intParam["num_matches_thresh2"].valeur);
+else
+    matcher = cv::makePtr<cv::detail::BestOf2NearestRangeMatcher>(pOCV->intParam["range_width"].valeur, pOCV->intParam["try_use_gpu"].valeur, pOCV->doubleParam["match_conf"].valeur);
 
-matcher(pano->features, pano->appariement);
-matcher.collectGarbage();
+
+(*matcher)(pano->features, pano->appariement);
+matcher->collectGarbage();
 
 AjoutOpAttribut(pOCV);
 r.push_back(this);
@@ -2977,10 +2985,16 @@ std::vector<ImageInfoCV	*> ImageInfoCV::HomographyBasedEstimator(std::vector< Im
     }
 
     
-    if (pOCV->intParam["ba_cost_func"].valeur == 0) 
+    if (pOCV->intParam["ba_cost_func"].valeur == 0)
+        pano->adjuster = cv::makePtr<cv::detail::NoBundleAdjuster>();
+    else if (pOCV->intParam["ba_cost_func"].valeur == 1)
         pano->adjuster = cv::makePtr<cv::detail::BundleAdjusterReproj>();
-    else if (pOCV->intParam["ba_cost_func"].valeur == 1) 
+    else if (pOCV->intParam["ba_cost_func"].valeur == 2)
         pano->adjuster = cv::makePtr<cv::detail::BundleAdjusterRay>();
+    else if (pOCV->intParam["ba_cost_func"].valeur == 3)
+        pano->adjuster = cv::makePtr<cv::detail::BundleAdjusterAffine>();
+    else if (pOCV->intParam["ba_cost_func"].valeur == 4)
+        pano->adjuster = cv::makePtr<cv::detail::BundleAdjusterAffinePartial>();
     else
     {
 		throw std::string("HomographyBasedEstimator : unknown BundleAdjusterReproj!");
@@ -3102,8 +3116,10 @@ std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, 
 			pano->warper_creator = cv::makePtr<cv::PaniniPortraitWarper>(1.5f, 1.0f);
         else if (pOCV->intParam["warp_type"].valeur ==13)
 			pano->warper_creator = cv::makePtr<cv::MercatorWarper>();
-        else if (pOCV->intParam["warp_type"].valeur ==14)
-			pano->warper_creator = cv::makePtr<cv::TransverseMercatorWarper>();
+        else if (pOCV->intParam["warp_type"].valeur == 14)
+            pano->warper_creator = cv::makePtr<cv::TransverseMercatorWarper>();
+        else if (pOCV->intParam["warp_type"].valeur == 15)
+            pano->warper_creator = cv::makePtr<cv::AffineWarper>();
     }
 
 	if (!pano->warper_creator)
@@ -3142,12 +3158,17 @@ std::vector<ImageInfoCV	*> ImageInfoCV::CorrectionExpo(std::vector< ImageInfoCV 
 	std::vector<ImageInfoCV	*> r;
 	if (pano == NULL)
 		return r;
-	if (pano->op.size() <= 1)
-	{
-		throw std::string("WraperWrap : not enough image!");
-		return r;
-	}
-	pano->correcteurExpo = cv::detail::ExposureCompensator::createDefault(pOCV->intParam["expos_comp_type"].valeur);
+    if (pano->op.size() <= 1)
+    {
+        throw std::string("WraperWrap : not enough image!");
+        return r;
+    }
+    if (pano->corners.size() == 0 || pano->images_warped.size() == 0 || pano->masks_warped.size() == 0)
+    {
+        throw std::string("Pano is not warped!");
+        return r;
+    }
+    pano->correcteurExpo = cv::detail::ExposureCompensator::createDefault(pOCV->intParam["expos_comp_type"].valeur);
 	pano->correcteurExpo->feed(pano->corners, pano->images_warped, pano->masks_warped);
 
     if (pano->op[0]->channels() == 1)

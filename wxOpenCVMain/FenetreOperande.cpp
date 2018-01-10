@@ -91,7 +91,7 @@ int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
-nom=st->GetLabel();
+nom=st->GetLabel().c_str();
 if (pOCV->doubleParam.find(nom)!=pOCV->doubleParam.end())
 	{
 	if (pOCV->doubleParam[nom].valeur==((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
@@ -165,7 +165,7 @@ int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
-nom=st->GetLabel();
+nom=st->GetLabel().c_str();
 if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
 	{
 	int ds=pOCV->intParam[nom].valeur-((wxSpinCtrl*)(w.GetEventObject()))->GetValue();
@@ -243,7 +243,7 @@ int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
 wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
-nom=st->GetLabel();
+nom=st->GetLabel().c_str();
 if (pOCV->doubleParam.find(nom)!=pOCV->doubleParam.end())
 	{
 	if (pOCV->doubleParam[nom].valeur==((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())

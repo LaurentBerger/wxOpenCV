@@ -312,8 +312,16 @@ listeParam["diffusivity"].insert(std::pair<string, int>(_("DIFF_PM_G2").ToStdStr
 listeParam["diffusivity"].insert(std::pair<string, int>(_("DIFF_WEICKERT").ToStdString(), 2));
 listeParam["diffusivity"].insert(std::pair<string, int>(_("DIFF_CHARBONNIER").ToStdString(), 2));
 
-listeParam["ba_cost_func"].insert(std::pair<string, int>(_("reproj").ToStdString(), 0));
-listeParam["ba_cost_func"].insert(std::pair<string, int>(_("ray").ToStdString(), 1));
+listeParam["panoMatcher"].insert(std::pair<string, int>(_("affine").ToStdString(), 2));
+listeParam["panoMatcher"].insert(std::pair<string, int>(_("bestNearest").ToStdString(), 0));
+listeParam["panoMatcher"].insert(std::pair<string, int>(_("bestNearestRange").ToStdString(), 1));
+
+
+listeParam["ba_cost_func"].insert(std::pair<string, int>(_("no").ToStdString(), 0));
+listeParam["ba_cost_func"].insert(std::pair<string, int>(_("reproj").ToStdString(), 1));
+listeParam["ba_cost_func"].insert(std::pair<string, int>(_("ray").ToStdString(), 2));
+listeParam["ba_cost_func"].insert(std::pair<string, int>(_("affine").ToStdString(), 3));
+listeParam["ba_cost_func"].insert(std::pair<string, int>(_("affine_partial").ToStdString(), 4));
 
 listeParam["Stitch_descriptor"].insert(std::pair<string, int>(_("orb").ToStdString(), 0));
 listeParam["Stitch_descriptor"].insert(std::pair<string, int>(_("surf").ToStdString(), 1));
@@ -333,6 +341,7 @@ listeParam["warp_type"].insert(std::pair<string, int>(_("paniniPortraitA2B1").To
 listeParam["warp_type"].insert(std::pair<string, int>(_("paniniPortraitA1.5B1").ToStdString(), 12));
 listeParam["warp_type"].insert(std::pair<string, int>(_("mercator").ToStdString(), 13));
 listeParam["warp_type"].insert(std::pair<string, int>(_("transverseMercator").ToStdString(), 14));
+listeParam["warp_type"].insert(std::pair<string, int>(_("AffineWarper").ToStdString(), 15));
 
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("no").ToStdString(), 0));
 listeParam["seam_find_type"].insert(std::pair<string, int>(_("voronoi").ToStdString(), 1));
@@ -1473,11 +1482,13 @@ if (s == "detailfeaturesfinder")
 }
 if (s == "detailmatchesinfo")
 	{
+    intParam["panoMatcher"] = DomaineParametreOp<int>(0, 0, 2, 1);
     intParam["try_use_gpu"]=DomaineParametreOp<int>(0,0,1,1);
     doubleParam["match_conf"]=DomaineParametreOp<double>(0.3,0.01,1000,0.1);
     intParam["num_matches_thresh1"] = DomaineParametreOp<int>(6,1,1000,1);
-    intParam["num_matches_thresh2"] = DomaineParametreOp<int>(6,1,1000,1);
-	nomOperation=s;
+    intParam["num_matches_thresh2"] = DomaineParametreOp<int>(6, 1, 1000, 1);
+    intParam["range_width"] = DomaineParametreOp<int>(-1, -1, 20, 1);
+    nomOperation=s;
 	nbOperande= 1;
 	nbImageRes=0;
     xx.listeOperation.insert(make_pair(s, *this));
@@ -1495,8 +1506,9 @@ if (s == "homographybasedestimator")
 	nomOperation = s;
 	nbOperande = 1;
 	nbImageRes = 0;
-	intParam["is_focals_estimated"] = DomaineParametreOp<int>(0, 0, 1, 1);
-	intParam["do_wave_correct"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["is_focals_estimated"] = DomaineParametreOp<int>(0, 0, 1, 1);
+    intParam["ba_cost_func"] = DomaineParametreOp<int>(0, 4, 1, 1);
+    intParam["do_wave_correct"] = DomaineParametreOp<int>(0, 0, 1, 1);
 	intParam["ba_refine_mask_0"] = DomaineParametreOp<int>(1, 0, 1, 1);
 	intParam["ba_refine_mask_2"] = DomaineParametreOp<int>(1, 0, 1, 1);
 	intParam["ba_refine_mask_3"] = DomaineParametreOp<int>(1, 0, 1, 1);
