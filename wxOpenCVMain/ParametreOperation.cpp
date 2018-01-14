@@ -419,6 +419,22 @@ if (xx.listeOperation.size() != 0 && xx.listeOperation.find(s) != xx.listeOperat
 //intParam["Save result"] = DomaineParametreOp<int>(0, 0, 0, 1);
 //intParam["Send packet"] = DomaineParametreOp<int>(0, 0, 0, 1);
 intParam["opencl_enable"]=  DomaineParametreOp<int>(1, 0, 1, 1);
+if (s == "LoadDNN")
+{
+    nomOperation = s;
+    nbImageRes = 1;
+    nbOperande = 1;
+    opVideo = true;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "ForwardDNN")
+{
+    nomOperation = s;
+    nbImageRes = 1;
+    nbOperande = 1;
+    opVideo = true;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "fond_gaussianmixture")
 	{
 	nomOperation = s;
@@ -1571,6 +1587,26 @@ bool ParametreOperation::InitPtrFonction()
 opAttribut=false;
 string s(nomOperation);
 
+if (s == "LoadDNN")
+{
+    nomOperation = s;
+    nbImageRes = 1;
+    nbOperande = 1;
+    opVideo = true;
+    lienHtml = "https://docs.opencv.org/trunk/d6/d0f/group__dnn.html#ga29d0ea5e52b1d1a6c2681e3f7d68473a";
+    refPDF = "";
+    operateur = &ImageInfoCV::LoadDNN;
+}
+if (s == "ApplyDNN")
+{
+    nomOperation = s;
+    nbImageRes = 1;
+    nbOperande = 1;
+    opVideo = true;
+    lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractormog2";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=375&zoom=70,250,100";
+    operateur = &ImageInfoCV::ApplyDNN;
+}
 if (s == "fond_gaussianmixture2")
 	{
 	nomOperation = s;

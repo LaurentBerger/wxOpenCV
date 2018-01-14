@@ -359,10 +359,28 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
     ImageInfoCV xx;
 
     s = bouton[event.GetId()].chaineOperation.c_str();
-    ParametreOperation p(s);
-    p.InitPtrFonction();
-    FenetreAlgo *f = new FenetreAlgo(NULL, _("Operation"), wxDefaultPosition, wxDefaultSize, xx.listeOperation[s], wxDEFAULT_FRAME_STYLE);
-    f->Show(true);
+    if (event.GetId()!=ID_DNN)
+    {
+        ParametreOperation p(s);
+        p.InitPtrFonction();
+        FenetreAlgo *f = new FenetreAlgo(NULL, _("Operation"), wxDefaultPosition, wxDefaultSize, xx.listeOperation[s], wxDEFAULT_FRAME_STYLE);
+        f->Show(true);
+    }
+    else
+    {
+        ParametreOperation p(s);
+        wxString model;
+        wxString proto;
+        wxFileDialog ouvertureModel(NULL, _("Open model!"), model, wxEmptyString, "*.caffemodel;*.net;*.pb;*.weights");
+        if (ouvertureModel.ShowModal() != wxID_OK)
+            return;
+        wxFileDialog ouvertureProto(NULL, _("Prototxt!"), proto, wxEmptyString, "*.prototxt;*.cfg");
+        if (ouvertureProto.ShowModal() != wxID_OK)
+            return;
+        p.nomModele = model.c_str();
+        p.nomProto = proto.c_str();
+    }
+
 }
 
 
@@ -1223,40 +1241,54 @@ Close(true);
 
 void InterfaceAvance::SelectOperation(wxCommandEvent& evt)
 {
-wxString s;
+    wxString s;
 
-switch(evt.GetId()){
-case ID_CONVOLUTION:
-	{
-	ImageInfoCV x;
+    switch(evt.GetId()){
+    case ID_CONVOLUTION:
+	    {
+	    ImageInfoCV x;
 
-	if (x.IndOpConvolution()<0 || x.opnn[x.IndOpConvolution()]==NULL)
-		{
-		wxMessageBox(_("You must defined convolution operator first!"),_("Error"), wxOK,this);
-		return;
-		}
-	}
-	break;
-case ID_EROSION:
-case ID_DILATATION:
-case ID_OUVERTURE:
-case ID_FERMETURE:
-case ID_CHAPHAUTBL:
-case ID_CHAPHAUTNO:
-case ID_GRADMORPH:
-	{
-	ImageInfoCV x;
+	    if (x.IndOpConvolution()<0 || x.opnn[x.IndOpConvolution()]==NULL)
+		    {
+		    wxMessageBox(_("You must defined convolution operator first!"),_("Error"), wxOK,this);
+		    return;
+		    }
+	    }
+	    break;
+    case ID_EROSION:
+    case ID_DILATATION:
+    case ID_OUVERTURE:
+    case ID_FERMETURE:
+    case ID_CHAPHAUTBL:
+    case ID_CHAPHAUTNO:
+    case ID_GRADMORPH:
+	    {
+	    ImageInfoCV x;
 
-	if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
-		{
-		wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
-		return;
-		}
-	}
-	break;
-	}
-((wxOsgApp*)osgApp)->DefOperateurImage(bouton[evt.GetId()].chaineOperation);
-((wxOsgApp*)osgApp)->DefPointeurSouris(1,1);
+	    if (x.IndOpMorphologie()<0 || x.opMorph[x.IndOpMorphologie()]==NULL)
+		    {
+		    wxMessageBox(_("You must defined morphological operator first!"),_("Error"), wxOK,this);
+		    return;
+		    }
+	    }
+	    break;
+    case ID_DNN:
+    {
+        wxString model;
+        wxString proto;
+        wxFileDialog ouvertureModel(NULL, _("Open model!"), model, wxEmptyString, "*.caffemodel;*.net;*.pb;*.weights");
+        if (ouvertureModel.ShowModal() != wxID_OK)
+            return;
+        wxFileDialog ouvertureProto(NULL, _("Prototxt!"), proto, wxEmptyString, "*.prototxt;*.cfg");
+        if (ouvertureProto.ShowModal() != wxID_OK)
+            return;
+
+    }
+        break;
+    }
+
+    ((wxOsgApp*)osgApp)->DefOperateurImage(bouton[evt.GetId()].chaineOperation);
+    ((wxOsgApp*)osgApp)->DefPointeurSouris(1,1);
 
 }
 

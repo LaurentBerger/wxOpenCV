@@ -20,6 +20,7 @@
 #include "ImageConstante.h"
 #include "ParametreOperation.h"
 #include "opencv2/core/ocl.hpp"
+#include "opencv2/dnn.hpp"
 
 typedef short CodeErreur;
 #define ERREUR OuiERREUR
@@ -119,6 +120,14 @@ static int nbIterOperateur;
 static int indOpConvolution; /*< Indice de l'opérateur de convolution sélectionné */
 static int indOpMorphologie; /*< Indice de l'opérateur de morphologie sélectionné */
 static int typeResultat;	 /*< Type du résultat -1, ou constante OpenCV  p256 reference manual */
+
+struct referenceCNN {
+    cv::dnn::Net net;
+    cv::String modele;
+    cv::String proto;
+};
+static std::map<int, referenceCNN	 > deep;    /*<! map des réseaux chargés */
+
 /***********************************************
 ********** INFO IMAGE **************************
 ************************************************/
@@ -331,6 +340,9 @@ std::vector<ImageInfoCV	*>Fond_MOG(std::vector< ImageInfoCV *>, ParametreOperati
 std::vector<ImageInfoCV	*>Fond_MOG2(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>Fond_KNN(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV	*>Fond_GMG(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+
+std::vector<ImageInfoCV		*>ImageInfoCV::LoadDNN(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV);
+std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV);
 
 
 std::vector<ImageInfoCV	*>DetailFeaturesFinder(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);

@@ -68,7 +68,9 @@ bool opVideo;	/*<! vrai lorsque l'opérateur binaire prend l'image précédente de 
 bool opAttribut;/*<! vrai lorsque l'opérateur modifie l'une des images sans créer une nouvelle image */
 int	 opErreur; /*<! non nul lorsqu'une erreur s'est produite */
 std::string msgErreur; /*<! message d'erreur */
-
+std::string nomModele; /*<: nom du modele pour deep learning*/
+std::string nomProto; /*<: nom du proto pour deep learning*/
+std::string nomLabel; /*<: nom du label pour deep learning*/
 std::vector <ImageInfoCV *> op;	/*!< Opérande 1 pour l'opération demandée */
 //ParametreOperation pOCV;	/*!< parametre de l'opérateur Unaire */
 std:: vector<int>	indOpFenetre;	/*!< Indice de la fenêtre contenant l'image de opérande 1 */
