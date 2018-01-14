@@ -225,5 +225,6 @@
 #include "bitmaps\superpixelseeds.xpm"
 #include "bitmaps\superpixelslc.xpm"
 #include "bitmaps\superpixelslic.xpm"
+#include "bitmaps\DNN.xpm"
 
 #endif

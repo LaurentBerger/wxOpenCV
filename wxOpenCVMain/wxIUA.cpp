@@ -100,7 +100,7 @@ enum
 	ID_GRAD_MVT,
 	ID_SEG_MVT,
 
-
+    ID_DNN,
 
 
 	ID_FFT,
@@ -246,6 +246,9 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
 
     CONSTRUCTEUR_CMD(bouton, ID_FFT, fft_xpm, _("FFT"), "FFT", 2);
     CONSTRUCTEUR_CMD(bouton, ID_IFFT, ifft_xpm, _("inverse FFT"), "IFFT", 2);
+
+    CONSTRUCTEUR_CMD(bouton, ID_DNN, DNN_xpm, _("Deep networks"), "DNN", 13);
+
 
     CONSTRUCTEUR_CMD(bouton, ID_CONVOLUTION, convolution_xpm, _("Convolution"), "filter2d", 3);
     CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_MOD, gradient_mod_xpm,_("Gradient modulus"), "scharr_mod", 3);
@@ -413,7 +416,8 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
 	InstallationbarreOutils(9);
 	InstallationbarreOutils(10);
 	InstallationbarreOutils(11);
-	InstallationbarreOutils(12);
+    InstallationbarreOutils(12);
+    InstallationbarreOutils(13);
 
 
     wxWindow* wnd10 = CreateTextCtrl(wxEmptyString);
@@ -1093,7 +1097,7 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 			Tool_LisMoy,Tool_LisMed,Tool_LisGau,Tool_flou,Tool_convolution,
 			Tool_fusionplan,Tool_separationplan,Tool_rgbluminance,
 			Tool_pyrflotoptique, Tool_calcflotoptique, Tool_calcflotoptiquefarner, Tool_estimtransfo, Tool_majmvt, Tool_phasecorrel,
-			Tool_Max
+			Tool_Max,Tool_DNN
 		};
 
 	tb = new wxAuiToolBar(this, wxID_ANY, wxDefaultPosition, wxDefaultSize,
@@ -1178,12 +1182,17 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 					  Name("Feature 2D").Caption("Feature 2D").
 					  ToolbarPane().Top().Row(6));
 		break;
-	case 12:
-		m_mgr.AddPane(tb, wxAuiPaneInfo().
-					  Name("Stitching").Caption("Stitching").
-					  ToolbarPane().Top().Row(8));
-		break;
-		}
+    case 12:
+        m_mgr.AddPane(tb, wxAuiPaneInfo().
+            Name("Stitching").Caption("Stitching").
+            ToolbarPane().Top().Row(8));
+        break;
+    case 13:
+        m_mgr.AddPane(tb, wxAuiPaneInfo().
+            Name("Deep net").Caption("Deep net").
+            ToolbarPane().Top().Row(8));
+        break;
+    }
 	    // add the toolbars to the manager
 }
 
