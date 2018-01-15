@@ -125,8 +125,9 @@ struct referenceCNN {
     cv::dnn::Net net;
     cv::String modele;
     cv::String proto;
+    cv::String labels;
 };
-static std::map<int, referenceCNN	 > deep;    /*<! map des réseaux chargés */
+static std::map<std::string , referenceCNN	 > deep;    /*<! map des réseaux chargés */
 
 /***********************************************
 ********** INFO IMAGE **************************

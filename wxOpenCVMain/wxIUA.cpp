@@ -247,7 +247,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
     CONSTRUCTEUR_CMD(bouton, ID_FFT, fft_xpm, _("FFT"), "FFT", 2);
     CONSTRUCTEUR_CMD(bouton, ID_IFFT, ifft_xpm, _("inverse FFT"), "IFFT", 2);
 
-    CONSTRUCTEUR_CMD(bouton, ID_DNN, DNN_xpm, _("Deep networks"), "DNN", 13);
+    CONSTRUCTEUR_CMD(bouton, ID_DNN, DNN_xpm, _("Deep networks"), "ForwardDNN", 13);
 
 
     CONSTRUCTEUR_CMD(bouton, ID_CONVOLUTION, convolution_xpm, _("Convolution"), "filter2d", 3);
@@ -374,11 +374,39 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
         wxFileDialog ouvertureModel(NULL, _("Open model!"), model, wxEmptyString, "*.caffemodel;*.net;*.pb;*.weights");
         if (ouvertureModel.ShowModal() != wxID_OK)
             return;
-        wxFileDialog ouvertureProto(NULL, _("Prototxt!"), proto, wxEmptyString, "*.prototxt;*.cfg");
-        if (ouvertureProto.ShowModal() != wxID_OK)
-            return;
-        p.nomModele = model.c_str();
-        p.nomProto = proto.c_str();
+        wxString s(ouvertureModel.GetFilename());
+        wxString s2(ouvertureModel.GetDirectory());
+        s = "\\" + s;
+        model = s2 + s;
+        wxFileName fs(model);
+        if (fs.GetExt() == "caffemodel")
+        {
+            wxFileDialog ouvertureProto(NULL, _("Prototxt!"), proto, wxEmptyString, "*.prototxt");
+            if (ouvertureProto.ShowModal() != wxID_OK)
+                return;
+            wxString s(ouvertureProto.GetFilename());
+            wxString s2(ouvertureProto.GetDirectory());
+            s = "\\" + s;
+            proto = s2 + s;
+
+        }
+        else if (fs.GetExt() == "weights")
+        {
+            wxFileDialog ouvertureProto(NULL, _("Prototxt!"), proto, wxEmptyString, "*.cfg");
+            if (ouvertureProto.ShowModal() != wxID_OK)
+                return;
+            wxString s(ouvertureProto.GetFilename());
+            wxString s2(ouvertureProto.GetDirectory());
+            s = "\\" + s;
+            proto = s2 + s;
+
+        }
+        if (fs.GetExt() == "caffemodel" || fs.GetExt() == "net" || fs.GetExt() == "pb" || fs.GetExt() == "weights")
+        {
+            p.nomModele = model.c_str();
+            p.nomProto = proto.c_str();
+            p.typeModele = fs.GetExt().c_str();
+        }
     }
 
 }
@@ -1272,19 +1300,6 @@ void InterfaceAvance::SelectOperation(wxCommandEvent& evt)
 		    }
 	    }
 	    break;
-    case ID_DNN:
-    {
-        wxString model;
-        wxString proto;
-        wxFileDialog ouvertureModel(NULL, _("Open model!"), model, wxEmptyString, "*.caffemodel;*.net;*.pb;*.weights");
-        if (ouvertureModel.ShowModal() != wxID_OK)
-            return;
-        wxFileDialog ouvertureProto(NULL, _("Prototxt!"), proto, wxEmptyString, "*.prototxt;*.cfg");
-        if (ouvertureProto.ShowModal() != wxID_OK)
-            return;
-
-    }
-        break;
     }
 
     ((wxOsgApp*)osgApp)->DefOperateurImage(bouton[evt.GetId()].chaineOperation);

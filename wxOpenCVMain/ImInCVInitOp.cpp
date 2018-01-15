@@ -8,7 +8,7 @@ ImageInfoCV **ImageInfoCV::op55=OperateurConv(6,5,5);
 ImageInfoCV **ImageInfoCV::op77=OperateurConv(6,7,7);
 ImageInfoCV **ImageInfoCV::opnn=OperateurConv(-1,-1,-1);
 ImageInfoCV **ImageInfoCV::opMorph=OperateurMorph();
-
+std::map<std::string, ImageInfoCV::referenceCNN	 > ImageInfoCV::deep;
 
 void ImageInfoCV::InitOp()
 {

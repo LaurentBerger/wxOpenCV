@@ -71,6 +71,7 @@ std::string msgErreur; /*<! message d'erreur */
 std::string nomModele; /*<: nom du modele pour deep learning*/
 std::string nomProto; /*<: nom du proto pour deep learning*/
 std::string nomLabel; /*<: nom du label pour deep learning*/
+std::string typeModele; /*<: type du modele pour deep learning caffemodel weights pb*/
 std::vector <ImageInfoCV *> op;	/*!< Opérande 1 pour l'opération demandée */
 //ParametreOperation pOCV;	/*!< parametre de l'opérateur Unaire */
 std:: vector<int>	indOpFenetre;	/*!< Indice de la fenêtre contenant l'image de opérande 1 */

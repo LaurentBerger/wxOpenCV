@@ -2525,18 +2525,23 @@ std::vector<ImageInfoCV		*>ImageInfoCV::LogPolar(std::vector< ImageInfoCV*> op, 
 
 std::vector<ImageInfoCV		*>ImageInfoCV::LoadDNN(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
-    ImageInfoCV *imDst = new ImageInfoCV();
-    cv::linearPolar(*op[0], *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur, pOCV->intParam["interpolationFlags"].valeur);
-
     std::vector<ImageInfoCV	*> r;
-    r.push_back(imDst);
+    if (pOCV->nomModele.length()==0)
+        return r;
+    if (pOCV->typeModele == "caffemodel")
+    {
+
+    }
     return r;
 }
 
 std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
     ImageInfoCV *imDst = new ImageInfoCV();
-    cv::linearPolar(*op[0], *imDst, pOCV->pointParam["center"].valeur, pOCV->doubleParam["M"].valeur, pOCV->intParam["interpolationFlags"].valeur);
+    
+    if (imDst->deep.find(pOCV->nomModele) == imDst->deep.end())
+    {
+    }
 
     std::vector<ImageInfoCV	*> r;
     r.push_back(imDst);
