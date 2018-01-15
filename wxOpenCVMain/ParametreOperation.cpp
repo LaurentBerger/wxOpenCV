@@ -1597,7 +1597,7 @@ if (s == "LoadDNN")
     refPDF = "";
     operateur = &ImageInfoCV::LoadDNN;
 }
-if (s == "ApplyDNN")
+if (s == "ForwardDNN")
 {
     nomOperation = s;
     nbImageRes = 1;

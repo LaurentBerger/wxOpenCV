@@ -359,35 +359,34 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
     ImageInfoCV xx;
 
     s = bouton[event.GetId()].chaineOperation.c_str();
+    ParametreOperation p(s);
+    p.InitPtrFonction();
     if (event.GetId()!=ID_DNN)
     {
-        ParametreOperation p(s);
-        p.InitPtrFonction();
         FenetreAlgo *f = new FenetreAlgo(NULL, _("Operation"), wxDefaultPosition, wxDefaultSize, xx.listeOperation[s], wxDEFAULT_FRAME_STYLE);
         f->Show(true);
     }
     else
     {
-        ParametreOperation p(s);
         wxString model;
         wxString proto;
         wxFileDialog ouvertureModel(NULL, _("Open model!"), model, wxEmptyString, "*.caffemodel;*.net;*.pb;*.weights");
         if (ouvertureModel.ShowModal() != wxID_OK)
             return;
-        wxString s(ouvertureModel.GetFilename());
+        wxString s1(ouvertureModel.GetFilename());
         wxString s2(ouvertureModel.GetDirectory());
-        s = "\\" + s;
-        model = s2 + s;
+        s1 = "\\" + s1;
+        model = s2 + s1;
         wxFileName fs(model);
         if (fs.GetExt() == "caffemodel")
         {
             wxFileDialog ouvertureProto(NULL, _("Prototxt!"), proto, wxEmptyString, "*.prototxt");
             if (ouvertureProto.ShowModal() != wxID_OK)
                 return;
-            wxString s(ouvertureProto.GetFilename());
+            wxString s1(ouvertureProto.GetFilename());
             wxString s2(ouvertureProto.GetDirectory());
-            s = "\\" + s;
-            proto = s2 + s;
+            s1 = "\\" + s1;
+            proto = s2 + s1;
 
         }
         else if (fs.GetExt() == "weights")
@@ -395,17 +394,17 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
             wxFileDialog ouvertureProto(NULL, _("Prototxt!"), proto, wxEmptyString, "*.cfg");
             if (ouvertureProto.ShowModal() != wxID_OK)
                 return;
-            wxString s(ouvertureProto.GetFilename());
+            wxString s1(ouvertureProto.GetFilename());
             wxString s2(ouvertureProto.GetDirectory());
-            s = "\\" + s;
-            proto = s2 + s;
+            s1 = "\\" + s1;
+            proto = s2 + s1;
 
         }
         if (fs.GetExt() == "caffemodel" || fs.GetExt() == "net" || fs.GetExt() == "pb" || fs.GetExt() == "weights")
         {
-            p.nomModele = model.c_str();
-            p.nomProto = proto.c_str();
-            p.typeModele = fs.GetExt().c_str();
+            xx.listeOperation[s].nomModele = model.c_str();
+            xx.listeOperation[s].nomProto = proto.c_str();
+            xx.listeOperation[s].typeModele = fs.GetExt().c_str();
         }
     }
 
