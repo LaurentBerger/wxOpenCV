@@ -2526,11 +2526,20 @@ std::vector<ImageInfoCV		*>ImageInfoCV::LogPolar(std::vector< ImageInfoCV*> op, 
 std::vector<ImageInfoCV		*>ImageInfoCV::LoadDNN(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
     std::vector<ImageInfoCV	*> r;
+    ImageInfoCV img;
     if (pOCV->nomModele.length()==0)
         return r;
-    if (pOCV->typeModele == "caffemodel")
+    if (pOCV->typeModele == "caffemodel" && ImageInfoCV::deep.find("pOCV->nomModele")== ImageInfoCV::deep.end())
     {
+        cv::dnn::Net net;
 
+        net = cv::dnn::readNetFromCaffe(pOCV->nomProto, pOCV->nomModele);
+        ImageInfoCV::referenceCNN x;
+        x.modele = pOCV->nomModele;
+        x.net = net;
+        x.proto = pOCV->nomProto;
+
+        ImageInfoCV::deep.insert(make_pair(pOCV->nomModele, x));
     }
     return r;
 }
