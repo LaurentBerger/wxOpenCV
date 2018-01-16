@@ -128,6 +128,11 @@ struct referenceCNN {
     cv::String labels;
 };
 static std::map<std::string , referenceCNN	 > deep;    /*<! map des réseaux chargés */
+std::vector<std::string> labelsCaffe;
+std::vector<std::string> nomClassseCaffe;
+std::vector<std::string> labelsYolo;
+std::vector<cv::Rect> rectYolo;
+std::vector<std::string> nomClassseYolo;
 
 /***********************************************
 ********** INFO IMAGE **************************

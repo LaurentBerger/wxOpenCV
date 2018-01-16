@@ -422,16 +422,18 @@ intParam["opencl_enable"]=  DomaineParametreOp<int>(1, 0, 1, 1);
 if (s == "LoadDNN")
 {
     nomOperation = s;
-    nbImageRes = 1;
+    nbImageRes = 0;
     nbOperande = 1;
+    opAttribut = true;
     opVideo = true;
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "ForwardDNN")
 {
     nomOperation = s;
-    nbImageRes = 1;
+    nbImageRes = 0;
     nbOperande = 1;
+    opAttribut = true;
     opVideo = true;
     xx.listeOperation.insert(make_pair(s, *this));
 }

@@ -370,6 +370,7 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
     {
         wxString model;
         wxString proto;
+        wxString label;
         wxFileDialog ouvertureModel(NULL, _("Open model!"), model, wxEmptyString, "*.caffemodel;*.net;*.pb;*.weights");
         if (ouvertureModel.ShowModal() != wxID_OK)
             return;
@@ -387,6 +388,13 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
             wxString s2(ouvertureProto.GetDirectory());
             s1 = "\\" + s1;
             proto = s2 + s1;
+            wxFileDialog ouvertureLabels(NULL, _("Labels!"), label, wxEmptyString, "*.txt");
+            if (ouvertureProto.ShowModal() != wxID_OK)
+                return;
+            s1 = ouvertureProto.GetFilename();
+            s2 = ouvertureProto.GetDirectory();
+            s1 = "\\" + s1;
+            label = s2 + s1;
 
         }
         else if (fs.GetExt() == "weights")
@@ -404,6 +412,7 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
         {
             xx.listeOperation[s].nomModele = model.c_str();
             xx.listeOperation[s].nomProto = proto.c_str();
+            xx.listeOperation[s].nomLabel = label.c_str();
             xx.listeOperation[s].typeModele = fs.GetExt().c_str();
         }
     }

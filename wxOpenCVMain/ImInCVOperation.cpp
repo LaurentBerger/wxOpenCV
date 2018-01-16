@@ -2559,7 +2559,8 @@ std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, 
         cv::Scalar(104, 117, 123), false);   //Convert Mat to batch of images
                                          //! [Prepare blob]
     ImageInfoCV::deep.find(pOCV->nomModele)->second.net.setInput(inputBlob, "data");        //set the network input
-    cv::Mat prob = ImageInfoCV::deep.find(pOCV->nomModele)->second.net.forward("prob");         //compute output
+    cv::Mat prob = ImageInfoCV::deep.find(pOCV->nomModele)->second.net.forward("prob");//compute output
+    prob.copyTo(*imDst);
 
     r.push_back(imDst);
     return r;
