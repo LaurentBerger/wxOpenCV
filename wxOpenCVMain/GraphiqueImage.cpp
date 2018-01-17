@@ -134,7 +134,9 @@ if(feuille->PtCtrl())
 if (cam && cam->IsRunning())
 	{
 	wxCriticalSectionLocker enter(travailCam);
-
+    TracerDNNCaffe(hdc);
+    TracerDNNYolo(hdc);
+    TracerDNNTensor(hdc);
     TracerPointORB(hdc);
     TracerPointSIFT(hdc);
     TracerPointSURF(hdc);
@@ -150,6 +152,9 @@ if (cam && cam->IsRunning())
     }
 else
     {
+    TracerDNNCaffe(hdc);
+    TracerDNNYolo(hdc);
+    TracerDNNTensor(hdc);
 
     TracerPointORB(hdc);
     TracerPointSIFT(hdc);

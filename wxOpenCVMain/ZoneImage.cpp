@@ -1065,7 +1065,10 @@ case MENU_POINTMSER:
 case MENU_POINTBLOB:
     tracerBLOBPoint = !tracerBLOBPoint;
     break;
-	}
+case MENU_DNNCAFFE:
+    tracerDNNCaffe = !tracerDNNCaffe;
+    break;
+}
 feuille->Refresh(false);
 
 }
@@ -1208,6 +1211,36 @@ for (int k=0;k<imAcq->channels()&& k<3;k++)
 		}
 	}
 }
+
+void FenetrePrincipale::TracerDNNCaffe(wxBufferedPaintDC &hdc)
+{
+    if (!tracerDNNCaffe || !imAcq)
+        return;
+    if (imAcq->ProbCaffe().empty())
+    {
+        tracerDNNCaffe = false;
+        return;
+    }
+
+}
+
+void FenetrePrincipale::TracerDNNYolo(wxBufferedPaintDC &hdc)
+{
+    if (!tracerDNNCaffe || !imAcq)
+        return;
+    if (imAcq->ObjetsYolo().empty())
+    {
+        tracerDNNCaffe = false;
+        return;
+    }
+}
+
+void FenetrePrincipale::TracerDNNTensor(wxBufferedPaintDC &hdc)
+{
+    if (!tracerDNNCaffe || !imAcq)
+        return;
+}
+
 
 void FenetrePrincipale::TracerBonCoin(wxBufferedPaintDC &hdc)
 {

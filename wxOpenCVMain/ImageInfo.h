@@ -128,6 +128,9 @@ struct referenceCNN {
     cv::String labels;
 };
 static std::map<std::string , referenceCNN	 > deep;    /*<! map des réseaux chargés */
+cv::Mat probCaffe;
+cv::Mat objetsYolo;
+cv::Mat probYolo;
 std::vector<std::string> labelsCaffe;
 std::vector<std::string> nomClassseCaffe;
 std::vector<std::string> labelsYolo;
@@ -546,6 +549,12 @@ ParametreOperation *AjoutOpAttribut(ParametreOperation *p);
 std::map<std::string,ParametreOperation> *ListeOpAttribut(){return &listeOpAttribut;};
 ParametreOperation *OpAttribut(std::string s){if (listeOpAttribut.find(s) != listeOpAttribut.end()) return &listeOpAttribut[s];return NULL;};
 Panoramique *ParamPano(){return pano;};
+
+cv::Mat ProbCaffe() { return probCaffe; };
+cv::Mat ObjetsYolo() { return objetsYolo; };
+std::string LabelCaffe(int i) { if (i >= 0 && i < labelsCaffe.size()) return labelsCaffe[i]; return std::string(); };
+std::string LabelYolo(int i) { if (i >= 0 && i < labelsYolo.size()) return labelsYolo[i]; return std::string(); };
+
 
 int EtapeOp();  /*<! retourne l'indice de l'étape de l'opérateur le plus grand */
 void CloneStat(ImageInfoCV *im);

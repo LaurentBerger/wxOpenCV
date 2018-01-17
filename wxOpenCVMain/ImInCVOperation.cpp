@@ -2561,8 +2561,8 @@ std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, 
     ImageInfoCV::deep.find(pOCV->nomModele)->second.net.setInput(inputBlob, "data");        //set the network input
     cv::Mat prob = ImageInfoCV::deep.find(pOCV->nomModele)->second.net.forward("prob");//compute output
     prob.copyTo(*imDst);
-
-    r.push_back(imDst);
+    op[0]->probCaffe = prob;
+    r.push_back(this);
     return r;
 }
 

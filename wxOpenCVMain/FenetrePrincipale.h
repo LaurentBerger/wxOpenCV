@@ -434,6 +434,9 @@ bool				tracerMSERPoint;	/*!< 1 Tracer des descripteurs MSER */
 bool				tracerORBPoint;		/*!< 1 Tracer des descripteurs ORB */
 bool				tracerSURFPoint;    /*!< 1 Tracer des descripteurs SURF */
 bool				tracerSIFTPoint;	/*!< 1 Tracer des descripteurs SIFT */
+bool                tracerDNNCaffe;     /*!< 1 Tracer du resultat caffe */
+bool                tracerDNNYolo;      /*!< 1 Tracer du resultat yolo */
+bool                tracerDNNTensor;    /*!< 1 Tracer du resultat tensor flow */
 bool				tracerAppariementPoint; /*!< 1 Tracerdes relations des points clés de deux images */
 char				modeImage;			/*!< 0 image, 1 module gradient, 2 binarisation, 3 region */
 char				modeFiltre;			/*!< 0 image standard, image filtrée avec passe bas le + fort */
@@ -697,6 +700,24 @@ void ChgtTailleVideo(int type);
      *  \brief ChgtTailleVideo
      *  \param type 0 et 8 image CV_UC3,32 8 image CV_SF32
      */
+
+void TracerDNNCaffe(wxBufferedPaintDC &hdc);
+/*!
+*  \brief TracerDNN
+*  \param type 0 et 8 Tracer des résultats du modèle DNN
+*/
+
+void TracerDNNYolo(wxBufferedPaintDC &hdc);
+/*!
+*  \brief TracerDNN
+*  \param type 0 et 8 Tracer des résultats du modèle DNN
+*/
+
+void TracerDNNTensor(wxBufferedPaintDC &hdc);
+/*!
+*  \brief TracerDNN
+*  \param type 0 et 8 Tracer des résultats du modèle DNN
+*/
 
 void TracerDescripteur(wxCommandEvent& event);
 /*!
@@ -1262,6 +1283,9 @@ enum
 	MENU_POINTAKAZE,
 	MENU_POINTKAZE,
 	MENU_POINTAGAST,
+    MENU_DNNCAFFE,
+    MENU_DNNYOLO,
+    MENU_DNNTENSOR,
     Menu_Popup_Palette,
     Menu_Popup_Zoom,
     ARCENCIEL_ = 2684,
