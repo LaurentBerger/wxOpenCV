@@ -831,13 +831,20 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 			menu.Check(MENU_POINTAGAST, true);
 		menuParametre = true;
 		}
-	if (f->FenAlgo() != NULL && f->FenAlgo()->NbParamSouris()!=0)
-		{
-		menu.AppendCheckItem(MENU_PTCTRL, _T("Control Point"));
-		if (pointCtrl)
-			menu.Check(MENU_PTCTRL, true);
-		menuParametre = true;
-		}
+    if (f->FenAlgo() != NULL && f->FenAlgo()->NbParamSouris() != 0)
+    {
+        menu.AppendCheckItem(MENU_PTCTRL, _T("Control Point"));
+        if (pointCtrl)
+            menu.Check(MENU_PTCTRL, true);
+        menuParametre = true;
+    }
+    if (!f->ImAcq()->ProbCaffe().empty())
+    {
+        menu.AppendCheckItem(MENU_DNNCAFFE, _T("Caffe label"));
+        if (f->TracerDNNCaffe())
+            menu.Check(MENU_DNNCAFFE, true);
+        menuParametre = true;
+    }
     if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre || f->ImAcq()->EtapeOp()>0)
     {
         menu.AppendCheckItem(Menu_ParAlg, _T("Algo. Parameters"));
@@ -1221,24 +1228,33 @@ void FenetrePrincipale::TracerDNNCaffe(wxBufferedPaintDC &hdc)
         tracerDNNCaffe = false;
         return;
     }
+    hdc.SetPen(*wxBLACK_DASHED_PEN);
+    cv::Mat p=imAcq->ProbCaffe();
+    int pos=-1;
+    p = p.reshape(1, 1); //reshape the blob to 1x1000 matrix
+    cv::Point indClasse;
+    double proba;
 
+    cv::minMaxLoc(p, NULL, &proba, NULL, &indClasse);
+    pos = indClasse.x;
+    wxString l;
+    l.Printf("%s : %lf", imAcq->LabelCaffe(pos), proba);
+    hdc.DrawText(l, 10, 30);
 }
 
 void FenetrePrincipale::TracerDNNYolo(wxBufferedPaintDC &hdc)
 {
-    if (!tracerDNNCaffe || !imAcq)
+    if (!tracerDNNYolo || !imAcq)
         return;
     if (imAcq->ObjetsYolo().empty())
     {
-        tracerDNNCaffe = false;
+        tracerDNNYolo = false;
         return;
     }
 }
 
 void FenetrePrincipale::TracerDNNTensor(wxBufferedPaintDC &hdc)
 {
-    if (!tracerDNNCaffe || !imAcq)
-        return;
 }
 
 

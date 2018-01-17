@@ -663,7 +663,10 @@ bool TracerPointKAZE(){ return	tracerKAZEPoint; };		/*!< 1 tracer des contours d
 bool TracerPointAKAZE(){ return	tracerAKAZEPoint; };		/*!< 1 tracer des contours des descripteurs des KAZE  */
 bool TracerPointAGAST(){ return	tracerAGASTPoint; };		/*!< 1 tracer des contours des descripteurs des KAZE  */
 bool TracerPointFREAK(){ return	tracerFREAKPoint; };		/*!< 1 tracer des contours des descripteurs des ORB  */
-bool TracerPointMSER(){ return	tracerMSERPoint; };		/*!< 1 tracer des contours des descripteurs des MSER  */
+bool TracerPointMSER() { return	tracerMSERPoint; };		/*!< 1 tracer des contours des descripteurs des MSER  */
+bool TracerDNNCaffe() { return	tracerDNNCaffe; };		/*!< 1 tracer des contours des descripteurs des MSER  */
+bool TracerDNNYolo() { return	tracerDNNYolo; };		/*!< 1 tracer des contours des descripteurs des MSER  */
+bool TracerDNNTensor() { return	tracerDNNTensor; };		/*!< 1 tracer des contours des descripteurs des MSER  */
 bool TracerContour(){ return	tracerContour; };		/*!< 1 tracer des contours des régions */
 bool TracerEnveloppe(){return	tracerEnveloppe;};
 bool TracerDefautEnveloppe(){return	tracerDefautEnveloppe;};

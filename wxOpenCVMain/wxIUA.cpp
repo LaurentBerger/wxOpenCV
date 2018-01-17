@@ -389,10 +389,10 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
             s1 = "\\" + s1;
             proto = s2 + s1;
             wxFileDialog ouvertureLabels(NULL, _("Labels!"), label, wxEmptyString, "*.txt");
-            if (ouvertureProto.ShowModal() != wxID_OK)
+            if (ouvertureLabels.ShowModal() != wxID_OK)
                 return;
-            s1 = ouvertureProto.GetFilename();
-            s2 = ouvertureProto.GetDirectory();
+            s1 = ouvertureLabels.GetFilename();
+            s2 = ouvertureLabels.GetDirectory();
             s1 = "\\" + s1;
             label = s2 + s1;
 

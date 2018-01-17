@@ -1602,7 +1602,7 @@ if (s == "LoadDNN")
 if (s == "ForwardDNN")
 {
     nomOperation = s;
-    nbImageRes = 1;
+    nbImageRes = 0;
     nbOperande = 1;
     opVideo = true;
     lienHtml = "http://docs.opencv.org/modules/video/doc/motion_analysis_and_object_tracking.html#backgroundsubtractormog2";

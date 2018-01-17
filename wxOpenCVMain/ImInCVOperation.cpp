@@ -2539,6 +2539,22 @@ std::vector<ImageInfoCV		*>ImageInfoCV::LoadDNN(std::vector< ImageInfoCV*> op, P
         x.net = net;
         x.proto = pOCV->nomProto;
 
+
+        std::ifstream fp(pOCV->nomLabel);
+        if (fp.is_open())
+        {
+
+            std::string name;
+            while (!fp.eof())
+            {
+                std::getline(fp, name);
+                if (name.length())
+                    labelsCaffe.push_back(name.substr(name.find(' ') + 1));
+            }
+        }
+        fp.close();
+
+
         ImageInfoCV::deep.insert(make_pair(pOCV->nomModele, x));
     }
     return r;
@@ -2562,6 +2578,8 @@ std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, 
     cv::Mat prob = ImageInfoCV::deep.find(pOCV->nomModele)->second.net.forward("prob");//compute output
     prob.copyTo(*imDst);
     op[0]->probCaffe = prob;
+    AjoutOpAttribut(pOCV);
+
     r.push_back(this);
     return r;
 }
