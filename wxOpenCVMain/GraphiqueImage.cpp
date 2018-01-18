@@ -149,7 +149,7 @@ if (cam && cam->IsRunning())
 	TracerFlotOptique(hdc);
     if (statActif)
         imgStatIm->Plot(modeCamera);
-    }
+}
 else
     {
     TracerDNNCaffe(hdc);

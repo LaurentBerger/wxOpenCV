@@ -406,6 +406,13 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
             wxString s2(ouvertureProto.GetDirectory());
             s1 = "\\" + s1;
             proto = s2 + s1;
+            wxFileDialog ouvertureLabels(NULL, _("names!"), label, wxEmptyString, "*.names");
+            if (ouvertureLabels.ShowModal() != wxID_OK)
+                return;
+            s1 = ouvertureLabels.GetFilename();
+            s2 = ouvertureLabels.GetDirectory();
+            s1 = "\\" + s1;
+            label = s2 + s1;
 
         }
         if (fs.GetExt() == "caffemodel" || fs.GetExt() == "net" || fs.GetExt() == "pb" || fs.GetExt() == "weights")

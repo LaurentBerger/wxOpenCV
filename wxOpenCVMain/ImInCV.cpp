@@ -314,6 +314,28 @@ if (im->CoinRef()->size()!=0)
 	for (int i=0;i<channels()&&i<im->channels();i++)
 		coinRef[i] = (*im->CoinRef())[i];
 	}
+if (im->CaffeResultPret())
+{
+    probCaffe = im->probCaffe.clone();
+    probRetenue.clear();
+    for (int i = 0; i < im->probRetenue.size(); i++)
+        probRetenue.push_back(im->probRetenue[i]);
+    nomClassseCaffe.clear();
+    for (int i = 0; i < im->nomClassseCaffe.size(); i++)
+        nomClassseCaffe.push_back(im->nomClassseCaffe[i]);
+
+}
+if (im->YoloResultPret())
+{
+    objetsYolo = im->objetsYolo.clone();
+    rectYolo.clear();
+    for (int i = 0; i < im->rectYolo.size(); i++)
+        rectYolo.push_back(im->rectYolo[i]);
+    nomClassseYolo.clear();
+    for (int i = 0; i < im->nomClassseYolo.size(); i++)
+        nomClassseYolo.push_back(im->nomClassseYolo[i]);
+
+}
 
 
  }

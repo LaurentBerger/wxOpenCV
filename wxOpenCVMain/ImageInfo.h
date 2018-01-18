@@ -126,14 +126,14 @@ struct referenceCNN {
     cv::String modele;
     cv::String proto;
     cv::String labels;
+    std::vector<std::string> listeLabels;
 };
 static std::map<std::string , referenceCNN	 > deep;    /*<! map des réseaux chargés */
 cv::Mat probCaffe;
 cv::Mat objetsYolo;
 cv::Mat probYolo;
-std::vector<std::string> labelsCaffe;
+std::vector<double> probRetenue;
 std::vector<std::string> nomClassseCaffe;
-std::vector<std::string> labelsYolo;
 std::vector<cv::Rect> rectYolo;
 std::vector<std::string> nomClassseYolo;
 
@@ -550,10 +550,13 @@ std::map<std::string,ParametreOperation> *ListeOpAttribut(){return &listeOpAttri
 ParametreOperation *OpAttribut(std::string s){if (listeOpAttribut.find(s) != listeOpAttribut.end()) return &listeOpAttribut[s];return NULL;};
 Panoramique *ParamPano(){return pano;};
 
-cv::Mat ProbCaffe() { return probCaffe; };
-cv::Mat ObjetsYolo() { return objetsYolo; };
-std::string LabelCaffe(int i) { if (i >= 0 && i < labelsCaffe.size()) return labelsCaffe[i]; return std::string(); };
-std::string LabelYolo(int i) { if (i >= 0 && i < labelsYolo.size()) return labelsYolo[i]; return std::string(); };
+int CaffeResultPret() { return nomClassseCaffe.size(); };
+int YoloResultPret() { return nomClassseYolo.size(); };
+cv::Rect RectYolo(int i) { if (i >= 0 && i < rectYolo.size()) return rectYolo[i]; };
+double ProbCaffe(int i) { if (i >= 0 && i<probRetenue.size()) return probRetenue[i]; };
+double ProbYolo(int i) { if (i >= 0 && i<probRetenue.size()) return probRetenue[i]; };
+std::string LabelCaffe(int i) { if (i >= 0 && i < nomClassseCaffe.size()) return nomClassseCaffe[i]; return std::string(); };
+std::string LabelYolo(int i) { if (i >= 0 && i < nomClassseYolo.size()) return nomClassseYolo[i]; return std::string(); };
 
 
 int EtapeOp();  /*<! retourne l'indice de l'étape de l'opérateur le plus grand */

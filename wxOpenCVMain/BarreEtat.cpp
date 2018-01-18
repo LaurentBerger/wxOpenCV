@@ -364,10 +364,25 @@ s.Printf(_T("(%d,%d)=(%f,%f,%f)"),x,y,r,g,b);
     SetStatusText(s, Champ_Text);
 
 }
-void BarreInfo::UpdateCurseur(int x,int y,std::complex<float> r,std::complex<float> g,std::complex<float> b)
+void BarreInfo::UpdateCurseur(int x, int y, std::complex<float> r, std::complex<float> g, std::complex<float> b)
 {
-wxString	s;
-s.Printf(_T("(%d,%d)=(%lf,%lf,%lf)"),x,y,abs(r),abs(g),abs(b));
+    wxString	s;
+    s.Printf(_T("(%d,%d)=(%lf,%lf,%lf)"), x, y, abs(r), abs(g), abs(b));
+    SetStatusText(s, Champ_Text);
+
+}
+
+void BarreInfo::UpdateCurseur(int x, int y, cv::Vec2d z2d)
+{
+    wxString	s;
+    s.Printf(_T("(%d,%d)=(%lf,%lf)"), x, y, z2d[0], z2d[1]);
+    SetStatusText(s, Champ_Text);
+
+}
+void BarreInfo::UpdateCurseur(int x, int y, cv::Vec2f z2d)
+{
+    wxString	s;
+    s.Printf(_T("(%d,%d)=(%f,%f)"), x, y, z2d[0], z2d[1]);
     SetStatusText(s, Champ_Text);
 
 }

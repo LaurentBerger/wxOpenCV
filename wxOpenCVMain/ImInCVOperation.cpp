@@ -2549,7 +2549,7 @@ std::vector<ImageInfoCV		*>ImageInfoCV::LoadDNN(std::vector< ImageInfoCV*> op, P
             {
                 std::getline(fp, name);
                 if (name.length())
-                    labelsCaffe.push_back(name.substr(name.find(' ') + 1));
+                    x.listeLabels.push_back(name.substr(name.find(' ') + 1));
             }
         }
         fp.close();
@@ -2557,29 +2557,116 @@ std::vector<ImageInfoCV		*>ImageInfoCV::LoadDNN(std::vector< ImageInfoCV*> op, P
 
         ImageInfoCV::deep.insert(make_pair(pOCV->nomModele, x));
     }
+    if (pOCV->typeModele == "weights" && ImageInfoCV::deep.find("pOCV->nomModele") == ImageInfoCV::deep.end())
+    {
+        cv::dnn::Net net;
+
+        net = cv::dnn::readNetFromDarknet(pOCV->nomProto, pOCV->nomModele);
+        ImageInfoCV::referenceCNN x;
+        x.modele = pOCV->nomModele;
+        x.net = net;
+        x.proto = pOCV->nomProto;
+
+
+        std::ifstream fp(pOCV->nomLabel);
+        if (fp.is_open())
+        {
+
+            std::string className = "";
+            while (std::getline(fp, className))
+                x.listeLabels.push_back(className);
+        }
+        fp.close();
+
+
+        ImageInfoCV::deep.insert(make_pair(pOCV->nomModele, x));
+    }
+
     return r;
 }
 
 std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
 {
     ImageInfoCV *imDst = new ImageInfoCV();
-    
-    std::vector<ImageInfoCV	*> r;
-    if (ImageInfoCV::deep.find(pOCV->nomModele) == ImageInfoCV::deep.end())
-    {
-        op[0]->LoadDNN(op, pOCV);
-    }
-    if (ImageInfoCV::deep.find(pOCV->nomModele) == ImageInfoCV::deep.end())
-        return r;
-    cv::Mat inputBlob = cv::dnn::blobFromImage(*op[0], 1.0f, cv::Size(224, 224),
-        cv::Scalar(104, 117, 123), false);   //Convert Mat to batch of images
-                                         //! [Prepare blob]
-    ImageInfoCV::deep.find(pOCV->nomModele)->second.net.setInput(inputBlob, "data");        //set the network input
-    cv::Mat prob = ImageInfoCV::deep.find(pOCV->nomModele)->second.net.forward("prob");//compute output
-    prob.copyTo(*imDst);
-    op[0]->probCaffe = prob;
-    AjoutOpAttribut(pOCV);
+    std::map<std::string, ImageInfoCV::referenceCNN>::iterator x;
 
+    std::vector<ImageInfoCV	*> r;
+    if (pOCV->nomModele.length() != 0)
+    {
+        x = ImageInfoCV::deep.find(pOCV->nomModele);
+        if (x == ImageInfoCV::deep.end())
+        {
+            op[0]->LoadDNN(op, pOCV);
+        }
+
+        x = ImageInfoCV::deep.find(pOCV->nomModele);
+        if (x == ImageInfoCV::deep.end() )
+            return r;
+    }
+    else
+        if (ImageInfoCV::deep.size() == 0)
+            return r;
+        else
+            x = ImageInfoCV::deep.begin();
+    if (x->second.modele.find("caffemodel") != std::string::npos)
+    {
+        cv::Mat inputBlob = cv::dnn::blobFromImage(*op[0], 1.0f, cv::Size(224, 224),
+            cv::Scalar(104, 117, 123), false);   //Convert Mat to batch of images
+                                                 //! [Prepare blob]
+        x->second.net.setInput(inputBlob, "data");        //set the network input
+        cv::Mat prob = x->second.net.forward("prob");//compute output
+        prob.copyTo(*imDst);
+        prob = prob.reshape(1, 1); //reshape the blob to 1x1000 matrix
+        op[0]->probCaffe = prob;
+        AjoutOpAttribut(pOCV);
+        op[0]->nomClassseCaffe.clear();
+        int pos = -1;
+        cv::Point indClasse;
+        double p;
+
+        cv::minMaxLoc(prob, NULL, &p, NULL, &indClasse);
+        pos = indClasse.x;
+        probRetenue.clear();
+        probRetenue.push_back(p);
+        if (pos >= 0 && pos < x->second.listeLabels.size())
+            op[0]->nomClassseCaffe.push_back(x->second.listeLabels[pos]);
+        else
+            op[0]->nomClassseCaffe.push_back("Unknown");
+    }
+    if (x->second.modele.find("weights") != std::string::npos)
+    {
+        float confidenceThreshold = 0.3;
+        cv::Mat inputBlob = cv::dnn::blobFromImage(*op[0], 1 / 255.F, cv::Size(416, 416), cv::Scalar(), true, false); //Convert Mat to batch of images
+        x->second.net.setInput(inputBlob, "data");
+        cv::Mat detectionMat = x->second.net.forward("detection_out");//compute output
+        op[0]->probYolo = detectionMat;
+        op[0]->nomClassseYolo.clear();
+        op[0]->rectYolo.clear();
+        for (int i = 0; i < detectionMat.rows; i++)
+        {
+            const int probability_index = 5;
+            const int probability_size = detectionMat.cols - probability_index;
+            float *prob_array_ptr = &detectionMat.at<float>(i, probability_index);
+
+            size_t objectClass = std::max_element(prob_array_ptr, prob_array_ptr + probability_size) - prob_array_ptr;
+            float confidence = detectionMat.at<float>(i, (int)objectClass + probability_index);
+
+            if (confidence > confidenceThreshold)
+            {
+                float x_center = detectionMat.at<float>(i, 0) * op[0]->cols;
+                float y_center = detectionMat.at<float>(i, 1) * op[0]->rows;
+                float width = detectionMat.at<float>(i, 2) * op[0]->cols;
+                float height = detectionMat.at<float>(i, 3) * op[0]->rows;
+                cv::Point p1(cvRound(x_center - width / 2), cvRound(y_center - height / 2));
+                cv::Point p2(cvRound(x_center + width / 2), cvRound(y_center + height / 2));
+                cv::Rect object(p1, p2);
+                op[0]->rectYolo.push_back(object);
+
+                std::string className = objectClass < x->second.listeLabels.size() ? x->second.listeLabels[objectClass] : "unknown";
+                op[0]->nomClassseYolo.push_back(className.c_str());
+             }
+        }
+    }
     r.push_back(this);
     return r;
 }

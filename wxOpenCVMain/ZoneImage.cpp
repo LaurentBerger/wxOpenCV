@@ -178,23 +178,33 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 	cv::Vec3b x;
 	cv::Vec3f xx;
 	cv::Vec4f xxxx;
-	cv::Vec6f xxx;
-	std::complex<float> zz[3];
+    cv::Vec6f xxx;
+    cv::Vec2d z2d;
+    cv::Vec2f z2f;
+    std::complex<float> zz[3];
 	int val;
 	double dVal;
     wxCriticalSectionLocker enter(f->travailCam);
     cv::Mat m =imAcq->getMat(cv::ACCESS_READ);
 
 	switch(imAcq->type()){
-	case CV_32FC1:
-		dVal = m.at<float>(point.y,point.x);
-		barreEtat->UpdateCurseur(point.x,point.y,dVal);
-		break;
-	case CV_64FC1:
-		dVal = m.at<double>(point.y,point.x);
-		barreEtat->UpdateCurseur(point.x,point.y,dVal);
-		break;
-	case CV_32FC3:
+    case CV_32FC1:
+        dVal = m.at<float>(point.y, point.x);
+        barreEtat->UpdateCurseur(point.x, point.y, dVal);
+        break;
+    case CV_32FC2:
+        z2f = m.at<cv::Vec2f>(point.y, point.x);
+        barreEtat->UpdateCurseur(point.x, point.y, z2f);
+        break;
+    case CV_64FC1:
+        dVal = m.at<double>(point.y, point.x);
+        barreEtat->UpdateCurseur(point.x, point.y, dVal);
+        break;
+    case CV_64FC2:
+        z2d = m.at<cv::Vec2d>(point.y, point.x);
+        barreEtat->UpdateCurseur(point.x, point.y, z2d);
+        break;
+    case CV_32FC3:
 		xx = m.at<cv::Vec3f>(point.y, point.x);;
 		barreEtat->UpdateCurseur(point.x, point.y, xx[2], xx[1], xx[0]);
 		break;
@@ -272,6 +282,8 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 			//osgApp->Outils()->RegionSecondaireSelect(0/*imRegionBrute->LitPixelEntier(point.y,point.x)*/);
 		}
 		break;
+    default :
+        wxMessageBox("Unknown type");
 		}
 	 }
 if (event.ControlDown() && event.LeftIsDown() && f->ImAcq() && point.x >= 0 && point.x<f->ImAcq()->cols && point.y >= 0 && point.y<f->ImAcq()->rows)
@@ -838,11 +850,18 @@ if (osgApp->ModeSouris()==SOURIS_STD)
             menu.Check(MENU_PTCTRL, true);
         menuParametre = true;
     }
-    if (!f->ImAcq()->ProbCaffe().empty())
+    if (f->ImAcq()->CaffeResultPret())
     {
         menu.AppendCheckItem(MENU_DNNCAFFE, _T("Caffe label"));
         if (f->TracerDNNCaffe())
             menu.Check(MENU_DNNCAFFE, true);
+        menuParametre = true;
+    }
+    if (f->ImAcq()->YoloResultPret())
+    {
+        menu.AppendCheckItem(MENU_DNNYOLO, _T("Yolo label"));
+        if (f->TracerDNNYolo())
+            menu.Check(MENU_DNNYOLO, true);
         menuParametre = true;
     }
     if (osgApp->Fenetre(f->IdFenetreOp1pre()) || menuParametre || f->ImAcq()->EtapeOp()>0)
@@ -1075,6 +1094,9 @@ case MENU_POINTBLOB:
 case MENU_DNNCAFFE:
     tracerDNNCaffe = !tracerDNNCaffe;
     break;
+case MENU_DNNYOLO:
+    tracerDNNYolo = !tracerDNNYolo;
+    break;
 }
 feuille->Refresh(false);
 
@@ -1223,22 +1245,17 @@ void FenetrePrincipale::TracerDNNCaffe(wxBufferedPaintDC &hdc)
 {
     if (!tracerDNNCaffe || !imAcq)
         return;
-    if (imAcq->ProbCaffe().empty())
+    if (!imAcq->CaffeResultPret())
     {
         tracerDNNCaffe = false;
         return;
     }
     hdc.SetPen(*wxBLACK_DASHED_PEN);
-    cv::Mat p=imAcq->ProbCaffe();
-    int pos=-1;
-    p = p.reshape(1, 1); //reshape the blob to 1x1000 matrix
-    cv::Point indClasse;
-    double proba;
-
-    cv::minMaxLoc(p, NULL, &proba, NULL, &indClasse);
-    pos = indClasse.x;
+    wxFont f= hdc.GetFont();
+    f.SetPointSize(f.GetPointSize() * 2);
+    hdc.SetFont(f);
     wxString l;
-    l.Printf("%s : %lf", imAcq->LabelCaffe(pos), proba);
+    l.Printf("%s : %lf", imAcq->LabelCaffe(0), imAcq->ProbCaffe(0));
     hdc.DrawText(l, 10, 30);
 }
 
@@ -1246,10 +1263,26 @@ void FenetrePrincipale::TracerDNNYolo(wxBufferedPaintDC &hdc)
 {
     if (!tracerDNNYolo || !imAcq)
         return;
-    if (imAcq->ObjetsYolo().empty())
+    if (!imAcq->YoloResultPret())
     {
         tracerDNNYolo = false;
         return;
+    }
+    wxBrush wt = *wxTRANSPARENT_BRUSH;
+    hdc.SetBrush(wt);
+    hdc.SetLogicalFunction(wxXOR);
+    hdc.SetPen(wxPen(*wxWHITE, 3));
+    wxFont f = hdc.GetFont();
+    f.SetPointSize(f.GetPointSize() * 2);
+    hdc.SetFont(f);
+    for (int i = 0; i < imAcq->YoloResultPret(); i++)
+    {
+        cv::Rect r = imAcq->RectYolo(i);
+        wxString l;
+        wxRect rct(r.x, r.y, r.width, r.height);
+        l.Printf("%s ", imAcq->LabelYolo(i));
+        hdc.DrawText(l, r.x, r.y);
+        hdc.DrawRectangle(rct);
     }
 }
 

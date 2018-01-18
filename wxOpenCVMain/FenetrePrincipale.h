@@ -1182,6 +1182,8 @@ void UpdateCurseur(int x,int y,double val);
 void UpdateCurseur(int x,int y,int r,int g,int b);
 void UpdateCurseur(int x,int y,float r,float g,float b);
 void UpdateCurseur(int x,int y,std::complex<float> r,std::complex<float> g,std::complex<float> b);
+void UpdateCurseur(int x, int y, cv::Vec2d z2d);
+void UpdateCurseur(int x, int y, cv::Vec2f z2d);
 
     // event handlers
     void OnTimer(wxTimerEvent& WXUNUSED(event)) { UpdateClock(); }
