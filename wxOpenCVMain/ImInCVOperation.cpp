@@ -2566,7 +2566,7 @@ std::vector<ImageInfoCV		*>ImageInfoCV::LoadDNN(std::vector< ImageInfoCV*> op, P
     ImageInfoCV img;
     if (pOCV->nomModele.length()==0)
         return r;
-    if (pOCV->typeModele == "caffemodel" && ImageInfoCV::deep.find("pOCV->nomModele")== ImageInfoCV::deep.end())
+    if (pOCV->typeModele == "caffemodel" && ImageInfoCV::deep.find(pOCV->nomModele)== ImageInfoCV::deep.end())
     {
         cv::dnn::Net net;
 
@@ -2594,7 +2594,7 @@ std::vector<ImageInfoCV		*>ImageInfoCV::LoadDNN(std::vector< ImageInfoCV*> op, P
 
         ImageInfoCV::deep.insert(make_pair(pOCV->nomModele, x));
     }
-    if (pOCV->typeModele == "weights" && ImageInfoCV::deep.find("pOCV->nomModele") == ImageInfoCV::deep.end())
+    if (pOCV->typeModele == "weights" && ImageInfoCV::deep.find(pOCV->nomModele) == ImageInfoCV::deep.end())
     {
         cv::dnn::Net net;
 
@@ -2669,6 +2669,7 @@ std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, 
             op[0]->nomClassseCaffe.push_back(x->second.listeLabels[pos]);
         else
             op[0]->nomClassseCaffe.push_back("Unknown");
+        AjoutOpAttribut(pOCV);
     }
     if (x->second.modele.find("weights") != std::string::npos)
     {
@@ -2703,6 +2704,7 @@ std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, 
                 op[0]->nomClassseYolo.push_back(className.c_str());
              }
         }
+        AjoutOpAttribut(pOCV);
     }
     r.push_back(this);
     return r;

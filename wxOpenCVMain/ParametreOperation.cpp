@@ -33,6 +33,13 @@ void ParametreOperation::write(cv::FileStorage& fs) const {
     fs<<s<<"{:";
     fs<< "op"<< this->nomOperation;
     fs << "nbOperande" << nbOperande;
+    if (this->nomOperation == "ForwardDNN")
+    {
+        fs << "modele" << this->nomModele;
+        fs << "proto" << this->nomProto;
+        fs << "labels" << this->nomLabel;
+        fs << "typeModele" << this->typeModele;
+    }
     for (int i = 0; i < nbOperande; i++)
     {
         string s("op");
@@ -164,6 +171,13 @@ void ParametreOperation::read(const cv::FileNode& node)                         
     {
         cv::FileNode op = node;
         nomOperation=(string)op["op"];
+        if (nomOperation == "ForwardDNN")
+        {
+            nomModele = op["modele"] ;
+            nomProto = op["proto"];;
+            nomLabel = op["labels"]; ;
+            typeModele = op["typeModele"]; ;
+        }
         nbOperande= op["nbOperande"];
         indOpFenetre.resize(nbOperande);
         this->op.resize(nbOperande);
