@@ -550,8 +550,9 @@ std::map<std::string,ParametreOperation> *ListeOpAttribut(){return &listeOpAttri
 ParametreOperation *OpAttribut(std::string s){if (listeOpAttribut.find(s) != listeOpAttribut.end()) return &listeOpAttribut[s];return NULL;};
 Panoramique *ParamPano(){return pano;};
 
-int CaffeResultPret() { return nomClassseCaffe.size(); };
-int YoloResultPret() { return nomClassseYolo.size(); };
+bool CaffeResultPret();
+bool YoloResultPret();
+int NbRectYolo() { return rectYolo.size(); };
 cv::Rect RectYolo(int i) { if (i >= 0 && i < rectYolo.size()) return rectYolo[i]; };
 double ProbCaffe(int i) { if (i >= 0 && i<probRetenue.size()) return probRetenue[i]; };
 double ProbYolo(int i) { if (i >= 0 && i<probRetenue.size()) return probRetenue[i]; };

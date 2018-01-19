@@ -1275,7 +1275,7 @@ void FenetrePrincipale::TracerDNNYolo(wxBufferedPaintDC &hdc)
     wxFont f = hdc.GetFont();
     f.SetPointSize(f.GetPointSize() * 2);
     hdc.SetFont(f);
-    for (int i = 0; i < imAcq->YoloResultPret(); i++)
+    for (int i = 0; i < imAcq->NbRectYolo(); i++)
     {
         cv::Rect r = imAcq->RectYolo(i);
         wxString l;

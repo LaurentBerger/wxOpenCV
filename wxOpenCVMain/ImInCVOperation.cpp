@@ -5,6 +5,43 @@
 #include "opencv2/xfeatures2d.hpp"
 #include "Panoramique.h"
 
+bool ImageInfoCV::CaffeResultPret() 
+{
+    std::map<std::string, referenceCNN>::iterator ite = deep.begin();
+    bool status = false;
+    int i = 0;
+
+    while (ite != deep.end() && !status)
+    {
+        if (ite->second.modele.find(".caffemodel") != std::string::npos)
+        {
+            status = true;
+        }
+        ite++;
+    }
+
+    return status;
+};
+bool ImageInfoCV::YoloResultPret()
+{
+    std::map<std::string, referenceCNN>::iterator ite = deep.begin();
+    bool status = false;
+    int i = 0;
+
+    while (ite != deep.end() && !status)
+    {
+        if (ite->second.modele.find(".weights") != std::string::npos)
+        {
+            status = true;
+        }
+        ite++;
+    }
+
+    return status;
+};
+
+
+
 /**
  * @function IndOpConvolution
  * @brief Choix de l'opérateur de convolution par son indice dans la liste des opérateurs
@@ -2610,6 +2647,8 @@ std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, 
             x = ImageInfoCV::deep.begin();
     if (x->second.modele.find("caffemodel") != std::string::npos)
     {
+        probRetenue.clear();
+        probRetenue.clear();
         cv::Mat inputBlob = cv::dnn::blobFromImage(*op[0], 1.0f, cv::Size(224, 224),
             cv::Scalar(104, 117, 123), false);   //Convert Mat to batch of images
                                                  //! [Prepare blob]
@@ -2626,8 +2665,6 @@ std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, 
 
         cv::minMaxLoc(prob, NULL, &p, NULL, &indClasse);
         pos = indClasse.x;
-        probRetenue.clear();
-        probRetenue.push_back(p);
         if (pos >= 0 && pos < x->second.listeLabels.size())
             op[0]->nomClassseCaffe.push_back(x->second.listeLabels[pos]);
         else
@@ -2635,13 +2672,13 @@ std::vector<ImageInfoCV		*>ImageInfoCV::ApplyDNN(std::vector< ImageInfoCV*> op, 
     }
     if (x->second.modele.find("weights") != std::string::npos)
     {
+        op[0]->nomClassseYolo.clear();
+        op[0]->rectYolo.clear();
         float confidenceThreshold = 0.3;
         cv::Mat inputBlob = cv::dnn::blobFromImage(*op[0], 1 / 255.F, cv::Size(416, 416), cv::Scalar(), true, false); //Convert Mat to batch of images
         x->second.net.setInput(inputBlob, "data");
         cv::Mat detectionMat = x->second.net.forward("detection_out");//compute output
         op[0]->probYolo = detectionMat;
-        op[0]->nomClassseYolo.clear();
-        op[0]->rectYolo.clear();
         for (int i = 0; i < detectionMat.rows; i++)
         {
             const int probability_index = 5;
