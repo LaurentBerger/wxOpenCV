@@ -1327,6 +1327,17 @@ while ( bCont )
 			}
         else
             listeOperation[nbOperation].nbOperande = val;
+        if (opValide && listeOperation[nbOperation].nomOperation == "ForwardDNN")
+        {
+            configApp->Read("modele", &valCleChaine);
+            listeOperation[nbOperation].nomModele = valCleChaine.c_str();
+            configApp->Read("proto", &valCleChaine);
+            listeOperation[nbOperation].nomProto = valCleChaine.c_str();
+            configApp->Read("labels", &valCleChaine);
+            listeOperation[nbOperation].nomLabel = valCleChaine.c_str();
+            configApp->Read("typeModele", &valCleChaine);
+            listeOperation[nbOperation].typeModele = valCleChaine.c_str();
+        }
         listeOperation[nbOperation].indOpFenetre.resize(listeOperation[nbOperation].nbOperande);
         listeOperation[nbOperation].op.resize(listeOperation[nbOperation].nbOperande);
 
@@ -1594,7 +1605,14 @@ SauverFichierConfig(chemin,"idOperation",(long)origineImage.idOperation);
 chemin.Printf("/operateur/%d/%d/",origineImage.idOperation,origineImage.indEtape);
 SauverFichierConfig(chemin, "op", origineImage.nomOperation);
 SauverFichierConfig(chemin, "nbOperande",(long) origineImage.nbOperande);
-SauverFichierConfig(chemin,"op",origineImage.nomOperation);
+if (origineImage.nomOperation == "ForwardDNN")
+{
+    SauverFichierConfig(chemin, "modele", origineImage.nomModele);
+    SauverFichierConfig(chemin, "proto", origineImage.nomProto);
+    SauverFichierConfig(chemin, "labels", origineImage.nomLabel);
+    SauverFichierConfig(chemin, "typeModele", origineImage.typeModele);
+}
+// A VOIR supprimer le  25/01 SauverFichierConfig(chemin,"op",origineImage.nomOperation);
 for (int i = 0; i < origineImage.nbOperande; i++)
 {
     string s("op");
