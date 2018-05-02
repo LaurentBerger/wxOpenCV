@@ -313,7 +313,7 @@ listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("nearest neighb
 listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("bilinear interpolation").ToStdString(), cv::INTER_LINEAR));
 listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("bicubic interpolation").ToStdString(), cv::INTER_CUBIC));
 listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("resampling using pixel area relation").ToStdString(), cv::INTER_AREA));
-listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("Lanczos interpolation over 8x8 neighborhood").ToStdString(), CV_INTER_LANCZOS4));
+listeParam["InterpolationFlags"].insert(std::pair<string, int>(_("Lanczos interpolation over 8x8 neighborhood").ToStdString(), cv::INTER_LANCZOS4));
 listeParam["InverseTransform"].insert(std::pair<string, int>(_("inverse transform").ToStdString(), cv::WARP_INVERSE_MAP));
 listeParam["InverseTransform"].insert(std::pair<string, int>(_("direct transform").ToStdString(), 0));
 
@@ -399,8 +399,8 @@ listeParam["opencl_enable"].insert(std::pair<string, int>(_("false").ToStdString
 listeParam["opencl_enable"].insert(std::pair<string, int>(_("true").ToStdString(), 1));
 
 listeParam["method"].insert(std::pair<string, int>(_("regular method using all the points").ToStdString(), 0));
-listeParam["method"].insert(std::pair<string, int>(_("RANSAC-based robust method").ToStdString(), CV_RANSAC));
-listeParam["method"].insert(std::pair<string, int>(_("Least-Median robust method").ToStdString(), CV_LMEDS));
+listeParam["method"].insert(std::pair<string, int>(_("RANSAC-based robust method").ToStdString(), cv::RANSAC));
+listeParam["method"].insert(std::pair<string, int>(_("Least-Median robust method").ToStdString(), cv::LMEDS));
 listeParam["method"].insert(std::pair<string, int>(_("PROSAC-based robust method").ToStdString(), cv::RHO));
 #endif
 }
@@ -556,7 +556,7 @@ if (s == "logPolar")
 	nbOperande = 1;
 	pointParam["center"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
 	doubleParam["M"] = DomaineParametreOp<double>(1, 0, 10000, 1);
-	intParam["InterpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, CV_INTER_LANCZOS4, 1);
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, cv::INTER_LANCZOS4, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "linearPolar")
@@ -566,7 +566,7 @@ if (s == "linearPolar")
 	nbOperande = 1;
 	pointParam["center"] = DomaineParametreOp<cv::Point>(cv::Point(0, 0), cv::Point(-1000, -1000), cv::Point(1000, 1000), cv::Point(1, 1),true);
 	doubleParam["M"] = DomaineParametreOp<double>(1, 0, 10000, 1);
-	intParam["InterpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, CV_INTER_LANCZOS4, 1);
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(cv::INTER_NEAREST, cv::INTER_NEAREST, cv::INTER_LANCZOS4, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "undistort")
@@ -604,8 +604,8 @@ if (s == "wrapAffine") // inclus la différence de deux images successives
 	doubleParam["angle"] = DomaineParametreOp<double>(0, -180, 180, 1);
 	doubleParam["scale"] = DomaineParametreOp<double>(1, 0.0000, 180, 0.1);
 	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
-	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_LINEAR, CV_INTER_LANCZOS4, 1);
-	intParam["borderMode"] = DomaineParametreOp<int>(IPL_BORDER_CONSTANT, IPL_BORDER_CONSTANT, IPL_BORDER_WRAP, 1);
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(cv::INTER_LINEAR, cv::INTER_LINEAR, cv::INTER_LANCZOS4, 1);
+	intParam["borderMode"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
 	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
@@ -615,8 +615,8 @@ if (s == "warpperspective") // inclus la différence de deux images successives
 	nbImageRes = 1;
 	nbOperande = 1;
 	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(1, 1), cv::Size(10000, 10000), cv::Size(1, 1));
-	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_LINEAR, CV_INTER_LANCZOS4, 1);
-	intParam["borderMode"] = DomaineParametreOp<int>(IPL_BORDER_CONSTANT, IPL_BORDER_CONSTANT, IPL_BORDER_WRAP, 1);
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(cv::INTER_LINEAR, cv::INTER_LINEAR, cv::INTER_LANCZOS4, 1);
+	intParam["borderMode"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
     intParam["InverseTransform"] = DomaineParametreOp<int>(0, 0, 1, 1);
 	doubleParam["borderValue"] = DomaineParametreOp<double>(0, -1000, 1000, 1);
     xx.listeOperation.insert(make_pair(s, *this));
@@ -638,7 +638,7 @@ if (s == "resize") // inclus la différence de deux images successives
 	doubleParam["fx"] = DomaineParametreOp<double>(0, 0, 10000, 1);
 	doubleParam["fy"] = DomaineParametreOp<double>(0, 0.0000, 10000,1);
 	sizeParam["dsize"] = DomaineParametreOp<cv::Size>(cv::Size(1000, 1000), cv::Size(0, 0), cv::Size(10000, 10000), cv::Size(1, 1));
-	intParam["InterpolationFlags"] = DomaineParametreOp<int>(CV_INTER_LINEAR, CV_INTER_NN, CV_INTER_LANCZOS4, 1);
+	intParam["InterpolationFlags"] = DomaineParametreOp<int>(cv::INTER_LINEAR, cv::INTER_NEAREST, cv::INTER_LANCZOS4, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 

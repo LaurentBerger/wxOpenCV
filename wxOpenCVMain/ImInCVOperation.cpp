@@ -753,7 +753,7 @@ double otsu=-1;
 	    {
         if (pOCV->intParam["OTSU"].valeur==1)
         {
-            otsu = threshold(*op[0], *im, 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+            otsu = threshold(*op[0], *im, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
             pOCV->doubleParam["threshold1"].valeur = otsu;
             pOCV->doubleParam["threshold2"].valeur = otsu/2;
         }
@@ -773,7 +773,7 @@ double otsu=-1;
 		    {
             if (pOCV->intParam["Otsu threshold"].valeur==1)
             {
-                otsu = threshold(planCouleur[i], d[i], 0, 255, CV_THRESH_BINARY | CV_THRESH_OTSU);
+                otsu = threshold(planCouleur[i], d[i], 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
                 pOCV->doubleParam["threshold1"].valeur = otsu;
                 pOCV->doubleParam["threshold1"].valeur = otsu/2;
             }
