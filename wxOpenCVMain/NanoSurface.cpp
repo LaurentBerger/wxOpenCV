@@ -14,6 +14,28 @@ using namespace std;
 
 //
 
+template<typename type> void DefinitionSurface(osg::HeightField *gr, osg::HeightField *gv, osg::HeightField*gb, cv::Mat &imOrig)
+{
+    for (int i = 0; i<imOrig.rows; i++)
+    {
+        type *d = imOrig.ptr<type>(i);
+        for (int j = 0; j<imOrig.cols; j++)
+            for (int indCanal = 0; indCanal<imOrig.channels(); indCanal++, d++)
+            {
+                switch (indCanal) {
+                case 0:
+                    gr->setHeight(j, i, ((*d)) / 255.0);
+                    break;
+                case 1:
+                    gv->setHeight(j, i, ((*d)) / 255.0);
+                    break;
+                case 2:
+                    gb->setHeight(j, i, ((*d)) / 255.0);
+                    break;
+                }
+            }
+    }
+}
 
 
 unsigned char palette[720]={245,244,242,242,240,236,239,237,233,237,234,230,234,232,226,231,229,223,229,226,220,226,223,217,
@@ -325,6 +347,7 @@ if (hauteur ==NULL)
 return ;
 }
 
+
 void NanoSurface::AjouteImage(osg::Image *im)
 {
 osg::HeightField *gr = new osg::HeightField;
@@ -372,91 +395,22 @@ cv::Mat imOrig = imOrigUMat->getMat(cv::ACCESS_READ);
 switch(imOrig.type()){
 case CV_8U :
 	{
-	for (int i=0;i<imOrig.rows;i++)		
-		{
-		unsigned char *d=imOrig.ptr(i);;
-		for (int j=0;j<imOrig.cols;j++)
-			for (int indCanal=0;indCanal<imOrig.channels();indCanal++,d++)
-				{
-				switch(indCanal){
-				case 0:
-					gr->setHeight(j,i,((*d))/255.0);	
-					break;
-				case 1:
-					gv->setHeight(j,i,((*d))/255.0);	
-					break;
-				case 2:
-					gb->setHeight(j,i,((*d))/255.0);
-					break;
-					}
-				}
-		}
+    DefinitionSurface<unsigned char>(gr, gv, gb, imOrig);
 	}
 	break;
 case CV_16U :
-	for (int i=0;i<imOrig.rows;i++)		
-		{
-		unsigned short *d=(unsigned short *)imOrig.ptr(i);
-		for (int j=0;j<imOrig.cols;j++)
-			for (int indCanal=0;indCanal<imOrig.channels();indCanal++,d++)
-				{
-				switch(indCanal){
-				case 0:
-					gr->setHeight(j,i,((*d))/255.0);	
-					break;
-				case 1:
-					gv->setHeight(j,i,((*d))/255.0);	
-					break;
-				case 2:
-					gb->setHeight(j,i,((*d))/255.0);
-					break;
-					}
-				}
-		}
+    DefinitionSurface<unsigned short>(gr, gv, gb, imOrig);
 	break;
 case CV_32S :
-	for (int i=0;i<imOrig.rows;i++)		
-		{
-		int *d=(int *)imOrig.ptr(i);
-		for (int j=0;j<imOrig.cols;j++)
-			for (int indCanal=0;indCanal<imOrig.channels();indCanal++,d++)
-				{
-				switch(indCanal){
-				case 0:
-					gr->setHeight(j,i,((*d))/255.0);	
-					break;
-				case 1:
-					gv->setHeight(j,i,((*d))/255.0);	
-					break;
-				case 2:
-					gb->setHeight(j,i,((*d))/255.0);
-					break;
-					}
-				}
-		}
+    DefinitionSurface<int>(gr, gv, gb, imOrig);
 	break;
 case CV_32F:
-	for (int i=0;i<imOrig.rows;i++)		
-		{
-		float *d=(float *)imOrig.ptr(i);
-		for (int j=0;j<imOrig.cols;j++)
-			for (int indCanal=0;indCanal<imOrig.channels();indCanal++,d++)
-				{
-				switch(indCanal){
-				case 0:
-					gr->setHeight(j,i,((*d))/255.0);	
-					break;
-				case 1:
-					gv->setHeight(j,i,((*d))/255.0);	
-					break;
-				case 2:
-					gb->setHeight(j,i,((*d))/255.0);
-					break;
-					}
-				}
-		}
-	break;
-	}
+    DefinitionSurface<float>(gr, gv, gb, imOrig);
+    break;
+case CV_64F:
+    DefinitionSurface<double>(gr, gv, gb, imOrig);
+    break;
+}
 preImage=1;
 }
 
@@ -619,7 +573,42 @@ case CV_16U :
 		}
 	}
 	break;
-	}
+case CV_64F:
+{
+    double maxZ = 0;
+    for (int indCanal = 0; indCanal<im->channels(); indCanal++)
+    {
+        if (maxZ<fabs((*(im->MaxIm()))[indCanal]))
+            maxZ = fabs((*(im->MaxIm()))[indCanal]);
+        if (maxZ<fabs((*(im->MinIm()))[indCanal]))
+            maxZ = fabs((*(im->MinIm()))[indCanal]);
+    }
+    echZ = 255.0 / maxZ;
+    for (int i = 0; i<im->rows; i++)
+    {
+        double *d = matIm.ptr<double>(i);
+        for (int j = 0; j<im->cols; j++)
+        {
+            for (int indCanal = 0; indCanal<im->channels(); indCanal++, d++)
+            {
+                switch (indCanal) {
+                case 0:
+                    gr->setHeight(j, im->rows - 1 - i, ((*d))*EchZ());
+                    break;
+                case 1:
+                    gv->setHeight(j, im->rows - 1 - i, ((*d))*EchZ());
+                    break;
+                case 2:
+                    gb->setHeight(j, im->rows - 1 - i, ((*d))*EchZ());
+                    break;
+                }
+            }
+        }
+    }
+}
+break;
+
+    }
 echZ=1.0;
 }
 

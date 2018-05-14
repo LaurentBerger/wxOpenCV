@@ -245,18 +245,30 @@ case CV_32S:
 		}
 	break;
 case CV_32F:
-	for(int i = 0; i < it.count; i++, ++it)
-		{
-		for (int k=0;k<imAcq->channels() && k<NB_MAX_CANAUX;k++)
-			{
-			x[k][i] =  norm(it.pos()-it2.pos());
-			cv::Point p=it.pos();
-			y[k][i]=((float*)matImAcq.ptr(p.y)+p.x*imAcq->channels())[k];
-			}
-		nbVal++;
-		}
-	break;
-	break;
+    for (int i = 0; i < it.count; i++, ++it)
+    {
+        for (int k = 0; k<imAcq->channels() && k<NB_MAX_CANAUX; k++)
+        {
+            x[k][i] = norm(it.pos() - it2.pos());
+            cv::Point p = it.pos();
+            y[k][i] = ((float*)matImAcq.ptr(p.y) + p.x*imAcq->channels())[k];
+        }
+        nbVal++;
+    }
+    break;
+case CV_64F:
+    for (int i = 0; i < it.count; i++, ++it)
+    {
+        for (int k = 0; k<imAcq->channels() && k<NB_MAX_CANAUX; k++)
+        {
+            x[k][i] = norm(it.pos() - it2.pos());
+            cv::Point p = it.pos();
+            y[k][i] = ((double*)matImAcq.ptr(p.y) + p.x*imAcq->channels())[k];
+        }
+        nbVal++;
+    }
+    break;
+    break;
 }
 
 wxPLplotstream* pls=courbe->GetStream();

@@ -431,7 +431,7 @@ if (!ongletStatus)
 		texte="Single precision floating point (32 bits) by channel";
 		break;
 	case CV_64F:
-		texte="Single precision floating point (32 bits) by channel";
+		texte="double precision floating point (64 bits) by channel";
 		break;
 	default :
 		texte ="Unknown size!";
@@ -495,7 +495,7 @@ else
 		texte = "Single precision floating point (32 bits) by channel";
 		break;
 	case CV_64F:
-		texte = "Single precision floating point (32 bits) by channel";
+		texte = "double precision floating point (64 bits) by channel";
 		break;
 	default:
 		texte = "Unknown size!";
