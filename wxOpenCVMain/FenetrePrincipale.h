@@ -526,6 +526,11 @@ CameraVirtuelle		*cam;
 long				tpsPreEvt;			/*!<Instant de l'événement précédent de l'acquisition de l'image */
 int					indEvtCam;
 int					nbImageCam;			/*!< Compteur d'image pour lévaluation du nombre d'images par seconde */
+
+template <typename _T>void CV2DIBImageReel(ImageInfoCV *);
+template <typename _T>void CV2DIBImageEntier(ImageInfoCV *);
+
+
 public :
 
 wxCriticalSection	travailCam; /*!< Utilisé pour bloquer la mémoire image ou communiquer avec le thread */

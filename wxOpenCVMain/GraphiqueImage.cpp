@@ -364,6 +364,215 @@ else
 
 	}
 }
+
+
+
+template<typename T_> void FenetrePrincipale::CV2DIBImageReel(ImageInfoCV* imSrc)
+{
+    cv::UMat *im = (cv::UMat*)imSrc;
+    unsigned char *dMasque;
+    bool masqueActif = false;
+    cv::Mat matMasque;
+    cv::Mat matGain;
+    cv::Mat matIm;
+    matIm = im->getMat(cv::ACCESS_READ);
+    if (imSrc->MasqueOperateur()->rows*imSrc->MasqueOperateur()->cols != 0)
+    {
+        masqueActif = true;
+        matMasque = imSrc->MasqueOperateur()->getMat(cv::ACCESS_READ);
+        dMasque = matMasque.ptr(0);
+    }
+    int	nbCanaux = matIm.channels();
+    if (correctionGain && imGain)
+        matGain = imGain->getMat(cv::ACCESS_READ);
+
+    for (int i = 0; i < matIm.rows; i++)
+        if (nbCanaux % 2 == 1)	// Nombre réel
+        {
+            if (masqueActif)
+                dMasque = matMasque.ptr(i);
+            float *g = NULL;
+            if (correctionGain && imGain)
+                g = matGain.ptr<float>(i);
+            T_ *d = matIm.ptr<T_>(i);
+            unsigned char *debLigne = (unsigned char *)tabRGB + i * matIm.cols * 3;
+            for (int j = 0; j < matIm.cols; j++, debLigne += 3)
+            {
+                for (int indCanal = 0; indCanal < nbCanaux; indCanal++, d++)
+                {
+                    double v = (*d - seuilNivBas[indCanal])*coeffCanal[indCanal];
+                    if (correctionGain)
+                        v = *g++*v;
+                    if (v < 0)
+                        v = 0;
+                    if (v >= nbCouleurPalette)
+                        v = nbCouleurPalette - 1;
+                    unsigned short val = (unsigned short)v;
+                    if (masqueActif && *dMasque == 0)
+                        val = val / 2;
+                    if (!planActif[indCanal])
+                        val = 0;
+                    switch (indCanal) {
+                    case 0:
+                        debLigne[2] = pCouleur[val].Blue();
+                        if (nbCanaux == 1)
+                        {
+                            debLigne[1] = pCouleur[val].Green();
+                            debLigne[0] = pCouleur[val].Red();
+                        }
+                        break;
+                    case 1:
+                        debLigne[1] = pCouleur[val].Green();
+                        if (nbCanaux == 2)
+                        {
+                            debLigne[0] = pCouleur[val].Red();
+                        }
+                        break;
+                    case 2:
+                        debLigne[0] = pCouleur[val].Red();
+                        break;
+                    }
+                }
+                if (masqueActif)
+                    dMasque++;
+            }
+
+        }
+        else
+        {
+            if (masqueActif)
+                dMasque = matMasque.ptr(i);
+            complex<T_> *d = (complex<T_>*)matIm.ptr(i);
+            unsigned char *debLigne = (unsigned char *)tabRGB + i * matIm.cols * 3;
+            for (int j = 0; j < matIm.cols; j++, debLigne += 3)
+            {
+                for (int indCanal = 0; indCanal < nbCanaux / 2; indCanal++, d++)
+                {
+                    double v;
+                    switch (feuille->ModeComplexe()) {
+                    case 0:
+                        v = (abs(*d) - seuilNivBas[indCanal])*coeffCanal[indCanal];
+                        break;
+                    case 1:
+                        v = (d->real() - seuilNivBas[indCanal])*coeffCanal[indCanal];
+                        break;
+                    case 2:
+                        v = (d->imag() - seuilNivBas[indCanal])*coeffCanal[indCanal];
+                        break;
+                    case 3:
+                        v = (20 * log(abs(*d) + 1) - seuilNivBas[indCanal])*coeffCanal[indCanal];
+                        break;
+                    case 4:
+                        v = (atan2(d->imag(), d->real()) - seuilNivBas[indCanal])*coeffCanal[indCanal];
+                        break;
+                    }
+                    if (v < 0)
+                        v = 0;
+                    if (v >= nbCouleurPalette)
+                        v = nbCouleurPalette - 1;
+                    unsigned short val = (unsigned short)v;
+                    if (masqueActif && *dMasque == 0)
+                        val = val / 2;
+                    if (!planActif[indCanal])
+                        val = 0;
+                    switch (indCanal) {
+                    case 0:
+                        debLigne[2] = pCouleur[val].Blue();
+                        if (nbCanaux / 2 == 1)
+                        {
+                            debLigne[1] = pCouleur[val].Green();
+                            debLigne[0] = pCouleur[val].Red();
+                        }
+                        break;
+                    case 1:
+                        debLigne[1] = pCouleur[val].Green();
+                        if (nbCanaux / 2 == 2)
+                        {
+                            debLigne[0] = pCouleur[val].Red();
+                        }
+                        break;
+                    case 2:
+                        debLigne[0] = pCouleur[val].Red();
+                        break;
+                    }
+                }
+                if (masqueActif)
+                    dMasque++;
+            }
+        }
+}
+
+template<typename T_> void FenetrePrincipale::CV2DIBImageEntier(ImageInfoCV* imSrc)
+{
+    cv::UMat *im = (cv::UMat*)imSrc;
+    unsigned char *dMasque;
+    bool masqueActif = false;
+    cv::Mat matMasque;
+    cv::Mat matGain;
+    cv::Mat matIm;
+    matIm = im->getMat(cv::ACCESS_READ);
+    if (imSrc->MasqueOperateur()->rows*imSrc->MasqueOperateur()->cols != 0)
+    {
+        masqueActif = true;
+        matMasque = imSrc->MasqueOperateur()->getMat(cv::ACCESS_READ);
+        dMasque = matMasque.ptr(0);
+    }
+    int	nbCanaux = matIm.channels();
+    if (correctionGain && imGain)
+        matGain = imGain->getMat(cv::ACCESS_READ);
+
+    for (int i = 0; i<matIm.rows; i++)
+    {
+        if (masqueActif)
+            dMasque = matMasque.ptr(i);
+        T_ *d = matIm.ptr<T_>(i);
+        unsigned char *debLigne = (unsigned char *)tabRGB + i * matIm.cols * 3;
+        float *g = NULL;
+        if (correctionGain && imGain)
+            g = (float*)matGain.ptr(i);
+        for (int j = 0; j<matIm.cols; j++, debLigne += 3)
+        {
+            for (int indCanal = 0; indCanal<nbCanaux; indCanal++, d++)
+            {
+                double v = (*d - seuilNivBas[indCanal])*coeffCanal[indCanal];
+                if (correctionGain)
+                    v = *g++*v;
+                if (v<0)
+                    v = 0;
+                if (v >= nbCouleurPalette)
+                    v = nbCouleurPalette - 1;
+                unsigned short val = (unsigned short)v;
+                if (masqueActif && *dMasque == 0)
+                    val = val / 2;
+                if (!planActif[indCanal])
+                    val = 0;
+                switch (indCanal) {
+                case 0:
+                    debLigne[2] = pCouleur[val].Blue();
+                    if (nbCanaux == 1)
+                    {
+                        debLigne[1] = pCouleur[val].Green();
+                        debLigne[0] = pCouleur[val].Red();
+                    }
+                    break;
+                case 1:
+                    debLigne[1] = pCouleur[val].Green();
+                    if (nbCanaux == 2)
+                    {
+                        debLigne[0] = pCouleur[val].Red();
+                    }
+                    break;
+                case 2:
+                    debLigne[0] = pCouleur[val].Red();
+                    break;
+                }
+            }
+            if (masqueActif)
+                dMasque++;
+        }
+    }
+}
+
 /**************************************************************
 Conversion d'une image UMat en DIB wxwidgets pour l'affichage
 **************************************************************/
@@ -417,446 +626,26 @@ if (correctionGain && imGain)
     matGain = imGain->getMat(cv::ACCESS_READ);
 switch(im->depth()){
 case CV_32F :
-	for (int i=0;i<im->rows;i++)		
-		if (nbCanaux%2==1)	// Nombre réel
-			{
-            if (masqueActif)
-                dMasque = matMasque.ptr(i);
-            float *g = NULL;
-			if (correctionGain && imGain)
-				g=(float*)matGain.ptr(i);
-			float *d=(float*)matIm.ptr(i);
-			unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
-			for (int j=0;j<im->cols;j++,debLigne+=3)
-				{
-				for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
-					{
-					double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
-					if (correctionGain)
-						v=*g++*v;
-					if (v<0)
-						v =0;
-					if (v>=nbCouleurPalette)
-						v=nbCouleurPalette-1;
-					unsigned short val=(unsigned short)v;
-                    if (masqueActif && *dMasque == 0)
-                        val = val / 2;
-                    if (!planActif[indCanal])
-						val=0;
-					switch(indCanal){
-					case 0:
-						debLigne[2] = pCouleur[val].Blue(); 
-						if (nbCanaux==1)
-							{
-							debLigne[1] = pCouleur[val].Green();
-							debLigne[0] = pCouleur[val].Red();
-							}
-						break;
-					case 1:
-						debLigne[1] = pCouleur[val].Green(); 
-						if (nbCanaux==2)
-							{
-							debLigne[0] = pCouleur[val].Red();
-							}
-						break;
-					case 2:
-						debLigne[0] = pCouleur[val].Red(); 
-						break;
-						}
-					}
-                if (masqueActif)
-                    dMasque++;
-                }
-
-			}
-		else
-			{
-            if (masqueActif)
-                dMasque = matMasque.ptr(i);
-            complex<float> *d = (complex<float>*)matIm.ptr(i);
-			unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
-			for (int j=0;j<im->cols;j++,debLigne+=3)
-				{
-				for (int indCanal=0;indCanal<nbCanaux/2;indCanal++,d++)
-					{
-					double v;
-					switch(feuille->ModeComplexe()){
-					case 0:
-						v = (abs(*d)-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
-						break;
-					case 1:
-						v = (d->real()-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
-						break;
-					case 2:
-						v = (d->imag()-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
-						break;
-					case 3:
-						v = (20*log(abs(*d)+1)-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
-						break;
-					case 4:
-						v = (atan2(d->imag(),d->real())-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
-						break;
-						}
-					if (v<0)
-						v =0;
-					if (v>=nbCouleurPalette)
-						v=nbCouleurPalette-1;
-					unsigned short val=(unsigned short)v;
-                    if (masqueActif && *dMasque == 0)
-                        val = val / 2;
-                    if (!planActif[indCanal])
-						val=0;
-					switch(indCanal){
-					case 0:
-						debLigne[2] = pCouleur[val].Blue(); 
-						if (nbCanaux/2==1)
-							{
-							debLigne[1] = pCouleur[val].Green();
-							debLigne[0] = pCouleur[val].Red();
-							}
-						break;
-					case 1:
-						debLigne[1] = pCouleur[val].Green(); 
-						if (nbCanaux/2==2)
-							{
-							debLigne[0] = pCouleur[val].Red();
-							}
-						break;
-					case 2:
-						debLigne[0] = pCouleur[val].Red(); 
-						break;
-						}
-					}
-                if (masqueActif)
-                    dMasque++;
-                }
-			}
+    CV2DIBImageReel<float>(imSrc);
 	break;
 case CV_64F:
-    for (int i = 0; i<im->rows; i++)
-        if (nbCanaux % 2 == 1)	// Nombre réel
-        {
-            if (masqueActif)
-                dMasque = matMasque.ptr(i);
-            double *g = NULL;
-            if (correctionGain && imGain)
-                g = matGain.ptr<double>(i);
-            double *d = matIm.ptr<double>(i);
-            unsigned char *debLigne = (unsigned char *)tabRGB + i * im->cols * 3;
-            for (int j = 0; j<im->cols; j++, debLigne += 3)
-            {
-                for (int indCanal = 0; indCanal<nbCanaux; indCanal++, d++)
-                {
-                    double v = (*d - seuilNivBas[indCanal])*coeffCanal[indCanal];
-                    if (correctionGain)
-                        v = *g++*v;
-                    if (v<0)
-                        v = 0;
-                    if (v >= nbCouleurPalette)
-                        v = nbCouleurPalette - 1;
-                    unsigned short val = (unsigned short)v;
-                    if (masqueActif && *dMasque == 0)
-                        val = val / 2;
-                    if (!planActif[indCanal])
-                        val = 0;
-                    switch (indCanal) {
-                    case 0:
-                        debLigne[2] = pCouleur[val].Blue();
-                        if (nbCanaux == 1)
-                        {
-                            debLigne[1] = pCouleur[val].Green();
-                            debLigne[0] = pCouleur[val].Red();
-                        }
-                        break;
-                    case 1:
-                        debLigne[1] = pCouleur[val].Green();
-                        if (nbCanaux == 2)
-                        {
-                            debLigne[0] = pCouleur[val].Red();
-                        }
-                        break;
-                    case 2:
-                        debLigne[0] = pCouleur[val].Red();
-                        break;
-                    }
-                }
-                if (masqueActif)
-                    dMasque++;
-            }
-
-        }
-        else
-        {
-            if (masqueActif)
-                dMasque = matMasque.ptr(i);
-            complex<double> *d = (complex<double>*)matIm.ptr(i);
-            unsigned char *debLigne = (unsigned char *)tabRGB + i * im->cols * 3;
-            for (int j = 0; j<im->cols; j++, debLigne += 3)
-            {
-                for (int indCanal = 0; indCanal<nbCanaux / 2; indCanal++, d++)
-                {
-                    double v;
-                    switch (feuille->ModeComplexe()) {
-                    case 0:
-                        v = (abs(*d) - seuilNivBas[indCanal])*coeffCanal[indCanal];
-                        break;
-                    case 1:
-                        v = (d->real() - seuilNivBas[indCanal])*coeffCanal[indCanal];
-                        break;
-                    case 2:
-                        v = (d->imag() - seuilNivBas[indCanal])*coeffCanal[indCanal];
-                        break;
-                    case 3:
-                        v = (20 * log(abs(*d) + 1) - seuilNivBas[indCanal])*coeffCanal[indCanal];
-                        break;
-                    case 4:
-                        v = (atan2(d->imag(), d->real()) - seuilNivBas[indCanal])*coeffCanal[indCanal];
-                        break;
-                    }
-                    if (v<0)
-                        v = 0;
-                    if (v >= nbCouleurPalette)
-                        v = nbCouleurPalette - 1;
-                    unsigned short val = (unsigned short)v;
-                    if (masqueActif && *dMasque == 0)
-                        val = val / 2;
-                    if (!planActif[indCanal])
-                        val = 0;
-                    switch (indCanal) {
-                    case 0:
-                        debLigne[2] = pCouleur[val].Blue();
-                        if (nbCanaux / 2 == 1)
-                        {
-                            debLigne[1] = pCouleur[val].Green();
-                            debLigne[0] = pCouleur[val].Red();
-                        }
-                        break;
-                    case 1:
-                        debLigne[1] = pCouleur[val].Green();
-                        if (nbCanaux / 2 == 2)
-                        {
-                            debLigne[0] = pCouleur[val].Red();
-                        }
-                        break;
-                    case 2:
-                        debLigne[0] = pCouleur[val].Red();
-                        break;
-                    }
-                }
-                if (masqueActif)
-                    dMasque++;
-            }
-        }
+    CV2DIBImageReel<double>(imSrc);
     break;
 
 case CV_32S :
-	for (int i=0;i<im->rows;i++)		
-		{
-        if (masqueActif)
-            dMasque = matMasque.ptr(i);
-        long *d = (long*)matIm.ptr(i);
-		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
-		float *g=NULL;
-		if (correctionGain && imGain)
-			g=(float*)matGain.ptr(i);
-		for (int j=0;j<im->cols;j++,debLigne+=3)
-			{
-			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
-				{
-				double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
-				if (correctionGain)
-					v=*g++*v;
-                if (v<0)
-					v =0;
-				if (v>=nbCouleurPalette)
-					v=nbCouleurPalette-1;
-				unsigned short val=(unsigned short)v;
-                if (masqueActif && *dMasque == 0)
-                    val = val / 2;
-                if (!planActif[indCanal])
-					val=0;
-				switch(indCanal){
-				case 0:
-					debLigne[2] = pCouleur[val].Blue(); 
-					if (nbCanaux==1)
-						{
-						debLigne[1] = pCouleur[val].Green();
-						debLigne[0] = pCouleur[val].Red();
-						}
-					break;
-				case 1:
-					debLigne[1] = pCouleur[val].Green(); 
-					if (nbCanaux==2)
-						{
-						debLigne[0] = pCouleur[val].Red();
-						}
-					break;
-				case 2:
-					debLigne[0] = pCouleur[val].Red(); 
-					break;
-					}
-				}
-            if (masqueActif)
-                dMasque++;
-            }
-		}
+    CV2DIBImageEntier<int>(imSrc);
+
 	break;
 case CV_16U :
-	for (int i=0;i<im->rows;i++)		
-		{
-        if (masqueActif)
-            dMasque = matMasque.ptr(i);
-        unsigned short *d = (unsigned short*)matIm.ptr(i);
-		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
-		float *g=NULL;
-		if (correctionGain && imGain)
-			g=(float*)matGain.ptr(i);
-		for (int j=0;j<im->cols;j++,debLigne+=3)
-			{
-			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
-				{
-				double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
-				if (correctionGain)
-					v=*g++*v;
-				if (v<0)
-					v =0;
-				if (v>=nbCouleurPalette)
-					v=nbCouleurPalette-1;
-				unsigned short val=(unsigned short)v;
-                if (masqueActif && *dMasque == 0)
-                    val = val / 2;
-                if (!planActif[indCanal])
-					val=0;
-				switch(indCanal){
-				case 0:
-					debLigne[2] = pCouleur[val].Blue(); 
-					if (nbCanaux==1)
-						{
-						debLigne[1] = pCouleur[val].Green();
-						debLigne[0] = pCouleur[val].Red();
-						}
-					break;
-				case 1:
-					debLigne[1] = pCouleur[val].Green(); 
-					if (nbCanaux==2)
-						{
-						debLigne[0] = pCouleur[val].Red();
-						}
-					break;
-				case 2:
-					debLigne[0] = pCouleur[val].Red(); 
-					break;
-					}
-				}
-            if (masqueActif)
-                dMasque++;
-            }
-		}
-	break;
+    CV2DIBImageEntier<unsigned short>(imSrc);
+ 	break;
 case CV_16S :
-	for (int i=0;i<im->rows;i++)		
-		{
-        if (masqueActif)
-            dMasque = matMasque.ptr(i);
-        short *d = (short*)matIm.ptr(i);
-		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
-		float *g=NULL;
-		if (correctionGain && imGain)
-			g=(float*)matGain.ptr(i);
-		for (int j=0;j<im->cols;j++,debLigne+=3)
-			{
-			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
-				{
-				double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
-				if (correctionGain)
-					v=*g++*v;
-				if (v<0)
-					v =0;
-				if (v>=nbCouleurPalette)
-					v=nbCouleurPalette-1;
-				unsigned short val=(unsigned short)v;
-                if (masqueActif && *dMasque==0)
-                    val = val / 2;
-                if (!planActif[indCanal])
-					val=0;
-				switch(indCanal){
-				case 0:
-					debLigne[2] = pCouleur[val].Blue(); 
-					if (nbCanaux==1)
-						{
-						debLigne[1] = pCouleur[val].Green();
-						debLigne[0] = pCouleur[val].Red();
-						}
-					break;
-				case 1:
-					debLigne[1] = pCouleur[val].Green(); 
-					if (nbCanaux==2)
-						{
-						debLigne[0] = pCouleur[val].Red();
-						}
-					break;
-				case 2:
-					debLigne[0] = pCouleur[val].Red(); 
-					break;
-					}
-				}
-            if (masqueActif)
-                dMasque++;
-            }
-		}
-	break;
+    CV2DIBImageEntier<short>(imSrc);
+    break;
 case CV_8U :
-	for (int i=0;i<im->rows;i++)		
-		{
-        if (masqueActif)
-            dMasque = matMasque.ptr(i);
-        unsigned char *d = matIm.ptr(i);
-		unsigned char *debLigne = (unsigned char *)tabRGB+i*im->cols*3;
-		float *g=NULL;
-		if (correctionGain && imGain)
-			g=(float*)matGain.ptr(i);
-		for (int j=0;j<im->cols;j++,debLigne+=3)
-			{
-			for (int indCanal=0;indCanal<nbCanaux;indCanal++,d++)
-				{
-				double v = (*d-seuilNivBas[indCanal])*coeffCanal[indCanal]; 
-				if (correctionGain)
-					v=*g++*v;
-				if (v<0)
-					v =0;
-				if (v>=nbCouleurPalette)
-					v=nbCouleurPalette-1;
-				unsigned short val=(unsigned short)v;
-                if (masqueActif && *dMasque==0)
-                    val = val / 2;
-				if (!planActif[indCanal])
-					val=0;
-				switch(indCanal){
-				case 0:
-					debLigne[2] = pCouleur[val].Blue(); 
-					if (nbCanaux==1)
-						{
-						debLigne[1] = pCouleur[val].Green();
-						debLigne[0] = pCouleur[val].Red();
-						}
-					break;
-				case 1:
-					debLigne[1] = pCouleur[val].Green(); 
-					if (nbCanaux==2)
-						{
-						debLigne[0] = pCouleur[val].Red();
-						}
-					break;
-				case 2:
-					debLigne[0] = pCouleur[val].Red(); 
-					break;
-					}
-				}
-            if (masqueActif)
-                dMasque++;
-            }
-		}
-	}
+    CV2DIBImageEntier<unsigned char>(imSrc);
+    break;
+}
 
 if (imAffichee==NULL)
 	{
