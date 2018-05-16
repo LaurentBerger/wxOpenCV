@@ -151,6 +151,29 @@ if (x[0])
 }
 
 
+template <typename T_> int FenetreCoupe::GetLineValue()
+{
+    cv::Point pt1((float)rCoupe.GetLeft(), (float)rCoupe.GetTop());
+    cv::Point pt2((float)rCoupe.GetRight(), (float)rCoupe.GetBottom());
+    ImageInfoCV			*imAcq = ((FenetrePrincipale *)fenMere)->ImAcq();
+    cv::Mat matImAcq = imAcq->getMat(cv::ACCESS_READ);
+    cv::LineIterator it(matImAcq, pt1, pt2, 8);
+    cv::LineIterator it2 = it;
+    int nbVal = 0;
+    for (int i = 0; i < it.count; i++, ++it)
+    {
+        for (int k = 0; k<imAcq->channels() && k<NB_MAX_CANAUX; k++)
+        {
+            x[k][i] = norm(it.pos() - it2.pos());
+            cv::Point p = it.pos();
+            T_ x=*matImAcq.ptr<T_>(p.y, p.x);
+            y[k][i] = (PLFLT)(x[k]);
+        }
+        nbVal++;
+    }
+    return nbVal;
+}
+
 void FenetreCoupe::Plot(bool b)
 {
 if (!osgApp)
@@ -197,77 +220,22 @@ if (x[0]==NULL)
 switch(imAcq->depth())
 {
 case CV_8U:
-	for(int i = 0; i < it.count; i++, ++it)
-		{
-		for (int k=0;k<imAcq->channels() && k<NB_MAX_CANAUX;k++)
-			{
-			x[k][i] =  norm(it.pos()-it2.pos());
-			y[k][i]=((const cv::Vec<unsigned char ,5> )*it)[k];
-			}
-		nbVal++;
-		}
+    nbVal = GetLineValue<cv::Vec<unsigned char, 5> >();
 	break;
 case CV_16U:
-	for(int i = 0; i < it.count; i++, ++it)
-		{
-		for (int k=0;k<imAcq->channels() && k<NB_MAX_CANAUX;k++)
-			{
-			x[k][i] =  norm(it.pos()-it2.pos());
-			cv::Point p=it.pos();
-			y[k][i]=((unsigned short*)matImAcq.ptr(p.y)+p.x*imAcq->channels())[k];
-
-			}
-		nbVal++;
-		}
+    nbVal = GetLineValue< cv::Vec<unsigned short, 5> >();
 	break;
 case CV_16S:
-	for(int i = 0; i < it.count; i++, ++it)
-		{
-		for (int k=0;k<imAcq->channels() && k<NB_MAX_CANAUX;k++)
-			{
-			x[k][i] =  norm(it.pos()-it2.pos());
-			cv::Point p=it.pos();
-			y[k][i]=((short*)matImAcq.ptr(p.y)+p.x*imAcq->channels())[k];
-			}
-		nbVal++;
-		}
+    nbVal = GetLineValue<cv::Vec<short, 3>>();
 	break;
 case CV_32S:
-	for(int i = 0; i < it.count; i++, ++it)
-		{
-		for (int k=0;k<imAcq->channels() && k<NB_MAX_CANAUX;k++)
-			{
-			x[k][i] =  norm(it.pos()-it2.pos());
-			cv::Point p=it.pos();
-			y[k][i]=((int*)matImAcq.ptr(p.y)+p.x*imAcq->channels())[k];
-			}
-		nbVal++;
-		}
-	break;
+    nbVal = GetLineValue<cv::Vec<int, 3>>();
+    break;
 case CV_32F:
-    for (int i = 0; i < it.count; i++, ++it)
-    {
-        for (int k = 0; k<imAcq->channels() && k<NB_MAX_CANAUX; k++)
-        {
-            x[k][i] = norm(it.pos() - it2.pos());
-            cv::Point p = it.pos();
-            y[k][i] = ((float*)matImAcq.ptr(p.y) + p.x*imAcq->channels())[k];
-        }
-        nbVal++;
-    }
+    nbVal = GetLineValue<cv::Vec<float, 3>>();
     break;
 case CV_64F:
-    for (int i = 0; i < it.count; i++, ++it)
-    {
-        for (int k = 0; k<imAcq->channels() && k<NB_MAX_CANAUX; k++)
-        {
-            x[k][i] = norm(it.pos() - it2.pos());
-            cv::Point p = it.pos();
-            y[k][i] = ((double*)matImAcq.ptr(p.y) + p.x*imAcq->channels())[k];
-        }
-        nbVal++;
-    }
-    break;
+    nbVal = GetLineValue<cv::Vec<double, 3>>();
     break;
 }
 
@@ -279,9 +247,7 @@ if (!pls)
 double moyenneH=0,varianceH=0,cumulH=0;
 PLFLT ymin=1e30, ymax=-1e30;
 
-int nbPlan=1;
-if (imAcq->type()==CV_8UC3)
-	nbPlan=3;
+int nbPlan=imAcq->channels();
 for (int j=0;j<nbPlan;j++)
 	{
 	double moyenneH=0,varianceH=0,cumulH=0;

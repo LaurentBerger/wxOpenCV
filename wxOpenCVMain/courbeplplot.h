@@ -85,6 +85,7 @@ private:
   void OnQuit( wxCommandEvent& event );
   void OnAbout( wxCommandEvent& event );
   void OnBackgroundColor( wxCommandEvent& event );
+  template<typename T_>  int GetLineValue();
 private:
   wxPLplotwindow<wxPanel> *courbe;
   bool bgcolor;
