@@ -1,5 +1,6 @@
 #ifndef __FENETREINFO__
 #include <wx/wx.h>
+#include <opencv2/core.hpp>
 
 // Define a new frame type: this is going to the frame showing the
 // effect of wxFRAME_SHAPED
@@ -31,6 +32,9 @@ private:
 
     wxBitmap m_bmp;
     wxPoint  m_delta;
+
+    template<typename T_>
+    void DrawSelected(cv::Mat im, wxPoint & pSrc, wxMemoryDC & memDC);
 
     // any class wishing to process wxWidgets events must use this macro
 };
