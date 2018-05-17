@@ -530,6 +530,8 @@ int					nbImageCam;			/*!< Compteur d'image pour lévaluation du nombre d'images
 template <typename _T>void CV2DIBImageReel(ImageInfoCV *);
 template <typename _T>void CV2DIBImageEntier(ImageInfoCV *);
 
+template<typename T_>void CV2DIBImageEntierPalette(ImageInfoCV * );
+
 
 public :
 

@@ -573,6 +573,78 @@ template<typename T_> void FenetrePrincipale::CV2DIBImageEntier(ImageInfoCV* imS
     }
 }
 
+
+template<typename T_> void FenetrePrincipale::CV2DIBImageEntierPalette(ImageInfoCV* imSrc)
+{
+    cv::UMat *im = (cv::UMat*)imSrc;
+    unsigned char *dMasque;
+    bool masqueActif = false;
+    cv::Mat matMasque;
+    cv::Mat matGain;
+    cv::Mat matIm;
+    matIm = im->getMat(cv::ACCESS_READ);
+    if (imSrc->MasqueOperateur()->rows*imSrc->MasqueOperateur()->cols != 0)
+    {
+        masqueActif = true;
+        matMasque = imSrc->MasqueOperateur()->getMat(cv::ACCESS_READ);
+        dMasque = matMasque.ptr(0);
+    }
+    int	nbCanaux = matIm.channels();
+    if (correctionGain && imGain)
+        matGain = imGain->getMat(cv::ACCESS_READ);
+    matIm-
+    for (int i = 0; i<matIm.rows; i++)
+    {
+        if (masqueActif)
+            dMasque = matMasque.ptr(i);
+        T_ *d = matIm.ptr<T_>(i);
+        unsigned char *debLigne = (unsigned char *)tabRGB + i * matIm.cols * 3;
+        float *g = NULL;
+        if (correctionGain && imGain)
+            g = (float*)matGain.ptr(i);
+        for (int j = 0; j<matIm.cols; j++, debLigne += 3)
+        {
+            for (int indCanal = 0; indCanal<nbCanaux; indCanal++, d++)
+            {
+                double v = (*d - seuilNivBas[indCanal])*coeffCanal[indCanal];
+                if (correctionGain)
+                    v = *g++*v;
+                if (v<0)
+                    v = 0;
+                if (v >= nbCouleurPalette)
+                    v = nbCouleurPalette - 1;
+                unsigned short val = (unsigned short)v;
+                if (masqueActif && *dMasque == 0)
+                    val = val / 2;
+                if (!planActif[indCanal])
+                    val = 0;
+                switch (indCanal) {
+                case 0:
+                    debLigne[2] = pCouleur[val].Blue();
+                    if (nbCanaux == 1)
+                    {
+                        debLigne[1] = pCouleur[val].Green();
+                        debLigne[0] = pCouleur[val].Red();
+                    }
+                    break;
+                case 1:
+                    debLigne[1] = pCouleur[val].Green();
+                    if (nbCanaux == 2)
+                    {
+                        debLigne[0] = pCouleur[val].Red();
+                    }
+                    break;
+                case 2:
+                    debLigne[0] = pCouleur[val].Red();
+                    break;
+                }
+            }
+            if (masqueActif)
+                dMasque++;
+        }
+    }
+}
+
 /**************************************************************
 Conversion d'une image UMat en DIB wxwidgets pour l'affichage
 **************************************************************/
