@@ -103,8 +103,6 @@ DefCurseur(5);
 
 cam=NULL;
 
-tabRGB=NULL;
-tabRGBTransparence=NULL;
 imAcq=NULL;
 imAffichee=NULL;
 imAcq = NULL;
@@ -483,7 +481,6 @@ return 0;
 void FenetrePrincipale::InitImageFenetre()
 {
 cam =NULL;
-tabRGB=NULL;
 imAcq=NULL;
 imAffichee=NULL;
 imGain=NULL;
@@ -575,12 +572,6 @@ feuille->Show();
 
 
 
-if (imAffichee)
-	{
-	tabRGB=NULL;
-	delete imAffichee;
-	}
-imAffichee=NULL;
 
 wxLogVerbose("Video opened");
 seuilNivBas=new double[imAcq->channels()];
@@ -588,7 +579,7 @@ coeffCanal=new double[imAcq->channels()];
 for (int i=0;i<imAcq->channels();i++)
 	{
 	seuilNivBas[i]=0;
-	coeffCanal[i]=256;
+	coeffCanal[i]=1;
 	}
 wxSize	tailleZoneImage;
 tailleZoneImage=GetClientSize();
@@ -634,7 +625,6 @@ if (imAffichee)
 	{
 	delete imAffichee;
 	}
-tabRGB=NULL;
 
 imAffichee=NULL;
 
@@ -805,7 +795,7 @@ for (int i=0;i<imAcq->channels();i++)
 	if(imAcq->depth()==CV_8S || imAcq->depth()==CV_8U)
 		{
 		seuilNivBas[i]=0;
-		coeffCanal[i]=256;
+		coeffCanal[i]=1;
 		}
 	else
 		{
@@ -819,7 +809,6 @@ feuille->DefOSGApp(osgApp);
 feuille->Show();
 if (imAffichee)
 	{
-	tabRGB=NULL;
 	delete imAffichee;
 	}
 imAffichee=NULL;
@@ -872,9 +861,6 @@ if (imAcq==NULL)
 	*/
 	if (imAffichee)
 		{
-		if (tabRGB)
-			delete tabRGB;
-		tabRGB=NULL;
 		delete imAffichee;
 		}
 	imAffichee=NULL;
@@ -889,7 +875,7 @@ if (imAcq==NULL)
 		if(imAcq->depth()==CV_8S || imAcq->depth()==CV_8U)
 			{
 			seuilNivBas[i]=0;
-			coeffCanal[i]=256;
+			coeffCanal[i]=1;
 			}
 		else
 			{
@@ -947,7 +933,7 @@ void FenetrePrincipale::DynamiqueAffichage(char type)
     {
 		seuilNivBas[i]=(*(imAcq->MinIm()))[i];
         if ((*(imAcq->MaxIm()))[i]-(*(imAcq->MinIm()))[i]!=0)
-		    coeffCanal[i]=65536/((*(imAcq->MaxIm()))[i]-(*(imAcq->MinIm()))[i]);
+		    coeffCanal[i]=256/((*(imAcq->MaxIm()))[i]-(*(imAcq->MinIm()))[i]);
         else
             coeffCanal[i]=0;
 
@@ -1197,14 +1183,12 @@ delete imGain;
 
 delete imAffichee;
 // est déjà fait par delete imAffichee delete tabRGB;
-delete []tabRGBTransparence;
 
 seuilNivBas=NULL;
 coeffCanal=NULL;
 imAcq=NULL;
 imGain=NULL;
 imAffichee=NULL;
-tabRGBTransparence=NULL;
 nbObjetFenetrePrincipale--;
 if (FenetrePrincipale::nbObjetFenetrePrincipale== 0)
 	{

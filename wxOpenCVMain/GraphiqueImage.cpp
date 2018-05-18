@@ -99,8 +99,6 @@ void FenetrePrincipale::DrawWindow(wxBufferedPaintDC &hdc)
     if (imAffichee->GetHeight() != imAcq->rows || imAffichee->GetWidth() != imAcq->cols)
     {
         imAffichee = NULL;
-        delete tabRGB;
-        tabRGB = NULL;
     }
 if (!imAcq)
 	return;
@@ -340,7 +338,7 @@ else
 	for (int i=0;i<4;i++)
 		if (cTransparence[i]!=0)
 			nbPlanTransparence++;
-	for (int i=0;i<4;i++)
+/*	for (int i=0;i<4;i++)
 		if (cTransparence[i]!=0)
 			{
 			switch(i){
@@ -349,7 +347,6 @@ else
 				break;
 				}
 			nbPlanTransparence--;
-			unsigned char *cSrc = (unsigned char *)tabRGB;
 			unsigned char *cDst = (unsigned char *)tabRGBTransparence;
 			
 			float k=cTransparence[i]/100.0;
@@ -360,7 +357,7 @@ else
 				for (int j=0;j<taille;j++,cSrc++,cDst++)
 					*cSrc = *cDst + k * *cSrc;
 				
-			}
+			}*/
 
 	}
 }
@@ -395,7 +392,7 @@ template<typename T_> void FenetrePrincipale::CV2DIBImageReel(ImageInfoCV* imSrc
             if (correctionGain && imGain)
                 g = matGain.ptr<float>(i);
             T_ *d = matIm.ptr<T_>(i);
-            unsigned char *debLigne = (unsigned char *)tabRGB + i * matIm.cols * 3;
+            unsigned char *debLigne = 0;//(unsigned char *)tabRGB + i * matIm.cols * 3;
             for (int j = 0; j < matIm.cols; j++, debLigne += 3)
             {
                 for (int indCanal = 0; indCanal < nbCanaux; indCanal++, d++)
@@ -443,7 +440,7 @@ template<typename T_> void FenetrePrincipale::CV2DIBImageReel(ImageInfoCV* imSrc
             if (masqueActif)
                 dMasque = matMasque.ptr(i);
             complex<T_> *d = (complex<T_>*)matIm.ptr(i);
-            unsigned char *debLigne = (unsigned char *)tabRGB + i * matIm.cols * 3;
+            unsigned char *debLigne = 0;// (unsigned char *)tabRGB + i * matIm.cols * 3;
             for (int j = 0; j < matIm.cols; j++, debLigne += 3)
             {
                 for (int indCanal = 0; indCanal < nbCanaux / 2; indCanal++, d++)
@@ -526,7 +523,7 @@ template<typename T_> void FenetrePrincipale::CV2DIBImageEntier(ImageInfoCV* imS
         if (masqueActif)
             dMasque = matMasque.ptr(i);
         T_ *d = matIm.ptr<T_>(i);
-        unsigned char *debLigne = (unsigned char *)tabRGB + i * matIm.cols * 3;
+        unsigned char *debLigne = 0;// (unsigned char *)tabRGB + i * matIm.cols * 3;
         float *g = NULL;
         if (correctionGain && imGain)
             g = (float*)matGain.ptr(i);
@@ -583,66 +580,54 @@ template<typename T_> void FenetrePrincipale::CV2DIBImageEntierPalette(ImageInfo
     cv::Mat matGain;
     cv::Mat matIm;
     matIm = im->getMat(cv::ACCESS_READ);
+
     if (imSrc->MasqueOperateur()->rows*imSrc->MasqueOperateur()->cols != 0)
     {
         masqueActif = true;
         matMasque = imSrc->MasqueOperateur()->getMat(cv::ACCESS_READ);
         dMasque = matMasque.ptr(0);
     }
+    bool gainFixe = true;
     int	nbCanaux = matIm.channels();
+
+    for (int indCanal = 1; indCanal < nbCanaux; indCanal++)
+        if (seuilNivBas[indCanal] != seuilNivBas[0] || coeffCanal[indCanal] != coeffCanal[0])
+            gainFixe = false;
+    vector<cv::Mat> dst;
+    split(matIm, dst);
+    if (dst.size() >= 3)
+    {
+        while (dst.size() != 3)
+            dst.pop_back();
+        cv::Mat tmp = dst[0];
+        dst[0] = dst[2];
+        dst[2] = tmp;
+        nbCanaux = 3;
+    }
     if (correctionGain && imGain)
         matGain = imGain->getMat(cv::ACCESS_READ);
-    matIm-
-    for (int i = 0; i<matIm.rows; i++)
+    for (int i = 0; i < nbCanaux; i++)
     {
-        if (masqueActif)
-            dMasque = matMasque.ptr(i);
-        T_ *d = matIm.ptr<T_>(i);
-        unsigned char *debLigne = (unsigned char *)tabRGB + i * matIm.cols * 3;
-        float *g = NULL;
-        if (correctionGain && imGain)
-            g = (float*)matGain.ptr(i);
-        for (int j = 0; j<matIm.cols; j++, debLigne += 3)
-        {
-            for (int indCanal = 0; indCanal<nbCanaux; indCanal++, d++)
-            {
-                double v = (*d - seuilNivBas[indCanal])*coeffCanal[indCanal];
-                if (correctionGain)
-                    v = *g++*v;
-                if (v<0)
-                    v = 0;
-                if (v >= nbCouleurPalette)
-                    v = nbCouleurPalette - 1;
-                unsigned short val = (unsigned short)v;
-                if (masqueActif && *dMasque == 0)
-                    val = val / 2;
-                if (!planActif[indCanal])
-                    val = 0;
-                switch (indCanal) {
-                case 0:
-                    debLigne[2] = pCouleur[val].Blue();
-                    if (nbCanaux == 1)
-                    {
-                        debLigne[1] = pCouleur[val].Green();
-                        debLigne[0] = pCouleur[val].Red();
-                    }
-                    break;
-                case 1:
-                    debLigne[1] = pCouleur[val].Green();
-                    if (nbCanaux == 2)
-                    {
-                        debLigne[0] = pCouleur[val].Red();
-                    }
-                    break;
-                case 2:
-                    debLigne[0] = pCouleur[val].Red();
-                    break;
-                }
-            }
-            if (masqueActif)
-                dMasque++;
-        }
+        dst[i] = (dst[i]- seuilNivBas[i])*coeffCanal[i];
+        if (correctionGain)
+            dst[i] = dst[i].mul(matGain);
     }
+    cv::Mat dst1;
+    if (!masqueActif)
+    {
+        cv::merge(dst, dst1);
+        dst1.convertTo(ecranRGB, CV_8U);
+        return;
+    }
+// masque Actif
+    cv::Mat invMask;
+    cv::bitwise_not(matMasque, invMask);
+    for (int i = 0; i < nbCanaux; i++)
+    {
+        add(dst[i],-128,dst[i],invMask);
+    }
+    cv::merge(dst, dst1);
+    dst1.convertTo(ecranRGB, CV_8U);
 }
 
 /**************************************************************
@@ -663,9 +648,8 @@ if (!pCouleur)
 long taille = im->cols*im->rows*3;
 if (imAffichee && imAffichee->GetHeight()*imAffichee->GetWidth() != im->cols*im->rows)
 	{
-	delete tabRGBTransparence;
-	tabRGBTransparence=NULL;
-	tabRGB=NULL;
+//	delete tabRGBTransparence;
+//	tabRGBTransparence=NULL;
 	delete imAffichee;
 	imAffichee=NULL;
 	if (imGain)
@@ -676,11 +660,11 @@ if (imAffichee && imAffichee->GetHeight()*imAffichee->GetWidth() != im->cols*im-
 		}
 	}
 
-if (tabRGB==NULL)
+/*if (tabRGB==NULL)
 	{
 	tabRGB = new unsigned char[taille];
 	tabRGBTransparence = new unsigned char[taille];
-	}
+	}*/
 unsigned char *dMasque;
 bool masqueActif=false;
 cv::Mat matMasque;
@@ -698,24 +682,25 @@ if (correctionGain && imGain)
     matGain = imGain->getMat(cv::ACCESS_READ);
 switch(im->depth()){
 case CV_32F :
-    CV2DIBImageReel<float>(imSrc);
+    CV2DIBImageEntierPalette<float>(imSrc);
 	break;
 case CV_64F:
-    CV2DIBImageReel<double>(imSrc);
+    CV2DIBImageEntierPalette<double>(imSrc);
     break;
 
 case CV_32S :
-    CV2DIBImageEntier<int>(imSrc);
+    CV2DIBImageEntierPalette<int>(imSrc);
 
 	break;
 case CV_16U :
-    CV2DIBImageEntier<unsigned short>(imSrc);
+    CV2DIBImageEntierPalette<unsigned short>(imSrc);
  	break;
 case CV_16S :
-    CV2DIBImageEntier<short>(imSrc);
+    CV2DIBImageEntierPalette<short>(imSrc);
     break;
 case CV_8U :
-    CV2DIBImageEntier<unsigned char>(imSrc);
+    CV2DIBImageEntierPalette<unsigned char>(imSrc);
+//    CV2DIBImageEntier<unsigned char>(imSrc);
     break;
 }
 
@@ -729,7 +714,7 @@ if (imAffichee==NULL)
 	else
 		imAffichee=new wxImage((int)im->cols,(int)im->rows);
 	imAffichee->SetMask(0);
-	imAffichee->SetData(tabRGB);
+	imAffichee->SetData(ecranRGB.ptr(0),true);
 	}
 return;
 }
@@ -746,14 +731,12 @@ return r;
 
 void FenetrePrincipale::RAZTransparence()
 {
-if (!tabRGB)
-	return;
 long taille = imAcq->cols*imAcq->rows*3;
 
-unsigned char *debLigne = (unsigned char *)tabRGBTransparence;
+/*unsigned char *debLigne = (unsigned char *)tabRGBTransparence;
 
 for (int i=0;i<taille;i++,debLigne++)
-	*debLigne=0;		
+	*debLigne=0;	*/	
 return;
 }
 

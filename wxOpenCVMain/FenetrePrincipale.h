@@ -502,8 +502,10 @@ bool				planActif[10];		/*!< plan couleur actif pour l'affichage */
 char				fondDejaDefini;		/*!< Vrai Une image de fond existe déjà */
 char				modeTransparence;	/*!< Mode transparence 0 une seule image affichée, 1 mode actif */
 int					cTransparence[4];	/*!< Coefficient de transparence pour les images image en cours, module seuil région */
-unsigned char		*tabRGB;			/*!< Image couleur affichée */
-unsigned char		*tabRGBTransparence;// Image couleur pour la gestion de la transparence
+//unsigned char		*tabRGB;			/*!< Image couleur affichée */
+cv::Mat             ecranRGB;
+cv::Mat             ecranRGBTransparence;
+//unsigned char		*tabRGBTransparence;// Image couleur pour la gestion de la transparence
 static	int			palArcEnCiel[1000];	/*!< Données contenant la palette arc en ciel */
 double				*seuilNivBas;		/*!< les valeurs d'image avec une valeur inférieur seront de couleur 0*/
 double				*coeffCanal;		/*!< coefficent multiplicatif pour caluler le niveau du pixel dans la palette nivPale
