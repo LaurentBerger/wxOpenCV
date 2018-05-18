@@ -595,15 +595,22 @@ template<typename T_> void FenetrePrincipale::CV2DIBImageEntierPalette(ImageInfo
             gainFixe = false;
     vector<cv::Mat> dst;
     split(matIm, dst);
-    if (dst.size() >= 3)
+    if (dst.size() != 3)
     {
+        while (dst.size() < 3)
+        {
+            coeffCanal[dst.size()] = coeffCanal[0];
+            seuilNivBas[dst.size()] = seuilNivBas[0];
+            dst.push_back(dst[0].clone());
+
+        }
         while (dst.size() != 3)
             dst.pop_back();
-        cv::Mat tmp = dst[0];
-        dst[0] = dst[2];
-        dst[2] = tmp;
         nbCanaux = 3;
     }
+    cv::Mat tmp = dst[0];
+    dst[0] = dst[2];
+    dst[2] = tmp;
     if (correctionGain && imGain)
         matGain = imGain->getMat(cv::ACCESS_READ);
     for (int i = 0; i < nbCanaux; i++)
