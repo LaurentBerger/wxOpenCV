@@ -96,7 +96,7 @@ wxPaintDC	hdc(this);
 
 void FenetrePrincipale::DrawWindow(wxBufferedPaintDC &hdc)
 {
-    if (imAffichee->GetHeight() != imAcq->rows || imAffichee->GetWidth() != imAcq->cols)
+    if (imAffichee && (imAffichee->GetHeight() != imAcq->rows || imAffichee->GetWidth() != imAcq->cols))
     {
         imAffichee = NULL;
     }
@@ -599,8 +599,10 @@ template<typename T_> void FenetrePrincipale::CV2DIBImageEntierPalette(ImageInfo
     {
         while (dst.size() < 3)
         {
-            coeffCanal[dst.size()] = coeffCanal[0];
-            seuilNivBas[dst.size()] = seuilNivBas[0];
+			if (coeffCanal.size()<3)
+				coeffCanal.push_back(coeffCanal[0]);
+			if (seuilNivBas.size()<3)
+				seuilNivBas.push_back(seuilNivBas[0]);
             dst.push_back(dst[0].clone());
 
         }

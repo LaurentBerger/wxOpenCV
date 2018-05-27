@@ -239,7 +239,6 @@ wxSlider *cbLum=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+2,ongletTemp
 wxSlider *cbSat=(wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST+3,ongletTemporels);
 wxSlider *cbTpsExpo = (wxSlider*)wxWindow::FindWindowById(ID_ASC_CONTRAST + 4, ongletTemporels);
 wxSlider *cbButter = (wxSlider*)wxWindow::FindWindowById(ID_GLI_BUTTER , ongletMoyenne);
-bool b;
 if (w.GetEventObject()==cbContrast)
 	{
 	if (cam->Contraste(w.GetInt()))

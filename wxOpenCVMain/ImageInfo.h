@@ -552,7 +552,7 @@ Panoramique *ParamPano(){return pano;};
 
 bool CaffeResultPret();
 bool YoloResultPret();
-int NbRectYolo() { return rectYolo.size(); };
+int NbRectYolo() { return static_cast<int>(rectYolo.size()); };
 cv::Rect RectYolo(int i) { if (i >= 0 && i < rectYolo.size()) return rectYolo[i]; };
 double ProbCaffe(int i) { if (i >= 0 && i<probRetenue.size()) return probRetenue[i]; };
 double ProbYolo(int i) { if (i >= 0 && i<probRetenue.size()) return probRetenue[i]; };

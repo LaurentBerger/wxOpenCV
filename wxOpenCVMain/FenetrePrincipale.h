@@ -507,8 +507,8 @@ cv::Mat             ecranRGB;
 cv::Mat             ecranRGBTransparence;
 //unsigned char		*tabRGBTransparence;// Image couleur pour la gestion de la transparence
 static	int			palArcEnCiel[1000];	/*!< Données contenant la palette arc en ciel */
-double				*seuilNivBas;		/*!< les valeurs d'image avec une valeur inférieur seront de couleur 0*/
-double				*coeffCanal;		/*!< coefficent multiplicatif pour caluler le niveau du pixel dans la palette nivPale
+std::vector<double>	    seuilNivBas;		/*!< les valeurs d'image avec une valeur inférieur seront de couleur 0*/
+std::vector<double>		coeffCanal;		/*!< coefficent multiplicatif pour caluler le niveau du pixel dans la palette nivPale
 coeffCanal[i]*max(I(x,y,i)- seuilNivBas(i),0) */
 //int					debNivPalette[6];	// Début du niveau associés à la couleur 0 
 //int					finNivPalette[6];	// Fin du niveau associés à la dernière couleur de la palette 

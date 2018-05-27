@@ -113,8 +113,6 @@ nbImageFonction=0;
 dImageBiais=0;
 dImageTache=0;
 
-seuilNivBas=NULL;
-coeffCanal=NULL;
 alphad=1;
 alpham=1;
 seuilModuleHaut = 7.5*7.5;
@@ -486,12 +484,10 @@ imAffichee=NULL;
 imGain=NULL;
 
 imAcq = new ImageInfoCV(1002,1004,CV_16UC1);
-seuilNivBas=new double[imAcq->channels()];
-coeffCanal=new double[imAcq->channels()];
 for (int i=0;i<imAcq->channels();i++)
 	{
-	seuilNivBas[i]=0;
-	coeffCanal[i]=1;
+	seuilNivBas.push_back(0);
+	coeffCanal.push_back(1.);
 	}
 
 //imAcq2 = new ImageInfo(ENTIER_IMAGE,T_SHORT_IMAGE,1002,1004);
@@ -574,12 +570,10 @@ feuille->Show();
 
 
 wxLogVerbose("Video opened");
-seuilNivBas=new double[imAcq->channels()];
-coeffCanal=new double[imAcq->channels()];
 for (int i=0;i<imAcq->channels();i++)
 	{
-	seuilNivBas[i]=0;
-	coeffCanal[i]=1;
+	seuilNivBas.push_back(0);
+	coeffCanal.push_back(1.);
 	}
 wxSize	tailleZoneImage;
 tailleZoneImage=GetClientSize();
@@ -785,8 +779,6 @@ nivBiais = new ImageInfoCV(imtmp->rows,imtmp->cols,imtmp->type());
 	}
 wxLogVerbose(_T("Image %s loaded"),nomFichier);
 //	int nbLigne=imtmp->rows,nbColonne=imtmp->cols,nbPlan=imtmp->channels();
-seuilNivBas=new double[imAcq->channels()];
-coeffCanal=new double[imAcq->channels()];
 for (int i=0;i<imAcq->channels();i++)
 	{
 	int z=imAcq->depth();
@@ -794,8 +786,8 @@ for (int i=0;i<imAcq->channels();i++)
 		imAcq->flags=(imAcq->flags&0xFFFFFFF8)|CV_16SC1;
 	if(imAcq->depth()==CV_8S || imAcq->depth()==CV_8U)
 		{
-		seuilNivBas[i]=0;
-		coeffCanal[i]=1;
+		seuilNivBas.push_back(0);
+		coeffCanal.push_back(1);
 		}
 	else
 		{
@@ -865,23 +857,13 @@ if (imAcq==NULL)
 		}
 	imAffichee=NULL;
 
-	seuilNivBas=new double[imAcq->channels()];
-	coeffCanal=new double[imAcq->channels()];
 	for (int i=0;i<imAcq->channels();i++)
 		{
 		int z=imAcq->depth();
 		if (z==2)
 			imAcq->flags=(imAcq->flags&0xFFFFFFF8)|CV_16SC1;
-		if(imAcq->depth()==CV_8S || imAcq->depth()==CV_8U)
-			{
-			seuilNivBas[i]=0;
-			coeffCanal[i]=1;
-			}
-		else
-			{
-			seuilNivBas[i]=0;
-			coeffCanal[i]=1;
-			}
+		seuilNivBas.push_back(0);
+		coeffCanal.push_back(1.);
 		}
 
 	}
@@ -1175,8 +1157,6 @@ if (detectionUtilisateur)
 	detectionUtilisateur->Stop();
 delete detectionUtilisateur;
 
-delete []seuilNivBas;
-delete []coeffCanal;
 delete imAcq;
 delete imGain;
 
@@ -1184,8 +1164,6 @@ delete imGain;
 delete imAffichee;
 // est déjà fait par delete imAffichee delete tabRGB;
 
-seuilNivBas=NULL;
-coeffCanal=NULL;
 imAcq=NULL;
 imGain=NULL;
 imAffichee=NULL;

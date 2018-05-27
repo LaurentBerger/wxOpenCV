@@ -799,7 +799,7 @@ cv::Mat m = xx.opnn[idFiltre]->getMat(cv::ACCESS_READ);
 for (int i=0;i<xx.opnn[idFiltre]->rows;i++)
 	for (int j=0;j<xx.opnn[idFiltre]->cols;j++)
 		g->DefCellule(i,j,m.at<float>(i,j));
-if (cb->GetStringSelection().Find(_("user"))!=wxNOT_FOUND)
+if (cb->GetStringSelection().Find(_("User"))!=wxNOT_FOUND)
 	g->EnableEditing (true);
 else
 	g->EnableEditing (false);
