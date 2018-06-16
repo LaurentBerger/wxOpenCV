@@ -14,9 +14,9 @@ FIND_PATH(
 
 
 
-find_package(glog QUIET OPTIONAL_COMPONENTS)
-find_package(ceres QUIET OPTIONAL_COMPONENTS)
-find_package(VTK  OPTIONAL_COMPONENTS)
+#find_package(glog QUIET OPTIONAL_COMPONENTS)
+#find_package(ceres QUIET OPTIONAL_COMPONENTS)
+#find_package(VTK  OPTIONAL_COMPONENTS)
 
 
 find_package(OpenSceneGraph  REQUIRED osgDB osgUtil osgGA osgViewer osgText osgSim)

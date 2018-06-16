@@ -2000,12 +2000,18 @@ void FenetrePrincipale::AjoutPointCourbeVideo(int c,double x, double y)
 void FenetrePrincipale::CopierSelect(wxCommandEvent& evt)
 {
     cv::Mat masque = cv::Mat::zeros(imAcq->size(),CV_8UC1);
+    bool empty = true;
     for (int i = 0; i < NB_MAX_RECTANGLE;i++)
         if (feuille->rectDsMasque[i] )
         {
+            if (!feuille->rectSelect[i].IsEmpty())
+                empty = false;
             masque(cv::Rect(feuille->rectSelect[i].x,feuille->rectSelect[i].y,feuille->rectSelect[i].GetWidth(),feuille->rectSelect[i].GetHeight()))=1;
         }
-    (*imAcq).copyTo(imClipBoard,masque);
+    if (!empty)
+        (*imAcq).copyTo(imClipBoard,masque);
+    else
+        wxMessageBox("Source is empty. Select a mask !");
 }
 
 void FenetrePrincipale::CollerImage(wxCommandEvent& evt)
