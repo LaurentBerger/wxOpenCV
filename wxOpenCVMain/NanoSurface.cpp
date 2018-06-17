@@ -1061,7 +1061,7 @@ void	NanoSurface::DefTailleFiltre(int i)
 {
 if (i<0 || i>=TAILLEMAXDUFILTRE || i==tailleDuFiltre)
 	return; 
-//osg::Group* root = dynamic_cast<osg::Group*>(((wxOsgApp*)osgApp)->LireViewer()->getSceneData());
+//osg::Group* root = dynamic_cast<osg::Group*>(((wxOpencvApp*)osgApp)->LireViewer()->getSceneData());
 MajSurface();
 }
 

@@ -15,7 +15,7 @@ using namespace std;
 void FenetrePrincipale::ImageCamera(wxCommandEvent& event)
 {
 modeImage = 0;
-//((wxOsgApp*)osgApp)->Outils()->MAJValeurPalette();
+//((wxOpencvApp*)osgApp)->Outils()->MAJValeurPalette();
 MAJNouvelleImage();
 
 }
@@ -24,7 +24,7 @@ MAJNouvelleImage();
 #ifdef __ESTCEUTILE__
 void OutilsImage::OuvertureOngletQuadriqueMulti()
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 
 
@@ -66,25 +66,25 @@ int i=0;
 new wxStaticText(ongletQuadriqueMulti,400+i,legende[i],position[i], taille[i]);
 i++;
 wxString	s;
-s.Printf(_T("%lf"),((wxOsgApp*)osgApp)->Graphique()->DericheAlphaM());
+s.Printf(_T("%lf"),((wxOpencvApp*)osgApp)->Graphique()->DericheAlphaM());
 new wxTextCtrl(ongletQuadriqueMulti,400+i,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
 i++;
 new wxStaticText(ongletQuadriqueMulti,400+i,legende[i],position[i], taille[i]);
 i++;
-s.Printf(_T("%lf"),((wxOsgApp*)osgApp)->Graphique()->DericheAlphaD());
+s.Printf(_T("%lf"),((wxOpencvApp*)osgApp)->Graphique()->DericheAlphaD());
 new wxTextCtrl(ongletQuadriqueMulti,400+i,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
 i++;
 new wxStaticText(ongletQuadriqueMulti,400+i,legende[i],position[i], taille[i]);
 i++;
-s.Printf(_T("%6.1lf"),(((wxOsgApp*)osgApp)->Graphique()->SeuilModuleHaut()));
+s.Printf(_T("%6.1lf"),(((wxOpencvApp*)osgApp)->Graphique()->SeuilModuleHaut()));
 new wxTextCtrl(ongletQuadriqueMulti,400+i,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
 i++;
-s.Printf(_T("%6.1lf"),(((wxOsgApp*)osgApp)->Graphique()->SeuilModuleBas()));
+s.Printf(_T("%6.1lf"),(((wxOpencvApp*)osgApp)->Graphique()->SeuilModuleBas()));
 new wxTextCtrl(ongletQuadriqueMulti,400+i,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
 i++;
 new wxStaticText(ongletQuadriqueMulti,400+i,legende[i],position[i], taille[i]);
 i++;
-s.Printf(_T("%d"),((wxOsgApp*)osgApp)->Graphique()->SeuilSurface());
+s.Printf(_T("%d"),((wxOpencvApp*)osgApp)->Graphique()->SeuilSurface());
 new wxTextCtrl(ongletQuadriqueMulti,400+i,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
 i++;
 for (;i<21;i++)
@@ -105,9 +105,9 @@ modelFct.Add(_T("Additif quadratique mono"));
 modelFct.Add(_T("Additif quadratique multi"));
 modelFct.Add(_T("Additif cubique multi"));
 wxChoice *t=new wxChoice(ongletQuadriqueMulti,400+i,position[i],taille[i], modelFct);
-//t->SetSelection(((wxOsgApp*)osgApp)->Graphique()->ImAcq()->LitTypeModeleFctSEEC());
+//t->SetSelection(((wxOpencvApp*)osgApp)->Graphique()->ImAcq()->LitTypeModeleFctSEEC());
 i++;
-s.Printf(_T("%5.1f"),((wxOsgApp*)osgApp)->Graphique()->DiffHauteur());
+s.Printf(_T("%5.1f"),((wxOpencvApp*)osgApp)->Graphique()->DiffHauteur());
 new wxTextCtrl(ongletQuadriqueMulti,400+i,s,position[i], taille[i],wxTE_PROCESS_ENTER|wxTE_PROCESS_TAB);
 i++;
 
@@ -124,7 +124,7 @@ return ((wxChoice*)ww[24])->GetCurrentSelection();
 
 void OutilsImage::OnTextValider(wxCommandEvent &w)
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 wxString s=((wxTextCtrl*)w.GetEventObject())->GetValue();
 long	valEntiere;
@@ -132,28 +132,28 @@ double	valFlottante;
 
 s.ToLong(&valEntiere);
 s.ToDouble(&valFlottante);
-char mode =((wxOsgApp*)osgApp)->Graphique()->ModeImage();
+char mode =((wxOpencvApp*)osgApp)->Graphique()->ModeImage();
 switch (w.GetId()){
 case 409:
 	{
-	((wxOsgApp*)osgApp)->Graphique()->DefDebNivPalette(valEntiere);
+	((wxOpencvApp*)osgApp)->Graphique()->DefDebNivPalette(valEntiere);
 	int minCtrl,maxCtrl;
 	slNivMin->SetValue(valEntiere);
 	maxCtrl=slNivMax->GetMax( );
 	slNivMax->SetRange(valEntiere, maxCtrl);
-	((wxOsgApp*)osgApp)->Graphique()->MAJNouvelleImage();
-	((wxOsgApp*)osgApp)->ImgStat()->DrawPalette();
+	((wxOpencvApp*)osgApp)->Graphique()->MAJNouvelleImage();
+	((wxOpencvApp*)osgApp)->ImgStat()->DrawPalette();
 	}
 	break;
 case 410:
 	{
-	((wxOsgApp*)osgApp)->Graphique()->DefFinNivPalette(valEntiere);
+	((wxOpencvApp*)osgApp)->Graphique()->DefFinNivPalette(valEntiere);
 	int minCtrl,maxCtrl;
 	slNivMax->SetValue(valEntiere);
 	minCtrl=slNivMin->GetMin();
 	slNivMin->SetRange(minCtrl,valEntiere);
-	((wxOsgApp*)osgApp)->Graphique()->MAJNouvelleImage();
-	((wxOsgApp*)osgApp)->ImgStat()->DrawPalette();
+	((wxOpencvApp*)osgApp)->Graphique()->MAJNouvelleImage();
+	((wxOpencvApp*)osgApp)->ImgStat()->DrawPalette();
 	}
 	break;
 	}
@@ -167,13 +167,13 @@ case 2 :
 	
 void OutilsImage::RegionPrincipaleSelect(int ind)
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 }
 
 void OutilsImage::RegionSecondaireSelect(int ind)
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 
 
@@ -181,7 +181,7 @@ if ( !((wxOsgApp*)osgApp)->VerifFenetre())
 
 void OutilsImage::FusionRegion(wxCommandEvent &w)
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 
 }

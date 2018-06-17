@@ -254,11 +254,11 @@ if (key=='V'&& event.ShiftDown() )
 		}
 	horlogeSeq->Start(3000,false);
 	horlogeCopy->Start(300,false);
-//	((wxOsgApp*)osgApp)->AutoriseVideo();
+//	((wxOpencvApp*)osgApp)->AutoriseVideo();
 	}
 if (key=='V'&& !event.ShiftDown() )
 	{
-//	((wxOsgApp*)osgApp)->InterditVideo();
+//	((wxOpencvApp*)osgApp)->InterditVideo();
 	if (horlogeSeq && horlogeSeq->IsRunning())
 		{
 		horlogeSeq->Stop();

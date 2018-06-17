@@ -255,7 +255,7 @@ void ImageStatistiques::OnRangeSelected(wxGridRangeSelectEvent &ev)
 if (!osgApp)
 	return;
 /*
-GrapheImageInfo*	grapheRegion=NULL;//((wxOsgApp*)osgApp)->Graphique()->GrapheImage();
+GrapheImageInfo*	grapheRegion=NULL;//((wxOpencvApp*)osgApp)->Graphique()->GrapheImage();
 if (!grapheRegion)
 	return;
 if (grapheRegion->nbSommets==0)
@@ -264,13 +264,13 @@ if ( ev.Selecting() )
     {
     for (int i=ev.GetTopRow();i<=ev.GetBottomRow() && i<grapheRegion->nbSommets;i++)
 		ongletRegion->DefRegionSelect(i,1);
-	((wxOsgApp*)osgApp)->Graphique()->TracerCercle(ongletRegion->RegionSelect());
+	((wxOpencvApp*)osgApp)->Graphique()->TracerCercle(ongletRegion->RegionSelect());
 	}
 else
     {
     for (int i=0;i<grapheRegion->nbSommets;i++)
 		ongletRegion->DefRegionSelect(i,0);
-	((wxOsgApp*)osgApp)->Graphique()->MAJNouvelleImage();
+	((wxOpencvApp*)osgApp)->Graphique()->MAJNouvelleImage();
 
 	}
 */
@@ -310,7 +310,7 @@ void FenetreRegion::OnRangeSelected(wxGridRangeSelectEvent &ev)
 if (!osgApp)
 	return;
 /*
-GrapheImageInfo*	grapheRegion=NULL;//((wxOsgApp*)osgApp)->Graphique()->GrapheImage();
+GrapheImageInfo*	grapheRegion=NULL;//((wxOpencvApp*)osgApp)->Graphique()->GrapheImage();
 if (!grapheRegion)
 	return;
 if (grapheRegion->nbSommets==0)
@@ -321,14 +321,14 @@ if (!gestionControlDown)
 		{
 		for (int i=ev.GetTopRow();i<=ev.GetBottomRow() && i<grapheRegion->nbSommets;i++)
 					regionSelect[cleTri[i]]=1;
-		((wxOsgApp*)osgApp)->Graphique()->MAJNouvelleImage();
-		((wxOsgApp*)osgApp)->Graphique()->TracerCercle(regionSelect);
+		((wxOpencvApp*)osgApp)->Graphique()->MAJNouvelleImage();
+		((wxOpencvApp*)osgApp)->Graphique()->TracerCercle(regionSelect);
 		}
 	else
 		{
 		for (int i=0;i<grapheRegion->nbSommets;i++)
 			regionSelect[cleTri[i]]=0;
-		((wxOsgApp*)osgApp)->Graphique()->MAJNouvelleImage();
+		((wxOpencvApp*)osgApp)->Graphique()->MAJNouvelleImage();
 
 		}
 	ev.Skip();
@@ -355,7 +355,7 @@ void FenetreRegion::MenuContextuel(wxGridEvent &w)
 if (!osgApp)
 	return;
 /*
-GrapheImageInfo*	grapheRegion=NULL;//((wxOsgApp*)osgApp)->Graphique()->GrapheImage();
+GrapheImageInfo*	grapheRegion=NULL;//((wxOpencvApp*)osgApp)->Graphique()->GrapheImage();
 if (!grapheRegion)
 	return;
 if (grapheRegion->nbSommets==0)
@@ -385,7 +385,7 @@ void FenetreRegion::FusionNiveau(wxCommandEvent &w)
 if (!osgApp)
 	return;
 /*
-GrapheImageInfo*	grapheRegion=NULL;//((wxOsgApp*)osgApp)->Graphique()->GrapheImage();
+GrapheImageInfo*	grapheRegion=NULL;//((wxOpencvApp*)osgApp)->Graphique()->GrapheImage();
 if (!grapheRegion)
 	return;
 if (grapheRegion->nbSommets==0)
@@ -414,7 +414,7 @@ void FenetreRegion::RAZNiveau(wxCommandEvent &w)
 if (!osgApp)
 	return;
 /*
-GrapheImageInfo*	grapheRegion=NULL;//((wxOsgApp*)osgApp)->Graphique()->GrapheImage();
+GrapheImageInfo*	grapheRegion=NULL;//((wxOpencvApp*)osgApp)->Graphique()->GrapheImage();
 if (!grapheRegion)
 	return;
 if (grapheRegion->nbSommets==0)
@@ -432,7 +432,7 @@ void FenetreRegion::DefinirNiveau(wxCommandEvent &w)
 if (!osgApp)
 	return;
 /*
-GrapheImageInfo*	grapheRegion=NULL;//((wxOsgApp*)osgApp)->Graphique()->GrapheImage();
+GrapheImageInfo*	grapheRegion=NULL;//((wxOpencvApp*)osgApp)->Graphique()->GrapheImage();
 if (!grapheRegion)
 	return;
 if (grapheRegion->nbSommets==0)
@@ -460,7 +460,7 @@ void FenetreRegion::LireNiveau(int *classe)
 if (!osgApp)
 	return;
 /*
-GrapheImageInfo*	grapheRegion=NULL;//((wxOsgApp*)osgApp)->Graphique()->GrapheImage();
+GrapheImageInfo*	grapheRegion=NULL;//((wxOpencvApp*)osgApp)->Graphique()->GrapheImage();
 if (!grapheRegion)
 	return;
 if (grapheRegion->nbSommets==0)
@@ -483,7 +483,7 @@ void FenetreRegion::OterSelection(wxGridEvent &w)
 if (!osgApp)
 	return;
 /*
-GrapheImageInfo*	grapheRegion=NULL;//((wxOsgApp*)osgApp)->Graphique()->GrapheImage();
+GrapheImageInfo*	grapheRegion=NULL;//((wxOpencvApp*)osgApp)->Graphique()->GrapheImage();
 if (!grapheRegion)
 	return;
 if (grapheRegion->nbSommets==0)
@@ -502,8 +502,8 @@ if (w.ControlDown())
 				listeRegion->SelectRow(i,true);
 		Refresh();
 		}
-	((wxOsgApp*)osgApp)->Graphique()->MAJNouvelleImage();
-	((wxOsgApp*)osgApp)->Graphique()->TracerCercle(regionSelect);
+	((wxOpencvApp*)osgApp)->Graphique()->MAJNouvelleImage();
+	((wxOpencvApp*)osgApp)->Graphique()->TracerCercle(regionSelect);
 	gestionControlDown=0;
 	if (regionSelect[cleTri[w.GetRow()]]==1)
 		w.Skip();

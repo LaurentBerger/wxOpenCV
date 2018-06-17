@@ -21,7 +21,7 @@
 #include "imagestat.h"
 #include "FenetreSeqOpe.h"
 //#include "OutilsImage.h"
-#include "wxOsgApp.h"
+#include "wxOpencvApp.h"
 #include "FenetrePrincipale.h"
 #include "TableauBord.h"
 #include "InterfaceAvance.h"
@@ -80,7 +80,7 @@ wxCOMPILE_TIME_ASSERT( WXSIZEOF(langNames) == WXSIZEOF(langIds),
 
 
 #ifndef _USRDLL
-IMPLEMENT_APP(wxOsgApp)
+IMPLEMENT_APP(wxOpencvApp)
 #else
 
 #ifdef SEEC_EXPORTS
@@ -90,7 +90,7 @@ IMPLEMENT_APP(wxOsgApp)
 #endif
 
 HANDLE ThreadId;
-wxOsgApp *monAppli=NULL;
+wxOpencvApp *monAppli=NULL;
 
 DWORD WINAPI ThreadProc(LPVOID lpParameter)
  {
@@ -101,9 +101,9 @@ if (lpParameter)
 	}
 int argc=0;
 char **argv=NULL;
-wxApp::SetInstance(monAppli=new wxOsgApp());
+wxApp::SetInstance(monAppli=new wxOpencvApp());
 wxEntryStart(argc,argv);
-wxOsgApp *g=(wxOsgApp*)monAppli;
+wxOpencvApp *g=(wxOpencvApp*)monAppli;
 g->OnInit();
 g->OnRun();
 return true;
@@ -136,7 +136,7 @@ ThreadProc((void*)NULL);
 
 extern "C" SEEC_EXPORTS_API void TestScilabThread(void)
 {
-monAppli = (wxOsgApp *)NULL;
+monAppli = (wxOpencvApp *)NULL;
 ThreadId = CreateThread(NULL,0,ThreadProc,(void*)monAppli,0,NULL);
 }
 
@@ -258,7 +258,7 @@ using namespace std;
 
 
 
-int wxOsgApp::FilterEvent(wxEvent& event)
+int wxOpencvApp::FilterEvent(wxEvent& event)
 {
     if ( event.GetEventType()==wxEVT_KEY_DOWN)
 		if (((wxKeyEvent&)event).GetKeyCode()==WXK_F1 ||
@@ -281,7 +281,7 @@ int wxOsgApp::FilterEvent(wxEvent& event)
 }
 
 
-FenetrePrincipale	*wxOsgApp::Graphique(int id)
+FenetrePrincipale	*wxOpencvApp::Graphique(int id)
 {
 if (id==-1)
 	if (nbFenetre>0 && indFenetre>=0)
@@ -298,7 +298,7 @@ else
 	return NULL;
 }
 
-int wxOsgApp::RechercheFenetre(ImageInfoCV *im)
+int wxOpencvApp::RechercheFenetre(ImageInfoCV *im)
 {
 map<int ,EnvFenetre *>::iterator pp;
 for (pp=listeFenetre.begin();pp!=listeFenetre.end();pp++)
@@ -310,7 +310,7 @@ return -1;
 }
 
 
-void wxOsgApp::Quitter(wxFrame *g)
+void wxOpencvApp::Quitter(wxFrame *g)
 {
 quitter=true;
 if (ctrlCamera)
@@ -367,7 +367,7 @@ delete imAcq;*/
 delete c;*/
 };
 
-void wxOsgApp::Video(wxCommandEvent &w,int type)
+void wxOpencvApp::Video(wxCommandEvent &w,int type)
 {
 static int nbFenVideo=0;
 wxString s("Video");
@@ -459,7 +459,7 @@ f->ModeCamera(w);
 
 
 
-void wxOsgApp::Ouvrir(wxCommandEvent &w)
+void wxOpencvApp::Ouvrir(wxCommandEvent &w)
 {
 wxString dossier;
 configApp->Read("/dossier",&dossier,wxEmptyString);
@@ -491,7 +491,7 @@ InitFenAssociee(f);
 f->InitIHM();
 }
 
-void wxOsgApp::InitFenAssociee(FenetrePrincipale *f)
+void wxOpencvApp::InitFenAssociee(FenetrePrincipale *f)
 {
     wxPoint p=f->GetPosition()+wxPoint(f->GetSize().GetWidth(),0);
 ImageStatistiques *imgStatIm = new ImageStatistiques(NULL, "Image Statistic",
@@ -550,7 +550,7 @@ f->SetIcon(icon);
 
 
 
-void wxOsgApp::DefOperateurImage(wxString &s)
+void wxOpencvApp::DefOperateurImage(wxString &s)
 {
 ImageInfoCV xx;
 pOCV.doubleParam.clear();
@@ -566,7 +566,7 @@ if (!pOCV.InitOperation((string)s.c_str()))
 
 
 
-void ExecuterOperation(wxOsgApp *app,ParametreOperation *pOCVNouveau)
+void ExecuterOperation(wxOpencvApp *app,ParametreOperation *pOCVNouveau)
 {
 ParametreOperation *pAct;
 vector<ImageInfoCV*>	r;
@@ -604,7 +604,7 @@ return ; // Le pointeur imTab n'est pas libéré
 }
 
 
-vector<ImageInfoCV*> wxOsgApp::ExecuterOperation(ParametreOperation *pOCVNouveau, bool noEvt)
+vector<ImageInfoCV*> wxOpencvApp::ExecuterOperation(ParametreOperation *pOCVNouveau, bool noEvt)
 {vector<ImageInfoCV*>	r;
  /*
        thread *thOperation= new thread(::ExecuterOperation,this,pOCVNouveau);
@@ -654,7 +654,7 @@ return r; // Le pointeur imTab n'est pas libéré
 }
 
 
-void wxOsgApp::CreerFenetreOperation()
+void wxOpencvApp::CreerFenetreOperation()
 {
 if (pOCV.operateur==NULL  || pOCV.op.size()==0)
 	return;
@@ -666,7 +666,7 @@ return;
 
 
 // `Main program' equivalent, creating windows and returning main app frame
-bool wxOsgApp::OnInit()
+bool wxOpencvApp::OnInit()
 {
 cv::ocl::setUseOpenCL(false);
 
@@ -800,7 +800,7 @@ if (ok)
 #endif
 
 
-Bind(VAL_EVT_CALCUL_FINI, &wxOsgApp::CalculFini,this,wxID_ANY);
+Bind(VAL_EVT_CALCUL_FINI, &wxOpencvApp::CalculFini,this,wxID_ANY);
 
 frame->DefOSGApp(this);
 frame->SetSize(wxSize(800,800));
@@ -814,7 +814,7 @@ dllSVGplplotdrv=NULL;
 class FenetreTest : public wxFrame
 {
 public :
-wxOsgApp *osgApp;
+wxOpencvApp *osgApp;
 FenetreTest(wxFrame *frame, const wxString& title, const wxPoint& pos, 
     const wxSize& size, long style = wxDEFAULT_FRAME_STYLE): wxFrame(frame, wxID_ANY, title , pos, size, style)
 {
@@ -825,7 +825,7 @@ Bind(wxEVT_CLOSE_WINDOW, &FenetreTest::OnClose,this);
 void FenetreTest::OnClose(wxCloseEvent& event)
 {
 wxFrame::OnCloseWindow(event);
-((wxOsgApp*)osgApp)->Quitter(NULL);
+((wxOpencvApp*)osgApp)->Quitter(NULL);
 }
 
 
@@ -899,7 +899,7 @@ return true;
 }
 
 
-void wxOsgApp::CalculFini(EvtCalculFini &w)
+void wxOpencvApp::CalculFini(EvtCalculFini &w)
 {
 
 vector<ImageInfoCV*> r=w.r;
@@ -1060,13 +1060,13 @@ pOCV.intParam.clear();
     return;
 }
 
-void wxOsgApp::AnnuleOp()
+void wxOpencvApp::AnnuleOp()
 {
 pOCV.InitOperation("");
 };
 
 
-void wxOsgApp::OuvertureOutils()
+void wxOpencvApp::OuvertureOutils()
 {
 if (ctrlCamera==NULL)
 	{
@@ -1101,7 +1101,7 @@ if (ctrlCamera)
 }
 
 
-void wxOsgApp::TracerZoom(wxPoint p)
+void wxOpencvApp::TracerZoom(wxPoint p)
 {
 	{
 	if (!listeFenetre[indFenetre]->fPrin->ModeRectangle())
@@ -1115,7 +1115,7 @@ void wxOsgApp::TracerZoom(wxPoint p)
 }
 
 
-void wxOsgApp::RetirerListe(FenetrePrincipale *f)
+void wxOpencvApp::RetirerListe(FenetrePrincipale *f)
 {
 delete listeFenetre[f->IdFenetre()]->fZoom;
 delete listeFenetre[f->IdFenetre()]->fStat;
@@ -1135,7 +1135,7 @@ while (i<nbFenetre)
 
 }
 
-void wxOsgApp::IdFenetreActive(int x)
+void wxOpencvApp::IdFenetreActive(int x)
 {
 if (listeFenetre.find(x)!=listeFenetre.end())
 	{
@@ -1146,13 +1146,13 @@ if (listeFenetre.find(x)!=listeFenetre.end())
 }
 
 
-void wxOsgApp::OnUseScreen(wxCommandEvent& WXUNUSED(event))
+void wxOpencvApp::OnUseScreen(wxCommandEvent& WXUNUSED(event))
 {
     m_useScreen = !m_useScreen;
 }
 
 
-void wxOsgApp::SauverFichierConfig(wxString s,int idFiltre,int type,int taille)
+void wxOpencvApp::SauverFichierConfig(wxString s,int idFiltre,int type,int taille)
 {
 
 ImageInfoCV xx;
@@ -1193,7 +1193,7 @@ configApp->Flush();
 }
 
 
-void wxOsgApp::LectureFichierConfig()
+void wxOpencvApp::LectureFichierConfig()
 {
 ImageInfoCV xx;
 // Lecture des opérateurs de convolution commençant par /convolution
@@ -1556,23 +1556,13 @@ if (numOpFaite>=0)
 	numOpFaite++;
 }
 
-void wxOsgApp::GenerationGraphDot(ParametreOperation *op)
+void wxOpencvApp::GenerationGraphDot(ParametreOperation *op)
 {
 }
 
 
 
-void wxOsgApp::SauverFichierConfig(wxString chemin,wxString cle, wxString chaine)
-{
-wxString s(configApp->GetPath());
-
-configApp->SetPath(chemin);
-configApp->Write(cle,chaine);
-configApp->Flush();
-configApp->SetPath(s);
-}
-
-void wxOsgApp::SauverFichierConfig(wxString chemin,wxString cle, long chaine)
+void wxOpencvApp::SauverFichierConfig(wxString chemin,wxString cle, wxString chaine)
 {
 wxString s(configApp->GetPath());
 
@@ -1582,7 +1572,17 @@ configApp->Flush();
 configApp->SetPath(s);
 }
 
-void wxOsgApp::SauverFichierConfig(wxString chemin,wxString cle, double chaine)
+void wxOpencvApp::SauverFichierConfig(wxString chemin,wxString cle, long chaine)
+{
+wxString s(configApp->GetPath());
+
+configApp->SetPath(chemin);
+configApp->Write(cle,chaine);
+configApp->Flush();
+configApp->SetPath(s);
+}
+
+void wxOpencvApp::SauverFichierConfig(wxString chemin,wxString cle, double chaine)
 {
 wxString s(configApp->GetPath());
 
@@ -1593,9 +1593,9 @@ configApp->SetPath(s);
 }
 
 
-void	wxOsgApp::SauverConfiguration(){listeFenetre[indFenetre]->fPrin->SauveDerniereConfig();};
+void	wxOpencvApp::SauverConfiguration(){listeFenetre[indFenetre]->fPrin->SauveDerniereConfig();};
 
-void wxOsgApp::SauverOperationFichierConfig(ParametreOperation &origineImage)
+void wxOpencvApp::SauverOperationFichierConfig(ParametreOperation &origineImage)
 {
 wxString param;
 wxString chemin;
@@ -1680,7 +1680,7 @@ for (itp = origineImage.pointParam.begin(); itp != origineImage.pointParam.end()
 }
 }
 
-void  wxOsgApp::DefOperande1(ImageInfoCV* im,int i)
+void  wxOpencvApp::DefOperande1(ImageInfoCV* im,int i)
 {
     if (pOCV.indOpFenetre.size()<=0)
     {
@@ -1694,7 +1694,7 @@ void  wxOsgApp::DefOperande1(ImageInfoCV* im,int i)
     }
 }
 
-void  wxOsgApp::DefOperande2(ImageInfoCV* im, int i)
+void  wxOpencvApp::DefOperande2(ImageInfoCV* im, int i)
 { 
     if (pOCV.indOpFenetre.size()<=1)
     {
@@ -1707,7 +1707,7 @@ void  wxOsgApp::DefOperande2(ImageInfoCV* im, int i)
         pOCV.indOpFenetre[1]=i;
     }
 }
-void  wxOsgApp::DefOperande3(ImageInfoCV* im, int i)
+void  wxOpencvApp::DefOperande3(ImageInfoCV* im, int i)
 { 
     if (pOCV.indOpFenetre.size()<=2)
     {
@@ -1720,31 +1720,43 @@ void  wxOsgApp::DefOperande3(ImageInfoCV* im, int i)
         pOCV.indOpFenetre[2]=i;
     }
 }
-void  wxOsgApp::DefOperandeN(ImageInfoCV* im, int i)
+void  wxOpencvApp::DefOperandeN(ImageInfoCV* im, int i)
 { 
     pOCV.op.push_back(im); 
     pOCV.indOpFenetre.push_back(i); 
 }
 
-void  wxOsgApp::SupOperandeN(ImageInfoCV* im, int i)
+void  wxOpencvApp::SupOperandeN(ImageInfoCV* im, int i)
 { 
 }
 
-ImageInfoCV * wxOsgApp::OpId(int id)
+bool wxOpencvApp::VerifImagesExiste(ParametreOperation *pOCV)
+{
+    for (int i = 0; i < pOCV->nbOperande; i++)
+    {
+        int indFen1 = RechercheFenetre(pOCV->op[i]);
+        if (indFen1<0)
+            return false;
+
+    }
+    return true;
+}
+
+ImageInfoCV * wxOpencvApp::OpId(int id)
 {
 if (pOCV.op.size()>id)
     return pOCV.op[id];
 return NULL;
 };
 
-int wxOsgApp::IndOpId(int id)
+int wxOpencvApp::IndOpId(int id)
 { 
 if (pOCV.op.size()>id)
     return pOCV.indOpFenetre[id];
 return -1;
 };
 
-void	wxOsgApp::DefPointeurSouris(int mode,int type)
+void	wxOpencvApp::DefPointeurSouris(int mode,int type)
 {
 modeSouris=mode;
 indPointeurSouris=type;

@@ -17,7 +17,7 @@ FenetreCourbe::FenetreCourbe( wxWindow* parent, wxWindowID id, const wxPoint& po
 
 void FenetreCourbe::OnClose(wxCloseEvent& event)
 {
-fenMere->RAZFenAlgo();
+fenMere->RAZGrapheOperation();
 wxFrame::OnCloseWindow(event);
 
 }

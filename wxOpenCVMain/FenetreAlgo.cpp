@@ -1,5 +1,6 @@
 #include "ParametreOperation.h"
 #include "FenetreAlgo.h"
+#include "GrapheOperation.h"
 #include "imagestat.h"
 #include "GlisserForme.h"
 #include <wx/hyperlink.h>
@@ -12,13 +13,16 @@ void FenetrePrincipale::ParamAlgo(wxCommandEvent& event)
 {
 
 
-if (!fenAlgo==NULL)
+if (fenOperation)
 	return;
-fenAlgo=new FenetreAlgo(this,origineImage.nomOperation,wxPoint(530,0), wxSize(430,570),this->osgApp);
+fenOperation = new GrapheOperation(this, osgApp,wxT("wxTreeCtrl Test"), 50, 50, 450, 600);
+fenOperation->Show(true);
+/*fenAlgo = new FenetreAlgo(f,this, origineImage.nomOperation, wxPoint(530, 0), wxSize(430, 570), this->osgApp);
+f->DefFenAlgo(fenAlgo);
 fenAlgo->DefFenMere(this);
-fenAlgo->DefOSGApp(this->osgApp);
+fenAlgo->DefOSGApp(osgApp);
 fenAlgo->Show(true);
-fenAlgo->Refresh(true);
+fenAlgo->Refresh(true);*/
 //fenAlgo->SendSizeEvent   ();
 }
 
@@ -29,9 +33,112 @@ fenAlgo->Refresh(true);
 #define ID_NOM_SEQUENCE 1001
 #define ID_SAUVER_SEQ_XML 1002
 
+FenetreAlgo::FenetreAlgo(GrapheOperation *t,FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
+    const wxSize& size, wxOpencvApp *osg, long style)
+{
+
+    wxSize s(size);
+    tailleMax = wxSize(0, 0);
+    wxPoint p(0, 100);
+
+    int hMax = 0, lMax = 0;
+    ParametreOperation *pOCV = frame->ParamOCV();
+    fenMere = frame;
+    osgApp = osg;
+    wFen = t;
+    classeur = new wxNotebook(t->Panel(), wxID_ANY);
+    FenetrePrincipale *f = fenMere;
+    nbEtape = 0;
+    nbParamMax = 0;
+    while (f && f->OrigineImage()->indOpFenetre.size()>0)
+    {
+        int id = f->OrigineImage()->indOpFenetre[0];
+        if (id >= 0)
+        {
+            int nbParam = f->OrigineImage()->intParam.size();
+            nbParam += f->OrigineImage()->doubleParam.size();
+            nbParam += 2 * f->OrigineImage()->pointParam.size();
+            nbParam += 2 * f->OrigineImage()->sizeParam.size();
+            if (nbParamMax<nbParam)
+                nbParamMax = nbParam;
+            nbEtape++;
+            f = ((wxOpencvApp *)osgApp)->Fenetre(id);
+        }
+        else
+            f = NULL;
+    }
+    map<string, ParametreOperation>::iterator it;
+
+    for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
+        nbEtape++;
+    nbParamMax = 2 * (nbParamMax + 2);
+    f = fenMere;
+    int nb = nbEtape - 1;
+    listeOp.resize(nbEtape);
+    for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
+    {
+        listeOp[nb] = std::pair< ParametreOperation*, int>(&it->second, fenMere->IdFenetre());
+        wxWindow *w = CreerOngletEtape(classeur, nb);
+        listeOnglet[w] = std::pair<wxString, int>(it->second.nomOperation, nb);
+        wxString nom(_("Step"));
+        nom.Printf("%s %d : %s", nom, it->second.indEtape, it->second.nomOperation);
+        classeur->InsertPage(0, w, nom, nbEtape == 1);
+        nb--;
+    }
+    while (f && f->OrigineImage()->indOpFenetre.size() > 0)
+    {
+        if (f->OrigineImage()->indOpFenetre.size() > 0)
+        {
+            listeOp[nb] = std::pair< ParametreOperation*, int>(f->OrigineImage(), f->IdFenetre());
+            wxWindow *w = CreerOngletEtape(classeur, nb);
+            listeOnglet[w] = std::pair<wxString, int>(f->OrigineImage()->nomOperation, nb);
+            wxString nom(_("Step"));
+            nom.Printf("%s %d : %s", nom, nb, f->OrigineImage()->nomOperation);
+            classeur->InsertPage(0, w, nom, nbEtape == 1);
+            int id = f->OrigineImage()->indOpFenetre[0];
+            if (id >= 0)
+                f = ((wxOpencvApp *)osgApp)->Fenetre(id);
+            else
+                f = NULL;
+            nb--;
+        }
+        else
+            f = NULL;
+    }
+    panneau = t->Panel();
+/*    wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
+    topsizer->Add(classeur, 1, wxGROW | wxEXPAND, 10);
+//    wxBoxSizer *partieBasse = new wxBoxSizer(wxHORIZONTAL);
+    wxColour fond(*wxLIGHT_GREY);
+    fond.Set(fond.Red(), 255, fond.Blue());
+    panneau->SetBackgroundColour(fond);
+    topsizer->Add(panneau, 1, wxGROW | wxEXPAND, 10);
+
+//    wxButton *button1 = new wxButton(panneau, ID_SAUVER_SEQ_CONFIG, _("Save all step as Macro in cfg "));
+//    wxButton *button2 = new wxButton(panneau, ID_SAUVER_SEQ_XML, _("Save all step as Macro in xml"));
+//    wxStaticText *st = new wxStaticText(panneau, -1, _("         Name "));
+    wxString nomMacro;
+    nomMacro.Printf("Macro %d", osg->NumSeqOpe());
+    //    wxTextCtrl *caseNomMacro = new wxTextCtrl(panneau, ID_NOM_SEQUENCE, nomMacro);
+//    partieBasse->Add(button1, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+//    partieBasse->Add(button2, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+//    partieBasse->Add(st, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+//    partieBasse->Add(caseNomMacro, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+//    panneau->SetSizer(partieBasse);
+//    Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_CONFIG);
+//    Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_XML);
+*/    t->Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
+    t->Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreAlgo::ComboBox, this);
+    t->Bind(wxEVT_TEXT_ENTER, &FenetreAlgo::OnTextValider, this);
+//    SetSizerAndFit(topsizer);
+    t->Show(true);
+}
+
+
+
+
 FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
-    const wxSize& size,wxOsgApp *osg, long style)
-     : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX  | wxCAPTION )
+    const wxSize& size,wxOpencvApp *osg, long style)
 {
 
 wxSize s(size);
@@ -42,8 +149,8 @@ int hMax=0,lMax=0;
 ParametreOperation *pOCV=frame->ParamOCV();
 fenMere= frame;
 osgApp=osg;
-
-classeur = new wxNotebook(this, wxID_ANY);
+wFen = new wxFrame();
+classeur = new wxNotebook(wFen, wxID_ANY);
 FenetrePrincipale *f=fenMere;
 nbEtape=0;
 nbParamMax=0;
@@ -59,7 +166,7 @@ while(f && f->OrigineImage()->indOpFenetre.size()>0)
 		if (nbParamMax<nbParam)
 			nbParamMax=nbParam;
 		nbEtape++;
-		f=((wxOsgApp *)osgApp)->Fenetre(id);
+		f=((wxOpencvApp *)osgApp)->Fenetre(id);
 		}
 	else 
 		f=NULL;
@@ -94,7 +201,7 @@ while (f && f->OrigineImage()->indOpFenetre.size() > 0)
 		classeur->InsertPage(0,w,nom,nbEtape==1);
         int id = f->OrigineImage()->indOpFenetre[0];
 		if (id>=0)
-			f=((wxOsgApp *)osgApp)->Fenetre(id);
+			f=((wxOpencvApp *)osgApp)->Fenetre(id);
 		else 
 			f=NULL;
 		nb--;
@@ -105,7 +212,7 @@ while (f && f->OrigineImage()->indOpFenetre.size() > 0)
 wxBoxSizer *topsizer = new wxBoxSizer( wxVERTICAL );
 topsizer->Add( classeur, 1, wxGROW|wxEXPAND,10  );
 wxBoxSizer *partieBasse=new wxBoxSizer(wxHORIZONTAL);
-panneau=new wxPanel(this, wxID_ANY);
+panneau=new wxPanel(wFen, wxID_ANY);
 wxColour fond(*wxLIGHT_GREY);
 fond.Set(fond.Red(),255,fond.Blue());
 panneau->SetBackgroundColour(fond);
@@ -122,19 +229,18 @@ partieBasse->Add(button2, 0, wxALIGN_CENTER_VERTICAL | wxALL);
 partieBasse->Add(st, 0, wxALIGN_CENTER_VERTICAL | wxALL);
 partieBasse->Add(caseNomMacro,0, wxALIGN_CENTER_VERTICAL|wxALL);
 panneau->SetSizer(partieBasse);
-Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_CONFIG);
-Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_XML);
-Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
-Bind(wxEVT_COMMAND_COMBOBOX_SELECTED,&FenetreAlgo::ComboBox,this);
-Bind(wxEVT_TEXT_ENTER, &FenetreAlgo::OnTextValider, this);
-SetSizerAndFit( topsizer );
-Show(true);
+wFen->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_CONFIG);
+wFen->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_XML);
+wFen->Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
+wFen->Bind(wxEVT_COMMAND_COMBOBOX_SELECTED,&FenetreAlgo::ComboBox,this);
+wFen->Bind(wxEVT_TEXT_ENTER, &FenetreAlgo::OnTextValider, this);
+wFen->SetSizerAndFit( topsizer );
+wFen->Show(true);
 }
 
 
 FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
          const wxSize& size, ParametreOperation &pOCV, long style)
-         : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCAPTION)
 {
 
     wxSize s(size);
@@ -144,7 +250,8 @@ FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const 
     int hMax = 0, lMax = 0;
     fenMere = frame;
 
-    classeur = new wxNotebook(this, wxID_ANY);
+    wFen = new wxFrame();
+    classeur = new wxNotebook(wFen, wxID_ANY);
     FenetrePrincipale *f = fenMere;
     nbEtape = 1;
     nbParamMax = pOCV.intParam.size() + pOCV.doubleParam.size() + pOCV.pointParam.size() + pOCV.sizeParam.size();
@@ -156,31 +263,31 @@ FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const 
     wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
     topsizer->Add(classeur, 1, wxGROW | wxEXPAND, 10);
     wxBoxSizer *partieBasse = new wxBoxSizer(wxHORIZONTAL);
-    panneau = new wxPanel(this, wxID_ANY);
+    panneau = new wxPanel(wFen, wxID_ANY);
     wxColour fond(*wxLIGHT_GREY);
     fond.Set(fond.Red(), 255, fond.Blue());
     panneau->SetBackgroundColour(fond);
     topsizer->Add(panneau, 1, wxGROW | wxEXPAND, 10);
 
     panneau->SetSizer(partieBasse);
-    Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
-    Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreAlgo::ComboBox, this);
-    SetSizerAndFit(topsizer);
-    Show(true);
+    wFen->Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
+    wFen->Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreAlgo::ComboBox, this);
+    wFen->SetSizerAndFit(topsizer);
+    wFen->Show(true);
 }
 
 
 
 void FenetreAlgo::ComboBox(wxCommandEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp )
 	return;
 string nom;
 int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
-wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
+wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,wFen);
 nom=st->GetLabel().c_str();
 if (pOCV->doubleParam.find(nom)!=pOCV->doubleParam.end())
 	{
@@ -236,8 +343,8 @@ if (osgApp == NULL || fenMere == NULL)
 	return;
 FenetrePrincipale *f=fenMere;
 int nb=nbEtape-1;
-std::map <int,std::vector <ParametreOperation > >  *t=((wxOsgApp *)osgApp)->TabSeqOperation();
-(*t)[((wxOsgApp *)osgApp)->NumSeqOpe()].resize(nbEtape);
+std::map <int,std::vector <ParametreOperation > >  *t=((wxOpencvApp *)osgApp)->TabSeqOperation();
+(*t)[((wxOpencvApp *)osgApp)->NumSeqOpe()].resize(nbEtape);
 wxTextCtrl *w = (wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE, panneau);
 
 map<string, ParametreOperation>::iterator it;
@@ -253,14 +360,14 @@ if (evt.GetId() == ID_SAUVER_SEQ_XML)
     }
 for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
 	{
-	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
+	listeOp[nb].first->idOperation=((wxOpencvApp *)osgApp)->NumSeqOpe();
 	if (listeOp[nb].first->indEtape==-1)
 		listeOp[nb].first->indEtape=nb;
 	listeOp[nb].first->nomSequence=w->GetValue().c_str();
 	ParametreOperation p;
 	p=*(listeOp[nb].first);
     if (evt.GetId() == ID_SAUVER_SEQ_CONFIG)
-	    ((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	    ((wxOpencvApp *)osgApp)->SauverOperationFichierConfig(p);
     string nomEtape("Operation");
     nomEtape+=to_string(nbEtape);
     if (fsx.isOpened())
@@ -277,7 +384,7 @@ while(f && f->OrigineImage()->indOpFenetre.size()>0)
 	if (f->OrigineImage())
 		{
 		listeOp[nb]=std::pair< ParametreOperation*,int>(f->OrigineImage(),f->IdFenetre()) ;
-		listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
+		listeOp[nb].first->idOperation=((wxOpencvApp *)osgApp)->NumSeqOpe();
 		if (listeOp[nb].first->indEtape==-1)
 			listeOp[nb].first->indEtape=nb;
 		wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
@@ -285,14 +392,14 @@ while(f && f->OrigineImage()->indOpFenetre.size()>0)
 		ParametreOperation p;
 		p=*(listeOp[nb].first);
         if (evt.GetId() == ID_SAUVER_SEQ_CONFIG)
-            ((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+            ((wxOpencvApp *)osgApp)->SauverOperationFichierConfig(p);
         if (fsx.isOpened())
             p.write(fsx);
         if (fsy.isOpened())
             p.write(fsy);
         int id = f->OrigineImage()->indOpFenetre[0];
 		if (id>=0)
-			f=((wxOsgApp *)osgApp)->Fenetre(id);
+			f=((wxOpencvApp *)osgApp)->Fenetre(id);
 		else 
 			f=NULL;
 		(*t)[listeOp[nb].first->idOperation][nb]=p;
@@ -487,11 +594,11 @@ void FenetreAlgo::MAJOngletEtape(int indOp)
     int indOriCtrl = 1 + indOp*nbParamMax;// Dépend de l'indice de l'opérateur pour éviter le recouvrement des onglets 
     for (its = pOCV->sizeParam.begin(); its != pOCV->sizeParam.end(); its++)
     {
-        wxSpinCtrlDouble *spw = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
+        wxSpinCtrlDouble *spw = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, wFen);
         spw->SetValue(its->second.valeur.width);
         nbParam++;
         
-        spw = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
+        spw = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, wFen);
         spw->SetValue(its->second.valeur.height);
 
         nbParam++;
@@ -505,7 +612,7 @@ void FenetreAlgo::MAJOngletEtape(int indOp)
         }
         else
         {
-            wxSpinCtrlDouble *sp = (wxSpinCtrlDouble *)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
+            wxSpinCtrlDouble *sp = (wxSpinCtrlDouble *)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, wFen);
             sp->SetValue(iti->second.valeur);
         }
         nbParam++;
@@ -513,7 +620,7 @@ void FenetreAlgo::MAJOngletEtape(int indOp)
     std::map<std::string, DomaineParametreOp<double> >::iterator itd;
     for (itd = pOCV->doubleParam.begin(); itd != pOCV->doubleParam.end(); itd++)
     {
-        wxSpinCtrlDouble *sp = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this); 
+        wxSpinCtrlDouble *sp = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, wFen);
         sp->SetValue(itd->second.valeur);
         nbParam++;
     }
@@ -522,10 +629,10 @@ void FenetreAlgo::MAJOngletEtape(int indOp)
     for (itp = pOCV->pointParam.begin(); itp != pOCV->pointParam.end(); itp++)
     {
 
-        wxSpinCtrlDouble *spw = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
+        wxSpinCtrlDouble *spw = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, wFen);
         spw->SetValue(itp->second.valeur.x);
         nbParam++;
-        wxSpinCtrlDouble *sph = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, this);
+        wxSpinCtrlDouble *sph = (wxSpinCtrlDouble*)wxWindow::FindWindowById(indOriCtrl + 2 * nbParam + 1, wFen);
         sph->SetValue(itp->second.valeur.y);
         nbParam++;
     }
@@ -538,7 +645,7 @@ FenetreAlgo::~FenetreAlgo()
 if (fenMere)
 {
     fenMere->Feuille()->ClearShapes();
-    fenMere->RAZFenAlgo();
+    fenMere->RAZGrapheOperation();
 }
 
 }
@@ -553,14 +660,14 @@ void FenetreAlgo::OnPaint(wxPaintEvent& event)
 
 void FenetreAlgo::OnSpinEntier(wxSpinEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 string nom;
 int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
-wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
+wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1, wFen);
 nom=st->GetLabel().c_str();
 if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
 	{
@@ -631,14 +738,14 @@ if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 
 void FenetreAlgo::OnSpinReel(wxSpinDoubleEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 string nom;
 int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
-wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
+wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1, wFen);
 nom=st->GetLabel().c_str();
 double x = w.GetValue();
 if (pOCV->doubleParam.find(nom) != pOCV->doubleParam.end())
@@ -700,14 +807,14 @@ void  FenetreAlgo::OnSpinPlus(wxSpinEvent& w)
 
 void  FenetreAlgo::OnSpinMoins(wxSpinEvent& w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 string nom;
 int ind=listeOnglet[classeur->GetCurrentPage()].second;
 
 ParametreOperation *pOCV=listeOp[ind].first;
-wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1,this);
+wxStaticText *st=(wxStaticText*)wxWindow::FindWindowById(w.GetId()-1, wFen);
 nom=st->GetLabel().c_str();
 if (pOCV->intParam.find(nom)!=pOCV->intParam.end())
 	{
@@ -784,8 +891,8 @@ void FenetreAlgo::OnKeyDown(wxKeyEvent &)
 
 void FenetreAlgo::OnClose(wxCloseEvent& event)
 {
-fenMere->RAZFenAlgo();
-wxFrame::OnCloseWindow(event);
+fenMere->RAZGrapheOperation();
+//wxFrame::OnCloseWindow(event);
 
 }
 
@@ -793,7 +900,7 @@ void FenetreAlgo::ExecuterOperation(int indOperation)
 {
 if (!osgApp)
 	return;
-wxOsgApp	*app=(wxOsgApp *)osgApp;
+wxOpencvApp	*app=(wxOpencvApp *)osgApp;
 ImageInfoCV **im=NULL;
 int indEtape = listeOp[indOperation].first->indEtape;
 for (int i=indEtape;i<nbEtape;i++)

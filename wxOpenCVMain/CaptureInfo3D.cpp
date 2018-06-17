@@ -42,7 +42,7 @@ root->addChild(geode[activeGeode]);
 
 void CaptureInfo3D::DefPositionCurseur(int i,float x,float y,float z)
 {
-//((wxOsgApp*)osgApp)->DefPositionCurseur(i,x,y,z);
+//((wxOpencvApp*)osgApp)->DefPositionCurseur(i,x,y,z);
 }
 
 void CaptureInfo3D::ActiveGeode(int n)
