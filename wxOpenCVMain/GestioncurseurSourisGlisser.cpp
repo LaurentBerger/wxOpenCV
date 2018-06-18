@@ -205,7 +205,7 @@ void ZoneImage::ClearShapes()
     m_displayList.Clear();
 }
 
-void wxOsgApp::SourisQuitterFen(wxMouseEvent &event)
+void wxOpencvApp::SourisQuitterFen(wxMouseEvent &event)
 {
 int x=0;
 

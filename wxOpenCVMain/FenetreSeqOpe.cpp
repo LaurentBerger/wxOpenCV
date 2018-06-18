@@ -20,7 +20,7 @@ using namespace std;
 
 
 FenetreSequenceOperation::FenetreSequenceOperation(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
-    const wxSize& size,wxOsgApp *osg, long style)
+    const wxSize& size,wxOpencvApp *osg, long style)
      : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN)
 {
 ImageInfoCV xx;
@@ -383,7 +383,7 @@ FenetreSequenceOperation::~FenetreSequenceOperation()
 delete []nomEtape;
 nomEtape=NULL;
 if (osgApp)
-	((wxOsgApp*)osgApp)->FenetreSeqOpe(NULL);
+	((wxOpencvApp*)osgApp)->FenetreSeqOpe(NULL);
 
 }
 
@@ -397,7 +397,7 @@ void FenetreSequenceOperation::OnPaint(wxPaintEvent& event)
 
 void FenetreSequenceOperation::OnSpinEntier(wxSpinEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 int opSelec=w.GetValue();
@@ -421,7 +421,7 @@ InsererCtrlEtape(&(it->second)[0]);
 
 void FenetreSequenceOperation::ComboBox(wxCommandEvent &w)
 {
-    wxOsgApp *app = (wxOsgApp *)osgApp;
+    wxOpencvApp *app = (wxOpencvApp *)osgApp;
     if (!osgApp)
         return;
     int indSeq;
@@ -470,7 +470,7 @@ void FenetreSequenceOperation::ComboBox(wxCommandEvent &w)
 
 void FenetreSequenceOperation::OnSpinReel(wxSpinDoubleEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 int indSeq;
@@ -548,7 +548,7 @@ if (!IndiceSequence(indSeq))
     return;
 if (!osgApp)
 	return;
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 int indOpe=event.GetInt();
 if (indOpe<0 || indOpe>=(*seqActif)[indSeq].size())
 	return;
@@ -561,7 +561,7 @@ void FenetreSequenceOperation::SelectionFichier(wxCommandEvent& event)
 {
 if (!osgApp)
 	return;
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 
 wxFileDialog ouverture(NULL, "Ouvrir ", wxEmptyString, wxEmptyString, "*.tif;*.jpg;*.bmp;*.png;*.yml;*.gz",wxFD_FILE_MUST_EXIST |wxFD_MULTIPLE );
 if (ouverture.ShowModal()!=wxID_OK)
@@ -638,7 +638,7 @@ void FenetreSequenceOperation::OnClose(wxCloseEvent& event)
 {
 delete []nomEtape;
 nomEtape=NULL;
-((wxOsgApp *)osgApp)->FenetreSeqOpe((void*)0xFFFFFFFF);
+((wxOpencvApp *)osgApp)->FenetreSeqOpe((void*)0xFFFFFFFF);
 wxFrame::OnCloseWindow(event);
 
 }
@@ -650,7 +650,7 @@ if (!IndiceSequence(opSelec))
     return;
 if (!osgApp)
 	return;
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 std::map <int,std::vector <ParametreOperation > >::iterator it=(*seqActif).begin();
 for (int i=0;i<opSelec&& it!=(*seqActif).end();i++,it++);
 ExecuterSequence(&(it->second));
@@ -662,7 +662,7 @@ void FenetreSequenceOperation::ExecuterSequence(std::vector <ParametreOperation>
 if (!osgApp)
 	return;
 OperandePresent(sq);
-wxOsgApp	*app=(wxOsgApp *)osgApp;
+wxOpencvApp	*app=(wxOpencvApp *)osgApp;
 ImageInfoCV **im=NULL;
 ImageInfoCV *imTmp=NULL;
 int i=0;
@@ -758,7 +758,7 @@ bool FenetreSequenceOperation::OperandePresent(std::vector <ParametreOperation> 
 {
 if (!osgApp)
 	return false;
-wxOsgApp	*app=(wxOsgApp *)osgApp;
+wxOpencvApp	*app=(wxOpencvApp *)osgApp;
 ImageInfoCV **im=NULL;
 ImageInfoCV *imTmp=NULL;
 int i=0;
@@ -809,7 +809,7 @@ void  FenetreSequenceOperation::OuvrirSequence(wxCommandEvent& event)
 {
 if (!osgApp)
 return;
-wxOsgApp *app = (wxOsgApp *)osgApp;
+wxOpencvApp *app = (wxOpencvApp *)osgApp;
 
 wxFileDialog ouverture(NULL, _("Open Sequence"), wxEmptyString, wxEmptyString, "*.xml", wxFD_FILE_MUST_EXIST );
 if (ouverture.ShowModal() != wxID_OK)
@@ -866,7 +866,7 @@ if (!c->GetValue())
 else
 {
     b->Disable();
-    wxOsgApp *app = (wxOsgApp *)osgApp;
+    wxOpencvApp *app = (wxOpencvApp *)osgApp;
 
     seqActif = app->TabSeqOperation();
     InsererCtrlEtape(&((*seqActif)[0][0]));

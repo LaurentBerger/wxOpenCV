@@ -361,7 +361,7 @@ case 110 :
 	break;
 case 204 :
 	cam->DefTempsExposition(valFlottante);
-	((wxOsgApp*)osgApp)->SauverConfiguration();
+	((wxOpencvApp*)osgApp)->SauverConfiguration();
 	break;
 case 206 :
 	cam->DefNombreAccumulation(valEntiere);
@@ -426,10 +426,10 @@ int i=0;
 wxCheckBox *t=new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]); //bias 200
 i++;
 if (osgApp)
-	t->SetValue(((wxOsgApp*)osgApp)->Graphique()->CorrectionBiais());
+	t->SetValue(((wxOpencvApp*)osgApp)->Graphique()->CorrectionBiais());
 t=new wxCheckBox(ongletFond,ID_CORRECTION_GAIN,legende[i],position[i], taille[i]); // background 201
 if (osgApp)
-	t->SetValue(((wxOsgApp*)osgApp)->Graphique()->CorrectionFond());
+	t->SetValue(((wxOpencvApp*)osgApp)->Graphique()->CorrectionFond());
 i++;
 new wxCheckBox(ongletFond,200+i,legende[i],position[i], taille[i]);// function 202
 i++;
@@ -1074,7 +1074,7 @@ void ControleCamera::ExpositionAutomatique(wxCommandEvent& c)
 {
 if (!cam)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 float tpsPause=cam->TempsExposition();
 float tpsMin=tpsPause/100,tpsMax=tpsPause*20;
@@ -1082,14 +1082,14 @@ int		nbCycle=11;
 float	rTps[11]={0.01,0.05,0.1,0.2,0.5,1,2,5,10,20,100};
 float	optiTps[11];
 
-cv::Mat	*histoImage=((wxOsgApp*)osgApp)->ImgStat()->Histogramme();
-ImageInfoCV			*imAcq=((wxOsgApp*)osgApp)->Graphique()->ImAcq();
+cv::Mat	*histoImage=((wxOpencvApp*)osgApp)->ImgStat()->Histogramme();
+ImageInfoCV			*imAcq=((wxOpencvApp*)osgApp)->Graphique()->ImAcq();
 long nbLig=imAcq->LitNbLigne(),nbCol=imAcq->LitNbColonne();
 long ligDeb=0,colDeb=0;
 
-if (((wxOsgApp*)osgApp)->Graphique()->ModeRectangle())
+if (((wxOpencvApp*)osgApp)->Graphique()->ModeRectangle())
 	{
-	wxRect	*r=((wxOsgApp*)osgApp)->Graphique()->RectangleSelec();
+	wxRect	*r=((wxOpencvApp*)osgApp)->Graphique()->RectangleSelec();
 	colDeb=r->GetLeft();
 	ligDeb=r->GetTop();
 	nbLig=r->GetHeight();
@@ -1189,7 +1189,7 @@ void ControleCamera::Play(wxCommandEvent& c)
 {
 if (!cam)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
     cam->ModeAcqContinu(1);
 
@@ -1199,7 +1199,7 @@ void ControleCamera::Record(wxCommandEvent& c)
 {
 if (!cam)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!parent)
     return;
@@ -1240,7 +1240,7 @@ void ControleCamera::Pause(wxCommandEvent& c)
 {
 if (!cam)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!parent)
     return;
@@ -1257,7 +1257,7 @@ void ControleCamera::Debut(wxCommandEvent& c)
 {
 if (!cam)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!parent)
     return;
@@ -1273,7 +1273,7 @@ void ControleCamera::Suivante(wxCommandEvent& c)
 {
 if (!cam)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!parent)
     return;
@@ -1292,7 +1292,7 @@ void ControleCamera::Precedente(wxCommandEvent& c)
 {
 if (!cam)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!parent)
     return;
@@ -1312,7 +1312,7 @@ void ControleCamera::Fin(wxCommandEvent& c)
 {
 if (!cam)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!parent)
     return;

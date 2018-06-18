@@ -29,7 +29,7 @@
 
 
 class FenetrePrincipale;
-class wxOsgApp;
+class wxOpencvApp;
 // Shape
 
 class DragShape: public wxObject
@@ -101,11 +101,11 @@ public:
     // a window, so we need to draw the background explicitly.
     virtual bool UpdateBackingFromWindow(wxDC& windowDC, wxMemoryDC& destDC, const wxRect& sourceRect,
                     const wxRect& destRect) const;
-void DefOSGApp(wxOsgApp *w){osgApp=w;};
+void DefOSGApp(wxOpencvApp *w){osgApp=w;};
 
 protected:
     ZoneImage*   m_canvas;
-	wxOsgApp			*osgApp;
+	wxOpencvApp			*osgApp;
 };
 
 

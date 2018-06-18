@@ -529,7 +529,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
 void InterfaceAvance::OnClose(wxCloseEvent& event)
 {
 wxFrame::OnCloseWindow(event);
-((wxOsgApp*)osgApp)->Quitter(NULL);
+((wxOpencvApp*)osgApp)->Quitter(NULL);
 }
 
 
@@ -825,7 +825,7 @@ if (event.GetString().ToDouble(&val))
     cv::Mat m = xx.opnn[idFiltre]->getMat(cv::ACCESS_RW);
 	m.at<float>(l,c)=val;
     m.copyTo(*xx.opnn[idFiltre]);
-	((wxOsgApp *)osgApp)->SauverFichierConfig("conv",idFiltre);
+	((wxOpencvApp *)osgApp)->SauverFichierConfig("conv",idFiltre);
 
 	}
 }
@@ -968,7 +968,7 @@ else
 	int ind =cb3->GetSelection();
 	int taille=roue1->GetValue();
 	ModifOpMorpho(type,taille,ind);
-	((wxOsgApp *)osgApp)->SauverFichierConfig("morph",ind,type,taille);
+	((wxOpencvApp *)osgApp)->SauverFichierConfig("morph",ind,type,taille);
 	}
 }
 
@@ -1260,18 +1260,18 @@ void InterfaceAvance::InstallationbarreOutils(int indBarre)
 
 void InterfaceAvance::Ouvrir(wxCommandEvent& event)
 {
-	((wxOsgApp*)osgApp)->Ouvrir(event);
+	((wxOpencvApp*)osgApp)->Ouvrir(event);
 
 }
 
 void InterfaceAvance::Video(wxCommandEvent& event)
 {
 if (event.GetId()==ID_VIDEO_32_FC3)
-	((wxOsgApp*)osgApp)->Video(event,32);
+	((wxOpencvApp*)osgApp)->Video(event,32);
 if (event.GetId()==ID_VIDEO_8_UC3)
-	((wxOsgApp*)osgApp)->Video(event,8);
+	((wxOpencvApp*)osgApp)->Video(event,8);
 if (event.GetId()==ID_VIDEO_FLUX)
-	((wxOsgApp*)osgApp)->Video(event,0);
+	((wxOpencvApp*)osgApp)->Video(event,0);
 
 }
 
@@ -1317,8 +1317,8 @@ void InterfaceAvance::SelectOperation(wxCommandEvent& evt)
 	    break;
     }
 
-    ((wxOsgApp*)osgApp)->DefOperateurImage(bouton[evt.GetId()].chaineOperation);
-    ((wxOsgApp*)osgApp)->DefPointeurSouris(1,1);
+    ((wxOpencvApp*)osgApp)->DefOperateurImage(bouton[evt.GetId()].chaineOperation);
+    ((wxOpencvApp*)osgApp)->DefPointeurSouris(1,1);
 
 }
 

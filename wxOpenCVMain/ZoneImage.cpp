@@ -1,6 +1,6 @@
 #include "FenetrePrincipale.h"
 #include "FenetreInfo.h"
-#include "wxOsgApp.h"
+#include "wxOpencvApp.h"
 #include "imagestat.h"
 #include "ControleCamera.h"
 #include "Fenetre3D.h"

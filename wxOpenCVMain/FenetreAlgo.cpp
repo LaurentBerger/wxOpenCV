@@ -1,9 +1,9 @@
 #include "ParametreOperation.h"
 #include "FenetreAlgo.h"
+#include "GrapheOperation.h"
 #include "imagestat.h"
 #include "GlisserForme.h"
 #include <wx/hyperlink.h>
-#include "GrapheOperation.h"
 
 using namespace std;
 
@@ -12,14 +12,16 @@ using namespace std;
 void FenetrePrincipale::ParamAlgo(wxCommandEvent& event)
 {
 
-    GrapheOperation *frame = new GrapheOperation(this, this->osgApp,wxT("wxTreeCtrl Test"), 50, 50, 450, 600);
-    frame->Show(true);
+GrapheOperation *f = new GrapheOperation(this, osgApp,wxT("wxTreeCtrl Test"), 50, 50, 450, 600);
+f->Show(true);
 
 if (!fenAlgo==NULL)
 	return;
-fenAlgo=new FenetreAlgo(this,origineImage.nomOperation,wxPoint(530,0), wxSize(430,570),this->osgApp);
+wxFrame *toto;
+fenAlgo = new FenetreAlgo(f,this, origineImage.nomOperation, wxPoint(530, 0), wxSize(430, 570), this->osgApp);
+f->DefFenAlgo(fenAlgo);
 fenAlgo->DefFenMere(this);
-fenAlgo->DefOSGApp(this->osgApp);
+fenAlgo->DefOSGApp(osgApp);
 fenAlgo->Show(true);
 fenAlgo->Refresh(true);
 //fenAlgo->SendSizeEvent   ();
@@ -32,8 +34,113 @@ fenAlgo->Refresh(true);
 #define ID_NOM_SEQUENCE 1001
 #define ID_SAUVER_SEQ_XML 1002
 
+FenetreAlgo::FenetreAlgo(GrapheOperation *t,FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
+    const wxSize& size, wxOpencvApp *osg, long style)
+    : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCAPTION)
+{
+
+    wxSize s(size);
+    tailleMax = wxSize(0, 0);
+    wxPoint p(0, 100);
+
+    int hMax = 0, lMax = 0;
+    ParametreOperation *pOCV = frame->ParamOCV();
+    fenMere = frame;
+    osgApp = osg;
+
+    classeur = new wxNotebook(t, wxID_ANY);
+    FenetrePrincipale *f = fenMere;
+    nbEtape = 0;
+    nbParamMax = 0;
+    while (f && f->OrigineImage()->indOpFenetre.size()>0)
+    {
+        int id = f->OrigineImage()->indOpFenetre[0];
+        if (id >= 0)
+        {
+            int nbParam = f->OrigineImage()->intParam.size();
+            nbParam += f->OrigineImage()->doubleParam.size();
+            nbParam += 2 * f->OrigineImage()->pointParam.size();
+            nbParam += 2 * f->OrigineImage()->sizeParam.size();
+            if (nbParamMax<nbParam)
+                nbParamMax = nbParam;
+            nbEtape++;
+            f = ((wxOpencvApp *)osgApp)->Fenetre(id);
+        }
+        else
+            f = NULL;
+    }
+    map<string, ParametreOperation>::iterator it;
+
+    for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
+        nbEtape++;
+    nbParamMax = 2 * (nbParamMax + 2);
+    f = fenMere;
+    int nb = nbEtape - 1;
+    listeOp.resize(nbEtape);
+    for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
+    {
+        listeOp[nb] = std::pair< ParametreOperation*, int>(&it->second, fenMere->IdFenetre());
+        wxWindow *w = CreerOngletEtape(classeur, nb);
+        listeOnglet[w] = std::pair<wxString, int>(it->second.nomOperation, nb);
+        wxString nom(_("Step"));
+        nom.Printf("%s %d : %s", nom, it->second.indEtape, it->second.nomOperation);
+        classeur->InsertPage(0, w, nom, nbEtape == 1);
+        nb--;
+    }
+    while (f && f->OrigineImage()->indOpFenetre.size() > 0)
+    {
+        if (f->OrigineImage()->indOpFenetre.size() > 0)
+        {
+            listeOp[nb] = std::pair< ParametreOperation*, int>(f->OrigineImage(), f->IdFenetre());
+            wxWindow *w = CreerOngletEtape(classeur, nb);
+            listeOnglet[w] = std::pair<wxString, int>(f->OrigineImage()->nomOperation, nb);
+            wxString nom(_("Step"));
+            nom.Printf("%s %d : %s", nom, nb, f->OrigineImage()->nomOperation);
+            classeur->InsertPage(0, w, nom, nbEtape == 1);
+            int id = f->OrigineImage()->indOpFenetre[0];
+            if (id >= 0)
+                f = ((wxOpencvApp *)osgApp)->Fenetre(id);
+            else
+                f = NULL;
+            nb--;
+        }
+        else
+            f = NULL;
+    }
+    wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
+    topsizer->Add(classeur, 1, wxGROW | wxEXPAND, 10);
+    wxBoxSizer *partieBasse = new wxBoxSizer(wxHORIZONTAL);
+    panneau = t->Panel();
+    wxColour fond(*wxLIGHT_GREY);
+    fond.Set(fond.Red(), 255, fond.Blue());
+    panneau->SetBackgroundColour(fond);
+    topsizer->Add(panneau, 1, wxGROW | wxEXPAND, 10);
+
+//    wxButton *button1 = new wxButton(panneau, ID_SAUVER_SEQ_CONFIG, _("Save all step as Macro in cfg "));
+//    wxButton *button2 = new wxButton(panneau, ID_SAUVER_SEQ_XML, _("Save all step as Macro in xml"));
+//    wxStaticText *st = new wxStaticText(panneau, -1, _("         Name "));
+    wxString nomMacro;
+    nomMacro.Printf("Macro %d", osg->NumSeqOpe());
+    //    wxTextCtrl *caseNomMacro = new wxTextCtrl(panneau, ID_NOM_SEQUENCE, nomMacro);
+//    partieBasse->Add(button1, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+//    partieBasse->Add(button2, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+//    partieBasse->Add(st, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+//    partieBasse->Add(caseNomMacro, 0, wxALIGN_CENTER_VERTICAL | wxALL);
+//    panneau->SetSizer(partieBasse);
+    Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_CONFIG);
+    Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_XML);
+    Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
+    Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreAlgo::ComboBox, this);
+    Bind(wxEVT_TEXT_ENTER, &FenetreAlgo::OnTextValider, this);
+    SetSizerAndFit(topsizer);
+    Show(true);
+}
+
+
+
+
 FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
-    const wxSize& size,wxOsgApp *osg, long style)
+    const wxSize& size,wxOpencvApp *osg, long style)
      : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX  | wxCAPTION )
 {
 
@@ -62,7 +169,7 @@ while(f && f->OrigineImage()->indOpFenetre.size()>0)
 		if (nbParamMax<nbParam)
 			nbParamMax=nbParam;
 		nbEtape++;
-		f=((wxOsgApp *)osgApp)->Fenetre(id);
+		f=((wxOpencvApp *)osgApp)->Fenetre(id);
 		}
 	else 
 		f=NULL;
@@ -97,7 +204,7 @@ while (f && f->OrigineImage()->indOpFenetre.size() > 0)
 		classeur->InsertPage(0,w,nom,nbEtape==1);
         int id = f->OrigineImage()->indOpFenetre[0];
 		if (id>=0)
-			f=((wxOsgApp *)osgApp)->Fenetre(id);
+			f=((wxOpencvApp *)osgApp)->Fenetre(id);
 		else 
 			f=NULL;
 		nb--;
@@ -176,7 +283,7 @@ FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const 
 
 void FenetreAlgo::ComboBox(wxCommandEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp )
 	return;
 string nom;
@@ -239,8 +346,8 @@ if (osgApp == NULL || fenMere == NULL)
 	return;
 FenetrePrincipale *f=fenMere;
 int nb=nbEtape-1;
-std::map <int,std::vector <ParametreOperation > >  *t=((wxOsgApp *)osgApp)->TabSeqOperation();
-(*t)[((wxOsgApp *)osgApp)->NumSeqOpe()].resize(nbEtape);
+std::map <int,std::vector <ParametreOperation > >  *t=((wxOpencvApp *)osgApp)->TabSeqOperation();
+(*t)[((wxOpencvApp *)osgApp)->NumSeqOpe()].resize(nbEtape);
 wxTextCtrl *w = (wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE, panneau);
 
 map<string, ParametreOperation>::iterator it;
@@ -256,14 +363,14 @@ if (evt.GetId() == ID_SAUVER_SEQ_XML)
     }
 for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
 	{
-	listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
+	listeOp[nb].first->idOperation=((wxOpencvApp *)osgApp)->NumSeqOpe();
 	if (listeOp[nb].first->indEtape==-1)
 		listeOp[nb].first->indEtape=nb;
 	listeOp[nb].first->nomSequence=w->GetValue().c_str();
 	ParametreOperation p;
 	p=*(listeOp[nb].first);
     if (evt.GetId() == ID_SAUVER_SEQ_CONFIG)
-	    ((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+	    ((wxOpencvApp *)osgApp)->SauverOperationFichierConfig(p);
     string nomEtape("Operation");
     nomEtape+=to_string(nbEtape);
     if (fsx.isOpened())
@@ -280,7 +387,7 @@ while(f && f->OrigineImage()->indOpFenetre.size()>0)
 	if (f->OrigineImage())
 		{
 		listeOp[nb]=std::pair< ParametreOperation*,int>(f->OrigineImage(),f->IdFenetre()) ;
-		listeOp[nb].first->idOperation=((wxOsgApp *)osgApp)->NumSeqOpe();
+		listeOp[nb].first->idOperation=((wxOpencvApp *)osgApp)->NumSeqOpe();
 		if (listeOp[nb].first->indEtape==-1)
 			listeOp[nb].first->indEtape=nb;
 		wxTextCtrl *w=(wxTextCtrl*)panneau->FindWindowById(ID_NOM_SEQUENCE,panneau);
@@ -288,14 +395,14 @@ while(f && f->OrigineImage()->indOpFenetre.size()>0)
 		ParametreOperation p;
 		p=*(listeOp[nb].first);
         if (evt.GetId() == ID_SAUVER_SEQ_CONFIG)
-            ((wxOsgApp *)osgApp)->SauverOperationFichierConfig(p);
+            ((wxOpencvApp *)osgApp)->SauverOperationFichierConfig(p);
         if (fsx.isOpened())
             p.write(fsx);
         if (fsy.isOpened())
             p.write(fsy);
         int id = f->OrigineImage()->indOpFenetre[0];
 		if (id>=0)
-			f=((wxOsgApp *)osgApp)->Fenetre(id);
+			f=((wxOpencvApp *)osgApp)->Fenetre(id);
 		else 
 			f=NULL;
 		(*t)[listeOp[nb].first->idOperation][nb]=p;
@@ -556,7 +663,7 @@ void FenetreAlgo::OnPaint(wxPaintEvent& event)
 
 void FenetreAlgo::OnSpinEntier(wxSpinEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 string nom;
@@ -634,7 +741,7 @@ if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 
 void FenetreAlgo::OnSpinReel(wxSpinDoubleEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 string nom;
@@ -703,7 +810,7 @@ void  FenetreAlgo::OnSpinPlus(wxSpinEvent& w)
 
 void  FenetreAlgo::OnSpinMoins(wxSpinEvent& w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 string nom;
@@ -796,7 +903,7 @@ void FenetreAlgo::ExecuterOperation(int indOperation)
 {
 if (!osgApp)
 	return;
-wxOsgApp	*app=(wxOsgApp *)osgApp;
+wxOpencvApp	*app=(wxOpencvApp *)osgApp;
 ImageInfoCV **im=NULL;
 int indEtape = listeOp[indOperation].first->indEtape;
 for (int i=indEtape;i<nbEtape;i++)

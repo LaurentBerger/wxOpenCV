@@ -2,6 +2,7 @@
 #define __FENETREALGO__
 
 #include "FenetrePrincipale.h"
+#include "GrapheOperation.h"
 #include <wx/spinbutt.h>
 #include <wx/spinctrl.h>
 #include <wx/string.h>
@@ -33,12 +34,15 @@ std::vector<wxWindow *> 		                                    ongletSouris;	/*<!
 std::map<wxSpinCtrlDouble*,DragShape *> 		                    formeSouris;	/*<! Spin modifiable par la souris et forme*/
 
 public :
-FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos, 
-        const wxSize& size,wxOsgApp *, long style = wxDEFAULT_FRAME_STYLE);
-        /*!< Constructeur de la fenetre parametrage */
+    /*!< Constructeur de la fenetre parametrage */
+FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
+    const wxSize& size, wxOpencvApp *, long style = wxDEFAULT_FRAME_STYLE);
+/*!< Constructeur de la fenetre parametrage */
 FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size, ParametreOperation &pOCV, long style);
-
+/*!< Constructeur de la fenetre parametrage */
+FenetreAlgo(GrapheOperation *t,FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
+    const wxSize& size, wxOpencvApp *, long style = wxDEFAULT_FRAME_STYLE);
 ~FenetreAlgo();
         /*!< destructeur de la fenetre parametrage */
 wxWindow *CreerOngletEtape(wxNotebook *,int);

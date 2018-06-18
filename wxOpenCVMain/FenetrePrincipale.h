@@ -15,7 +15,7 @@
 #include <string>
 #include <map>
 
-#include "wxOsgApp.h"
+#include "wxOpencvApp.h"
 
 class ControleCamera;
 class ImageStatistiques;
@@ -75,7 +75,7 @@ op1=NULL;op2=NULL;indOp1=-1;indOp2=-1;indRes=-1;idOperation=-1;indEtape=-1;
 class ZoneImage : public  wxScrolled<wxWindow>
 {
 FenetrePrincipale	*f;				/*!< Cadre où est affichée la fenêtre avec ascenseur */
-wxOsgApp			*osgApp;		/*!< lien sur l'application */
+wxOpencvApp			*osgApp;		/*!< lien sur l'application */
 wxBitmap            mBuffer;       /*!< Double buffering */
 void				*f3D;			/*!< lien sur la fenetre 3D représentant l'image */
 int					facteurZoom;	/*!< zoom=2^facteurZoom*/
@@ -128,7 +128,7 @@ FenetrePrincipale* FenMere(){return f;};
 	 * \param w : fenêtre parent
 	 */
 
-void DefOSGApp(wxOsgApp *w){osgApp=w;};
+void DefOSGApp(wxOpencvApp *w){osgApp=w;};
     /*!
      *  \brief DefOSGApp
      *
@@ -515,7 +515,7 @@ coeffCanal[i]*max(I(x,y,i)- seuilNivBas(i),0) */
 int					indPalette;			/*!< Indice de palette sélectionnée */
 int					nbCouleurPalette;	/*!< Nombre de couleur dans la palette */
 wxColour			*p;
-wxOsgApp			*osgApp;
+wxOpencvApp			*osgApp;
 FenetreZoom			*fenZoom;
 ImageStatistiques	*imgStatIm;
 FenetreAlgo			*fenAlgo;
@@ -1085,7 +1085,7 @@ void DIB(ImageInfoCV *im);
 void DIBImage(ImageInfoCV *im,int	indPlanTransparent=0);
 void RAZTransparence();
 
-void DefOSGApp(wxOsgApp *w){osgApp=w;if (feuille) feuille->DefOSGApp(w); };
+void DefOSGApp(wxOpencvApp *w){osgApp=w;if (feuille) feuille->DefOSGApp(w); };
 void F3D(void *f){if (feuille) feuille->F3D(f);};
 void *OSGApp(){return osgApp; };
 void  DefZoom(FenetreZoom *f){fenZoom=f;};

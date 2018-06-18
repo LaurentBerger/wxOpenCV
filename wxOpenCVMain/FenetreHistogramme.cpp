@@ -16,12 +16,12 @@ END_EVENT_TABLE()
 
 void FenetreHistogramme::OnKeyDown(wxKeyEvent &event)
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!fenMere)
 	return;
 int id=((FenetrePrincipale *)fenMere)->IdFenetre();
-((wxOsgApp*)osgApp)->Graphique(id)->TraitementClavier(event);
+((wxOpencvApp*)osgApp)->Graphique(id)->TraitementClavier(event);
 
 event.Skip();
 }
@@ -268,9 +268,9 @@ if (nbGraines[0]==-1)
 long nbLig=imAcq->rows,nbCol=imAcq->cols;
 long ligDeb=0,colDeb=0;
 
-if (((wxOsgApp*)osgApp)->Graphique(id)->ModeRectangle())
+if (((wxOpencvApp*)osgApp)->Graphique(id)->ModeRectangle())
 	{
-	wxRect	*r=((wxOsgApp*)osgApp)->Graphique(id)->RectangleSelec();
+	wxRect	*r=((wxOpencvApp*)osgApp)->Graphique(id)->RectangleSelec();
 	if (r->GetWidth()<0)
 		{
 		colDeb=r->GetRight();
@@ -411,7 +411,7 @@ void FenetreHistogramme::Plot(char fenetreActive)
 {
 if (!osgApp )
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!fenMere)
 	return;

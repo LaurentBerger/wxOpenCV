@@ -15,7 +15,7 @@ using namespace std;
 void FenetrePrincipale::ImageCamera(wxCommandEvent& event)
 {
 modeImage = 0;
-//((wxOsgApp*)osgApp)->Outils()->MAJValeurPalette();
+//((wxOpencvApp*)osgApp)->Outils()->MAJValeurPalette();
 MAJNouvelleImage();
 
 }

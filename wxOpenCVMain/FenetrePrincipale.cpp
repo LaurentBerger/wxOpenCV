@@ -3,7 +3,7 @@
 #include "imagestat.h"
 #include "FenetreSeqOpe.h"
 #include "CameraOpenCV.h"
-#include "wxOsgApp.h"
+#include "wxOpencvApp.h"
 #include "FenetreAlgo.h"
 #include <wx/display.h>
 #include <iostream>

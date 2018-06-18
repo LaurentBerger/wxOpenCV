@@ -71,10 +71,10 @@ case 8:
 
 void ImageStatistiques::DrawPaletteActuelle()
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 wxWindowDC hdc(ongletPalette);
-wxColor				*pCouleur=((wxOsgApp*)osgApp)->Graphique()->Palette();
+wxColor				*pCouleur=((wxOpencvApp*)osgApp)->Graphique()->Palette();
 
 
 wxRect r(0,0,200,600);
@@ -87,10 +87,10 @@ tr=*wxTRANSPARENT_BRUSH;
 hdc.SetBrush(tr);
 
 wxPen crayon;
-int ind=0,pas=((wxOsgApp*)osgApp)->Graphique()->NbCouleurPalette()/512;
-int deb=((wxOsgApp*)osgApp)->Graphique()->SeuilNivBas();
-ImageInfoCV* im=((wxOsgApp*)osgApp)->Graphique()->ImAcq();
-int fin=((*(im->MaxIm()))[0]-((wxOsgApp*)osgApp)->Graphique()->SeuilNivBas(0))*fenMere->CoeffCanal(0);
+int ind=0,pas=((wxOpencvApp*)osgApp)->Graphique()->NbCouleurPalette()/512;
+int deb=((wxOpencvApp*)osgApp)->Graphique()->SeuilNivBas();
+ImageInfoCV* im=((wxOpencvApp*)osgApp)->Graphique()->ImAcq();
+int fin=((*(im->MaxIm()))[0]-((wxOpencvApp*)osgApp)->Graphique()->SeuilNivBas(0))*fenMere->CoeffCanal(0);
 
 for (int i=0;i<512;i++,ind+=pas)
 	{

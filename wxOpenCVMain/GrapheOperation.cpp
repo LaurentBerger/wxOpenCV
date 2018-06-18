@@ -156,7 +156,7 @@ wxEND_EVENT_TABLE()
 
 
 
-GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOsgApp *osg, const wxString& title, int x, int y, int w, int h)
+GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, const wxString& title, int x, int y, int w, int h)
     : wxFrame((wxFrame *)NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
     arbre(NULL)
 #if wxUSE_LOG
@@ -165,6 +165,7 @@ GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOsgApp *osg, const 
 {
     fenMere = frame;
     osgApp = osg;
+    fenAlgo = NULL;
     // This reduces flicker effects - even better would be to define
     // OnEraseBackground to do nothing. When the tree control's scrollbars are
     // show or hidden, the frame is sent a background erase event.
@@ -210,7 +211,7 @@ void GrapheOperation::CreateTreeWithDefStyle()
 
 void GrapheOperation::CreateTree(long style)
 {
-    arbre = new ArboCalcul((FenetrePrincipale*)fenMere,(wxOsgApp*)osgApp,m_panel, TreeTest_Ctrl,
+    arbre = new ArboCalcul((FenetrePrincipale*)fenMere,(wxOpencvApp*)osgApp,m_panel, TreeTest_Ctrl,
         wxDefaultPosition, wxDefaultSize,
         style);
     Resize();
@@ -272,12 +273,11 @@ void GrapheOperation::OnSize(wxSizeEvent& event)
 void GrapheOperation::Resize()
 {
     wxSize size = GetClientSize();
-    arbre->SetSize(0, 0, size.x, size.y
-#if wxUSE_LOG
-        * 2 / 3);
-    m_textCtrl->SetSize(0, 2 * size.y / 3, size.x, size.y / 3
-#endif
-    );
+    arbre->SetSize(0, 0, size.x, size.y* 1 / 3);
+    m_textCtrl->SetSize(0, 1 * size.y / 3, size.x, size.y / 3);
+    if (fenAlgo)
+        fenAlgo->SetSize(0, 2 * size.y / 3, size.x, size.y / 3);
+
 }
 
 void GrapheOperation::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -453,7 +453,6 @@ void GrapheOperation::OnDeleteAll(wxCommandEvent& WXUNUSED(event))
 void GrapheOperation::OnRecreate(wxCommandEvent& event)
 {
     OnDeleteAll(event);
-    arbre->AddTestItemsToTree(NUM_CHILDREN_PER_LEVEL, NUM_LEVELS);
 }
 
 void GrapheOperation::OnSetImageSize(wxCommandEvent& WXUNUSED(event))
@@ -723,7 +722,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(ArboCalcul, wxGenericTreeCtrl);
 wxIMPLEMENT_DYNAMIC_CLASS(ArboCalcul, wxTreeCtrl);
 #endif
 
-ArboCalcul::ArboCalcul(FenetrePrincipale *frame, wxOsgApp *osg,wxWindow *parent, const wxWindowID id,
+ArboCalcul::ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg,wxWindow *parent, const wxWindowID id,
     const wxPoint& pos, const wxSize& size,
     long style)
     : wxTreeCtrl(parent, id, pos, size, style),
@@ -873,7 +872,7 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
         for (int i=0;i<f->OrigineImage()->nbOperande;i++)
         {
             int id = f->OrigineImage()->indOpFenetre[i];
-            FenetrePrincipale *fId = ((wxOsgApp *)osgApp)->Fenetre(id);
+            FenetrePrincipale *fId = ((wxOpencvApp *)osgApp)->Fenetre(id);
             wxTreeItemId noeud = AppendItem(idParent, fId->GetTitle(),-1,-1, new MyTreeItemData(fId->GetTitle() +"data item"));
 
             if (fId)
@@ -887,86 +886,7 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
 }
 
 
-void ArboCalcul::AddItemsRecursively(const wxTreeItemId& idParent,
-    size_t numChildren,
-    size_t depth,
-    size_t folder)
-{
-    if (depth > 0)
-    {
-        bool hasChildren = depth > 1;
 
-        wxString str;
-        for (size_t n = 0; n < numChildren; n++)
-        {
-            // at depth 1 elements won't have any more children
-            if (hasChildren)
-                str.Printf(wxT("%s child %u"), wxT("Folder"), unsigned(n + 1));
-            else
-                str.Printf(wxT("%s child %u.%u"), wxT("File"), unsigned(folder), unsigned(n + 1));
-
-            // here we pass to AppendItem() normal and selected item images (we
-            // suppose that selected image follows the normal one in the enum)
-            int image, imageSel;
-/*            if (wxGetApp().ShowImages())
-            {
-                image = depth == 1 ? TreeCtrlIcon_File : TreeCtrlIcon_Folder;
-                imageSel = image + 1;
-            }
-            else*/
-            {
-                image = imageSel = -1;
-            }
-            wxTreeItemId id = AppendItem(idParent, str, image, imageSel,
-                new MyTreeItemData(str));
-
- /*           if (wxGetApp().ShowStates())
-                SetItemState(id, 0);*/
-
-            // and now we also set the expanded one (only for the folders)
-            if (hasChildren /*&& wxGetApp().ShowImages()*/)
-            {
-                SetItemImage(id, TreeCtrlIcon_FolderOpened,
-                    wxTreeItemIcon_Expanded);
-            }
-
-            AddItemsRecursively(id, numChildren, depth - 1, n + 1);
-        }
-    }
-    //else: done!
-}
-
-void ArboCalcul::AddTestItemsToTree(size_t numChildren,
-    size_t depth)
-{
-    int image = /*wxGetApp().ShowImages()*/1 ? ArboCalcul::TreeCtrlIcon_Folder : -1;
-    wxTreeItemId rootId = AddRoot(wxT("Root"),
-        image, image,
-        new MyTreeItemData(wxT("Root item")));
-    if (!HasFlag(wxTR_HIDE_ROOT) && image != -1)
-    {
-        SetItemImage(rootId, TreeCtrlIcon_FolderOpened, wxTreeItemIcon_Expanded);
-    }
-
-    AddItemsRecursively(rootId, numChildren, depth, 0);
-
-    // set some colours/fonts for testing
-    if (!HasFlag(wxTR_HIDE_ROOT))
-        SetItemFont(rootId, *wxITALIC_FONT);
-
-    wxTreeItemIdValue cookie;
-    wxTreeItemId id = GetFirstChild(rootId, cookie);
-    SetItemTextColour(id, *wxBLUE);
-
-    id = GetNextChild(rootId, cookie);
-    if (id)
-        id = GetNextChild(rootId, cookie);
-    if (id)
-    {
-        SetItemTextColour(id, *wxRED);
-        SetItemBackgroundColour(id, *wxLIGHT_GREY);
-    }
-}
 
 wxTreeItemId ArboCalcul::GetLastTreeITem() const
 {
@@ -1343,12 +1263,6 @@ void ArboCalcul::OnItemCollapsing(wxTreeEvent& event)
 
     // for testing, prevent the user from collapsing the first child folder
     wxTreeItemId itemId = event.GetItem();
-    if (IsTestItem(itemId))
-    {
-        wxMessageBox(wxT("You can't collapse this item."));
-
-        event.Veto();
-    }
 }
 
 void ArboCalcul::OnItemActivated(wxTreeEvent& event)

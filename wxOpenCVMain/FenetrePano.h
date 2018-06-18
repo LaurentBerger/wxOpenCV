@@ -30,7 +30,7 @@ wxSize							tailleMax;	/*!< taille maximale de la fenêtre */
 
 public :
 	FenetrePano(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
-        const wxSize& size,wxOsgApp *, long style = wxDEFAULT_FRAME_STYLE);
+        const wxSize& size,wxOpencvApp *, long style = wxDEFAULT_FRAME_STYLE);
         /*!< Constructeur de la fenetre parametrage */
 	~FenetrePano();
         /*!< destructeur de la fenetre parametrage */
