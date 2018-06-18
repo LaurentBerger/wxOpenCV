@@ -3,6 +3,7 @@
 #include "imagestat.h"
 #include "GlisserForme.h"
 #include <wx/hyperlink.h>
+#include "GrapheOperation.h"
 
 using namespace std;
 
@@ -11,6 +12,8 @@ using namespace std;
 void FenetrePrincipale::ParamAlgo(wxCommandEvent& event)
 {
 
+    GrapheOperation *frame = new GrapheOperation(this, this->osgApp,wxT("wxTreeCtrl Test"), 50, 50, 450, 600);
+    frame->Show(true);
 
 if (!fenAlgo==NULL)
 	return;
