@@ -275,8 +275,8 @@ void GrapheOperation::Resize()
     wxSize size = GetClientSize();
     arbre->SetSize(0, 0, size.x, size.y* 1 / 3);
     m_textCtrl->SetSize(0, 1 * size.y / 3, size.x, size.y / 3);
-    if (fenAlgo)
-        fenAlgo->SetSize(0, 2 * size.y / 3, size.x, size.y / 3);
+/*    if (fenAlgo)
+        fenAlgo->SetSize(0, 2 * size.y / 3, size.x, size.y / 3);*/
 
 }
 

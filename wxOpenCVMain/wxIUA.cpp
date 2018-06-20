@@ -364,7 +364,6 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
     if (event.GetId()!=ID_DNN)
     {
         FenetreAlgo *f = new FenetreAlgo(NULL, _("Operation"), wxDefaultPosition, wxDefaultSize, xx.listeOperation[s], wxDEFAULT_FRAME_STYLE);
-        f->Show(true);
     }
     else
     {

@@ -305,7 +305,7 @@ public:
     void OnIdle(wxIdleEvent& event);
     void OnSize(wxSizeEvent& event);
     wxPanel *Panel() { return m_panel; };
-    void DefFenAlgo(wxFrame *t) { fenAlgo = t; Resize(); };
+    void DefFenAlgo(void *t) { fenAlgo = t; };
 private:
     void TogStyle(int id, long flag);
 
@@ -326,7 +326,7 @@ private:
 
     wxPanel *m_panel;
     ArboCalcul *arbre;
-    wxFrame *fenAlgo;
+    void *fenAlgo;
 #if wxUSE_LOG
     wxTextCtrl *m_textCtrl;
 #endif // wxUSE_LOG
