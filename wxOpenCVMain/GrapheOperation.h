@@ -1,6 +1,11 @@
 #ifndef __GRAPHEOPERATION__
 #define __GRAPHEOPERATION__
 #include "FenetrePrincipale.h"
+#include "GrapheOperation.h"
+#include <wx/spinbutt.h>
+#include <wx/spinctrl.h>
+#include <wx/string.h>
+#include "wx/notebook.h"
 // For compilers that support precompilation, includes "wx/wx.h".
 #include "wx/wxprec.h"
 
@@ -34,6 +39,7 @@
 #endif
 #endif
 
+class GrapheOperation;
 
 class MyTreeItemData : public wxTreeItemData
 {
@@ -46,6 +52,68 @@ public:
 private:
     wxString m_desc;
 };
+
+class FenetreInfoOperation
+{
+private:
+    FenetrePrincipale * fenMere;
+    void							*osgApp;
+    std::map<wxWindow*, std::pair<wxString, int> >	listeOnglet;/*<! Onglet associé à chaque opération */
+    std::vector<std::pair<ParametreOperation*, int> >		listeOp;	/*<! Onglet associé à chaque opération */
+    wxFrame *wFen;
+    int								nbParamMax;	/*<! Nombre de parametre maximum de l'ensemble de opérations */
+    int								nbEtape;	/*<! Nombre d'étape nécessaire pour effectuer l'opération */
+    wxNotebook						*classeur;	/*!< le classeur avec ses différents onglets*/
+    wxSize							tailleMax;	/*!< taille maximale de la fenêtre */
+    std::vector<std::pair<wxSpinCtrlDouble*, wxSpinCtrlDouble*> >		spinSouris;	/*<! Spin modifiable par la souris */
+    std::vector<DomaineParametreOp<cv::Point>*> 		                paramSouris;	/*<! Spin modifiable par la souris */
+    std::vector<wxWindow *> 		                                    ongletSouris;	/*<! Spin modifiable par la souris */
+    std::map<wxSpinCtrlDouble*, DragShape *> 		                    formeSouris;	/*<! Spin modifiable par la souris et forme*/
+
+public:
+    /*!< Constructeur de la fenetre parametrage */
+    FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale *frame, ParametreOperation *, wxOpencvApp *osg);
+    ~FenetreInfoOperation();
+    /*!< destructeur de la fenetre parametrage */
+    wxWindow *CreerOngletEtape(wxNotebook *, int);
+    /*!< Création d'un onglet pour une étape */
+    void MAJOngletEtape(int indOp);
+    /*!< Mise à jour de l'onglet après l'opération */
+    // Gestion des évènements
+    void OnActivate(wxActivateEvent& event);
+    /*!< Gestion pour maj palette */
+    void OnPaint(wxPaintEvent& event);
+    /*!< Gestion pour maj palette */
+    void OnSpinEntier(wxSpinEvent &w);
+    /*!< Gestion des boutons pour valeurs entières */
+    void OnSpinReel(wxSpinDoubleEvent &w);
+    /*!< Gestion des boutons pour valeurs réelles */
+    void  OnSpinMoins(wxSpinEvent& event);
+    /*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
+    void  OnSpinPlus(wxSpinEvent& event);
+    /*!< Gestion des boutons pour valeurs avec entier pas autre que 1 */
+    void SauverSequence(wxCommandEvent &evt);
+    /*!< Sauvegarde des étapes comme séquence */
+    void ComboBox(wxCommandEvent &evt);
+    /*!<Sélection d'un parametre à l'aide de sa description */
+    void OnTextValider(wxCommandEvent &w);
+    void OnKeyDown(wxKeyEvent &);
+
+    void OnClose(wxCloseEvent& event);
+    /*!< Fermeture de la fenetre parametrage */
+    void  PositionSouris(int, wxPoint);
+    /*!<Spin modifé à partir de la souris */
+
+
+    void DefOSGApp(void *w) { osgApp = w; };
+    void DefFenMere(FenetrePrincipale *f) { fenMere = f; };
+    /*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
+    void ExecuterOperation(int indEtape);/*!<Excute l'opération après modification des paramètres à partir de l'étape indEtape */
+    int NbParamSouris() { return spinSouris.size(); }
+    wxNotebook *Classeur() { return classeur; };
+
+};
+
 
 class ArboCalcul : public wxTreeCtrl
 {
@@ -305,6 +373,7 @@ public:
     void OnIdle(wxIdleEvent& event);
     void OnSize(wxSizeEvent& event);
     wxPanel *Panel() { return m_panel; };
+    wxNotebook *Classeur() { return classeur; };
     void DefFenAlgo(void *t) { fenAlgo = t; };
 private:
     void TogStyle(int id, long flag);
@@ -326,6 +395,7 @@ private:
 
     wxPanel *m_panel;
     ArboCalcul *arbre;
+    wxNotebook *classeur;
     void *fenAlgo;
 #if wxUSE_LOG
     wxTextCtrl *m_textCtrl;

@@ -46,8 +46,8 @@ FenetreAlgo::FenetreAlgo(GrapheOperation *t,FenetrePrincipale *frame, const wxSt
     ParametreOperation *pOCV = frame->ParamOCV();
     fenMere = frame;
     osgApp = osg;
-
-    classeur = new wxNotebook(t, wxID_ANY);
+    wFen = t;
+    classeur = new wxNotebook(t->Panel(), wxID_ANY);
     FenetrePrincipale *f = fenMere;
     nbEtape = 0;
     nbParamMax = 0;
