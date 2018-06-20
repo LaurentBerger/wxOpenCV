@@ -47,7 +47,7 @@ FenetreAlgo(GrapheOperation *t,FenetrePrincipale *frame, const wxString& title, 
         /*!< destructeur de la fenetre parametrage */
 wxWindow *CreerOngletEtape(wxNotebook *,int);
         /*!< Création d'un onglet pour une étape */
-void FenetreAlgo::MAJOngletEtape(int indOp);
+void MAJOngletEtape(int indOp);
 /*!< Mise à jour de l'onglet après l'opération */
 // Gestion des évènements
 void OnActivate(wxActivateEvent& event);
@@ -80,6 +80,7 @@ void DefFenMere(FenetrePrincipale *f){fenMere =f;};
 		/*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
 void ExecuterOperation(int indEtape);/*!<Excute l'opération après modification des paramètres à partir de l'étape indEtape */
 int NbParamSouris(){ return spinSouris.size();}
+wxNotebook *Classeur() { return classeur; };
 };
 
 #endif

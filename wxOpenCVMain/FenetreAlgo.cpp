@@ -36,7 +36,7 @@ fenAlgo->Refresh(true);
 
 FenetreAlgo::FenetreAlgo(GrapheOperation *t,FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size, wxOpencvApp *osg, long style)
-    : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCAPTION)
+    : wxFrame()
 {
 
     wxSize s(size);
@@ -107,10 +107,10 @@ FenetreAlgo::FenetreAlgo(GrapheOperation *t,FenetrePrincipale *frame, const wxSt
         else
             f = NULL;
     }
-    wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
-    topsizer->Add(classeur, 1, wxGROW | wxEXPAND, 10);
-    wxBoxSizer *partieBasse = new wxBoxSizer(wxHORIZONTAL);
     panneau = t->Panel();
+/*    wxBoxSizer *topsizer = new wxBoxSizer(wxVERTICAL);
+    topsizer->Add(classeur, 1, wxGROW | wxEXPAND, 10);
+//    wxBoxSizer *partieBasse = new wxBoxSizer(wxHORIZONTAL);
     wxColour fond(*wxLIGHT_GREY);
     fond.Set(fond.Red(), 255, fond.Blue());
     panneau->SetBackgroundColour(fond);
@@ -127,12 +127,12 @@ FenetreAlgo::FenetreAlgo(GrapheOperation *t,FenetrePrincipale *frame, const wxSt
 //    partieBasse->Add(st, 0, wxALIGN_CENTER_VERTICAL | wxALL);
 //    partieBasse->Add(caseNomMacro, 0, wxALIGN_CENTER_VERTICAL | wxALL);
 //    panneau->SetSizer(partieBasse);
-    Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_CONFIG);
-    Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_XML);
-    Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
+//    Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_CONFIG);
+//    Bind(wxEVT_COMMAND_BUTTON_CLICKED, &FenetreAlgo::SauverSequence, this, ID_SAUVER_SEQ_XML);
+*/    Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
     Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreAlgo::ComboBox, this);
     Bind(wxEVT_TEXT_ENTER, &FenetreAlgo::OnTextValider, this);
-    SetSizerAndFit(topsizer);
+//    SetSizerAndFit(topsizer);
     Show(true);
 }
 
