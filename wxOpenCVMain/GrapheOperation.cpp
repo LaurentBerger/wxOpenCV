@@ -3,22 +3,26 @@
 
 #include "GrapheOperation.h"
 #include "FenetreAlgo.h"
+#include "GlisserForme.h"
+
 #include <wx/hyperlink.h>
 
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\icon1.xpm"
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\icon2.xpm"
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\icon3.xpm"
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\icon4.xpm"
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\icon5.xpm"
+/*
+#include "\Lib\wxWidgets\samples\treectrl\icon1.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\icon2.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\icon3.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\icon4.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\icon5.xpm"
 
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\state1.xpm"
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\state2.xpm"
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\state3.xpm"
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\state4.xpm"
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\state5.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\state1.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\state2.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\state3.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\state4.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\state5.xpm"
 
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\unchecked.xpm"
-#include "G:\Lib\wxWidgets-3.1.0\samples\treectrl\checked.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\unchecked.xpm"
+#include "\Lib\wxWidgets\samples\treectrl\checked.xpm"
+*/
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
 #include "../sample.xpm"
@@ -750,7 +754,10 @@ ArboCalcul::ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg,wxWindow *pare
 
 void ArboCalcul::CreateImageList(int size)
 {
-    if (size == -1)
+	m_imageSize = 0;
+
+	return;
+/*    if (size == -1)
     {
         SetImageList(NULL);
         return;
@@ -799,12 +806,14 @@ void ArboCalcul::CreateImageList(int size)
         }
     }
 
-    AssignImageList(images);
+    AssignImageList(images);*/
 }
 
 void ArboCalcul::CreateStateImageList(bool del)
 {
-    if (del)
+	SetStateImageList(NULL);
+	return;
+/*	if (del)
     {
         SetStateImageList(NULL);
         return;
@@ -847,7 +856,7 @@ void ArboCalcul::CreateStateImageList(bool del)
             states->Add(icons[i]);
     }
 
-    AssignStateImageList(states);
+    AssignStateImageList(states);*/
 }
 
 void ArboCalcul::CreateButtonsImageList(int WXUNUSED(size))
@@ -1451,9 +1460,9 @@ FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale
         else
             f = NULL;
     }
-    t->Bind(wxEVT_SPINCTRLDOUBLE, &FenetreAlgo::OnSpinReel, this);
-    t->Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreAlgo::ComboBox, this);
-    t->Bind(wxEVT_TEXT_ENTER, &FenetreAlgo::OnTextValider, this);
+    t->Bind(wxEVT_SPINCTRLDOUBLE, &FenetreInfoOperation::OnSpinReel, this);
+    t->Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreInfoOperation::ComboBox, this);
+    t->Bind(wxEVT_TEXT_ENTER, &FenetreInfoOperation::OnTextValider, this);
     //    SetSizerAndFit(topsizer);
     t->Show(true);
 }
@@ -1875,4 +1884,65 @@ void FenetreInfoOperation::OnClose(wxCloseEvent& event)
 
 }
 
+
+void FenetreInfoOperation::ComboBox(wxCommandEvent &w)
+{
+	wxOpencvApp *app = (wxOpencvApp *)osgApp;
+	if (!osgApp)
+		return;
+	std::string nom;
+	int ind = listeOnglet[classeur->GetCurrentPage()].second;
+
+	ParametreOperation *pOCV = listeOp[ind].first;
+	wxStaticText *st = (wxStaticText*)wxWindow::FindWindowById(w.GetId() - 1, wFen);
+	nom = st->GetLabel().c_str();
+	if (pOCV->doubleParam.find(nom) != pOCV->doubleParam.end())
+	{
+		if (pOCV->doubleParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+			return;
+		pOCV->doubleParam[nom].valeur = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+	}
+	if (pOCV->intParam.find(nom) != pOCV->intParam.end())
+	{
+
+		if (ParametreOperation::listeParam.find(nom) != ParametreOperation::listeParam.end())
+		{
+			int nb = ((wxComboBox*)(w.GetEventObject()))->GetCurrentSelection();
+			int i = 0;
+			std::map <std::string, int  >::iterator iter = pOCV->listeParam[nom].begin();
+			for (; iter != pOCV->listeParam[nom].end() && i != nb; ++iter, ++i);
+			if (i == nb)
+				pOCV->intParam[nom].valeur = iter->second;
+		}
+		else
+		{
+			if (pOCV->intParam[nom].valeur == ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue())
+				return;
+			pOCV->intParam[nom].valeur = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		}
+	}
+	if (pOCV->sizeParam.find(nom) != pOCV->sizeParam.end())
+	{
+		if ((w.GetId()) % 4 == 0)
+		{
+			if (pOCV->sizeParam[nom].valeur.width == ((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
+				return;
+			pOCV->sizeParam[nom].valeur.width = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		}
+		else
+		{
+			if (pOCV->sizeParam[nom].valeur.height == ((wxSpinCtrl*)(w.GetEventObject()))->GetValue())
+				return;
+			pOCV->sizeParam[nom].valeur.height = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
+		}
+	}
+	if (fenMere)
+		ExecuterOperation(ind);
+
+}
+
+void FenetreInfoOperation::ExecuterOperation(int indOperation)
+{
+
+}
 
