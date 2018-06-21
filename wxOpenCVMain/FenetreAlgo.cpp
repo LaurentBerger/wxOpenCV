@@ -18,11 +18,11 @@ f->Show(true);
 if (!fenAlgo==NULL)
 	return;
 wxFrame *toto;
-fenAlgo = new FenetreAlgo(f,this, origineImage.nomOperation, wxPoint(530, 0), wxSize(430, 570), this->osgApp);
+/*fenAlgo = new FenetreAlgo(f,this, origineImage.nomOperation, wxPoint(530, 0), wxSize(430, 570), this->osgApp);
 f->DefFenAlgo(fenAlgo);
 fenAlgo->DefFenMere(this);
 fenAlgo->DefOSGApp(osgApp);
-/*fenAlgo->Show(true);
+fenAlgo->Show(true);
 fenAlgo->Refresh(true);*/
 //fenAlgo->SendSizeEvent   ();
 }

@@ -72,7 +72,7 @@ private:
 
 public:
     /*!< Constructeur de la fenetre parametrage */
-    FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale *frame, ParametreOperation *, wxOpencvApp *osg);
+    FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale *frame, wxOpencvApp *osg);
     ~FenetreInfoOperation();
     /*!< destructeur de la fenetre parametrage */
     wxWindow *CreerOngletEtape(wxNotebook *, int);
@@ -374,7 +374,6 @@ public:
     void OnSize(wxSizeEvent& event);
     wxPanel *Panel() { return m_panel; };
     wxNotebook *Classeur() { return classeur; };
-    void DefFenAlgo(void *t) { fenAlgo = t; };
 private:
     void TogStyle(int id, long flag);
 
@@ -396,7 +395,7 @@ private:
     wxPanel *m_panel;
     ArboCalcul *arbre;
     wxNotebook *classeur;
-    void *fenAlgo;
+    std::unique_ptr<FenetreInfoOperation> fenAlgo;
 #if wxUSE_LOG
     wxTextCtrl *m_textCtrl;
 #endif // wxUSE_LOG

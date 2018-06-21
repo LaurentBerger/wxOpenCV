@@ -7,22 +7,6 @@
 
 #include <wx/hyperlink.h>
 
-/*
-#include "\Lib\wxWidgets\samples\treectrl\icon1.xpm"
-#include "\Lib\wxWidgets\samples\treectrl\icon2.xpm"
-#include "\Lib\wxWidgets\samples\treectrl\icon3.xpm"
-#include "\Lib\wxWidgets\samples\treectrl\icon4.xpm"
-#include "\Lib\wxWidgets\samples\treectrl\icon5.xpm"
-
-#include "\Lib\wxWidgets\samples\treectrl\state1.xpm"
-#include "\Lib\wxWidgets\samples\treectrl\state2.xpm"
-#include "\Lib\wxWidgets\samples\treectrl\state3.xpm"
-#include "\Lib\wxWidgets\samples\treectrl\state4.xpm"
-#include "\Lib\wxWidgets\samples\treectrl\state5.xpm"
-
-#include "\Lib\wxWidgets\samples\treectrl\unchecked.xpm"
-#include "\Lib\wxWidgets\samples\treectrl\checked.xpm"
-*/
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
 #include "../sample.xpm"
@@ -183,9 +167,8 @@ GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, con
 
 
     m_panel = new wxPanel(this);
-    classeur = new wxNotebook(this, wxID_ANY);
-
-
+    classeur = new wxNotebook(m_panel, wxID_ANY);
+    fenAlgo = std::make_unique<FenetreInfoOperation>(this, frame, osg);
 #if wxUSE_LOG
     // create the controls
     m_textCtrl = new wxTextCtrl(m_panel, wxID_ANY, wxT(""),
@@ -282,6 +265,7 @@ void GrapheOperation::OnSize(wxSizeEvent& event)
 void GrapheOperation::Resize()
 {
     wxSize size = GetClientSize();
+    arbre->SetSize(0, 0, size.x, size.y * 1 / 2);
     if (classeur)
         classeur->SetSize(0, size.y / 2, size.x, size.y / 3);
     m_textCtrl->SetSize(0, 5 * size.y / 6, size.x, size.y / 6);
@@ -754,10 +738,7 @@ ArboCalcul::ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg,wxWindow *pare
 
 void ArboCalcul::CreateImageList(int size)
 {
-	m_imageSize = 0;
-
-	return;
-/*    if (size == -1)
+    if (size == -1)
     {
         SetImageList(NULL);
         return;
@@ -774,15 +755,6 @@ void ArboCalcul::CreateImageList(int size)
     wxBusyCursor wait;
     wxIcon icons[5];
 
-    if (m_alternateImages)
-    {
-        icons[TreeCtrlIcon_File] = wxIcon(icon1_xpm);
-        icons[TreeCtrlIcon_FileSelected] = wxIcon(icon2_xpm);
-        icons[TreeCtrlIcon_Folder] = wxIcon(icon3_xpm);
-        icons[TreeCtrlIcon_FolderSelected] = wxIcon(icon4_xpm);
-        icons[TreeCtrlIcon_FolderOpened] = wxIcon(icon5_xpm);
-    }
-    else
     {
         wxSize iconSize(size, size);
 
@@ -806,14 +778,12 @@ void ArboCalcul::CreateImageList(int size)
         }
     }
 
-    AssignImageList(images);*/
+    AssignImageList(images);
 }
 
 void ArboCalcul::CreateStateImageList(bool del)
 {
-	SetStateImageList(NULL);
-	return;
-/*	if (del)
+	if (del)
     {
         SetStateImageList(NULL);
         return;
@@ -822,29 +792,10 @@ void ArboCalcul::CreateStateImageList(bool del)
     wxImageList *states;
     wxBusyCursor wait;
 
-    if (m_alternateStates)
-    {
-        wxIcon icons[5];
-        icons[0] = wxIcon(state1_xpm);  // yellow
-        icons[1] = wxIcon(state2_xpm);  // green
-        icons[2] = wxIcon(state3_xpm);  // red
-        icons[3] = wxIcon(state4_xpm);  // blue
-        icons[4] = wxIcon(state5_xpm);  // black
-
-        int width = icons[0].GetWidth(),
-            height = icons[0].GetHeight();
-
-        // Make an state image list containing small icons
-        states = new wxImageList(width, height, true);
-
-        for (size_t i = 0; i < WXSIZEOF(icons); i++)
-            states->Add(icons[i]);
-    }
-    else
     {
         wxIcon icons[2];
-        icons[0] = wxIcon(unchecked_xpm);
-        icons[1] = wxIcon(checked_xpm);
+        icons[0] = wxArtProvider::GetIcon(wxART_NORMAL_FILE, wxART_LIST);
+        icons[1] = wxArtProvider::GetIcon(wxART_NORMAL_FILE, wxART_LIST);
 
         int width = icons[0].GetWidth(),
             height = icons[0].GetHeight();
@@ -856,7 +807,7 @@ void ArboCalcul::CreateStateImageList(bool del)
             states->Add(icons[i]);
     }
 
-    AssignStateImageList(states);*/
+    AssignStateImageList(states);
 }
 
 void ArboCalcul::CreateButtonsImageList(int WXUNUSED(size))
@@ -1412,7 +1363,7 @@ void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
         unsigned(tree->GetChildrenCount(GetId(), false)));
 }
 
-FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale *frame, ParametreOperation *pOCV, wxOpencvApp *osg)
+FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale *frame, wxOpencvApp *osg)
 {
     int hMax = 0, lMax = 0;
     fenMere = frame;
@@ -1422,6 +1373,12 @@ FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale
     FenetrePrincipale *f = fenMere;
     nbEtape = 0;
     nbParamMax = 0;
+    t->Bind(wxEVT_SPINCTRLDOUBLE, &FenetreInfoOperation::OnSpinReel, this);
+    t->Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreInfoOperation::ComboBox, this);
+    t->Bind(wxEVT_TEXT_ENTER, &FenetreInfoOperation::OnTextValider, this);
+    //    SetSizerAndFit(topsizer);
+    t->Show(true);
+    return;
     std::map<std::string, ParametreOperation>::iterator it;
 
     for (it = fenMere->ImAcq()->ListeOpAttribut()->begin(); it != fenMere->ImAcq()->ListeOpAttribut()->end(); it++)
@@ -1460,11 +1417,6 @@ FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale
         else
             f = NULL;
     }
-    t->Bind(wxEVT_SPINCTRLDOUBLE, &FenetreInfoOperation::OnSpinReel, this);
-    t->Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreInfoOperation::ComboBox, this);
-    t->Bind(wxEVT_TEXT_ENTER, &FenetreInfoOperation::OnTextValider, this);
-    //    SetSizerAndFit(topsizer);
-    t->Show(true);
 }
 
 wxWindow *FenetreInfoOperation::CreerOngletEtape(wxNotebook *classeur, int indOp)
