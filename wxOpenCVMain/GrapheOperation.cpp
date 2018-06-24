@@ -109,12 +109,6 @@ wxBEGIN_EVENT_TABLE(ArboCalcul, wxGenericTreeCtrl)
 #else
 wxBEGIN_EVENT_TABLE(ArboCalcul, wxTreeCtrl)
 #endif
-EVT_TREE_BEGIN_DRAG(TreeTest_Ctrl, ArboCalcul::OnBeginDrag)
-EVT_TREE_BEGIN_RDRAG(TreeTest_Ctrl, ArboCalcul::OnBeginRDrag)
-EVT_TREE_END_DRAG(TreeTest_Ctrl, ArboCalcul::OnEndDrag)
-EVT_TREE_BEGIN_LABEL_EDIT(TreeTest_Ctrl, ArboCalcul::OnBeginLabelEdit)
-EVT_TREE_END_LABEL_EDIT(TreeTest_Ctrl, ArboCalcul::OnEndLabelEdit)
-EVT_TREE_DELETE_ITEM(TreeTest_Ctrl, ArboCalcul::OnDeleteItem)
 #if 0       // there are so many of those that logging them causes flicker
 EVT_TREE_GET_INFO(TreeTest_Ctrl, ArboCalcul::OnGetInfo)
 #endif
@@ -168,7 +162,7 @@ GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, con
 
     m_panel = new wxPanel(this);
     classeur = new wxNotebook(m_panel, wxID_ANY);
-    fenAlgo = std::make_unique<FenetreInfoOperation>(this, frame, osg);
+    fenAlgo = std::make_shared<FenetreInfoOperation>(this, frame, osg);
 #if wxUSE_LOG
     // create the controls
     m_textCtrl = new wxTextCtrl(m_panel, wxID_ANY, wxT(""),
@@ -206,6 +200,8 @@ void GrapheOperation::CreateTree(long style)
     arbre = new ArboCalcul((FenetrePrincipale*)fenMere,(wxOpencvApp*)osgApp,m_panel, TreeTest_Ctrl,
         wxDefaultPosition, wxDefaultSize,
         style);
+    arbre->DefFenAlgo(fenAlgo);
+    arbre->Installation();
     Resize();
 }
 
@@ -714,7 +710,7 @@ wxIMPLEMENT_DYNAMIC_CLASS(ArboCalcul, wxGenericTreeCtrl);
 wxIMPLEMENT_DYNAMIC_CLASS(ArboCalcul, wxTreeCtrl);
 #endif
 
-ArboCalcul::ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg,wxWindow *parent, const wxWindowID id,
+ArboCalcul::ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg, wxWindow *parent, const wxWindowID id,
     const wxPoint& pos, const wxSize& size,
     long style)
     : wxTreeCtrl(parent, id, pos, size, style),
@@ -728,12 +724,18 @@ ArboCalcul::ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg,wxWindow *pare
     fenMere = frame;
     osgApp = osg;
 
-    FenetrePrincipale *f = fenMere;
-    
+    nbEtape = 0;
+    nbParamMax = 0;
+}
+void ArboCalcul::Installation()
+{
     wxString n;
+    FenetrePrincipale *f = fenMere;
     f->GetTitle();
     wxTreeItemId rootId = AddRoot(f->GetTitle(),-1, -1,new MyTreeItemData(f->GetTitle()));
     PileCalcul(rootId, f);
+    nbParamMax = 2 * (nbParamMax + 2);
+
 }
 
 void ArboCalcul::CreateImageList(int size)
@@ -838,13 +840,27 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
             int id = f->OrigineImage()->indOpFenetre[i];
             FenetrePrincipale *fId = ((wxOpencvApp *)osgApp)->Fenetre(id);
             wxTreeItemId noeud = AppendItem(idParent, fId->GetTitle(),-1,-1, new MyTreeItemData(fId->GetTitle() +"data item"));
+            std::map<std::string, ParametreOperation>::iterator it;
+            for (it = fId->ImAcq()->ListeOpAttribut()->begin(); it != fId->ImAcq()->ListeOpAttribut()->end(); it++)
+            {
+                fenAlgo.get()->AjouterEtape(nbEtape, &it->second, id);
+                nbEtape++;
+
+            }
 
             if (fId)
                 PileCalcul(noeud, fId);
         }
         wxString n(f->OrigineImage()->nomOperation);
         wxTreeItemId id = AppendItem(idParent, n, -1,-1, new MyTreeItemData(n));
-
+        int nbParam = f->OrigineImage()->intParam.size();
+        nbParam += f->OrigineImage()->doubleParam.size();
+        nbParam += 2 * f->OrigineImage()->pointParam.size();
+        nbParam += 2 * f->OrigineImage()->sizeParam.size();
+        if (nbParamMax<nbParam)
+            nbParamMax = nbParam;
+        fenAlgo.get()->AjouterEtape(nbEtape, f->OrigineImage(), f->IdFenetre());
+        nbEtape++;
 
     }
 }
@@ -966,8 +982,6 @@ void ArboCalcul::name(wxTreeEvent& event)                        \
     event.Skip();                                                \
 }
 
-TREE_EVENT_HANDLER(OnBeginRDrag)
-TREE_EVENT_HANDLER(OnDeleteItem)
 TREE_EVENT_HANDLER(OnGetInfo)
 TREE_EVENT_HANDLER(OnSetInfo)
 TREE_EVENT_HANDLER(OnItemExpanded)
@@ -1129,97 +1143,6 @@ void ArboCalcul::OnTreeKeyDown(wxTreeEvent& event)
     event.Skip();
 }
 
-void ArboCalcul::OnBeginDrag(wxTreeEvent& event)
-{
-    // need to explicitly allow drag
-    if (event.GetItem() != GetRootItem())
-    {
-        m_draggedItem = event.GetItem();
-
-        wxPoint clientpt = event.GetPoint();
-        wxPoint screenpt = ClientToScreen(clientpt);
-
-        wxLogMessage(wxT("OnBeginDrag: started dragging %s at screen coords (%i,%i)"),
-            GetItemText(m_draggedItem).c_str(),
-            screenpt.x, screenpt.y);
-
-        event.Allow();
-    }
-    else
-    {
-        wxLogMessage(wxT("OnBeginDrag: this item can't be dragged."));
-    }
-}
-
-void ArboCalcul::OnEndDrag(wxTreeEvent& event)
-{
-    wxTreeItemId itemSrc = m_draggedItem,
-        itemDst = event.GetItem();
-    m_draggedItem = (wxTreeItemId)0l;
-
-    // where to copy the item?
-    if (itemDst.IsOk() && !ItemHasChildren(itemDst))
-    {
-        // copy to the parent then
-        itemDst = GetItemParent(itemDst);
-    }
-
-    if (!itemDst.IsOk())
-    {
-        wxLogMessage(wxT("OnEndDrag: can't drop here."));
-
-        return;
-    }
-
-    wxString text = GetItemText(itemSrc);
-    wxLogMessage(wxT("OnEndDrag: '%s' copied to '%s'."),
-        text.c_str(), GetItemText(itemDst).c_str());
-
-    // just do append here - we could also insert it just before/after the item
-    // on which it was dropped, but this requires slightly more work... we also
-    // completely ignore the client data and icon of the old item but could
-    // copy them as well.
-    //
-    // Finally, we only copy one item here but we might copy the entire tree if
-    // we were dragging a folder.
-    int image = /*wxGetApp().ShowImages()*/1 ? TreeCtrlIcon_File : -1;
-    wxTreeItemId id = AppendItem(itemDst, text, image);
-
- //   if (wxGetApp().ShowStates())
-        SetItemState(id, GetItemState(itemSrc));
-}
-
-void ArboCalcul::OnBeginLabelEdit(wxTreeEvent& event)
-{
-    wxLogMessage(wxT("OnBeginLabelEdit"));
-
-    // for testing, prevent this item's label editing
-    wxTreeItemId itemId = event.GetItem();
-    if (IsTestItem(itemId))
-    {
-        wxMessageBox(wxT("You can't edit this item."));
-
-        event.Veto();
-    }
-    else if (itemId == GetRootItem())
-    {
-        // test that it is possible to change the text of the item being edited
-        SetItemText(itemId, wxT("Editing root item"));
-    }
-}
-
-void ArboCalcul::OnEndLabelEdit(wxTreeEvent& event)
-{
-    wxLogMessage(wxT("OnEndLabelEdit"));
-
-    // don't allow anything except letters in the labels
-    if (!event.GetLabel().IsWord())
-    {
-        wxMessageBox(wxT("The new label should be a single word."));
-
-        event.Veto();
-    }
-}
 
 void ArboCalcul::OnItemCollapsing(wxTreeEvent& event)
 {
@@ -1378,6 +1301,7 @@ FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale
     t->Bind(wxEVT_TEXT_ENTER, &FenetreInfoOperation::OnTextValider, this);
     //    SetSizerAndFit(topsizer);
     t->Show(true);
+    listeOp.clear();
     return;
     std::map<std::string, ParametreOperation>::iterator it;
 
@@ -1417,6 +1341,17 @@ FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale
         else
             f = NULL;
     }
+}
+
+void FenetreInfoOperation::AjouterEtape(int nb, ParametreOperation *pOCV, int idFenetre)
+{
+    listeOp.push_back(std::pair< ParametreOperation*, int>(pOCV, idFenetre));
+    wxWindow *w = CreerOngletEtape(classeur, nb);
+    listeOnglet[w] = std::pair<wxString, int>(pOCV->nomOperation, nb);
+    wxString nom(_("Step"));
+    nom.Printf("%s %d : %s", nom, pOCV->indEtape, pOCV->nomOperation);
+    classeur->InsertPage(0, w, nom, nb == 1);
+
 }
 
 wxWindow *FenetreInfoOperation::CreerOngletEtape(wxNotebook *classeur, int indOp)

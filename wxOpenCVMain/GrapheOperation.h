@@ -73,7 +73,7 @@ private:
 public:
     /*!< Constructeur de la fenetre parametrage */
     FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale *frame, wxOpencvApp *osg);
-    ~FenetreInfoOperation();
+    ~FenetreInfoOperation() {};
     /*!< destructeur de la fenetre parametrage */
     wxWindow *CreerOngletEtape(wxNotebook *, int);
     /*!< Création d'un onglet pour une étape */
@@ -110,6 +110,7 @@ public:
     /*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
     void ExecuterOperation(int indEtape);/*!<Excute l'opération après modification des paramètres à partir de l'étape indEtape */
     int NbParamSouris() { return spinSouris.size(); }
+    void AjouterEtape(int nb, ParametreOperation *pOCV, int idFenetre);
     wxNotebook *Classeur() { return classeur; };
 
 };
@@ -118,8 +119,17 @@ public:
 class ArboCalcul : public wxTreeCtrl
 {
 private:
-    FenetrePrincipale   *fenMere;
-    void                *osgApp;
+    FenetrePrincipale       *fenMere;
+    void                    *osgApp;
+    int                     m_imageSize;               // current size of images
+    bool                    m_reverseSort;             // flag for OnCompareItems
+    wxTreeItemId            m_draggedItem;             // item being dragged right now
+    bool                    m_alternateImages;
+    bool                    m_alternateStates;
+
+    std::shared_ptr<FenetreInfoOperation> fenAlgo;
+    int             nbEtape;
+    int             nbParamMax;
 public:
     enum
     {
@@ -134,14 +144,9 @@ public:
     ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg, wxWindow *parent, const wxWindowID id,
         const wxPoint& pos, const wxSize& size,
         long style);
+    void Installation();
     virtual ~ArboCalcul() {};
 
-    void OnBeginDrag(wxTreeEvent& event);
-    void OnBeginRDrag(wxTreeEvent& event);
-    void OnEndDrag(wxTreeEvent& event);
-    void OnBeginLabelEdit(wxTreeEvent& event);
-    void OnEndLabelEdit(wxTreeEvent& event);
-    void OnDeleteItem(wxTreeEvent& event);
     void OnContextMenu(wxContextMenuEvent& event);
     void OnItemMenu(wxTreeEvent& event);
     void OnGetInfo(wxTreeEvent& event);
@@ -169,6 +174,7 @@ public:
     void CreateButtonsImageList(int size = 11);
     void CreateStateImageList(bool del = false);
 
+    void DefFenAlgo(std::shared_ptr<FenetreInfoOperation> f) { fenAlgo = f; };
     void DoSortChildren(const wxTreeItemId& item, bool reverse = false)
     {
         m_reverseSort = reverse; wxTreeCtrl::SortChildren(item);
@@ -212,11 +218,6 @@ private:
 
     void LogEvent(const wxChar *name, const wxTreeEvent& event);
 
-    int          m_imageSize;               // current size of images
-    bool         m_reverseSort;             // flag for OnCompareItems
-    wxTreeItemId m_draggedItem;             // item being dragged right now
-    bool         m_alternateImages;
-    bool         m_alternateStates;
 
     // NB: due to an ugly wxMSW hack you _must_ use wxDECLARE_DYNAMIC_CLASS();
     //     if you want your overloaded OnCompareItems() to be called.
@@ -232,6 +233,13 @@ class GrapheOperation : public wxFrame
 private:
     FenetrePrincipale * fenMere;
     void                *osgApp;
+    wxPanel *m_panel;
+    ArboCalcul *arbre;
+    wxNotebook *classeur;
+    std::shared_ptr<FenetreInfoOperation> fenAlgo;
+#if wxUSE_LOG
+    wxTextCtrl *m_textCtrl;
+#endif // wxUSE_LOG
 public:
     // ctor and dtor
     GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, const wxString& title, int x, int y, int w, int h);
@@ -392,13 +400,6 @@ private:
     void DoShowRelativeItem(TreeFunc1_t pfn, const wxString& label);
 
 
-    wxPanel *m_panel;
-    ArboCalcul *arbre;
-    wxNotebook *classeur;
-    std::unique_ptr<FenetreInfoOperation> fenAlgo;
-#if wxUSE_LOG
-    wxTextCtrl *m_textCtrl;
-#endif // wxUSE_LOG
 
     void DoSetBold(bool bold = true);
 
