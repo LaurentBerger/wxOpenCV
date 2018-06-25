@@ -6,6 +6,7 @@
 #include "GlisserForme.h"
 
 #include <wx/hyperlink.h>
+#include <algorithm>
 
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
@@ -732,7 +733,7 @@ void ArboCalcul::Installation()
     wxString n;
     FenetrePrincipale *f = fenMere;
     f->GetTitle();
-    wxTreeItemId rootId = AddRoot(f->GetTitle(),-1, -1,new MyTreeItemData(f->GetTitle()));
+    wxTreeItemId rootId = AddRoot(f->GetTitle(),-1, -1,new InfoNoeud(f->GetTitle(),f,NULL));
     PileCalcul(rootId, f);
     nbParamMax = 2 * (nbParamMax + 2);
 
@@ -839,7 +840,7 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
         {
             int id = f->OrigineImage()->indOpFenetre[i];
             FenetrePrincipale *fId = ((wxOpencvApp *)osgApp)->Fenetre(id);
-            wxTreeItemId noeud = AppendItem(idParent, fId->GetTitle(),-1,-1, new MyTreeItemData(fId->GetTitle() +"data item"));
+            wxTreeItemId noeud = AppendItem(idParent, fId->GetTitle(),-1,-1, new InfoNoeud(fId->GetTitle() +"data item",fId,idParent));
             std::map<std::string, ParametreOperation>::iterator it;
             for (it = fId->ImAcq()->ListeOpAttribut()->begin(); it != fId->ImAcq()->ListeOpAttribut()->end(); it++)
             {
@@ -852,7 +853,7 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
                 PileCalcul(noeud, fId);
         }
         wxString n(f->OrigineImage()->nomOperation);
-        wxTreeItemId id = AppendItem(idParent, n, -1,-1, new MyTreeItemData(n));
+        wxTreeItemId id = AppendItem(idParent, n, -1,-1, new InfoNoeud(n, f->OrigineImage(),nbEtape,idParent));
         int nbParam = f->OrigineImage()->intParam.size();
         nbParam += f->OrigineImage()->doubleParam.size();
         nbParam += 2 * f->OrigineImage()->pointParam.size();
@@ -1156,11 +1157,13 @@ void ArboCalcul::OnItemActivated(wxTreeEvent& event)
 {
     // show some info about this item
     wxTreeItemId itemId = event.GetItem();
-    MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
+    InfoNoeud *item = (InfoNoeud *)GetItemData(itemId);
 
     if (item != NULL)
     {
         item->ShowInfo(this);
+        if (item->Operation())
+            fenAlgo.get()->ActiverOnglet(item->IndiceOnglet());
     }
 
     wxLogMessage(wxT("OnItemActivated"));
@@ -1181,7 +1184,7 @@ void ArboCalcul::OnItemMenu(wxTreeEvent& event)
     wxTreeItemId itemId = event.GetItem();
     wxCHECK_RET(itemId.IsOk(), "should have a valid item");
 
-    MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
+    InfoNoeud *item = (InfoNoeud *)GetItemData(itemId);
     wxPoint clientpt = event.GetPoint();
     wxPoint screenpt = ClientToScreen(clientpt);
 
@@ -1229,7 +1232,7 @@ void ArboCalcul::OnItemRClick(wxTreeEvent& event)
     wxTreeItemId itemId = event.GetItem();
     wxCHECK_RET(itemId.IsOk(), "should have a valid item");
 
-    MyTreeItemData *item = (MyTreeItemData *)GetItemData(itemId);
+    InfoNoeud *item = (InfoNoeud *)GetItemData(itemId);
 
     wxLogMessage(wxT("Item \"%s\" right clicked"), item ? item->GetDesc() : wxString(wxS("unknown")));
 
@@ -1259,7 +1262,7 @@ void ArboCalcul::OnRMouseDClick(wxMouseEvent& event)
     }
     else
     {
-        MyTreeItemData *item = (MyTreeItemData *)GetItemData(id);
+        InfoNoeud *item = (InfoNoeud *)GetItemData(id);
         if (item)
         {
             wxLogMessage(wxT("Item '%s' under mouse"), item->GetDesc());
@@ -1274,7 +1277,7 @@ static inline const wxChar *Bool2String(bool b)
     return b ? wxT("") : wxT("not ");
 }
 
-void MyTreeItemData::ShowInfo(wxTreeCtrl *tree)
+void InfoNoeud::ShowInfo(wxTreeCtrl *tree)
 {
     wxLogMessage(wxT("Item '%s': %sselected, %sexpanded, %sbold,\n")
         wxT("%u children (%u immediately under this item)."),
@@ -1525,6 +1528,11 @@ wxWindow *FenetreInfoOperation::CreerOngletEtape(wxNotebook *classeur, int indOp
 }
 
 
+
+void FenetreInfoOperation::ActiverOnglet(int ind)
+{
+    classeur->SetSelection(classeur->GetPageCount()-1-ind);
+}
 
 void FenetreInfoOperation::OnActivate(wxActivateEvent& event)
 {

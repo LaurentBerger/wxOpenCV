@@ -41,16 +41,23 @@
 
 class GrapheOperation;
 
-class MyTreeItemData : public wxTreeItemData
+class InfoNoeud : public wxTreeItemData
 {
+private:
+    wxString m_desc;
+    FenetrePrincipale *fen;     // non nul si noeud = fenêtre
+    ParametreOperation *pOCV;   // non nul si noeud = opération
+    const wxTreeItemId res;     // Noeud de niveau supérieur = résultat NULL si racine
+    int indOnglet;
 public:
-    MyTreeItemData(const wxString& desc) : m_desc(desc) { }
+    InfoNoeud(const wxString& desc, FenetrePrincipale *f,const wxTreeItemId pUp) : res(pUp),m_desc(desc), fen(f),pOCV(NULL),indOnglet(-1) { }
+    InfoNoeud(const wxString& desc, ParametreOperation *p,int n,const wxTreeItemId pUp) : res(pUp), m_desc(desc), fen(NULL),pOCV(p), indOnglet(n) { }
 
     void ShowInfo(wxTreeCtrl *tree);
     wxString const& GetDesc() const { return m_desc; }
-
-private:
-    wxString m_desc;
+    ParametreOperation *Operation() { return pOCV; };
+    int IndiceOnglet() { return indOnglet; };
+    FenetrePrincipale *FenetrePrincipale() { return fen; };
 };
 
 class FenetreInfoOperation
@@ -78,6 +85,8 @@ public:
     wxWindow *CreerOngletEtape(wxNotebook *, int);
     /*!< Création d'un onglet pour une étape */
     void MAJOngletEtape(int indOp);
+    /*!< Mise à jour de l'onglet après l'opération */
+    void ActiverOnglet(int);
     /*!< Mise à jour de l'onglet après l'opération */
     // Gestion des évènements
     void OnActivate(wxActivateEvent& event);
