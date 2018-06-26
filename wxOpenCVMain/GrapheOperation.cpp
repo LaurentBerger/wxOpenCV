@@ -203,6 +203,7 @@ void GrapheOperation::CreateTree(long style)
         style);
     arbre->DefFenAlgo(fenAlgo);
     arbre->Installation();
+    fenAlgo.get()->DefArbre(arbre);
     Resize();
 }
 
@@ -840,11 +841,11 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
         {
             int id = f->OrigineImage()->indOpFenetre[i];
             FenetrePrincipale *fId = ((wxOpencvApp *)osgApp)->Fenetre(id);
-            wxTreeItemId noeud = AppendItem(idParent, fId->GetTitle(),-1,-1, new InfoNoeud(fId->GetTitle() +"data item",fId,idParent));
+            wxTreeItemId noeud = AppendItem(idParent, fId->GetTitle(),-1,-1, new InfoNoeud(fId->GetTitle() ,fId,idParent));
             std::map<std::string, ParametreOperation>::iterator it;
             for (it = fId->ImAcq()->ListeOpAttribut()->begin(); it != fId->ImAcq()->ListeOpAttribut()->end(); it++)
             {
-                fenAlgo.get()->AjouterEtape(nbEtape, &it->second, id);
+                fenAlgo.get()->AjouterEtape(nbEtape, &it->second, id,noeud);
                 nbEtape++;
 
             }
@@ -860,7 +861,7 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
         nbParam += 2 * f->OrigineImage()->sizeParam.size();
         if (nbParamMax<nbParam)
             nbParamMax = nbParam;
-        fenAlgo.get()->AjouterEtape(nbEtape, f->OrigineImage(), f->IdFenetre());
+        fenAlgo.get()->AjouterEtape(nbEtape, f->OrigineImage(), f->IdFenetre(), id);
         nbEtape++;
 
     }
@@ -1296,6 +1297,7 @@ FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale
     osgApp = osg;
     wFen = t;
     classeur = t->Classeur();
+    arbre = NULL;
     FenetrePrincipale *f = fenMere;
     nbEtape = 0;
     nbParamMax = 0;
@@ -1346,8 +1348,9 @@ FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale
     }
 }
 
-void FenetreInfoOperation::AjouterEtape(int nb, ParametreOperation *pOCV, int idFenetre)
+void FenetreInfoOperation::AjouterEtape(int nb, ParametreOperation *pOCV, int idFenetre,wxTreeItemId &n)
 {
+    noeuds.insert(std::pair<ParametreOperation *,wxTreeItemId &>(pOCV, n));
     listeOp.push_back(std::pair< ParametreOperation*, int>(pOCV, idFenetre));
     wxWindow *w = CreerOngletEtape(classeur, nb);
     listeOnglet[w] = std::pair<wxString, int>(pOCV->nomOperation, nb);
@@ -1838,6 +1841,37 @@ void FenetreInfoOperation::ComboBox(wxCommandEvent &w)
 
 void FenetreInfoOperation::ExecuterOperation(int indOperation)
 {
+    if (!osgApp)
+        return;
+    wxOpencvApp	*app = (wxOpencvApp *)osgApp;
+    ImageInfoCV **im = NULL;
+    ParametreOperation *pOCV = listeOp[indOperation].first;
+
+    std::map<ParametreOperation *, wxTreeItemId & >::iterator w = noeuds.find( pOCV);
+    
+    while (w!=noeuds.end()) 
+    {
+        if (pOCV != NULL)
+        {
+            if (app->VerifImagesExiste(pOCV))
+            {
+
+            }
+            wxTreeItemId &t = w->second;
+            InfoNoeud *item = (InfoNoeud *)arbre->GetItemData(t);
+            if (item && item->Operation())
+            {
+                pOCV = item->Operation();
+            }
+            else
+                pOCV = NULL;
+            if (pOCV)
+                w = noeuds.find(pOCV);
+            else
+                w = noeuds.end();
+        }
+
+    } 
 
 }
 

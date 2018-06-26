@@ -40,6 +40,7 @@
 #endif
 
 class GrapheOperation;
+class ArboCalcul;
 
 class InfoNoeud : public wxTreeItemData
 {
@@ -76,6 +77,8 @@ private:
     std::vector<DomaineParametreOp<cv::Point>*> 		                paramSouris;	/*<! Spin modifiable par la souris */
     std::vector<wxWindow *> 		                                    ongletSouris;	/*<! Spin modifiable par la souris */
     std::map<wxSpinCtrlDouble*, DragShape *> 		                    formeSouris;	/*<! Spin modifiable par la souris et forme*/
+    std::map<ParametreOperation * ,wxTreeItemId & > noeuds;
+    ArboCalcul *arbre;
 
 public:
     /*!< Constructeur de la fenetre parametrage */
@@ -115,11 +118,12 @@ public:
 
 
     void DefOSGApp(void *w) { osgApp = w; };
+    void DefArbre(ArboCalcul *w) { arbre = w; };
     void DefFenMere(FenetrePrincipale *f) { fenMere = f; };
     /*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
     void ExecuterOperation(int indEtape);/*!<Excute l'opération après modification des paramètres à partir de l'étape indEtape */
     int NbParamSouris() { return spinSouris.size(); }
-    void AjouterEtape(int nb, ParametreOperation *pOCV, int idFenetre);
+    void AjouterEtape(int nb, ParametreOperation *pOCV, int idFenetre,wxTreeItemId &n);
     wxNotebook *Classeur() { return classeur; };
 
 };
