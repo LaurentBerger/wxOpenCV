@@ -12,12 +12,11 @@ using namespace std;
 void FenetrePrincipale::ParamAlgo(wxCommandEvent& event)
 {
 
-GrapheOperation *f = new GrapheOperation(this, osgApp,wxT("wxTreeCtrl Test"), 50, 50, 450, 600);
-f->Show(true);
 
-if (!fenAlgo==NULL)
+if (fenOperation)
 	return;
-wxFrame *toto;
+fenOperation = new GrapheOperation(this, osgApp,wxT("wxTreeCtrl Test"), 50, 50, 450, 600);
+fenOperation->Show(true);
 /*fenAlgo = new FenetreAlgo(f,this, origineImage.nomOperation, wxPoint(530, 0), wxSize(430, 570), this->osgApp);
 f->DefFenAlgo(fenAlgo);
 fenAlgo->DefFenMere(this);
@@ -646,7 +645,7 @@ FenetreAlgo::~FenetreAlgo()
 if (fenMere)
 {
     fenMere->Feuille()->ClearShapes();
-    fenMere->RAZFenAlgo();
+    fenMere->RAZGrapheOperation();
 }
 
 }
@@ -892,7 +891,7 @@ void FenetreAlgo::OnKeyDown(wxKeyEvent &)
 
 void FenetreAlgo::OnClose(wxCloseEvent& event)
 {
-fenMere->RAZFenAlgo();
+fenMere->RAZGrapheOperation();
 //wxFrame::OnCloseWindow(event);
 
 }

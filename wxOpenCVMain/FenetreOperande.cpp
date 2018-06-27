@@ -143,7 +143,7 @@ ExecuterOperation(ind);
 
 FenetreOperande::~FenetreOperande()
 {
-fenMere->RAZFenAlgo();
+fenMere->RAZGrapheOperation();
 
 }
 
@@ -306,7 +306,7 @@ void FenetreOperande::OnKeyDown(wxKeyEvent &)
 
 void FenetreOperande::OnClose(wxCloseEvent& event)
 {
-fenMere->RAZFenAlgo();
+fenMere->RAZGrapheOperation();
 wxFrame::OnCloseWindow(event);
 
 }

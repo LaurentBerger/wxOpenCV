@@ -60,7 +60,7 @@ osgApp=NULL;
 zoomActif=false;
 statActif=false;
 fenetreSauvee =0;
-fenAlgo=NULL;
+RAZGrapheOperation();
 fenPano = NULL;
 courbeVideo=NULL;
 idFenetre=-1;
@@ -1086,8 +1086,8 @@ Close(true);
 
 FenetrePrincipale::~FenetrePrincipale()
 {
-    if (fenAlgo)
-        fenAlgo->DefFenMere(NULL);
+    if (fenOperation)
+        fenOperation->DefFenMere(NULL);
     if (courbeVideo)
         courbeVideo->DefFenMere(NULL);
 }
@@ -1145,8 +1145,8 @@ if (cam!=NULL )
 		cam->Resume();
 		}
 }
-if (fenAlgo)
-    fenAlgo->DefFenMere(NULL);
+if (fenOperation)
+    fenOperation->DefFenMere(NULL);
 if (courbeVideo)
     courbeVideo->DefFenMere(NULL);
 if (osgApp && !osgApp->Quitter())

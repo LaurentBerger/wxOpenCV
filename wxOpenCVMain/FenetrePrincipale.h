@@ -20,6 +20,7 @@
 class ControleCamera;
 class ImageStatistiques;
 class FenetreAlgo;
+class GrapheOperation;
 class FenetreCourbe;
 class FenetrePano;
 class OutilsImage;
@@ -518,7 +519,7 @@ wxColour			*p;
 wxOpencvApp			*osgApp;
 FenetreZoom			*fenZoom;
 ImageStatistiques	*imgStatIm;
-FenetreAlgo			*fenAlgo;
+GrapheOperation	    *fenOperation;
 FenetrePano			*fenPano;
 FenetreCourbe       *courbeVideo;
 HorodatageSequence  *dateSeq;
@@ -593,7 +594,7 @@ ParametreOperation *OrigineImage(){return &origineImage;};
      *  \brief fonction OrigineImage
      *  caractéristiques de l'opération.
      */
-void RAZFenAlgo(){ fenAlgo = NULL; };
+void RAZGrapheOperation(){ fenOperation = NULL; };
 /*!
 *  \brief fonction RAZFenAlgo
 *  Appelée lors de la fermeture de la fenêtre algorithme.
@@ -934,7 +935,7 @@ FenetreZoom *FZoom(){ return fenZoom; };
 *  \brief fonction ZoomActif
 *  Fenêtre zoom de la fenêtre.
 */
-FenetreAlgo *FenAlgo(){return fenAlgo;}
+GrapheOperation *FenGrapheOperation(){return fenOperation;}
 FenetreCourbe *FenCourbeVideo(){return courbeVideo;}
 
 void DefPointeurSouris(int type);

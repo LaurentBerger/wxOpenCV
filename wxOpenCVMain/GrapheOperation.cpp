@@ -4,6 +4,7 @@
 #include "GrapheOperation.h"
 #include "FenetreAlgo.h"
 #include "GlisserForme.h"
+#include "ImageStat.h"
 
 #include <wx/hyperlink.h>
 #include <algorithm>
@@ -181,6 +182,7 @@ GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, con
 
 GrapheOperation::~GrapheOperation()
 {
+    fenMere->RAZGrapheOperation();
 #if wxUSE_LOG
     delete wxLog::SetActiveTarget(NULL);
 #endif // wxUSE_LOG
@@ -835,24 +837,25 @@ int ArboCalcul::OnCompareItems(const wxTreeItemId& item1,
 void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
 {
 
-    if (f && f->OrigineImage()->indOpFenetre.size() != 0)
+    if (f )
     {
-        for (int i=0;i<f->OrigineImage()->nbOperande;i++)
+        wxString n(f->GetTitle());
+        wxTreeItemId id;
+        if (GetRootItem() == idParent)
+            id = idParent;
+        else
+            id = AppendItem(idParent, n, -1, -1, new InfoNoeud(n, f, idParent));
+        std::map<std::string, ParametreOperation>::iterator it;
+        for (it = f->ImAcq()->ListeOpAttribut()->begin(); it != f->ImAcq()->ListeOpAttribut()->end(); it++)
         {
-            int id = f->OrigineImage()->indOpFenetre[i];
-            FenetrePrincipale *fId = ((wxOpencvApp *)osgApp)->Fenetre(id);
-            wxTreeItemId noeud = AppendItem(idParent, fId->GetTitle(),-1,-1, new InfoNoeud(fId->GetTitle() ,fId,idParent));
-            std::map<std::string, ParametreOperation>::iterator it;
-            for (it = fId->ImAcq()->ListeOpAttribut()->begin(); it != fId->ImAcq()->ListeOpAttribut()->end(); it++)
-            {
-                fenAlgo.get()->AjouterEtape(nbEtape, &it->second, id,noeud);
-                nbEtape++;
-
-            }
-
-            if (fId)
-                PileCalcul(noeud, fId);
+            wxString n(it->second.nomOperation);
+            wxTreeItemId idOp = AppendItem(id, n, -1, -1, new InfoNoeud(n, &it->second,nbEtape, id));
+            fenAlgo.get()->AjouterEtape(nbEtape, &it->second, f->IdFenetre(),id);
+            nbEtape++;
         }
+        if (!f->OrigineImage()->nomOperation.empty())
+            PileCalcul(id, f->OrigineImage());
+        /*
         wxString n(f->OrigineImage()->nomOperation);
         wxTreeItemId id = AppendItem(idParent, n, -1,-1, new InfoNoeud(n, f->OrigineImage(),nbEtape,idParent));
         int nbParam = f->OrigineImage()->intParam.size();
@@ -863,6 +866,33 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
             nbParamMax = nbParam;
         fenAlgo.get()->AjouterEtape(nbEtape, f->OrigineImage(), f->IdFenetre(), id);
         nbEtape++;
+        */
+
+    }
+}
+
+void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, ParametreOperation *pOCV)
+{
+
+    if (pOCV != NULL)
+    {
+        wxString n(pOCV->nomOperation);
+        wxTreeItemId id = AppendItem(idParent, n, -1, -1, new InfoNoeud(n, pOCV, nbEtape, idParent));
+        int nbParam = pOCV->intParam.size();
+        nbParam += pOCV->doubleParam.size();
+        nbParam += 2 * pOCV->pointParam.size();
+        nbParam += 2 * pOCV->sizeParam.size();
+        if (nbParamMax<nbParam)
+            nbParamMax = nbParam;
+        fenAlgo.get()->AjouterEtape(nbEtape, pOCV, -1, id);
+        nbEtape++;
+        for (int i = 0; i<pOCV->nbOperande; i++)
+        {
+            int idF = pOCV->indOpFenetre[i];
+            FenetrePrincipale *fId = ((wxOpencvApp *)osgApp)->Fenetre(idF);
+            if (fId)
+                PileCalcul(id, fId);
+        }
 
     }
 }
@@ -1266,7 +1296,7 @@ void ArboCalcul::OnRMouseDClick(wxMouseEvent& event)
         InfoNoeud *item = (InfoNoeud *)GetItemData(id);
         if (item)
         {
-            wxLogMessage(wxT("Item '%s' under mouse"), item->GetDesc());
+            wxLogMessage(wxT("Item '%s' under mouse"), item->Operation()->nomOperation);
         }
     }
 
@@ -1778,7 +1808,7 @@ void FenetreInfoOperation::OnKeyDown(wxKeyEvent &)
 
 void FenetreInfoOperation::OnClose(wxCloseEvent& event)
 {
-    fenMere->RAZFenAlgo();
+    fenMere->RAZGrapheOperation();
 
 }
 
@@ -1847,28 +1877,80 @@ void FenetreInfoOperation::ExecuterOperation(int indOperation)
     ImageInfoCV **im = NULL;
     ParametreOperation *pOCV = listeOp[indOperation].first;
 
-    std::map<ParametreOperation *, wxTreeItemId & >::iterator w = noeuds.find( pOCV);
-    
-    while (w!=noeuds.end()) 
+    std::map<ParametreOperation *, wxTreeItemId  >::iterator w = noeuds.find( pOCV);
+    std::vector<ImageInfoCV*>r;
+    if (w == noeuds.end())
+        return;
+    wxTreeItemId noeud=w->second;
+    while (noeud != arbre->GetRootItem()) 
     {
         if (pOCV != NULL)
         {
             if (app->VerifImagesExiste(pOCV))
             {
 
+                wxTreeItemId t = noeud;
+                InfoNoeud *item = (InfoNoeud *)arbre->GetItemData(t);
+                t = item->getParent();
+                item = (InfoNoeud *)arbre->GetItemData(t);
+                if (item )
+                {
+                    app->DefOperateurImage(wxString(pOCV->nomOperation));
+                    for (int i = 0; i < pOCV->nbOperande; i++)
+                    {
+                        int indFen = app->RechercheFenetre(pOCV->op[i]);
+                        if (indFen < 0)
+                        {
+                            wxMessageBox(_("Previous image is closed?"), _("Problem"), wxOK);
+                            return;
+                        }
+                        else
+                           app->DefOperandeN(pOCV->op[i], indFen);
+                    }
+                    r = pOCV->ExecuterOperation();
+                    if (r.size() != 0)
+                    {
+                        item = (InfoNoeud *)arbre->GetItemData(t);
+                        FenetrePrincipale *f=item->FenetrePrincipale();
+
+
+                        if (f && f->ImAcq() != r[0])
+                            f->AssosierImage(r[0]);
+                        f->DynamiqueAffichage();
+
+                        f->NouvelleImage();
+                        f->MAJNouvelleImage();
+                        if (f->ImgStat())
+                        {
+                            f->ImgStat()->Plot(true);
+                            f->ImgStat()->MAJOnglet(-1);
+                        }
+                        f->DefHistorique();
+                        noeud = item->getParent();
+                        if (noeud && noeud != arbre->GetRootItem())
+                        {
+                            InfoNoeud *item = (InfoNoeud *)arbre->GetItemData(noeud);
+                            pOCV = item->Operation();
+                        }
+                        else
+                        {
+                            pOCV = NULL;
+                            noeud = arbre->GetRootItem();
+                        }
+                    }
+                }
+                else
+                {
+                    pOCV = NULL;
+                    noeud = arbre->GetRootItem();
+                }
             }
-            wxTreeItemId &t = w->second;
-            InfoNoeud *item = (InfoNoeud *)arbre->GetItemData(t);
-            if (item && item->Operation())
+            else
             {
-                pOCV = item->Operation();
-            }
-            else
                 pOCV = NULL;
-            if (pOCV)
-                w = noeuds.find(pOCV);
-            else
-                w = noeuds.end();
+                noeud = arbre->GetRootItem();
+            }
+
         }
 
     } 

@@ -59,6 +59,7 @@ public:
     ParametreOperation *Operation() { return pOCV; };
     int IndiceOnglet() { return indOnglet; };
     FenetrePrincipale *FenetrePrincipale() { return fen; };
+    wxTreeItemId getParent() { return res; };
 };
 
 class FenetreInfoOperation
@@ -77,7 +78,7 @@ private:
     std::vector<DomaineParametreOp<cv::Point>*> 		                paramSouris;	/*<! Spin modifiable par la souris */
     std::vector<wxWindow *> 		                                    ongletSouris;	/*<! Spin modifiable par la souris */
     std::map<wxSpinCtrlDouble*, DragShape *> 		                    formeSouris;	/*<! Spin modifiable par la souris et forme*/
-    std::map<ParametreOperation * ,wxTreeItemId & > noeuds;
+    std::map<ParametreOperation * ,wxTreeItemId  > noeuds;
     ArboCalcul *arbre;
 
 public:
@@ -226,6 +227,7 @@ protected:
 private:
     // Find the very last item in the tree.
     void PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f);
+    void PileCalcul(const wxTreeItemId & idParent, ParametreOperation * pOCV);
     void DoResetBrokenStateImages(const wxTreeItemId& idParent,
         wxTreeItemIdValue cookie, int state);
 
@@ -257,6 +259,7 @@ public:
     // ctor and dtor
     GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, const wxString& title, int x, int y, int w, int h);
     virtual ~GrapheOperation();
+    void DefFenMere(FenetrePrincipale *f) { fenMere = f; };
 
     // menu callbacks
     void OnQuit(wxCommandEvent& event);
