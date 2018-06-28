@@ -69,7 +69,7 @@ private:
     void							*osgApp;
     std::map<wxWindow*, std::pair<wxString, int> >	listeOnglet;/*<! Onglet associé à chaque opération */
     std::vector<std::pair<ParametreOperation*, int> >		listeOp;	/*<! Onglet associé à chaque opération */
-    wxFrame *wFen;
+    wxPanel *wFen;
     int								nbParamMax;	/*<! Nombre de parametre maximum de l'ensemble de opérations */
     int								nbEtape;	/*<! Nombre d'étape nécessaire pour effectuer l'opération */
     wxNotebook						*classeur;	/*!< le classeur avec ses différents onglets*/
@@ -108,6 +108,7 @@ public:
     void SauverSequence(wxCommandEvent &evt);
     /*!< Sauvegarde des étapes comme séquence */
     void ComboBox(wxCommandEvent &evt);
+    std::vector<std::pair<ParametreOperation*,int>> FindOperande(ImageInfoCV * x);
     /*!<Sélection d'un parametre à l'aide de sa description */
     void OnTextValider(wxCommandEvent &w);
     void OnKeyDown(wxKeyEvent &);
@@ -263,6 +264,7 @@ public:
 
     // menu callbacks
     void OnQuit(wxCommandEvent& event);
+    void OnClose(wxCloseEvent & event);
     void OnClearLog(wxCommandEvent& event);
 
     void OnTogButtons(wxCommandEvent& event)

@@ -188,6 +188,16 @@ GrapheOperation::~GrapheOperation()
 #endif // wxUSE_LOG
 }
 
+void GrapheOperation::OnQuit(wxCommandEvent& WXUNUSED(event))
+{
+    Close(true);
+}
+
+void GrapheOperation::OnClose(wxCloseEvent& event)
+{
+    fenMere->RAZGrapheOperation();
+}
+
 void GrapheOperation::CreateTreeWithDefStyle()
 {
     long style = wxTR_DEFAULT_STYLE |
@@ -272,10 +282,6 @@ void GrapheOperation::Resize()
 
 }
 
-void GrapheOperation::OnQuit(wxCommandEvent& WXUNUSED(event))
-{
-    Close(true);
-}
 
 
 void GrapheOperation::OnClearLog(wxCommandEvent& WXUNUSED(event))
@@ -737,8 +743,8 @@ void ArboCalcul::Installation()
     FenetrePrincipale *f = fenMere;
     f->GetTitle();
     wxTreeItemId rootId = AddRoot(f->GetTitle(),-1, -1,new InfoNoeud(f->GetTitle(),f,NULL));
+    nbParamMax = 30;
     PileCalcul(rootId, f);
-    nbParamMax = 2 * (nbParamMax + 2);
 
 }
 
@@ -878,12 +884,6 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, ParametreOperation *pO
     {
         wxString n(pOCV->nomOperation);
         wxTreeItemId id = AppendItem(idParent, n, -1, -1, new InfoNoeud(n, pOCV, nbEtape, idParent));
-        int nbParam = pOCV->intParam.size();
-        nbParam += pOCV->doubleParam.size();
-        nbParam += 2 * pOCV->pointParam.size();
-        nbParam += 2 * pOCV->sizeParam.size();
-        if (nbParamMax<nbParam)
-            nbParamMax = nbParam;
         fenAlgo.get()->AjouterEtape(nbEtape, pOCV, -1, id);
         nbEtape++;
         for (int i = 0; i<pOCV->nbOperande; i++)
@@ -1325,12 +1325,12 @@ FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale
     int hMax = 0, lMax = 0;
     fenMere = frame;
     osgApp = osg;
-    wFen = t;
+    wFen = t->Panel();
     classeur = t->Classeur();
     arbre = NULL;
     FenetrePrincipale *f = fenMere;
     nbEtape = 0;
-    nbParamMax = 0;
+    nbParamMax = 30;
     t->Bind(wxEVT_SPINCTRLDOUBLE, &FenetreInfoOperation::OnSpinReel, this);
     t->Bind(wxEVT_COMMAND_COMBOBOX_SELECTED, &FenetreInfoOperation::ComboBox, this);
     t->Bind(wxEVT_TEXT_ENTER, &FenetreInfoOperation::OnTextValider, this);
@@ -1869,6 +1869,21 @@ void FenetreInfoOperation::ComboBox(wxCommandEvent &w)
 
 }
 
+std::vector<std::pair<ParametreOperation*, int>> FenetreInfoOperation::FindOperande(ImageInfoCV *x)
+{
+    std::map<ParametreOperation *, wxTreeItemId  >::iterator w = noeuds.begin();
+    std::vector<std::pair<ParametreOperation*,int>> p;
+    for (auto n : noeuds)
+    {
+        for (int i = 0;i<n.first->nbOperande;i++)
+            if (n.first->op[i] == x)
+            {
+                p.push_back(std::make_pair(n.first, i));
+            }
+    }
+    return p;
+}
+
 void FenetreInfoOperation::ExecuterOperation(int indOperation)
 {
     if (!osgApp)
@@ -1912,8 +1927,11 @@ void FenetreInfoOperation::ExecuterOperation(int indOperation)
                     {
                         item = (InfoNoeud *)arbre->GetItemData(t);
                         FenetrePrincipale *f=item->FenetrePrincipale();
-
-
+                        std::vector<std::pair<ParametreOperation*, int>> pl=FindOperande(f->ImAcq());
+                        for (auto p : pl)
+                        {
+                            p.first->op[p.second] = r[0];
+                        }
                         if (f && f->ImAcq() != r[0])
                             f->AssosierImage(r[0]);
                         f->DynamiqueAffichage();
