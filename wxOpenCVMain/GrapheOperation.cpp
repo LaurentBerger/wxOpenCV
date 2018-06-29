@@ -32,7 +32,7 @@ static const int NUM_LEVELS = 2;
 wxBEGIN_EVENT_TABLE(GrapheOperation, wxFrame)
 EVT_IDLE(GrapheOperation::OnIdle)
 EVT_SIZE(GrapheOperation::OnSize)
-
+EVT_CLOSE(GrapheOperation::OnClose)
 MENU_LINK(Quit)
 MENU_LINK(ClearLog)
 
@@ -182,7 +182,8 @@ GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, con
 
 GrapheOperation::~GrapheOperation()
 {
-    fenMere->RAZGrapheOperation();
+    if (fenMere)
+        fenMere->RAZGrapheOperation();
 #if wxUSE_LOG
     delete wxLog::SetActiveTarget(NULL);
 #endif // wxUSE_LOG
@@ -195,7 +196,9 @@ void GrapheOperation::OnQuit(wxCommandEvent& WXUNUSED(event))
 
 void GrapheOperation::OnClose(wxCloseEvent& event)
 {
-    fenMere->RAZGrapheOperation();
+    if (fenMere)
+        fenMere->RAZGrapheOperation();
+    wxFrame::OnCloseWindow(event);
 }
 
 void GrapheOperation::CreateTreeWithDefStyle()

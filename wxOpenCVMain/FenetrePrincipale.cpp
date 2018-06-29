@@ -1146,7 +1146,10 @@ if (cam!=NULL )
 		}
 }
 if (fenOperation)
+{
     fenOperation->DefFenMere(NULL);
+    fenOperation->OnClose(event);
+}
 if (courbeVideo)
     courbeVideo->DefFenMere(NULL);
 if (osgApp && !osgApp->Quitter())
