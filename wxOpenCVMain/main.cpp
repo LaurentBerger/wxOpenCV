@@ -545,7 +545,8 @@ wxIcon icon;
 wxBitmap b(f->ImageAffichee()->Scale(64,64));
 icon.CopyFromBitmap(b);
 f->SetIcon(icon);
-
+wxIcon ic2 = f->GetIcon();
+ic2.GetDepth();
 }
 
 

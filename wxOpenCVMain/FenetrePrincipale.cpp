@@ -371,6 +371,11 @@ nomImageQuadrique=sd;
 
 void FenetrePrincipale::InitIHM()
 {
+    wxIcon icon;
+    wxBitmap b(ImageAffichee()->Scale(64, 64));
+    icon.CopyFromBitmap(b);
+    SetIcon(icon);
+
 //osgApp->Outils()->OuvertureOngletCouleur(modeMoyenne,indFiltreMoyenne);
 //osgApp->ImgStat()->MAJInfo(9,nomImageBiais);
 //osgApp->ImgStat()->MAJInfo(11,nomImageTache);

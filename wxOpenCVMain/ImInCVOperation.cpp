@@ -585,7 +585,7 @@ return r;
  * @function ScharrModule
  * @brief Module du gradient Scharr d'une image im1 
  */
-std::vector<ImageInfoCV *>ImageInfoCV::ScharrModule(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
+std::vector<ImageInfoCV *>ImageInfoCV::ModuleGradientScharr(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
 UMat	imx ;
@@ -635,6 +635,88 @@ std::vector<ImageInfoCV	*> r;
 r.push_back(im);
 return r;
 }
+
+/**
+* @function Module du gradient 
+* @brief Module du gradient sobel d'une image im1
+*/
+std::vector<ImageInfoCV *>ImageInfoCV::ModuleGradient(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
+{
+    switch (pOCV->intParam["moduleGradient"].valeur) {
+    case 0:
+        return ModuleGradientSobel(op, pOCV);
+        break;
+    case 1:
+        return ModuleGradientScharr(op, pOCV);
+        break;
+    case 2:
+        return ModuleGradientDeriche(op, pOCV);
+        break;
+    case 3:
+        return ModuleGradientPaillou(op, pOCV);
+        break;
+
+    }
+    std::vector<ImageInfoCV	*> r;
+    return r;
+}
+
+
+/**
+* @function Module du gradient Sobel
+* @brief Module du gradient sobel d'une image im1
+*/
+std::vector<ImageInfoCV *>ImageInfoCV::ModuleGradientSobel(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
+{
+    ImageInfoCV	*im = new ImageInfoCV;
+    UMat	imx;
+    UMat	imy;
+    UMat	imAbsx;
+    UMat	imAbsy;
+
+    cv::Sobel(*op[0], imx, pOCV->intParam["ddepth"].valeur, 1, 0, pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
+    cv::Sobel(*op[0], imy, pOCV->intParam["ddepth"].valeur, 0, 1, pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
+    absdiff(imx, cv::Scalar::all(0), imAbsx);
+    absdiff(imy, cv::Scalar::all(0), imAbsy);
+    addWeighted(imAbsx, 0.5, imAbsy, 0.5, 0, *im);
+
+    std::vector<ImageInfoCV	*> r;
+    r.push_back(im);
+    return r;
+}
+
+/**
+* @function SobelX
+* @brief Sobel d'une image im1 
+*/
+std::vector<ImageInfoCV *>ImageInfoCV::SobelX(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
+{
+    ImageInfoCV	*im = new ImageInfoCV;
+
+    cv::Sobel(*op[0], *im, pOCV->intParam["ddepth"].valeur, 1, 0, pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
+
+    std::vector<ImageInfoCV	*> r;
+    r.push_back(im);
+    return r;
+}
+
+
+/**
+* @function SobelY
+* @brief Sobel Y d'une image im1 
+*/
+std::vector<ImageInfoCV *>ImageInfoCV::SobelY(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
+{
+    ImageInfoCV	*im = new ImageInfoCV;
+
+    cv::Sobel(*op[0], *im, pOCV->intParam["ddepth"].valeur, 0, 1,
+        pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
+
+    std::vector<ImageInfoCV	*> r;
+    r.push_back(im);
+    return r;
+}
+
 
 /**
  * @function ScharrModule

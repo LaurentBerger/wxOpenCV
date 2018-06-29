@@ -306,6 +306,10 @@ listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to BGR (NV12)"
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to Lab").ToStdString(), cv::COLOR_BGR2Lab));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Lab to BGR").ToStdString(), cv::COLOR_Lab2BGR));
 
+listeParam["gradientFilter"].insert(std::pair<string, int>(_("Scharr filter").ToStdString(), 0));
+listeParam["gradientFilter"].insert(std::pair<string, int>(_("Sobel filter").ToStdString(), 1));
+listeParam["gradientFilter"].insert(std::pair<string, int>(_("Deriche filter").ToStdString(), 2));
+listeParam["gradientFilter"].insert(std::pair<string, int>(_("Paillou").ToStdString(), 3));
 
 
 
@@ -1243,37 +1247,71 @@ if (s == "paillou_y")
     xx.listeOperation.insert(make_pair(s, *this));
 }
 
-if (s == "scharr_mod")
-	{
-	nbImageRes=1;
+if (s == "mod_gradient")
+{
+    nbImageRes = 1;
     nbOperande = 1;
     nomOperation = s;
-	intParam["ddepth"]=DomaineParametreOp<int>(-1,-1,CV_32F,1);
-	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
-	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
-	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+    doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
+    doubleParam["delta"] = DomaineParametreOp<double>(0, 0.0, 1000, 1);
+    intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
+    intParam["gradientFilter"] = DomaineParametreOp<int>(0, 0, 3, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "scharr_x")
-	{
-	nbImageRes=1;
+{
+    nbImageRes = 1;
     nbOperande = 1;
     intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
-	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
-	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
-	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	nomOperation=s;
+    doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
+    doubleParam["delta"] = DomaineParametreOp<double>(0, 0.0, 1000, 1);
+    intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
+    nomOperation = s;
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "scharr_y")
-	{
-	nbImageRes=1;
+{
+    nbImageRes = 1;
     nbOperande = 1;
     intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
-	doubleParam["scale"]=DomaineParametreOp<double>(1,0.01,10,0.1);
-	doubleParam["delta"]=DomaineParametreOp<double>(0,0.0,1000,1);
-	intParam["borderType"]=DomaineParametreOp<int>(cv::BORDER_CONSTANT,cv::BORDER_CONSTANT,cv::BORDER_WRAP,1);
-	nomOperation=s;
+    doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
+    doubleParam["delta"] = DomaineParametreOp<double>(0, 0.0, 1000, 1);
+    intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
+    nomOperation = s;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "sobel_mod")
+{
+    nbImageRes = 1;
+    nbOperande = 1;
+    nomOperation = s;
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+    doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
+    doubleParam["delta"] = DomaineParametreOp<double>(0, 0.0, 1000, 1);
+    intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "sobel_x")
+{
+    nbImageRes = 1;
+    nbOperande = 1;
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+    doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
+    doubleParam["delta"] = DomaineParametreOp<double>(0, 0.0, 1000, 1);
+    intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
+    nomOperation = s;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
+if (s == "sobel_y")
+{
+    nbImageRes = 1;
+    nbOperande = 1;
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+    doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
+    doubleParam["delta"] = DomaineParametreOp<double>(0, 0.0, 1000, 1);
+    intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
+    nomOperation = s;
     xx.listeOperation.insert(make_pair(s, *this));
 }
 if (s == "laplacian")
@@ -2078,27 +2116,55 @@ if (s=="morph_gradient")
 	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=260&zoom=70,250,100";
 	return true;
 	}
-if (s=="scharr_mod")
-	{
-	operateur = &ImageInfoCV::ScharrModule;
-	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
-	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
-	return true;
-	}
-if (s=="scharr_x")
-	{
-	operateur = &ImageInfoCV::ScharrX;
-	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
-	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
-	return true;
-	}
-if (s=="scharr_y")
-	{
-	operateur = &ImageInfoCV::ScharrY;
-	lienHtml="http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
-	refPDF="http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
-	return true;
-	}
+if (s == "mod_gradient")
+{
+    operateur = &ImageInfoCV::ModuleGradient;
+    lienHtml = "http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+    return true;
+}
+if (s == "scharr_mod")
+{
+    operateur = &ImageInfoCV::ModuleGradientScharr;
+    lienHtml = "http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+    return true;
+}
+if (s == "scharr_x")
+{
+    operateur = &ImageInfoCV::ScharrX;
+    lienHtml = "http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+    return true;
+}
+if (s == "scharr_y")
+{
+    operateur = &ImageInfoCV::ScharrY;
+    lienHtml = "http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+    return true;
+}
+if (s == "sobel_mod")
+{
+    operateur = &ImageInfoCV::ModuleGradientScharr;
+    lienHtml = "http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+    return true;
+}
+if (s == "sobel_x")
+{
+    operateur = &ImageInfoCV::SobelX;
+    lienHtml = "https://docs.opencv.org/trunk/d4/d86/group__imgproc__filter.html#gacea54f142e81b6758cb6f375ce782c8d";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+    return true;
+}
+if (s == "sobel_y")
+{
+    operateur = &ImageInfoCV::SobelY;
+    lienHtml = "https://docs.opencv.org/trunk/d4/d86/group__imgproc__filter.html#gacea54f142e81b6758cb6f375ce782c8d";
+    refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
+    return true;
+}
 if (s=="deriche_mod")
 	{
 	operateur = &ImageInfoCV::ModuleGradientDeriche;

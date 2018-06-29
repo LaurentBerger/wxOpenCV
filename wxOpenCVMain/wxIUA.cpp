@@ -251,7 +251,7 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
 
 
     CONSTRUCTEUR_CMD(bouton, ID_CONVOLUTION, convolution_xpm, _("Convolution"), "filter2d", 3);
-    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_MOD, gradient_mod_xpm,_("Gradient modulus"), "scharr_mod", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_MOD, gradient_mod_xpm,_("Gradient modulus"), "mod_gradient", 3);
     CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_X, gradient_x_xpm, _("Gradient X"), "scharr_x", 3);
     CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_Y, gradient_y_xpm, _("Gradient Y"), "scharr_y", 3);
     CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_PAILLOU_MOD, gradient_modDeriche_xpm,_("Gradient modulus(PAILLOU)"), "paillou_mod", 3);

@@ -14,6 +14,8 @@
 #include "../sample.xpm"
 #endif
 
+//#undef wxUSE_LOG
+
 static const int NUM_CHILDREN_PER_LEVEL = 5;
 static const int NUM_LEVELS = 2;
 
@@ -745,7 +747,10 @@ void ArboCalcul::Installation()
     wxString n;
     FenetrePrincipale *f = fenMere;
     f->GetTitle();
-    wxTreeItemId rootId = AddRoot(f->GetTitle(),-1, -1,new InfoNoeud(f->GetTitle(),f,NULL));
+    listeImage.Add(f->GetIcon());
+    listeImage.Add(f->GetIcon());
+    SetImageList(&listeImage);
+    wxTreeItemId rootId = AddRoot(f->GetTitle(),0, 1,new InfoNoeud(f->GetTitle(),f,NULL));
     nbParamMax = 30;
     PileCalcul(rootId, f);
 
@@ -849,11 +854,13 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
     if (f )
     {
         wxString n(f->GetTitle());
+        listeImage.Add(f->GetIcon());
+        listeImage.Add(f->GetIcon());
         wxTreeItemId id;
         if (GetRootItem() == idParent)
             id = idParent;
         else
-            id = AppendItem(idParent, n, -1, -1, new InfoNoeud(n, f, idParent));
+            id = AppendItem(idParent, n, listeImage.GetImageCount()-2, listeImage.GetImageCount() - 1, new InfoNoeud(n, f, idParent));
         std::map<std::string, ParametreOperation>::iterator it;
         for (it = f->ImAcq()->ListeOpAttribut()->begin(); it != f->ImAcq()->ListeOpAttribut()->end(); it++)
         {

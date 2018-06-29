@@ -250,7 +250,7 @@ FenetreAlgo::FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const 
     int hMax = 0, lMax = 0;
     fenMere = frame;
 
-    wFen = new wxFrame();
+    wFen = new wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxCAPTION);
     classeur = new wxNotebook(wFen, wxID_ANY);
     FenetrePrincipale *f = fenMere;
     nbEtape = 1;
