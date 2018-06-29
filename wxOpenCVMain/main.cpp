@@ -542,7 +542,8 @@ f->NouvelleImage();
 f->MAJNouvelleImage();
 f->RecupDerniereConfig();
 wxIcon icon;
-wxBitmap b(f->ImageAffichee()->Scale(64,64));
+//wxBitmap b(f->ImageAffichee()->Scale(64, 64));
+wxBitmap b(f->ImageAffichee()->Scale(16, 16));
 icon.CopyFromBitmap(b);
 f->SetIcon(icon);
 wxIcon ic2 = f->GetIcon();
@@ -553,14 +554,32 @@ ic2.GetDepth();
 
 void wxOpencvApp::DefOperateurImage(wxString &s)
 {
-ImageInfoCV xx;
-pOCV.doubleParam.clear();
-pOCV.intParam.clear();
-pOCV.sizeParam.clear();
-pOCV.pointParam.clear();
-if (!pOCV.InitOperation((string)s.c_str()))
-	wxMessageBox(_("Undefined operation"));
+    ImageInfoCV xx;
+    pOCV.doubleParam.clear();
+    pOCV.intParam.clear();
+    pOCV.sizeParam.clear();
+    pOCV.pointParam.clear();
+    if (!pOCV.InitOperation((string)s.c_str()))
+        wxMessageBox(_("Undefined operation"));
 
+}
+
+void wxOpencvApp::DefBitmapOperateur(wxBitmap &b, wxString &s)
+{
+    if (listeBitmap.find((string)s.c_str()) == listeBitmap.end())
+    {
+        listeBitmap.insert(pair<string,wxBitmap>(s.c_str(), b));
+    }
+
+}
+
+wxBitmap wxOpencvApp::BitmapOperateur(wxString &s)
+{
+    if (listeBitmap.find((string)s.c_str()) == listeBitmap.end())
+    {
+        return wxBitmap();
+    }
+    return listeBitmap[(string)s.c_str()];
 }
 
 

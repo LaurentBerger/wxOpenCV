@@ -92,7 +92,8 @@ char	camAndor;	/*!< égal à 1 si une caméra Andor est branchée */
 char	camOpenCV;	/*!< égal à 1 si une caméra est détectée par OpenCv */
 
 
-std::map <int ,EnvFenetre *>	listeFenetre;
+std::map <int, EnvFenetre *>	listeFenetre;
+std::map <std::string , wxBitmap >	listeBitmap;
 
 int					nbFenetre;
 int					indFenetre;
@@ -123,6 +124,8 @@ void RetirerListe(FenetrePrincipale *);
 
 // Méthodes liées à des opérations sur les images
 void DefOperateurImage(wxString &);
+void DefBitmapOperateur(wxBitmap & b, wxString &);
+wxBitmap BitmapOperateur(wxString & s);
 void DefEtapeOperation(int x){pOCV.indEtape=x;};
 void DefOperande1(ImageInfoCV* im,int i=-1);
 void DefOperande2(ImageInfoCV* im,int i=-1);

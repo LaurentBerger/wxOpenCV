@@ -1317,6 +1317,7 @@ void InterfaceAvance::SelectOperation(wxCommandEvent& evt)
     }
 
     ((wxOpencvApp*)osgApp)->DefOperateurImage(bouton[evt.GetId()].chaineOperation);
+    ((wxOpencvApp*)osgApp)->DefBitmapOperateur(bouton[evt.GetId()].bitmap, bouton[evt.GetId()].chaineOperation);
     ((wxOpencvApp*)osgApp)->DefPointeurSouris(1,1);
 
 }

@@ -141,7 +141,7 @@ private:
     wxTreeItemId            m_draggedItem;             // item being dragged right now
     bool                    m_alternateImages;
     bool                    m_alternateStates;
-    wxImageList             listeImage;
+    std::shared_ptr<wxImageList>             listeImage;
     std::shared_ptr<FenetreInfoOperation> fenAlgo;
     int             nbEtape;
     int             nbParamMax;
