@@ -329,6 +329,10 @@ if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 		pOCV->sizeParam[nom].valeur.height=((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
 		}
 	}
+if (nom == "gradientFilter")
+{
+    app->DefTypeGradient(pOCV->intParam[nom].valeur);
+}
 if (fenMere)
 	ExecuterOperation(ind);
 

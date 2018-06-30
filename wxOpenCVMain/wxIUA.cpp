@@ -53,12 +53,18 @@ enum
     ID_GRADIENT_MOD,
     ID_GRADIENT_X,
     ID_GRADIENT_Y,
-    ID_GRADIENT_DERICHE_MOD,
-    ID_GRADIENT_DERICHE_X,
-    ID_GRADIENT_DERICHE_Y,
-    ID_GRADIENT_PAILLOU_MOD,
-    ID_GRADIENT_PAILLOU_X,
-    ID_GRADIENT_PAILLOU_Y,
+    ID_GRADIENT_MOD_SOBEL,
+    ID_GRADIENT_X_SOBEL,
+    ID_GRADIENT_Y_SOBEL,
+    ID_GRADIENT_MOD_SCHARR,
+    ID_GRADIENT_X_SCHARR,
+    ID_GRADIENT_Y_SCHARR,
+    ID_GRADIENT_MOD_DERICHE,
+    ID_GRADIENT_X_DERICHE,
+    ID_GRADIENT_Y_DERICHE,
+    ID_GRADIENT_MOD_PAILLOU,
+    ID_GRADIENT_X_PAILLOU,
+    ID_GRADIENT_Y_PAILLOU,
 	ID_LAPLACIEN,
  	ID_LISMOY,
 	ID_LISGAU,
@@ -252,11 +258,8 @@ bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "ad
 
     CONSTRUCTEUR_CMD(bouton, ID_CONVOLUTION, convolution_xpm, _("Convolution"), "filter2d", 3);
     CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_MOD, gradient_mod_xpm,_("Gradient modulus"), "mod_gradient", 3);
-    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_X, gradient_x_xpm, _("Gradient X"), "scharr_x", 3);
-    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_Y, gradient_y_xpm, _("Gradient Y"), "scharr_y", 3);
-    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_PAILLOU_MOD, gradient_modDeriche_xpm,_("Gradient modulus(PAILLOU)"), "paillou_mod", 3);
-    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_PAILLOU_X, gradient_xDeriche_xpm, _("Gradient X(PAILLOU)"), "paillou_x", 3);
-    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_PAILLOU_Y, gradient_yDeriche_xpm, _("Gradient Y(PAILLOU)"), "paillou_y", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_X, gradient_x_xpm, _("Gradient X"), "gradient_x", 3);
+    CONSTRUCTEUR_CMD(bouton, ID_GRADIENT_Y, gradient_y_xpm, _("Gradient Y"), "gradient_y", 3);
     CONSTRUCTEUR_CMD(bouton, ID_LAPLACIEN, laplacien_xpm, _("Laplacian"), "laplacian", 3);
     CONSTRUCTEUR_CMD(bouton, ID_LISMOY, LisMoy_xpm, _("Blur (mean)"), "blur", 3);
     CONSTRUCTEUR_CMD(bouton, ID_LISMED, LisMed_xpm, _("Blur (median filter)"), "medianblur", 3);
@@ -364,6 +367,8 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
     if (event.GetId()!=ID_DNN)
     {
         FenetreAlgo *f = new FenetreAlgo(NULL, _("Operation"), wxDefaultPosition, wxDefaultSize, xx.listeOperation[s], wxDEFAULT_FRAME_STYLE);
+        f->DefFenMere(NULL);
+        f->DefOSGApp(osgApp);
     }
     else
     {
@@ -1315,9 +1320,95 @@ void InterfaceAvance::SelectOperation(wxCommandEvent& evt)
 	    }
 	    break;
     }
-
-    ((wxOpencvApp*)osgApp)->DefOperateurImage(bouton[evt.GetId()].chaineOperation);
-    ((wxOpencvApp*)osgApp)->DefBitmapOperateur(bouton[evt.GetId()].bitmap, bouton[evt.GetId()].chaineOperation);
+    int opeSelec = evt.GetId();
+    if (bouton[evt.GetId()].chaineOperation == "mod_gradient" ||
+        bouton[evt.GetId()].chaineOperation == "gradient_x" ||
+        bouton[evt.GetId()].chaineOperation == "gradient_y")
+    {
+        int type=((wxOpencvApp*)osgApp)->TypeGradient();
+        std::string nomOperation;
+        switch (type) {
+        case ImageInfoCV::SELECT_SOBEL:
+            nomOperation = "sobel_";
+            if (bouton[evt.GetId()].chaineOperation == "mod_gradient")
+            {
+                opeSelec = ID_GRADIENT_MOD_SOBEL;
+                nomOperation += "mod";
+            }
+            if (bouton[evt.GetId()].chaineOperation == "gradient_x")
+            {
+                opeSelec = ID_GRADIENT_X_SOBEL;
+                nomOperation += "x";
+            }
+            if (bouton[evt.GetId()].chaineOperation == "gradient_y")
+            {
+                opeSelec = ID_GRADIENT_Y_SOBEL;
+                nomOperation += "y";
+            }
+            break;
+        case ImageInfoCV::SELECT_SCHARR:
+            nomOperation = "scharr_";
+            if (bouton[evt.GetId()].chaineOperation == "mod_gradient")
+            {
+                opeSelec = ID_GRADIENT_MOD_SCHARR;
+                nomOperation += "mod";
+            }
+            if (bouton[evt.GetId()].chaineOperation == "gradient_x")
+            {
+                opeSelec = ID_GRADIENT_X_SCHARR;
+                nomOperation += "x";
+            }
+            if (bouton[evt.GetId()].chaineOperation == "gradient_y")
+            {
+                opeSelec = ID_GRADIENT_Y_SCHARR;
+                nomOperation += "y";
+            }
+            break;
+        case ImageInfoCV::SELECT_DERICHE:
+            nomOperation = "deriche_";
+            if (bouton[evt.GetId()].chaineOperation == "mod_gradient")
+            {
+                opeSelec = ID_GRADIENT_MOD_DERICHE;
+                nomOperation += "mod";
+            }
+            if (bouton[evt.GetId()].chaineOperation == "gradient_x")
+            {
+                opeSelec = ID_GRADIENT_X_DERICHE;
+                nomOperation += "x";
+            }
+            if (bouton[evt.GetId()].chaineOperation == "gradient_y")
+            {
+                opeSelec = ID_GRADIENT_Y_DERICHE;
+                nomOperation += "y";
+            }
+            break;
+        case ImageInfoCV::SELECT_PAILLOU:
+            nomOperation = "paillou_";
+            if (bouton[evt.GetId()].chaineOperation == "mod_gradient")
+            {
+                opeSelec = ID_GRADIENT_MOD_PAILLOU;
+                nomOperation += "mod";
+            }
+            if (bouton[evt.GetId()].chaineOperation == "gradient_x")
+            {
+                opeSelec = ID_GRADIENT_X_PAILLOU;
+                nomOperation += "x";
+            }
+            if (bouton[evt.GetId()].chaineOperation == "gradient_y")
+            {
+                opeSelec = ID_GRADIENT_Y_PAILLOU;
+                nomOperation += "y";
+            }
+            break;
+        }
+        ((wxOpencvApp*)osgApp)->DefOperateurImage(wxString(nomOperation));
+        ((wxOpencvApp*)osgApp)->DefBitmapOperateur(bouton[evt.GetId()].bitmap, wxString(nomOperation));
+    }
+    else
+    {
+        ((wxOpencvApp*)osgApp)->DefOperateurImage(bouton[evt.GetId()].chaineOperation);
+        ((wxOpencvApp*)osgApp)->DefBitmapOperateur(bouton[evt.GetId()].bitmap, bouton[opeSelec].chaineOperation);
+    }
     ((wxOpencvApp*)osgApp)->DefPointeurSouris(1,1);
 
 }

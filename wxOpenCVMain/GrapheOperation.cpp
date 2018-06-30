@@ -855,12 +855,11 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
     if (f )
     {
         wxString n(f->GetTitle());
-        wxIcon icon;
-        wxBitmap b(f->ImageAffichee()->Scale(16, 16));
-        icon.CopyFromBitmap(b);
+        wxIconBundle iconBundle = f->GetIcons();
+        wxIcon icon=iconBundle.GetIcon(wxSize(32, 32), wxIconBundle::FALLBACK_NEAREST_LARGER);
 
         listeImage.get()->Add(icon);
-        listeImage.get()->Add(b);
+        listeImage.get()->Add(icon);
         wxTreeItemId id;
         if (GetRootItem() == idParent)
             id = idParent;
@@ -900,13 +899,13 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, ParametreOperation *pO
         wxString n(pOCV->nomOperation);
         wxBitmap b = ((wxOpencvApp*)osgApp)->BitmapOperateur(wxString(pOCV->nomOperation));
         wxImage Image = b.ConvertToImage();
-        Image.Rescale(16, 16);
+        Image.Rescale(32, 32);
         wxBitmap NewBitmap(Image);
         wxIcon icon;
         icon.CopyFromBitmap(NewBitmap);
 
         listeImage.get()->Add(icon);
-        listeImage.get()->Add(b);
+        listeImage.get()->Add(icon);
         wxTreeItemId id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, pOCV, nbEtape, idParent));
         fenAlgo.get()->AjouterEtape(nbEtape, pOCV, -1, id);
         nbEtape++;

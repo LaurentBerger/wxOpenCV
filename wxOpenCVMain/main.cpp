@@ -541,13 +541,18 @@ f->Show(true);
 f->NouvelleImage();
 f->MAJNouvelleImage();
 f->RecupDerniereConfig();
+wxBitmap b1(f->ImageAffichee()->Scale(64, 64));
+wxBitmap b2(f->ImageAffichee()->Scale(32, 32));
+wxBitmap b3(f->ImageAffichee()->Scale(16, 16));
 wxIcon icon;
-//wxBitmap b(f->ImageAffichee()->Scale(64, 64));
-wxBitmap b(f->ImageAffichee()->Scale(16, 16));
-icon.CopyFromBitmap(b);
-f->SetIcon(icon);
-wxIcon ic2 = f->GetIcon();
-ic2.GetDepth();
+icon.CopyFromBitmap(b1);
+wxIconBundle lotIcons(icon);
+icon.CopyFromBitmap(b2);
+lotIcons.AddIcon(icon);
+icon.CopyFromBitmap(b3);
+lotIcons.AddIcon(icon);
+
+f->SetIcons(lotIcons);
 }
 
 
@@ -688,13 +693,14 @@ return;
 // `Main program' equivalent, creating windows and returning main app frame
 bool wxOpencvApp::OnInit()
 {
-cv::ocl::setUseOpenCL(false);
+    cv::ocl::setUseOpenCL(false);
 
-bool b=false;
+    bool b=false;
 //b=wxUnsetEnv("PLPLOT_HOME");
 //b=wxUnsetEnv("PLPLOT_LIB");
 //b=wxUnsetEnv("PLPLOT_DRV_DIR");
 //	osg::Image *im=osgDB::readImageFile("F:\\Lib\\OpenSceneGraph-Data-3.0.0\\Images\\reflect.rgb");
+    typeGradient = 0;
 	numOpFaite=0;
 	numSeqOpe=0;
 	quitter=false;

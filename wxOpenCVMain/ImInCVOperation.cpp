@@ -674,8 +674,8 @@ std::vector<ImageInfoCV *>ImageInfoCV::ModuleGradientSobel(std::vector< ImageInf
     UMat	imAbsx;
     UMat	imAbsy;
 
-    cv::Sobel(*op[0], imx, pOCV->intParam["ddepth"].valeur, 1, 0, pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
-    cv::Sobel(*op[0], imy, pOCV->intParam["ddepth"].valeur, 0, 1, pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
+    cv::Sobel(*op[0], imx, pOCV->intParam["ddepth"].valeur, 1, 0, 3,pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
+    cv::Sobel(*op[0], imy, pOCV->intParam["ddepth"].valeur, 0, 1, 3,pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
     absdiff(imx, cv::Scalar::all(0), imAbsx);
     absdiff(imy, cv::Scalar::all(0), imAbsy);
     addWeighted(imAbsx, 0.5, imAbsy, 0.5, 0, *im);
@@ -693,7 +693,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::SobelX(std::vector< ImageInfoCV*> op, Par
 {
     ImageInfoCV	*im = new ImageInfoCV;
 
-    cv::Sobel(*op[0], *im, pOCV->intParam["ddepth"].valeur, 1, 0, pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
+    cv::Sobel(*op[0], *im, pOCV->intParam["ddepth"].valeur, 1, 0,3, pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
 
     std::vector<ImageInfoCV	*> r;
     r.push_back(im);
@@ -709,7 +709,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::SobelY(std::vector< ImageInfoCV*> op, Par
 {
     ImageInfoCV	*im = new ImageInfoCV;
 
-    cv::Sobel(*op[0], *im, pOCV->intParam["ddepth"].valeur, 0, 1,
+    cv::Sobel(*op[0], *im, pOCV->intParam["ddepth"].valeur, 0, 1,3,
         pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
 
     std::vector<ImageInfoCV	*> r;

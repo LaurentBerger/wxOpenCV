@@ -22,6 +22,8 @@
 #include "opencv2/core/ocl.hpp"
 #include "opencv2/dnn.hpp"
 
+
+
 typedef short CodeErreur;
 #define ERREUR OuiERREUR
 
@@ -52,6 +54,14 @@ class ImageInfoCV : public cv::UMat {
 // xxx bit de poids fort pour le nombre de canaux
 // 000 1 canal, 001 2 canaux, 010 3 canaux
 public :
+    enum {
+        SELECT_SOBEL = 0,
+        SELECT_SCHARR,
+        SELECT_DERICHE,
+        SELECT_PAILLOU
+    };
+
+
 static ImageInfoCV **op33;
 static ImageInfoCV **op55;
 static ImageInfoCV **op77;

@@ -306,10 +306,10 @@ listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Yuv to BGR (NV12)"
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("BGR to Lab").ToStdString(), cv::COLOR_BGR2Lab));
 listeParam["ColorSpaceCode"].insert(std::pair<string, int>(_("Lab to BGR").ToStdString(), cv::COLOR_Lab2BGR));
 
-listeParam["gradientFilter"].insert(std::pair<string, int>(_("Scharr filter").ToStdString(), 0));
-listeParam["gradientFilter"].insert(std::pair<string, int>(_("Sobel filter").ToStdString(), 1));
-listeParam["gradientFilter"].insert(std::pair<string, int>(_("Deriche filter").ToStdString(), 2));
-listeParam["gradientFilter"].insert(std::pair<string, int>(_("Paillou").ToStdString(), 3));
+listeParam["gradientFilter"].insert(std::pair<string, int>(_("Sobel filter").ToStdString(), ImageInfoCV::SELECT_SOBEL));
+listeParam["gradientFilter"].insert(std::pair<string, int>(_("Scharr filter").ToStdString(), ImageInfoCV::SELECT_SCHARR));
+listeParam["gradientFilter"].insert(std::pair<string, int>(_("Deriche filter").ToStdString(), ImageInfoCV::SELECT_DERICHE));
+listeParam["gradientFilter"].insert(std::pair<string, int>(_("Paillou").ToStdString(), ImageInfoCV::SELECT_PAILLOU));
 
 
 
@@ -1259,6 +1259,17 @@ if (s == "mod_gradient")
     intParam["gradientFilter"] = DomaineParametreOp<int>(0, 0, 3, 1);
     xx.listeOperation.insert(make_pair(s, *this));
 }
+if (s == "scharr_mod")
+{
+    nbImageRes = 1;
+    nbOperande = 1;
+    intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+    doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
+    doubleParam["delta"] = DomaineParametreOp<double>(0, 0.0, 1000, 1);
+    intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
+    nomOperation = s;
+    xx.listeOperation.insert(make_pair(s, *this));
+}
 if (s == "scharr_x")
 {
     nbImageRes = 1;
@@ -2146,7 +2157,7 @@ if (s == "scharr_y")
 }
 if (s == "sobel_mod")
 {
-    operateur = &ImageInfoCV::ModuleGradientScharr;
+    operateur = &ImageInfoCV::ModuleGradientSobel;
     lienHtml = "http://docs.opencv.org/modules/imgproc/doc/filtering.html#scharr";
     refPDF = "http://docs.opencv.org/opencv2refman.pdf#page=266&zoom=70,250,100";
     return true;

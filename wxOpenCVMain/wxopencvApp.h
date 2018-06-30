@@ -65,92 +65,95 @@ public:
 class wxOpencvApp : public wxApp
 {
 protected:
-wxLanguage	langue;							/*!< language choisi */
-wxLocale	locale;							/*!< locale we'll be using */
-wxFileConfig *configApp;					/*!< Fichier de configuration de l'application */
+    wxLanguage	langue;							/*!< language choisi */
+    wxLocale	locale;							/*!< locale we'll be using */
+    wxFileConfig *configApp;					/*!< Fichier de configuration de l'application */
 
-std::vector<ParametreOperation> listeOperation;		/*<! Liste des opérations individuelles */
-std::map <int,std::vector <ParametreOperation > > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
-int 	numOpFaite;								/*!< Nombre d'opération faites ou sauvgardées dans le fichier INI */
-int     numSeqOpe;								/*!< Nombre de séquence d'opérations faites ou sauvgardées dans le fichier INI */
-wxPoint posFenetre;
-char	utilisateurAbsent;
-bool	quitter;
-ServeurScilab		*serveur;
+    std::vector<ParametreOperation> listeOperation;		/*<! Liste des opérations individuelles */
+    std::map <int, std::vector <ParametreOperation > > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
+    int 	numOpFaite;								/*!< Nombre d'opération faites ou sauvgardées dans le fichier INI */
+    int     numSeqOpe;								/*!< Nombre de séquence d'opérations faites ou sauvgardées dans le fichier INI */
+    wxPoint posFenetre;
+    char	utilisateurAbsent;
+    bool	quitter;
+    ServeurScilab		*serveur;
 public:
-wxCriticalSection m_critsectWork;
+    wxCriticalSection m_critsectWork;
 
-private :
+private:
 #ifdef _DLL_DETECTION__
-wxDynamicLibrary *dllAndor;
-wxDynamicLibrary *dllplplot;
-wxDynamicLibrary *dllWXplplotdrv;
-wxDynamicLibrary *dllSVGplplotdrv;
+    wxDynamicLibrary *dllAndor;
+    wxDynamicLibrary *dllplplot;
+    wxDynamicLibrary *dllWXplplotdrv;
+    wxDynamicLibrary *dllSVGplplotdrv;
 #endif
 
-char	camAndor;	/*!< égal à 1 si une caméra Andor est branchée */
-char	camOpenCV;	/*!< égal à 1 si une caméra est détectée par OpenCv */
+    char	camAndor;	/*!< égal à 1 si une caméra Andor est branchée */
+    char	camOpenCV;	/*!< égal à 1 si une caméra est détectée par OpenCv */
 
 
-std::map <int, EnvFenetre *>	listeFenetre;
-std::map <std::string , wxBitmap >	listeBitmap;
+    std::map <int, EnvFenetre *>	listeFenetre;
+    std::map <std::string, wxBitmap >	listeBitmap;
 
-int					nbFenetre;
-int					indFenetre;
+    int					nbFenetre;
+    int					indFenetre;
 
-int					indPointeurSouris;		// Précise le type de cursuer
-int					modeSouris;				// utilisé pour la sélection d'image
+    int					indPointeurSouris;		// Précise le type de cursuer
+    int					modeSouris;				// utilisé pour la sélection d'image
 
-ControleCamera		*ctrlCamera;
-OutilsImage			*outils;
-void				*fSeqOpe;		// Fenetre permettant d'écécuter plusieurs séquences
-void				*fenOpe;		//  Fenetre pour définir plusieurs opérandes
+    ControleCamera		*ctrlCamera;
+    OutilsImage			*outils;
+    void				*fSeqOpe;		// Fenetre permettant d'écécuter plusieurs séquences
+    void				*fenOpe;		//  Fenetre pour définir plusieurs opérandes
 
-ParametreOperation pOCV;	/*!< parametre de l'opérateur Unaire */
+    ParametreOperation pOCV;	/*!< parametre de l'opérateur Unaire */
+    int typeGradient;           /*! 0 Sobel, 1 Scharr, 2 Deriche, 3 Paillou*/
 
 
-public :	
-wxOpencvApp() { langue = wxLANGUAGE_UNKNOWN; }
-bool OnInit();
-void Quitter(wxFrame *g);
-void Ouvrir(wxCommandEvent &);	/*!< Ouverture d'un document */	
-void InitFenAssociee(FenetrePrincipale *f); /*!< Ouvrir les fenetres associées à la fenetre principale */
+public:
+    wxOpencvApp() { langue = wxLANGUAGE_UNKNOWN; }
+    bool OnInit();
+    void Quitter(wxFrame *g);
+    void Ouvrir(wxCommandEvent &);	/*!< Ouverture d'un document */
+    void InitFenAssociee(FenetrePrincipale *f); /*!< Ouvrir les fenetres associées à la fenetre principale */
 
-void Video(wxCommandEvent &,int);
-void Enregistrer(wxCommandEvent& event);
+    void Video(wxCommandEvent &, int);
+    void Enregistrer(wxCommandEvent& event);
 
-void OuvertureOutils();
-void RetirerListe(FenetrePrincipale *);
+    void OuvertureOutils();
+    void RetirerListe(FenetrePrincipale *);
 
-// Méthodes liées à des opérations sur les images
-void DefOperateurImage(wxString &);
-void DefBitmapOperateur(wxBitmap & b, wxString &);
-wxBitmap BitmapOperateur(wxString & s);
-void DefEtapeOperation(int x){pOCV.indEtape=x;};
-void DefOperande1(ImageInfoCV* im,int i=-1);
-void DefOperande2(ImageInfoCV* im,int i=-1);
-void DefOperande3(ImageInfoCV* im,int i=-1);
-void DefOperandeN(ImageInfoCV* im,int i=-1);
-void SupOperandeN(ImageInfoCV* im,int i=-1);
-ParametreOperation *Operation(){return &pOCV;};
-void RAZOp(){pOCV.op.clear();pOCV.indOpFenetre.clear();pOCV.doubleParam.clear();pOCV.intParam.clear();};
-void DefParametreOCV(ParametreOperation &x){pOCV=x;};
-bool VerifImagesExiste(ParametreOperation *);
-bool Operateur(){return pOCV.operateur;} /*!< Vrai si opération unaire sélectionnée */
-ImageInfoCV *Op1(){return OpId(0);};
-ImageInfoCV *Op2(){return OpId(1);};
-ImageInfoCV *Op3(){return OpId(2);};
-ImageInfoCV *OpId(int id);
-int IndOpId(int id);
-int IndOp1(){return IndOpId(0);};
-int IndOp2(){return IndOpId(1);};
-int IndOp3(){return IndOpId(2);};
-int IdFenetreOp1pre();
-int NbOperande(){ return pOCV.nbOperande; };
-int NumSeqOpe(int *x=NULL){if (x!=NULL) numSeqOpe=*x;return numSeqOpe;};
-void AnnuleOp();
-std::map <int,std::vector <ParametreOperation > >  *TabSeqOperation(){return &tabOperation;}
-std::vector<ImageInfoCV*> ExecuterOperation(ParametreOperation * = NULL, bool noEvt = false);
+    // Méthodes liées à des opérations sur les images
+    void DefOperateurImage(wxString &);
+    void DefBitmapOperateur(wxBitmap & b, wxString &);
+    wxBitmap BitmapOperateur(wxString & s);
+    void DefEtapeOperation(int x) { pOCV.indEtape = x; };
+    void DefOperande1(ImageInfoCV* im, int i = -1);
+    void DefOperande2(ImageInfoCV* im, int i = -1);
+    void DefOperande3(ImageInfoCV* im, int i = -1);
+    void DefOperandeN(ImageInfoCV* im, int i = -1);
+    void SupOperandeN(ImageInfoCV* im, int i = -1);
+    ParametreOperation *Operation() { return &pOCV; };
+    void RAZOp() { pOCV.op.clear(); pOCV.indOpFenetre.clear(); pOCV.doubleParam.clear(); pOCV.intParam.clear(); };
+    void DefParametreOCV(ParametreOperation &x) { pOCV = x; };
+    void DefTypeGradient(int x) { typeGradient = x; };
+    int TypeGradient() { return typeGradient; };
+    bool VerifImagesExiste(ParametreOperation *);
+    bool Operateur(){return pOCV.operateur;} /*!< Vrai si opération unaire sélectionnée */
+    ImageInfoCV *Op1(){return OpId(0);};
+    ImageInfoCV *Op2(){return OpId(1);};
+    ImageInfoCV *Op3(){return OpId(2);};
+    ImageInfoCV *OpId(int id);
+    int IndOpId(int id);
+    int IndOp1(){return IndOpId(0);};
+    int IndOp2(){return IndOpId(1);};
+    int IndOp3(){return IndOpId(2);};
+    int IdFenetreOp1pre();
+    int NbOperande(){ return pOCV.nbOperande; };
+    int NumSeqOpe(int *x=NULL){if (x!=NULL) numSeqOpe=*x;return numSeqOpe;};
+    void AnnuleOp();
+    std::map <int,std::vector <ParametreOperation > >  *TabSeqOperation(){return &tabOperation;}
+    std::vector<ImageInfoCV*> ExecuterOperation(ParametreOperation * = NULL, bool noEvt = false);
     /*!
      *  \brief Fonction ExecuterOperation
      *
