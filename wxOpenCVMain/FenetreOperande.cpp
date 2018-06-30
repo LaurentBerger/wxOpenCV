@@ -29,7 +29,7 @@ osgApp->FenetreOperande(fenOpe);
 #define ID_SAUVER_SEQ_XML 1002
 
 FenetreOperande::FenetreOperande(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
-    const wxSize& size,wxOsgApp *osg, long style)
+    const wxSize& size,wxOpencvApp *osg, long style)
      : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX  | wxCAPTION )
 {
 
@@ -83,7 +83,7 @@ Show(true);
 
 void FenetreOperande::ComboBox(wxCommandEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp || !fenMere)
 	return;
 string nom;
@@ -143,7 +143,7 @@ ExecuterOperation(ind);
 
 FenetreOperande::~FenetreOperande()
 {
-fenMere->RAZFenAlgo();
+fenMere->RAZGrapheOperation();
 
 }
 
@@ -157,7 +157,7 @@ void FenetreOperande::OnPaint(wxPaintEvent& event)
 
 void FenetreOperande::OnSpinEntier(wxSpinEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 string nom;
@@ -235,7 +235,7 @@ if (pOCV->sizeParam.find(nom)!=pOCV->sizeParam.end())
 
 void FenetreOperande::OnSpinReel(wxSpinDoubleEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 string nom;
@@ -306,7 +306,7 @@ void FenetreOperande::OnKeyDown(wxKeyEvent &)
 
 void FenetreOperande::OnClose(wxCloseEvent& event)
 {
-fenMere->RAZFenAlgo();
+fenMere->RAZGrapheOperation();
 wxFrame::OnCloseWindow(event);
 
 }

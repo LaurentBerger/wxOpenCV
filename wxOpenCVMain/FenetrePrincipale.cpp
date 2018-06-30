@@ -3,7 +3,7 @@
 #include "imagestat.h"
 #include "FenetreSeqOpe.h"
 #include "CameraOpenCV.h"
-#include "wxOsgApp.h"
+#include "wxOpencvApp.h"
 #include "FenetreAlgo.h"
 #include <wx/display.h>
 #include <iostream>
@@ -60,7 +60,7 @@ osgApp=NULL;
 zoomActif=false;
 statActif=false;
 fenetreSauvee =0;
-fenAlgo=NULL;
+RAZGrapheOperation();
 fenPano = NULL;
 courbeVideo=NULL;
 idFenetre=-1;
@@ -371,6 +371,11 @@ nomImageQuadrique=sd;
 
 void FenetrePrincipale::InitIHM()
 {
+    wxIcon icon;
+    wxBitmap b(ImageAffichee()->Scale(64, 64));
+    icon.CopyFromBitmap(b);
+    SetIcon(icon);
+
 //osgApp->Outils()->OuvertureOngletCouleur(modeMoyenne,indFiltreMoyenne);
 //osgApp->ImgStat()->MAJInfo(9,nomImageBiais);
 //osgApp->ImgStat()->MAJInfo(11,nomImageTache);
@@ -1086,8 +1091,8 @@ Close(true);
 
 FenetrePrincipale::~FenetrePrincipale()
 {
-    if (fenAlgo)
-        fenAlgo->DefFenMere(NULL);
+    if (fenOperation)
+        fenOperation->DefFenMere(NULL);
     if (courbeVideo)
         courbeVideo->DefFenMere(NULL);
 }
@@ -1145,8 +1150,11 @@ if (cam!=NULL )
 		cam->Resume();
 		}
 }
-if (fenAlgo)
-    fenAlgo->DefFenMere(NULL);
+if (fenOperation)
+{
+    fenOperation->DefFenMere(NULL);
+    fenOperation->OnClose(event);
+}
 if (courbeVideo)
     courbeVideo->DefFenMere(NULL);
 if (osgApp && !osgApp->Quitter())

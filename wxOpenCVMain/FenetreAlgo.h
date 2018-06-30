@@ -2,6 +2,7 @@
 #define __FENETREALGO__
 
 #include "FenetrePrincipale.h"
+#include "GrapheOperation.h"
 #include <wx/spinbutt.h>
 #include <wx/spinctrl.h>
 #include <wx/string.h>
@@ -14,14 +15,14 @@
 */
 
 
-class FenetreAlgo : public  wxFrame
+class FenetreAlgo 
 {
 private :
 FenetrePrincipale				*fenMere;
 void							*osgApp;
 std::map<wxWindow*,std::pair<wxString,int> >	listeOnglet;/*<! Onglet associé à chaque opération */
 std::vector<std::pair<ParametreOperation*,int> >		listeOp;	/*<! Onglet associé à chaque opération */
-
+wxFrame *wFen;
 int								nbParamMax;	/*<! Nombre de parametre maximum de l'ensemble de opérations */
 int								nbEtape;	/*<! Nombre d'étape nécessaire pour effectuer l'opération */
 wxPanel							*panneau;	/*!< Pointeur sur le panneau contenant le classeur */
@@ -33,17 +34,20 @@ std::vector<wxWindow *> 		                                    ongletSouris;	/*<!
 std::map<wxSpinCtrlDouble*,DragShape *> 		                    formeSouris;	/*<! Spin modifiable par la souris et forme*/
 
 public :
-FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos, 
-        const wxSize& size,wxOsgApp *, long style = wxDEFAULT_FRAME_STYLE);
-        /*!< Constructeur de la fenetre parametrage */
+    /*!< Constructeur de la fenetre parametrage */
+FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
+    const wxSize& size, wxOpencvApp *, long style = wxDEFAULT_FRAME_STYLE);
+/*!< Constructeur de la fenetre parametrage */
 FenetreAlgo(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
     const wxSize& size, ParametreOperation &pOCV, long style);
-
+/*!< Constructeur de la fenetre parametrage */
+FenetreAlgo(GrapheOperation *t,FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
+    const wxSize& size, wxOpencvApp *, long style = wxDEFAULT_FRAME_STYLE);
 ~FenetreAlgo();
         /*!< destructeur de la fenetre parametrage */
 wxWindow *CreerOngletEtape(wxNotebook *,int);
         /*!< Création d'un onglet pour une étape */
-void FenetreAlgo::MAJOngletEtape(int indOp);
+void MAJOngletEtape(int indOp);
 /*!< Mise à jour de l'onglet après l'opération */
 // Gestion des évènements
 void OnActivate(wxActivateEvent& event);
@@ -76,6 +80,7 @@ void DefFenMere(FenetrePrincipale *f){fenMere =f;};
 		/*!< Definition du pointeur sur l'application. Permet le dialogue avec les autres éléments. */
 void ExecuterOperation(int indEtape);/*!<Excute l'opération après modification des paramètres à partir de l'étape indEtape */
 int NbParamSouris(){ return spinSouris.size();}
+wxNotebook *Classeur() { return classeur; };
 };
 
 #endif

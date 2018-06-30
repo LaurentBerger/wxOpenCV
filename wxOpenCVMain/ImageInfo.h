@@ -367,7 +367,10 @@ std::vector<ImageInfoCV *>Negation(std::vector< ImageInfoCV *>, ParametreOperati
 std::vector<ImageInfoCV *>Laplacien(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>ScharrX(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>ScharrY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
-std::vector<ImageInfoCV *>ScharrModule(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>ModuleGradientScharr(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>SobelX(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>SobelY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
+std::vector<ImageInfoCV *>ModuleGradientSobel(std::vector< ImageInfoCV *>, ParametreOperation *pOCV);
 std::vector<ImageInfoCV *>Contour(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV *>ConvexHull(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);
 std::vector<ImageInfoCV *>ConvexityDefects(std::vector< ImageInfoCV *>, ParametreOperation *paramOCV);

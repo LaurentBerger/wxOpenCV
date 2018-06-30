@@ -62,7 +62,7 @@ public:
 };
 
 /* Define a new application type */
-class wxOsgApp : public wxApp
+class wxOpencvApp : public wxApp
 {
 protected:
 wxLanguage	langue;							/*!< language choisi */
@@ -92,7 +92,8 @@ char	camAndor;	/*!< égal à 1 si une caméra Andor est branchée */
 char	camOpenCV;	/*!< égal à 1 si une caméra est détectée par OpenCv */
 
 
-std::map <int ,EnvFenetre *>	listeFenetre;
+std::map <int, EnvFenetre *>	listeFenetre;
+std::map <std::string , wxBitmap >	listeBitmap;
 
 int					nbFenetre;
 int					indFenetre;
@@ -105,32 +106,11 @@ OutilsImage			*outils;
 void				*fSeqOpe;		// Fenetre permettant d'écécuter plusieurs séquences
 void				*fenOpe;		//  Fenetre pour définir plusieurs opérandes
 
-#ifdef __CESTFINII__
-// surjection nombre d'images, les images dans un tableau et les paramètres
-ImageInfoCV**  (ImageInfoCV::*opSurjecMultiple)(int,ImageInfoCV **,ParametreOperation *) ;
-// Opération programmée ternaire : Fusion plan
-ImageInfoCV*  (ImageInfoCV::*opNaireSelec)(int ,ImageInfoCV **,ParametreOperation *) ;
-// Opération programmée binaire
-ImageInfoCV*  (ImageInfoCV::*opBinaireSelec)(ImageInfoCV *,ImageInfoCV *,ParametreOperation *) ;
-// Opération programmée unaire avec parametre
-ImageInfoCV*  (ImageInfoCV::*opUnaireSelec)(ImageInfoCV *,ParametreOperation *) ;
-// Surjection (plusieurs résultats   avec parametre
-ImageInfoCV**  (ImageInfoCV::*opSurjecUnaire)(ImageInfoCV *,ParametreOperation *) ;
-wxString	nomOperation;
-int nbOperande;	/*!< Nombre d'opérande pour l'opération 1 unaire, 2 binaire, 3 fusion plan */
-// Opérande sélectionnée
-ImageInfoCV *op1;	/*!< Opérande 1 pour l'opération demandée */
-ImageInfoCV *op2;	/*!< Opérande 2 pour l'opération demandée */
-ImageInfoCV *op3;	/*!< Opérande 3 pour l'opération demandée uniquement fusion plan*/
-int	indOp1Fenetre;	/*!< Indice de la fenêtre contenant l'image de opérande 1 */
-int indOp2Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
-int indOp3Fenetre;  /*!< Indice de la fenêtre contenant l'image de opérande 2 */
-#endif
 ParametreOperation pOCV;	/*!< parametre de l'opérateur Unaire */
 
 
 public :	
-wxOsgApp() { langue = wxLANGUAGE_UNKNOWN; }
+wxOpencvApp() { langue = wxLANGUAGE_UNKNOWN; }
 bool OnInit();
 void Quitter(wxFrame *g);
 void Ouvrir(wxCommandEvent &);	/*!< Ouverture d'un document */	
@@ -144,6 +124,8 @@ void RetirerListe(FenetrePrincipale *);
 
 // Méthodes liées à des opérations sur les images
 void DefOperateurImage(wxString &);
+void DefBitmapOperateur(wxBitmap & b, wxString &);
+wxBitmap BitmapOperateur(wxString & s);
 void DefEtapeOperation(int x){pOCV.indEtape=x;};
 void DefOperande1(ImageInfoCV* im,int i=-1);
 void DefOperande2(ImageInfoCV* im,int i=-1);
@@ -153,6 +135,7 @@ void SupOperandeN(ImageInfoCV* im,int i=-1);
 ParametreOperation *Operation(){return &pOCV;};
 void RAZOp(){pOCV.op.clear();pOCV.indOpFenetre.clear();pOCV.doubleParam.clear();pOCV.intParam.clear();};
 void DefParametreOCV(ParametreOperation &x){pOCV=x;};
+bool VerifImagesExiste(ParametreOperation *);
 bool Operateur(){return pOCV.operateur;} /*!< Vrai si opération unaire sélectionnée */
 ImageInfoCV *Op1(){return OpId(0);};
 ImageInfoCV *Op2(){return OpId(1);};

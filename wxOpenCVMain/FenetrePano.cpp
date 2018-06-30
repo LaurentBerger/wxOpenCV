@@ -28,7 +28,7 @@ void FenetrePrincipale::ParamPano(wxCommandEvent& event)
 #define ID_SAUVER_SEQ_XML 1002
 
 FenetrePano::FenetrePano(FenetrePrincipale *frame, const wxString& title, const wxPoint& pos,
-    const wxSize& size,wxOsgApp *osg, long style)
+    const wxSize& size,wxOpencvApp *osg, long style)
      : wxFrame(frame, wxID_ANY, title, pos, size, wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX  | wxCAPTION )
 {
 
@@ -96,7 +96,7 @@ Show(true);
 
 void FenetrePano::ComboBox(wxCommandEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp || !fenMere)
 	return;
 
@@ -299,7 +299,7 @@ void FenetrePano::OnSpinEntier(wxSpinEvent &w)
 
 void FenetrePano::OnSpinReel(wxSpinDoubleEvent &w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 }
@@ -311,7 +311,7 @@ void  FenetrePano::OnSpinPlus(wxSpinEvent& w)
 
 void  FenetrePano::OnSpinMoins(wxSpinEvent& w)
 {
-wxOsgApp *app=(wxOsgApp *)osgApp;
+wxOpencvApp *app=(wxOpencvApp *)osgApp;
 if (!osgApp)
 	return;
 }

@@ -257,7 +257,7 @@ wxFrame::OnCloseWindow(event);
 
 void ImageStatistiques::OnSlider(wxScrollEvent &w)
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 int canal;
 wxString s;
@@ -313,7 +313,7 @@ double	valFlottante;
 
 s.ToLong(&valEntiere);
 s.ToDouble(&valFlottante);
-char mode =((wxOsgApp*)osgApp)->Graphique()->ModeImage();
+char mode =((wxOpencvApp*)osgApp)->Graphique()->ModeImage();
 int canal;
 switch (w.GetId()){
 case ID_VAL_LUM_ROUGE:
@@ -350,7 +350,7 @@ case ID_VAL_GAIN_CANAL5:
 
 void ImageStatistiques::Plot(bool b)
 {
-/*if (((wxOsgApp*)osgApp)->UtilisateurAbsent())
+/*if (((wxOpencvApp*)osgApp)->UtilisateurAbsent())
 	return;*/
 if (ongletHistogramme)
 	if (listeFenetreOnglet->GetCurrentPage()==ongletHistogramme && listeFenetreOnglet->GetSelection()==1)
@@ -528,7 +528,7 @@ ongletStatus->Refresh();
 
 void ImageStatistiques::OnSpinCtrl(wxSpinEvent &w)
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 cv::Mat	*histoImage=Histogramme();
 int		deb=0,fin=histoImage->rows;
@@ -585,7 +585,7 @@ DrawPalette();*/
 
 void ImageStatistiques::DrawPalette()
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 wxWindowDC hdc(ongletCouleur);
 wxColor				*pCouleur=fenMere->Palette();
@@ -630,7 +630,7 @@ for (int i=0;i<512;i++,ind+=pas)
 
 void ImageStatistiques::MAJValeurPalette()
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 wxString ss;
 ss.Printf(_T("%lf"),fenMere->SeuilNivBas() );
@@ -646,7 +646,7 @@ ww=(ongletCouleur->GetChildren());
 void ImageStatistiques::MAJMinMaxHisto()
 {
 
-if ( !((wxOsgApp*)osgApp)->VerifFenetre() || !ongletHistogramme)
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre() || !ongletHistogramme)
 	return;
 if (!ongletHistogramme)
 	return;
@@ -704,7 +704,7 @@ DrawPalette();*/
 
 void ImageStatistiques::MAJInfo(int art,char *info)
 {
-if (((wxOsgApp*)osgApp)->UtilisateurAbsent())
+if (((wxOpencvApp*)osgApp)->UtilisateurAbsent())
 	return;
 wxWindowList&w=ongletStatus->GetChildren();
 
@@ -732,7 +732,7 @@ w[art]->Refresh();
 
 void ImageStatistiques::MAJInfo(int art,wxString ss)
 {
-if (((wxOsgApp*)osgApp)->UtilisateurAbsent())
+if (((wxOpencvApp*)osgApp)->UtilisateurAbsent())
 	return;
 wxWindowList&w=ongletStatus->GetChildren();
 
@@ -760,7 +760,7 @@ w[art]->Refresh();
 
 void ImageStatistiques::MAJInfo(int art,int d)
 {
-if (((wxOsgApp*)osgApp)->UtilisateurAbsent())
+if (((wxOpencvApp*)osgApp)->UtilisateurAbsent())
 	return;
 wxWindowList&w=ongletStatus->GetChildren();
 
@@ -1001,7 +1001,7 @@ ongletFocus->Refresh();
 
 void ImageStatistiques::MAJStatRec(int ind,float *t)
 {
-if (((wxOsgApp*)osgApp)->UtilisateurAbsent())
+if (((wxOpencvApp*)osgApp)->UtilisateurAbsent())
 	return;
 if (!ongletFocus || listeFenetreOnglet->GetCurrentPage()!=ongletFocus)
 	return;
@@ -1019,7 +1019,7 @@ ongletFocus->RAZHistoStat();
 
 void ImageStatistiques::MAJCoupe(wxRect &r)
 {
-if (((wxOsgApp*)osgApp)->UtilisateurAbsent() || !ongletHistogramme)
+if (((wxOpencvApp*)osgApp)->UtilisateurAbsent() || !ongletHistogramme)
 	return;
 if (!ongletCoupe || listeFenetreOnglet->GetCurrentPage()!=ongletCoupe)
 	return;

@@ -53,7 +53,7 @@ void FenetreDistribRadiale::Plot(bool b)
 {
 if (!osgApp)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!b)
 	return;
@@ -83,9 +83,9 @@ for (int i=0;i<5*nbPlan;i++)
 	for (int j=0;j<nbVal;j++)
 		dr[i][j]=0;
 
-if (((wxOsgApp*)osgApp)->Graphique()->ModeRectangle())
+if (((wxOpencvApp*)osgApp)->Graphique()->ModeRectangle())
 	{
-	wxRect	*r=((wxOsgApp*)osgApp)->Graphique()->RectangleSelec();
+	wxRect	*r=((wxOpencvApp*)osgApp)->Graphique()->RectangleSelec();
 	colDeb=r->GetLeft();
 	ligDeb=r->GetTop();
 	nbLig=r->GetHeight();
@@ -129,7 +129,7 @@ courbe->RenewPlot();
 
 FenetreDistribRadiale::~FenetreDistribRadiale()
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!fenMere)
 	return;
@@ -189,7 +189,7 @@ excel->Show();
 
 FenetreDistribAngulaire::~FenetreDistribAngulaire()
 {
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!fenMere)
 	return;
@@ -197,8 +197,8 @@ if (!dr)
 	return;
 int id=((FenetrePrincipale *)fenMere)->IdFenetre();
 ImageInfoCV			*imAcq;
-if (((wxOsgApp*)osgApp)->Graphique(id)->ModeImage()!=1)
-	imAcq =((wxOsgApp*)osgApp)->Graphique(id)->ImAcq();
+if (((wxOpencvApp*)osgApp)->Graphique(id)->ModeImage()!=1)
+	imAcq =((wxOpencvApp*)osgApp)->Graphique(id)->ImAcq();
 else
 	return;
 for (int i=0;i<5*imAcq->LitNbPlan();i++)
@@ -212,7 +212,7 @@ void FenetreDistribAngulaire::Plot(bool b)
 {
 if (!osgApp)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!b)
 	return;
@@ -241,9 +241,9 @@ long ligDeb=0,colDeb=0;
 		for (int j=0;j<nbVal;j++)
 			dr[i][j]=0;
 
-if (((wxOsgApp*)osgApp)->Graphique()->ModeRectangle())
+if (((wxOpencvApp*)osgApp)->Graphique()->ModeRectangle())
 	{
-	wxRect	*r=((wxOsgApp*)osgApp)->Graphique()->RectangleSelec();
+	wxRect	*r=((wxOpencvApp*)osgApp)->Graphique()->RectangleSelec();
 	colDeb=r->GetLeft();
 	ligDeb=r->GetTop();
 	nbLig=r->GetHeight();

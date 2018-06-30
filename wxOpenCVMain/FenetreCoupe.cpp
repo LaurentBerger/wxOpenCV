@@ -178,7 +178,7 @@ void FenetreCoupe::Plot(bool b)
 {
 if (!osgApp)
 	return;
-if ( !((wxOsgApp*)osgApp)->VerifFenetre())
+if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 if (!b)
 	return;
@@ -191,9 +191,9 @@ long ligDeb=0,colDeb=0;
 
 cv::Point pt1((float)rCoupe.GetLeft(),(float)rCoupe.GetTop());
 cv::Point pt2((float)rCoupe.GetRight(),(float)rCoupe.GetBottom());
-if (((wxOsgApp*)osgApp)->Graphique()->ModeRectangle())
+if (((wxOpencvApp*)osgApp)->Graphique()->ModeRectangle())
 	{
-	wxRect	*r=((wxOsgApp*)osgApp)->Graphique()->RectangleSelec();
+	wxRect	*r=((wxOpencvApp*)osgApp)->Graphique()->RectangleSelec();
 	colDeb=r->GetLeft();
 	ligDeb=r->GetTop();
 	nbLig=r->GetHeight();
@@ -320,7 +320,7 @@ for (int j=0;j<nbPlan;j++)
 	}
 ((FenetrePrincipale *)fenMere)->AjoutPointCourbeVideo(-1,0,0);
 courbe->RenewPlot();
-if (((wxOsgApp*)osgApp)->Graphique()->ModeCoupe())
+if (((wxOpencvApp*)osgApp)->Graphique()->ModeCoupe())
 	CoordonneeGraphique();
 }
 
@@ -367,7 +367,7 @@ if (!pls)
 
 void FenetreCoupe::OnKeyDown(wxKeyEvent &event)
 {
-((wxOsgApp*)osgApp)->Graphique()->TraitementClavier(event);
+((wxOpencvApp*)osgApp)->Graphique()->TraitementClavier(event);
 
 event.Skip();
 }

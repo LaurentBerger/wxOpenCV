@@ -1,6 +1,6 @@
 #include "FenetrePrincipale.h"
 #include "FenetreInfo.h"
-#include "wxOsgApp.h"
+#include "wxOpencvApp.h"
 #include "imagestat.h"
 #include "ControleCamera.h"
 #include "Fenetre3D.h"
@@ -843,13 +843,13 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 			menu.Check(MENU_POINTAGAST, true);
 		menuParametre = true;
 		}
-    if (f->FenAlgo() != NULL && f->FenAlgo()->NbParamSouris() != 0)
+/*    if (f->GrapheOperation() != NULL && f->FenGrapheOperation()->NbParamSouris() != 0)
     {
         menu.AppendCheckItem(MENU_PTCTRL, _T("Control Point"));
         if (pointCtrl)
             menu.Check(MENU_PTCTRL, true);
         menuParametre = true;
-    }
+    }*/
     if (f->ImAcq()->CaffeResultPret())
     {
         menu.AppendCheckItem(MENU_DNNCAFFE, _T("Caffe label"));
