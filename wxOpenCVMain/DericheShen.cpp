@@ -2,8 +2,10 @@
 
 using namespace cv;
 
+#ifdef OLDGRADIENT
 
-std::vector<ImageInfoCV	*> ImageInfoCV::GradientDericheX(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)//double alphaDerive,double alphaMoyenne)
+
+std::vector<ImageInfoCV	*> ImageInfoCV::GradientDericheXOld(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)//double alphaDerive,double alphaMoyenne)
 {
 std::vector<ImageInfoCV	*> r;
 
@@ -183,7 +185,7 @@ return r;
 }
 
 
-std::vector<ImageInfoCV	*> ImageInfoCV::GradientDericheY(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
+std::vector<ImageInfoCV	*> ImageInfoCV::GradientDericheYOLD(std::vector< ImageInfoCV *>, ParametreOperation *pOCV)
 {
 std::vector<ImageInfoCV	*> r;
 /*
@@ -349,3 +351,4 @@ for (nb=0;nb<channels();nb++)
 r.push_back(imRes);
 return r;
 }
+#endif

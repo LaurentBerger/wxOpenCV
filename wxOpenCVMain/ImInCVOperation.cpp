@@ -581,6 +581,38 @@ if (r1.size() == 1 && r2.size()==1)
 return r;
 }
 
+
+/**
+* @function GradientDericheX
+* @brief gradient selon x d'une image
+*/
+std::vector<ImageInfoCV *>ImageInfoCV::GradientDericheX(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
+{
+    ImageInfoCV	*im = new ImageInfoCV;
+
+    cv::ximgproc::GradientDericheX(*op[0], *im, pOCV->doubleParam["alphaDerive"].valeur, pOCV->doubleParam["alphaMoyenne"].valeur);
+
+    std::vector<ImageInfoCV	*> r;
+    r.push_back(im);
+    return r;
+}
+
+
+/**
+* @function GradientDericheY
+* @brief gradient selon y d'une image
+*/
+std::vector<ImageInfoCV *>ImageInfoCV::GradientDericheY(std::vector< ImageInfoCV*> op, ParametreOperation *pOCV)
+{
+    ImageInfoCV	*im = new ImageInfoCV;
+
+    cv::ximgproc::GradientDericheY(*op[0], *im, pOCV->doubleParam["alphaDerive"].valeur, pOCV->doubleParam["alphaMoyenne"].valeur);
+
+    std::vector<ImageInfoCV	*> r;
+    r.push_back(im);
+    return r;
+}
+
 /**
  * @function ScharrModule
  * @brief Module du gradient Scharr d'une image im1 
@@ -742,8 +774,8 @@ return r;
 }
 
 /**
- * @function ScharrX
- * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
+ * @function GradientPaillouX
+ * @brief gradient selon x d'une image 
  */
 std::vector<ImageInfoCV *>ImageInfoCV::GradientPaillouX(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
@@ -758,9 +790,9 @@ return r;
 
 
 /**
- * @function ScharrY
- * @brief Dilatation d'une image im1 par l'opérateur im2 où l'opérateur par défaut
- */
+* @function GradientPaillouY
+* @brief gradient selon y d'une image 
+*/
 std::vector<ImageInfoCV *>ImageInfoCV::GradientPaillouY(std::vector< ImageInfoCV*> op,ParametreOperation *pOCV)
 {
 ImageInfoCV	*im =new ImageInfoCV;
