@@ -148,7 +148,7 @@ GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, con
     : wxFrame((wxFrame *)NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
     arbre(NULL)
 #if wxUSE_LOG
-    , m_textCtrl(NULL),
+    , infoTexte(NULL),
     classeur(NULL)
 #endif // wxUSE_LOG
 {
@@ -167,16 +167,9 @@ GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, con
     m_panel = new wxPanel(this);
     classeur = new wxNotebook(m_panel, wxID_ANY);
     fenAlgo = std::make_shared<FenetreInfoOperation>(this, frame, osg);
-#if wxUSE_LOG
-    // create the controls
-    m_textCtrl = new wxTextCtrl(m_panel, wxID_ANY, wxT(""),
+    infoTexte = new wxTextCtrl(m_panel, wxID_ANY, wxT(""),
         wxDefaultPosition, wxDefaultSize,
         wxTE_MULTILINE | wxSUNKEN_BORDER);
-
-    // set our text control as the log target
-    wxLogTextCtrl *logWindow = new wxLogTextCtrl(m_textCtrl);
-    delete wxLog::SetActiveTarget(logWindow);
-#endif // wxUSE_LOG
 
     CreateTreeWithDefStyle();
     CreateStatusBar(2);
@@ -185,10 +178,10 @@ GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, con
 GrapheOperation::~GrapheOperation()
 {
     if (fenMere)
+    {
         fenMere->RAZGrapheOperation();
-#if wxUSE_LOG
-    delete wxLog::SetActiveTarget(NULL);
-#endif // wxUSE_LOG
+        fenMere = NULL;
+    }
 }
 
 void GrapheOperation::OnQuit(wxCommandEvent& WXUNUSED(event))
@@ -199,7 +192,10 @@ void GrapheOperation::OnQuit(wxCommandEvent& WXUNUSED(event))
 void GrapheOperation::OnClose(wxCloseEvent& event)
 {
     if (fenMere)
+    {
         fenMere->RAZGrapheOperation();
+        fenMere = NULL;
+    }
     wxFrame::OnCloseWindow(event);
 }
 
@@ -265,11 +261,7 @@ void GrapheOperation::OnIdle(wxIdleEvent& event)
 
 void GrapheOperation::OnSize(wxSizeEvent& event)
 {
-    if (arbre
-#if wxUSE_LOG
-        && m_textCtrl
-#endif // wxUSE_LOG
-        )
+    if (arbre && infoTexte)
     {
         Resize();
     }
@@ -283,7 +275,7 @@ void GrapheOperation::Resize()
     arbre->SetSize(0, 0, size.x, size.y * 1 / 2);
     if (classeur)
         classeur->SetSize(0, size.y / 2, size.x, size.y / 3);
-    m_textCtrl->SetSize(0, 5 * size.y / 6, size.x, size.y / 6);
+    infoTexte->SetSize(0, 5 * size.y / 6, size.x, size.y / 6);
 
 }
 
@@ -291,7 +283,7 @@ void GrapheOperation::Resize()
 
 void GrapheOperation::OnClearLog(wxCommandEvent& WXUNUSED(event))
 {
-    m_textCtrl->Clear();
+    infoTexte->Clear();
 }
 
 void GrapheOperation::OnRename(wxCommandEvent& WXUNUSED(event))
@@ -311,7 +303,7 @@ void GrapheOperation::OnCount(wxCommandEvent& WXUNUSED(event))
 
     int i = arbre->GetChildrenCount(item, false);
 
-    wxLogMessage(wxT("%d children"), i);
+    infoTexte->AppendText(wxString(wxT("%d children\n"), i));
 }
 
 void GrapheOperation::OnCountRec(wxCommandEvent& WXUNUSED(event))
@@ -322,7 +314,7 @@ void GrapheOperation::OnCountRec(wxCommandEvent& WXUNUSED(event))
 
     int i = arbre->GetChildrenCount(item);
 
-    wxLogMessage(wxT("%d children"), i);
+    infoTexte->AppendText(wxString(wxT("%d children"), i));
 }
 
 void GrapheOperation::DoSort(bool reverse)
@@ -343,7 +335,7 @@ void GrapheOperation::OnHighlight(wxCommandEvent& WXUNUSED(event))
     wxRect r;
     if (!arbre->GetBoundingRect(id, r, true /* text, not full row */))
     {
-        wxLogMessage(wxT("Failed to get bounding item rect"));
+        infoTexte->AppendText(wxString(wxT("Failed to get bounding item rect")));
         return;
     }
 
@@ -1253,7 +1245,6 @@ void ArboCalcul::OnContextMenu(wxContextMenuEvent& event)
 {
     wxPoint pt = event.GetPosition();
 
-    wxLogMessage(wxT("OnContextMenu at screen coords (%i, %i)"), pt.x, pt.y);
 
     event.Skip();
 }
@@ -1408,7 +1399,7 @@ void FenetreInfoOperation::AjouterEtape(int nb, ParametreOperation *pOCV, int id
     wxWindow *w = CreerOngletEtape(classeur, nb);
     listeOnglet[w] = std::pair<wxString, int>(pOCV->nomOperation, nb);
     wxString nom(_("Step"));
-    nom.Printf("%s %d : %s", nom, pOCV->indEtape, pOCV->nomOperation);
+    nom.Printf("%s %d : %s", nom, nb, pOCV->nomOperation);
     classeur->InsertPage(0, w, nom, nb == 1);
 
 }

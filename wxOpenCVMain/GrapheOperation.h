@@ -253,9 +253,8 @@ private:
     ArboCalcul *arbre;
     wxNotebook *classeur;
     std::shared_ptr<FenetreInfoOperation> fenAlgo;
-#if wxUSE_LOG
-    wxTextCtrl *m_textCtrl;
-#endif // wxUSE_LOG
+    wxTextCtrl *infoTexte;
+
 public:
     // ctor and dtor
     GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, const wxString& title, int x, int y, int w, int h);
