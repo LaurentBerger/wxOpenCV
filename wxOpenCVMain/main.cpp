@@ -1758,7 +1758,7 @@ void  wxOpencvApp::SupOperandeN(ImageInfoCV* im, int i)
 
 bool wxOpencvApp::VerifImagesExiste(ParametreOperation *pOCV)
 {
-    for (int i = 0; i < pOCV->nbOperande; i++)
+    for (int i = 0; i < pOCV->nbOperande && i<pOCV->op.size(); i++)
     {
         int indFen1 = RechercheFenetre(pOCV->op[i]);
         if (indFen1<0)

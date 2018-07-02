@@ -1889,7 +1889,7 @@ std::vector<std::pair<ParametreOperation*, int>> FenetreInfoOperation::FindOpera
     std::vector<std::pair<ParametreOperation*,int>> p;
     for (auto n : noeuds)
     {
-        for (int i = 0;i<n.first->nbOperande;i++)
+        for (int i = 0;i<n.first->nbOperande && i<n.first->op.size();i++)
             if (n.first->op[i] == x)
             {
                 p.push_back(std::make_pair(n.first, i));
@@ -1925,7 +1925,7 @@ void FenetreInfoOperation::ExecuterOperation(int indOperation)
                 if (item )
                 {
                     app->DefOperateurImage(wxString(pOCV->nomOperation));
-                    for (int i = 0; i < pOCV->nbOperande; i++)
+                    for (int i = 0; i < pOCV->nbOperande && i<pOCV->op.size(); i++)
                     {
                         int indFen = app->RechercheFenetre(pOCV->op[i]);
                         if (indFen < 0)
