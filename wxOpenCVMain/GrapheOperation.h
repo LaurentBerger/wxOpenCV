@@ -1,5 +1,6 @@
 #ifndef __GRAPHEOPERATION__
 #define __GRAPHEOPERATION__
+#include <memory>
 #include "FenetrePrincipale.h"
 #include "GrapheOperation.h"
 #include <wx/spinbutt.h>
@@ -172,7 +173,6 @@ public:
     void OnItemCollapsing(wxTreeEvent& event);
     void OnSelChanged(wxTreeEvent& event);
     void OnSelChanging(wxTreeEvent& event);
-    void OnTreeKeyDown(wxTreeEvent& event);
     void OnItemActivated(wxTreeEvent& event);
     void OnItemStateClick(wxTreeEvent& event);
     void OnItemRClick(wxTreeEvent& event);
