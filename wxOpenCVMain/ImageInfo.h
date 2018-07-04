@@ -302,7 +302,7 @@ char*	LitCopyright(void);
 char*	LitOrdinateur(void);
 char*	LitNomPgm(void);
 char*	LitNomProjet(void);
-char*	InfoImage(void);
+std::string	InfoImage(void);
 
 //Utilitaire pour info sur l'image
 char *InfoPixel(long x,long y,long =-1,long =-1);

@@ -571,167 +571,47 @@ void ImageInfoCV::SauverProprieteProjet(char *nomFichier)
 }
 
 
-char *ImageInfoCV::InfoImage(void)
+std::string ImageInfoCV::InfoImage(void)
 {
-#ifdef __INFOTEXTE__
-char	*texte=new char[1024],*p;
-long	n=0,lActuelle=0,lMax=1024,i;
-texte[0]=0;
+    string texte;
+    switch (depth())
+    {
+    case CV_32S:
+        texte = "int (32 bits)";
+        break;
+    case CV_16U:
+        texte = "unsigned short (16 bits)";
+        break;
+    case CV_16S:
+        texte = " short (16 bits)";
+        break;
+    case CV_8U:
+        texte = "Unsigned char (8 bits)";
+        break;
+    case CV_8S:
+        texte = "Signed char (8 bits)";
+        break;
+    case CV_32F:
+        texte = "Single precision floating point (32 bits) by channel";
+        break;
+    case CV_64F:
+        texte = "double precision floating point (64 bits) by channel";
+        break;
+    default:
+        texte = "Unknown size!";
+    }
 
-p= nomImage;
-if (p)
-	{
-	i = strlen(p);
-	char *tmp=new char[i+20];
-	sprintf(tmp,"Nom de l'image : %s\n",p);
-	i = strlen(tmp);
-	n += i;
-	while (n+lActuelle>lMax)
-		{
-		lMax = lMax +1024;
-		char *t=new char[lMax];
-		strcpy(t,texte);
-		delete texte;
-		texte = t;
-		}
-	strcat(texte,tmp);
-	}
-p=natureImage;		// Méthode de saisie de l'image
-if (p)
-	{
-	i = strlen(p);
-	char *tmp=new char[i+20];
-	sprintf(tmp,"Nature de l'image : %s\n",p);
-	i = strlen(tmp);
-	n += i;
-	while (n+lActuelle>lMax)
-		{
-		lMax = lMax +1024;
-		char *t=new char[lMax];
-		strcpy(t,texte);
-		delete texte;
-		texte = t;
-		}
-	strcat(texte,tmp);
-	}
-p=dateCreation;	
-if (p)
-	{
-	i = strlen(p);
-	char *tmp=new char[i+20];
-	sprintf(tmp,"Date de création : %s",p);
-	i = strlen(tmp);
-	n += i;
-	while (n+lActuelle>lMax)
-		{
-		lMax = lMax +1024;
-		char *t=new char[lMax];
-		strcpy(t,texte);
-		delete texte;
-		texte = t;
-		}
-	strcat(texte,tmp);
-	}
+    texte = texte +"\n";
+    for (int i = 0; i<channels() ; i++)
+    {
+        texte += "(Min,Max) Channels " + to_string(i);
+        texte += " = ( " + std::to_string(static_cast<double>((*(MinIm()))[i]));
+        texte += " , " ;
+        texte += std::to_string(static_cast<double>((*(MaxIm()))[i])) + ")\n";
+    }
+    return texte;
 
 
-
-p=createur;			// Programme et(?) utilisateur
-if (p)
-	{
-	i = strlen(p);
-	char *tmp=new char[i+20];
-	sprintf(tmp,"Créateur : %s\n",p);
-	i = strlen(tmp);
-	n += i;
-	while (n+lActuelle>lMax)
-		{
-		lMax = lMax +1024;
-		char *t=new char[lMax];
-		strcpy(t,texte);
-		delete texte;
-		texte = t;
-		}
-	strcat(texte,tmp);
-	}
-p= typeMateriel;		// Nom de la chaine d'acquisition
-if (p)
-	{
-	i = strlen(p);
-	char *tmp=new char[i+20];
-	sprintf(tmp,"Matériel : %s\n",p);
-	i = strlen(tmp);
-	n += i;
-	while (n+lActuelle>lMax)
-		{
-		lMax = lMax +1024;
-		char *t=new char[lMax];
-		strcpy(t,texte);
-		delete texte;
-		texte = t;
-		}
-	strcat(texte,tmp);
-	}
-p=nomPgm;			// Nom et version du pgm 
-if (p)
-	{
-	i = strlen(p);
-	char *tmp=new char[i+20];
-	sprintf(tmp,"Nom du programme : %s\n",p);
-	i = strlen(tmp);
-	n += i;
-	while (n+lActuelle>lMax)
-		{
-		lMax = lMax +1024;
-		char *t=new char[lMax];
-		strcpy(t,texte);
-		delete texte;
-		texte = t;
-		}
-	strcat(texte,tmp);
-	}
-char t[256];
-sprintf(t,"Résolution X : %lf\n",resolX);
-p=t;
-if (p)
-	{
-	i = strlen(p);
-	char *tmp=new char[i+20];
-	sprintf(tmp,"%s",p);
-	i = strlen(tmp);
-	n += i;
-	while (n+lActuelle>lMax)
-		{
-		lMax = lMax +1024;
-		char *t=new char[lMax];
-		strcpy(t,texte);
-		delete texte;
-		texte = t;
-		}
-	strcat(texte,tmp);
-	}
-sprintf(t,"Résolution X : %lf\n",resolY);
-p=t;
-if (p)
-	{
-	i = strlen(p);
-	char *tmp=new char[i+20];
-	sprintf(tmp,"%s",p);
-	i = strlen(tmp);
-	n += i;
-	while (n+lActuelle>lMax)
-		{
-		lMax = lMax +1024;
-		char *t=new char[lMax];
-		strcpy(t,texte);
-		delete texte;
-		texte = t;
-		}
-	strcat(texte,tmp);
-	}
-return texte;
-#else
-return NULL;
-#endif
 }
 
 

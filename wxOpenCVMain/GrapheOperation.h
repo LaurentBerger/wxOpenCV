@@ -140,12 +140,12 @@ private:
     int                     m_imageSize;               // current size of images
     bool                    m_reverseSort;             // flag for OnCompareItems
     wxTreeItemId            m_draggedItem;             // item being dragged right now
-    bool                    m_alternateImages;
-    bool                    m_alternateStates;
+    wxTreeItemId            idEvt;             // item being dragged right now
     std::shared_ptr<wxImageList>             listeImage;
     std::shared_ptr<FenetreInfoOperation> fenAlgo;
     int             nbEtape;
     int             nbParamMax;
+    wxTextCtrl      *info;
 public:
     enum
     {
@@ -156,15 +156,18 @@ public:
         TreeCtrlIcon_FolderOpened
     };
 
-    ArboCalcul() { m_alternateImages = false; m_alternateStates = false; }
+    ArboCalcul() { info = NULL; }
     ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg, wxWindow *parent, const wxWindowID id,
         const wxPoint& pos, const wxSize& size,
         long style);
+    void DefTextCtrl(wxTextCtrl *t) { info = t; };
+    void Printf(InfoNoeud *) ;
     void Installation();
     virtual ~ArboCalcul() {};
 
     void OnContextMenu(wxContextMenuEvent& event);
     void OnItemMenu(wxTreeEvent& event);
+    void OnMenuSelect(wxCommandEvent& event);
     void OnGetInfo(wxTreeEvent& event);
     void OnSetInfo(wxTreeEvent& event);
     void OnItemExpanded(wxTreeEvent& event);
@@ -196,17 +199,10 @@ public:
     }
 
     void DoToggleIcon(const wxTreeItemId& item);
-    void DoToggleState(const wxTreeItemId& item);
 
     void ShowMenu(wxTreeItemId id, const wxPoint& pt);
 
     int ImageSize(void) const { return m_imageSize; }
-
-    void SetAlternateImages(bool show) { m_alternateImages = show; }
-    bool AlternateImages() const { return m_alternateImages; }
-
-    void SetAlternateStates(bool show) { m_alternateStates = show; }
-    bool AlternateStates() const { return m_alternateStates; }
 
     void ResetBrokenStateImages()
     {
@@ -326,10 +322,8 @@ public:
     void OnRecreate(wxCommandEvent& event);
     void OnToggleButtons(wxCommandEvent& event);
     void OnToggleImages(wxCommandEvent& event);
-    void OnToggleStates(wxCommandEvent& event);
+//    void OnToggleStates(wxCommandEvent& event);
     void OnToggleBell(wxCommandEvent& event);
-    void OnToggleAlternateImages(wxCommandEvent& event);
-    void OnToggleAlternateStates(wxCommandEvent& event);
     void OnSetImageSize(wxCommandEvent& event);
     void OnCollapseAndReset(wxCommandEvent& event);
 
@@ -357,7 +351,7 @@ public:
     void OnDecSpacing(wxCommandEvent& event);
 
     void OnToggleIcon(wxCommandEvent& event);
-    void OnToggleState(wxCommandEvent& event);
+//    void OnToggleState(wxCommandEvent& event);
 
     void OnShowFirstVisible(wxCommandEvent& WXUNUSED(event))
     {
@@ -427,6 +421,7 @@ private:
 enum
 {
     TreeTest_Quit = wxID_EXIT,
+    TreeTest_Save = wxID_SAVE,
     TreeTest_About = wxID_ABOUT,
     TreeTest_ClearLog = wxID_CLEAR,
     TreeTest_TogButtons = wxID_HIGHEST,
