@@ -241,7 +241,7 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 		break;
 	case CV_8UC4 :
 		xxxx=m.at<cv::Vec4b>(point.y,point.x);;
-		barreEtat->UpdateCurseur(point.x,point.y,xxxx[2],xxxx[1],xxxx[0]);
+		barreEtat->UpdateCurseur(point.x,point.y,xxxx);
 		break;
 	case CV_16UC1 :
 		val = m.at<unsigned short>(point.y,point.x);
@@ -251,11 +251,15 @@ if (f->BarreEtat() && f->BarreEtat()->Curseur()  && point.x>=0 && point.x<imAcq-
 		val = m.at< short>(point.y,point.x);
 		barreEtat->UpdateCurseur(point.x,point.y,val);
 		break;
-	case CV_16SC3 :
-		xx=m.at<cv::Vec3s>(point.y,point.x);;
-		barreEtat->UpdateCurseur(point.x,point.y,xx[2],xx[1],xx[0]);
-		break;
-	case CV_16UC(48):
+    case CV_16SC3:
+        xx = m.at<cv::Vec3s>(point.y, point.x);;
+        barreEtat->UpdateCurseur(point.x, point.y, xx[2], xx[1], xx[0]);
+        break;
+    case CV_16SC4:
+        xxxx = m.at<cv::Vec4s>(point.y, point.x);;
+        barreEtat->UpdateCurseur(point.x, point.y, xxxx);
+        break;
+    case CV_16UC(48):
 		{
 		barreEtat->UpdateCurseur(point.x,point.y,0/*imRegionBrute->LitPixelEntier(point.y,point.x)*/);
 		if (event.m_shiftDown)

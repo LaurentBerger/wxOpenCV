@@ -386,3 +386,10 @@ void BarreInfo::UpdateCurseur(int x, int y, cv::Vec2f z2d)
     SetStatusText(s, Champ_Text);
 
 }
+void BarreInfo::UpdateCurseur(int x, int y, cv::Vec4f z2d)
+{
+    wxString	s;
+    s.Printf(_T("(%d,%d)=(%f,%f,%f,%f)"), x, y, z2d[0], z2d[1], z2d[2], z2d[3]);
+    SetStatusText(s, Champ_Text);
+
+}

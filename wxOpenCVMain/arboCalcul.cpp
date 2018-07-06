@@ -421,7 +421,7 @@ void ArboCalcul::OnMenuSelect(wxCommandEvent& evt)
 
     switch (evt.GetId()) {
     case TreeTest_Save:
-        Printf(item);
+        SauverSequence(w);
         break;
     case TreeTest_About:
         Printf(item);
@@ -545,6 +545,48 @@ void ArboCalcul::OnRMouseDClick(wxMouseEvent& event)
 
     event.Skip();
 }
+
+void ArboCalcul::SauverSequence(wxTreeItemId &idParent)
+{
+    if (osgApp == NULL || fenMere == NULL)
+        return;
+    FenetrePrincipale *f = fenMere;
+    cv::FileStorage fsx;
+    wxString nomFic("Nom A Voir");
+    nomFic.Replace(" ", "_");
+    cv::FileStorage fsy;
+    fsx.open((std::string)nomFic.c_str() + ".xml", cv::FileStorage::WRITE);
+    fsy.open((std::string)nomFic.c_str() + ".yml", cv::FileStorage::WRITE);
+    wxTreeItemId t = GetRootItem();
+    if (t == idParent)
+    {
+        SauverNoeud(t, fsx);
+     }
+
+}
+
+void ArboCalcul::SauverNoeud(wxTreeItemId &id, cv::FileStorage &fs)
+{
+    if (osgApp == NULL || fenMere == NULL)
+        return;
+    if (id.IsOk())
+    {
+        wxTreeItemIdValue cookie;
+        wxTreeItemId tf = GetFirstChild(id, cookie);
+        while (tf.IsOk())
+        {
+            InfoNoeud *item = (InfoNoeud *)GetItemData(id);
+            if (item->Operation())
+                item->Operation()->write(fs);
+            else
+                SauverNoeud(tf, fs);
+            tf = GetNextChild(id, cookie);
+        }
+    }
+    return;
+}
+
+
 
 static inline const wxChar *Bool2String(bool b)
 {

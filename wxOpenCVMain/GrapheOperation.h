@@ -184,6 +184,10 @@ public:
     void OnRMouseUp(wxMouseEvent& event);
     void OnRMouseDClick(wxMouseEvent& event);
 
+    void SauverSequence(wxTreeItemId &idParent);
+
+    void SauverNoeud(wxTreeItemId & idParent, cv::FileStorage & fs);
+
     wxTreeItemId GetLastTreeITem() const;
     void GetItemsRecursively(const wxTreeItemId& idParent,
         wxTreeItemIdValue cookie = 0);
