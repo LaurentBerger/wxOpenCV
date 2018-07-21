@@ -47,7 +47,7 @@ wxEND_EVENT_TABLE()
 
 
 
-// ArboCalcul implementation
+// ArboCalcul implementation :
 #if USE_GENERIC_TREECTRL
 wxIMPLEMENT_DYNAMIC_CLASS(ArboCalcul, wxGenericTreeCtrl);
 #else
