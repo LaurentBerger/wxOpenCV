@@ -305,6 +305,7 @@ bool ArboCalcul::ModifNoeud(FenetrePrincipale *f, wxTreeItemId w)
                 break;
             }
         }
+
     }
     else
         return false;
@@ -317,6 +318,10 @@ bool ArboCalcul::ModifNoeud(FenetrePrincipale *f, wxTreeItemId w)
         delete item;
 
     }
+    if (itempocv->Operation())
+        fenAlgo.get()->ExecuterOperation(itempocv->IndiceOnglet());
+    Collapse(idParent);
+    Expand(idParent);
     return true;
 }
 
