@@ -217,8 +217,9 @@ BEGIN_EVENT_TABLE(FenetrePrincipale, wxFrame)
 	EVT_MENU(MENU_OP1,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP2,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(MENU_OP3,  FenetrePrincipale::PrepOperation)
-	EVT_MENU(MENU_EXEC_OP,  FenetrePrincipale::PrepOperation)
-	EVT_MENU(RESET_OP,  FenetrePrincipale::PrepOperation)
+    EVT_MENU(MENU_EXEC_OP, FenetrePrincipale::PrepOperation)
+    EVT_MENU(MENU_SET_NEW_OP, FenetrePrincipale::PrepOperation)
+    EVT_MENU(RESET_OP,  FenetrePrincipale::PrepOperation)
 	EVT_MENU(ENREGISTRER_FICHIER,FenetrePrincipale::Enregistrer)
 	EVT_MENU(ENREGISTRERSOUS_FICHIER,FenetrePrincipale::EnregistrerSous)
 	EVT_MENU(CREER_RAPPORT,FenetrePrincipale::CreerRapport)
@@ -1014,6 +1015,7 @@ for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	imgStatIm->DefOSGApp(this);
 	f->DefZoom(fenZoom);
 	f->DefImgStat(imgStatIm);
+    f->OrigineImage()->indRes = RechercheFenetre(f->ImAcq());
 #ifdef _DLL_DETECTION__
 	if (dllplplot->IsLoaded() && dllSVGplplotdrv->IsLoaded())
 #endif
@@ -1793,5 +1795,12 @@ for (pp=listeFenetre.begin();pp!=listeFenetre.end();pp++)
 		pp->second->fPrin->DefPointeurSouris(type);
 	}
 }
+
+void	wxOpencvApp::DefNoeudCalcul(void *a, void *id)
+{
+    arbre = a;
+    idArbre = id;
+}
+
 
 

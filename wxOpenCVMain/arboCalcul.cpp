@@ -19,14 +19,14 @@ wxBEGIN_EVENT_TABLE(ArboCalcul, wxTreeCtrl)
 #if 0       // there are so many of those that logging them causes flicker
 EVT_TREE_GET_INFO(TreeTest_Ctrl, ArboCalcul::OnGetInfo)
 #endif
-EVT_TREE_SET_INFO(TreeTest_Ctrl, ArboCalcul::OnSetInfo)
-EVT_TREE_ITEM_EXPANDED(TreeTest_Ctrl, ArboCalcul::OnItemExpanded)
-EVT_TREE_ITEM_EXPANDING(TreeTest_Ctrl, ArboCalcul::OnItemExpanding)
-EVT_TREE_ITEM_COLLAPSED(TreeTest_Ctrl, ArboCalcul::OnItemCollapsed)
-EVT_TREE_ITEM_COLLAPSING(TreeTest_Ctrl, ArboCalcul::OnItemCollapsing)
+//EVT_TREE_SET_INFO(TreeTest_Ctrl, ArboCalcul::OnSetInfo)
+//EVT_TREE_ITEM_EXPANDED(TreeTest_Ctrl, ArboCalcul::OnItemExpanded)
+//EVT_TREE_ITEM_EXPANDING(TreeTest_Ctrl, ArboCalcul::OnItemExpanding)
+//EVT_TREE_ITEM_COLLAPSED(TreeTest_Ctrl, ArboCalcul::OnItemCollapsed)
+///EVT_TREE_ITEM_COLLAPSING(TreeTest_Ctrl, ArboCalcul::OnItemCollapsing)
 
-EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, ArboCalcul::OnSelChanged)
-EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, ArboCalcul::OnSelChanging)
+///EVT_TREE_SEL_CHANGED(TreeTest_Ctrl, ArboCalcul::OnSelChanged)
+//EVT_TREE_SEL_CHANGING(TreeTest_Ctrl, ArboCalcul::OnSelChanging)
 EVT_TREE_ITEM_ACTIVATED(TreeTest_Ctrl, ArboCalcul::OnItemActivated)
 EVT_TREE_STATE_IMAGE_CLICK(TreeTest_Ctrl, ArboCalcul::OnItemStateClick)
 
@@ -227,21 +227,21 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
         }
         if (!f->OrigineImage()->nomOperation.empty())
             PileCalcul(id, f->OrigineImage());
-        /*
-        wxString n(f->OrigineImage()->nomOperation);
-        wxTreeItemId id = AppendItem(idParent, n, -1,-1, new InfoNoeud(n, f->OrigineImage(),nbEtape,idParent));
-        int nbParam = f->OrigineImage()->intParam.size();
-        nbParam += f->OrigineImage()->doubleParam.size();
-        nbParam += 2 * f->OrigineImage()->pointParam.size();
-        nbParam += 2 * f->OrigineImage()->sizeParam.size();
-        if (nbParamMax<nbParam)
-            nbParamMax = nbParam;
-        fenAlgo.get()->AjouterEtape(nbEtape, f->OrigineImage(), f->IdFenetre(), id);
-        nbEtape++;
-        */
 
     }
 }
+
+void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, wxString n)
+{
+
+        wxTreeItemId id;
+        if (GetRootItem() == idParent)
+            id = idParent;
+        else
+            id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, NULL, idParent));
+ 
+}
+
 
 void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, ParametreOperation *pOCV)
 {
@@ -267,12 +267,58 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, ParametreOperation *pO
             FenetrePrincipale *fId = ((wxOpencvApp *)osgApp)->Fenetre(idF);
             if (fId)
                 PileCalcul(id, fId);
+            else
+                PileCalcul(id, "?????");
+
         }
 
     }
 }
 
+bool ArboCalcul::ModifNoeud(FenetrePrincipale *f, wxTreeItemId w)
+{
+    wxString n(f->GetTitle());
+    wxIconBundle iconBundle = f->GetIcons();
+    wxIcon icon = iconBundle.GetIcon(wxSize(32, 32), wxIconBundle::FALLBACK_NEAREST_LARGER);
 
+    listeImage.get()->Add(icon);
+    listeImage.get()->Add(icon);
+    InfoNoeud *item = (InfoNoeud *)GetItemData(w);
+    wxTreeItemId idParent;
+    if (item != NULL)
+    {
+        idParent = item->getParent();
+    }
+    else
+        return false;
+    InfoNoeud *itempocv= (InfoNoeud *)GetItemData(idParent);
+    if (itempocv->Operation())
+    {
+        ParametreOperation *pocv = itempocv->Operation();
+        ImageInfoCV *imAcq = item->FenetrePrincipale()->ImAcq();
+        for (int i = 0; i < pocv->nbOperande; i++)
+        {
+            if (pocv->op[i] == imAcq)
+            {
+                pocv->op[i] = f->ImAcq();
+                pocv->indOpFenetre[i] = ((wxOpencvApp*)osgApp)->RechercheFenetre(f->ImAcq());
+                break;
+            }
+        }
+    }
+    else
+        return false;
+    SetItemText(w, n);
+    SetItemData(w, new InfoNoeud(n, f, idParent));
+    SetItemImage(w, listeImage.get()->GetImageCount() - 2);
+//    id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, f, idParent));
+    if (item != NULL)
+    {
+        delete item;
+
+    }
+    return true;
+}
 
 
 wxTreeItemId ArboCalcul::GetLastTreeITem() const
@@ -368,13 +414,13 @@ void ArboCalcul::name(wxTreeEvent& event)                        \
     event.Skip();                                                \
 }
 
-TREE_EVENT_HANDLER(OnGetInfo)
-TREE_EVENT_HANDLER(OnSetInfo)
-TREE_EVENT_HANDLER(OnItemExpanded)
-TREE_EVENT_HANDLER(OnItemExpanding)
-TREE_EVENT_HANDLER(OnItemCollapsed)
-TREE_EVENT_HANDLER(OnSelChanged)
-TREE_EVENT_HANDLER(OnSelChanging)
+//TREE_EVENT_HANDLER(OnGetInfo)
+//TREE_EVENT_HANDLER(OnSetInfo)
+//TREE_EVENT_HANDLER(OnItemExpanded)
+//TREE_EVENT_HANDLER(OnItemExpanding)
+//TREE_EVENT_HANDLER(OnItemCollapsed)
+//TREE_EVENT_HANDLER(OnSelChanged)
+//TREE_EVENT_HANDLER(OnSelChanging)
 
 #undef TREE_EVENT_HANDLER
 
@@ -440,7 +486,10 @@ void ArboCalcul::OnMenuSelect(wxCommandEvent& evt)
         else
             wxLogMessage(wxT("Unknown"));
         break;
-
+    case TreeTest_Select_operande:
+        ((wxOpencvApp*)osgApp)->DefPointeurSouris(3, 1);
+        ((wxOpencvApp*)osgApp)->DefNoeudCalcul(this, GetSelection());
+        break;
     }
 
     {
@@ -491,10 +540,18 @@ void ArboCalcul::ShowMenu(wxTreeItemId id, const wxPoint& pt)
         if (item->Operation())
             title << wxT("Operation ") << GetItemText(id);
         else
+        {
             title << wxT("Image ") << GetItemText(id);
+
+        }
         menu.Append(TreeTest_About, wxT("&About"));
         menu.AppendSeparator();
         menu.Append(TreeTest_Highlight, wxT("&Select item")+GetItemText(id));
+        if (!item->Operation() && GetChildrenCount(id)==0)
+        {
+            menu.AppendSeparator();
+            menu.Append(TreeTest_Select_operande, wxT("&New operande"));
+        }
 
         PopupMenu(&menu, pt);
     }
@@ -572,14 +629,25 @@ void ArboCalcul::SauverNoeud(wxTreeItemId &id, cv::FileStorage &fs)
     if (id.IsOk())
     {
         wxTreeItemIdValue cookie;
+        InfoNoeud *item = (InfoNoeud *)GetItemData(id);
+        if (item->Operation())
+        {
+            item->Operation()->write(fs);
+        }
         wxTreeItemId tf = GetFirstChild(id, cookie);
         while (tf.IsOk())
         {
-            InfoNoeud *item = (InfoNoeud *)GetItemData(id);
+            InfoNoeud *item = (InfoNoeud *)GetItemData(tf);
             if (item->Operation())
-                item->Operation()->write(fs);
+            {
+                wxTreeItemId tfch = tf;
+                SauverNoeud(tfch, fs);
+            }
             else
-                SauverNoeud(tf, fs);
+            {
+                wxTreeItemId tfch = tf;
+                SauverNoeud(tfch, fs);
+            }
             tf = GetNextChild(id, cookie);
         }
     }

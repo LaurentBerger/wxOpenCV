@@ -168,14 +168,14 @@ public:
     void OnContextMenu(wxContextMenuEvent& event);
     void OnItemMenu(wxTreeEvent& event);
     void OnMenuSelect(wxCommandEvent& event);
-    void OnGetInfo(wxTreeEvent& event);
-    void OnSetInfo(wxTreeEvent& event);
-    void OnItemExpanded(wxTreeEvent& event);
-    void OnItemExpanding(wxTreeEvent& event);
-    void OnItemCollapsed(wxTreeEvent& event);
+//    void OnGetInfo(wxTreeEvent& event);
+//    void OnSetInfo(wxTreeEvent& event);
+//    void OnItemExpanded(wxTreeEvent& event);
+//    void OnItemExpanding(wxTreeEvent& event);
+//    void OnItemCollapsed(wxTreeEvent& event);
     void OnItemCollapsing(wxTreeEvent& event);
-    void OnSelChanged(wxTreeEvent& event);
-    void OnSelChanging(wxTreeEvent& event);
+//    void OnSelChanged(wxTreeEvent& event);
+//    void OnSelChanging(wxTreeEvent& event);
     void OnItemActivated(wxTreeEvent& event);
     void OnItemStateClick(wxTreeEvent& event);
     void OnItemRClick(wxTreeEvent& event);
@@ -214,6 +214,7 @@ public:
         int state = count > 0 ? count - 1 : wxTREE_ITEMSTATE_NONE;
         DoResetBrokenStateImages(GetRootItem(), 0, state);
     }
+    bool ModifNoeud(FenetrePrincipale * f, wxTreeItemId w);
 
 protected:
     virtual int OnCompareItems(const wxTreeItemId& i1, const wxTreeItemId& i2) wxOVERRIDE;
@@ -228,6 +229,7 @@ protected:
 private:
     // Find the very last item in the tree.
     void PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f);
+    void PileCalcul(const wxTreeItemId & idParent, wxString n);
     void PileCalcul(const wxTreeItemId & idParent, ParametreOperation * pOCV);
     void DoResetBrokenStateImages(const wxTreeItemId& idParent,
         wxTreeItemIdValue cookie, int state);
@@ -429,6 +431,7 @@ enum
     TreeTest_About = wxID_ABOUT,
     TreeTest_ClearLog = wxID_CLEAR,
     TreeTest_TogButtons = wxID_HIGHEST,
+    TreeTest_Select_operande ,
     TreeTest_TogTwist,
     TreeTest_TogLines,
     TreeTest_TogEdit,

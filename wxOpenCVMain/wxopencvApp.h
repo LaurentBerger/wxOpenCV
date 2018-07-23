@@ -73,6 +73,9 @@ protected:
     std::map <int, std::vector <ParametreOperation > > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
     int 	numOpFaite;								/*!< Nombre d'opération faites ou sauvgardées dans le fichier INI */
     int     numSeqOpe;								/*!< Nombre de séquence d'opérations faites ou sauvgardées dans le fichier INI */
+    void    *arbre;
+    wxTreeItemId    idArbre;
+
     wxPoint posFenetre;
     char	utilisateurAbsent;
     bool	quitter;
@@ -118,7 +121,7 @@ public:
     void InitFenAssociee(FenetrePrincipale *f); /*!< Ouvrir les fenetres associées à la fenetre principale */
 
     void Video(wxCommandEvent &, int);
-    void Enregistrer(wxCommandEvent& event);
+//    void Enregistrer(wxCommandEvent& event);
 
     void OuvertureOutils();
     void RetirerListe(FenetrePrincipale *);
@@ -148,7 +151,7 @@ public:
     int IndOp1(){return IndOpId(0);};
     int IndOp2(){return IndOpId(1);};
     int IndOp3(){return IndOpId(2);};
-    int IdFenetreOp1pre();
+//    int IdFenetreOp1pre();
     int NbOperande(){ return pOCV.nbOperande; };
     int NumSeqOpe(int *x=NULL){if (x!=NULL) numSeqOpe=*x;return numSeqOpe;};
     void AnnuleOp();
@@ -227,12 +230,13 @@ void CalculFini(EvtCalculFini &w);
 
 // Gestion  du curseur souris
 void	DefPointeurSouris(int modeSouris=0,int typeSouris=0);
+void    DefNoeudCalcul(void *a, void *id);
 int		PointeurSouris(int x){return indPointeurSouris;};
 void	SourisQuitterFen(wxMouseEvent &event);
 int		ModeSouris(){return modeSouris;};
 
 //// Operations
-void DefOperateurImage(ImageInfoCV* (ImageInfoCV::*f)(ImageInfoCV & ,ImageInfoCV &));
+//void DefOperateurImage(ImageInfoCV* (ImageInfoCV::*f)(ImageInfoCV & ,ImageInfoCV &));
 void GenerationGraphDot(ParametreOperation *op);
     /*!
      *  \brief Fonction GenerationGraphDot
@@ -241,7 +245,7 @@ void GenerationGraphDot(ParametreOperation *op);
      */
 
     // Tile the bitmap
-    bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
+//    bool TileBitmap(const wxRect& rect, wxDC& dc, wxBitmap& bitmap);
 
 //// Accessors
     wxBitmap& GetBackgroundBitmap() const { return (wxBitmap&) m_background; }
@@ -277,6 +281,8 @@ void				*FenetreSeqOpe(){return fSeqOpe;};
 void				*FenetreOperande(){return fenOpe;};
 void				FenetreOperande(void *f){fenOpe=f;};
 ServeurScilab		*Serveur(){return serveur;};
+void *ArboCalcul() { return arbre; };
+void *NoeudCalcul() { return idArbre; };
 
 void TracerZoom(wxPoint p);
 

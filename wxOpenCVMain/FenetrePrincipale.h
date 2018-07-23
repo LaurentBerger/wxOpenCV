@@ -6,11 +6,13 @@
 #include "CameraVirtuelle.h"
 #include "HorodatageSequence.h"
 
-#include "wx/timer.h"
+#include <wx/timer.h>
 #include <wx/dynlib.h>
 #include <wx/fileconf.h>
 #include <wx/graphics.h>
 #include <wx/dcbuffer.h>
+#include <wx/treectrl.h>
+
 //#include <wx/dde.h>
 #include <string>
 #include <map>
@@ -37,6 +39,8 @@ class GlisserImage;
 #define SOURIS_STD 0
 #define SELECTION_EN_COURS 1
 #define DEPLACEMENT_EN_COURS 2
+#define SELECTION_EN_COURS_NEW_OPERANDE 3
+#define DEPLACEMENT_EN_COURS_NEW_OPERANDE 4
 
 #ifdef __TOTO__
 /*! \class Operation
@@ -1354,6 +1358,7 @@ enum
 	MENU_OP15,
 	MENU_EXEC_OP,
 	RESET_OP,
+    MENU_SET_NEW_OP,
 	LBnxn,		// ListBox pour filtre nxn
 	ROUETAILLE_MORPH,		// SpinCtrl pour taille de l'opérateur morphologie
 	LBTY_MORPH,     // ListBox pour forme de l'opérateur

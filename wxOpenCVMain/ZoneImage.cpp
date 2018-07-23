@@ -903,7 +903,7 @@ if (osgApp->ModeSouris()==SOURIS_STD)
 	if (modeMasque)
 		menu.Check(Mode_Masque, true);
 	}
-else
+else if (osgApp->ModeSouris()==SELECTION_EN_COURS)
 	{
 	for (int i=0;i<osgApp->NbOperande();i++)
 	{
@@ -926,6 +926,11 @@ else
 	menu.Append(RESET_OP,  "Operation canceled");
 
 	}
+else if (osgApp->ModeSouris() == SELECTION_EN_COURS_NEW_OPERANDE)
+{
+    menu.AppendCheckItem(MENU_SET_NEW_OP, "Set as new operande " );
+
+}
 
 
 PopupMenu(&menu, pos.x, pos.y);
