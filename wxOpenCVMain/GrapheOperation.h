@@ -53,7 +53,8 @@ private:
     int indOnglet;
 public:
     InfoNoeud(const wxString& desc, FenetrePrincipale *f,const wxTreeItemId pUp) : res(pUp),m_desc(desc), fen(f),pOCV(NULL),indOnglet(-1) { }
-    InfoNoeud(const wxString& desc, ParametreOperation *p,int n,const wxTreeItemId pUp) : res(pUp), m_desc(desc), fen(NULL),pOCV(p), indOnglet(n) { }
+	InfoNoeud(const wxString& desc, ParametreOperation *p, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc), fen(NULL), pOCV(p), indOnglet(n) { }
+	InfoNoeud(const wxString& desc, wxString &s, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc), fen(NULL), pOCV(NULL), indOnglet(n) { }
 
     void ShowInfo(wxTreeCtrl *tree);
     wxString const& GetDesc() const { return m_desc; }
@@ -163,6 +164,9 @@ public:
     ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg, wxWindow *parent, const wxWindowID id,
         const wxPoint& pos, const wxSize& size,
         long style);
+	int FindIdOperation(int id);
+	int FindMaxIdOperation();
+	int FindIdResOperation(int id);
     void DefTextCtrl(wxTextCtrl *t) { info = t; };
     void Printf(InfoNoeud *) ;
     void Installation();

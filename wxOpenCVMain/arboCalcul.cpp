@@ -72,6 +72,44 @@ ArboCalcul::ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg, wxWindow *par
     Bind(wxEVT_COMMAND_MENU_SELECTED, &ArboCalcul::OnMenuSelect, this, -1);
 
 }
+int ArboCalcul::FindIdOperation(int id)
+{
+	for (int i = 0; i < listeOp.size(); i++)
+	{
+		if (listeOp[i].idOperation == id)
+			return i;
+	}
+	return -1;
+
+}
+
+int ArboCalcul::FindMaxIdOperation()
+{
+	int idMax = -1,iMax=-1;
+	for (int i = 0; i < listeOp.size(); i++)
+	{
+		if (listeOp[i].idOperation > idMax)
+		{
+			idMax = listeOp[i].idOperation;
+			iMax = i;
+		}
+	}
+	return iMax;
+
+}
+
+int ArboCalcul::FindIdResOperation(int id)
+{
+	for (int i = 0; i < listeOp.size(); i++)
+	{
+		if (listeOp[i].indRes == id)
+			return i;
+	}
+	return -1;
+
+}
+
+
 void ArboCalcul::Installation()
 {
     wxString n;
@@ -96,8 +134,9 @@ void ArboCalcul::Installation()
         PileCalcul(rootId, f);
     }
     else
-    {
-        rootId = AddRoot(nomArbre, 0, 1, new InfoNoeud(nomArbre, f, NULL));
+    { 
+		int id=FindMaxIdOperation();
+        rootId = AddRoot(std::to_string(id), 0, 1, new InfoNoeud(wxString(std::to_string(id)), wxString(std::to_string(id)),id, NULL));
         PileCalcul(rootId, f);
 
     }
