@@ -85,6 +85,7 @@ private:
 public:
     /*!< Constructeur de la fenetre parametrage */
     FenetreInfoOperation(GrapheOperation *t, FenetrePrincipale *frame, wxOpencvApp *osg);
+    FenetreInfoOperation(GrapheOperation * t, std::vector<ParametreOperation> arbreOperation, wxOpencvApp * osg);
     ~FenetreInfoOperation() {};
     /*!< destructeur de la fenetre parametrage */
     wxWindow *CreerOngletEtape(wxNotebook *, int);
@@ -146,6 +147,8 @@ private:
     int             nbEtape;
     int             nbParamMax;
     wxTextCtrl      *info;
+    std::vector<ParametreOperation> listeOp;
+    wxString nomArbre;
 public:
     enum
     {
@@ -197,6 +200,8 @@ public:
     void CreateStateImageList(bool del = false);
 
     void DefFenAlgo(std::shared_ptr<FenetreInfoOperation> f) { fenAlgo = f; };
+    void DefListeOp(std::vector<ParametreOperation > f) { listeOp = f; };
+    void DefTitre(wxString s) { nomArbre = s; };
     void DoSortChildren(const wxTreeItemId& item, bool reverse = false)
     {
         m_reverseSort = reverse; wxTreeCtrl::SortChildren(item);
@@ -256,10 +261,12 @@ private:
     wxNotebook *classeur;
     std::shared_ptr<FenetreInfoOperation> fenAlgo;
     wxTextCtrl *infoTexte;
-
+    wxString nomSequence; 
+    std::vector<ParametreOperation> listeOp;
 public:
     // ctor and dtor
     GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, const wxString& title, int x, int y, int w, int h);
+    GrapheOperation(std::vector<ParametreOperation> arbreOperation, wxOpencvApp *osg, const wxString& title, int x, int y, int w, int h);
     virtual ~GrapheOperation();
     void DefFenMere(FenetrePrincipale *f) { fenMere = f; };
 
@@ -399,6 +406,8 @@ public:
     void OnSize(wxSizeEvent& event);
     wxPanel *Panel() { return m_panel; };
     wxNotebook *Classeur() { return classeur; };
+    wxString NomSequence() { return nomSequence; };
+    std::vector<ParametreOperation> SequenceOperation() { return listeOp; };
 private:
     void TogStyle(int id, long flag);
 

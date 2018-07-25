@@ -2507,6 +2507,8 @@ if (operateur)
 	catch(cv::Exception& e)
 		{
 		string s(e.msg);
+        opErreur = e.code;
+        msgErreur = e.msg;
 		}
 
 	}

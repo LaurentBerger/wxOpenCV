@@ -143,6 +143,35 @@ GrapheOperation::GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, con
     CreateStatusBar(2);
 }
 
+
+GrapheOperation::GrapheOperation(std::vector<ParametreOperation> arbreOperation, wxOpencvApp * osg, const wxString & title, int x, int y, int w, int h)
+    : wxFrame((wxFrame *)NULL, wxID_ANY, title, wxPoint(x, y), wxSize(w, h)),
+    arbre(NULL)
+#if wxUSE_LOG
+    , infoTexte(NULL),
+    classeur(NULL)
+#endif // wxUSE_LOG
+{
+    fenMere = NULL;
+    osgApp = osg;
+    fenAlgo = NULL;
+    SetBackgroundColour(*wxWHITE);
+
+    SetIcon(wxICON(sample));
+
+    listeOp = arbreOperation;
+    nomSequence = title;
+    m_panel = new wxPanel(this);
+    classeur = new wxNotebook(m_panel, wxID_ANY);
+    fenAlgo = std::make_shared<FenetreInfoOperation>(this, arbreOperation, osg);
+    infoTexte = new wxTextCtrl(m_panel, wxID_ANY, wxT(""),
+        wxDefaultPosition, wxDefaultSize,
+        wxTE_MULTILINE | wxSUNKEN_BORDER);
+
+    CreateTreeWithDefStyle();
+    CreateStatusBar(2);
+}
+
 GrapheOperation::~GrapheOperation()
 {
     if (fenMere)
@@ -182,6 +211,12 @@ void GrapheOperation::CreateTree(long style)
     arbre = new ArboCalcul((FenetrePrincipale*)fenMere,(wxOpencvApp*)osgApp,m_panel, TreeTest_Ctrl,
         wxDefaultPosition, wxDefaultSize,
         style);
+    if (listeOp.size() != 0 )
+    {
+        arbre->DefListeOp(listeOp);
+        arbre->DefTitre(GetTitle());
+    }
+
     arbre->DefFenAlgo(fenAlgo);
     arbre->DefTextCtrl(infoTexte);
     arbre->Installation();

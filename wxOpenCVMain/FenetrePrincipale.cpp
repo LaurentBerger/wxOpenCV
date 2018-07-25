@@ -790,16 +790,8 @@ for (int i=0;i<imAcq->channels();i++)
 	int z=imAcq->depth();
 	if (z==2)
 		imAcq->flags=(imAcq->flags&0xFFFFFFF8)|CV_16SC1;
-	if(imAcq->depth()==CV_8S || imAcq->depth()==CV_8U)
-		{
-		seuilNivBas.push_back(0);
-		coeffCanal.push_back(1);
-		}
-	else
-		{
-		seuilNivBas[i]=0;
-		coeffCanal[i]=1;
-		}
+	seuilNivBas.push_back(0);
+	coeffCanal.push_back(1);
 	}
 feuille = new ZoneImage(this,wxSize(imAcq->cols/2, imAcq->rows/2));
 feuille->DefFenetrePrincipale(this);
@@ -1554,16 +1546,18 @@ DrawWindow(dc);
 
 void FenetrePrincipale::OnSize( wxSizeEvent &w)
 {
-if (!imAcq)
-	return;
-wxSize	taille=GetClientSize();
-float	fZoomNume=pow(2.0,feuille->FacteurZoom());
-SetClientSize(taille.x, taille.y);
-feuille->SetSize(taille);
-feuille->OnSize(w);
+    if (!imAcq)
+        return;
+    if (!feuille)
+	    return;
+    wxSize	taille=GetClientSize();
+    float	fZoomNume=pow(2.0,feuille->FacteurZoom());
+    SetClientSize(taille.x, taille.y);
+    feuille->SetSize(taille);
+    feuille->OnSize(w);
 
-//wxClientDC dc(feuille);
-//DrawWindow(dc);
+    //wxClientDC dc(feuille);
+    //DrawWindow(dc);
 
 }
 

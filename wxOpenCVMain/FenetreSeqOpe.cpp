@@ -1,5 +1,6 @@
 #include "FenetreSeqOpe.h"
 #include "imagestat.h"
+#include "GrapheOperation.h"
 #include <wx/hyperlink.h>
 
 using namespace std;
@@ -851,6 +852,9 @@ evt.SetEventObject(spw);
 spw->SetRange(0, 0);
 spw->SetValue(0);
 OnSpinEntier(evt);
+GrapheOperation *fenOperation = new GrapheOperation(seqFichier[0], (wxOpencvApp*)osgApp, nom.c_str(), 50, 50, 450, 600);
+fenOperation->Show(true);
+
 
 }
 
