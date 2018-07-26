@@ -229,7 +229,7 @@ Commande::Commande(int a,const char *b[], wxString c, wxString d, int e) :idEvt(
 
 void InterfaceAvance::InitCommande()
 {
-#define CONSTRUCTEUR_CMD(var,ID,var_icon,aide,fct,num) var[ID]=Commande(ID,var_icon, aide, fct,num)
+#define CONSTRUCTEUR_CMD(var,ID,var_icon,aide,fct,num) var[ID]=Commande(ID,var_icon, aide, fct,num);
 bouton[ID_ADDITION] = Commande(ID_ADDITION, addition_xpm, _("Add 2 images"), "add", 0);
     CONSTRUCTEUR_CMD(bouton, ID_ADDITION,addition_xpm, _("Add 2 images"), "add", 0);
     CONSTRUCTEUR_CMD(bouton, ID_SOUSTRACTION, soustraction_xpm, _("Difference between 2 images"), "subtract", 0);
@@ -430,6 +430,17 @@ void InterfaceAvance::OnMyButtonRightDown(wxMouseEvent& event)
 
 }
 
+void InterfaceAvance::DefOSGApp(void *w)
+{ 
+    osgApp = w; 
+    std::map<int, Commande>::iterator ite = bouton.begin();
+    for (; ite != bouton.end(); ite++)
+    {
+        ((wxOpencvApp*)osgApp)->DefBitmapOperateur(ite->second.bitmap, ite->second.chaineOperation);
+    }
+}
+
+
 
 InterfaceAvance::InterfaceAvance(wxWindow* parent,
                  wxWindowID id,
@@ -445,6 +456,7 @@ InterfaceAvance::InterfaceAvance(wxWindow* parent,
 	tbOperation=NULL;
 	tbConv=NULL;
 	tbMorph=NULL;
+    osgApp = NULL;
 	InitCommande();
 	// tell wxAuiManager to manage this frame
     m_mgr.SetManagedWindow(this);

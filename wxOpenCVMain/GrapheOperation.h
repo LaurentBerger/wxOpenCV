@@ -51,16 +51,19 @@ private:
     ParametreOperation *pOCV;   // non nul si noeud = opération
     const wxTreeItemId res;     // Noeud de niveau supérieur = résultat NULL si racine
     int indOnglet;
+    int indFen;
 public:
-    InfoNoeud(const wxString& desc, FenetrePrincipale *f,const wxTreeItemId pUp) : res(pUp),m_desc(desc), fen(f),pOCV(NULL),indOnglet(-1) { }
-	InfoNoeud(const wxString& desc, ParametreOperation *p, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc), fen(NULL), pOCV(p), indOnglet(n) { }
-	InfoNoeud(const wxString& desc, wxString &s, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc), fen(NULL), pOCV(NULL), indOnglet(n) { }
+    InfoNoeud(const wxString& desc, FenetrePrincipale *f,const wxTreeItemId pUp) : res(pUp),m_desc(desc), fen(f), indFen(-1),pOCV(NULL),indOnglet(-1) { }
+	InfoNoeud(const wxString& desc, ParametreOperation *p, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc),indFen(-1), fen(NULL), pOCV(p), indOnglet(n) { }
+	InfoNoeud(const wxString& desc, wxString &s, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc), fen(NULL), indFen(n), pOCV(NULL), indOnglet(n) { }
 
     void ShowInfo(wxTreeCtrl *tree);
     wxString const& GetDesc() const { return m_desc; }
     ParametreOperation *Operation() { return pOCV; };
     int IndiceOnglet() { return indOnglet; };
-    FenetrePrincipale *FenetrePrincipale() { return fen; };
+    int IndiceFenetre() { return indFen; };
+    FenetrePrincipale *Fenetre() { return fen; };
+    void DefFenetre( FenetrePrincipale *fz)  { fen=fz; };
     wxTreeItemId getParent() { return res; };
 };
 
@@ -133,9 +136,15 @@ public:
 
 };
 
+struct ArboCalculParam {
+    cv::FileStorage fs;
+    FenetrePrincipale *fen = NULL;
+    int indFen = -1;
+};
 
 class ArboCalcul : public wxTreeCtrl
 {
+//    typedef void (ArboCalcul::*FonctionNoeud)(wxTreeItemid &,ArboCalculParam &p);
 private:
     FenetrePrincipale       *fenMere;
     void                    *osgApp;
@@ -165,7 +174,8 @@ public:
         const wxPoint& pos, const wxSize& size,
         long style);
 	int FindIdOperation(int id);
-	int FindMaxIdOperation();
+    int FindMaxEtapeOperation();
+//	int FindMaxIdOperation();
 	int FindIdResOperation(int id);
     void DefTextCtrl(wxTextCtrl *t) { info = t; };
     void Printf(InfoNoeud *) ;
@@ -193,7 +203,14 @@ public:
 
     void SauverSequence(wxTreeItemId &idParent);
 
-    void SauverNoeud(wxTreeItemId & idParent, cv::FileStorage & fs);
+    void SauverNoeud(wxTreeItemId & id, ArboCalculParam & p);
+
+    void ReplacerIdParFenetre(wxTreeItemId & id, ArboCalculParam & p);
+
+    void ExplorerArbre(wxTreeItemId & id, ArboCalculParam & p, void (ArboCalcul::*FonctionNoeud)(wxTreeItemId &, ArboCalculParam &));
+
+
+//    void SauverNoeud(wxTreeItemId & idParent, ArboCalulParam &p);
 
     wxTreeItemId GetLastTreeITem() const;
     void GetItemsRecursively(const wxTreeItemId& idParent,
@@ -238,7 +255,7 @@ protected:
 private:
     // Find the very last item in the tree.
     void PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f);
-    void PileCalcul(const wxTreeItemId & idParent, wxString n);
+    void PileCalcul(const wxTreeItemId & idParent, int indRes);
     void PileCalcul(const wxTreeItemId & idParent, ParametreOperation * pOCV);
     void DoResetBrokenStateImages(const wxTreeItemId& idParent,
         wxTreeItemIdValue cookie, int state);

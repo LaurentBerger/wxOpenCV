@@ -1762,7 +1762,7 @@ bool wxOpencvApp::VerifImagesExiste(ParametreOperation *pOCV)
 {
     for (int i = 0; i < pOCV->nbOperande && i<pOCV->op.size(); i++)
     {
-        int indFen1 = RechercheFenetre(pOCV->op[i]);
+        int indFen1 = RechercheFenetre(pOCV->op[i])*0+1;
         if (indFen1<0)
             return false;
 

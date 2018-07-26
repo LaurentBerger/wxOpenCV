@@ -83,14 +83,14 @@ int ArboCalcul::FindIdOperation(int id)
 
 }
 
-int ArboCalcul::FindMaxIdOperation()
+int ArboCalcul::FindMaxEtapeOperation()
 {
 	int idMax = -1,iMax=-1;
 	for (int i = 0; i < listeOp.size(); i++)
 	{
-		if (listeOp[i].idOperation > idMax)
+		if (listeOp[i].indEtape > idMax)
 		{
-			idMax = listeOp[i].idOperation;
+			idMax = listeOp[i].indEtape;
 			iMax = i;
 		}
 	}
@@ -135,9 +135,12 @@ void ArboCalcul::Installation()
     }
     else
     { 
-		int id=FindMaxIdOperation();
-        rootId = AddRoot(std::to_string(id), 0, 1, new InfoNoeud(wxString(std::to_string(id)), wxString(std::to_string(id)),id, NULL));
-        PileCalcul(rootId, f);
+		int id=FindMaxEtapeOperation();
+        if (id >= 0)
+        {
+            rootId = AddRoot(std::to_string(listeOp[id].indRes), 0, 1, new InfoNoeud(wxString(std::to_string(id)), wxString(std::to_string(id)),id, NULL));
+            PileCalcul(rootId, &listeOp[id]);
+        }
 
     }
     nbParamMax = 30;
@@ -148,9 +151,9 @@ void ArboCalcul::Printf(InfoNoeud *v)
 {
     if (!info)
         return;
-    if (v->FenetrePrincipale())
+    if (v->Fenetre())
     {
-        FenetrePrincipale *f = v->FenetrePrincipale();
+        FenetrePrincipale *f = v->Fenetre();
         ImageInfoCV *im = f->ImAcq();
         if (!im)
             return;
@@ -288,15 +291,26 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
     }
 }
 
-void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, wxString n)
+void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, int indRes)
 {
 
+    if (indRes>=0)
+    {
+        wxString n(std::to_string(indRes));
+
+        listeImage.get()->Add(wxArtProvider::GetIcon(wxART_WARNING));
+        listeImage.get()->Add(wxArtProvider::GetIcon(wxART_WARNING));
         wxTreeItemId id;
         if (GetRootItem() == idParent)
             id = idParent;
         else
-            id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, NULL, idParent));
- 
+            id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, wxString(std::to_string(indRes)),indRes, idParent));
+        int idOp = FindIdResOperation(indRes);
+        if (idOp>=0)
+            PileCalcul(id, &listeOp[idOp]);
+
+    }
+
 }
 
 
@@ -307,11 +321,20 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, ParametreOperation *pO
     {
         wxString n(pOCV->nomOperation);
         wxBitmap b = ((wxOpencvApp*)osgApp)->BitmapOperateur(wxString(pOCV->nomOperation));
-        wxImage Image = b.ConvertToImage();
-        Image.Rescale(32, 32);
-        wxBitmap NewBitmap(Image);
+        wxImage image;
+        wxBitmap newBitmap; ;
         wxIcon icon;
-        icon.CopyFromBitmap(NewBitmap);
+        if (b.IsOk())
+        {
+            image = b.ConvertToImage();
+            image.Rescale(32, 32);
+            newBitmap = wxBitmap(image);
+            icon.CopyFromBitmap(newBitmap);
+        }
+        else
+        {
+            icon = wxArtProvider::GetIcon(wxART_WARNING);
+        }
 
         listeImage.get()->Add(icon);
         listeImage.get()->Add(icon);
@@ -325,7 +348,10 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, ParametreOperation *pO
             if (fId)
                 PileCalcul(id, fId);
             else
-                PileCalcul(id, "?????");
+            {
+                PileCalcul(id, idF);
+
+            }
 
         }
 
@@ -348,35 +374,45 @@ bool ArboCalcul::ModifNoeud(FenetrePrincipale *f, wxTreeItemId w)
     }
     else
         return false;
-    InfoNoeud *itempocv= (InfoNoeud *)GetItemData(idParent);
-    if (itempocv->Operation())
+    InfoNoeud *itempocv = (InfoNoeud *)GetItemData(idParent);
+    if (item->Fenetre())
     {
-        ParametreOperation *pocv = itempocv->Operation();
-        ImageInfoCV *imAcq = item->FenetrePrincipale()->ImAcq();
-        for (int i = 0; i < pocv->nbOperande; i++)
+        if (itempocv->Operation())
         {
-            if (pocv->op[i] == imAcq)
+            ParametreOperation *pocv = itempocv->Operation();
+            ImageInfoCV *imAcq = item->Fenetre()->ImAcq();
+            for (int i = 0; i < pocv->nbOperande; i++)
             {
-                pocv->op[i] = f->ImAcq();
-                pocv->indOpFenetre[i] = ((wxOpencvApp*)osgApp)->RechercheFenetre(f->ImAcq());
-                break;
+                if (pocv->op[i] == imAcq)
+                {
+                    pocv->op[i] = f->ImAcq();
+                    pocv->indOpFenetre[i] = ((wxOpencvApp*)osgApp)->RechercheFenetre(f->ImAcq());
+                    break;
+                }
             }
         }
+        else
+            return false;
+        SetItemText(w, n);
+        SetItemData(w, new InfoNoeud(n, f, idParent));
+        SetItemImage(w, listeImage.get()->GetImageCount() - 2);
+    //    id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, f, idParent));
+        if (item != NULL)
+        {
+            delete item;
 
+        }
+        if (itempocv->Operation())
+            fenAlgo.get()->ExecuterOperation(itempocv->IndiceOnglet());
     }
     else
-        return false;
-    SetItemText(w, n);
-    SetItemData(w, new InfoNoeud(n, f, idParent));
-    SetItemImage(w, listeImage.get()->GetImageCount() - 2);
-//    id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, f, idParent));
-    if (item != NULL)
     {
-        delete item;
-
+        ArboCalculParam p;
+        p.indFen = item->IndiceFenetre();
+        p.fen = f;
+        wxTreeItemId root = GetRootItem();
+        ExplorerArbre(root, p, &ArboCalcul::ReplacerIdParFenetre);
     }
-    if (itempocv->Operation())
-        fenAlgo.get()->ExecuterOperation(itempocv->IndiceOnglet());
     Collapse(idParent);
     Expand(idParent);
     return true;
@@ -535,12 +571,12 @@ void ArboCalcul::OnMenuSelect(wxCommandEvent& evt)
         Printf(item);
         break;
     case TreeTest_Highlight:
-        if (item->FenetrePrincipale())
+        if (item->Fenetre())
         {
-            item->FenetrePrincipale()->Iconize(false);
-            item->FenetrePrincipale()->SetFocus();
-            item->FenetrePrincipale()->Raise();
-            item->FenetrePrincipale()->Show(true);
+            item->Fenetre()->Iconize(false);
+            item->Fenetre()->SetFocus();
+            item->Fenetre()->Raise();
+            item->Fenetre()->Show(true);
         }
         else if (item->Operation())
             {
@@ -669,24 +705,105 @@ void ArboCalcul::SauverSequence(wxTreeItemId &idParent)
 {
     if (osgApp == NULL )
         return;
-    cv::FileStorage fsx;
     wxString nomFic("Nom A Voir");
     nomFic.Replace(" ", "_");
     cv::FileStorage fsy;
-    fsx.open((std::string)nomFic.c_str() + ".xml", cv::FileStorage::WRITE);
     fsy.open((std::string)nomFic.c_str() + ".yml", cv::FileStorage::WRITE);
     wxTreeItemId t = GetRootItem();
     if (t == idParent)
     {
         nbEtape = 0;
-        SauverNoeud(t, fsy);
+        ArboCalculParam p;
+        p.fs.open((std::string)nomFic.c_str() + ".xml", cv::FileStorage::WRITE);
+        SauverNoeud(t, p);
         nbEtape = 0;
-        SauverNoeud(t, fsx);
+        p.fs.open((std::string)nomFic.c_str() + ".yml", cv::FileStorage::WRITE);;
+        SauverNoeud(t, p);
     }
 
 }
 
-void ArboCalcul::SauverNoeud(wxTreeItemId &id, cv::FileStorage &fs)
+void ArboCalcul::ExplorerArbre(wxTreeItemId &id, ArboCalculParam &p, void (ArboCalcul::*fonctionNoeud)(wxTreeItemId &, ArboCalculParam &p) )
+{
+    if (osgApp == NULL)
+        return;
+    if (id.IsOk())
+    {
+        wxTreeItemIdValue cookie;
+        wxTreeItemId tf = GetFirstChild(id, cookie);
+        while (tf.IsOk())
+        {
+            InfoNoeud *item = (InfoNoeud *)GetItemData(tf);
+            if (item->Operation())
+            {
+                wxTreeItemId tfch = tf;
+                ExplorerArbre(tfch, p,fonctionNoeud);
+            }
+            else
+            {
+                wxTreeItemId tfch = tf;
+                ExplorerArbre(tfch, p, fonctionNoeud);
+            }
+            tf = GetNextChild(id, cookie);
+        }
+        (this->*fonctionNoeud)(id, p);
+/*        InfoNoeud *item = (InfoNoeud *)GetItemData(id);
+        if (item->Operation())
+        {
+            item->Operation()->indEtape = nbEtape;
+            item->Operation()->write(fs);
+            nbEtape++;
+        }*/
+    }
+    return;
+}
+void ArboCalcul::SauverNoeud(wxTreeItemId &id, ArboCalculParam & p)
+{
+    InfoNoeud *item = (InfoNoeud *)GetItemData(id);
+    if (item && item->Operation() && p.fs.isOpened())
+    {
+        item->Operation()->indEtape = nbEtape;
+        item->Operation()->write(p.fs);
+        nbEtape++;
+    }
+
+}
+
+void ArboCalcul::ReplacerIdParFenetre(wxTreeItemId &id, ArboCalculParam & p)
+{
+    InfoNoeud *item = (InfoNoeud *)GetItemData(id);
+    if (item )
+    {
+        if (item->IndiceFenetre() == p.indFen)
+        {
+            item->DefFenetre(p.fen);
+            wxString n(p.fen->GetTitle());
+            wxIconBundle iconBundle = p.fen->GetIcons();
+            wxIcon icon = iconBundle.GetIcon(wxSize(32, 32), wxIconBundle::FALLBACK_NEAREST_LARGER);
+
+            listeImage.get()->Add(icon);
+            listeImage.get()->Add(icon);
+            wxTreeItemId idParent;
+            if (item != NULL)
+            {
+                idParent = item->getParent();
+            }
+            SetItemText(id, p.fen->GetTitle());
+            SetItemData(id, new InfoNoeud(p.fen->GetTitle(), p.fen, idParent));
+            SetItemImage(id, listeImage.get()->GetImageCount() - 2);
+            //    id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, f, idParent));
+            if (item != NULL)
+            {
+                delete item;
+
+            }
+
+        }
+    }
+
+}
+
+/*void ArboCalcul::SauverNoeud(wxTreeItemId &id, cv::FileStorage &fs)
 {
     if (osgApp == NULL )
         return;
@@ -718,7 +835,7 @@ void ArboCalcul::SauverNoeud(wxTreeItemId &id, cv::FileStorage &fs)
         }
     }
     return;
-}
+}*/
 
 
 
@@ -1116,7 +1233,7 @@ void FenetreInfoOperation::OnSpinReel(wxSpinDoubleEvent &w)
             fenMere->Feuille()->Update();
         }
     }
-    if (fenMere)
+    //if (fenMere)
         ExecuterOperation(ind);
 }
 
@@ -1335,7 +1452,7 @@ void FenetreInfoOperation::ExecuterOperation(int indOperation)
                     if (r.size() != 0)
                     {
                         item = (InfoNoeud *)arbre->GetItemData(t);
-                        FenetrePrincipale *f=item->FenetrePrincipale();
+                        FenetrePrincipale *f=item->Fenetre();
                         std::vector<std::pair<ParametreOperation*, int>> pl=FindOperande(f->ImAcq());
                         for (auto p : pl)
                         {

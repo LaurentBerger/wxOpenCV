@@ -85,7 +85,7 @@ public:
 
     wxAuiDockArt* GetDockArt();
     void DoUpdate();
-	void DefOSGApp(void *w){osgApp=w;};
+	void DefOSGApp(void *w);
 	void OnClose(wxCloseEvent& event);
 	void InitCommande();
 	/*!
