@@ -45,6 +45,11 @@ class ArboCalcul;
 
 class InfoNoeud : public wxTreeItemData
 {
+    enum
+    {
+        NON_INIT=0,OPERATION_VALIDE = 1, OPERATION_SEQUENCE_FICHIER, FENETRE_RESULTAT, FENETRE_DONNEE,
+        INDICE_FENETRE_VALIDE, INDICE_FENETRE_LOGIQUE
+    };
 private:
     wxString m_desc;
     FenetrePrincipale *fen;     // non nul si noeud = fenêtre
@@ -52,6 +57,7 @@ private:
     const wxTreeItemId res;     // Noeud de niveau supérieur = résultat NULL si racine
     int indOnglet;
     int indFen;
+    int typeNoeud;  
 public:
     InfoNoeud(const wxString& desc, FenetrePrincipale *f,const wxTreeItemId pUp) : res(pUp),m_desc(desc), fen(f), indFen(-1),pOCV(NULL),indOnglet(-1) { }
 	InfoNoeud(const wxString& desc, ParametreOperation *p, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc),indFen(-1), fen(NULL), pOCV(p), indOnglet(n) { }
