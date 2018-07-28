@@ -116,6 +116,7 @@ private:
 public:
     wxOpencvApp() { langue = wxLANGUAGE_UNKNOWN; }
     bool OnInit();
+    void CreerFenetre(std::vector<ImageInfoCV*> r, int nbres);
     void Quitter(wxFrame *g);
     void Ouvrir(wxCommandEvent &);	/*!< Ouverture d'un document */
     void InitFenAssociee(FenetrePrincipale *f); /*!< Ouvrir les fenetres associées à la fenetre principale */

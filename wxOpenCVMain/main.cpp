@@ -925,6 +925,116 @@ posFenetre = wxPoint(20,20);
 return true;
 }
 
+void wxOpencvApp::CreerFenetre(vector<ImageInfoCV*> r,int nbres)
+{
+    FenetrePrincipale *f = new FenetrePrincipale(NULL, pOCV.nomOperation,
+        wxPoint(0, 0), wxSize(530, 570), wxCLOSE_BOX | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
+    FenetreZoom *fenZoom = new FenetreZoom(f);
+    f->DefOSGApp(this);
+    wxString s;
+    int ind = -1;
+    if (pOCV.nomOperation == "Convolution")
+    {
+        ind = r[nbres]->IndOpConvolution();
+    }
+    if (pOCV.nomOperation == "Erosion")
+    {
+        ind = r[nbres]->IndOpMorphologie();
+    }
+    if (pOCV.nomOperation == "Dilatation")
+    {
+        ind = r[nbres]->IndOpMorphologie();
+    }
+    int idOperation = -1;
+    int numEtape = -1;
+    if (pOCV.indOpFenetre[0] != -1)
+    {
+        FenetrePrincipale *f = Fenetre(pOCV.indOpFenetre[0]);
+
+        if (f != NULL)
+        {
+            if (f->OrigineImage() != NULL)
+            {
+                idOperation = f->OrigineImage()->idOperation;
+                if (idOperation >= 0)
+                    numEtape = f->OrigineImage()->indEtape + 1;
+            }
+        }
+        if (idOperation == -1 && pOCV.indOpFenetre.size() >= 2 && pOCV.indOpFenetre[1] >= 0)
+        {
+            f = Fenetre(pOCV.indOpFenetre[1]);
+            if (f->OrigineImage() != NULL)
+            {
+                idOperation = f->OrigineImage()->idOperation;
+                if (idOperation >= 0)
+                    numEtape = f->OrigineImage()->indEtape + 1;
+            }
+        }
+    }
+    if (numEtape == -1)
+        numEtape = 0;
+    if (idOperation == -1)
+        idOperation = numOpFaite++;
+    if (pOCV.indOpFenetre.size() >= 1)
+        f->DefHistorique(pOCV.indOpFenetre[0], -1, -1, idOperation, numEtape, pOCV.nomOperation, &pOCV);
+    if (pOCV.indOpFenetre.size() >= 2)
+        f->DefHistorique(pOCV.indOpFenetre[0], pOCV.indOpFenetre[1], -1, idOperation, numEtape, pOCV.nomOperation, &pOCV);
+    if (pOCV.indOpFenetre.size() >= 3)
+        f->DefHistorique(pOCV.indOpFenetre[0], pOCV.indOpFenetre[1], pOCV.indOpFenetre[2], idOperation, numEtape, pOCV.nomOperation, &pOCV);
+    if (ind != -1)
+        s.Printf("%d : %s(operator %d) of image %d ", nbFenetre, pOCV.nomOperation, ind, pOCV.indOpFenetre[0]);
+    else
+        s.Printf("%d : %s of image %d ", nbFenetre, pOCV.nomOperation, pOCV.indOpFenetre[0]);
+    f->SetLabel(s);
+
+
+    f->AssosierImage(r[nbres]);
+    f->DynamiqueAffichage();
+    f->Bind(wxEVT_LEAVE_WINDOW, &FenetrePrincipale::SourisQuitterFen, f);
+
+    ImageStatistiques *imgStatIm = new ImageStatistiques(NULL, _("Image Statistic"),
+        wxPoint(530, 0), wxSize(430, 570),
+        wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
+    listeFenetre[nbFenetre] = new EnvFenetre(f, fenZoom, imgStatIm);
+    indFenetre = nbFenetre;
+    f->DefId(nbFenetre);
+    imgStatIm->SetLabel("Stat : " + s);
+    imgStatIm->DefFenMere(f);
+    imgStatIm->OuvertureOngletStatus();
+    imgStatIm->DefOSGApp(this);
+    f->DefZoom(fenZoom);
+    f->DefImgStat(imgStatIm);
+    f->OrigineImage()->indRes = RechercheFenetre(f->ImAcq());
+#ifdef _DLL_DETECTION__
+    if (dllplplot->IsLoaded() && dllSVGplplotdrv->IsLoaded())
+#endif
+    {
+        imgStatIm->OuvertureOngletHistogramme();
+        imgStatIm->OuvertureOngletCoupe();
+        /*		imgStatIm->OuvertureOngletDistribRadiale();
+        imgStatIm->OuvertureOngletDistribAngulaire();
+        imgStatIm->OuvertureOngletFocus();*/
+    }
+    imgStatIm->OuvertureOngletCouleur();
+    imgStatIm->OuvertureOngletPalette();
+    if (f->ImAcq() && f->ImAcq()->StatComposante())
+    {
+        imgStatIm->OuvertureOngletRegion();
+        imgStatIm->ListerRegion();
+    }
+    imgStatIm->OuvertureOngletCurseur();
+    f->DefHistorique();
+    f->Show(true);
+
+    f->NouvelleImage();
+    f->MAJNouvelleImage();
+
+    f->RecupDerniereConfig();
+    nbFenetre++;
+    f->InitIHM();
+    wxCommandEvent evt;
+    f->ParamAlgo(evt);
+}
 
 void wxOpencvApp::CalculFini(EvtCalculFini &w)
 {
@@ -938,113 +1048,7 @@ if (r.size()==NULL)
 	}
 for (int nbres=0;nbres<pOCV.nbImageRes;nbres++)
 	{
-	FenetrePrincipale *f = new FenetrePrincipale(NULL, pOCV.nomOperation,
-		wxPoint(0,0), wxSize(530,570),wxCLOSE_BOX|wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
-	FenetreZoom *fenZoom = new FenetreZoom(f);
-	f->DefOSGApp(this);
-	wxString s;
-    int ind = -1;
-	if (pOCV.nomOperation=="Convolution")
-		{
-		ind = r[nbres]->IndOpConvolution();
-		}
-	if (pOCV.nomOperation=="Erosion")
-		{
-		ind = r[nbres]->IndOpMorphologie();
-		}
-	if (pOCV.nomOperation=="Dilatation")
-		{
-		ind = r[nbres]->IndOpMorphologie();
-		}
-	int idOperation=-1;
-	int numEtape=-1;
-    if (pOCV.indOpFenetre[0] != -1)
-		{
-        FenetrePrincipale *f = Fenetre(pOCV.indOpFenetre[0]);
-		
-		if (f!=NULL)
-			{
-			if(f->OrigineImage()!=NULL)
-				{
-				idOperation=f->OrigineImage()->idOperation;
-				if (idOperation>=0)
-					numEtape=f->OrigineImage()->indEtape+1;
-				}
-			}
-        if (idOperation == -1 && pOCV.indOpFenetre.size()>=2 &&pOCV.indOpFenetre[1] >= 0)
-			{
-            f = Fenetre(pOCV.indOpFenetre[1]);
-			if(f->OrigineImage()!=NULL)
-				{
-				idOperation=f->OrigineImage()->idOperation;
-				if (idOperation>=0)
-					numEtape=f->OrigineImage()->indEtape+1;
-				}
-			}
-		}
-	if (numEtape==-1)
-		numEtape=0;
-	if (idOperation==-1)
-		idOperation=numOpFaite++;
-	if (pOCV.indOpFenetre.size()>=1)
-        f->DefHistorique(pOCV.indOpFenetre[0], -1, -1, idOperation, numEtape, pOCV.nomOperation, &pOCV);
-	if (pOCV.indOpFenetre.size()>=2)
-        f->DefHistorique(pOCV.indOpFenetre[0], pOCV.indOpFenetre[1], -1, idOperation, numEtape, pOCV.nomOperation, &pOCV);
-    if (pOCV.indOpFenetre.size() >= 3)
-        f->DefHistorique(pOCV.indOpFenetre[0], pOCV.indOpFenetre[1], pOCV.indOpFenetre[2], idOperation, numEtape, pOCV.nomOperation, &pOCV);
-	if (ind!=-1)
-        s.Printf("%d : %s(operator %d) of image %d ", nbFenetre, pOCV.nomOperation, ind, pOCV.indOpFenetre[0]);
-	else
-        s.Printf("%d : %s of image %d ", nbFenetre, pOCV.nomOperation, pOCV.indOpFenetre[0]);
-	f->SetLabel(s);
-
-
-	f->AssosierImage(r[nbres]);
-    f->DynamiqueAffichage();
-	f->Bind(wxEVT_LEAVE_WINDOW, &FenetrePrincipale::SourisQuitterFen, f);
-
-	ImageStatistiques *imgStatIm = new ImageStatistiques(NULL, _("Image Statistic"),
-		wxPoint(530,0), wxSize(430,570),
-		wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
-	listeFenetre[nbFenetre]=new EnvFenetre(f,fenZoom,imgStatIm);
-	indFenetre=nbFenetre;
-	f->DefId(nbFenetre);
-	imgStatIm->SetLabel("Stat : "+s);
-	imgStatIm->DefFenMere(f);
-	imgStatIm->OuvertureOngletStatus();
-	imgStatIm->DefOSGApp(this);
-	f->DefZoom(fenZoom);
-	f->DefImgStat(imgStatIm);
-    f->OrigineImage()->indRes = RechercheFenetre(f->ImAcq());
-#ifdef _DLL_DETECTION__
-	if (dllplplot->IsLoaded() && dllSVGplplotdrv->IsLoaded())
-#endif
-		{
-		imgStatIm->OuvertureOngletHistogramme();
-		imgStatIm->OuvertureOngletCoupe();
-/*		imgStatIm->OuvertureOngletDistribRadiale();
-		imgStatIm->OuvertureOngletDistribAngulaire();
-		imgStatIm->OuvertureOngletFocus();*/
-		}
-	imgStatIm->OuvertureOngletCouleur();
-	imgStatIm->OuvertureOngletPalette();
-	if (f->ImAcq() && f->ImAcq()->StatComposante())
-		{
-		imgStatIm->OuvertureOngletRegion();
-		imgStatIm->ListerRegion();
-		}
-	imgStatIm->OuvertureOngletCurseur();
-	f->DefHistorique();
-	f->Show(true);
-
-	f->NouvelleImage();
-	f->MAJNouvelleImage();
-
-	f->RecupDerniereConfig();
-	nbFenetre++;
-	f->InitIHM();
-	wxCommandEvent evt;
-	f->ParamAlgo(evt);
+    CreerFenetre(r,nbres);
 	}
 if (pOCV.nbImageRes==0)
 	{

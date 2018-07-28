@@ -386,7 +386,6 @@ void FenetreInfoOperation::OnSpinReel(wxSpinDoubleEvent &w)
             fenMere->Feuille()->Update();
         }
     }
-    if (fenMere)
         ExecuterOperation(ind);
 }
 
@@ -537,7 +536,6 @@ void FenetreInfoOperation::ComboBox(wxCommandEvent &w)
             pOCV->sizeParam[nom].valeur.height = ((wxSpinCtrlDouble*)(w.GetEventObject()))->GetValue();
         }
     }
-//    if (fenMere)
         ExecuterOperation(ind);
 
 }
@@ -606,6 +604,13 @@ void FenetreInfoOperation::ExecuterOperation(int indOperation)
                     {
                         item = (InfoNoeud *)arbre->GetItemData(t);
                         FenetrePrincipale *f = item->Fenetre();
+                        if (!f)
+                        {
+                            ((wxOpencvApp*)osgApp)->CreerFenetre(r,0);
+                            f = ((wxOpencvApp*)osgApp)->Graphique(pOCV->indRes);
+                        }
+                        if (!f)
+                            return;
                         std::vector<std::pair<ParametreOperation*, int>> pl = FindOperande(f->ImAcq());
                         for (auto p : pl)
                         {
