@@ -838,12 +838,14 @@ do
     if (!fs[s].empty())
     {
         p.read(fs[s]);
+        p.AjouteIndiceOp(app->GetOffsetOpe());
         p.InitPtrFonction();
         seqFichier[0].push_back(p);
     }
     indEtape++;
 }
 while (!fs[s].empty());
+app->UpdateOffsetOpe();
 seqActif = &seqFichier;
 InsererCtrlEtape(&(seqFichier[0][0]));
 wxSpinCtrl *spw = (wxSpinCtrl*) wxWindow::FindWindowById(IND_OPE, panneau);

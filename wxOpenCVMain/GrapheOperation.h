@@ -69,7 +69,9 @@ public:
     int IndiceOnglet() { return indOnglet; };
     int IndiceFenetre() { return indFen; };
     FenetrePrincipale *Fenetre() { return fen; };
-    void DefFenetre( FenetrePrincipale *fz)  { fen=fz; };
+    void DefFenetre(FenetrePrincipale *fz) { fen = fz; };
+    void DefIndFenetre(int ind) { indFen = ind; };
+    void DefTitle(wxString s) { m_desc = s; };
     wxTreeItemId getParent() { return res; };
 };
 

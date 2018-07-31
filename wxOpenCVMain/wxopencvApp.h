@@ -111,6 +111,7 @@ private:
 
     ParametreOperation pOCV;	/*!< parametre de l'opérateur Unaire */
     int typeGradient;           /*! 0 Sobel, 1 Scharr, 2 Deriche, 3 Paillou*/
+    int offsetOpe;
 
 
 public:
@@ -155,6 +156,8 @@ public:
 //    int IdFenetreOp1pre();
     int NbOperande(){ return pOCV.nbOperande; };
     int NumSeqOpe(int *x=NULL){if (x!=NULL) numSeqOpe=*x;return numSeqOpe;};
+    int GetOffsetOpe() { return offsetOpe; };
+    void UpdateOffsetOpe() { offsetOpe += 50; };
     void AnnuleOp();
     std::map <int,std::vector <ParametreOperation > >  *TabSeqOperation(){return &tabOperation;}
     std::vector<ImageInfoCV*> ExecuterOperation(ParametreOperation * = NULL, bool noEvt = false);

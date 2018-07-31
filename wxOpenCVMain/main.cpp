@@ -709,6 +709,7 @@ bool wxOpencvApp::OnInit()
 	fSeqOpe=NULL;
 	fenOpe=NULL;
     ctrlCamera=NULL;
+    offsetOpe = 100;
     configApp=new wxFileConfig("wxOpenCV","LB","wxOpenCV.ini",wxEmptyString);
 	LectureFichierConfig();
 #ifndef __MULTILANGUE__

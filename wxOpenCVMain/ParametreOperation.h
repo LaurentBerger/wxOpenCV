@@ -89,6 +89,7 @@ explicit ParametreOperation(std::string s);
 explicit ParametreOperation(){ InitOperation(""); };
 bool InitOperation(std::string s);
 bool InitPtrFonction();
+void AjouteIndiceOp(int offset);
 std::vector<ImageInfoCV*> ExecuterOperation();
 void write(cv::FileStorage& fs) const;                      //Write serialization for this class
 void read(const cv::FileNode& node);                          //Read serialization for this class

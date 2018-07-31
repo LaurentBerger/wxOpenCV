@@ -419,11 +419,13 @@ void ArboCalcul::ExplorerArbre(wxTreeItemId &id, ArboCalculParam &p, void (ArboC
             {
                 wxTreeItemId tfch = tf;
                 ExplorerArbre(tfch, p, fonctionNoeud);
+                (this->*fonctionNoeud)(id, p);
             }
             else
             {
                 wxTreeItemId tfch = tf;
                 ExplorerArbre(tfch, p, fonctionNoeud);
+                (this->*fonctionNoeud)(id, p);
             }
             tf = GetNextChild(id, cookie);
         }
@@ -455,30 +457,45 @@ void ArboCalcul::ReplacerIdParFenetre(wxTreeItemId &id, ArboCalculParam & p)
     InfoNoeud *item = (InfoNoeud *)GetItemData(id);
     if (item)
     {
-        if (item->IndiceFenetre() == p.indFen)
+        wxTreeItemId idParent;
+        idParent = item->getParent();
+        if (item->Fenetre() || item->IndiceFenetre()>=0)
         {
-            item->DefFenetre(p.fen);
-            wxString n(p.fen->GetTitle());
-            wxIconBundle iconBundle = p.fen->GetIcons();
-            wxIcon icon = iconBundle.GetIcon(wxSize(32, 32), wxIconBundle::FALLBACK_NEAREST_LARGER);
-
-            listeImage.get()->Add(icon);
-            listeImage.get()->Add(icon);
-            wxTreeItemId idParent;
-            if (item != NULL)
+            if (item->IndiceFenetre() == p.indFen)
             {
-                idParent = item->getParent();
-            }
-            SetItemText(id, p.fen->GetTitle());
-            SetItemData(id, new InfoNoeud(p.fen->GetTitle(), p.fen, idParent));
-            SetItemImage(id, listeImage.get()->GetImageCount() - 2);
-            //    id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, f, idParent));
-            if (item != NULL)
+                int ind = -1;
+                if (p.fen)
+                    ind = ((wxOpencvApp *)osgApp)->RechercheFenetre(((FenetrePrincipale*)p.fen)->ImAcq());
+                if (ind >= 0)
+                {
+                    item->DefFenetre(p.fen);
+                    item->DefIndFenetre(ind);
+                    item->DefTitle(p.fen->GetTitle());
+                }
+                wxString n(p.fen->GetTitle());
+                wxIconBundle iconBundle = p.fen->GetIcons();
+                wxIcon icon = iconBundle.GetIcon(wxSize(32, 32), wxIconBundle::FALLBACK_NEAREST_LARGER);
+
+                listeImage.get()->Add(icon);
+                listeImage.get()->Add(icon);
+                SetItemText(id, p.fen->GetTitle());
+                SetItemImage(id, listeImage.get()->GetImageCount() - 2);
+             }
+        }
+        else if (item->Operation())
+        {
+            ParametreOperation *pOCV = item->Operation();
+            for (int i = 0; i < pOCV->nbOperande; i++)
             {
-                delete item;
-
+                if (pOCV->indOpFenetre[i] == p.indFen)
+                {
+                    pOCV->indOpFenetre[i] = p.indFen;
+                    if (i < pOCV->op.size())
+                        pOCV->op[i] = ((FenetrePrincipale*)p.fen)->ImAcq();
+                    else
+                        pOCV->op.push_back(((FenetrePrincipale*)p.fen)->ImAcq());
+                }
             }
-
         }
     }
 

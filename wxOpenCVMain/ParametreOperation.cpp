@@ -2489,6 +2489,13 @@ if (s == "panocomposition")
 return false;
 }
 
+void ParametreOperation::AjouteIndiceOp(int offset)
+{
+    for (int i = 0; i < nbOperande; i++)
+        indOpFenetre[i] += offset;
+    indRes += offset;
+}
+
 
 std::vector<ImageInfoCV*> ParametreOperation::ExecuterOperation()
 {
