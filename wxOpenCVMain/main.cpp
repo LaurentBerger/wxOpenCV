@@ -926,7 +926,7 @@ posFenetre = wxPoint(20,20);
 return true;
 }
 
-void wxOpencvApp::CreerFenetre(vector<ImageInfoCV*> r,int nbres)
+FenetrePrincipale* wxOpencvApp::CreerFenetre(vector<ImageInfoCV*> r,int nbres)
 {
     FenetrePrincipale *f = new FenetrePrincipale(NULL, pOCV.nomOperation,
         wxPoint(0, 0), wxSize(530, 570), wxCLOSE_BOX | wxMINIMIZE_BOX | wxMAXIMIZE_BOX | wxRESIZE_BORDER | wxSYSTEM_MENU | wxCAPTION | wxCLIP_CHILDREN);
@@ -1035,6 +1035,7 @@ void wxOpencvApp::CreerFenetre(vector<ImageInfoCV*> r,int nbres)
     f->InitIHM();
     wxCommandEvent evt;
     f->ParamAlgo(evt);
+    return f;
 }
 
 void wxOpencvApp::CalculFini(EvtCalculFini &w)

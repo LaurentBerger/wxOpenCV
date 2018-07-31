@@ -606,8 +606,14 @@ void FenetreInfoOperation::ExecuterOperation(int indOperation)
                         FenetrePrincipale *f = item->Fenetre();
                         if (!f)
                         {
-                            ((wxOpencvApp*)osgApp)->CreerFenetre(r,0);
-                            f = ((wxOpencvApp*)osgApp)->Graphique(pOCV->indRes);
+                            f = ((wxOpencvApp*)osgApp)->CreerFenetre(r,0);
+                            if (!f)
+                                return;
+                            ArboCalculParam p;
+                            p.fen = f;
+                            p.indFen = item->IndiceFenetre();
+                            arbre->ExplorerArbre(arbre->GetRootItem(), p, &ArboCalcul::ReplacerIdParFenetre);
+                            item->DefFenetre(f);
                         }
                         if (!f)
                             return;
