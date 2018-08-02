@@ -404,7 +404,7 @@ void ArboCalcul::SauverSequence(wxTreeItemId &idParent)
 
 }
 
-void ArboCalcul::ExplorerArbre(wxTreeItemId &id, ArboCalculParam &p, void (ArboCalcul::*fonctionNoeud)(wxTreeItemId &, ArboCalculParam &p))
+void ArboCalcul::ExplorerArbre(wxTreeItemId &id, ArboCalculParam &p, void (ArboCalcul::*fonctionNoeud)(wxTreeItemId &, ArboCalculParam &p, bool))
 {
     if (osgApp == NULL)
         return;
@@ -419,17 +419,17 @@ void ArboCalcul::ExplorerArbre(wxTreeItemId &id, ArboCalculParam &p, void (ArboC
             {
                 wxTreeItemId tfch = tf;
                 ExplorerArbre(tfch, p, fonctionNoeud);
-                (this->*fonctionNoeud)(id, p);
+                (this->*fonctionNoeud)(id, p,false);
             }
             else
             {
                 wxTreeItemId tfch = tf;
                 ExplorerArbre(tfch, p, fonctionNoeud);
-                (this->*fonctionNoeud)(id, p);
+                (this->*fonctionNoeud)(id, p,false);
             }
             tf = GetNextChild(id, cookie);
         }
-        (this->*fonctionNoeud)(id, p);
+        (this->*fonctionNoeud)(id, p,true);
         /*        InfoNoeud *item = (InfoNoeud *)GetItemData(id);
         if (item->Operation())
         {
@@ -440,8 +440,10 @@ void ArboCalcul::ExplorerArbre(wxTreeItemId &id, ArboCalculParam &p, void (ArboC
     }
     return;
 }
-void ArboCalcul::SauverNoeud(wxTreeItemId &id, ArboCalculParam & p)
+void ArboCalcul::SauverNoeud(wxTreeItemId &id, ArboCalculParam & p, bool quitterBranche)
 {
+    if (!quitterBranche)
+        return;
     InfoNoeud *item = (InfoNoeud *)GetItemData(id);
     if (item && item->Operation() && p.fs.isOpened())
     {
@@ -452,7 +454,7 @@ void ArboCalcul::SauverNoeud(wxTreeItemId &id, ArboCalculParam & p)
 
 }
 
-void ArboCalcul::ReplacerIdParFenetre(wxTreeItemId &id, ArboCalculParam & p)
+void ArboCalcul::ReplacerIdParFenetre(wxTreeItemId &id, ArboCalculParam & p, bool quitterBranche)
 {
     InfoNoeud *item = (InfoNoeud *)GetItemData(id);
     if (item)

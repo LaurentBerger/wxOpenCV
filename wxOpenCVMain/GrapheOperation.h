@@ -167,6 +167,7 @@ private:
     wxTextCtrl      *info;
     std::vector<ParametreOperation> listeOp;
     wxString nomArbre;
+    bool listeOpPrete;
 public:
     enum
     {
@@ -211,11 +212,11 @@ public:
 
     void SauverSequence(wxTreeItemId &idParent);
 
-    void SauverNoeud(wxTreeItemId & id, ArboCalculParam & p);
+    void SauverNoeud(wxTreeItemId & id, ArboCalculParam & p,bool quitterBranche);
 
-    void ReplacerIdParFenetre(wxTreeItemId & id, ArboCalculParam & p);
+    void ReplacerIdParFenetre(wxTreeItemId & id, ArboCalculParam & p, bool quitterBranche);
 
-    void ExplorerArbre(wxTreeItemId & id, ArboCalculParam & p, void (ArboCalcul::*FonctionNoeud)(wxTreeItemId &, ArboCalculParam &));
+    void ExplorerArbre(wxTreeItemId & id, ArboCalculParam & p, void (ArboCalcul::*FonctionNoeud)(wxTreeItemId &, ArboCalculParam &,bool));
 
 
 //    void SauverNoeud(wxTreeItemId & idParent, ArboCalulParam &p);

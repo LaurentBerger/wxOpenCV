@@ -572,7 +572,7 @@ void FenetreInfoOperation::ExecuterOperation(int indOperation)
     {
         if (pOCV != NULL)
         {
-            if (app->VerifImagesExiste(pOCV))
+            if (app->VerifImagesExiste(pOCV)|| true)
             {
 
                 wxTreeItemId t = noeud;
