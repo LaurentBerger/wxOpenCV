@@ -214,6 +214,8 @@ public:
 
     void SauverNoeud(wxTreeItemId & id, ArboCalculParam & p,bool quitterBranche);
 
+    void ExecuterNoeud(wxTreeItemId & id, ArboCalculParam & p, bool quitterBranche);
+
     void ReplacerIdParFenetre(wxTreeItemId & id, ArboCalculParam & p, bool quitterBranche);
 
     void ExplorerArbre(wxTreeItemId & id, ArboCalculParam & p, void (ArboCalcul::*FonctionNoeud)(wxTreeItemId &, ArboCalculParam &,bool));

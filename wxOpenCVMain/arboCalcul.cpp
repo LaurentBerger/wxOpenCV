@@ -454,6 +454,74 @@ void ArboCalcul::SauverNoeud(wxTreeItemId &id, ArboCalculParam & p, bool quitter
 
 }
 
+void ArboCalcul::ExecuterNoeud(wxTreeItemId &id, ArboCalculParam & p, bool quitterBranche)
+{
+    if (!quitterBranche)
+        return;
+    InfoNoeud *data = (InfoNoeud *)GetItemData(id);
+
+    if (data->Operation())
+    {
+        ParametreOperation *pOCV = data->Operation();
+        if (((wxOpencvApp*)osgApp)->VerifImagesExiste(pOCV) )
+        {
+            FenetrePrincipale *f=((wxOpencvApp *)osgApp)->Graphique(pOCV->indRes);
+            if (!f)
+            {
+                r = pOCV->ExecuterOperation();
+                if (pOCV->opErreur)
+                {
+                    pOCV->opErreur = 0;
+                    return;
+                }
+                if (r.size() != 0)
+                {
+                    item = (InfoNoeud *)arbre->GetItemData(t);
+                    FenetrePrincipale *f = item->Fenetre();
+                    if (!f)
+                    {
+                        f = ((wxOpencvApp*)osgApp)->CreerFenetre(r, 0);
+                        if (!f)
+                            return;
+                        ArboCalculParam p;
+                        p.fen = f;
+                        p.indFen = item->IndiceFenetre();
+                        arbre->ExplorerArbre(arbre->GetRootItem(), p, &ArboCalcul::ReplacerIdParFenetre);
+                        item->DefFenetre(f);
+                    }
+                    if (!f)
+                        return;
+                    std::vector<std::pair<ParametreOperation*, int>> pl = FindOperande(f->ImAcq());
+                    for (auto p : pl)
+                    {
+                        p.first->op[p.second] = r[0];
+                    }
+                    if (f && f->ImAcq() != r[0])
+                        f->AssosierImage(r[0]);
+                    f->DynamiqueAffichage();
+
+                    f->NouvelleImage();
+                    f->MAJNouvelleImage();
+                    if (f->ImgStat())
+                    {
+                        f->ImgStat()->Plot(true);
+                        f->ImgStat()->MAJOnglet(-1);
+                    }
+                    f->DefHistorique();
+                    noeud = item->getParent();
+                    if (noeud && noeud != arbre->GetRootItem())
+                    {
+                        InfoNoeud *item = (InfoNoeud *)arbre->GetItemData(noeud);
+                        pOCV = item->Operation();
+                    }
+                }
+
+            }
+        }
+    }
+
+}
+
 void ArboCalcul::ReplacerIdParFenetre(wxTreeItemId &id, ArboCalculParam & p, bool quitterBranche)
 {
     InfoNoeud *item = (InfoNoeud *)GetItemData(id);
@@ -491,7 +559,7 @@ void ArboCalcul::ReplacerIdParFenetre(wxTreeItemId &id, ArboCalculParam & p, boo
             {
                 if (pOCV->indOpFenetre[i] == p.indFen)
                 {
-                    pOCV->indOpFenetre[i] = p.indFen;
+                    pOCV->indOpFenetre[i] = ((FenetrePrincipale*)p.fen)->IdFenetre();
                     if (i < pOCV->op.size())
                         pOCV->op[i] = ((FenetrePrincipale*)p.fen)->ImAcq();
                     else

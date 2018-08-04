@@ -555,6 +555,9 @@ std::vector<std::pair<ParametreOperation*, int>> FenetreInfoOperation::FindOpera
     return p;
 }
 
+
+
+
 void FenetreInfoOperation::ExecuterOperation(int indOperation)
 {
     if (!osgApp)
@@ -567,84 +570,83 @@ void FenetreInfoOperation::ExecuterOperation(int indOperation)
     std::vector<ImageInfoCV*>r;
     if (w == noeuds.end())
         return;
-    wxTreeItemId noeud = w->second;
+    wxTreeItemId noeud ;
+    noeud = arbre->GetRootItem();
+    ArboCalculParam p;
+    arbre->ExplorerArbre(noeud,p,&ArboCalcul::ExecuterNoeud);
+    noeud = w->second;
+
+
+
     while (noeud != arbre->GetRootItem())
     {
         if (pOCV != NULL)
         {
-            if (app->VerifImagesExiste(pOCV)|| true)
-            {
 
-                wxTreeItemId t = noeud;
-                InfoNoeud *item = (InfoNoeud *)arbre->GetItemData(t);
-                t = item->getParent();
-                item = (InfoNoeud *)arbre->GetItemData(t);
-                if (item)
+            wxTreeItemId t = noeud;
+            InfoNoeud *item = (InfoNoeud *)arbre->GetItemData(t);
+            t = item->getParent();
+            item = (InfoNoeud *)arbre->GetItemData(t);
+            if (item)
+            {
+                app->DefOperateurImage(wxString(pOCV->nomOperation));
+                for (int i = 0; i < pOCV->nbOperande && i<pOCV->op.size(); i++)
                 {
-                    app->DefOperateurImage(wxString(pOCV->nomOperation));
-                    for (int i = 0; i < pOCV->nbOperande && i<pOCV->op.size(); i++)
+                    int indFen = app->RechercheFenetre(pOCV->op[i]);
+                    if (indFen < 0)
                     {
-                        int indFen = app->RechercheFenetre(pOCV->op[i]);
-                        if (indFen < 0)
-                        {
-                            wxMessageBox(_("Previous image is closed?"), _("Problem"), wxOK);
-                            return;
-                        }
-                        else
-                            app->DefOperandeN(pOCV->op[i], indFen);
-                    }
-                    r = pOCV->ExecuterOperation();
-                    if (pOCV->opErreur)
-                    {
-                        wxMessageBox(pOCV->msgErreur, _("Exception"), wxICON_ERROR);
-                        pOCV->opErreur = 0;
+                        wxMessageBox(_("Previous image is closed?"), _("Problem"), wxOK);
                         return;
                     }
-                    if (r.size() != 0)
+                    else
+                        app->DefOperandeN(pOCV->op[i], indFen);
+                }
+                r = pOCV->ExecuterOperation();
+                if (pOCV->opErreur)
+                {
+                    wxMessageBox(pOCV->msgErreur, _("Exception"), wxICON_ERROR);
+                    pOCV->opErreur = 0;
+                    return;
+                }
+                if (r.size() != 0)
+                {
+                    item = (InfoNoeud *)arbre->GetItemData(t);
+                    FenetrePrincipale *f = item->Fenetre();
+                    if (!f)
                     {
-                        item = (InfoNoeud *)arbre->GetItemData(t);
-                        FenetrePrincipale *f = item->Fenetre();
-                        if (!f)
-                        {
-                            f = ((wxOpencvApp*)osgApp)->CreerFenetre(r,0);
-                            if (!f)
-                                return;
-                            ArboCalculParam p;
-                            p.fen = f;
-                            p.indFen = item->IndiceFenetre();
-                            arbre->ExplorerArbre(arbre->GetRootItem(), p, &ArboCalcul::ReplacerIdParFenetre);
-                            item->DefFenetre(f);
-                        }
+                        f = ((wxOpencvApp*)osgApp)->CreerFenetre(r,0);
                         if (!f)
                             return;
-                        std::vector<std::pair<ParametreOperation*, int>> pl = FindOperande(f->ImAcq());
-                        for (auto p : pl)
-                        {
-                            p.first->op[p.second] = r[0];
-                        }
-                        if (f && f->ImAcq() != r[0])
-                            f->AssosierImage(r[0]);
-                        f->DynamiqueAffichage();
+                        ArboCalculParam p;
+                        p.fen = f;
+                        p.indFen = item->IndiceFenetre();
+                        arbre->ExplorerArbre(arbre->GetRootItem(), p, &ArboCalcul::ReplacerIdParFenetre);
+                        item->DefFenetre(f);
+                    }
+                    if (!f)
+                        return;
+                    std::vector<std::pair<ParametreOperation*, int>> pl = FindOperande(f->ImAcq());
+                    for (auto p : pl)
+                    {
+                        p.first->op[p.second] = r[0];
+                    }
+                    if (f && f->ImAcq() != r[0])
+                        f->AssosierImage(r[0]);
+                    f->DynamiqueAffichage();
 
-                        f->NouvelleImage();
-                        f->MAJNouvelleImage();
-                        if (f->ImgStat())
-                        {
-                            f->ImgStat()->Plot(true);
-                            f->ImgStat()->MAJOnglet(-1);
-                        }
-                        f->DefHistorique();
-                        noeud = item->getParent();
-                        if (noeud && noeud != arbre->GetRootItem())
-                        {
-                            InfoNoeud *item = (InfoNoeud *)arbre->GetItemData(noeud);
-                            pOCV = item->Operation();
-                        }
-                        else
-                        {
-                            pOCV = NULL;
-                            noeud = arbre->GetRootItem();
-                        }
+                    f->NouvelleImage();
+                    f->MAJNouvelleImage();
+                    if (f->ImgStat())
+                    {
+                        f->ImgStat()->Plot(true);
+                        f->ImgStat()->MAJOnglet(-1);
+                    }
+                    f->DefHistorique();
+                    noeud = item->getParent();
+                    if (noeud && noeud != arbre->GetRootItem())
+                    {
+                        InfoNoeud *item = (InfoNoeud *)arbre->GetItemData(noeud);
+                        pOCV = item->Operation();
                     }
                 }
                 else
