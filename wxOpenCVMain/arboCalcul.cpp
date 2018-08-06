@@ -138,7 +138,7 @@ void ArboCalcul::Installation()
 		int id=FindMaxEtapeOperation();
         if (id >= 0)
         {
-            rootId = AddRoot(std::to_string(listeOp[id].indRes), 0, 1, new InfoNoeud(wxString(std::to_string(id)), wxString(std::to_string(id)),id, NULL));
+            rootId = AddRoot(std::to_string(listeOp[id].indRes), 0, 1, new InfoNoeud(wxString(std::to_string(listeOp[id].indRes)), wxString(std::to_string(listeOp[id].indRes)), listeOp[id].indRes, NULL));
             PileCalcul(rootId, &listeOp[id]);
         }
 
@@ -429,7 +429,10 @@ void ArboCalcul::ExplorerArbre(wxTreeItemId &id, ArboCalculParam &p, void (ArboC
             }
             tf = GetNextChild(id, cookie);
         }
-        (this->*fonctionNoeud)(id, p,true);
+        if (id == GetRootItem())
+            (this->*fonctionNoeud)(id, p, false);
+        else
+            (this->*fonctionNoeud)(id, p,true);
         /*        InfoNoeud *item = (InfoNoeud *)GetItemData(id);
         if (item->Operation())
         {
@@ -459,6 +462,8 @@ void ArboCalcul::ExecuterNoeud(wxTreeItemId &id, ArboCalculParam & p, bool quitt
     if (!quitterBranche)
         return;
     InfoNoeud *data = (InfoNoeud *)GetItemData(id);
+    wxTreeItemId noeud = id;
+    std::vector<ImageInfoCV*>r;
 
     if (data->Operation())
     {
@@ -468,6 +473,14 @@ void ArboCalcul::ExecuterNoeud(wxTreeItemId &id, ArboCalculParam & p, bool quitt
             FenetrePrincipale *f=((wxOpencvApp *)osgApp)->Graphique(pOCV->indRes);
             if (!f)
             {
+                wxOpencvApp	*app = (wxOpencvApp *)osgApp;
+                app->DefOperateurImage(wxString(pOCV->nomOperation));
+                for (int i = 0; i < pOCV->nbOperande && i<pOCV->op.size(); i++)
+                {
+                    int indFen = app->RechercheFenetre(pOCV->op[i]);
+                    if (indFen >= 0)
+                        app->DefOperandeN(pOCV->op[i], indFen);
+                }
                 r = pOCV->ExecuterOperation();
                 if (pOCV->opErreur)
                 {
@@ -476,7 +489,7 @@ void ArboCalcul::ExecuterNoeud(wxTreeItemId &id, ArboCalculParam & p, bool quitt
                 }
                 if (r.size() != 0)
                 {
-                    item = (InfoNoeud *)arbre->GetItemData(t);
+                    InfoNoeud *item = (InfoNoeud *)GetItemData(noeud);
                     FenetrePrincipale *f = item->Fenetre();
                     if (!f)
                     {
@@ -485,17 +498,14 @@ void ArboCalcul::ExecuterNoeud(wxTreeItemId &id, ArboCalculParam & p, bool quitt
                             return;
                         ArboCalculParam p;
                         p.fen = f;
-                        p.indFen = item->IndiceFenetre();
-                        arbre->ExplorerArbre(arbre->GetRootItem(), p, &ArboCalcul::ReplacerIdParFenetre);
+                        p.indFen = item->Operation()->indRes;
+                        ExplorerArbre(GetRootItem(), p, &ArboCalcul::ReplacerIdParFenetre);
                         item->DefFenetre(f);
+                        item->DefIndFenetre(f->IdFenetre());
+                        pOCV->indRes = f->IdFenetre();
                     }
                     if (!f)
                         return;
-                    std::vector<std::pair<ParametreOperation*, int>> pl = FindOperande(f->ImAcq());
-                    for (auto p : pl)
-                    {
-                        p.first->op[p.second] = r[0];
-                    }
                     if (f && f->ImAcq() != r[0])
                         f->AssosierImage(r[0]);
                     f->DynamiqueAffichage();
@@ -509,9 +519,9 @@ void ArboCalcul::ExecuterNoeud(wxTreeItemId &id, ArboCalculParam & p, bool quitt
                     }
                     f->DefHistorique();
                     noeud = item->getParent();
-                    if (noeud && noeud != arbre->GetRootItem())
+                    if (noeud && noeud != GetRootItem())
                     {
-                        InfoNoeud *item = (InfoNoeud *)arbre->GetItemData(noeud);
+                        InfoNoeud *item = (InfoNoeud *)GetItemData(noeud);
                         pOCV = item->Operation();
                     }
                 }

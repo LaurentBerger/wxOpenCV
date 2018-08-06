@@ -578,7 +578,7 @@ void FenetreInfoOperation::ExecuterOperation(int indOperation)
 
 
 
-    while (noeud != arbre->GetRootItem())
+    while (noeud.IsOk() && noeud != arbre->GetRootItem())
     {
         if (pOCV != NULL)
         {
