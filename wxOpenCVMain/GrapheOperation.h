@@ -45,9 +45,15 @@ class ArboCalcul;
 
 class InfoNoeud : public wxTreeItemData
 {
+#define NOEUD_FENETRE 1
+#define NOEUD_OPERATION 2
+#define NOEUD_RESULTAT 4
+#define NOEUD_ATTRIBUT 8
+#define NOEUD_AVEC_ATTRIBUT 16
+
     enum
     {
-        NON_INIT=0,OPERATION_VALIDE = 1, OPERATION_SEQUENCE_FICHIER, FENETRE_RESULTAT, FENETRE_DONNEE,
+        NON_INIT=0,FENETRE_RESULTAT, FENETRE_DONNEE,
         INDICE_FENETRE_VALIDE, INDICE_FENETRE_LOGIQUE
     };
 private:
@@ -59,9 +65,9 @@ private:
     int indFen;
     int typeNoeud;  
 public:
-    InfoNoeud(const wxString& desc, FenetrePrincipale *f,const wxTreeItemId pUp) : res(pUp),m_desc(desc), fen(f), indFen(-1),pOCV(NULL),indOnglet(-1) { }
-	InfoNoeud(const wxString& desc, ParametreOperation *p, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc),indFen(-1), fen(NULL), pOCV(p), indOnglet(n) { }
-	InfoNoeud(const wxString& desc, wxString &s, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc), fen(NULL), indFen(n), pOCV(NULL), indOnglet(n) { }
+    InfoNoeud(const wxString& desc, FenetrePrincipale *f,const wxTreeItemId pUp) : res(pUp),m_desc(desc), fen(f), indFen(-1),pOCV(NULL),indOnglet(-1),typeNoeud(0) { }
+	InfoNoeud(const wxString& desc, ParametreOperation *p, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc),indFen(-1), fen(NULL), pOCV(p), indOnglet(n), typeNoeud(0) { }
+	InfoNoeud(const wxString& desc, wxString &s, int n, const wxTreeItemId pUp) : res(pUp), m_desc(desc), fen(NULL), indFen(n), pOCV(NULL), indOnglet(n), typeNoeud(0) { }
 
     void ShowInfo(wxTreeCtrl *tree);
     wxString const& GetDesc() const { return m_desc; }
@@ -72,6 +78,8 @@ public:
     void DefFenetre(FenetrePrincipale *fz) { fen = fz; };
     void DefIndFenetre(int ind) { indFen = ind; };
     void DefTitle(wxString s) { m_desc = s; };
+    void DefTypeNoeud(int s) { typeNoeud = s; };
+    int TypeNoeud() { return typeNoeud; };
     wxTreeItemId getParent() { return res; };
 };
 

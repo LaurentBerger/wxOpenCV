@@ -192,8 +192,39 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, int indRes)
         else
             id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, wxString(std::to_string(indRes)),indRes, idParent));
         int idOp = FindIdResOperation(indRes);
-        if (idOp>=0)
+        bool att = false;
+        for (int ind= 0;ind<listeOp.size();ind++)
+        {
+            if (listeOp[ind].opAttribut && listeOp[ind].nbImageRes == 0 && listeOp[ind].nbOperande > 0 && listeOp[ind].indOpFenetre[0] == indRes)
+            {
+                wxString n(listeOp[ind].nomOperation);
+                wxTreeItemId idOp = AppendItem(id, n, -1, -1, new InfoNoeud(n, &listeOp[ind], nbEtape, id));
+                fenAlgo.get()->AjouterEtape(nbEtape, &listeOp[ind], indRes, id);
+                nbEtape++;
+                att = true;
+
+            }
+        }
+        if (idOp >= 0)
+        {
             PileCalcul(id, &listeOp[idOp]);
+            InfoNoeud *item = (InfoNoeud *)GetItemData(id);
+            if (item)
+                if (att)
+                    item->DefTypeNoeud(NOEUD_RESULTAT + NOEUD_ATTRIBUT);
+                else
+                    item->DefTypeNoeud(NOEUD_RESULTAT);
+
+        }
+        else
+        {
+            InfoNoeud *item = (InfoNoeud *)GetItemData(id);
+            if (item)
+                if (att)
+                    item->DefTypeNoeud(NOEUD_FENETRE+NOEUD_ATTRIBUT);
+                else
+                    item->DefTypeNoeud(NOEUD_FENETRE);
+        }
 
     }
 
@@ -370,7 +401,7 @@ void ArboCalcul::ShowMenu(wxTreeItemId id, const wxPoint& pt)
         menu.Append(TreeTest_About, wxT("&About"));
         menu.AppendSeparator();
         menu.Append(TreeTest_Highlight, wxT("&Select item") + GetItemText(id));
-        if (!item->Operation() && GetChildrenCount(id) == 0)
+        if (!item->Operation() && item->TypeNoeud()&NOEUD_FENETRE)
         {
             menu.AppendSeparator();
             menu.Append(TreeTest_Select_operande, wxT("&New operande"));

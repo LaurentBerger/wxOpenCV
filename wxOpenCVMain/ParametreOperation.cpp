@@ -2493,7 +2493,8 @@ void ParametreOperation::AjouteIndiceOp(int offset)
 {
     for (int i = 0; i < nbOperande; i++)
         indOpFenetre[i] += offset;
-    indRes += offset;
+    if (indRes >= 0)
+        indRes += offset;
 }
 
 
