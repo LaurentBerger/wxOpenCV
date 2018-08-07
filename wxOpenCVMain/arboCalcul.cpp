@@ -502,25 +502,25 @@ void ArboCalcul::ExecuterNoeud(wxTreeItemId &id, ArboCalculParam & p, bool quitt
         if (((wxOpencvApp*)osgApp)->VerifImagesExiste(pOCV) )
         {
             FenetrePrincipale *f=((wxOpencvApp *)osgApp)->Graphique(pOCV->indRes);
+            wxOpencvApp	*app = (wxOpencvApp *)osgApp;
+            app->DefOperateurImage(wxString(pOCV->nomOperation));
+            for (int i = 0; i < pOCV->nbOperande && i<pOCV->op.size(); i++)
+            {
+                int indFen = app->RechercheFenetre(pOCV->op[i]);
+                if (indFen >= 0)
+                    app->DefOperandeN(pOCV->op[i], indFen);
+            }
+            r = pOCV->ExecuterOperation();
+            if (pOCV->opErreur)
+            {
+                pOCV->opErreur = 0;
+                return;
+            }
+            InfoNoeud *item = (InfoNoeud *)GetItemData(noeud);
             if (!f)
             {
-                wxOpencvApp	*app = (wxOpencvApp *)osgApp;
-                app->DefOperateurImage(wxString(pOCV->nomOperation));
-                for (int i = 0; i < pOCV->nbOperande && i<pOCV->op.size(); i++)
-                {
-                    int indFen = app->RechercheFenetre(pOCV->op[i]);
-                    if (indFen >= 0)
-                        app->DefOperandeN(pOCV->op[i], indFen);
-                }
-                r = pOCV->ExecuterOperation();
-                if (pOCV->opErreur)
-                {
-                    pOCV->opErreur = 0;
-                    return;
-                }
                 if (r.size() != 0)
                 {
-                    InfoNoeud *item = (InfoNoeud *)GetItemData(noeud);
                     FenetrePrincipale *f = item->Fenetre();
                     if (!f)
                     {
