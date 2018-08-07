@@ -6,3 +6,9 @@
 
 using namespace std;
 
+bool SequenceOperation::ExecuterSequence()
+{
+    return false;
+}
+
+

@@ -99,14 +99,19 @@ friend std::ostream& operator << (std::ostream &out, const ParametreOperation&);
 
 class SequenceOperation {
     void                    *osgApp;
+    bool                    majFenetre;
     std::vector<ParametreOperation> listeOp;
 public :
 
-    SequenceOperation() { osgApp = NULL; };
+    SequenceOperation(): osgApp(NULL),majFenetre(false) {};
     void AjouterOperation(ParametreOperation p) { listeOp.push_back(p); };
     ParametreOperation LireOperation(int ind) { if (ind >= 0 && ind < listeOp.size()) return listeOp[ind]; else return ParametreOperation(); };
     bool DefOperation(int ind, ParametreOperation p) {
         if (ind < 0 || ind >= listeOp.size()) return false; listeOp[ind] = p; return true;};
+    void DefOSGApp(void *w) { osgApp = w; };
+    void MajFenetre(bool maj) { majFenetre = maj; };
+    bool MajFenetre() { return majFenetre; };
+    bool ExecuterSequence();
 
 };
 
