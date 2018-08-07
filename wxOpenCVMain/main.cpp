@@ -1034,7 +1034,7 @@ FenetrePrincipale* wxOpencvApp::CreerFenetre(vector<ImageInfoCV*> r,int nbres)
     nbFenetre++;
     f->InitIHM();
     wxCommandEvent evt;
-    f->ParamAlgo(evt);
+//    f->ParamAlgo(evt);
     return f;
 }
 
@@ -1061,7 +1061,7 @@ if (pOCV.nbImageRes==0)
         f->NouvelleImage();
         f->MAJNouvelleImage();
         wxCommandEvent evt;
-		f->ParamAlgo(evt);
+//		f->ParamAlgo(evt);
 		}
     if (pOCV.nomOperation == "orbfeatures2d")
         listeFenetre[pOCV.indOpFenetre[0]]->fStat->OuvertureOngletKeyPt(f->ImAcq()->PointCle(IMAGEINFOCV_ORB_DES),_("ORB features"));

@@ -97,6 +97,19 @@ friend std::ostream& operator << (std::ostream &out, const ParametreOperation&);
 
 };
 
+class SequenceOperation {
+    void                    *osgApp;
+    std::vector<ParametreOperation> listeOp;
+public :
+
+    SequenceOperation() { osgApp = NULL; };
+    void AjouterOperation(ParametreOperation p) { listeOp.push_back(p); };
+    ParametreOperation LireOperation(int ind) { if (ind >= 0 && ind < listeOp.size()) return listeOp[ind]; else return ParametreOperation(); };
+    bool DefOperation(int ind, ParametreOperation p) {
+        if (ind < 0 || ind >= listeOp.size()) return false; listeOp[ind] = p; return true;};
+
+};
+
 #ifndef __WIN32__ // en rélaité C++11
 std::string to_string(double x);
 #endif
