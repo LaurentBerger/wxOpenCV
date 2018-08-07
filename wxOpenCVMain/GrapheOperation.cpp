@@ -2,12 +2,14 @@
 
 
 #include "GrapheOperation.h"
+#include "ParametreOperation.h"
 #include "FenetreAlgo.h"
 #include "GlisserForme.h"
 #include "ImageStat.h"
 
 #include <wx/hyperlink.h>
 #include <algorithm>
+#include <memory>
 
 
 #ifndef wxHAS_IMAGES_IN_RESOURCES
@@ -211,9 +213,15 @@ void GrapheOperation::CreateTree(long style)
     arbre = new ArboCalcul((FenetrePrincipale*)fenMere,(wxOpencvApp*)osgApp,m_panel, TreeTest_Ctrl,
         wxDefaultPosition, wxDefaultSize,
         style);
+
+    seq = std::make_shared<SequenceOperation>(true);
     if (listeOp.size() != 0 )
     {
+        seq->DefOSGApp(osgApp);
+        for (int i = 0; i < listeOp.size(); i++)
+            seq->AjouterOperation(listeOp[i]);
         arbre->DefListeOp(listeOp);
+        arbre->DefSequence(seq);
         arbre->DefTitre(GetTitle());
     }
 

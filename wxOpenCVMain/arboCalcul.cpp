@@ -88,7 +88,7 @@ int ArboCalcul::FindMaxEtapeOperation()
 	int idMax = -1,iMax=-1;
 	for (int i = 0; i < listeOp.size(); i++)
 	{
-		if (listeOp[i].indEtape > idMax)
+		if (listeOp[i].indEtape > idMax && !listeOp[i].opAttribut)
 		{
 			idMax = listeOp[i].indEtape;
 			iMax = i;
@@ -164,6 +164,8 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
         else
             id = AppendItem(idParent, n, listeImage.get()->GetImageCount()-2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, f, idParent));
         std::map<std::string, ParametreOperation>::iterator it;
+        if (!f->OrigineImage()->nomOperation.empty())
+            PileCalcul(id, f->OrigineImage());
         for (it = f->ImAcq()->ListeOpAttribut()->begin(); it != f->ImAcq()->ListeOpAttribut()->end(); it++)
         {
             wxString n(it->second.nomOperation);
@@ -171,8 +173,6 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
             fenAlgo.get()->AjouterEtape(nbEtape, &it->second, f->IdFenetre(),id);
             nbEtape++;
         }
-        if (!f->OrigineImage()->nomOperation.empty())
-            PileCalcul(id, f->OrigineImage());
 
     }
 }

@@ -174,6 +174,7 @@ private:
     int             nbParamMax;
     wxTextCtrl      *info;
     std::vector<ParametreOperation> listeOp;
+    std::shared_ptr<SequenceOperation> seq;
     wxString nomArbre;
     bool listeOpPrete;
 public:
@@ -241,6 +242,7 @@ public:
 
     void DefFenAlgo(std::shared_ptr<FenetreInfoOperation> f) { fenAlgo = f; };
     void DefListeOp(std::vector<ParametreOperation > f) { listeOp = f; };
+    void DefSequence(std::shared_ptr<SequenceOperation> s) { seq = s; };
     void DefTitre(wxString s) { nomArbre = s; };
     void DoSortChildren(const wxTreeItemId& item, bool reverse = false)
     {
@@ -303,6 +305,7 @@ private:
     wxTextCtrl *infoTexte;
     wxString nomSequence; 
     std::vector<ParametreOperation> listeOp;
+    std::shared_ptr<SequenceOperation> seq;
 public:
     // ctor and dtor
     GrapheOperation(FenetrePrincipale *frame, wxOpencvApp *osg, const wxString& title, int x, int y, int w, int h);
@@ -447,7 +450,7 @@ public:
     wxPanel *Panel() { return m_panel; };
     wxNotebook *Classeur() { return classeur; };
     wxString NomSequence() { return nomSequence; };
-    std::vector<ParametreOperation> SequenceOperation() { return listeOp; };
+    std::vector<ParametreOperation> ListeOperation() { return listeOp; };
 private:
     void TogStyle(int id, long flag);
 
