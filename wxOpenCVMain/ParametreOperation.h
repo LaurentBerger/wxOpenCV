@@ -97,27 +97,6 @@ friend std::ostream& operator << (std::ostream &out, const ParametreOperation&);
 
 };
 
-class SequenceOperation {
-    void                    *osgApp;
-    bool                    majFenetre;
-    std::vector<ParametreOperation> listeOp;
-    int indRacine;
-    std::vector<int> indNoeud;
-public :
-
-    SequenceOperation(bool maj) : osgApp(NULL), majFenetre(maj), indRacine(-1) {};
-    ~SequenceOperation() {};
-    void AjouterOperation(ParametreOperation p);
-    ParametreOperation LireOperation(int ind) { if (ind >= 0 && ind < listeOp.size()) return listeOp[ind]; else return ParametreOperation(); };
-    bool DefOperation(int ind, ParametreOperation p) {
-        if (ind < 0 || ind >= listeOp.size()) return false; listeOp[ind] = p; return true;};
-    void DefOSGApp(void *w) { osgApp = w; };
-    void MajFenetre(bool maj) { majFenetre = maj; };
-    bool MajFenetre() { return majFenetre; };
-    bool ExecuterSequence();
-
-};
-
 #ifndef __WIN32__ // en rélaité C++11
 std::string to_string(double x);
 #endif

@@ -3,6 +3,7 @@
 
 #include "GrapheOperation.h"
 #include "ParametreOperation.h"
+#include "SequenceOperation.h"
 #include "FenetreAlgo.h"
 #include "GlisserForme.h"
 #include "ImageStat.h"

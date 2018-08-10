@@ -2,6 +2,7 @@
 #define __GRAPHEOPERATION__
 #include <memory>
 #include "FenetrePrincipale.h"
+#include "SequenceOperation.h"
 #include "GrapheOperation.h"
 #include <wx/spinbutt.h>
 #include <wx/spinctrl.h>
@@ -192,7 +193,7 @@ public:
         const wxPoint& pos, const wxSize& size,
         long style);
 	int FindIdOperation(int id);
-    int FindMaxEtapeOperation();
+    int FindMaxEtapeOperation(bool );
 //	int FindMaxIdOperation();
 	int FindIdResOperation(int id);
     void DefTextCtrl(wxTextCtrl *t) { info = t; };

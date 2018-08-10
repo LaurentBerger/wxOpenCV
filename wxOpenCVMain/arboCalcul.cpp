@@ -83,12 +83,12 @@ int ArboCalcul::FindIdOperation(int id)
 
 }
 
-int ArboCalcul::FindMaxEtapeOperation()
+int ArboCalcul::FindMaxEtapeOperation(bool att)
 {
 	int idMax = -1,iMax=-1;
 	for (int i = 0; i < listeOp.size(); i++)
 	{
-		if (listeOp[i].indEtape > idMax && !listeOp[i].opAttribut)
+		if (listeOp[i].indEtape > idMax && listeOp[i].opAttribut==att)
 		{
 			idMax = listeOp[i].indEtape;
 			iMax = i;
@@ -135,7 +135,7 @@ void ArboCalcul::Installation()
     }
     else
     { 
-		int id=FindMaxEtapeOperation();
+		int id=FindMaxEtapeOperation(false);
         if (id >= 0)
         {
             rootId = AddRoot(std::to_string(listeOp[id].indRes), 0, 1, new InfoNoeud(wxString(std::to_string(listeOp[id].indRes)), wxString(std::to_string(listeOp[id].indRes)), listeOp[id].indRes, NULL));
