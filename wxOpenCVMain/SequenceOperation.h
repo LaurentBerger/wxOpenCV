@@ -48,7 +48,7 @@ class SequenceOperation {
     bool                    majFenetre;
     std::vector<ParametreOperation> listeOp;
     int indRacine;
-    NoeudOperation *racine;
+    std::shared_ptr<NoeudOperation> racine;
     std::vector< std::shared_ptr<NoeudOperation> > lNoeud;
 public:
 
