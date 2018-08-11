@@ -25,21 +25,29 @@ private:
     ParametreOperation *pOCV;   // non nul si noeud = opération
     int indOnglet;
     int indFen;
+    int indOp;
     int typeNoeud;
-    NoeudOperation *parent;     // Noeud de niveau supérieur = résultat NULL si racine
+    std::vector<std::shared_ptr<NoeudOperation>> children;
+    std::vector<std::shared_ptr<NoeudOperation>> parent;
 public:
-    NoeudOperation(ParametreOperation *p, NoeudOperation *pUp, int n) : imAcq(NULL), pOCV(p), parent(pUp), indFen(-1), indOnglet(n), typeNoeud(0) { }
-    NoeudOperation(ImageInfoCV *f, NoeudOperation *pUp) : imAcq(f), pOCV(NULL),parent(pUp), indFen(-1),  indOnglet(-1), typeNoeud(0) { }
+    NoeudOperation(ParametreOperation *p, int n) : imAcq(NULL), pOCV(p), indFen(-1), indOnglet(n), typeNoeud(0) { }
+    NoeudOperation(ImageInfoCV *f) : imAcq(f), pOCV(NULL), indFen(-1), indOnglet(-1), typeNoeud(0) { }
+    NoeudOperation(int ind) : imAcq(NULL), pOCV(NULL), indFen(-1), indOnglet(-1), typeNoeud(0) { }
 
     ParametreOperation *Operation() { return pOCV; };
     int IndiceOnglet() { return indOnglet; };
     int IndiceFenetre() { return indFen; };
+    int IndiceOperande() { return indOp; };
     ImageInfoCV *ImAcq() { return imAcq; };
-    void DefFenetre(ImageInfoCV *fz) { imAcq = fz; pOCV = NULL; };
+    void DefImage(ImageInfoCV *fz) { imAcq = fz; pOCV = NULL; };
     void DefIndFenetre(int ind) { indFen = ind; };
+    void DefIndOperande(int ind) { indOp = ind; };
     void DefTypeNoeud(int s) { typeNoeud = s; };
     int TypeNoeud() { return typeNoeud; };
-    NoeudOperation* GetParent() { return parent; };
+    void AddChildren(std::shared_ptr<NoeudOperation> n) { children.push_back(n); };
+    void AddParent(std::shared_ptr<NoeudOperation> n) { parent.push_back(n); };
+    int GetNbParent() { return parent.size(); };
+    std::shared_ptr<NoeudOperation> GetParent(int i) { if (i < parent.size()) return parent[i]; return NULL; };
 };
 
 
@@ -57,6 +65,7 @@ public:
     void AjouterOperation(ParametreOperation p);
     void SauverSequence(std::string fileName);
     void LireSequence(std::string fileName);
+    void AjouterNoeud(std::shared_ptr<NoeudOperation> n);
     void CreerArbre();
     ParametreOperation LireOperation(int ind) { if (ind >= 0 && ind < listeOp.size()) return listeOp[ind]; else return ParametreOperation(); };
     bool DefOperation(int ind, ParametreOperation p) {
@@ -69,3 +78,4 @@ public:
 
 };
 #endif
+

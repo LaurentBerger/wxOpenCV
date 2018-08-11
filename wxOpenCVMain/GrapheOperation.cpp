@@ -218,14 +218,14 @@ void GrapheOperation::CreateTree(long style)
     seq = std::make_shared<SequenceOperation>(true);
     if (listeOp.size() != 0 )
     {
-        seq->DefOSGApp(osgApp);
+        seq.get()->DefOSGApp(osgApp);
         for (int i = 0; i < listeOp.size(); i++)
-            seq->AjouterOperation(listeOp[i]);
+            seq.get()->AjouterOperation(listeOp[i]);
         arbre->DefListeOp(listeOp);
         arbre->DefSequence(seq);
         arbre->DefTitre(GetTitle());
     }
-
+    seq.get()->CreerArbre();
     arbre->DefFenAlgo(fenAlgo);
     arbre->DefTextCtrl(infoTexte);
     arbre->Installation();
