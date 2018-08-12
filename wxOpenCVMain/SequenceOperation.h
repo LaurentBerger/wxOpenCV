@@ -30,9 +30,9 @@ private:
     std::vector<std::shared_ptr<NoeudOperation>> children;
     std::vector<std::shared_ptr<NoeudOperation>> parent;
 public:
-    NoeudOperation(ParametreOperation *p, int n) : imAcq(NULL), pOCV(p), indFen(-1), indOnglet(n), typeNoeud(0) { }
-    NoeudOperation(ImageInfoCV *f) : imAcq(f), pOCV(NULL), indFen(-1), indOnglet(-1), typeNoeud(0) { }
-    NoeudOperation(int ind) : imAcq(NULL), pOCV(NULL), indFen(-1), indOnglet(-1), typeNoeud(0) { }
+    NoeudOperation(ParametreOperation *p, int n) : imAcq(NULL), pOCV(p), indFen(-1), indOnglet(n), typeNoeud(0) { };
+    NoeudOperation(ImageInfoCV *f) : imAcq(f), pOCV(NULL), indFen(-1), indOnglet(-1), typeNoeud(0) { };
+    NoeudOperation(int ind) : imAcq(NULL), pOCV(NULL), indFen(-1), indOnglet(-1), typeNoeud(0), indOp(ind) { };
 
     ParametreOperation *Operation() { return pOCV; };
     int IndiceOnglet() { return indOnglet; };

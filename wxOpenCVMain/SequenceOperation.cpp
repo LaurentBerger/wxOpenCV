@@ -63,6 +63,7 @@ void SequenceOperation::AjouterNoeud(shared_ptr<NoeudOperation> n)
             {
                 nim = make_shared<NoeudOperation>(p->indRes);
                 n.get()->AddParent(nim);
+                lNoeud.push_back(nim);
             }
             else
                 n.get()->AddParent(*it);
@@ -85,6 +86,7 @@ void SequenceOperation::AjouterNoeud(shared_ptr<NoeudOperation> n)
             }
             if (nim->GetNbParent())
                 n.get()->AddChildren(nim);
+            lNoeud.push_back(nim);
         }
     }
 }
@@ -108,4 +110,5 @@ void SequenceOperation::CreerArbre()
         lNoeud.push_back(n);
 
     }
+    listeUtil[0] = 0;
 }
