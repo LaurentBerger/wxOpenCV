@@ -484,11 +484,11 @@ double				diffHauteur;		/*!< Différence de hauteur pour fusion des régions */
 
 wxImage				*imAffichee;		/*!< wxImage affichée résultant de l'image opencv et de la palette*/
 
-wxColor				*pCouleur;
+std::shared_ptr<std::vector<wxColour>>				pCouleur;
 static int			nbObjetFenetrePrincipale;
 public :
-static wxColor		*pLineaire;
-static wxColor		*pAleatoire;
+static std::vector<std::shared_ptr<std::vector<wxColour>>>		paletteDispo;
+/*static wxColor		*pAleatoire;
 static wxColor		*pJet;
 static wxColor		*pRainbow;
 static wxColor		*pPerso;
@@ -499,7 +499,7 @@ static wxColor		*pLin256;
 static wxColor		*pRainbow256;
 static wxColor		*pThermique;
 static wxColor		*pThermique256;
-static wxColor		*pThermique256Boucle;
+static wxColor		*pThermique256Boucle;*/
 private:
 wxColor				*paletteChargee[10];
 bool				planActif[10];		/*!< plan couleur actif pour l'affichage */
@@ -982,7 +982,7 @@ char ImageTraitee(){return imageTraitee;};
 char ModeImage(){return modeImage;};
 wxImage* ImageAffichee(){return imAffichee;};
 int NbMarcheFit(){return nbMarcheFit;};
-wxColor *Palette(){return pCouleur;};
+std::shared_ptr<std::vector<wxColour>> Palette(){return pCouleur;};
 int IndPalette(){return indPalette;};
 char ModeRectangle(){return feuille->ModeRectangle();};
 char ModeCoupe(){return feuille->ModeCoupe();};
@@ -1137,7 +1137,7 @@ void DefCurseur(int r=1,int xc=15,int yc=15);
 
 
 
-wxColour CouleurAleatoire(int i){if (pAleatoire) return pAleatoire[i];return wxColour(0,0,0);};
+wxColour CouleurAleatoire(int i) { return (*paletteDispo[paletteDispo.size() - 1].get())[i]; };
 
 char TypeAcqImage(void){return typeAcqImage;};
 private:

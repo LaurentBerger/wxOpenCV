@@ -1169,36 +1169,6 @@ imAcq=NULL;
 imGain=NULL;
 imAffichee=NULL;
 nbObjetFenetrePrincipale--;
-if (FenetrePrincipale::nbObjetFenetrePrincipale== 0)
-	{
-	delete[]pLineaire;
-	delete[]pJet;
-	delete[]pRainbow;
-	delete[]pPerso;
-	delete[]pPersoInv;
-	delete[]pRainbow256;
-	delete[]pRainbow256Boucle;
-	delete[]pLin256;
-	delete[]pLin256Boucle;
-	delete[]pThermique;
-	delete[]pThermique256;
-	delete[]pThermique256Boucle;
-	delete[]pAleatoire;
-	pLineaire = NULL;
-	pAleatoire = NULL;
-	pJet = NULL;
-	pRainbow = NULL;
-	pPerso = NULL;
-	pPersoInv = NULL;
-	pLin256Boucle = NULL;
-	pRainbow256Boucle = NULL;
-	pLin256 = NULL;
-	pRainbow256 = NULL;
-	pThermique = NULL;
-	pThermique256 = NULL;
-	pThermique256Boucle = NULL;
-
-	}
 wxFrame::OnCloseWindow(event);
 }
 
@@ -1460,38 +1430,7 @@ void FenetrePrincipale::SelectPalette(wxCommandEvent& event)
 {
 wxColour	*p=NULL;
 indPalette=event.GetId()-NOIRETBLANC_;
-switch(indPalette){
-case 0:
-	pCouleur=pLineaire;
-	break;
-case 1:
-	pCouleur=pJet;
-	break;
-case 2:
-	pCouleur=pRainbow;
-	break;
-case 3:
-	pCouleur=pPerso;
-	break;
-case 4:
-	pCouleur=pPersoInv;
-	break;
-case 5:
-	pCouleur=pLin256;
-	break;
-case 6:
-	pCouleur=pRainbow256;
-	break;
-case 7:
-	pCouleur=pLin256Boucle;
-	break;
-case 8:
-	pCouleur=pRainbow256Boucle;
-	break;
-case 9:
-	pCouleur=pAleatoire;
-	break;
-	}
+pCouleur = paletteDispo[indPalette];
 
 MAJNouvelleImage();
 osgApp->ImgStat()->DrawPaletteActuelle();

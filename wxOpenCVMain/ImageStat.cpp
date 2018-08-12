@@ -588,7 +588,7 @@ void ImageStatistiques::DrawPalette()
 if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 wxWindowDC hdc(ongletCouleur);
-wxColor				*pCouleur=fenMere->Palette();
+std::shared_ptr<std::vector<wxColor>>	pCouleur=fenMere->Palette();
 if(pCouleur==NULL)
 	fenMere->InitPalette(65536);
 pCouleur=fenMere->Palette();
@@ -612,7 +612,7 @@ int deb=fenMere->SeuilNivBas();
 int fin=((*(fenMere->ImAcq()->MaxIm()))[0]-fenMere->SeuilNivBas(0))*fenMere->CoeffCanal(0);
 for (int i=0;i<512;i++,ind+=pas)
 	{
-	crayon.SetColour(pCouleur[ind].Red(),pCouleur[ind].Green(),pCouleur[ind].Blue());
+	crayon.SetColour((*pCouleur.get())[ind].Red(), (*pCouleur.get())[ind].Green(), (*pCouleur.get())[ind].Blue());
 	hdc.SetPen(crayon);
 	hdc.DrawLine(r.x+i,r.y,r.x+i,r.y+r.height-22 );
 	if (i>16 && i%32==1)

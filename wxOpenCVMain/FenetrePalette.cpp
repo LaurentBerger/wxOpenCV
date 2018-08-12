@@ -74,7 +74,7 @@ void ImageStatistiques::DrawPaletteActuelle()
 if ( !((wxOpencvApp*)osgApp)->VerifFenetre())
 	return;
 wxWindowDC hdc(ongletPalette);
-wxColor				*pCouleur=((wxOpencvApp*)osgApp)->Graphique()->Palette();
+std::shared_ptr<std::vector<wxColor>> pCouleur=((wxOpencvApp*)osgApp)->Graphique()->Palette();
 
 
 wxRect r(0,0,200,600);
@@ -94,7 +94,7 @@ int fin=((*(im->MaxIm()))[0]-((wxOpencvApp*)osgApp)->Graphique()->SeuilNivBas(0)
 
 for (int i=0;i<512;i++,ind+=pas)
 	{
-	crayon.SetColour(pCouleur[ind].Red(),pCouleur[ind].Green(),pCouleur[ind].Blue());
+	crayon.SetColour((*pCouleur.get())[i].Red(), (*pCouleur.get())[i].Green(), (*pCouleur.get())[i].Blue());
 	hdc.SetPen(crayon);
 	hdc.DrawLine(0,512-i,100,512-i);
 	if (i>16 && i%32==1)

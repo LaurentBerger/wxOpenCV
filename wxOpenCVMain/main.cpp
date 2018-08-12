@@ -339,19 +339,6 @@ if (fSeqOpe)
 for (int i = 0; i < listeFenetre.size(); i++)
 	delete listeFenetre[i];
 delete serveur;
-if (FenetrePrincipale::pLineaire)
-	{
-	delete [](FenetrePrincipale::pLineaire);
-	delete [](FenetrePrincipale::pLin256);
-	delete [](FenetrePrincipale::pLin256Boucle);
-	delete [](FenetrePrincipale::pAleatoire);
-	delete [](FenetrePrincipale::pJet);
-	delete [](FenetrePrincipale::pRainbow);
-	delete [](FenetrePrincipale::pRainbow256);
-	delete [](FenetrePrincipale::pRainbow256Boucle);
-	delete [](FenetrePrincipale::pPerso);
-	delete [](FenetrePrincipale::pPersoInv);
-	}
 #ifdef _DLL_DETECTION__
 delete dllplplot;
 delete dllWXplplotdrv;

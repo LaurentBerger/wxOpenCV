@@ -5,7 +5,8 @@
 #include <fstream>
 using namespace std;
 
-
+std::vector<std::shared_ptr<vector<wxColour>>> FenetrePrincipale::paletteDispo;
+/*
 wxColor		*FenetrePrincipale::pLineaire=NULL;
 wxColor		*FenetrePrincipale::pAleatoire=NULL;
 wxColor		*FenetrePrincipale::pJet=NULL;
@@ -18,7 +19,7 @@ wxColor		*FenetrePrincipale::pLin256=NULL;
 wxColor		*FenetrePrincipale::pRainbow256=NULL;
 wxColor		*FenetrePrincipale::pThermique=NULL;
 wxColor		*FenetrePrincipale::pThermique256=NULL;
-wxColor		*FenetrePrincipale::pThermique256Boucle=NULL;
+wxColor		*FenetrePrincipale::pThermique256Boucle=NULL;*/
 int			FenetrePrincipale::nbObjetFenetrePrincipale=0;
 
 void FenetrePrincipale::DefSeuilNivBas(double x,int plan)
@@ -230,100 +231,37 @@ void FenetrePrincipale::InitPalette(int nbCouleur)
 double pi=acos(-1.0);
 long i;
 nbCouleurPalette=nbCouleur;
-if (!pLineaire)
-	{
-	pLineaire = new wxColour[nbCouleur];
-	pJet = new wxColour[65536];
-	pRainbow = new wxColour[65536];
-	pPerso = new wxColour[65536];
-	pPersoInv = new wxColour[65536];
-	pRainbow256 = new wxColour[65536];
-	pRainbow256Boucle = new wxColour[65536];
-	pLin256 = new wxColour[65536];
-	pLin256Boucle = new wxColour[65536];
-	pThermique = new wxColour[65536];
-	pThermique256 = new wxColour[65536];
-	pThermique256Boucle = new wxColour[65536];
-	pAleatoire= new wxColour[nbCouleur];
-	for (i=0;i<nbCouleur;i++)
-			pLineaire[i].Set(i/256,i/256,i/256);
-	float red,green,blue;
-	{
-	ifstream ff("jetcolor16384.txt");
-	if (ff.is_open())
-		{
-		for (int i=0;i<16384;i++)
-			{
-			ff>>red>>green>>blue;
-			pJet[4*i].Set(red*255,green*255,blue*255);
-			pJet[4*i+1].Set(red*255,green*255,blue*255);
-			pJet[4*i+2].Set(red*255,green*255,blue*255);
-			pJet[4*i+3].Set(red*255,green*255,blue*255);
-			}
-		ff.close();
-		}
-	}
-	
-	{
-	ifstream ff("rainbow16384.txt");
-	if (ff.is_open())
-		{
-		for (int i=0;i<16384;i++)
-			{
-			ff>>red>>green>>blue;
-			pRainbow[4*i].Set(red*255,green*255,blue*255);
-			pRainbow[4*i+1].Set(red*255,green*255,blue*255);
-			pRainbow[4*i+2].Set(red*255,green*255,blue*255);
-			pRainbow[4*i+3].Set(red*255,green*255,blue*255);
-			}
-		ff.close();
-		}
-	}
-	{
-	ifstream ff("palPerso.txt");
-	if (ff.is_open())
-		{
-		for (int i=0;i<16384;i++)
-			{
-			ff>>red>>green>>blue;
-			pPerso[4*i].Set(red*255,green*255,blue*255);
-			pPerso[4*i+1].Set(pJet[4*i].Red(),pJet[4*i].Green(),pJet[4*i].Blue());
-			pPerso[4*i+2].Set(pJet[4*i].Red(),pJet[4*i].Green(),pJet[4*i].Blue());
-			pPerso[4*i+3].Set(pJet[4*i].Red(),pJet[4*i].Green(),pJet[4*i].Blue());
-			}
-		ff.close();
-		}
-	}
-	{
-	ifstream ff("palPersoInv.txt");
-	if (ff.is_open())
-		{
-		for (int i=0;i<16384;i++)
-			{
-			ff>>red>>green>>blue;
-			pPersoInv[4*i].Set(red*255,green*255,blue*255);
-			pPersoInv[4*i+1].Set(red*255,green*255,blue*255);
-			pPersoInv[4*i+2].Set(red*255,green*255,blue*255);
-			pPersoInv[4*i+3].Set(red*255,green*255,blue*255);
-			}
-		ff.close();
-		}
-	for (int i=0;i<256;i++)
-		{
-		for (int j=0;j<256;j++)
-			{
-			pRainbow256[i*256+j].Set(pRainbow[i*256].Red(),pRainbow[i*256].Green(),pRainbow[i*256].Blue());
-			pRainbow256Boucle[j*256+i].Set(pRainbow[i*256].Red(),pRainbow[i*256].Green(),pRainbow[i*256].Blue());
-			pLin256[i*256+j].Set(pLineaire[i*256].Red(),pLineaire[i*256].Green(),pLineaire[i*256].Blue());
-			pLin256Boucle[j*256+i].Set(pLineaire[i*256].Red(),pLineaire[i*256].Green(),pLineaire[i*256].Blue());
-			}
-		}
-	}
-	for (i=0;i<nbCouleur;i++)
-			pAleatoire[i].Set(rand()&0xFF,rand()&0xFF,rand()&0xFF);
-	
-	}
-pCouleur=pLineaire;
+if (paletteDispo.size() != 0)
+{
+    pCouleur = paletteDispo[0];
+    return;
+}
+cv::Mat src(1, 256, CV_8UC1),dst;
+for (int i = 0; i < src.cols; i++)
+    src.at<uchar>(0, i) = i;
+shared_ptr<vector<wxColour>> w = std::make_shared<vector<wxColour>>(nbCouleur);
+for (int j = 0; j < 16384; j++)
+    (*w.get())[j].Set(j, j, j);
+paletteDispo.push_back(w);
+for (int i = cv::COLORMAP_AUTUMN; i <= cv::COLORMAP_PARULA; i++)
+{
+    cv::applyColorMap(src, dst, i);
+    shared_ptr<vector<wxColour>> w = std::make_shared<vector<wxColour>>(nbCouleur);
+    for (int j = 0; j < 256; j++)
+    {
+        int red = dst.at<cv::Vec3b>(0, j)[2];
+        int green = dst.at<cv::Vec3b>(0, j)[1];
+        int blue= dst.at<cv::Vec3b>(0, j)[0];
+        for (int k=0;k<256;k++)
+            (*w.get())[256 * j+k].Set(red , green , blue );
+    }
+    paletteDispo.push_back(w);
+}
+w = std::make_shared<vector<wxColour>>(nbCouleur);
+for (int i=0;i<nbCouleur;i++)
+    (*w.get())[i].Set(rand()&0xFF,rand()&0xFF,rand()&0xFF);
+paletteDispo.push_back(w);
+pCouleur = paletteDispo[0];
 }
 
 void FenetrePrincipale::DIB(ImageInfoCV *im)
