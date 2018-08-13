@@ -47,7 +47,7 @@ Bind(wxEVT_LEFT_UP, &ZoneImage::OnLeftButtonUp,this);
 Bind(wxEVT_LEFT_DOWN, &ZoneImage::OnLeftButtonDown,this);
 Bind(wxEVT_CONTEXT_MENU, &ZoneImage::OnMenuContext,this);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::Vue3D, this, Menu_3D);
-Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::SelectPalette, this, NOIRETBLANC_, NOIRETBLANC_ + 9);
+Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::SelectPalette, this, NOIRETBLANC_, NOIRETBLANC_ + 14);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::ModeComplexe,this,M_MODULE_,PHASE_RD);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR8,ZOOM8SUR1);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SequenceOperation,this,SEQ_OPE);
@@ -626,16 +626,21 @@ wxMenu *ZoneImage::CreateMenuPalette(wxString *title)
 {
     wxMenu *menu = new wxMenu;
     menu->AppendCheckItem(NOIRETBLANC_, _("&Linear\tCtrl-F1"));
-    menu->AppendCheckItem(NOIRETBLANC_+1, _("&Jet\t"));
-    menu->AppendCheckItem(NOIRETBLANC_+2, _("&Rainbow\t"));
-    menu->AppendCheckItem(NOIRETBLANC_+3, _("&Owner\t"));
-    menu->AppendCheckItem(NOIRETBLANC_+4, _("&Reverse Owner\t"));
-    menu->AppendCheckItem(NOIRETBLANC_+5, _("&Linear 8 bits\tCtrl-F2"));
-    menu->AppendCheckItem(NOIRETBLANC_+6, _("&Rainbow 8bits\t"));
-    menu->AppendCheckItem(NOIRETBLANC_+7, _("&Linear loop 8 bis\t"));
-    menu->AppendCheckItem(NOIRETBLANC_+8, _("&Rainbow loop 8 bits\t"));
-    menu->AppendCheckItem(NOIRETBLANC_+9, _("&Randomize\t"));
-	menu->Check(f->IndPalette()+NOIRETBLANC_,true);
+    menu->AppendCheckItem(NOIRETBLANC_+1, _("&autumn\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+2, _("&bone\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+3, _("&jet\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+4, _("&winter\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+5, _("&rainbow\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+6, _("&ocean\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+7, _("&summer\t"));
+    menu->AppendCheckItem(NOIRETBLANC_+8, _("&spring\t"));
+    menu->AppendCheckItem(NOIRETBLANC_ + 9, _("&cool\t"));
+    menu->AppendCheckItem(NOIRETBLANC_ + 10, _("&hsv\t"));
+    menu->AppendCheckItem(NOIRETBLANC_ + 11, _("&pink\t"));
+    menu->AppendCheckItem(NOIRETBLANC_ + 12, _("&hot\t"));
+    menu->AppendCheckItem(NOIRETBLANC_ + 13, _("&parula\t"));
+    menu->AppendCheckItem(NOIRETBLANC_ + 14, _("&randomize\t"));
+    menu->Check(f->IndPalette()+NOIRETBLANC_,true);
 
     return menu;
 }

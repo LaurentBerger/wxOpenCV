@@ -1397,16 +1397,21 @@ if (ind1!=-1)
 wxMenu *FenetrePrincipale::CreateMenuPalette(wxString *title)
 {
     wxMenu *menu = new wxMenu;
-    menu->Append(NOIRETBLANC_, _T("&Gris\tCtrl-F1"));
-    menu->Append(NOIRETBLANC_+1, _T("&Arcenciel\tCtrl-F2"));
-    menu->Append(NOIRETBLANC_+2, _T("&Arcenciel 8bits\t"));
-    menu->Append(NOIRETBLANC_+3, _T("&Gris 8 bits\tCtrl-F2"));
-    menu->Append(NOIRETBLANC_+4, _T("&Arcenciel circulaire 8 bits\t"));
-    menu->Append(NOIRETBLANC_+5, _T("&gris circulaire 8 bis\t"));
-    menu->Append(NOIRETBLANC_+6, _T("&Jet\t"));
-    menu->Append(NOIRETBLANC_+7, _T("&Rainbow\t"));
-    menu->Append(NOIRETBLANC_+8, _T("&Owner\t"));
-    menu->Append(NOIRETBLANC_+9, _T("&Aleatoire\t"));
+    menu->Append(NOIRETBLANC_, _("&Linear\tCtrl-F1"));
+    menu->Append(NOIRETBLANC_ + 1, _("&autumn\t"));
+    menu->Append(NOIRETBLANC_ + 2, _("&bone\t"));
+    menu->Append(NOIRETBLANC_ + 3, _("&jet\t"));
+    menu->Append(NOIRETBLANC_ + 4, _("&winter\t"));
+    menu->Append(NOIRETBLANC_ + 5, _("&rainbow\t"));
+    menu->Append(NOIRETBLANC_ + 6, _("&ocean\t"));
+    menu->Append(NOIRETBLANC_ + 7, _("&summer\t"));
+    menu->Append(NOIRETBLANC_ + 8, _("&spring\t"));
+    menu->Append(NOIRETBLANC_ + 9, _("&cool\t"));
+    menu->Append(NOIRETBLANC_ + 10, _("&hsv\t"));
+    menu->Append(NOIRETBLANC_ + 11, _("&pink\t"));
+    menu->Append(NOIRETBLANC_ + 12, _("&hot\t"));
+    menu->Append(NOIRETBLANC_ + 13, _("&parula\t"));
+    menu->Append(NOIRETBLANC_ + 14, _("&randomize\t"));
 
     return menu;
 }
@@ -1428,7 +1433,7 @@ Ouvrir l'image calibre et la ranger dans la classe NanoRaptor
 */
 void FenetrePrincipale::SelectPalette(wxCommandEvent& event)
 {
-wxColour	*p=NULL;
+    wxColour	*p = NULL;
 indPalette=event.GetId()-NOIRETBLANC_;
 pCouleur = paletteDispo[indPalette];
 

@@ -564,7 +564,7 @@ template<typename T_> void FenetrePrincipale::CV2DIBImageEntierPalette(ImageInfo
     {
         cv::merge(dst, dst1);
         dst1.convertTo(ecranRGB, CV_8U);
-        if (indPalette!=0)
+        if (indPalette>0 && indPalette<14)
             cv::applyColorMap(ecranRGB, ecranRGB, indPalette-1);
         return;
     }
