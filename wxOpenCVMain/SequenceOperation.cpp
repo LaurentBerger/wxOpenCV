@@ -43,10 +43,40 @@ void SequenceOperation::LireSequence(string fileName)
     fs.release();
 }
 
-bool findIndOperande(shared_ptr<NoeudOperation> n)
-{
-    return n.get()->IndiceOperande() == 28;
-}
+struct FindIndRes {
+    explicit FindIndRes(int i): n(i) { }
+    inline bool operator()(const shared_ptr<NoeudOperation> & m) const 
+    { if (m.get()->Operation()) 
+        return m.get()->Operation()->indRes == n;
+      return false;
+    }
+private:
+    int n;
+}; 
+
+struct FindIndOpe {
+    explicit FindIndOpe(int i) : n(i) { }
+    inline bool operator()(const shared_ptr<NoeudOperation> & m) const
+    {
+        if (!m.get()->Operation())
+            return m.get()->IndiceOperande() == n;
+        return false;
+    }
+private:
+    int n;
+};
+struct FindOpe {
+    explicit FindOpe(ImageInfoCV *i) : n(i) { }
+    inline bool operator()(const shared_ptr<NoeudOperation> & m) const
+    {
+        if (!m.get()->Operation())
+            return m.get()->ImAcq() == n;
+        return false;
+    }
+private:
+    ImageInfoCV *n;
+};
+
 
 void SequenceOperation::AjouterNoeud(shared_ptr<NoeudOperation> n)
 {
@@ -58,35 +88,100 @@ void SequenceOperation::AjouterNoeud(shared_ptr<NoeudOperation> n)
         if (p->indRes != -1)
         {
             shared_ptr<NoeudOperation> nim;
-            std::vector<shared_ptr<NoeudOperation>>::iterator it = find_if(lNoeud.begin(), lNoeud.end(), findIndOperande);
+            std::vector<shared_ptr<NoeudOperation>>::iterator it = find_if(lNoeud.begin(), lNoeud.end(), FindIndOpe(p->indRes));
             if (it == lNoeud.end())
             {
+                lNoeud.push_back(n);
                 nim = make_shared<NoeudOperation>(p->indRes);
                 n.get()->AddParent(nim);
+                nim.get()->AddChildren(n);
                 lNoeud.push_back(nim);
+                for (int i = 0; i < p->indOpFenetre.size(); i++)
+                {
+                    shared_ptr<NoeudOperation> nim;
+                    std::vector<shared_ptr<NoeudOperation>>::iterator it;
+                    if (i < p->op.size() && p->op[i])
+                    {
+                        it = find_if(lNoeud.begin(), lNoeud.end(), FindOpe(p->op[i]));
+                        if (it == lNoeud.end())
+                        {
+                            nim = make_shared<NoeudOperation>(p->op[i]);
+                            nim.get()->AddParent(n);
+                            nim.get()->DefIndOperande(p->indOpFenetre[i]);
+                        }
+                        else
+                        {
+                            (*it)->AddParent(n);
+                            n.get()->AddChildren(*it);
+                        }
+                    }
+                    else
+                    {
+                        it = find_if(lNoeud.begin(), lNoeud.end(), FindIndOpe(p->indOpFenetre[i]));
+                        if (it == lNoeud.end())
+                        {
+                            nim = make_shared<NoeudOperation>(p->indOpFenetre[i]);
+                            nim.get()->DefIndOperande(p->indOpFenetre[i]);
+                            nim.get()->AddParent(n);
+                        }
+                        else
+                        {
+                            (*it)->AddParent(n);
+                            n.get()->AddChildren(*it);
+                        }
+                    }
+                    if (nim && nim->GetNbParent())
+                        n.get()->AddChildren(nim);
+                    if (nim && nim.get())
+                        lNoeud.push_back(nim);
+                }
             }
-            else
-                n.get()->AddParent(*it);
         }
-        for (int i = 0; i < p->indOpFenetre.size(); i++)
+        else  // Attribut
         {
-            shared_ptr<NoeudOperation> nim;
-            if (i < p->op.size())
+            lNoeud.push_back(n);
+            for (int i = 0; i < p->indOpFenetre.size(); i++)
             {
-                nim = make_shared<NoeudOperation>(p->op[i]);
-                nim.get()->AddParent(n);
-                nim.get()->DefIndOperande(p->indOpFenetre[i]);
+                shared_ptr<NoeudOperation> nim;
+                std::vector<shared_ptr<NoeudOperation>>::iterator it;
+                if (i < p->op.size() && p->op[i])
+                {
+                    it = find_if(lNoeud.begin(), lNoeud.end(), FindOpe(p->op[i]));
+                    if (it == lNoeud.end())
+                    {
+                        nim = make_shared<NoeudOperation>(p->op[i]);
+                        nim.get()->AddParent(n);
+                        nim.get()->DefIndOperande(p->indOpFenetre[i]);
+                    }
+                    else
+                    {
+                        (*it)->AddParent(n);
+                        n.get()->AddChildren(*it);
+                    }
+                }
+                else
+                {
+                    it = find_if(lNoeud.begin(), lNoeud.end(), FindIndOpe(p->indOpFenetre[i]));
+                    if (it == lNoeud.end())
+                    {
+                        nim = make_shared<NoeudOperation>(p->indOpFenetre[i]);
+                        nim.get()->DefIndOperande(p->indOpFenetre[i]);
+                        nim.get()->AddParent(n);
+                    }
+                    else
+                    {
+                        (*it)->AddParent(n);
+                        n.get()->AddChildren(*it);
+                    }
+                }
+                if (nim)
+                {
+                    n.get()->AddParent(nim);
+                    nim.get()->AddChildren(n);
+                }
+                if (nim && nim.get())
+                    lNoeud.push_back(nim);
             }
-            else
-            {
-                nim = make_shared<NoeudOperation>(p->indOpFenetre[i]);
-                nim.get()->DefIndOperande(p->indOpFenetre[i]);
-                nim.get()->AddParent(n);
-
-            }
-            if (nim->GetNbParent())
-                n.get()->AddChildren(nim);
-            lNoeud.push_back(nim);
         }
     }
 }
@@ -99,7 +194,6 @@ void SequenceOperation::CreerArbre()
         return;
     shared_ptr<NoeudOperation> n = make_shared<NoeudOperation>(&listeOp[0], -1);
     AjouterNoeud(n);
-    lNoeud.push_back(n);
     vector<int> listeUtil(listeOp.size(), 0);
     listeUtil[0] = 1;
     racine = n;
@@ -107,8 +201,6 @@ void SequenceOperation::CreerArbre()
     {
         shared_ptr<NoeudOperation> n = make_shared<NoeudOperation>(&listeOp[i], -1);
         AjouterNoeud(n);
-        lNoeud.push_back(n);
-
     }
     listeUtil[0] = 0;
 }
