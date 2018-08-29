@@ -693,6 +693,7 @@ bool wxOpencvApp::OnInit()
 	numSeqOpe=0;
 	quitter=false;
 	serveur = NULL;
+    arbre = NULL;
 	fSeqOpe=NULL;
 	fenOpe=NULL;
     ctrlCamera=NULL;

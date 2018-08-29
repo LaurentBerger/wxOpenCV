@@ -53,9 +53,13 @@ FenetreInfoOperation::FenetreInfoOperation(GrapheOperation *t, std::vector<Param
 
 void FenetreInfoOperation::AjouterEtape(int nb, ParametreOperation *pOCV, int idFenetre, wxTreeItemId &n)
 {
+    if (nb < 0)
+        return;
     noeuds.insert(std::pair<ParametreOperation *, wxTreeItemId &>(pOCV, n));
     listeOp.push_back(std::pair< ParametreOperation*, int>(pOCV, idFenetre));
     wxWindow *w = CreerOngletEtape(classeur, nb);
+    if (!w)
+        return;
     listeOnglet[w] = std::pair<wxString, int>(pOCV->nomOperation, nb);
     wxString nom(_("Step"));
     nom.Printf("%s %d : %s", nom, nb, pOCV->nomOperation);
@@ -67,6 +71,8 @@ wxWindow *FenetreInfoOperation::CreerOngletEtape(wxNotebook *classeur, int indOp
 {
     // nbParamMax  nombre d'article maximum par onglet
     wxWindow *page = new wxWindow(classeur, -1);
+    if (indOp >= listeOp.size())
+        return NULL;
     ParametreOperation *pOCV = listeOp[indOp].first;
     int nbParam = 1;
     int ligne = 50;

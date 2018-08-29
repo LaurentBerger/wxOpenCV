@@ -87,6 +87,7 @@ static std::map<std::string,std::map<std::string,int> > listeParam;
 
 explicit ParametreOperation(std::string s);
 explicit ParametreOperation(){ InitOperation(""); };
+bool empty() { return nomOperation.length() == 0; };
 bool InitOperation(std::string s);
 bool InitPtrFonction();
 void AjouteIndiceOp(int offset);

@@ -1351,24 +1351,27 @@ case MENU_EXEC_OP:
 	}
 	break;
 case RESET_OP :
-{
-	wxMessageDialog w(this, "Do you want to cancel operation?" , _T("Cancel"), wxYES_NO|wxCENTRE|wxSTAY_ON_TOP);
-	if (w.ShowModal()==wxID_YES)
-		{
-		osgApp->AnnuleOp();
-		osgApp->DefPointeurSouris(0,0);
+    {
+	    wxMessageDialog w(this, "Do you want to cancel operation?" , _T("Cancel"), wxYES_NO|wxCENTRE|wxSTAY_ON_TOP);
+	    if (w.ShowModal()==wxID_YES)
+		    {
+		    osgApp->AnnuleOp();
+		    osgApp->DefPointeurSouris(0,0);
 
-		}
+		    }
 
-}
+    }
+    break;
 case MENU_SET_NEW_OP:
-{
-    ArboCalcul *arbre = (ArboCalcul*)osgApp->ArboCalcul();
-    wxTreeItemId id = osgApp->NoeudCalcul();
-    arbre->ModifNoeud(this, id);
-    osgApp->DefPointeurSouris(0, 0);
+    {
+        ArboCalcul *arbre = (ArboCalcul*)osgApp->ArboCalcul();
+        if (!arbre)
+            break;
+        wxTreeItemId id = osgApp->NoeudCalcul();
+        arbre->ModifNoeud(this, id);
+        osgApp->DefPointeurSouris(0, 0);
 
-}
+    }
     break;
 	}
 }

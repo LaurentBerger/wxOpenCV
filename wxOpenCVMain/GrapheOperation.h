@@ -171,7 +171,6 @@ private:
     wxTreeItemId            idEvt;             // item being dragged right now
     std::shared_ptr<wxImageList>             listeImage;
     std::shared_ptr<FenetreInfoOperation> fenAlgo;
-    int             nbEtape;
     int             nbParamMax;
     wxTextCtrl      *info;
     std::vector<ParametreOperation> listeOp;

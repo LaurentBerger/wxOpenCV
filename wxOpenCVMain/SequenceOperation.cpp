@@ -9,14 +9,17 @@ bool SequenceOperation::ExecuterSequence()
     return false;
 }
 
-void SequenceOperation::AjouterOperation(ParametreOperation p)
+bool SequenceOperation::AjouterOperation(ParametreOperation p)
 {
     listeOp.push_back(p); 
+    shared_ptr<NoeudOperation> n = make_shared<NoeudOperation>(&listeOp.back(), -1);
+    bool b = AjouterNoeud(n);
     if (indRacine == -1)
     {
         indRacine = 0;
-        return;
+        return b;
     }
+    return b;
 }
 
 void SequenceOperation::SauverSequence(string fileName)
@@ -77,11 +80,36 @@ private:
     ImageInfoCV *n;
 };
 
+struct FindOperation {
+    explicit FindOperation(ParametreOperation p) : n(p) { }
+    inline bool operator()(const shared_ptr<NoeudOperation> & m) const
+    {
+        if (m.get()->Operation())
+        {
+            ParametreOperation  *p=m.get()->Operation();
+            if (p && p->indRes == n.indRes)
+            {
+                if (p->indOpFenetre.size() != n.indOpFenetre.size())
+                    return false;
+                for (int i = 0; i < p->indOpFenetre.size(); i++)
+                    if (p->indOpFenetre[i] != n.indOpFenetre[i])
+                        return false;
+                return true;
+            }
+            else
+                return false;
 
-void SequenceOperation::AjouterNoeud(shared_ptr<NoeudOperation> n)
+        }
+        return false;
+    }
+private:
+    ParametreOperation n;
+};
+
+bool SequenceOperation::AjouterNoeud(shared_ptr<NoeudOperation> n)
 {
     if (!n.get())
-        return;
+        return false;
     if (n.get()->Operation())
     {
         ParametreOperation *p = n.get()->Operation();
@@ -91,6 +119,7 @@ void SequenceOperation::AjouterNoeud(shared_ptr<NoeudOperation> n)
             std::vector<shared_ptr<NoeudOperation>>::iterator it = find_if(lNoeud.begin(), lNoeud.end(), FindIndOpe(p->indRes));
             if (it == lNoeud.end())
             {
+                n.get()->DefIndiceOnglet(nbOnglet++);
                 lNoeud.push_back(n);
                 nim = make_shared<NoeudOperation>(p->indRes);
                 n.get()->AddParent(nim);
@@ -136,9 +165,16 @@ void SequenceOperation::AjouterNoeud(shared_ptr<NoeudOperation> n)
                         lNoeud.push_back(nim);
                 }
             }
+            else
+                return false;
         }
         else  // Attribut
         {
+            std::vector<shared_ptr<NoeudOperation>>::iterator it = find_if(lNoeud.begin(), lNoeud.end(), FindOperation(*p));
+            if (it != lNoeud.end())
+                return false;
+            n.get()->DefTypeNoeud(NoeudOperation::Type_Noeud::NOEUD_ATTRIBUT);
+            n.get()->DefIndiceOnglet(nbOnglet++);
             lNoeud.push_back(n);
             for (int i = 0; i < p->indOpFenetre.size(); i++)
             {
@@ -184,6 +220,7 @@ void SequenceOperation::AjouterNoeud(shared_ptr<NoeudOperation> n)
             }
         }
     }
+    return true;
 }
 
 
@@ -204,3 +241,13 @@ void SequenceOperation::CreerArbre()
     }
     listeUtil[0] = 0;
 }
+
+int SequenceOperation::Etape(ParametreOperation &p)
+{
+    std::vector<shared_ptr<NoeudOperation>>::iterator it;
+    it = find_if(lNoeud.begin(), lNoeud.end(), FindOperation(p));
+    if (it==lNoeud.end())
+        return -1;
+    return (*it)->IndiceOnglet();
+}
+

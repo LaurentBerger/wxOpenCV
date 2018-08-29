@@ -67,7 +67,6 @@ ArboCalcul::ArboCalcul(FenetrePrincipale *frame, wxOpencvApp *osg, wxWindow *par
     fenMere = frame;
     osgApp = osg;
 
-    nbEtape = 0;
     nbParamMax = 0;
     Bind(wxEVT_COMMAND_MENU_SELECTED, &ArboCalcul::OnMenuSelect, this, -1);
 
@@ -168,10 +167,13 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
             PileCalcul(id, f->OrigineImage());
         for (it = f->ImAcq()->ListeOpAttribut()->begin(); it != f->ImAcq()->ListeOpAttribut()->end(); it++)
         {
+            
             wxString n(it->second.nomOperation);
-            wxTreeItemId idOp = AppendItem(id, n, -1, -1, new InfoNoeud(n, &it->second,nbEtape, id));
-            fenAlgo.get()->AjouterEtape(nbEtape, &it->second, f->IdFenetre(),id);
-            nbEtape++;
+            if (!seq.get()->AjouterOperation(it->second))
+                return;
+            wxTreeItemId idOp = AppendItem(id, n, -1, -1, new InfoNoeud(n, &it->second,
+                seq.get()->Etape(it->second), id));
+            fenAlgo.get()->AjouterEtape(seq.get()->Etape(it->second), &it->second, f->IdFenetre(),id);
         }
 
     }
@@ -197,10 +199,12 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, int indRes)
         {
             if (listeOp[ind].opAttribut && listeOp[ind].nbImageRes == 0 && listeOp[ind].nbOperande > 0 && listeOp[ind].indOpFenetre[0] == indRes)
             {
+                ;
+                if (!seq.get()->AjouterOperation(listeOp[ind]))
+                    return;
                 wxString n(listeOp[ind].nomOperation);
-                wxTreeItemId idOp = AppendItem(id, n, -1, -1, new InfoNoeud(n, &listeOp[ind], nbEtape, id));
-                fenAlgo.get()->AjouterEtape(nbEtape, &listeOp[ind], indRes, id);
-                nbEtape++;
+                wxTreeItemId idOp = AppendItem(id, n, -1, -1, new InfoNoeud(n, &listeOp[ind], seq.get()->Etape(listeOp[ind]), id));
+                fenAlgo.get()->AjouterEtape(seq.get()->Etape(listeOp[ind]), &listeOp[ind], indRes, id);
                 att = true;
 
             }
@@ -255,9 +259,12 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, ParametreOperation *pO
 
         listeImage.get()->Add(icon);
         listeImage.get()->Add(icon);
+        seq.get()->AjouterOperation(*pOCV);
+        if (!seq.get()->AjouterOperation(*pOCV))
+            return;
+        int nbEtape = seq.get()->Etape(*pOCV);
         wxTreeItemId id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, pOCV, nbEtape, idParent));
-        fenAlgo.get()->AjouterEtape(nbEtape, pOCV, -1, id);
-        nbEtape++;
+        fenAlgo.get()->AjouterEtape(seq.get()->Etape(*pOCV), pOCV, -1, id);
         for (int i = 0; i<pOCV->nbOperande; i++)
         {
             int idF = pOCV->indOpFenetre[i];
@@ -422,12 +429,12 @@ void ArboCalcul::SauverSequence(wxTreeItemId &idParent)
     wxTreeItemId t = GetRootItem();
     if (t == idParent)
     {
-        nbEtape = 0;
+//        nbEtape = 0;
         ArboCalculParam p;
         p.fs.open((std::string)nomFic.c_str() + ".xml", cv::FileStorage::WRITE);
         ExplorerArbre(t,p,&ArboCalcul::SauverNoeud);
         p.fs.release();
-        nbEtape = 0;
+//        nbEtape = 0;
         p.fs.open((std::string)nomFic.c_str() + ".yml", cv::FileStorage::WRITE);;
         ExplorerArbre(t, p, &ArboCalcul::SauverNoeud);
         p.fs.release();
@@ -481,9 +488,9 @@ void ArboCalcul::SauverNoeud(wxTreeItemId &id, ArboCalculParam & p, bool quitter
     InfoNoeud *item = (InfoNoeud *)GetItemData(id);
     if (item && item->Operation() && p.fs.isOpened())
     {
-        item->Operation()->indEtape = nbEtape;
+//        item->Operation()->indEtape = nbEtape;
         item->Operation()->write(p.fs);
-        nbEtape++;
+ //       nbEtape++;
     }
 
 }
