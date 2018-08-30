@@ -3,6 +3,7 @@ cmake_minimum_required(VERSION 2.8)
 
 PROJECT (wxopencv)
 set(CMAKE_MODULE_PATH "${wxopencv_SOURCE_DIR}/CMake")
+set(CMAKE_SUPPRESS_REGENERATION true)
 #set(plplot $ENV{PLPLOT_HOME})
 set(LOSDK $ENV{LibreOfficeSDK})
 

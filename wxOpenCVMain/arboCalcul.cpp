@@ -169,11 +169,12 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, FenetrePrincipale *f)
         {
             
             wxString n(it->second.nomOperation);
-            if (!seq.get()->AjouterOperation(it->second))
-                return;
+            if (seq.get()->AjouterOperation(it->second))
+            {
+                fenAlgo.get()->AjouterEtape(seq.get()->Etape(it->second), &it->second, f->IdFenetre(),id);
+            }
             wxTreeItemId idOp = AppendItem(id, n, -1, -1, new InfoNoeud(n, &it->second,
                 seq.get()->Etape(it->second), id));
-            fenAlgo.get()->AjouterEtape(seq.get()->Etape(it->second), &it->second, f->IdFenetre(),id);
         }
 
     }
@@ -199,12 +200,13 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, int indRes)
         {
             if (listeOp[ind].opAttribut && listeOp[ind].nbImageRes == 0 && listeOp[ind].nbOperande > 0 && listeOp[ind].indOpFenetre[0] == indRes)
             {
-                ;
-                if (!seq.get()->AjouterOperation(listeOp[ind]))
-                    return;
                 wxString n(listeOp[ind].nomOperation);
+                bool bl = seq.get()->AjouterOperation(listeOp[ind]);
                 wxTreeItemId idOp = AppendItem(id, n, -1, -1, new InfoNoeud(n, &listeOp[ind], seq.get()->Etape(listeOp[ind]), id));
-                fenAlgo.get()->AjouterEtape(seq.get()->Etape(listeOp[ind]), &listeOp[ind], indRes, id);
+                if (bl)
+                {
+                    fenAlgo.get()->AjouterEtape(seq.get()->Etape(listeOp[ind]), &listeOp[ind], indRes, id);
+                }
                 att = true;
 
             }
@@ -259,12 +261,13 @@ void ArboCalcul::PileCalcul(const wxTreeItemId& idParent, ParametreOperation *pO
 
         listeImage.get()->Add(icon);
         listeImage.get()->Add(icon);
-        seq.get()->AjouterOperation(*pOCV);
-        if (!seq.get()->AjouterOperation(*pOCV))
-            return;
+        bool bl = seq.get()->AjouterOperation(*pOCV);
         int nbEtape = seq.get()->Etape(*pOCV);
         wxTreeItemId id = AppendItem(idParent, n, listeImage.get()->GetImageCount() - 2, listeImage.get()->GetImageCount() - 1, new InfoNoeud(n, pOCV, nbEtape, idParent));
-        fenAlgo.get()->AjouterEtape(seq.get()->Etape(*pOCV), pOCV, -1, id);
+        if (bl)
+        {
+            fenAlgo.get()->AjouterEtape(nbEtape, pOCV, -1, id);
+        }
         for (int i = 0; i<pOCV->nbOperande; i++)
         {
             int idF = pOCV->indOpFenetre[i];
