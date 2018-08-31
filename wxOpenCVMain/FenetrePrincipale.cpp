@@ -1115,22 +1115,22 @@ if (osgApp && !osgApp->Quitter())
         wxMessageDialog w(this, _T("Close window"), _T("Quit"), wxYES_NO | wxCENTRE | wxSTAY_ON_TOP);
         b = w.ShowModal() == wxID_YES;
         w.Close();
-		if (b && fenetreSauvee==0)
-			{
-			wxMessageDialog w(this, _T("Do you want to save it?") , _T("Quit"), wxYES_NO|wxCENTRE|wxSTAY_ON_TOP);
-			if (w.ShowModal()==wxID_YES)
-				{
-				wxCommandEvent evt;
-				Enregistrer(evt);
-				}
-			}
-	    else
-		    {
-		    event.Veto();
-		    return;
-		    }
     }
-	}
+    if (fenetreSauvee == 0)
+    {
+        wxMessageDialog w(this, _T("Do you want to save it?"), _T("Quit"), wxYES_NO | wxCENTRE | wxSTAY_ON_TOP);
+        if (w.ShowModal() == wxID_YES)
+        {
+            wxCommandEvent evt;
+            Enregistrer(evt);
+        }
+    }
+    else
+    {
+        event.Veto();
+        return;
+    }
+}
 if (cam!=NULL )
 	{
 	if (osgApp && osgApp->CtrlCamera()  && osgApp->CtrlCamera()->Camera()==cam)

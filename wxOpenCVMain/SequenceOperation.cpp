@@ -31,6 +31,7 @@ void SequenceOperation::SauverSequence(string fileName)
     if (fs.isOpened())
         for (auto l : listeOp)
         {
+            l.indEtape = Etape(l);
             l.write(fs);
         }
     fs.release();
