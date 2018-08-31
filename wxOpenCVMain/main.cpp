@@ -681,7 +681,6 @@ return;
 // `Main program' equivalent, creating windows and returning main app frame
 bool wxOpencvApp::OnInit()
 {
-    cv::ocl::setUseOpenCL(false);
 
     bool b=false;
 //b=wxUnsetEnv("PLPLOT_HOME");
@@ -700,8 +699,14 @@ bool wxOpencvApp::OnInit()
     offsetOpe = 100;
     configApp=new wxFileConfig("wxOpenCV","LB","wxOpenCV.ini",wxEmptyString);
 	LectureFichierConfig();
+    oclStatus = false;
+    confirmFermeturefenetre = false;
+    oclStatus = configApp->Read("/setUseOpenCL", oclStatus);
+    confirmFermeturefenetre = configApp->Read("/confirmFermeturefenetre", confirmFermeturefenetre);
+    cv::ocl::setUseOpenCL(oclStatus);
 #ifndef __MULTILANGUE__
 	langue=(wxLanguage)configApp->Read("/langue",langue);
+
 //gestion du langage
     if ( langue == wxLANGUAGE_UNKNOWN )
     {
@@ -758,8 +763,10 @@ bool wxOpencvApp::OnInit()
     }
 #endif
 #endif
-configApp->Write("/langue",(long)langue);
-configApp->Flush();
+    configApp->Write("/langue", (long)langue);
+    configApp->Write("/setUseOpencl", (bool)oclStatus);
+    configApp->Write("/confirmFermeturefenetre", (bool)confirmFermeturefenetre);
+    configApp->Flush();
 
 
 wxInitAllImageHandlers();

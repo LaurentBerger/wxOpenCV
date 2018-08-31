@@ -995,7 +995,7 @@ nomDuDocument = ouverture.GetFilename();
 repertoireDuDocument = ouverture.GetDirectory();
 wxString s=repertoireDuDocument+_T("\\")+nomDuDocument;
 if (::wxFileExists(s))
-	if (wxMessageBox("File already exist. Overwrite it?", "Warning", wxYES_NO==wxNO))
+	if (wxMessageBox("File already exist. Overwrite it?", "Warning", wxYES_NO))
 		return;
 EnregistrerImage();
 }
@@ -1109,10 +1109,13 @@ if (horlogeSeq && horlogeSeq->IsRunning())
 	}*/
 if (osgApp && !osgApp->Quitter())
 	{
-	wxMessageDialog w(this, _T("Close window") , _T("Quit"), wxYES_NO|wxCENTRE|wxSTAY_ON_TOP);
-	if (w.ShowModal()==wxID_YES)
-		{
-		if (fenetreSauvee==0)
+    bool b = false;
+    if (osgApp->ConfirmFermeturefenetre())
+    {
+        wxMessageDialog w(this, _T("Close window"), _T("Quit"), wxYES_NO | wxCENTRE | wxSTAY_ON_TOP);
+        b = w.ShowModal() == wxID_YES;
+        w.Close();
+		if (b && fenetreSauvee==0)
 			{
 			wxMessageDialog w(this, _T("Do you want to save it?") , _T("Quit"), wxYES_NO|wxCENTRE|wxSTAY_ON_TOP);
 			if (w.ShowModal()==wxID_YES)
@@ -1121,14 +1124,12 @@ if (osgApp && !osgApp->Quitter())
 				Enregistrer(evt);
 				}
 			}
-		else
-			w.Close();
-		}
-	else
-		{
-		event.Veto();
-		return;
-		}
+	    else
+		    {
+		    event.Veto();
+		    return;
+		    }
+    }
 	}
 if (cam!=NULL )
 	{

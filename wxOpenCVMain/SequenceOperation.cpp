@@ -14,6 +14,8 @@ bool SequenceOperation::AjouterOperation(ParametreOperation p)
     listeOp.push_back(p); 
     shared_ptr<NoeudOperation> n = make_shared<NoeudOperation>(&listeOp.back(), -1);
     bool b = AjouterNoeud(n);
+    if (!b)
+        listeOp.pop_back();
     if (indRacine == -1)
     {
         indRacine = 0;

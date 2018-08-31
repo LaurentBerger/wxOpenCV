@@ -427,10 +427,19 @@ void ArboCalcul::SauverSequence(wxTreeItemId &idParent)
 {
     if (osgApp == NULL)
         return;
-    wxString nomFic("Nom A Voir");
+    wxString typePossible("(*.xml)|*.xml");
+    wxFileDialog ouverture(this, _("Save Sequence As"), wxEmptyString, wxEmptyString, typePossible, wxFD_SAVE | wxFD_OVERWRITE_PROMPT);
+    if (ouverture.ShowModal() == wxID_CANCEL)
+        return;
+    wxString nomDuDocument = ouverture.GetFilename();
+    wxString repertoireDuDocument = ouverture.GetDirectory();
+    wxString s = repertoireDuDocument + _T("\\") + nomDuDocument;
+
+    wxString nomFic(s);
     nomFic.Replace(" ", "_");
+    seq.get()->SauverSequence(std::string(nomFic.c_str()));
     wxTreeItemId t = GetRootItem();
-    if (t == idParent)
+/*    if (t == idParent)
     {
 //        nbEtape = 0;
         ArboCalculParam p;
@@ -441,7 +450,7 @@ void ArboCalcul::SauverSequence(wxTreeItemId &idParent)
         p.fs.open((std::string)nomFic.c_str() + ".yml", cv::FileStorage::WRITE);;
         ExplorerArbre(t, p, &ArboCalcul::SauverNoeud);
         p.fs.release();
-    }
+    }*/
 
 }
 

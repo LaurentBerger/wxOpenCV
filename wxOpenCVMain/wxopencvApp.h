@@ -68,7 +68,8 @@ protected:
     wxLanguage	langue;							/*!< language choisi */
     wxLocale	locale;							/*!< locale we'll be using */
     wxFileConfig *configApp;					/*!< Fichier de configuration de l'application */
-
+    bool confirmFermeturefenetre;
+    bool oclStatus;
     std::vector<ParametreOperation> listeOperation;		/*<! Liste des opérations individuelles */
     std::map <int, std::vector <ParametreOperation > > tabOperation;	/*!< Tableau des opérations effectuées dans une séquence */
     int 	numOpFaite;								/*!< Nombre d'opération faites ou sauvgardées dans le fichier INI */
@@ -121,7 +122,7 @@ public:
     void Quitter(wxFrame *g);
     void Ouvrir(wxCommandEvent &);	/*!< Ouverture d'un document */
     void InitFenAssociee(FenetrePrincipale *f); /*!< Ouvrir les fenetres associées à la fenetre principale */
-
+    bool ConfirmFermeturefenetre() {return confirmFermeturefenetre;};
     void Video(wxCommandEvent &, int);
 //    void Enregistrer(wxCommandEvent& event);
 
