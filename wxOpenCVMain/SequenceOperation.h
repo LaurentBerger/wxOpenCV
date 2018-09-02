@@ -7,6 +7,12 @@
 #include "opencv2/opencv.hpp"
 #include "ParametreOperation.h"
 
+struct SequenceParam {
+    cv::FileStorage fs;
+    void  *fenetre = NULL;
+    int indFen = -1;
+    void *osgApp=NULL;
+};
 
 class NoeudOperation {
 private:
@@ -52,7 +58,11 @@ public:
         INDICE_FENETRE_VALIDE, INDICE_FENETRE_LOGIQUE
     };
 
+    void ReplacerIdParFenetre(SequenceParam & p, bool quitterBranche);
+
 };
+
+
 
 
 class SequenceOperation {
@@ -70,6 +80,9 @@ public:
     bool AjouterOperation(ParametreOperation p);
     void SauverSequence(std::string fileName);
     void LireSequence(std::string fileName);
+    ParametreOperation * RechercherOperation(ParametreOperation & p);
+    void ReplacerIdParFenetre(SequenceParam & p, bool quitterBranche);
+    bool ExplorerSequence(SequenceParam , void (NoeudOperation::*FonctionNoeud)(SequenceParam &, bool));
     bool AjouterNoeud(std::shared_ptr<NoeudOperation> n);
     void CreerArbre();
     ParametreOperation LireOperation(int ind) { if (ind >= 0 && ind < listeOp.size()) return listeOp[ind]; else return ParametreOperation(); };

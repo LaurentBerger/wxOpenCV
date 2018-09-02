@@ -8,6 +8,7 @@
 #include <wx/timer.h>
 #include <wx/dynlib.h>
 #include <wx/fileconf.h>
+#include <wx/treebase.h>
 #include <string>
 #include <map>
 

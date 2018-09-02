@@ -1,3 +1,5 @@
+#include "wxopencvApp.h"
+#include "FenetrePrincipale.h"
 #include "SequenceOperation.h"
 #include <memory>
 
@@ -108,6 +110,57 @@ struct FindOperation {
 private:
     ParametreOperation n;
 };
+
+
+ParametreOperation *SequenceOperation::RechercherOperation(ParametreOperation &p)
+{
+    std::vector<shared_ptr<NoeudOperation>>::iterator it = find_if(lNoeud.begin(), lNoeud.end(), FindOperation(p));
+    if (it == lNoeud.end())
+        return NULL;
+    return (*it)->Operation();
+}
+
+void NoeudOperation::ReplacerIdParFenetre(SequenceParam & p, bool quitterBranche)
+{
+    NoeudOperation *idParent;
+    if (imAcq || indFen >= 0)
+        {
+            if (indFen == p.indFen)
+            {
+                int ind = -1;
+                if (p.fenetre && p.osgApp)
+                    ind = ((wxOpencvApp *)p.osgApp)->RechercheFenetre(((FenetrePrincipale*)p.fenetre)->ImAcq());
+                if (ind >= 0)
+                {
+                    indFen = ind;
+                }
+            }
+        }
+    else if (!pOCV.empty())
+    {
+        for (int i = 0; i < pOCV.nbOperande; i++)
+        {
+            if (pOCV.indOpFenetre[i] == p.indFen)
+            {
+                pOCV.indOpFenetre[i] = ((FenetrePrincipale*)p.fenetre)->IdFenetre();
+                if (i < pOCV.op.size())
+                    pOCV.op[i] = ((FenetrePrincipale*)p.fenetre)->ImAcq();
+                else
+                    pOCV.op.push_back(((FenetrePrincipale*)p.fenetre)->ImAcq());
+            }
+        }
+    }
+}
+
+bool SequenceOperation::ExplorerSequence(SequenceParam p, void (NoeudOperation::*fonctionNoeud)(SequenceParam &p, bool))
+{
+    std::vector<shared_ptr<NoeudOperation>>::iterator it;
+    for (it = lNoeud.begin(); it != lNoeud.end(); it++)
+    {
+        ((it->get())->*fonctionNoeud)(p, false);
+    }
+    return true;
+}
 
 bool SequenceOperation::AjouterNoeud(shared_ptr<NoeudOperation> n)
 {

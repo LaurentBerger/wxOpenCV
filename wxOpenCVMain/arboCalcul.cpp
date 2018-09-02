@@ -307,13 +307,16 @@ bool ArboCalcul::ModifNoeud(FenetrePrincipale *f, wxTreeItemId w)
         if (itempocv->Operation())
         {
             ParametreOperation *pocv = itempocv->Operation();
+            ParametreOperation *pocvRef=seq.get()->RechercherOperation(*pocv);
             ImageInfoCV *imAcq = item->Fenetre()->ImAcq();
             for (int i = 0; i < pocv->nbOperande; i++)
             {
                 if (pocv->op[i] == imAcq)
                 {
+                    pocvRef->op[i] = f->ImAcq();
                     pocv->op[i] = f->ImAcq();
                     pocv->indOpFenetre[i] = ((wxOpencvApp*)osgApp)->RechercheFenetre(f->ImAcq());
+                    pocvRef->indOpFenetre[i] = pocv->indOpFenetre[i];
                     break;
                 }
             }
@@ -330,15 +333,22 @@ bool ArboCalcul::ModifNoeud(FenetrePrincipale *f, wxTreeItemId w)
 
         }
         if (itempocv->Operation())
+        {
             fenAlgo.get()->ExecuterOperation(itempocv->IndiceOnglet());
+            seq.get()->ExecuterSequence();
+        }
     }
     else
     {
         ArboCalculParam p;
+        SequenceParam ps;
         p.indFen = item->IndiceFenetre();
         p.fen = f;
+        ps.indFen = item->IndiceFenetre();
+        ps.fenetre = f;
         wxTreeItemId root = GetRootItem();
         ExplorerArbre(root, p, &ArboCalcul::ReplacerIdParFenetre);
+        seq.get()->ExplorerSequence(ps, &NoeudOperation::ReplacerIdParFenetre);
     }
     Collapse(idParent);
     Expand(idParent);
