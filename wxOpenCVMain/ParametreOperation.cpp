@@ -51,7 +51,7 @@ void ParametreOperation::write(cv::FileStorage& fs) const {
     fs << "idOperation" << idOperation;
     fs << "nomSequence" << nomSequence;
     int nb = 0;
-    fs << "intParam" << "[";
+    fs << "intParam" << "[:";
 #ifdef __WIN32__ // en realité C++11
     for (auto iti = intParam.begin(); iti != intParam.end(); iti++)
         {
@@ -61,7 +61,7 @@ void ParametreOperation::write(cv::FileStorage& fs) const {
         fs << "maxVal" << iti->second.maxi;
         fs << "pasVal" << iti->second.pas<<"}";
         }
-    fs << "]" << "doubleParam" << "[";
+    fs << "]" << "doubleParam" << "[:";
     nb = 0;
     map<string, DomaineParametreOp<double> >::iterator itd;
     for (auto iti = doubleParam.begin(); iti != doubleParam.end(); iti++)
@@ -73,7 +73,7 @@ void ParametreOperation::write(cv::FileStorage& fs) const {
         fs << "pasVal" << iti->second.pas << "}";
         nb++;
         }
-    fs << "]" << "sizeParam" << "[";
+    fs << "]" << "sizeParam" << "[:";
     nb = 0;
     for (auto itp = sizeParam.begin(); itp != sizeParam.end(); itp++)
         {
@@ -89,7 +89,7 @@ void ParametreOperation::write(cv::FileStorage& fs) const {
         nb++;
         }
     std::map<std::string, DomaineParametreOp<cv::Point> >::iterator itp;
-    fs << "]" << "pointParam" << "[";
+    fs << "]" << "pointParam" << "[:";
     for (auto itp = pointParam.begin(); itp != pointParam.end(); itp++)
         {
         fs << "{:" << "nom" << itp->first;
