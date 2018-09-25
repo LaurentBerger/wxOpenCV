@@ -1793,7 +1793,7 @@ if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getPatchSize() != pOCV->intPa
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getScaleFactor() != pOCV->doubleParam["ScaleFactor"].valeur)
 	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setScaleFactor(pOCV->doubleParam["ScaleFactor"].valeur);
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getScoreType() != pOCV->intParam["ScoreType"].valeur)
-	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setScoreType(pOCV->intParam["ScoreType"].valeur);
+	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setScoreType(static_cast<cv::ORB::ScoreType>(pOCV->intParam["ScoreType"].valeur));
 if (pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->getWTA_K() != pOCV->intParam["WTA_K"].valeur)
 	pOCV->detecteur["ORB"].dynamicCast<cv::ORB>()->setWTA_K(pOCV->intParam["WTA_K"].valeur);
 
@@ -2116,7 +2116,7 @@ if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getExtended() != pOCV->intP
 if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getUpright() != pOCV->doubleParam["upright"].valeur)
     pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->setUpright(pOCV->doubleParam["upright"].valeur);
 if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getDiffusivity() != pOCV->intParam["Diffusivity"].valeur)
-    pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->setDiffusivity(pOCV->intParam["Diffusivity"].valeur);
+    pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->setDiffusivity(static_cast<cv::KAZE::DiffusivityType>(pOCV->intParam["Diffusivity"].valeur));
 if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getNOctaveLayers() != pOCV->intParam["NOctaveLayers"].valeur)
     pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->setNOctaveLayers(pOCV->intParam["NOctaveLayers"].valeur);
 if (pOCV->detecteur["KAZE"].dynamicCast<cv::KAZE>()->getNOctaves() != pOCV->intParam["NOctaves"].valeur)
@@ -2171,9 +2171,9 @@ if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getDescriptorChannels() !
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getDescriptorSize() != pOCV->doubleParam["DescriptorSize"].valeur)
     pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDescriptorSize(pOCV->doubleParam["DescriptorSize"].valeur);
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getDescriptorType() != pOCV->intParam["DescriptorType"].valeur)
-    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDescriptorType(pOCV->intParam["DescriptorType"].valeur);
+    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDescriptorType(static_cast<cv::AKAZE::DescriptorType>(pOCV->intParam["DescriptorType"].valeur));
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getDiffusivity() != pOCV->intParam["Diffusivity"].valeur)
-    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDiffusivity(pOCV->intParam["Diffusivity"].valeur);
+    pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setDiffusivity(static_cast<cv::KAZE::DiffusivityType>(pOCV->intParam["Diffusivity"].valeur));
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getNOctaveLayers() != pOCV->intParam["NOctaveLayers"].valeur)
     pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->setNOctaveLayers(pOCV->intParam["NOctaveLayers"].valeur);
 if (pOCV->detecteur["AKAZE"].dynamicCast<cv::AKAZE>()->getNOctaves() != pOCV->intParam["NOctaves"].valeur)
