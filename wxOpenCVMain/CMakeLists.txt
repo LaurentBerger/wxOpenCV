@@ -25,7 +25,7 @@ configure_file (
 	"${PROJECT_SOURCE_DIR}/wxOpenCVConfig.h.in"
 	"${PROJECT_SOURCE_DIR}/wxOpenCVConfig.h"
 	)
-
+message ("wxwidgets =  ${wxWidgets_LIBRARIES}")
 if (wxWidgets_FOUND)
 	include_directories(${wxWidgets_INCLUDE_DIRS})
 	target_link_libraries (wxOpenCVMain ${wxWidgets_LIBRARIES} )

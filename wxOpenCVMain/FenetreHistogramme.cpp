@@ -2,7 +2,7 @@
 #include "courbeplplot.h"
 #include "Tableur.h"
 #include "imagestat.h"
-#include <opencv/highgui.h>
+#include "opencv2/opencv.hpp"
 #include <vector>
 
 using namespace cv;
