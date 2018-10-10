@@ -1094,83 +1094,86 @@ FenetrePrincipale::~FenetrePrincipale()
 
 void FenetrePrincipale::OnClose(wxCloseEvent& event)
 {
-if (horlogeSeq && horlogeSeq->IsRunning())
-	{
-	wxMessageBox( _T("You must stop grabbing sequence before!"), _T("Quit Application") ,wxOK);
-	event.Veto();
-	return;
-	}
-/*if (ModeCamera())
-	{
-	wxMessageBox(_T("You must stop grabbing image before!"), _T("Quit Application") , wxOK);
-	event.Veto();
-	return;
+    if (horlogeSeq && horlogeSeq->IsRunning())
+	    {
+	    wxMessageBox( _T("You must stop grabbing sequence before!"), _T("Quit Application") ,wxOK);
+	    event.Veto();
+	    return;
+	    }
+    /*if (ModeCamera())
+	    {
+	    wxMessageBox(_T("You must stop grabbing image before!"), _T("Quit Application") , wxOK);
+	    event.Veto();
+	    return;
 
-	}*/
-if (osgApp && !osgApp->Quitter())
-	{
-    bool b = false;
-    if (osgApp->ConfirmFermeturefenetre())
+	    }*/
+    if (osgApp && !osgApp->Quitter())
     {
-        wxMessageDialog w(this, _T("Close window"), _T("Quit"), wxYES_NO | wxCENTRE | wxSTAY_ON_TOP);
-        b = w.ShowModal() == wxID_YES;
-        w.Close();
-    }
-    if (fenetreSauvee == 0)
-    {
-        wxMessageDialog w(this, _T("Do you want to save it?"), _T("Quit"), wxYES_NO | wxCENTRE | wxSTAY_ON_TOP);
-        if (w.ShowModal() == wxID_YES)
+        bool b = false;
+        if (osgApp->ConfirmFermeturefenetre())
         {
-            wxCommandEvent evt;
-            Enregistrer(evt);
+            wxMessageDialog w(this, _T("Close window"), _T("Quit"), wxYES_NO | wxCENTRE | wxSTAY_ON_TOP);
+            b = w.ShowModal() == wxID_YES;
+            w.Close();
+        }
+        else
+            b = true;
+        if (fenetreSauvee == 0)
+        {
+            wxMessageDialog w(this, _T("Do you want to save it?"), _T("Quit"), wxYES_NO | wxCENTRE | wxSTAY_ON_TOP);
+            if (w.ShowModal() == wxID_YES)
+            {
+                wxCommandEvent evt;
+                Enregistrer(evt);
+            }
+            b = true;
+        }
+        if (!b)
+        {
+            event.Veto();
+            return;
         }
     }
-    else
-    {
-        event.Veto();
-        return;
+    if (cam!=NULL )
+	    {
+	    if (osgApp && osgApp->CtrlCamera()  && osgApp->CtrlCamera()->Camera()==cam)
+		    {
+		    osgApp->CtrlCamera()->DefCamera(NULL);
+		    osgApp->CtrlCamera()->SetTitle(_("Undefined"));
+		    }
+	    if (cam->IsPaused())
+		    {
+		    cam->parent=NULL;
+		    cam->Resume();
+		    }
     }
-}
-if (cam!=NULL )
-	{
-	if (osgApp && osgApp->CtrlCamera()  && osgApp->CtrlCamera()->Camera()==cam)
-		{
-		osgApp->CtrlCamera()->DefCamera(NULL);
-		osgApp->CtrlCamera()->SetTitle(_("Undefined"));
-		}
-	if (cam->IsPaused())
-		{
-		cam->parent=NULL;
-		cam->Resume();
-		}
-}
-if (fenOperation)
-{
-    fenOperation->DefFenMere(NULL);
-    fenOperation->OnClose(event);
-}
-if (courbeVideo)
-    courbeVideo->DefFenMere(NULL);
-if (osgApp && !osgApp->Quitter())
-	osgApp->RetirerListe(this);
-if (cam)
-	OnCloseThread(event);
-if (detectionUtilisateur)
-	detectionUtilisateur->Stop();
-delete detectionUtilisateur;
+    if (fenOperation)
+    {
+        fenOperation->DefFenMere(NULL);
+        fenOperation->OnClose(event);
+    }
+    if (courbeVideo)
+        courbeVideo->DefFenMere(NULL);
+    if (osgApp && !osgApp->Quitter())
+	    osgApp->RetirerListe(this);
+    if (cam)
+	    OnCloseThread(event);
+    if (detectionUtilisateur)
+	    detectionUtilisateur->Stop();
+    delete detectionUtilisateur;
 
-delete imAcq;
-delete imGain;
+    delete imAcq;
+    delete imGain;
 
 
-delete imAffichee;
-// est déjà fait par delete imAffichee delete tabRGB;
+    delete imAffichee;
+    // est déjà fait par delete imAffichee delete tabRGB;
 
-imAcq=NULL;
-imGain=NULL;
-imAffichee=NULL;
-nbObjetFenetrePrincipale--;
-wxFrame::OnCloseWindow(event);
+    imAcq=NULL;
+    imGain=NULL;
+    imAffichee=NULL;
+    nbObjetFenetrePrincipale--;
+    wxFrame::OnCloseWindow(event);
 }
 
 void FenetrePrincipale::EnregistrerImage()
