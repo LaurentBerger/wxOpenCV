@@ -788,7 +788,7 @@ wxString	wxPlPlotDrv(cheminPlplotDrv+"/wxwidgets");
 //new wxDynamicLibrary(svgPlPlotDrv);
 
 int nbEcran=wxDisplay::GetCount() ;
-wxDisplay ecran(0);
+wxDisplay ecran(static_cast<unsigned int>(0));
 
 wxRect display;
 display = ecran.GetGeometry();

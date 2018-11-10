@@ -1298,6 +1298,7 @@ if (s == "sobel_mod")
     nbOperande = 1;
     nomOperation = s;
     intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+    intParam["size"] = DomaineParametreOp<int>(0, 0, 15, 1);
     doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
     doubleParam["delta"] = DomaineParametreOp<double>(0, 0.0, 1000, 1);
     intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
@@ -1308,6 +1309,7 @@ if (s == "sobel_x")
     nbImageRes = 1;
     nbOperande = 1;
     intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+    intParam["size"] = DomaineParametreOp<int>(0, 0, 15, 1);
     doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
     doubleParam["delta"] = DomaineParametreOp<double>(0, 0.0, 1000, 1);
     intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);
@@ -1319,6 +1321,7 @@ if (s == "sobel_y")
     nbImageRes = 1;
     nbOperande = 1;
     intParam["ddepth"] = DomaineParametreOp<int>(-1, -1, CV_32F, 1);
+    intParam["size"] = DomaineParametreOp<int>(0, 0, 15, 1);
     doubleParam["scale"] = DomaineParametreOp<double>(1, 0.01, 10, 0.1);
     doubleParam["delta"] = DomaineParametreOp<double>(0, 0.0, 1000, 1);
     intParam["borderType"] = DomaineParametreOp<int>(cv::BORDER_CONSTANT, cv::BORDER_CONSTANT, cv::BORDER_WRAP, 1);

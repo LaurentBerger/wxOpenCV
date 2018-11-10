@@ -806,7 +806,7 @@ if (imAcq->type()==CV_16UC1 && (*(imAcq->MaxIm()))[0]<32767.)
 	imAcq->flags=(imAcq->flags&0xFFFFFFF0)|CV_16SC1;
 int		fZoomNume,fZoomDeno;
 int nbEcran=wxDisplay::GetCount() ;
-wxDisplay ecran(0);
+wxDisplay ecran(static_cast<unsigned int> (0));
 wxRect display;
 display = ecran.GetGeometry();
 int n=1;
@@ -877,7 +877,7 @@ if (!feuille)
 	feuille->DefOSGApp(osgApp);
     int		fZoomNume,fZoomDeno;
     int nbEcran=wxDisplay::GetCount() ;
-    wxDisplay ecran(0);
+    wxDisplay ecran(static_cast<unsigned int>(0));
     wxRect display;
     display = ecran.GetGeometry();
     int n=1;

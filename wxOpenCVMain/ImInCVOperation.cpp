@@ -706,8 +706,8 @@ std::vector<ImageInfoCV *>ImageInfoCV::ModuleGradientSobel(std::vector< ImageInf
     UMat	imAbsx;
     UMat	imAbsy;
 
-    cv::Sobel(*op[0], imx, pOCV->intParam["ddepth"].valeur, 1, 0, 3,pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
-    cv::Sobel(*op[0], imy, pOCV->intParam["ddepth"].valeur, 0, 1, 3,pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
+    cv::Sobel(*op[0], imx, pOCV->intParam["ddepth"].valeur, 1, 0, 2 * pOCV->intParam["size"].valeur + 1,pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
+    cv::Sobel(*op[0], imy, pOCV->intParam["ddepth"].valeur, 0, 1, 2 * pOCV->intParam["size"].valeur + 1,pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
     absdiff(imx, cv::Scalar::all(0), imAbsx);
     absdiff(imy, cv::Scalar::all(0), imAbsy);
     addWeighted(imAbsx, 0.5, imAbsy, 0.5, 0, *im);
@@ -725,7 +725,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::SobelX(std::vector< ImageInfoCV*> op, Par
 {
     ImageInfoCV	*im = new ImageInfoCV;
 
-    cv::Sobel(*op[0], *im, pOCV->intParam["ddepth"].valeur, 1, 0,3, pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
+    cv::Sobel(*op[0], *im, pOCV->intParam["ddepth"].valeur, 1, 0,2* pOCV->intParam["size"].valeur+1, pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
 
     std::vector<ImageInfoCV	*> r;
     r.push_back(im);
@@ -741,7 +741,7 @@ std::vector<ImageInfoCV *>ImageInfoCV::SobelY(std::vector< ImageInfoCV*> op, Par
 {
     ImageInfoCV	*im = new ImageInfoCV;
 
-    cv::Sobel(*op[0], *im, pOCV->intParam["ddepth"].valeur, 0, 1,3,
+    cv::Sobel(*op[0], *im, pOCV->intParam["ddepth"].valeur, 0, 1, 2 * pOCV->intParam["size"].valeur + 1,
         pOCV->doubleParam["scale"].valeur, pOCV->doubleParam["delta"].valeur, pOCV->intParam["borderType"].valeur);
 
     std::vector<ImageInfoCV	*> r;
@@ -3161,14 +3161,14 @@ if (pOCV->pano.size()==0)
 {
     pOCV->pano.push_back(pano);
 }
-cv::Ptr<cv::detail::FeaturesFinder> finder;
+cv::Ptr<cv::Feature2D> finder;
 if (pOCV->intParam["Stitch_descriptor"].valeur==0 )
 {
-    finder = cv::makePtr<cv::detail::OrbFeaturesFinder>(pOCV->sizeParam["orb_grid_size"].valeur,pOCV->intParam["orb_nfeatures"].valeur,(float)pOCV->doubleParam["orb_scaleFactor"].valeur,pOCV->intParam["orb_nlevels"].valeur);
+    finder = cv::ORB::create(pOCV->intParam["orb_nfeatures"].valeur,(float)pOCV->doubleParam["orb_scaleFactor"].valeur,pOCV->intParam["orb_nlevels"].valeur);
 }
 if (pOCV->intParam["Stitch_descriptor"].valeur==1)
 {
-    finder = cv::makePtr<cv::detail::SurfFeaturesFinder>(pOCV->doubleParam["surf_hess_thresh"].valeur,pOCV->intParam["surf_num_octaves"].valeur,
+    finder = cv::xfeatures2d::SURF::create(pOCV->doubleParam["surf_hess_thresh"].valeur,pOCV->intParam["surf_num_octaves"].valeur,
         pOCV->intParam["surf_num_layers"].valeur,pOCV->intParam["surf_num_octaves_descr"].valeur,pOCV->intParam["surf_num_layers_descr"].valeur);
 }
 pano->features.resize(pOCV->op.size());
@@ -3199,12 +3199,12 @@ for (int i = 0; i < pOCV->op.size(); ++i)
 		pano->seam_work_aspect = pano->seam_scale / pano->work_scale;
 		pano->is_seam_scale_set = true;
 	}
-	(*finder)(*pOCV->op[i], pano->features[i]);
+	computeImageFeatures(finder,*pOCV->op[i], pano->features[i]);
     pano->features[i].img_idx = i;
 	cv::resize(*pano->op[i], img, cv::Size(), pano->seam_scale, pano->seam_scale);
 	pano->tabImg[i] = img.clone();
 }
-finder->collectGarbage();
+//finder->collectGarbage();
 std::vector<ImageInfoCV	*> r;
 ImageInfoCV *t = new ImageInfoCV(1, 1, pano->op[0]->type());
 t->pano = pano;
