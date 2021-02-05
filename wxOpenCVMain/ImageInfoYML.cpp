@@ -1,5 +1,6 @@
 #include "ImageInfo.h"
 #include "wx/string.h"
+#include <fstream>
 
 using namespace std;
 using namespace cv;

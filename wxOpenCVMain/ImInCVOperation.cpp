@@ -1,5 +1,6 @@
 #include "ImageInfo.h"
 #include <vector>
+#include <fstream>
 #include "opencv2/optflow.hpp"
 #include "opencv2/ximgproc.hpp"
 #include "opencv2/xfeatures2d.hpp"
@@ -1825,8 +1826,8 @@ if (op[0] != this)
 
 //if (pOCV->detecteur.size() == 0 )
 	{
-	cv::Ptr<cv::xfeatures2d::SIFT> b;
-	b = cv::xfeatures2d::SIFT::create(pOCV->intParam["nfeatures"].valeur, pOCV->intParam["nOctaveLayers"].valeur,
+	cv::Ptr<cv::SIFT> b;
+	b = cv::SIFT::create(pOCV->intParam["nfeatures"].valeur, pOCV->intParam["nOctaveLayers"].valeur,
         pOCV->doubleParam["contrastThreshold"].valeur, pOCV->doubleParam["edgeThreshold"].valeur, pOCV->doubleParam["sigma"].valeur);
 	pOCV->detecteur["SIFT"] = b;
 	}
@@ -3378,14 +3379,14 @@ std::vector<ImageInfoCV	*> ImageInfoCV::WraperWrap(std::vector< ImageInfoCV *>, 
     // Warp images and their masks
 
 #ifdef HAVE_OPENCV_CUDAWARPING
-    if (try_cuda && cuda::getCudaEnabledDeviceCount() > 0)
+    if (cv::cuda::getCudaEnabledDeviceCount() > 0)
     {
         if (pOCV->intParam["warp_type"].valeur ==0)
-            warper_creator = cv::makePtr<cv::PlaneWarperGpu>();
+            pano->warper_creator = cv::makePtr<cv::PlaneWarperGpu>();
         else if (pOCV->intParam["warp_type"].valeur ==1)
-            warper_creator = cv::makePtr<cv::CylindricalWarperGpu>();
+            pano->warper_creator = cv::makePtr<cv::CylindricalWarperGpu>();
         else if (pOCV->intParam["warp_type"].valeur ==2)
-            warper_creator = cv::makePtr<cv::SphericalWarperGpu>();
+            pano->warper_creator = cv::makePtr<cv::SphericalWarperGpu>();
     }
     else
 #endif
@@ -3483,8 +3484,8 @@ std::vector<ImageInfoCV	*> ImageInfoCV::CorrectionExpo(std::vector< ImageInfoCV 
 	else if (pOCV->intParam["seam_find_type"].valeur == 2)
 	{
 #ifdef HAVE_OPENCV_CUDALEGACY
-		if (try_cuda && cuda::getCudaEnabledDeviceCount() > 0)
-			pano->couture = cv::makePtr<cv::detail::GraphCutSeamFinderGpu>(GraphCutSeamFinderBase::COST_COLOR);
+		if (cv::cuda::getCudaEnabledDeviceCount() > 0)
+			pano->couture = cv::makePtr<cv::detail::GraphCutSeamFinderGpu>(cv::detail::GraphCutSeamFinderBase::COST_COLOR);
 		else
 #endif
 			pano->couture = cv::makePtr<cv::detail::GraphCutSeamFinder>(cv::detail::GraphCutSeamFinderBase::COST_COLOR);
@@ -3492,8 +3493,8 @@ std::vector<ImageInfoCV	*> ImageInfoCV::CorrectionExpo(std::vector< ImageInfoCV 
 	else if (pOCV->intParam["seam_find_type"].valeur == 3)
 	{
 #ifdef HAVE_OPENCV_CUDALEGACY
-		if (try_cuda && cuda::getCudaEnabledDeviceCount() > 0)
-			pano->couture = cv::makePtr<detail::GraphCutSeamFinderGpu>(GraphCutSeamFinderBase::COST_COLOR_GRAD);
+		if (cv::cuda::getCudaEnabledDeviceCount() > 0)
+			pano->couture = cv::makePtr<cv::detail::GraphCutSeamFinderGpu>(cv::detail::GraphCutSeamFinderBase::COST_COLOR_GRAD);
 		else
 #endif
 			pano->couture = cv::makePtr<cv::detail::GraphCutSeamFinder>(cv::detail::GraphCutSeamFinderBase::COST_COLOR_GRAD);

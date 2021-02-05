@@ -1,18 +1,4 @@
 source ./libmodel.sh
-if [[ $updateRepo = ON ]] 
-then
-	if [ ! -d "$myRepo/wxopencv" ]; 
-	then 
-		echo "cloning wxopencv" 
-		git clone https://github.com/LaurentBerger/wxopencv.git 
-		mkdir ${buildRepo}/wxopencv
-		mkdir ${installRepo}/wxopencv 
-	else 
-		cd wxopencv 
-		git pull 
-	fi 
-	cd ..
-fi
 RepoSource=wxopencv
 pushd ${buildRepo}/$RepoSource 
 cmake -G"$CMAKE_CONFIG_GENERATOR" \
