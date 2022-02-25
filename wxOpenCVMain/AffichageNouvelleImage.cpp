@@ -179,6 +179,8 @@ case 3:
 case 4:
 	break;
 	}
+if (interdireAffichage)
+    return;
 if (cam && cam->IsRunning())
 	{
     feuille->Refresh();

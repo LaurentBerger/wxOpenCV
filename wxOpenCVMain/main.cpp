@@ -1146,8 +1146,8 @@ void wxOpencvApp::TracerZoom(wxPoint p)
 
 void wxOpencvApp::RetirerListe(FenetrePrincipale *f)
 {
-delete listeFenetre[f->IdFenetre()]->fZoom;
-delete listeFenetre[f->IdFenetre()]->fStat;
+//delete listeFenetre[f->IdFenetre()]->fZoom;
+//delete listeFenetre[f->IdFenetre()]->fStat;
 indFenetre=f->IdFenetre();
 listeFenetre.erase(f->IdFenetre());
 int i=0;

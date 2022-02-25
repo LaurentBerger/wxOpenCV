@@ -372,6 +372,8 @@ nomImageQuadrique=sd;
 
 void FenetrePrincipale::InitIHM()
 {
+    if (!ImageAffichee())
+        return;
     wxIcon icon;
     wxBitmap b(ImageAffichee()->Scale(64, 64));
     icon.CopyFromBitmap(b);
@@ -1155,7 +1157,7 @@ void FenetrePrincipale::OnClose(wxCloseEvent& event)
     if (courbeVideo)
         courbeVideo->DefFenMere(NULL);
     if (osgApp && !osgApp->Quitter())
-	    osgApp->RetirerListe(this);
+        osgApp->RetirerListe(this);
     if (cam)
 	    OnCloseThread(event);
     if (detectionUtilisateur)

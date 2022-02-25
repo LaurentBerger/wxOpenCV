@@ -104,8 +104,13 @@ void FenetrePrincipale::DrawWindow(wxBufferedPaintDC &hdc)
 if (!imAcq)
 	return;
 if (!imAffichee)
-	if (imAcq)
+	if (imAcq && imAcq->rows * imAcq->cols >0)
 		DIB(imAcq);
+    else
+    {
+        interdireAffichage = true;
+        return;
+    }
 if (imAffichee)
 	{
 	wxCriticalSectionLocker enter(travailCam);
@@ -597,6 +602,11 @@ if (!pCouleur)
 
 // zone mémoire pour le DIB 
 long taille = im->cols*im->rows*3;
+if (taille == 0)
+{
+    interdireAffichage = true;
+    return;
+}
 if (imAffichee && imAffichee->GetHeight()*imAffichee->GetWidth() != im->cols*im->rows)
 	{
 //	delete tabRGBTransparence;

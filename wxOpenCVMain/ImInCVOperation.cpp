@@ -1165,7 +1165,7 @@ if (op[0]->channels()==1)
 else
 	{
 	std::vector<UMat> planCouleurSrc;
-	UMat *planCouleurDst=new UMat[op[0]->channels()];
+	std::vector<UMat> planCouleurDst(op[0]->channels());
 	std::vector<UMat> d(op[0]->channels());
 	cv::split( *op[0], planCouleurSrc );
 	for (int i=0;i<op[0]->channels();i++)
@@ -1184,7 +1184,6 @@ else
 		}
 	cv::merge(d, *im);
 	int nb=im->channels();
-	delete []planCouleurDst;
 
 	}
 

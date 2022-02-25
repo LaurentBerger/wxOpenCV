@@ -298,11 +298,13 @@ if (((wxOpencvApp*)osgApp)->Graphique(id)->ModeRectangle())
 		
 	}
 cv::Rect const zoneTraitee(colDeb, ligDeb, nbCol, nbLig);
-if (ligDeb<0  || colDeb<0 || nbLig<0 || nbCol<0)
+if (ligDeb<0  || colDeb<0 || nbLig<0 || nbCol<0 || imAcq->size().height * imAcq->size().width==0)
 	{
 	return;
 	}
-UMat masque = UMat::zeros(imAcq->size(), CV_8U);  // type of mask is CV_8U
+UMat masque;
+if (imAcq!=NULL && imAcq->size().height * imAcq->size().width >0)
+    masque = UMat::zeros(imAcq->size(), CV_8U);  // type of mask is CV_8U
 if (zoneTraitee.area()>0)
     masque(zoneTraitee) = 255;
 

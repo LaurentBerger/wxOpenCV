@@ -1,10 +1,11 @@
 #include "FenetreRegion.h"
 #include "imagestat.h"
 #include <wx/clipbrd.h>
+#include <wx/grid.h>
 
 BEGIN_EVENT_TABLE( FenetreRegion, wxWindow )
     EVT_GRID_SELECT_CELL(FenetreRegion::OnSelectCell )
-    EVT_GRID_RANGE_SELECT( FenetreRegion::OnRangeSelected )
+    EVT_GRID_RANGE_SELECTED( FenetreRegion::OnRangeSelected )
     EVT_GRID_CELL_RIGHT_CLICK(FenetreRegion::MenuContextuel)
     EVT_GRID_LABEL_LEFT_CLICK(FenetreRegion::OterSelection)
 	EVT_MENU(NEW_LEVEL,  FenetreRegion::DefinirNiveau)
