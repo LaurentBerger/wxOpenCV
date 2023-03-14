@@ -244,11 +244,7 @@ if (paletteDispo.size() != 0)
 cv::Mat src(1, 256, CV_8UC1),dst;
 for (int i = 0; i < src.cols; i++)
     src.at<uchar>(0, i) = i;
-shared_ptr<vector<wxColour>> w = std::make_shared<vector<wxColour>>(nbCouleur);
-for (int j = 0; j < 16384; j++)
-    (*w.get())[j].Set(j, j, j);
-paletteDispo.push_back(w);
-for (int i = cv::COLORMAP_AUTUMN; i <= cv::COLORMAP_PARULA; i++)
+for (int i = cv::COLORMAP_AUTUMN; i <= cv::COLORMAP_DEEPGREEN; i++)
 {
     cv::applyColorMap(src, dst, i);
     shared_ptr<vector<wxColour>> w = std::make_shared<vector<wxColour>>(nbCouleur);
@@ -262,6 +258,10 @@ for (int i = cv::COLORMAP_AUTUMN; i <= cv::COLORMAP_PARULA; i++)
     }
     paletteDispo.push_back(w);
 }
+shared_ptr<vector<wxColour>> w = std::make_shared<vector<wxColour>>(nbCouleur);
+for (int j = 0; j < 16384; j++)
+    (*w.get())[j].Set(j, j, j);
+paletteDispo.push_back(w);
 w = std::make_shared<vector<wxColour>>(nbCouleur);
 for (int i=0;i<nbCouleur;i++)
     (*w.get())[i].Set(rand()&0xFF,rand()&0xFF,rand()&0xFF);
@@ -569,8 +569,8 @@ template<typename T_> void FenetrePrincipale::CV2DIBImageEntierPalette(ImageInfo
     {
         cv::merge(dst, dst1);
         dst1.convertTo(ecranRGB, CV_8U);
-        if (indPalette>0 && indPalette<14)
-            cv::applyColorMap(ecranRGB, ecranRGB, indPalette-1);
+        if (indPalette>= cv::COLORMAP_AUTUMN && indPalette<=cv::COLORMAP_DEEPGREEN )
+            cv::applyColorMap(ecranRGB, ecranRGB, indPalette);
         return;
     }
 // masque Actif
@@ -582,8 +582,8 @@ template<typename T_> void FenetrePrincipale::CV2DIBImageEntierPalette(ImageInfo
     }
     cv::merge(dst, dst1);
     dst1.convertTo(ecranRGB, CV_8U);
-    if (indPalette != 0)
-        cv::applyColorMap(ecranRGB, ecranRGB, indPalette - 1);
+    if (indPalette >= 0)
+        cv::applyColorMap(ecranRGB, ecranRGB, indPalette );
 }
 
 /**************************************************************

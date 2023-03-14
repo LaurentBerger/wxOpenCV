@@ -47,7 +47,7 @@ Bind(wxEVT_LEFT_UP, &ZoneImage::OnLeftButtonUp,this);
 Bind(wxEVT_LEFT_DOWN, &ZoneImage::OnLeftButtonDown,this);
 Bind(wxEVT_CONTEXT_MENU, &ZoneImage::OnMenuContext,this);
 Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::Vue3D, this, Menu_3D);
-Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::SelectPalette, this, NOIRETBLANC_, NOIRETBLANC_ + 14);
+Bind(wxEVT_COMMAND_MENU_SELECTED, &ZoneImage::SelectPalette, this, NOIRETBLANC_, NOIRETBLANC_ - cv::COLORMAP_AUTUMN + cv::COLORMAP_DEEPGREEN+2);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::ModeComplexe,this,M_MODULE_,PHASE_RD);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::MAJZoom,this,ZOOM1SUR8,ZOOM8SUR1);
 Bind(wxEVT_COMMAND_MENU_SELECTED,&ZoneImage::SequenceOperation,this,SEQ_OPE);
@@ -625,7 +625,7 @@ return wxRect(p1Img,p2Img);
 wxMenu *ZoneImage::CreateMenuPalette(wxString *title)
 {
     wxMenu *menu = new wxMenu;
-    menu->AppendCheckItem(NOIRETBLANC_, _("&Linear\tCtrl-F1"));
+    menu->AppendCheckItem(NOIRETBLANC_, _("&Gray\t"));
     menu->AppendCheckItem(NOIRETBLANC_+1, _("&autumn\t"));
     menu->AppendCheckItem(NOIRETBLANC_+2, _("&bone\t"));
     menu->AppendCheckItem(NOIRETBLANC_+3, _("&jet\t"));
@@ -638,10 +638,19 @@ wxMenu *ZoneImage::CreateMenuPalette(wxString *title)
     menu->AppendCheckItem(NOIRETBLANC_ + 10, _("&hsv\t"));
     menu->AppendCheckItem(NOIRETBLANC_ + 11, _("&pink\t"));
     menu->AppendCheckItem(NOIRETBLANC_ + 12, _("&hot\t"));
-    menu->AppendCheckItem(NOIRETBLANC_ + 13, _("&parula\t"));
-    menu->AppendCheckItem(NOIRETBLANC_ + 14, _("&randomize\t"));
-    menu->Check(f->IndPalette()+NOIRETBLANC_,true);
-
+	menu->AppendCheckItem(NOIRETBLANC_ + 13, _("&parula\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 14, _("&magma\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 15, _("&inferno\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 16, _("&plasma\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 17, _("&viridis\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 18, _("&cividis\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 19, _("&twilight\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 20, _("&twilight shifted\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 21, _("&turbo\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 22, _("&deepgreen\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 23, _("&randomize\t"));
+	menu->AppendCheckItem(NOIRETBLANC_ + 24, _("&randomize\t"));
+	menu->Check(f->IndPalette()+NOIRETBLANC_,true);
     return menu;
 }
 
@@ -1868,7 +1877,7 @@ void FenetrePrincipale::TracerPointSURF(wxBufferedPaintDC &hdc)
         hdc.DrawRectangle(p, w);
         }
 
-    TracerAppariementPoint(hdc);
+    TracerAppariementPoint(hdc, IMAGEINFOCV_SURF_DES);
 }
 
 
@@ -1906,17 +1915,17 @@ catch (cv::Exception& e)
 		}
 }
 
-void FenetrePrincipale::TracerAppariementPoint(wxBufferedPaintDC &hdc)
+void FenetrePrincipale::TracerAppariementPoint(wxBufferedPaintDC &hdc, char type)
 {
 if ( !imAcq)
 	return;
-if (!imAcq->PointCle() ||(imAcq->Appariement()==NULL || imAcq->Appariement()->size()==0))
+if (!imAcq->PointCle(type) ||(imAcq->Appariement()==NULL || imAcq->Appariement()->size()==0))
 	{
 	return;
 	}
 
-std::vector<cv::KeyPoint> *pts1 = imAcq->PointCle(-1);
-std::vector<cv::DMatch> *m = imAcq->Appariement();
+std::vector<cv::KeyPoint> *pts1 = imAcq->PointCle(type);
+std::vector<cv::DMatch> *m = imAcq->Appariement(type);
 FenetrePrincipale *f;
 ParametreOperation *pOCV;
 
@@ -1945,7 +1954,7 @@ if (imAcq->ListeOpAttribut()->find("matchdescriptormatcher") == imAcq->ListeOpAt
             }
             pts1 = imAcq->PointCle(it->first);
             std::vector<cv::KeyPoint> *pts2 = imAcq->PointCleApp(it->first);
-            if (pts2->size()==0)
+            if (pts2 && pts2->size()==0)
 	            return;
             int fZoomNume, fZoomDeno;
             //wxPoint pos = ClientToScreen(pt);
@@ -1976,8 +1985,8 @@ else
     else
         f= NULL; 
     if (!f) return;
-    std::vector<cv::KeyPoint> *pts2 = f->imAcq->PointCle();
-    if (pts2->size()==0)
+    std::vector<cv::KeyPoint> *pts2 = f->imAcq->PointCle(type);
+    if (pts2 && pts2->size()==0)
 	    return;
     int fZoomNume, fZoomDeno;
     //wxPoint pos = ClientToScreen(pt);
@@ -1985,7 +1994,7 @@ else
     wxPen crayon[3] = { *wxBLACK_PEN, *wxBLACK_PEN, *wxBLACK_PEN };
     wxScreenDC ecran;
     ecran.StartDrawingOnTop();
-    for (int i = 0; i < m->size(); i++)
+    for (int i = 0; i < std::min(int(m->size()),50); i++)
 	    {
 	    wxPoint p_1((*pts1)[(*m)[i].queryIdx].pt.x, (*pts1)[(*m)[i].queryIdx].pt.y);
 	    wxPoint p1(RepereImageEcran(p_1));

@@ -811,6 +811,8 @@ int nbEcran=wxDisplay::GetCount() ;
 wxDisplay ecran(static_cast<unsigned int> (0));
 wxRect display;
 display = ecran.GetGeometry();
+display.x = 0;
+display.y = 0;
 int n=1;
 wxRect r;
 do {
@@ -1420,7 +1422,16 @@ wxMenu *FenetrePrincipale::CreateMenuPalette(wxString *title)
     menu->Append(NOIRETBLANC_ + 11, _("&pink\t"));
     menu->Append(NOIRETBLANC_ + 12, _("&hot\t"));
     menu->Append(NOIRETBLANC_ + 13, _("&parula\t"));
-    menu->Append(NOIRETBLANC_ + 14, _("&randomize\t"));
+	menu->Append(NOIRETBLANC_ + 14, _("&magma\t"));
+	menu->Append(NOIRETBLANC_ + 15, _("&inferno\t"));
+	menu->Append(NOIRETBLANC_ + 16, _("&plasma\t"));
+	menu->Append(NOIRETBLANC_ + 17, _("&viridis\t"));
+	menu->Append(NOIRETBLANC_ + 18, _("&cividis\t"));
+	menu->Append(NOIRETBLANC_ + 19, _("&twilight\t"));
+	menu->Append(NOIRETBLANC_ + 20, _("&twilight shifted\t"));
+	menu->Append(NOIRETBLANC_ + 21, _("&turbo\t"));
+	menu->Append(NOIRETBLANC_ + 22, _("&deepgreen\t"));
+	menu->Append(NOIRETBLANC_ + 23, _("&randomize\t"));
 
     return menu;
 }
@@ -1428,11 +1439,11 @@ wxMenu *FenetrePrincipale::CreateMenuPalette(wxString *title)
 wxMenu *FenetrePrincipale::CreateMenuZoom(wxString *title)
 {
     wxMenu *menu = new wxMenu;
-    menu->Append(ZOOM1SUR2, _T("&Zoom 1/2\tCtrl-F1"));
-    menu->Append(ZOOM1SUR1, _T("&Zoom x1\tCtrl-F2"));
-    menu->Append(ZOOM2SUR1, _T("&Zoom x2\tCtrl-F2"));
-    menu->Append(ZOOM4SUR1, _T("&Zoom x4\tCtrl-F2"));
-    menu->Append(ZOOM8SUR1, _T("&Zoom x8\tCtrl-F2"));
+    menu->Append(ZOOM1SUR2, _T("&Zoom 1/2"));
+    menu->Append(ZOOM1SUR1, _T("&Zoom x1"));
+    menu->Append(ZOOM2SUR1, _T("&Zoom x2"));
+    menu->Append(ZOOM4SUR1, _T("&Zoom x4"));
+    menu->Append(ZOOM8SUR1, _T("&Zoom x8"));
 
     return menu;
 }

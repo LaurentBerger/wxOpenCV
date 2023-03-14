@@ -2237,10 +2237,14 @@ for (; it != descripteur.end();it++)
             case IMAGEINFOCV_BRISK_DES:
                 descriptorMatcher = cv::BFMatcher(cv::NORM_HAMMING,pOCV->intParam["crossCheck"].valeur).clone();
                 break;
-            case IMAGEINFOCV_KAZE_DES:
-                descriptorMatcher = cv::BFMatcher(cv::NORM_HAMMING,pOCV->intParam["crossCheck"].valeur).clone();
-                break;
-            }
+			case IMAGEINFOCV_KAZE_DES:
+				descriptorMatcher = cv::BFMatcher(cv::NORM_HAMMING, pOCV->intParam["crossCheck"].valeur).clone();
+				break;
+			case IMAGEINFOCV_SIFT_DES:
+			case IMAGEINFOCV_SURF_DES:
+				descriptorMatcher = cv::BFMatcher(cv::NORM_L2, pOCV->intParam["crossCheck"].valeur).clone();
+				break;
+			}
         else 
             descriptorMatcher = cv::DescriptorMatcher::create("BruteForce-Hamming");
     }

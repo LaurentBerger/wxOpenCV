@@ -792,7 +792,7 @@ void TracerRegionMvt(wxCommandEvent& event);
 *  \brief TracerBonCoin
 *  tracer du flot optique de l'image
 */
-void TracerAppariementPoint(wxBufferedPaintDC &hdc);
+void TracerAppariementPoint(wxBufferedPaintDC &hdc, char type=0);
 /*!
 *  \brief TracerAppariementPoint
 *  tracer des relations enttre les points clés de deux images
@@ -1325,7 +1325,7 @@ enum
     NOIRETBLANC12_,
     NOIRETBLANC13_,
     NOIRETBLANC14_,
-    M_MODULE_,
+    M_MODULE_=2715,
     PARTIE_REELLE,
     PARTIE_IMAGINAIRE, 
     LOG_DB, 

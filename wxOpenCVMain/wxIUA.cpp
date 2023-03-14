@@ -180,7 +180,6 @@ BEGIN_EVENT_TABLE(InterfaceAvance, wxFrame)
     EVT_MENU(InterfaceAvance::ID_CreateSizeReport, InterfaceAvance::OnCreateSizeReport)
     EVT_MENU(InterfaceAvance::ID_CreateNotebook, InterfaceAvance::OnCreateNotebook)
     EVT_MENU(ID_Settings, InterfaceAvance::OnSettings)
-    EVT_MENU(wxID_EXIT, InterfaceAvance::OnExit)
     EVT_MENU(wxID_ABOUT, InterfaceAvance::OnAbout)
 //    EVT_MENU_RANGE(InterfaceAvance::ID_FirstPerspective, InterfaceAvance::ID_FirstPerspective+1000,
 //                   InterfaceAvance::OnRestorePerspective)
@@ -737,6 +736,8 @@ void InterfaceAvance::OnCreateSizeReport(wxCommandEvent& WXUNUSED(event))
 void InterfaceAvance::OnExit(wxCommandEvent& WXUNUSED(event))
 {
     Close(true);
+    ((wxOpencvApp*)osgApp)->Quitter(NULL);
+
 }
 
 void InterfaceAvance::OnAbout(wxCommandEvent& WXUNUSED(event))
@@ -1296,6 +1297,7 @@ if (event.GetId()==ID_VIDEO_FLUX)
 void InterfaceAvance::OnQuit(wxCommandEvent& WXUNUSED(event))
 {
 Close(true);
+
 }
 
 void InterfaceAvance::SelectOperation(wxCommandEvent& evt)
